@@ -1,0 +1,31 @@
+<div class="menu">
+
+  <nav>
+    <ul class="nav nav-pills">
+      <li [ngClass]="{ active: isActive('Home') }" (click)="active('Home')"><a href="#">Home</a></li>
+      <li [ngClass]="{ active: isActive('Quick Posts') }">
+        <a href="#" (click)="active('Quick Posts')" data-toggle="dropdown" class="dropdown-toggle">Quick Posts</a>
+        <ul class="dropdown-menu sub-menu">
+          <li><a href="#">trending</a></li>
+          <li><a href="#">selected</a></li>
+        </ul>
+      </li>
+      <li [ngClass]="{ active: isActive('Join') }"><a href="#" (click)="active('Join')">Join</a></li>
+      <li [ngClass]="{ active: isActive('Sign In') }"><a href="#" (click)="active('Sign In')">Sign In</a></li>
+    </ul>
+  </nav>
+
+</div>
+
+<div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="true"></div>
+
+<!--<script>
+  $('ul li a').click(function () {
+    console.log('xx');
+    $(this).parent().siblings().removeClass('active');
+    $(this).parent().addClass('active')
+  });
+
+
+  $('body').click(function () { console.log('cl'); })
+</script>-->
