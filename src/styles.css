@@ -1,27 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
 
 /*title, subtile, menu, header, footer background-color*/
-div.title{background-color:#279FBB; color:white;}
-div.subtitle{background-color: #222;color:white; padding-top: 5px; padding-bottom:5px; }
-div.menu{background-color:  #111;color:white;padding-top: 5px;padding-bottom:5px;}
-div.footer{background-color:  #111;color:white;padding-top: 5px;padding-bottom:15px;}
-
+.title{background-color:#279FBB; color:white;}
+.subtitle{background-color:#070707; color:white; padding-top: 5px; padding-bottom:5px; }
+.menu{background-color:#101010; color:white;padding-top: 5px;padding-bottom:5px;}
+.site-content{max-width:600px; margin-top:10px;}
+.footer{background-color:#070707;color:white;padding-top: 5px;padding-bottom:15px;}
+.footer .col-xs-12{margin-top:10px;}
 
 /*Centered menu*/
-.nav-pills {
+.nav {
     display: inline-block;
     float: none;
 }
 
-/*Menu hyperlink text color*/
-div.menu .nav-pills a{color:white;}
+/* main menu items */
+.menu .nav > li a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 
-/*Active menu item and hover background-color*/
-div.menu .nav-pills li.active > a,
-div.menu .nav-pills li a:hover {background-color: #279FBB}
+/*Menu hyperlink text color*/
+.menu .nav a{color:white;}
+
+/*Active menu item and hover color*/
+.menu .nav > li a.active,
+.menu .nav > li a:hover,
+.menu .nav > li.open > a,
+.menu .nav li li a.active,
+.menu .nav li li a:hover
+{background-color: #279FBB; color:white}
 
 /*Default cursor on active menu item*/
-div.menu .nav-pills li.active > a:hover{cursor:default;}
+.menu .nav a.active{cursor:default;}
+
+/*Allow pointer if active menu item has sub-menu*/
+.menu .nav a.dropdown-toggle:hover{cursor:pointer}
 
 /*Sub-Menu background and border*/
-div.menu .nav-pills li.active ul {background-color: #333; border:solid  1px #666;}
+.menu .nav ul {background-color: #333; border:solid  1px #666;}
+
+.dropdown-menu li a{
+  color: #fff;
+}
+
+/* Site Content in Router-Outlet */
+.site-content{max-width: 600px;}
