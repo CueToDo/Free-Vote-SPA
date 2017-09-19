@@ -12,13 +12,12 @@ export class MenuComponent implements OnInit {
 
   }
 
-  QuickPostURLs: string[] = ['/trending', '/selected', '/my-posts', '/favourite-posts'];
+  QuickPostURLs: string[] = ['/trending', '/selected', '/my-posts', '/favourite-posts', '/post-of-the-week', '/post-of-the-week-vote'];
 
 
   isActive(link): boolean {
     switch (link) {
       case "QuickPosts": {
-        console.log("QuickPosts" + this.router.url);
         return this.QuickPostURLs.indexOf(this.router.url) > -1;
       }
       default: {
