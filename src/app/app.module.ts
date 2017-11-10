@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from "@angular/router"
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown'; /* Bootstrap dropdowns */
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
@@ -55,7 +56,8 @@ const appRoutes: Routes = [
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),
-    FacebookModule.forRoot()
+    FacebookModule.forRoot(),
+    BsDropdownModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

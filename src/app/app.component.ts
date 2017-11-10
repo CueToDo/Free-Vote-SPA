@@ -7,6 +7,6 @@ import { FBTestComponent } from './fbtest/fbtest.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Free.Vote';
+  title = 'Free.Vote - deploy';
   strapline = 'express yourself honestly, disagree without fear, agree without favour';
 }

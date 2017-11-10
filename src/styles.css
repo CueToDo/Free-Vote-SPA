@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
+
 /*title, subtile, menu, header, footer background-color*/
 .title{background-color:#279FBB; color:white;}
 .subtitle{background-color:#070707; color:white; padding-top: 5px; padding-bottom:5px; }
@@ -8,41 +9,25 @@
 .footer{background-color:#070707;color:white;padding-top: 5px;padding-bottom:15px;}
 .footer .col-xs-12{margin-top:10px;}
 
-/*Centered menu*/
-.nav {
-    display: inline-block;
-    float: none;
-}
 
-/* main menu items */
-.menu .nav > li a {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
-/*Menu hyperlink text color*/
-.menu .nav a{color:white;}
-
-/*Active menu item and hover color*/
-.menu .nav > li a.active,
-.menu .nav > li a:hover,
-.menu .nav > li.open > a,
-.menu .nav li li a.active,
-.menu .nav li li a:hover
+#free-vote .btn-primary,
+#free-vote ul li a:hover, 
+#free-vote ul li a.active
 {background-color: #279FBB; color:white}
 
-/*Default cursor on active menu item*/
-.menu .nav a.active{cursor:default;}
+/*Active menu item and hover color*/
+#free-vote .btn-primary:hover, 
+#free-vote .btn-primary.active
+{background-color:#1b6c7f; color:white}
 
-/*Allow pointer if active menu item has sub-menu*/
-.menu .nav a.dropdown-toggle:hover{cursor:pointer}
+#free-vote button:focus {outline:none;}
 
-/*Sub-Menu background and border*/
-.menu .nav ul {background-color: #333; border:solid  1px #666;}
+#free-vote .btn-primary.active:not(.dropdown-toggle):hover
+{cursor:default}
 
-.dropdown-menu li a{
-  color: #fff;
-}
+
+#free-vote ul {background-color:#333; border:solid 1px #666;}
+#free-vote ul li a {color:white}
 
 /* Site Content in Router-Outlet */
 .site-content{max-width: 600px;}

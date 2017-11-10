@@ -1,23 +1,38 @@
-<div class="dropdown menu">
+<div id="free-vote"> <!--for css overrides-->
 
-  <ul class="nav nav-pills">
-    <li><a routerLink="/" [ngClass]="{ active: isActive('/') }">Home</a>
-    </li>
-    <li>
-      <a href="#" data-toggle="dropdown" [ngClass]="{ active: isActive('QuickPosts') }" class="dropdown-toggle">Quick Posts</a>
-      <ul class="dropdown-menu">
-        <li><a routerLink="/trending" [ngClass]="{ active: isActive('/trending') }">trending</a></li>
-        <li><a routerLink="/selected" [ngClass]="{ active: isActive('/selected') }">selected</a></li>
-        <li><a routerLink="/tag" [ngClass]="{ active: isActive('/tag') }">my selected</a></li>
-        <li><a routerLink="/my-posts" [ngClass]="{ active: isActive('/my-posts') }">my posts</a></li>
-        <li><a routerLink="/favourite-posts" [ngClass]="{ active: isActive('/favourite-posts') }">favourite posts</a></li>
-        <li><a routerLink="/post-of-the-week" [ngClass]="{ active: isActive('/post-of-the-week') }">post of the week</a></li>
-        <li><a routerLink="/post-of-the-week-vote" [ngClass]="{ active: isActive('/post-of-the-week-vote') }">post-o-t-w vote</a></li>
-      </ul>
-    </li>
-    <li><a routerLink="/join" [ngClass]="{ active: isActive('/join') }">Join</a></li>
-    <li><a routerLink="/sign-in" [ngClass]="{ active: isActive('/sign-in') }">Sign In</a></li>
-  </ul>
+  <button class="btn btn-primary" routerLink="/" [ngClass]="{ active: isActive('/') }">Home</button>
 
+  <div class="btn-group" dropdown>
+    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('QuickPosts') }">Quick Posts</button>
+    <ul *dropdownMenu class="dropdown-menu" role="menu">
+      <li role="menuitem">
+        <a routerLink="/trending" class="dropdown-item" [ngClass]="{ active: isActive('/trending') }">trending</a>
+      </li>
+      <li role="menuitem">
+        <a routerLink="/selected" class="dropdown-item" [ngClass]="{ active: isActive('/selected') }">selected</a>
+      </li>
+      <li role="menuitem">
+        <a routerLink="/tag" class="dropdown-item" [ngClass]="{ active: isActive('/tag') }">my selected</a>
+      </li>
+      <li role="menuitem">
+        <a routerLink="/my-posts" class="dropdown-item" [ngClass]="{ active: isActive('/my-posts') }">my posts</a>
+      </li>
+      <li role="menuitem">
+        <a routerLink="/favourite-posts" class="dropdown-item" [ngClass]="{ active: isActive('/favourite-posts') }">favourite posts</a>
+      </li>
+      <li role="menuitem">
+        <a routerLink="/post-of-the-week" class="dropdown-item" [ngClass]="{ active: isActive('/post-of-the-week') }">post of the week</a>
+      </li>
+      <li role="menuitem">
+        <a routerLink="/post-of-the-week-vote" class="dropdown-item" [ngClass]="{ active: isActive('/post-of-the-week-vote') }">post-o-t-w vote</a>
+      </li>
+    </ul>
+  </div>
+
+
+
+  <button routerLink="/join" class="btn btn-primary" [ngClass]="{ active: isActive('/join') }">Join</button>
+
+  <button routerLink="/sign-in" class="btn btn-primary" [ngClass]="{ active: isActive('/sign-in') }">Sign In</button>
 
 </div>

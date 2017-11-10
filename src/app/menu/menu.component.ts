@@ -12,7 +12,7 @@ export class MenuComponent implements OnInit {
 
   }
 
-  QuickPostURLs: string[] = ['/trending', '/selected', '/my-posts', '/favourite-posts', '/post-of-the-week', '/post-of-the-week-vote'];
+  QuickPostURLs: string[] = ['/trending', '/selected','/my-selected', '/my-posts', '/favourite-posts', '/post-of-the-week', '/post-of-the-week-vote'];
 
 
   isActive(link): boolean {

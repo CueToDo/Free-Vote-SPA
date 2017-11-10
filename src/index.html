@@ -9,53 +9,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
-
   <script>
-    /* Facebook Script */
-    var FBAccessToken;
+    /* Facebook Script Requires jQuery !!! can't have it*/
+    /* Lazy load using modules on sign in? */
+    // var FBAccessToken;
   
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: '1114396292039346',
-        autoLogAppEvents: true,
-        xfbml: true,
-        version: 'v2.9'
-      });
-  
-  
-  
-      FB.AppEvents.logPageView();
+    // window.fbAsyncInit = function () {
+    //   FB.init({
+    //     appId: '1114396292039346',
+    //     autoLogAppEvents: true,
+    //     xfbml: true,
+    //     version: 'v2.9'
+    //   });
   
   
-      function basicAPIRequest() {
-        FB.api('/me?fields=name,picture,email', function (response) {
-          document.getElementById('accountInfo').innerHTML =
-            ('<img src="' + response.picture.data.url + '"> ' + response.email);
-        });
-      }
   
-      FB.getLoginStatus(function (response) {
-        if (response.status === 'connected') {
-          FBAccessToken = response.authResponse.accessToken;
-          console.log(response.authResponse.accessToken);
-          basicAPIRequest();
-        }
-      });
+    //   FB.AppEvents.logPageView();
   
-    };
   
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    //   function basicAPIRequest() {
+    //     FB.api('/me?fields=name,picture,email', function (response) {
+    //       document.getElementById('accountInfo').innerHTML =
+    //         ('<img src="' + response.picture.data.url + '"> ' + response.email);
+    //     });
+    //   }
   
-    function greet() { alert(FBAccessToken); }
+    //   FB.getLoginStatus(function (response) {
+    //     if (response.status === 'connected') {
+    //       FBAccessToken = response.authResponse.accessToken;
+    //       console.log(response.authResponse.accessToken);
+    //       basicAPIRequest();
+    //     }
+    //   });
+  
+    // };
+  
+    // (function (d, s, id) {
+    //   var js, fjs = d.getElementsByTagName(s)[0];
+    //   if (d.getElementById(id)) { return; }
+    //   js = d.createElement(s); js.id = id;
+    //   js.src = "//connect.facebook.net/en_US/sdk.js";
+    //   fjs.parentNode.insertBefore(js, fjs);
+    // }(document, 'script', 'facebook-jssdk'));
+  
+    // function greet() { alert(FBAccessToken); }
   
   </script>
 
