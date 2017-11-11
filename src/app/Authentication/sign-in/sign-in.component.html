@@ -1,14 +1,35 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
 
+  <div class="signin">
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-2">
+        email
+      </div>
+      <div class="col-md-4">
+        <input id="ipEmailAddress" formControlName="emailAddress" type="text" required />
+      </div>
+      <div class="col-md-3"></div>
+    </div>
 
-<div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true"
-  data-use-continue-as="true"></div>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-2">
+        password
+      </div>
+      <div class="col-md-4">
+        <input id="ipPassword" formControlName="password" type="password" />
+      </div>
+      <div class="col-md-3"></div>
+    </div>
 
-  <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-2">&nbsp;</div>
+      <div class="col-md-4">
+        <Button *ngIf="router.url==='/sign-in'" (click)="button='signIn'" Class="btn btn-primary">sign in</Button>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
   </div>
-
-  <div id="accountInfo" style="padding-top: 20px">You haven't logged in yet.</div>
-
-
-
-
-<!-- <app-fbtest></app-fbtest> -->
+</form>

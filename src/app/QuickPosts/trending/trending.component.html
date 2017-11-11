@@ -1,3 +1,5 @@
-<p>
-  trending works!
-</p>
+<div class="text-center mb-4">
+  <span *ngFor="let tag of tags">
+    <a routerLink="/{{ tag.TagRoute }}" [ngStyle]="{'font-size':FontSize(tag.TagWeight),'padding-right':'10px'}">{{ tag.TagDisplay }}</a>
+  </span>
+</div>

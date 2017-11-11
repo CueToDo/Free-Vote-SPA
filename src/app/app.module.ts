@@ -1,15 +1,25 @@
+//Angular
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule } from "@angular/router"
+
+//Bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'; /* Bootstrap dropdowns */
 
-import { AppComponent } from './app.component';
-import { MenuComponent } from './menu/menu.component';
-
+//Facebook
 import { FacebookModule } from 'ngx-facebook';
 import { FBTestComponent } from './fbtest/fbtest.component';
+
+//App Services
+import { HttpClientService } from './services/http-client.service'
+import { AuthenticationService, SignInData } from './services/authentication.service'
+import { TagsService } from './services/tags.service';
+
+//App Components
+import { AppComponent } from './app.component';
+import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { TrendingComponent } from './QuickPosts/trending/trending.component';
 import { SignInComponent } from './Authentication/sign-in/sign-in.component';
@@ -27,7 +37,7 @@ const appRoutes: Routes = [
   { path: 'sign-in', component: SignInComponent },
   { path: 'trending', component: TrendingComponent },
   { path: 'selected', component: SelectedTagsComponent },
-  { path: 'tag', component: SelectedTagComponent },
+  { path: ':tag', component: SelectedTagComponent },
   { path: 'my-posts', component: MyPostsComponent },
   { path: 'new-post', component: NewPostComponent },
   { path: 'favourite-posts', component: FavouritePostsComponent },
@@ -53,8 +63,9 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes),
     FacebookModule.forRoot(),
     BsDropdownModule.forRoot()
