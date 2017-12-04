@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Routes, RouterModule } from "@angular/router"
+import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from "@angular/router"
 
 //Bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'; /* Bootstrap dropdowns */
@@ -37,13 +37,16 @@ const appRoutes: Routes = [
   { path: 'sign-in', component: SignInComponent },
   { path: 'trending', component: TrendingComponent },
   { path: 'selected', component: SelectedTagsComponent },
-  { path: ':tag', component: SelectedTagComponent },
   { path: 'my-posts', component: MyPostsComponent },
   { path: 'new-post', component: NewPostComponent },
   { path: 'favourite-posts', component: FavouritePostsComponent },
   { path: 'post-of-the-week', component: PostOfTheWeekComponent },
-  { path: 'post-of-the-week-vote', component: PostOfTheWeekVoteComponent }
+  { path: 'post-of-the-week-vote', component: PostOfTheWeekVoteComponent },
+  { path: 'personal', loadChildren: './personal/personal.module#PersonalModule' },
+  { path: ':tag', component: SelectedTagComponent }
 ];
+
+
 
 @NgModule({
   declarations: [

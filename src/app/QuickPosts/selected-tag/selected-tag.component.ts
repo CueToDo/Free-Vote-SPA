@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule, ParamMap, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-selected-tag',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SelectedTagComponent implements OnInit {
 
-  constructor() { }
+  Tag: string;
+
+  constructor(private route: ActivatedRoute) {
+
+  }
 
   ngOnInit() {
+    this.Tag = this.route.snapshot.paramMap.get('tag');
   }
 
 }
