@@ -1,4 +1,5 @@
-<div id="free-vote"> <!--for css overrides-->
+<div id="free-vote">
+  <!--for css overrides-->
 
   <button class="btn btn-primary" routerLink="/" [ngClass]="{ active: isActive('/') }">Home</button>
 
@@ -29,7 +30,17 @@
     </ul>
   </div>
 
-
+  <div class="btn-group" dropdown>
+    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('Personal') }">Personal</button>
+    <ul *dropdownMenu class="dropdown-menu" role="menu">
+      <li role="menuitem">
+        <a routerLink="/personal/details" class="dropdown-item" [ngClass]="{ active: isActive('/personal/details') }">personal details</a>
+      </li>
+      <li role="menuitem">
+        <a routerLink="/personal/location" class="dropdown-item" [ngClass]="{ active: isActive('/personal/location') }">location</a>
+      </li>
+    </ul>
+  </div>
 
   <button routerLink="/join" class="btn btn-primary" [ngClass]="{ active: isActive('/join') }">Join</button>
 
