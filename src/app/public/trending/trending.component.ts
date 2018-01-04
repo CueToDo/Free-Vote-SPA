@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TagsService, Tag } from '../../services/tags.service';
 import { HttpClientService } from '../../services/http-client.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trending',
@@ -14,7 +15,8 @@ export class TrendingComponent implements OnInit {
   tags: Tag[];
 
   constructor(private tagsService: TagsService) { }
-  //constructor(){}
+  //constructor(){}y
+  
 
   ngOnInit() {
     this.tagsService.Trending().subscribe(response => {

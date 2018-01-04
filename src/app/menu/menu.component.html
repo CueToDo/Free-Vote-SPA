@@ -1,31 +1,38 @@
 <div id="free-vote">
   <!--for css overrides-->
 
-  <button class="btn btn-primary" routerLink="/" [ngClass]="{ active: isActive('/') }">Home</button>
+  <button class="btn btn-primary" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</button>
 
   <div class="btn-group" dropdown>
-    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('QuickPosts') }">Quick Posts</button>
+    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('tags') }">tags</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
       <li role="menuitem">
-        <a routerLink="/trending" class="dropdown-item" [ngClass]="{ active: isActive('/trending') }">trending</a>
+        <a routerLink="/trending" class="dropdown-item" routerLinkActive="active">trending</a>
       </li>
       <li role="menuitem">
-        <a routerLink="/selected" class="dropdown-item" [ngClass]="{ active: isActive('/selected') }">selected</a>
+        <a routerLink="/private/following-tags" class="dropdown-item" routerLinkActive="active">following</a>
       </li>
       <li role="menuitem">
-        <a routerLink="/tag" class="dropdown-item" [ngClass]="{ active: isActive('/tag') }">[selected tag]</a>
+        <a [routerLink]="SelectedTag" class="dropdown-item" routerLinkActive="active">{{ SelectedTag}}</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="btn-group" dropdown>
+    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('posts') }">posts</button>
+    <ul *dropdownMenu class="dropdown-menu" role="menu">
+      <li role="menuitem">
+        <a routerLink="/private/favourite-posts" class="dropdown-item" routerLinkActive="active">favourite posts</a>
       </li>
       <li role="menuitem">
-        <a routerLink="/my-posts" class="dropdown-item" [ngClass]="{ active: isActive('/my-posts') }">my posts</a>
+        <a routerLink="/private/my-posts" class="dropdown-item" routerLinkActive="active">my posts</a>
+      </li>
+
+      <li role="menuitem">
+        <a routerLink="/post-of-the-week" class="dropdown-item" routerLinkActive="active">post of the week</a>
       </li>
       <li role="menuitem">
-        <a routerLink="/favourite-posts" class="dropdown-item" [ngClass]="{ active: isActive('/favourite-posts') }">favourite posts</a>
-      </li>
-      <li role="menuitem">
-        <a routerLink="/post-of-the-week" class="dropdown-item" [ngClass]="{ active: isActive('/post-of-the-week') }">post of the week</a>
-      </li>
-      <li role="menuitem">
-        <a routerLink="/post-of-the-week-vote" class="dropdown-item" [ngClass]="{ active: isActive('/post-of-the-week-vote') }">post-o-t-w vote</a>
+        <a routerLink="/private/post-of-the-week-vote" class="dropdown-item" routerLinkActive="active">post-o-t-w vote</a>
       </li>
     </ul>
   </div>
@@ -34,16 +41,19 @@
     <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('Personal') }">Personal</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
       <li role="menuitem">
-        <a routerLink="/personal/details" class="dropdown-item" [ngClass]="{ active: isActive('/personal/details') }">personal details</a>
+        <a routerLink="/personal/details" class="dropdown-item" routerLinkActive="active">personal details</a>
       </li>
       <li role="menuitem">
-        <a routerLink="/personal/location" class="dropdown-item" [ngClass]="{ active: isActive('/personal/location') }">location</a>
+        <a routerLink="/personal/location" class="dropdown-item" routerLinkActive="active">location</a>
       </li>
     </ul>
   </div>
 
-  <button routerLink="/join" class="btn btn-primary" [ngClass]="{ active: isActive('/join') }">Join</button>
+  <button routerLink="/join" class="btn btn-primary" routerLinkActive="active" *ngIf="!SignedIn()">Join</button>
 
-  <button routerLink="/sign-in" class="btn btn-primary" [ngClass]="{ active: isActive('/sign-in') }">Sign In</button>
+  <button routerLink="/sign-in" class="btn btn-primary" routerLinkActive="active" *ngIf="!SignedIn()">Sign In</button>
 
+  <button routerLink="/sign-out" class="btn btn-primary" routerLinkActive="active" *ngIf="SignedIn()">Sign out</button>
+
+  <a [routerLink]="['user','bob']">View Bobs Account</a>
 </div>

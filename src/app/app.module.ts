@@ -12,40 +12,40 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown'; /* Bootstrap dropdown
 import { FacebookModule } from 'ngx-facebook';
 import { FBTestComponent } from './fbtest/fbtest.component';
 
+//Modules
+//import { PostsPrivateModule } from './posts-private/posts-private.module';
+
 //App Services
 import { HttpClientService } from './services/http-client.service'
 import { AuthenticationService, SignInData } from './services/authentication.service'
-import { TagsService } from './services/tags.service';
+//import { TagsService } from './services/tags.service';
+import { LoginRouteGuard } from './services/login-route-guard';
 
 //App Components
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
-import { TrendingComponent } from './QuickPosts/trending/trending.component';
 import { SignInComponent } from './Authentication/sign-in/sign-in.component';
-import { SelectedTagsComponent } from './QuickPosts/selected-tags/selected-tags.component';
-import { SelectedTagComponent } from './QuickPosts/selected-tag/selected-tag.component';
-import { MyPostsComponent } from './QuickPosts/my-posts/my-posts.component';
-import { NewPostComponent } from './QuickPosts/new-post/new-post.component';
-import { FavouritePostsComponent } from './QuickPosts/favourite-posts/favourite-posts.component';
-import { PostOfTheWeekComponent } from './QuickPosts/post-of-the-week/post-of-the-week.component';
-import { PostOfTheWeekVoteComponent } from './QuickPosts/post-of-the-week-vote/post-of-the-week-vote.component';
+
+import { TrendingComponent } from './public/trending/trending.component';
+import { PostOfTheWeekComponent } from './public/post-of-the-week/post-of-the-week.component';
+import { SelectedTagComponent } from './public/selected-tag/selected-tag.component';
+import { SignOutComponent } from './authentication/sign-out/sign-out.component';
+
+//Other Module Components
+//import { TrendingComponent } from './posts-public/trending/trending.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'join', component: SignInComponent },
   { path: 'sign-in', component: SignInComponent },
+  { path: 'sign-out', component: SignOutComponent },
   { path: 'trending', component: TrendingComponent },
-  { path: 'selected', component: SelectedTagsComponent },
-  { path: 'my-posts', component: MyPostsComponent },
-  { path: 'new-post', component: NewPostComponent },
-  { path: 'favourite-posts', component: FavouritePostsComponent },
   { path: 'post-of-the-week', component: PostOfTheWeekComponent },
-  { path: 'post-of-the-week-vote', component: PostOfTheWeekVoteComponent },
-  { path: 'personal', loadChildren: './personal/personal.module#PersonalModule' },
+  { path: 'private', loadChildren: './private/private.module#PrivateModule' },
+  { path: 'personal', loadChildren: './personal/personal.module#PersonalModule', canActivate: [LoginRouteGuard] },
   { path: ':tag', component: SelectedTagComponent }
 ];
-
 
 
 @NgModule({
@@ -54,15 +54,11 @@ const appRoutes: Routes = [
     MenuComponent,
     FBTestComponent,
     HomeComponent,
-    TrendingComponent,
     SignInComponent,
-    SelectedTagsComponent,
-    SelectedTagComponent,
-    MyPostsComponent,
-    NewPostComponent,
-    FavouritePostsComponent,
+    SignOutComponent,
+    TrendingComponent,
     PostOfTheWeekComponent,
-    PostOfTheWeekVoteComponent
+    SelectedTagComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +69,7 @@ const appRoutes: Routes = [
     FacebookModule.forRoot(),
     BsDropdownModule.forRoot()
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [LoginRouteGuard, HttpClientService],
+  bootstrap: [AppComponent] 
 })
 export class AppModule { }

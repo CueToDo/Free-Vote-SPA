@@ -1,24 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+import { AuthenticationService, SignInStatus } from '../services/authentication.service';
+
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
 
-  constructor(private router: Router) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService) {
 
   }
 
-  QuickPostURLs: string[] = ['/trending', '/selected','/my-selected', '/my-posts', '/favourite-posts', '/post-of-the-week', '/post-of-the-week-vote'];
+  TagURLs: string[] = ['/trending', '/private/following-tags'];
+  PostURLs: string[] = ['/private/favourite-posts', '/private/my-posts', '/post-of-the-week', '/private/post-of-the-week-vote'];
+
+  private routeChangeSubscription: any;
+  private SelectedTag: string = 'any-old-baguette';
+  public SignInStatus = SignInStatus;
+
+  SignedIn(): boolean { return this.authenticationService.SignInData.SignInResult == SignInStatus.SignInSuccess; }
 
 
   isActive(link): boolean {
+    //console.log(this.SelectedTag + ' ' + this.activatedRoute.url);
     switch (link) {
-      case "QuickPosts": {
-        return this.QuickPostURLs.indexOf(this.router.url) > -1;
+      case "tags": {
+        return this.TagURLs.indexOf(this.router.url) > -1 || this.SelectedTag == this.router.url.replace('/', '');
+      }
+      case "posts": {
+        return this.PostURLs.indexOf(this.router.url) > -1;
       }
       default: {
         return link == this.router.url;
@@ -27,8 +41,21 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('Menu Component initialised');
+    //https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
+    //https://stackoverflow.com/questions/37144999/angular2-get-router-params-outside-of-router-outlet
+
+    this.routeChangeSubscription = this.activatedRoute.params.subscribe(params => {
+      console.log('menu component ROUTE CHANGED');
+      if (params['tag'] && params['tag'] != '') {
+        this.SelectedTag = params['tag'];
+        console.log('CHANGING' + this.SelectedTag);
+      }
+    });
   }
 
+  ngOnDestroy() {
+    this.routeChangeSubscription.unsubscribe();
+  }
 
-
-}
+} 
