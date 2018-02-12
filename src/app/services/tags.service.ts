@@ -1,8 +1,9 @@
 import { AppSettingsModule } from '../app.settings.module'
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
 import { HttpClientService } from './http-client.service';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+
 
 @Injectable()
 export class TagsService {
@@ -18,11 +19,14 @@ export class TagsService {
   //They do not work with other types, like a service 
 
 
-  Trending(): Observable<any> {
+  Trending(): Observable<Tag[]> {
     return this.httpClientService
       .get(this.WebAPIUrl)
+      .map(data => data as Tag[])
   }
+
 }
+
 
 export class Tag {
   TagName: string;

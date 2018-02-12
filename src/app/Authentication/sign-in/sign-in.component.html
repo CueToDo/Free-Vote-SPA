@@ -2,34 +2,28 @@
 
   <div class="signin">
     <div class="row">
-      <div class="col-md-3"></div>
-      <div class="col-md-2">
+      <div class="col-md-4">
         email
       </div>
-      <div class="col-md-4">
-        <input id="ipEmailAddress" formControlName="emailAddress" type="text" required />
+      <div class="col-md-8">
+        <input formControlName="emailAddress" type="text" required />
       </div>
-      <div class="col-md-3"></div>
     </div>
 
     <div class="row">
-      <div class="col-md-3"></div>
-      <div class="col-md-2">
+      <div class="col-md-4">
         password
       </div>
-      <div class="col-md-4">
-        <input id="ipPassword" formControlName="password" type="password" />
+      <div class="col-md-8">
+        <input formControlName="password" type="password" />
       </div>
-      <div class="col-md-3"></div>
     </div>
 
     <div class="row">
-      <div class="col-md-3"></div>
-      <div class="col-md-2">&nbsp;</div>
-      <div class="col-md-4">
+      <div class="col-md-4">&nbsp;</div>
+      <div class="col-md-8">
         <Button *ngIf="router.url==='/sign-in' || router.url==='/join'" (click)="button='signIn'" Class="btn btn-primary">{{router.url=='/sign-in'?'sign in':'join'}}</Button>
       </div>
-      <div class="col-md-3"></div>
     </div>
   </div>
 </form>

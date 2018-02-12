@@ -13,9 +13,9 @@ export class AppSettingsModule {
   //public static ServiceUrl = 'http://freevote-002-site1.btempurl.com/';
   public static ServiceUrl = 'http://localhost:56529/';
 
-  constructor(){
+  constructor() {
     console.log('cons');
   }
-  
+
 }
 

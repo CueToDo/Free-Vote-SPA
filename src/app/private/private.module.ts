@@ -6,18 +6,18 @@ import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from "@angular
 //Components
 import { FavouritePostsComponent } from './favourite-posts/favourite-posts.component';
 import { FollowingTagsComponent } from './following-tags/following-tags.component';
-import { MyPostsComponent } from './my-posts/my-posts.component';
 import { NewPostComponent } from './new-post/new-post.component';
 import { PostOfTheWeekVoteComponent } from './post-of-the-week-vote/post-of-the-week-vote.component';
 
 //Services
-import { LoginRouteGuard } from '../services/login-route-guard';
+import { LoginRouteGuardService } from '../services/login-route-guard.service';
+//import { AuthenticationService } from '../services/authentication.service';
 
+//Private Module Routes
 const privateRoutes: Routes = [
-  { path: 'following-tags', component: FollowingTagsComponent, canActivate: [LoginRouteGuard] },
-  { path: 'favourite-posts', component: FavouritePostsComponent, canActivate: [LoginRouteGuard] },
-  { path: 'my-posts', component: MyPostsComponent, canActivate: [LoginRouteGuard] },
-  { path: 'post-of-the-week-vote', component: PostOfTheWeekVoteComponent }
+  { path: 'following-tags', component: FollowingTagsComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'favourite-posts', component: FavouritePostsComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'post-of-the-week-vote', component: PostOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] }
 ];
 
 @NgModule({
@@ -28,11 +28,10 @@ const privateRoutes: Routes = [
   declarations: [
     FollowingTagsComponent,
     FavouritePostsComponent,
-    MyPostsComponent,
     NewPostComponent,
     PostOfTheWeekVoteComponent
-  ],
-  providers: [LoginRouteGuard]
+  ]
+  //providers: [LoginRouteGuardService] //YOU BASTARD AuthenticationService There's the separate instance
 })
 
 export class PrivateModule { }

@@ -24,11 +24,11 @@ export class SignInComponent implements OnInit, OnDestroy {
   button: string;
   waiting: boolean = false;
 
-  constructor(fb: FormBuilder, private _router: Router, private authenticationService: AuthenticationService) {
+  constructor(private formBuilder: FormBuilder, private _router: Router, private authenticationService: AuthenticationService) {
 
     this.router = _router;
 
-    this.form = fb.group({
+    this.form = formBuilder.group({
       "emailAddress": this.emailAddress,
       "password": this.password
     });
@@ -39,11 +39,13 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    //this.authenticationService.SignInStatusChange.unsubscribe();
+    this.authenticationService.SignInStatusChange.unsubscribe();
   }
 
   SignInStatusChange() {
+
     console.log('changed ' + this.authenticationService.SignInData.SignInResult);
+    
     if (this.authenticationService.SignInData.SignInResult  == SignInStatus.SignInSuccess) {
       this._router.navigateByUrl('trending'); 
     }

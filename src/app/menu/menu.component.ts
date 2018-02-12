@@ -12,7 +12,7 @@ import { AuthenticationService, SignInStatus } from '../services/authentication.
 export class MenuComponent implements OnInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService) {
-
+    console.log("NEW menu component");
   }
 
   TagURLs: string[] = ['/trending', '/private/following-tags'];
@@ -22,7 +22,12 @@ export class MenuComponent implements OnInit, OnDestroy {
   private SelectedTag: string = 'any-old-baguette';
   public SignInStatus = SignInStatus;
 
-  SignedIn(): boolean { return this.authenticationService.SignInData.SignInResult == SignInStatus.SignInSuccess; }
+  SignedIn(): boolean {
+    console.log("Evaluate SignedIn");
+    let signedIn = this.authenticationService.SignInData.SignInResult == SignInStatus.SignInSuccess
+    //console.log('Menu Component Sign In Check: ' + signedIn);
+    return signedIn;
+  }
 
 
   isActive(link): boolean {
@@ -41,7 +46,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('Menu Component initialised');
+    console.log('INIT Menu Component');
     //https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
     //https://stackoverflow.com/questions/37144999/angular2-get-router-params-outside-of-router-outlet
 

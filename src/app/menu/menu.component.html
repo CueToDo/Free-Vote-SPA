@@ -9,7 +9,7 @@
       <li role="menuitem">
         <a routerLink="/trending" class="dropdown-item" routerLinkActive="active">trending</a>
       </li>
-      <li role="menuitem">
+      <li role="menuitem" *ngIf="SignedIn()">
         <a routerLink="/private/following-tags" class="dropdown-item" routerLinkActive="active">following</a>
       </li>
       <li role="menuitem">
@@ -21,23 +21,23 @@
   <div class="btn-group" dropdown>
     <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('posts') }">posts</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
-      <li role="menuitem">
+      <li role="menuitem" *ngIf="SignedIn()">
         <a routerLink="/private/favourite-posts" class="dropdown-item" routerLinkActive="active">favourite posts</a>
       </li>
-      <li role="menuitem">
+      <li role="menuitem" *ngIf="SignedIn()">
         <a routerLink="/private/my-posts" class="dropdown-item" routerLinkActive="active">my posts</a>
       </li>
 
       <li role="menuitem">
         <a routerLink="/post-of-the-week" class="dropdown-item" routerLinkActive="active">post of the week</a>
       </li>
-      <li role="menuitem">
+      <li role="menuitem" *ngIf="SignedIn()">
         <a routerLink="/private/post-of-the-week-vote" class="dropdown-item" routerLinkActive="active">post-o-t-w vote</a>
       </li>
     </ul>
   </div>
 
-  <div class="btn-group" dropdown>
+  <div class="btn-group" dropdown *ngIf="SignedIn()">
     <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('Personal') }">Personal</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
       <li role="menuitem">
@@ -45,6 +45,9 @@
       </li>
       <li role="menuitem">
         <a routerLink="/personal/location" class="dropdown-item" routerLinkActive="active">location</a>
+      </li>
+      <li role="menuitem">
+        <a routerLink="/personal/group-membership" class="dropdown-item" routerLinkActive="active">group membership</a>
       </li>
     </ul>
   </div>
@@ -55,5 +58,4 @@
 
   <button routerLink="/sign-out" class="btn btn-primary" routerLinkActive="active" *ngIf="SignedIn()">Sign out</button>
 
-  <a [routerLink]="['user','bob']">View Bobs Account</a>
 </div>

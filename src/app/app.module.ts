@@ -16,10 +16,8 @@ import { FBTestComponent } from './fbtest/fbtest.component';
 //import { PostsPrivateModule } from './posts-private/posts-private.module';
 
 //App Services
-import { HttpClientService } from './services/http-client.service'
-import { AuthenticationService, SignInData } from './services/authentication.service'
-//import { TagsService } from './services/tags.service';
-import { LoginRouteGuard } from './services/login-route-guard';
+import { ServicesModule } from './services/services.module';
+import { LoginRouteGuardService } from './services/login-route-guard.service'; //currently needed in Routes below
 
 //App Components
 import { AppComponent } from './app.component';
@@ -31,6 +29,8 @@ import { TrendingComponent } from './public/trending/trending.component';
 import { PostOfTheWeekComponent } from './public/post-of-the-week/post-of-the-week.component';
 import { SelectedTagComponent } from './public/selected-tag/selected-tag.component';
 import { SignOutComponent } from './authentication/sign-out/sign-out.component';
+import { PointsComponent } from './public/points/points.component';
+
 
 //Other Module Components
 //import { TrendingComponent } from './posts-public/trending/trending.component';
@@ -43,13 +43,15 @@ const appRoutes: Routes = [
   { path: 'trending', component: TrendingComponent },
   { path: 'post-of-the-week', component: PostOfTheWeekComponent },
   { path: 'private', loadChildren: './private/private.module#PrivateModule' },
-  { path: 'personal', loadChildren: './personal/personal.module#PersonalModule', canActivate: [LoginRouteGuard] },
-  { path: ':tag', component: SelectedTagComponent }
+  { path: 'personal', loadChildren: './personal/personal.module#PersonalModule', canActivate: [LoginRouteGuardService] },
+  { path: ':tag', component: PointsComponent },
+  { path: 'private/my-posts', component: PointsComponent }
 ];
 
 
 @NgModule({
   declarations: [
+    ServicesModule,
     AppComponent,
     MenuComponent,
     FBTestComponent,
@@ -58,7 +60,8 @@ const appRoutes: Routes = [
     SignOutComponent,
     TrendingComponent,
     PostOfTheWeekComponent,
-    SelectedTagComponent
+    SelectedTagComponent,
+    PointsComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +72,10 @@ const appRoutes: Routes = [
     FacebookModule.forRoot(),
     BsDropdownModule.forRoot()
   ],
-  providers: [LoginRouteGuard, HttpClientService],
-  bootstrap: [AppComponent] 
+  //ALL Services are provided in imported Services module
+  providers: [],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+}

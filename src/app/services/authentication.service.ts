@@ -5,13 +5,19 @@ import { Subject } from 'rxjs/Subject';
 import { HttpClientService } from './http-client.service';
 import { Cookie } from 'ng2-cookies';
 
+
 @Injectable()
 export class AuthenticationService {
 
     //Let the service handle the communication and the response data
     //Notify service users via Subject
 
+    //expose this for service users to check
+    SignInData: SignInData;
+
     constructor(private httpClientService: HttpClientService) {
+
+        this.SignInData = new SignInData()
 
         //Singleton Service - called once only
         if (Cookie.get("SignInData") != "") {
@@ -20,19 +26,24 @@ export class AuthenticationService {
             console.log(Cookie.get("SignInData"));
             console.log(this.SignInData);
         }
-        else { this.SignInData = new SignInData() };
+
+        this.SignInData.Version = 0;
+        console.log('Auth SVC constructor: version ' + this.SignInData.Version);
     }
+
 
     private signInUrl = "http://freevote-002-site1.btempurl.com/authentication/signin";
     //private signInUrl = 'http://localhost:56529/authentication/signin';
 
-    //expose this for service users to check
-    SignInData = new SignInData();
 
     public SignInStatusChange = new Subject<any>();
 
 
     SignIn(website: string, email: string, password: string): void {
+
+        debugger;
+        
+        let version = this.SignInData.Version;
 
         let success = false;
         let data = { "website": website, "email": email, "password": password };
@@ -42,7 +53,6 @@ export class AuthenticationService {
             //.map(response => response.json()); //assumed - not needed
             .subscribe(response => {
 
-                //debugger;
 
                 this.SignInData = <SignInData>response;
                 console.log('SignInStatus: ' + this.SignInData.SignInResult);
@@ -55,6 +65,9 @@ export class AuthenticationService {
                 if (this.SignInData.SignInResult == SignInStatus.SignInSuccess) {
                     Cookie.set('SignInData', JSON.stringify(this.SignInData));
                     success = true;
+                    //debugger;
+                    this.SignInData.Version = version + 1;
+                    console.log('Logged In Version:' + this.SignInData.Version);
                 }
 
                 //Notify any observers that didn't initiate the SignIn Request
@@ -67,7 +80,9 @@ export class AuthenticationService {
 
     SignOut() {
         Cookie.delete('SignInData');
-        this.SignInData = new SignInData() 
+        let version = this.SignInData.Version;
+        this.SignInData = new SignInData()
+        this.SignInData.Version = version;
         this.SignInData.SignInResult = SignInStatus.SignedOut;
         this.SignInStatusChange.next();
     }
@@ -82,6 +97,7 @@ export class SignInData {
     public SessionID: number;
     public Roles: string[];
     public JWT: string;
+    public Version: number;
 }
 
 export enum SignInStatus {

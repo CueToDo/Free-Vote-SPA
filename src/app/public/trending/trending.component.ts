@@ -20,7 +20,8 @@ export class TrendingComponent implements OnInit {
 
   ngOnInit() {
     this.tagsService.Trending().subscribe(response => {
-      console.log('data back');
+      console.log('data back:' + response.forEach(element => element.TagWeight));
+      
       this.tags = response;
     })
   }

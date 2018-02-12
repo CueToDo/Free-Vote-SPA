@@ -18,7 +18,7 @@ export class HttpClientService {
     //state cannot be changed after creation
     let headers = new HttpHeaders()
       .set('Content-Type', 'application/json; charset=utf-8')
-      .set('SignInToken', Cookie.get('SignInToken').valueOf());
+      .set('SignInData', Cookie.get('SignInData').valueOf());
     return { headers: headers };
   }
 

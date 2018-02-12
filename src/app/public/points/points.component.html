@@ -1,0 +1,22 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+
+
+  <p>
+    {{ Tag }}
+  </p>
+
+  date from
+  <input formControlName="dateFrom" type="text" required />
+
+  date to
+  <input formControlName="dateTo" type="text" required />
+
+  containing text
+  <input formControlName="containingText" type="text" required />
+
+<button>resubmit</button>
+
+  {{ error }}
+
+</form>
