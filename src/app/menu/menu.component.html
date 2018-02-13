@@ -10,7 +10,7 @@
         <a routerLink="/trending" class="dropdown-item" routerLinkActive="active">trending</a>
       </li>
       <li role="menuitem" *ngIf="SignedIn()">
-        <a routerLink="/private/following-tags" class="dropdown-item" routerLinkActive="active">following</a>
+        <a routerLink="/my/following-tags" class="dropdown-item" routerLinkActive="active">following</a>
       </li>
       <li role="menuitem">
         <a [routerLink]="SelectedTag" class="dropdown-item" routerLinkActive="active">{{ SelectedTag}}</a>
@@ -22,17 +22,17 @@
     <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('posts') }">posts</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
       <li role="menuitem" *ngIf="SignedIn()">
-        <a routerLink="/private/favourite-posts" class="dropdown-item" routerLinkActive="active">favourite posts</a>
+        <a routerLink="/my/favourite-posts" class="dropdown-item" routerLinkActive="active">favourite posts</a>
       </li>
       <li role="menuitem" *ngIf="SignedIn()">
-        <a routerLink="/private/my-posts" class="dropdown-item" routerLinkActive="active">my posts</a>
+        <a routerLink="/my/posts" class="dropdown-item" routerLinkActive="active">my posts</a>
       </li>
 
       <li role="menuitem">
         <a routerLink="/post-of-the-week" class="dropdown-item" routerLinkActive="active">post of the week</a>
       </li>
       <li role="menuitem" *ngIf="SignedIn()">
-        <a routerLink="/private/post-of-the-week-vote" class="dropdown-item" routerLinkActive="active">post-o-t-w vote</a>
+        <a routerLink="/my/post-of-the-week-vote" class="dropdown-item" routerLinkActive="active">post-o-t-w vote</a>
       </li>
     </ul>
   </div>

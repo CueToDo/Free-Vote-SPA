@@ -13,10 +13,11 @@ import { FacebookModule } from 'ngx-facebook';
 import { FBTestComponent } from './fbtest/fbtest.component';
 
 //Modules
-//import { PostsPrivateModule } from './posts-private/posts-private.module';
+import { MyModule } from './my/my.module';
 
-//App Services
+//Global Singleton Services imported from Services Module
 import { ServicesModule } from './services/services.module';
+//LoginRouteGuardService imported for Routes, but not provided
 import { LoginRouteGuardService } from './services/login-route-guard.service'; //currently needed in Routes below
 
 //App Components
@@ -31,7 +32,6 @@ import { SelectedTagComponent } from './public/selected-tag/selected-tag.compone
 import { SignOutComponent } from './authentication/sign-out/sign-out.component';
 import { PointsComponent } from './public/points/points.component';
 
-
 //Other Module Components
 //import { TrendingComponent } from './posts-public/trending/trending.component';
 
@@ -42,7 +42,7 @@ const appRoutes: Routes = [
   { path: 'sign-out', component: SignOutComponent },
   { path: 'trending', component: TrendingComponent },
   { path: 'post-of-the-week', component: PostOfTheWeekComponent },
-  { path: 'private', loadChildren: './private/private.module#PrivateModule' },
+  { path: 'my', loadChildren: './my/my.module#MyModule' },
   { path: 'personal', loadChildren: './personal/personal.module#PersonalModule', canActivate: [LoginRouteGuardService] },
   { path: ':tag', component: PointsComponent },
   { path: 'private/my-posts', component: PointsComponent }
@@ -51,7 +51,6 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    ServicesModule,
     AppComponent,
     MenuComponent,
     FBTestComponent,
@@ -70,7 +69,9 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     FacebookModule.forRoot(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    ServicesModule,
+    MyModule
   ],
   //ALL Services are provided in imported Services module
   providers: [],

@@ -1,4 +1,3 @@
-import { AppSettingsModule } from '../app.settings.module'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { HttpClientService } from './http-client.service';
@@ -8,7 +7,7 @@ import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 @Injectable()
 export class TagsService {
 
-  private WebAPIUrl = AppSettingsModule.ServiceUrl + "Tags/trending/free.vote";
+  private WebAPIUrl = "tags/trending/free.vote";
 
   constructor(private httpClientService: HttpClientService) {
     console.log('tags.service');

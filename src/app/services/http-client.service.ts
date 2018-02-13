@@ -4,6 +4,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Cookie } from 'ng2-cookies';
 
+const ServiceUrl = 'http://freevote-002-site1.btempurl.com/';
+//const ServiceUrl = 'http://localhost:56529/';
+
 @Injectable()
 export class HttpClientService {
 
@@ -24,11 +27,12 @@ export class HttpClientService {
 
   //Observable<Object>
   get(url) {
-    return this.httpClient.get(url, this.RequestHeaders());
+    debugger;
+    return this.httpClient.get(ServiceUrl + url, this.RequestHeaders());
   }
 
   post(url, data) {
-    return this.httpClient.post(url, JSON.stringify(data), this.RequestHeaders());
+    return this.httpClient.post(ServiceUrl + url, JSON.stringify(data), this.RequestHeaders());
   }
 
 }

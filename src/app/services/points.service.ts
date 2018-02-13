@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClientService } from './http-client.service';
 import { Subject } from 'rxjs/Subject';
 
-import { AppSettingsModule } from '../app.settings.module';
-
 @Injectable()
 export class PointsService {
 
@@ -23,13 +21,13 @@ export class PointsService {
 
     debugger;
 
-    var url: string = AppSettingsModule.ServiceUrl;
+    let url=""
     let data = { "DateFrom": dateFrom, "DateTo": dateTo, "ContainingText": containingText };
     let success = false;
 
     switch (pointSelectionType) {
       case PointSelectionTypes.MyPoints:
-        url += "points/mypoints/";
+        url = "points/mypoints/";
         break;
     }
 

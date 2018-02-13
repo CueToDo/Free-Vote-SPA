@@ -12,8 +12,10 @@ import { PointsService } from './points.service';
   imports: [
     CommonModule
   ],
-  declarations: [SignInData], //rare declaration in Services Module
+  //declarations: [SignInData], //rare declaration in Services Module
   providers: [HttpClientService, AuthenticationService, LoginRouteGuardService, TagsService, PointsService]
 })
 
-export class ServicesModule { }
+export class ServicesModule { 
+
+}

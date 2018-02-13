@@ -23,7 +23,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   public SignInStatus = SignInStatus;
 
   SignedIn(): boolean {
-    console.log("Evaluate SignedIn");
     let signedIn = this.authenticationService.SignInData.SignInResult == SignInStatus.SignInSuccess
     //console.log('Menu Component Sign In Check: ' + signedIn);
     return signedIn;

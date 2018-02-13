@@ -1,10 +1,8 @@
-import { AppSettingsModule } from '../app.settings.module'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 import { HttpClientService } from './http-client.service';
 import { Cookie } from 'ng2-cookies';
-
 
 @Injectable()
 export class AuthenticationService {
@@ -32,7 +30,7 @@ export class AuthenticationService {
     }
 
 
-    private signInUrl = "http://freevote-002-site1.btempurl.com/authentication/signin";
+    //private signInUrl = "http://freevote-002-site1.btempurl.com/authentication/signin";
     //private signInUrl = 'http://localhost:56529/authentication/signin';
 
 
@@ -49,7 +47,7 @@ export class AuthenticationService {
         let data = { "website": website, "email": email, "password": password };
 
         this.httpClientService
-            .post(AppSettingsModule.ServiceUrl + 'authentication/signin/', data)
+            .post('authentication/signin/', data)
             //.map(response => response.json()); //assumed - not needed
             .subscribe(response => {
 
