@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ParamMap, ActivatedRoute } from '@angular/router';
 
 import { PointsService, PointSelectionTypes } from '../../services/points.service';
@@ -14,9 +14,8 @@ export class PointsComponent implements OnInit {
 
   //Subscriptions
   private routeChangeSubscription: any;
-  private PointsSelectedSubscription: any;
-  private PointsSelectionErrorSubscription: any;
-  
+  private PointSelectionSubscription: any;
+
   private pointSelectionType = PointSelectionTypes.POTW;
   private Tag: string;
   private error: string;
@@ -28,6 +27,7 @@ export class PointsComponent implements OnInit {
   containingText = new FormControl("");
 
   constructor(private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private pointsService: PointsService) {
+    
     //detect what type of selection is required from route
     this.pointsService.PointSelectionType = PointSelectionTypes.MyPoints;
 
@@ -53,7 +53,7 @@ export class PointsComponent implements OnInit {
         this.pointSelectionType = PointSelectionTypes.Tag;
       }
       else {
-        if (this.router.url == '/private/my-posts') {
+        if (this.router.url == '/my/posts') {
           this.Tag = "My Posts";
           this.pointSelectionType = PointSelectionTypes.MyPoints;
         }
@@ -63,42 +63,31 @@ export class PointsComponent implements OnInit {
         }
 
       }
-
+debugger;
     });
 
-    //subscribe to completion of point selection
-    this.PointsSelectedSubscription = this.pointsService.PointsSelected.subscribe(
-      () => this.PointsSelected()
-    )
-
-    //subscribe to points selection error
-    this.PointsSelectionErrorSubscription = this.pointsService.PointsSelectionError.subscribe(
-      error => this.error = error
-    )
     //initiate selection
     this.SelectPoints();
   }
-
-
-
 
   onSubmit() {
     this.SelectPoints();
   }
 
+  SelectPoints() {
+    this.PointSelectionSubscription = this.pointsService.SelectPoints(this.pointSelectionType, this.dateFrom.value, this.dateTo.value, this.containingText.value)
+      .subscribe(
+        response => { console.log(response); },
+        error => { },
+        () => { })
+  }
+
   ngOnDestroy() {
-    this.PointsSelectedSubscription.unsubscribe();
-    this.PointsSelectionErrorSubscription.unsubscribe();
+    this.PointSelectionSubscription.unsubscribe();
     this.routeChangeSubscription.unsubscribe();
   }
 
-  SelectPoints(){
-    debugger;
-    this.pointsService.SelectPoints(this.pointSelectionType, this.dateFrom.value, this.dateTo.value, this.containingText.value);
-  }
 
-  PointsSelected() {
-    console.log('points successfully selected: now get and display');
-  }
+
 
 }

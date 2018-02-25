@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClientService } from './http-client.service';
-import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class PointsService {
 
-  public PointsSelected = new Subject<any>();
-  public PointsSelectionError = new Subject<any>();
+  // public PointsSelected = new Subject<any>();
+  // public PointsSelectionError = new Subject<any>();
 
   public PointSelectionType: PointSelectionTypes;
 
@@ -17,17 +17,18 @@ export class PointsService {
 
   }
 
-  SelectPoints(pointSelectionType: PointSelectionTypes, dateFrom: string, dateTo: string, containingText: string) {
+  SelectPoints(pointSelectionType: PointSelectionTypes, fromDate: string, toDate: string, containingText: string): Observable<PointSelectionResult> {
 
-    debugger;
-
-    let url=""
-    let data = { "DateFrom": dateFrom, "DateTo": dateTo, "ContainingText": containingText };
+    let url = ""
+    let data = { "FromDate": fromDate, "ToDate": toDate, "ContainingText": containingText };
     let success = false;
 
     switch (pointSelectionType) {
       case PointSelectionTypes.MyPoints:
-        url = "points/mypoints/";
+        url = "points/select/my/";
+        break;
+      case PointSelectionTypes.Tag:
+        url = "points/select/tag/";
         break;
     }
 
@@ -35,22 +36,21 @@ export class PointsService {
 
     console.log('Selectpoints');
 
-    this.httpClientService
-
+    return this.httpClientService
       .post(url, data)
+      .map(data => data as PointSelectionResult)
 
-      //.map(response => response.json()); //assumed - not needed
 
-      .subscribe(response => {
+    // .subscribe(response => {
 
-        //Notify observers 
-        this.PointsSelectionError.next(null); //Clear any error
-        this.PointsSelected.next();
-      },
-      error => {
-        console.log('httpClientService ERROR: ' + error.error.error);
-        this.PointsSelectionError.next(error.error.error);
-      });
+    //   //Notify observers 
+    //   this.PointsSelectionError.next(null); //Clear any error
+    //   this.PointsSelected.next();
+    // },
+    //   error => {
+    //     console.log('httpClientService ERROR: ' + error.error.error);
+    //     this.PointsSelectionError.next(error.error.error);
+    //   });
   }
 
 
@@ -74,4 +74,17 @@ export enum PointSelectionTypes {
 
   Group,
   Popular
+}
+
+export class Point {
+  PointID: number;
+  VoterIDPoint: number;
+  PointText: string;
+}
+
+export class PointSelectionResult {
+  PointsSelected: number;
+  FromDate: string;
+  ToDate: string;
+  Points: Point[];
 }

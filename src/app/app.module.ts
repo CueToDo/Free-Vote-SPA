@@ -14,6 +14,7 @@ import { FBTestComponent } from './fbtest/fbtest.component';
 
 //Modules
 import { MyModule } from './my/my.module';
+import { CoreModule } from './core/core.module';
 
 //Global Singleton Services imported from Services Module
 import { ServicesModule } from './services/services.module';
@@ -30,7 +31,7 @@ import { TrendingComponent } from './public/trending/trending.component';
 import { PostOfTheWeekComponent } from './public/post-of-the-week/post-of-the-week.component';
 import { SelectedTagComponent } from './public/selected-tag/selected-tag.component';
 import { SignOutComponent } from './authentication/sign-out/sign-out.component';
-import { PointsComponent } from './public/points/points.component';
+import { PointsComponent } from './core/points/points.component';
 
 //Other Module Components
 //import { TrendingComponent } from './posts-public/trending/trending.component';
@@ -44,8 +45,7 @@ const appRoutes: Routes = [
   { path: 'post-of-the-week', component: PostOfTheWeekComponent },
   { path: 'my', loadChildren: './my/my.module#MyModule' },
   { path: 'personal', loadChildren: './personal/personal.module#PersonalModule', canActivate: [LoginRouteGuardService] },
-  { path: ':tag', component: PointsComponent },
-  { path: 'private/my-posts', component: PointsComponent }
+  { path: ':tag', component: PointsComponent }
 ];
 
 
@@ -59,8 +59,7 @@ const appRoutes: Routes = [
     SignOutComponent,
     TrendingComponent,
     PostOfTheWeekComponent,
-    SelectedTagComponent,
-    PointsComponent
+    SelectedTagComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +70,9 @@ const appRoutes: Routes = [
     FacebookModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServicesModule,
+    CoreModule,
     MyModule
+    //CommonComponentsModule //no need to import pointscomponent here
   ],
   //ALL Services are provided in imported Services module
   providers: [],

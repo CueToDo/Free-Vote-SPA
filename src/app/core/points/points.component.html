@@ -1,7 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-
-
   <p>
     {{ Tag }}
   </p>
@@ -17,6 +15,8 @@
 
 <button>resubmit</button>
 
+<div *ngIf="error!=''" class="text-danger">
   {{ error }}
+</div>
 
 </form>
