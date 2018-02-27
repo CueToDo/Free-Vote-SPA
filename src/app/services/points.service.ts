@@ -32,9 +32,8 @@ export class PointsService {
         break;
     }
 
-    debugger;
 
-    console.log('Selectpoints');
+    console.log('Selectpoints - ' + url);
 
     return this.httpClientService
       .post(url, data)

@@ -32,6 +32,7 @@ import { PostOfTheWeekComponent } from './public/post-of-the-week/post-of-the-we
 import { SelectedTagComponent } from './public/selected-tag/selected-tag.component';
 import { SignOutComponent } from './authentication/sign-out/sign-out.component';
 import { PointsComponent } from './core/points/points.component';
+import { PointComponent } from './core/point/point.component';
 
 //Other Module Components
 //import { TrendingComponent } from './posts-public/trending/trending.component';
@@ -59,7 +60,8 @@ const appRoutes: Routes = [
     SignOutComponent,
     TrendingComponent,
     PostOfTheWeekComponent,
-    SelectedTagComponent
+    SelectedTagComponent,
+    PointComponent
   ],
   imports: [
     BrowserModule,

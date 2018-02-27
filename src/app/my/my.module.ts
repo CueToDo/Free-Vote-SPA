@@ -8,7 +8,6 @@ import { CoreModule } from '../core/core.module';
 
 //Components
 import { PointsComponent } from '../core/points/points.component';
-import { FavouritePostsComponent } from './favourite-posts/favourite-posts.component';
 import { FollowingTagsComponent } from './following-tags/following-tags.component';
 import { NewPostComponent } from './new-post/new-post.component';
 import { PostOfTheWeekVoteComponent } from './post-of-the-week-vote/post-of-the-week-vote.component';
@@ -20,9 +19,9 @@ import { LoginRouteGuardService } from '../services/login-route-guard.service';
 //Private Module Routes
 const privateRoutes: Routes = [
   { path: 'following-tags', component: FollowingTagsComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'favourite-posts', component: FavouritePostsComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'post-of-the-week-vote', component: PostOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'posts', component: PointsComponent, canActivate: [LoginRouteGuardService] }
+  { path: 'favourite-points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'point-of-the-week-vote', component: PostOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'points', component: PointsComponent, canActivate: [LoginRouteGuardService] }
 ];
 
 @NgModule({
@@ -33,7 +32,6 @@ const privateRoutes: Routes = [
   ],
   declarations: [
     FollowingTagsComponent,
-    FavouritePostsComponent,
     NewPostComponent,
     PostOfTheWeekVoteComponent
   ]

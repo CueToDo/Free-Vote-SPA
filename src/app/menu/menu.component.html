@@ -19,20 +19,20 @@
   </div>
 
   <div class="btn-group" dropdown>
-    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('posts') }">posts</button>
+    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('posts') }">points</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
       <li role="menuitem" *ngIf="SignedIn()">
-        <a routerLink="/my/favourite-posts" class="dropdown-item" routerLinkActive="active">favourite posts</a>
+        <a routerLink="/my/favourite-points" class="dropdown-item" routerLinkActive="active">favourite points</a>
       </li>
       <li role="menuitem" *ngIf="SignedIn()">
-        <a routerLink="/my/posts" class="dropdown-item" routerLinkActive="active">my posts</a>
+        <a routerLink="/my/points" class="dropdown-item" routerLinkActive="active">my points</a>
       </li>
 
       <li role="menuitem">
-        <a routerLink="/post-of-the-week" class="dropdown-item" routerLinkActive="active">post of the week</a>
+        <a routerLink="/point-of-the-week" class="dropdown-item" routerLinkActive="active">point of the week</a>
       </li>
       <li role="menuitem" *ngIf="SignedIn()">
-        <a routerLink="/my/post-of-the-week-vote" class="dropdown-item" routerLinkActive="active">post-o-t-w vote</a>
+        <a routerLink="/my/point-of-the-week-vote" class="dropdown-item" routerLinkActive="active">point-o-t-w vote</a>
       </li>
     </ul>
   </div>
