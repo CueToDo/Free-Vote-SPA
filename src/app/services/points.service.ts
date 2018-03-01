@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClientService } from './http-client.service';
 import { Observable } from 'rxjs/Rx';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable()
 export class PointsService {
@@ -13,11 +14,11 @@ export class PointsService {
   //Pages retrieved from server
   pages: number[];
 
-  constructor(private httpClientService: HttpClientService) {
+  constructor(private httpClientService: HttpClientService, private route: ActivatedRoute) {
 
   }
 
-  SelectPoints(pointSelectionType: PointSelectionTypes, fromDate: string, toDate: string, containingText: string): Observable<PointSelectionResult> {
+  SelectPoints(pointSelectionType: PointSelectionTypes, tag: string, fromDate: string, toDate: string, containingText: string): Observable<PointSelectionResult> {
 
     let url = ""
     let data = { "FromDate": fromDate, "ToDate": toDate, "ContainingText": containingText };
@@ -25,10 +26,10 @@ export class PointsService {
 
     switch (pointSelectionType) {
       case PointSelectionTypes.MyPoints:
-        url = "points/select/my/";
+        url = "points/select/my";
         break;
-      case PointSelectionTypes.Tag:
-        url = "points/select/tag/";
+      case PointSelectionTypes.Tag: ;
+        url = "points/select/" + tag;
         break;
     }
 

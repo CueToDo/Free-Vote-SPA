@@ -12,7 +12,7 @@ import { PointsService, PointSelectionTypes, Point } from '../../services/points
 })
 export class PointsComponent implements OnInit {
 
-  
+
   //Subscriptions
   private routeChangeSubscription: any;
   private PointSelectionSubscription: any;
@@ -24,9 +24,9 @@ export class PointsComponent implements OnInit {
   containingText = new FormControl("");
 
   //Private variables
+  private tagRoute = "";
   private pointSelectionType = PointSelectionTypes.POTW;
-  private Tag: string;
-  private points: Point[] ;
+  private points: Point[];
   private error: string;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private pointsService: PointsService) {
@@ -51,21 +51,21 @@ export class PointsComponent implements OnInit {
 
       console.log('POINTS COMPONENT ROUTE CHANGED');
 
+      this.tagRoute="";
+
       if (params['tag'] != undefined) {
-        this.Tag = params['tag'];
+        this.tagRoute = params['tag'];
         this.pointSelectionType = PointSelectionTypes.Tag;
+        debugger;
       }
       else {
         if (this.router.url == '/my/points') {
-          this.Tag = "My Points";
           this.pointSelectionType = PointSelectionTypes.MyPoints;
         }
         else if (this.router.url == '/my/favourite-points') {
-          this.Tag = "My Favourites";
           this.pointSelectionType = PointSelectionTypes.MyPoints;
         }
         else {
-          this.Tag = "Other";
           this.pointSelectionType = PointSelectionTypes.Popular;
         }
 
@@ -82,13 +82,17 @@ export class PointsComponent implements OnInit {
   }
 
   SelectPoints() {
-    this.PointSelectionSubscription = this.pointsService.SelectPoints(this.pointSelectionType, this.dateFrom.value, this.dateTo.value, this.containingText.value)
+
+    this.PointSelectionSubscription = this.pointsService.SelectPoints(
+        this.pointSelectionType, this.tagRoute, this.dateFrom.value, 
+        this.dateTo.value, this.containingText.value)
       .subscribe(
         response => {
           console.log(response);
           this.dateFrom.setValue(response.FromDate);
           this.dateTo.setValue(response.ToDate);
           this.points = response.Points;
+          debugger;
         },
         error => { this.error = error.error.error; },
         () => { })
