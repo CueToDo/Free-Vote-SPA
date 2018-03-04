@@ -10,8 +10,6 @@ export class TagsService {
   private WebAPIUrl = "tags/trending/free.vote";
 
   constructor(private httpClientService: HttpClientService) {
-    console.log('tags.service');
-    console.log('WebAPIUrl:' + this.WebAPIUrl);
   }
 
   //OnInit() work with Directives and Components. 

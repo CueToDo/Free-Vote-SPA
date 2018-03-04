@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
-import { AuthenticationService, SignInStatus } from '../services/authentication.service';
+
+import { CoreDataService } from '../../services/coredata.service';
+import { AuthenticationService, SignInStatus } from '../../services/authentication.service';
 
 
 @Component({
@@ -11,10 +13,12 @@ import { AuthenticationService, SignInStatus } from '../services/authentication.
 })
 export class MenuComponent implements OnInit, OnDestroy {
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService) {
-    console.log("NEW menu component");
+  constructor(private activatedRoute: ActivatedRoute, private router: Router,
+    private coreDataService: CoreDataService, private authenticationService: AuthenticationService) {
+    console.log("MENU constructor");
   }
 
+  //ToDo TagURLs
   TagURLs: string[] = ['/trending', '/private/following-tags'];
   PostURLs: string[] = ['/private/favourite-posts', '/private/my-posts', '/post-of-the-week', '/private/post-of-the-week-vote'];
 
@@ -45,7 +49,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('INIT Menu Component');
+    console.log('MENU onInit');
     //https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
     //https://stackoverflow.com/questions/37144999/angular2-get-router-params-outside-of-router-outlet
 

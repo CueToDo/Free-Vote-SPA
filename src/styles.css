@@ -3,10 +3,11 @@
 
 /*title, subtile, menu, header, footer background-color*/
 .title{background-color:#279FBB; color:white;}
-.subtitle{background-color:#070707; color:white; padding-top: 5px; padding-bottom:5px; }
-.menu{background-color:#101010; color:white;padding-top: 5px;padding-bottom:5px;}
+.subtitle{background-color:black; color:white; padding-top: 5px; padding-bottom:5px; }
+.menu{background-color:#070707; color:white;padding-top: 5px;padding-bottom:5px;}
+.pagetitle{background-color:#333333; color:white;}
 .site-content{max-width:600px; margin-top:10px;}
-.footer{background-color:#070707;color:white;padding-top: 5px;padding-bottom:15px;}
+.footer{background-color:black;color:white;padding-top: 5px;padding-bottom:15px;}
 .footer .col-xs-12{margin-top:10px;}
 
 
@@ -34,3 +35,6 @@
 
 .signin .row {margin-top:8px;}
 .signin:last-child {margin-bottom:8px;}
+
+.title h1  {margin-top: 12px; }
+.pagetitle h1 {margin-top: 8px; font-size: 2em; }

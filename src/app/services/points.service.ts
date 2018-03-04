@@ -26,15 +26,17 @@ export class PointsService {
 
     switch (pointSelectionType) {
       case PointSelectionTypes.MyPoints:
-        url = "points/select/my";
+        url = "points/select/my/points";
+        break;
+        case PointSelectionTypes.FavouritePoints:
+        url = "points/select/my/favourite-points";
         break;
       case PointSelectionTypes.Tag: ;
-        url = "points/select/" + tag;
+        url = "points/select/tag/" + tag;
         break;
     }
 
-
-    console.log('Selectpoints - ' + url);
+    //console.log('Selectpoints - ' + url);
 
     return this.httpClientService
       .post(url, data)
@@ -68,8 +70,8 @@ export enum PointSelectionTypes {
   POTWVote,
   WoWAdmin,
 
-  MyPoints, // private/my-posts
-  Favourites,
+  MyPoints, 
+  FavouritePoints,
   Point,
 
   Group,

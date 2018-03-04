@@ -1,0 +1,21 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  date from
+  <input formControlName="dateFrom" type="text" required /> date to
+  <input formControlName="dateTo" type="text" required /> containing text
+  <input formControlName="containingText" type="text" required />
+
+  <button>resubmit</button>
+
+  <div *ngIf="error!=''" class="text-danger">
+    {{ error }}
+  </div>
+
+  <div *ngFor="let point of points">
+    <div [innerHTML]="point.PointText"></div>
+    (see also)
+    use the pointcomponent here
+    <hr>
+  </div>
+
+</form>

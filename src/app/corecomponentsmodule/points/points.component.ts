@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ParamMap, ActivatedRoute } from '@angular/router';
 
+import { CoreDataService } from '../../services/coredata.service';
 import { PointsService, PointSelectionTypes, Point } from '../../services/points.service';
 
 @Component({
@@ -24,12 +25,14 @@ export class PointsComponent implements OnInit {
   containingText = new FormControl("");
 
   //Private variables
-  private tagRoute = "";
   private pointSelectionType = PointSelectionTypes.POTW;
   private points: Point[];
   private error: string;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private pointsService: PointsService) {
+  constructor(private formBuilder: FormBuilder,
+    private router: Router, private activatedRoute: ActivatedRoute,
+    private coreDataService: CoreDataService,
+    private pointsService: PointsService) {
 
     //detect what type of selection is required from route
     this.pointsService.PointSelectionType = PointSelectionTypes.MyPoints;
@@ -39,6 +42,8 @@ export class PointsComponent implements OnInit {
       "dateTo": this.dateTo,
       "containingText": this.containingText
     });
+
+    console.log('POINTS constructor');
   }
 
   ngOnInit() {
@@ -49,28 +54,27 @@ export class PointsComponent implements OnInit {
     //Need to do following to get route params
     this.routeChangeSubscription = this.activatedRoute.params.subscribe(params => {
 
-      console.log('POINTS COMPONENT ROUTE CHANGED');
-
-      this.tagRoute="";
-
       if (params['tag'] != undefined) {
-        this.tagRoute = params['tag'];
+        this.coreDataService.TagRoute = params['tag'];
+        this.coreDataService.SetPageTitle(this.coreDataService.TagDisplay());
         this.pointSelectionType = PointSelectionTypes.Tag;
-        debugger;
       }
       else {
         if (this.router.url == '/my/points') {
           this.pointSelectionType = PointSelectionTypes.MyPoints;
+          this.coreDataService.SetPageTitle('my points');
         }
         else if (this.router.url == '/my/favourite-points') {
-          this.pointSelectionType = PointSelectionTypes.MyPoints;
+          this.pointSelectionType = PointSelectionTypes.FavouritePoints;
+          this.coreDataService.SetPageTitle('favourite points');
         }
         else {
           this.pointSelectionType = PointSelectionTypes.Popular;
+          this.coreDataService.SetPageTitle('popular points');
         }
 
       }
-
+      console.log('POINTS onInit');
     });
 
     //initiate selection
@@ -78,21 +82,21 @@ export class PointsComponent implements OnInit {
   }
 
   onSubmit() {
+    //ToDo Change the URL
     this.SelectPoints();
   }
 
   SelectPoints() {
 
     this.PointSelectionSubscription = this.pointsService.SelectPoints(
-        this.pointSelectionType, this.tagRoute, this.dateFrom.value, 
-        this.dateTo.value, this.containingText.value)
+      this.pointSelectionType, this.coreDataService.TagRoute, this.dateFrom.value,
+      this.dateTo.value, this.containingText.value)
       .subscribe(
         response => {
-          console.log(response);
+          //console.log(response);
           this.dateFrom.setValue(response.FromDate);
           this.dateTo.setValue(response.ToDate);
           this.points = response.Points;
-          debugger;
         },
         error => { this.error = error.error.error; },
         () => { })

@@ -26,7 +26,6 @@ export class AuthenticationService {
         }
 
         this.SignInData.Version = 0;
-        console.log('Auth SVC constructor: version ' + this.SignInData.Version);
     }
 
 

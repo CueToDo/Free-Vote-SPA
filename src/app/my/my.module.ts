@@ -4,36 +4,34 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from "@angular/router"
 
 //modules
-import { CoreModule } from '../core/core.module';
+import { CoreComponentsModule } from '../corecomponentsmodule/corecomponents.module';
 
 //Components
-import { PointsComponent } from '../core/points/points.component';
-import { FollowingTagsComponent } from './following-tags/following-tags.component';
+import { TagsComponent } from '../corecomponentsmodule/tags/tags.component';
+import { PointsComponent } from '../corecomponentsmodule/points/points.component';
 import { NewPostComponent } from './new-post/new-post.component';
-import { PostOfTheWeekVoteComponent } from './post-of-the-week-vote/post-of-the-week-vote.component';
-
+import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-the-week-vote.component';
 
 //Services
 import { LoginRouteGuardService } from '../services/login-route-guard.service';
 
 //Private Module Routes
 const privateRoutes: Routes = [
-  { path: 'following-tags', component: FollowingTagsComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'following-tags', component: TagsComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'favourite-points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'point-of-the-week-vote', component: PostOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'points', component: PointsComponent, canActivate: [LoginRouteGuardService] }
+  { path: 'point-of-the-week-vote', component: PointOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] }
 ];
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(privateRoutes),
-    CoreModule
+    CoreComponentsModule,
+    RouterModule.forChild(privateRoutes)
   ],
   declarations: [
-    FollowingTagsComponent,
     NewPostComponent,
-    PostOfTheWeekVoteComponent
+    PointOfTheWeekVoteComponent
   ]
   //providers: [LoginRouteGuardService] //YOU BASTARD AuthenticationService There's the separate instance
 })

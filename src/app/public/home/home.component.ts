@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import {CoreDataService} from '../../services/coredata.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -7,9 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private coreDataService: CoreDataService) { }
 
   ngOnInit() {
+    this.coreDataService.SetPageTitle('Home');
   }
 
 }

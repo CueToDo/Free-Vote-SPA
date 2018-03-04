@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PostOfTheWeekComponent } from './post-of-the-week.component';
+import { TagsComponent } from './tags.component';
 
-describe('PostOfTheWeekComponent', () => {
-  let component: PostOfTheWeekComponent;
-  let fixture: ComponentFixture<PostOfTheWeekComponent>;
+describe('TrendingComponent', () => {
+  let component: TagsComponent;
+  let fixture: ComponentFixture<TagsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PostOfTheWeekComponent ]
+      declarations: [ TagsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PostOfTheWeekComponent);
+    fixture = TestBed.createComponent(TagsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
