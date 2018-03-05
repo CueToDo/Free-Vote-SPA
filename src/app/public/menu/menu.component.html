@@ -13,7 +13,7 @@
         <a routerLink="/my/following-tags" class="dropdown-item" routerLinkActive="active">following</a>
       </li>
       <li role="menuitem">
-        <a [routerLink]="SelectedTag" class="dropdown-item" routerLinkActive="active">{{ SelectedTag}}</a>
+        <a *ngIf="selectedTag !=''" [routerLink]="selectedTag" class="dropdown-item" routerLinkActive="active">{{ selectedTag}}</a>
       </li>
     </ul>
   </div>

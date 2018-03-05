@@ -9,22 +9,39 @@ export class CoreDataService {
 
   constructor(private tagDisplayPipe: TagDisplayPipe) { }
 
+  public PageTitle: string;
+  public TagRoute: string;
+  public TagDisplay: string;
+
   //http://jasonwatmore.com/post/2016/12/01/angular-2-communicating-between-components-with-observable-subject
-  private subject = new Subject<string>();
+  private tagDisplaySubject = new Subject<string>();
+  private titleSubject = new Subject<string>();
+
+  SetTagRoute(tagRoute: string) {
+
+    this.TagRoute = tagRoute;
+    this.TagDisplay = this.tagDisplayPipe.transform(tagRoute);
+    this.PageTitle = this.TagDisplay;
+
+    this.tagDisplaySubject.next(this.TagDisplay);
+    this.titleSubject.next(this.TagDisplay);
+
+    return
+  }
+
+  GetTagDisplay(): Observable<string> {
+    return this.tagDisplaySubject.asObservable();
+  }
 
   SetPageTitle(pageTitle: string) {
-    console.log('core data service PAGETITLE: ' + pageTitle);
-    this.subject.next(pageTitle)
+    this.PageTitle = pageTitle;
+    this.titleSubject.next(pageTitle)
   }
 
   GetPageTitle(): Observable<string> {
-    return this.subject.asObservable();
+    return this.titleSubject.asObservable();
   }
 
-  TagRoute = "";
 
-  TagDisplay(): string {
-    return this.tagDisplayPipe.transform(this.TagRoute);
-  }
 
 }

@@ -22,8 +22,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   TagURLs: string[] = ['/trending', '/private/following-tags'];
   PostURLs: string[] = ['/private/favourite-posts', '/private/my-posts', '/post-of-the-week', '/private/post-of-the-week-vote'];
 
-  private routeChangeSubscription: any;
-  private SelectedTag: string = 'any-old-baguette';
+  private tagChangeSubscription: any;
+  private selectedTag: string = '';
   public SignInStatus = SignInStatus;
 
   SignedIn(): boolean {
@@ -37,7 +37,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     //console.log(this.SelectedTag + ' ' + this.activatedRoute.url);
     switch (link) {
       case "tags": {
-        return this.TagURLs.indexOf(this.router.url) > -1 || this.SelectedTag == this.router.url.replace('/', '');
+        return this.TagURLs.indexOf(this.router.url) > -1 || this.selectedTag == this.router.url.replace('/', '');
       }
       case "posts": {
         return this.PostURLs.indexOf(this.router.url) > -1;
@@ -49,21 +49,18 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('MENU onInit');
     //https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
     //https://stackoverflow.com/questions/37144999/angular2-get-router-params-outside-of-router-outlet
 
-    this.routeChangeSubscription = this.activatedRoute.params.subscribe(params => {
-      console.log('menu component ROUTE CHANGED');
-      if (params['tag'] && params['tag'] != '') {
-        this.SelectedTag = params['tag'];
-        console.log('CHANGING' + this.SelectedTag);
-      }
-    });
+    this.tagChangeSubscription = this.coreDataService.GetTagDisplay()
+      .subscribe(tagDisplay => {
+        this.selectedTag = tagDisplay;
+        console.log('swotiwont');
+      });
   }
 
   ngOnDestroy() {
-    this.routeChangeSubscription.unsubscribe();
+    this.tagChangeSubscription.unsubscribe();
   }
 
 } 

@@ -28,6 +28,7 @@ export class PointsComponent implements OnInit {
   private pointSelectionType = PointSelectionTypes.POTW;
   private points: Point[];
   private error: string;
+  private tagRoute:string;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router, private activatedRoute: ActivatedRoute,
@@ -55,8 +56,8 @@ export class PointsComponent implements OnInit {
     this.routeChangeSubscription = this.activatedRoute.params.subscribe(params => {
 
       if (params['tag'] != undefined) {
-        this.coreDataService.TagRoute = params['tag'];
-        this.coreDataService.SetPageTitle(this.coreDataService.TagDisplay());
+        this.tagRoute = params['tag'];
+        this.coreDataService.SetTagRoute(this.tagRoute);
         this.pointSelectionType = PointSelectionTypes.Tag;
       }
       else {
@@ -89,7 +90,7 @@ export class PointsComponent implements OnInit {
   SelectPoints() {
 
     this.PointSelectionSubscription = this.pointsService.SelectPoints(
-      this.pointSelectionType, this.coreDataService.TagRoute, this.dateFrom.value,
+      this.pointSelectionType, this.tagRoute, this.dateFrom.value,
       this.dateTo.value, this.containingText.value)
       .subscribe(
         response => {
