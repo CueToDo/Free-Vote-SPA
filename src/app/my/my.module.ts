@@ -82,5 +82,3 @@ export class MyModule { }
 //In the new common module must "import from" + import and export ReactiveFormsModule
 
 //+ when you change your imports you must stop the webserver and ng serve again
-
-//Save git username/password
