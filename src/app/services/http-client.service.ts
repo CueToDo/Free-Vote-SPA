@@ -4,38 +4,74 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Cookie } from 'ng2-cookies';
 
-const ServiceUrl = 'http://localhost:56529/';
-//const ServiceUrl = 'http://freevote-002-site1.btempurl.com/';
-//const ServiceUrl = 'http://api.free.vote/';
+import { } from 'rxjs/add/operator/map';
 
 @Injectable()
 export class HttpClientService {
 
-  letx=1;
-  constructor(private httpClient: HttpClient) { }
+  private readonly spaDomain: string;
+
+  private readonly serviceUrl: string = 'http://localhost:56529/';
+  //private readonly serviceUrl: string = 'http://api.free.vote/';
+
+  private sessionID: string = Cookie.get('SessionID').valueOf();;
+  private jwt: string = Cookie.get('JWT').valueOf();
+
+  constructor(private httpClient: HttpClient) {
+
+    this.spaDomain = window.location.origin.split("//")[1].split(":")[0];
+    if (this.spaDomain == 'localhost') this.spaDomain = 'free.vote';
+
+    console.log({ SPADomain: this.spaDomain, SessionID: this.sessionID, JWT: this.jwt })
+
+    if (!this.jwt && !this.sessionID) {
+
+      this.SessionIDNew()
+        .then(sessionID => {
+          Cookie.set('SessionID', sessionID);
+          console.log(sessionID);
+        })
+    }
+  }
 
   ngOnInit() {
   }
 
+  SessionIDNew(): Promise<string> {
+    return this.post('authentication/sessionidnew/', {})
+      .then(response => response.SessionID);
+  }
+
   RequestHeaders() {
+
     //https://stackoverflow.com/questions/45286764/angular-4-3-httpclient-doesnt-send-header/45286959#45286959
     //The instances of the new HttpHeader class are immutable objects.
     //state cannot be changed after creation
     let headers = new HttpHeaders()
       .set('Content-Type', 'application/json; charset=utf-8')
-      .set('SignInData', Cookie.get('SignInData').valueOf());
+      .set('Website', this.spaDomain)
+      .set('SessionID', this.sessionID)
+      .set('JWT', this.jwt);
+
     return { headers: headers };
+  }
+
+  getPrice(url, data): Promise<number> {
+    return this.post(url, data)
+      .then(response => response.json().bpi[""].rate);
   }
 
   //Observable<Object>
   get(url) {
-    return this.httpClient.get(ServiceUrl + url, this.RequestHeaders());
+    return this.httpClient.get(this.serviceUrl + url, this.RequestHeaders());
   }
 
-  post(url, data) {
-    return this.httpClient.post(ServiceUrl + url, JSON.stringify(data), this.RequestHeaders());
+  post(url, data): Promise<any> {
+    return this.httpClient
+      .post(this.serviceUrl + url,
+        JSON.stringify(data),
+        this.RequestHeaders())
+      .toPromise();
   }
 
 }
-
-

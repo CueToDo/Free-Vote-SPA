@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { AuthenticationService, SignInStatus } from './authentication.service';
+
+import { SignInStatus } from './coredata.service';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class LoginRouteGuardService implements CanActivate {
@@ -11,7 +13,7 @@ export class LoginRouteGuardService implements CanActivate {
 
   canActivate() {
     this.currentDate = new Date()
-    let signedIn = this.authenticationServide.SignInData.SignInResult == SignInStatus.SignInSuccess;
+    let signedIn = this.authenticationServide.SignInData.SignInStatus == SignInStatus.SignInSuccess;
     return signedIn;
   }
 }

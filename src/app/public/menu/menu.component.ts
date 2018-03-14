@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
-import { CoreDataService } from '../../services/coredata.service';
-import { AuthenticationService, SignInStatus } from '../../services/authentication.service';
-
+import { CoreDataService, SignInStatus } from '../../services/coredata.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-menu',
@@ -27,7 +26,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   public SignInStatus = SignInStatus;
 
   SignedIn(): boolean {
-    let signedIn = this.authenticationService.SignInData.SignInResult == SignInStatus.SignInSuccess
+    let signedIn = this.authenticationService.SignInData.SignInStatus == SignInStatus.SignInSuccess
     //console.log('Menu Component Sign In Check: ' + signedIn);
     return signedIn;
   }

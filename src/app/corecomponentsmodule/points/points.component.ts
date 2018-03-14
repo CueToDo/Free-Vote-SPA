@@ -16,7 +16,7 @@ export class PointsComponent implements OnInit {
 
   //Subscriptions
   private routeChangeSubscription: any;
-  private PointSelectionSubscription: any;
+  //private PointSelectionSubscription: any;
 
   //Controls
   form: FormGroup;
@@ -89,22 +89,19 @@ export class PointsComponent implements OnInit {
 
   SelectPoints() {
 
-    this.PointSelectionSubscription = this.pointsService.SelectPoints(
+    this.pointsService.SelectPoints(
       this.pointSelectionType, this.tagRoute, this.dateFrom.value,
       this.dateTo.value, this.containingText.value)
-      .subscribe(
+      .then(
         response => {
           //console.log(response);
           this.dateFrom.setValue(response.FromDate);
           this.dateTo.setValue(response.ToDate);
           this.points = response.Points;
-        },
-        error => { this.error = error.error.error; },
-        () => { })
+        })
   }
 
   ngOnDestroy() {
-    this.PointSelectionSubscription.unsubscribe();
     this.routeChangeSubscription.unsubscribe();
   }
 

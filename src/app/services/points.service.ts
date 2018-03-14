@@ -18,7 +18,7 @@ export class PointsService {
 
   }
 
-  SelectPoints(pointSelectionType: PointSelectionTypes, tag: string, fromDate: string, toDate: string, containingText: string): Observable<PointSelectionResult> {
+  SelectPoints(pointSelectionType: PointSelectionTypes, tag: string, fromDate: string, toDate: string, containingText: string): Promise<PointSelectionResult> {
 
     let url = ""
     let data = { "FromDate": fromDate, "ToDate": toDate, "ContainingText": containingText };
@@ -40,7 +40,7 @@ export class PointsService {
 
     return this.httpClientService
       .post(url, data)
-      .map(data => data as PointSelectionResult)
+      .then(data => data as PointSelectionResult)
 
 
     // .subscribe(response => {

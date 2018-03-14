@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/map'; //https://stackoverflow.com/questions/34515173/angular-2-http-get-with-typescript-error-http-get-map-is-not-a-function-in
 
 //import { HttpClientService } from '../../services/http-client.service';
-import { AuthenticationService, SignInStatus } from '../../services/authentication.service';
-import 'rxjs/add/operator/map'; //https://stackoverflow.com/questions/34515173/angular-2-http-get-with-typescript-error-http-get-map-is-not-a-function-in
+import { AuthenticationService } from '../../services/authentication.service';
+import { SignInStatus } from '../../services/coredata.service';
 
 
 @Component({
@@ -42,14 +43,7 @@ export class SignInComponent implements OnInit, OnDestroy {
     this.authenticationService.SignInStatusChange.unsubscribe();
   }
 
-  SignInStatusChange() {
 
-    console.log('changed ' + this.authenticationService.SignInData.SignInResult);
-    
-    if (this.authenticationService.SignInData.SignInResult  == SignInStatus.SignInSuccess) {
-      this._router.navigateByUrl('trending'); 
-    }
-  }
 
   onSubmit() {
     console.log('submit');
@@ -59,7 +53,13 @@ export class SignInComponent implements OnInit, OnDestroy {
 
       //just tell me something changed???
       this.authenticationService.SignInStatusChange.subscribe(
-        () => this.SignInStatusChange()
+        (signInData) => {
+          console.log('changed ' + this.authenticationService.SignInData.SignInStatus);
+
+          if (signInData.SignInStatus == SignInStatus.SignInSuccess) {
+            this._router.navigateByUrl('trending');
+          }
+        }
       )
 
       this.authenticationService.SignIn("free.vote", this.emailAddress.value, this.password.value);

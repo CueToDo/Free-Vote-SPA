@@ -7,7 +7,7 @@ import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 @Injectable()
 export class TagsService {
 
-  private WebAPIUrl = "tags/trending/free.vote";
+  private WebAPIUrl = "tags/trending";
 
   constructor(private httpClientService: HttpClientService) {
   }
