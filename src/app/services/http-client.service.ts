@@ -10,7 +10,6 @@ import { } from 'rxjs/add/operator/map';
 export class HttpClientService {
 
   private readonly spaDomain: string;
-
   private readonly serviceUrl: string = 'http://localhost:56529/';
   //private readonly serviceUrl: string = 'http://api.free.vote/';
 
@@ -20,12 +19,14 @@ export class HttpClientService {
   constructor(private httpClient: HttpClient) {
 
     this.spaDomain = window.location.origin.split("//")[1].split(":")[0];
+
     if (this.spaDomain == 'localhost') this.spaDomain = 'free.vote';
 
     console.log({ SPADomain: this.spaDomain, SessionID: this.sessionID, JWT: this.jwt })
 
     if (!this.jwt && !this.sessionID) {
 
+      //If there's no JWT then must get SessionID
       this.SessionIDNew()
         .then(sessionID => {
           Cookie.set('SessionID', sessionID);
@@ -34,19 +35,19 @@ export class HttpClientService {
     }
   }
 
-  ngOnInit() {
-  }
 
   SessionIDNew(): Promise<string> {
     return this.post('authentication/sessionidnew/', {})
       .then(response => response.SessionID);
   }
 
+
   RequestHeaders() {
 
     //https://stackoverflow.com/questions/45286764/angular-4-3-httpclient-doesnt-send-header/45286959#45286959
     //The instances of the new HttpHeader class are immutable objects.
     //state cannot be changed after creation
+
     let headers = new HttpHeaders()
       .set('Content-Type', 'application/json; charset=utf-8')
       .set('Website', this.spaDomain)
@@ -56,17 +57,16 @@ export class HttpClientService {
     return { headers: headers };
   }
 
-  getPrice(url, data): Promise<number> {
-    return this.post(url, data)
-      .then(response => response.json().bpi[""].rate);
+
+  get(url): Promise<any> {
+    return this.httpClient.get(this.serviceUrl + url, this.RequestHeaders()).toPromise();
   }
 
-  //Observable<Object>
-  get(url) {
-    return this.httpClient.get(this.serviceUrl + url, this.RequestHeaders());
-  }
 
   post(url, data): Promise<any> {
+
+    debugger;
+
     return this.httpClient
       .post(this.serviceUrl + url,
         JSON.stringify(data),

@@ -18,28 +18,40 @@ export class PointsService {
 
   }
 
-  SelectPoints(pointSelectionType: PointSelectionTypes, tag: string, fromDate: string, toDate: string, containingText: string): Promise<PointSelectionResult> {
+  PointsTaggedMinDate(tagRoute: string, points: number): Promise<string> {
 
-    let url = ""
+    let data = { "TagRoute": tagRoute, "Points": points };
+    let route = "points/taggedMinDate";
+debugger;
+    return this.httpClientService
+      .post(route, data)
+      .then(response => response)    
+  }
+
+
+  SelectPoints(pointSelectionType: PointSelectionTypes, tag: string,
+    fromDate: string, toDate: string, containingText: string): Promise<PointSelectionResult> {
+
+    let route = ""
     let data = { "FromDate": fromDate, "ToDate": toDate, "ContainingText": containingText };
     let success = false;
 
     switch (pointSelectionType) {
       case PointSelectionTypes.MyPoints:
-        url = "points/select/my/points";
+        route = "points/select/my/points";
         break;
-        case PointSelectionTypes.FavouritePoints:
-        url = "points/select/my/favourite-points";
+      case PointSelectionTypes.FavouritePoints:
+        route = "points/select/my/favourite-points";
         break;
       case PointSelectionTypes.Tag: ;
-        url = "points/select/tag/" + tag;
+        route = "points/select/tag/" + tag;
         break;
     }
 
     //console.log('Selectpoints - ' + url);
 
     return this.httpClientService
-      .post(url, data)
+      .post(route, data)
       .then(data => data as PointSelectionResult)
 
 
@@ -70,7 +82,7 @@ export enum PointSelectionTypes {
   POTWVote,
   WoWAdmin,
 
-  MyPoints, 
+  MyPoints,
   FavouritePoints,
   Point,
 

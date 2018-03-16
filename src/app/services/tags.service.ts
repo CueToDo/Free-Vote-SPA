@@ -16,10 +16,10 @@ export class TagsService {
   //They do not work with other types, like a service 
 
 
-  Trending(): Observable<Tag[]> {
+  Trending(): Promise<Tag[]> {
     return this.httpClientService
       .get(this.WebAPIUrl)
-      .map(data => data as Tag[])
+      .then(data => data as Tag[])
   }
 
 }

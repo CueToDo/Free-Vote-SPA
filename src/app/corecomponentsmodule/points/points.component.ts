@@ -75,16 +75,26 @@ export class PointsComponent implements OnInit {
         }
 
       }
-      console.log('POINTS onInit');
+      console.log('POINTS onInit ' + this.tagRoute);
     });
 
     //initiate selection
-    this.SelectPoints();
+    this.PointsTaggedMinDate();
   }
 
   onSubmit() {
     //ToDo Change the URL
     this.SelectPoints();
+  }
+
+  PointsTaggedMinDate(){
+    this.pointsService.PointsTaggedMinDate(this.tagRoute, 10)
+    .then(
+      response => {
+        this.dateFrom.setValue(response);
+        this.SelectPoints();
+      }
+    )
   }
 
   SelectPoints() {

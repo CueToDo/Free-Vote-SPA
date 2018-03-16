@@ -27,7 +27,7 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.tagsService.Trending().subscribe(response => {
+    this.tagsService.Trending().then(response => {
       this.tags = response;
     })
   }
