@@ -10,15 +10,15 @@ import { } from 'rxjs/add/operator/map';
 export class HttpClientService {
 
   private readonly spaDomain: string;
-  private readonly serviceUrl: string = 'http://localhost:56529/';
-  //private readonly serviceUrl: string = 'http://api.free.vote/';
+  //private readonly serviceUrl: string = 'http://localhost:56529/';
+  private readonly serviceUrl: string = 'http://api.free.vote/';
 
   private sessionID: string = Cookie.get('SessionID').valueOf();;
   private jwt: string = Cookie.get('JWT').valueOf();
 
   constructor(private httpClient: HttpClient) {
 
-    this.spaDomain = window.location.origin.split("//")[1].split(":")[0];
+    this.spaDomain = window.location.origin.split("//")[1].split(":")[0].replace('api.','');
 
     if (this.spaDomain == 'localhost') this.spaDomain = 'free.vote';
 
@@ -64,8 +64,6 @@ export class HttpClientService {
 
 
   post(url, data): Promise<any> {
-
-    debugger;
 
     return this.httpClient
       .post(this.serviceUrl + url,

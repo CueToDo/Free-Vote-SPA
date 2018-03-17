@@ -11,11 +11,19 @@
     {{ error }}
   </div>
 
+  <script src="https://cdn.ckeditor.com/4.9.0/standard/ckeditor.js"></script>
+
+  <textarea name="editor1" id="editor1" rows="10" cols="80">
+    This is my textarea to be replaced with CKEditor.
+</textarea>
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace( 'editor1' );
+</script>
+
   <div *ngFor="let point of points">
-    <div [innerHTML]="point.PointText"></div>
-    (see also)
-    use the pointcomponent here
-    <hr>
+    <app-point [point]="point"></app-point>
   </div>
 
 </form>

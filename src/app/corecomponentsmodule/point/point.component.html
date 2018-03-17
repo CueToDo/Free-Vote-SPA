@@ -1,3 +1,6 @@
-<p>
-  point works!
-</p>
+<div [innerHTML]="point.PointText"></div>
+<span *ngIf="point.LastRow"> (see also )</span>
+{{point.PointID}}
+{{point.LastRow}}
+{{point.DateTimeUpdated}}
+<hr *ngIf="!point.LastRow"/>

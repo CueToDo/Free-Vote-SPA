@@ -22,10 +22,10 @@ export class PointsService {
 
     let data = { "TagRoute": tagRoute, "Points": points };
     let route = "points/taggedMinDate";
-debugger;
+
     return this.httpClientService
       .post(route, data)
-      .then(response => response)    
+      .then(response => response)
   }
 
 
@@ -52,8 +52,11 @@ debugger;
 
     return this.httpClientService
       .post(route, data)
-      .then(data => data as PointSelectionResult)
-
+      .then(data => {
+        console.log(data);
+        return data as PointSelectionResult;
+      })
+  
 
     // .subscribe(response => {
 
@@ -93,7 +96,47 @@ export enum PointSelectionTypes {
 export class Point {
   PointID: number;
   VoterIDPoint: number;
+
+  PointTypeID:number;
+  PointTypeIDVoter:number;
+
   PointText: string;
+
+  Draft : boolean;
+  Source: string;
+  URL: string;
+  Archived: boolean;
+  DateTimeUpdated: string;
+
+  Sequence:number;
+  LastRowNumber:number;
+  LastRow: boolean;
+
+  FeedbackGiven: boolean;
+  FeedbackID:number;
+  SupportLevelID:number;
+  Comment: string;
+  FeedbackDate: string;
+  FeedbackIsUpdatable: boolean;
+  WoWVote: boolean;
+
+  Attached: boolean;
+
+  Adoptable: boolean;
+  Unadoptable: boolean;
+
+  TotalFeedback:number;
+  NetSupport:number;
+  PerCentInFavour:number;
+
+  Support:number;
+  Opposition:number;
+  Abstentions:number;
+  Reports:number;
+
+  IsInOpenedSurvey: boolean;
+  IsInClosedSurvey: boolean;
+  IsQuestionAnswer: boolean;
 }
 
 export class PointSelectionResult {

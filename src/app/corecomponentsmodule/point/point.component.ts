@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
+import { Point } from '../../services/points.service';
 
 @Component({
   selector: 'app-point',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./point.component.css']
 })
 export class PointComponent implements OnInit {
+
+  @Input() point: Point;
 
   constructor() { }
 

@@ -1,7 +1,11 @@
 //Angular
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from "@angular/router"
+
+//CKEditor
+import { CKEditorModule } from 'ng2-ckeditor';
 
 //modules
 import { CoreComponentsModule } from '../corecomponentsmodule/corecomponents.module';
@@ -9,7 +13,7 @@ import { CoreComponentsModule } from '../corecomponentsmodule/corecomponents.mod
 //Components
 import { TagsComponent } from '../corecomponentsmodule/tags/tags.component';
 import { PointsComponent } from '../corecomponentsmodule/points/points.component';
-import { NewPostComponent } from './new-post/new-post.component';
+import { NewPointComponent } from '../my/new-point/new-point.component';
 import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-the-week-vote.component';
 
 //Services
@@ -20,17 +24,20 @@ const privateRoutes: Routes = [
   { path: 'following-tags', component: TagsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'favourite-points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'point-of-the-week-vote', component: PointOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] }
+  { path: 'point-of-the-week-vote', component: PointOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'new-point', component: NewPointComponent, canActivate: [LoginRouteGuardService] }
 ];
 
 @NgModule({
   imports: [
     CommonModule,
     CoreComponentsModule,
-    RouterModule.forChild(privateRoutes)
+    RouterModule.forChild(privateRoutes),
+    FormsModule,
+    CKEditorModule
   ],
   declarations: [
-    NewPostComponent,
+    NewPointComponent,
     PointOfTheWeekVoteComponent
   ]
   //providers: [LoginRouteGuardService] //YOU BASTARD AuthenticationService There's the separate instance
