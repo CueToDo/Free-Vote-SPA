@@ -14,7 +14,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router,
     private coreDataService: CoreDataService, private authenticationService: AuthenticationService) {
-    console.log("MENU constructor");
   }
 
   //ToDo TagURLs
@@ -54,7 +53,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.tagChangeSubscription = this.coreDataService.GetTagDisplay()
       .subscribe(tagDisplay => {
         this.selectedTag = tagDisplay;
-        console.log('swotiwont');
       });
   }
 

@@ -25,16 +25,14 @@ export class AppComponent implements OnDestroy {
   pageTitleSubscription: Subscription;
 
   constructor(private coreDataService: CoreDataService) {
-    console.log('appcomponent constructor');
+
     this.pageTitleSubscription = this.coreDataService.GetPageTitle()
       .subscribe(pageTitle => {
-        console.log('App Component PAGETITLE:' + pageTitle);
         this.pageTitle = pageTitle;
       });
   }
 
   ngOnInit(){
-    console.log('appcomponent onInit');
   }
 
   ngOnDestroy() {

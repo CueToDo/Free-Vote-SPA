@@ -44,7 +44,6 @@ export class PointsComponent implements OnInit {
       "containingText": this.containingText
     });
 
-    console.log('POINTS constructor');
   }
 
   ngOnInit() {
@@ -75,7 +74,6 @@ export class PointsComponent implements OnInit {
         }
 
       }
-      console.log('POINTS onInit ' + this.tagRoute);
     });
 
     //initiate selection

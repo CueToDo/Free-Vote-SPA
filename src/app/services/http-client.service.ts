@@ -10,39 +10,52 @@ import { } from 'rxjs/add/operator/map';
 export class HttpClientService {
 
   private readonly spaDomain: string;
-  //private readonly serviceUrl: string = 'http://localhost:56529/';
-  private readonly serviceUrl: string = 'http://api.free.vote/';
+  private readonly website: string;
+  private readonly serviceUrl: string;
 
-  private sessionID: string = Cookie.get('SessionID').valueOf();;
+  private sessionID(): string {
+    let id: string = Cookie.get('SessionID').valueOf();
+    return id == "" ? "0" : id;
+  }
   private jwt: string = Cookie.get('JWT').valueOf();
 
   constructor(private httpClient: HttpClient) {
 
-    this.spaDomain = window.location.origin.split("//")[1].split(":")[0].replace('api.','');
+    this.spaDomain = window.location.origin.split("//")[1].split(":")[0].replace('api.', '');
 
-    if (this.spaDomain == 'localhost') this.spaDomain = 'free.vote';
+    if (this.spaDomain == 'localhost') {
+      this.website = 'free.vote';
+      this.serviceUrl = 'http://localhost:56529/';
+    } else {
+      this.website = this.spaDomain;
+      this.serviceUrl = 'http://api.free.vote/';
+    }
 
-    console.log({ SPADomain: this.spaDomain, SessionID: this.sessionID, JWT: this.jwt })
+    console.log({ Website: this.website, ServiceUrl: this.serviceUrl, SessionID: this.sessionID(), JWT: this.jwt })
 
-    if (!this.jwt && !this.sessionID) {
-
-      //If there's no JWT then must get SessionID
-      this.SessionIDNew()
-        .then(sessionID => {
-          Cookie.set('SessionID', sessionID);
-          console.log(sessionID);
-        })
+    if (!this.jwt) {
+      console.log('NO JWT');
+      this.SessionKeepAlive();
     }
   }
 
+  SessionKeepAlive() {
+    //If there's no JWT then must get SessionID
+    this.SessionIDRenew()
+      .then(sessionID => {
+        Cookie.set('SessionID', sessionID);
+      })
+  }
 
-  SessionIDNew(): Promise<string> {
-    return this.post('authentication/sessionidnew/', {})
+  SessionIDRenew(): Promise<string> {
+    return this.get('authentication/sessionidrenew/' + this.sessionID())
       .then(response => response.SessionID);
   }
 
 
   RequestHeaders() {
+
+
 
     //https://stackoverflow.com/questions/45286764/angular-4-3-httpclient-doesnt-send-header/45286959#45286959
     //The instances of the new HttpHeader class are immutable objects.
@@ -50,8 +63,8 @@ export class HttpClientService {
 
     let headers = new HttpHeaders()
       .set('Content-Type', 'application/json; charset=utf-8')
-      .set('Website', this.spaDomain)
-      .set('SessionID', this.sessionID)
+      .set('Website', this.website)
+      .set('SessionID', this.sessionID())
       .set('JWT', this.jwt);
 
     return { headers: headers };
@@ -59,11 +72,14 @@ export class HttpClientService {
 
 
   get(url): Promise<any> {
+    if (!url.includes('sessionidrenew'))  this.SessionKeepAlive(); 
     return this.httpClient.get(this.serviceUrl + url, this.RequestHeaders()).toPromise();
   }
 
 
   post(url, data): Promise<any> {
+
+    this.SessionKeepAlive();
 
     return this.httpClient
       .post(this.serviceUrl + url,
