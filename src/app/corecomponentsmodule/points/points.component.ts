@@ -28,7 +28,7 @@ export class PointsComponent implements OnInit {
   private pointSelectionType = PointSelectionTypes.POTW;
   private points: Point[];
   private error: string;
-  private tagRoute:string;
+  private tagRoute: string;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router, private activatedRoute: ActivatedRoute,
@@ -58,6 +58,8 @@ export class PointsComponent implements OnInit {
         this.tagRoute = params['tag'];
         this.coreDataService.SetTagRoute(this.tagRoute);
         this.pointSelectionType = PointSelectionTypes.Tag;
+        //initiate selection
+        this.PointsTaggedMinDate();
       }
       else {
         if (this.router.url == '/my/points') {
@@ -76,8 +78,6 @@ export class PointsComponent implements OnInit {
       }
     });
 
-    //initiate selection
-    this.PointsTaggedMinDate();
   }
 
   onSubmit() {
@@ -85,14 +85,14 @@ export class PointsComponent implements OnInit {
     this.SelectPoints();
   }
 
-  PointsTaggedMinDate(){
+  PointsTaggedMinDate() {
     this.pointsService.PointsTaggedMinDate(this.tagRoute, 10)
-    .then(
-      response => {
-        this.dateFrom.setValue(response);
-        this.SelectPoints();
-      }
-    )
+      .then(
+        response => {
+          this.dateFrom.setValue(response);
+          this.SelectPoints();
+        }
+      )
   }
 
   SelectPoints() {

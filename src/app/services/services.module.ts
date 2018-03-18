@@ -16,9 +16,9 @@ import { TagDisplayPipe } from './tag-display.pipe';
     CommonModule
   ],
   //declarations: [SignInData], //rare declaration in Services Module
-  providers: [HttpClientService,CoreDataService, TagDisplayPipe,  AuthenticationService, LoginRouteGuardService, TagsService, PointsService]
+  providers: [CoreDataService, HttpClientService, TagDisplayPipe, AuthenticationService, LoginRouteGuardService, TagsService, PointsService]
 })
 
-export class ServicesModule { 
+export class ServicesModule {
 
 }

@@ -6,35 +6,27 @@ import { Cookie } from 'ng2-cookies';
 
 import { } from 'rxjs/add/operator/map';
 
+import { CoreDataService } from './coredata.service';
+import { SignInStatus, SignInData } from './coredata.service';
+
 @Injectable()
 export class HttpClientService {
 
-  private readonly spaDomain: string;
-  private readonly website: string;
-  private readonly serviceUrl: string;
+  private website: string;
+  private serviceUrl: string;
 
   private sessionID(): string {
     let id: string = Cookie.get('SessionID').valueOf();
     return id == "" ? "0" : id;
   }
-  private jwt: string = Cookie.get('JWT').valueOf();
+  
+  constructor(private httpClient: HttpClient, private coreDataService: CoreDataService) {
 
-  constructor(private httpClient: HttpClient) {
+    this.website = coreDataService.Website;
+    this.serviceUrl = coreDataService.ServiceUrl;
 
-    this.spaDomain = window.location.origin.split("//")[1].split(":")[0].replace('api.', '');
-
-    if (this.spaDomain == 'localhost') {
-      this.website = 'free.vote';
-      this.serviceUrl = 'http://localhost:56529/';
-    } else {
-      this.website = this.spaDomain;
-      this.serviceUrl = 'http://api.free.vote/';
-    }
-
-    console.log({ Website: this.website, ServiceUrl: this.serviceUrl, SessionID: this.sessionID(), JWT: this.jwt })
-
-    if (!this.jwt) {
-      console.log('NO JWT');
+    if (!coreDataService.SignInData.JWT) {
+      console.log('NO JWT - renew SessionID in constructor');
       this.SessionKeepAlive();
     }
   }
@@ -65,14 +57,14 @@ export class HttpClientService {
       .set('Content-Type', 'application/json; charset=utf-8')
       .set('Website', this.website)
       .set('SessionID', this.sessionID())
-      .set('JWT', this.jwt);
+      .set('JWT', this.coreDataService.SignInData.JWT);
 
     return { headers: headers };
   }
 
 
   get(url): Promise<any> {
-    if (!url.includes('sessionidrenew'))  this.SessionKeepAlive(); 
+    if (!url.includes('sessionidrenew')) this.SessionKeepAlive();
     return this.httpClient.get(this.serviceUrl + url, this.RequestHeaders()).toPromise();
   }
 

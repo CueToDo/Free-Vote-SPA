@@ -49,12 +49,9 @@ export class SignInComponent implements OnInit, OnDestroy {
     console.log('submit');
     if (this.button == "signIn") {
 
-      //debugger;
-
       //just tell me something changed???
       this.authenticationService.SignInStatusChange.subscribe(
         (signInData) => {
-          console.log('changed ' + this.authenticationService.SignInData.SignInStatus);
 
           if (signInData.SignInStatus == SignInStatus.SignInSuccess) {
             this._router.navigateByUrl('trending');
@@ -63,25 +60,6 @@ export class SignInComponent implements OnInit, OnDestroy {
       )
 
       this.authenticationService.SignIn("free.vote", this.emailAddress.value, this.password.value);
-      // .subscribe(response => {
-
-      //   //debugger;
-      //   console.log('no debugger');
-      //   this.waiting = false;
-
-      //   //http://stackoverflow.com/questions/32896407/redirect-within-component-angular-2
-      //   if (result.SignInResult == 30) {
-      //     Cookie.set('JWT', result.JWT);
-      //     this._router.navigateByUrl('trending');
-      //   } else {
-      //     this.attemptsRemaining = result.AttemptsRemaining;
-      //   }
-      // },
-      // error => {
-      //   console.log("Sign-In Error" + error);
-      // }
-
-      // );
 
     }
   }

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 import { CoreDataService, SignInStatus } from '../../services/coredata.service';
-import { AuthenticationService } from '../../services/authentication.service';
+import { HttpClientService } from '../../services/http-client.service';
 
 @Component({
   selector: 'app-menu',
@@ -13,7 +13,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 export class MenuComponent implements OnInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router,
-    private coreDataService: CoreDataService, private authenticationService: AuthenticationService) {
+    private coreDataService: CoreDataService, private httpClientService: HttpClientService) {
   }
 
   //ToDo TagURLs
@@ -25,7 +25,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   public SignInStatus = SignInStatus;
 
   SignedIn(): boolean {
-    let signedIn = this.authenticationService.SignInData.SignInStatus == SignInStatus.SignInSuccess
+    console.log('friends');
+    let signedIn = this.coreDataService.SignInData.SignInStatus == SignInStatus.SignInSuccess
     //console.log('Menu Component Sign In Check: ' + signedIn);
     return signedIn;
   }

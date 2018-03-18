@@ -18,6 +18,9 @@ import { FBTestComponent } from './fbtest/fbtest.component';
 
 export class AppComponent implements OnDestroy {
 
+  website: string;
+  serviceUrl: string;
+
   title = 'Free.Vote';
   strapline = 'express yourself honestly, disagree without fear, agree without favour';
   pageTitle = "";
@@ -26,13 +29,16 @@ export class AppComponent implements OnDestroy {
 
   constructor(private coreDataService: CoreDataService) {
 
+    this.website = coreDataService.Website;
+    this.serviceUrl = coreDataService.ServiceUrl;
+    
     this.pageTitleSubscription = this.coreDataService.GetPageTitle()
       .subscribe(pageTitle => {
         this.pageTitle = pageTitle;
       });
   }
 
-  ngOnInit(){
+  ngOnInit() {
   }
 
   ngOnDestroy() {

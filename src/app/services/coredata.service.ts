@@ -1,17 +1,50 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
+import { Cookie } from 'ng2-cookies';
 
 import { TagDisplayPipe } from './tag-display.pipe';
 
 @Injectable()
 export class CoreDataService {
 
-  constructor(private tagDisplayPipe: TagDisplayPipe) { }
+  public SpaDomain: string;
+  public Website: string;
+  public ServiceUrl: string;
+
+  public get SignInData(): SignInData {
+
+    var signInData = new SignInData();
+
+    if (Cookie.get("SignInData") != "") {
+      signInData = JSON.parse(Cookie.get("SignInData").valueOf());
+    }
+
+    return signInData;
+  }
+
+
 
   public PageTitle: string;
   public TagRoute: string;
   public TagDisplay: string;
+
+  constructor(private tagDisplayPipe: TagDisplayPipe) {
+
+    this.SpaDomain = window.location.origin.split("//")[1].split(":")[0].replace('api.', '');
+
+    if (this.SpaDomain == 'localhost') {
+      this.Website = 'free.vote';
+      this.ServiceUrl = 'http://localhost:56529/';
+    } else {
+      this.Website = this.SpaDomain;
+      this.ServiceUrl = 'http://api.free.vote/';
+    }
+
+    console.log({ Website: this.Website, ServiceUrl: this.ServiceUrl })
+  }
+
+
 
   //http://jasonwatmore.com/post/2016/12/01/angular-2-communicating-between-components-with-observable-subject
   private tagDisplaySubject = new Subject<string>();
@@ -46,12 +79,15 @@ export class CoreDataService {
 
 //API return object
 export class SignInData {
-  //SignIn Failure
-  public AttemptsRemaining: number;
+  //Server Error
+  Error: string = "";
   //SignIn Status
-  public SignInStatus: SignInStatus;
+  public SignInStatus = SignInStatus.SignedOut;
+  //SignIn Failure
+  public AttemptsRemaining: number = 0;
   //SignIn Success
-  public JWT: string;
+  public JWT: string = "";
+  public roles: string[] = [];
 }
 
 export enum SignInStatus {
