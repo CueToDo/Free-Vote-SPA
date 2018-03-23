@@ -25,7 +25,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   public SignInStatus = SignInStatus;
 
   SignedIn(): boolean {
-    console.log('friends');
     let signedIn = this.coreDataService.SignInData.SignInStatus == SignInStatus.SignInSuccess
     //console.log('Menu Component Sign In Check: ' + signedIn);
     return signedIn;

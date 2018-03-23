@@ -1,29 +1,23 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-horizontal mt-3">
 
-  <div class="signin">
-    <div class="row">
-      <div class="col-md-4">
-        email
-      </div>
-      <div class="col-md-8">
-        <input formControlName="emailAddress" type="text" required />
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-4">
-        password
-      </div>
-      <div class="col-md-8">
-        <input formControlName="password" type="password" />
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-4">&nbsp;</div>
-      <div class="col-md-8">
-        <Button *ngIf="router.url==='/sign-in' || router.url==='/join'" (click)="button='signIn'" Class="btn btn-primary">{{router.url=='/sign-in'?'sign in':'join'}}</Button>
-      </div>
+  <div class="form-group row mb-0">
+    <label class="control-label col-sm-3 col-form-label-lg" for="emailAddress">email</label>
+    <div class="col-sm-9">
+      <input formControlName="emailAddress" type="email" class="form-control" id="emailAddress" required />
     </div>
   </div>
+
+  <div class="form-group row mb-0">
+    <label class="control-label col-sm-3 col-form-label-lg" for="password">password</label>
+    <div class="col-sm-9">
+      <input formControlName="password" type="password" class="form-control" id="password" required />
+    </div>
+  </div>
+
+  <div class="form-group row mb-4">
+    <div class="col-sm-9 offset-sm-3">
+      <Button *ngIf="router.url==='/sign-in' || router.url==='/join'" (click)="button='signIn'" Class="btn btn-primary">{{router.url=='/sign-in'?'sign in':'join'}}</Button>
+    </div>
+  </div>
+
 </form>

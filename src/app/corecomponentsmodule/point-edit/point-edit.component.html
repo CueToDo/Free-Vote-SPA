@@ -1,0 +1,14 @@
+(change)="onChange($event)" (editorChange)="onEditorChange($event)" (ready)="onReady($event)" (focus)="onFocus($event)" (blur)="onBlur($event)"
+(contentDom)="onContentDom($event)" (fileUploadRequest)="onFileUploadRequest($event)"
+
+<ckeditor [(ngModel)]="ckeditorContent" [config]="{}" [readonly]="false" debounce="500">
+</ckeditor>
+
+
+<div>
+  free.vote slash tags: {{tagDisplay}}
+  <a routerLink="/{{tagRoute}}">{{tagRoute}}</a>
+  <div [formGroup]="form">
+    <input formControlName="slashTags" type="text" />
+  </div>
+</div>

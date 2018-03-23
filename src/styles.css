@@ -33,8 +33,14 @@
 /* Site Content in Router-Outlet */
 .site-content{max-width: 600px;}
 
-.signin .row {margin-top:8px;}
-.signin:last-child {margin-bottom:8px;}
-
 .title h1  {margin-top: 12px; }
 .pagetitle h1 {margin-top: 8px; font-size: 2em; }
+
+
+.ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+  }
+  
+  .ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+  }

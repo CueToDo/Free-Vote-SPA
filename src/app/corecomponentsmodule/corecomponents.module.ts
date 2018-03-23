@@ -3,26 +3,33 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 
+//CKEditor
+import { CKEditorModule } from 'ng2-ckeditor';
+
 import { TagsComponent } from './tags/tags.component';
-import { PointComponent } from './point/point.component';
 import { PointsComponent } from './points/points.component';
+import { PointComponent } from './point/point.component';
+import { PointEditComponent } from './point-edit/point-edit.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    CKEditorModule
   ],
   declarations: [
     TagsComponent,
     PointComponent,
-    PointsComponent
+    PointsComponent,
+    PointEditComponent
   ],
   providers: [],
   exports: [
+    PointsComponent,
     PointComponent,
-    PointsComponent
+    PointEditComponent
   ]
 })
 export class CoreComponentsModule {

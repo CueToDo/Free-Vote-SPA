@@ -4,16 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from "@angular/router"
 
-//CKEditor
-import { CKEditorModule } from 'ng2-ckeditor';
-
 //modules
 import { CoreComponentsModule } from '../corecomponentsmodule/corecomponents.module';
 
 //Components
 import { TagsComponent } from '../corecomponentsmodule/tags/tags.component';
 import { PointsComponent } from '../corecomponentsmodule/points/points.component';
-import { NewPointComponent } from '../my/new-point/new-point.component';
+import { PointEditComponent } from '../corecomponentsmodule/point-edit/point-edit.component';
 import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-the-week-vote.component';
 
 //Services
@@ -25,7 +22,7 @@ const privateRoutes: Routes = [
   { path: 'points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'favourite-points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'point-of-the-week-vote', component: PointOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'new-point', component: NewPointComponent, canActivate: [LoginRouteGuardService] }
+  { path: 'new-point', component: PointEditComponent, canActivate: [LoginRouteGuardService] }
 ];
 
 @NgModule({
@@ -33,11 +30,9 @@ const privateRoutes: Routes = [
     CommonModule,
     CoreComponentsModule,
     RouterModule.forChild(privateRoutes),
-    FormsModule,
-    CKEditorModule
+    FormsModule
   ],
   declarations: [
-    NewPointComponent,
     PointOfTheWeekVoteComponent
   ]
   //providers: [LoginRouteGuardService] //YOU BASTARD AuthenticationService There's the separate instance

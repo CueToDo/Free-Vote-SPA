@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map'; //https://stackoverflow.com/questions/34515173/a
 //import { HttpClientService } from '../../services/http-client.service';
 import { AuthenticationService } from '../../services/authentication.service';
 import { SignInStatus } from '../../services/coredata.service';
-
+import { CoreDataService } from '../../services/coredata.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -25,10 +25,15 @@ export class SignInComponent implements OnInit, OnDestroy {
   button: string;
   waiting: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private _router: Router, private authenticationService: AuthenticationService) {
+  constructor(private formBuilder: FormBuilder,
+    private _router: Router,
+    private authenticationService: AuthenticationService,
+    private coreDataService: CoreDataService) {
 
     this.router = _router;
 
+    this.coreDataService.SetPageTitle(this.router.url === '/sign-in' ? 'sign in' : 'join');
+    
     this.form = formBuilder.group({
       "emailAddress": this.emailAddress,
       "password": this.password
