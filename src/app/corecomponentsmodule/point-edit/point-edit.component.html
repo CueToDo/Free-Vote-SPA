@@ -1,14 +1,17 @@
 (change)="onChange($event)" (editorChange)="onEditorChange($event)" (ready)="onReady($event)" (focus)="onFocus($event)" (blur)="onBlur($event)"
 (contentDom)="onContentDom($event)" (fileUploadRequest)="onFileUploadRequest($event)"
 
-<ckeditor [(ngModel)]="ckeditorContent" [config]="{}" [readonly]="false" debounce="500">
-</ckeditor>
 
 
-<div>
-  free.vote slash tags: {{tagDisplay}}
-  <a routerLink="/{{tagRoute}}">{{tagRoute}}</a>
-  <div [formGroup]="form">
-    <input formControlName="slashTags" type="text" />
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-horizontal mt-3">
+
+  <div class="form-group">
+    <ckeditor [ngModel]="point" formControlname="point" [config]="{}" [readonly]="false" debounce="500">
+    </ckeditor>
   </div>
-</div>
+
+  <div class="form-group row mb-4">
+    <Button (click)="button='signIn'" Class="btn btn-primary">save</Button>
+  </div>
+
+</form>
