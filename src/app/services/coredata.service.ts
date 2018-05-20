@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Cookie } from 'ng2-cookies';
 
 import { TagDisplayPipe } from './tag-display.pipe';

@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 //Rx
-import { Observable } from 'rxjs/Rx';
-import { Observer } from 'rxjs/Observer';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs';
+import { Observer } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { CoreDataService } from './services/coredata.service';
 import { FBTestComponent } from './fbtest/fbtest.component';
