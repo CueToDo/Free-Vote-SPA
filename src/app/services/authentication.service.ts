@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { HttpClientService } from './http-client.service';
 import { Cookie } from 'ng2-cookies';
 

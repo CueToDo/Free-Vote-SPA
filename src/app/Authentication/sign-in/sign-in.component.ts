@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import 'rxjs/add/operator/map'; //https://stackoverflow.com/questions/34515173/angular-2-http-get-with-typescript-error-http-get-map-is-not-a-function-in
+//import 'rxjs/add/operator/map'; //removed (angular 6) //https://stackoverflow.com/questions/34515173/angular-2-http-get-with-typescript-error-http-get-map-is-not-a-function-in
 
 //import { HttpClientService } from '../../services/http-client.service';
 import { AuthenticationService } from '../../services/authentication.service';

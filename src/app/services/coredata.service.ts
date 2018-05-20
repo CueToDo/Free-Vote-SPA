@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Cookie } from 'ng2-cookies';
 
 import { TagDisplayPipe } from './tag-display.pipe';
@@ -26,7 +26,7 @@ export class CoreDataService {
 
 
   public PageTitle: string;
-  public TagRoute: string;
+  public SlashTag: string;
   public TagDisplay: string;
 
   constructor(private tagDisplayPipe: TagDisplayPipe) {
@@ -38,7 +38,7 @@ export class CoreDataService {
       this.ServiceUrl = 'http://localhost:56529/';
     } else {
       this.Website = this.SpaDomain;
-      this.ServiceUrl = 'http://api.free.vote/';
+      this.ServiceUrl = 'https://api.free.vote/';
     }
 
     console.log({ Website: this.Website, ServiceUrl: this.ServiceUrl })
@@ -52,7 +52,7 @@ export class CoreDataService {
 
   SetTagRoute(tagRoute: string) {
 
-    this.TagRoute = tagRoute;
+    this.SlashTag = tagRoute;
     this.TagDisplay = this.tagDisplayPipe.transform(tagRoute);
     this.PageTitle = this.TagDisplay;
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClientService } from './http-client.service';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class PointsService {
   }
 
 
-  SelectPoints(pointSelectionType: PointSelectionTypes, tag: string,
+  SelectPoints(pointSelectionType: PointSelectionTypes, slashTag: string,
     fromDate: string, toDate: string, containingText: string): Promise<PointSelectionResult> {
 
     let route = ""
@@ -44,11 +44,11 @@ export class PointsService {
         route = "points/select/my/favourite-points";
         break;
       case PointSelectionTypes.Tag: ;
-        route = "points/select/tag/" + tag;
+        route = "points/select/tag/" + slashTag; //minus slash!
         break;
     }
 
-    //console.log('Selectpoints - ' + url);
+    console.log('Selectpoints - ' + route);
 
     return this.httpClientService
       .post(route, data)

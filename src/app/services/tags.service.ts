@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { HttpClientService } from './http-client.service';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 

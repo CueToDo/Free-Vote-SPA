@@ -13,24 +13,28 @@ export class PointEditComponent implements OnInit {
   ckeditorContent: string = '<p>Some html</p>';
 
   form: FormGroup;
-  slashTags = new FormControl("", Validators.required);
+  point = new FormControl("", Validators.required);
 
-  tagRoute: string;
+  slashTag: string;
   tagDisplay: string;
 
   constructor(private formBuilder: FormBuilder, private coreDataService: CoreDataService) {
 
     this.coreDataService.SetPageTitle('new point');
-    this.tagRoute = coreDataService.TagRoute;
+    this.slashTag = coreDataService.SlashTag;
     this.tagDisplay = coreDataService.TagDisplay;
 
     this.form = formBuilder.group({
-      "slashTags": this.slashTags
+      point: this.point
     });
 
   }
 
   ngOnInit() {
+
+  }
+
+  onSubmit(){
 
   }
 
