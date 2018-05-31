@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
 /*title, subtile, menu, header, footer background-color*/
 .title{background-color:#279FBB; color:white;}
 .subtitle{background-color:black; color:white; padding-top: 5px; padding-bottom:5px; }
