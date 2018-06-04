@@ -11,6 +11,9 @@ import { PointsComponent } from './points/points.component';
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 
+//Pipes
+import { TagDisplayPipe } from './tag-display.pipe';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -23,7 +26,8 @@ import { PointEditComponent } from './point-edit/point-edit.component';
     TagsComponent,
     PointComponent,
     PointsComponent,
-    PointEditComponent
+    PointEditComponent,
+    TagDisplayPipe
   ],
   providers: [],
   exports: [

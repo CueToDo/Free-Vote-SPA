@@ -52,16 +52,6 @@ const appRoutes: Routes = [
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MenuComponent,
-    FBTestComponent,
-    HomeComponent,
-    SignInComponent,
-    SignOutComponent,
-    PointOfTheWeekComponent,
-    SelectedTagComponent
-  ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
@@ -73,6 +63,16 @@ const appRoutes: Routes = [
     ServicesModule,
     CoreComponentsModule,
     MyModule
+  ],
+  declarations: [
+    AppComponent,
+    MenuComponent,
+    FBTestComponent,
+    HomeComponent,
+    SignInComponent,
+    SignOutComponent,
+    PointOfTheWeekComponent,
+    SelectedTagComponent
   ],
   //ALL Services are provided in imported Services module
   providers: [],

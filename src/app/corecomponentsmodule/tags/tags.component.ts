@@ -4,11 +4,13 @@ import { Router } from '@angular/router';
 
 import { CoreDataService } from '../../services/coredata.service';
 import { TagsService, Tag } from '../../services/tags.service';
+import { TagDisplayPipe } from '../tag-display.pipe';
 
 @Component({
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.css'],
   providers: [] //Need HttpClientService as well as TagsService. NO: do not decorate components with service providers.
+  ,preserveWhitespaces:true
 })
 
 export class TagsComponent implements OnInit {

@@ -3,8 +3,6 @@ import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 import { Cookie } from 'ng2-cookies';
 
-import { TagDisplayPipe } from './tag-display.pipe';
-
 @Injectable()
 export class CoreDataService {
 
@@ -29,7 +27,7 @@ export class CoreDataService {
   public SlashTag: string;
   public TagDisplay: string;
 
-  constructor(private tagDisplayPipe: TagDisplayPipe) {
+  constructor() {
 
     this.SpaDomain = window.location.origin.split("//")[1].split(":")[0].replace('api.', '');
 
@@ -53,7 +51,6 @@ export class CoreDataService {
   SetTagRoute(tagRoute: string) {
 
     this.SlashTag = tagRoute;
-    this.TagDisplay = this.tagDisplayPipe.transform(tagRoute);
     this.PageTitle = this.TagDisplay;
 
     this.tagDisplaySubject.next(this.TagDisplay);

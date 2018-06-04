@@ -33,17 +33,13 @@
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="mx-auto site-content center-block" style="min-width:400px;">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
+  <router-outlet></router-outlet>
 </div>
 
 <div class="footer">
   <div class="container">
     <div class="row">
-      <div class="col-xs-12 mx-auto text-center">
+      <div class="col-12 mx-auto text-center">
         {{ strapline }}
       </div>
     </div>
@@ -56,8 +52,8 @@
       Service Url: {{ serviceUrl }}
     </div>
     <div class="col-3">
-        Website: {{ website }}
-      </div>
+      Website: {{ website }}
+    </div>
     <div class="col-3">
       <div class="text-right">
         © free.vote, 2018
