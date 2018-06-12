@@ -1,9 +1,9 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-
+<form (ngSubmit)="onSubmit()">
+<!--[formGroup]="form"-->
   date from
-  <input formControlName="dateFrom" type="text" required /> date to
-  <input formControlName="dateTo" type="text" required /> containing text
-  <input formControlName="containingText" type="text" required />
+  <input name="dateFrom" type="text" required /> date to <!--formControlName="dateFrom"-->
+  <input name="dateTo" type="text" required /> containing text <!--formControlName="dateTo"-->
+  <input name="containingText" type="text" required /> <!--formControlName="containingText"-->
 
   <button>resubmit</button>
 
@@ -16,3 +16,7 @@
   </div>
 
 </form>
+
+<div *ngIf="coreDataService.SignedIn()">
+  <a routerLink="/new-point">New Point</a>
+</div>

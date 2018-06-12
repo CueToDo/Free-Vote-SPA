@@ -42,7 +42,11 @@ export class CoreDataService {
     console.log({ Website: this.Website, ServiceUrl: this.ServiceUrl })
   }
 
-
+  SignedIn(): boolean {
+    let signedIn = this.SignInData.SignInStatus == SignInStatus.SignInSuccess
+    //console.log('Menu Component Sign In Check: ' + signedIn);
+    return signedIn;
+  }
 
   //http://jasonwatmore.com/post/2016/12/01/angular-2-communicating-between-components-with-observable-subject
   private tagDisplaySubject = new Subject<string>();

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule /*ReactiveFormsModule*/ } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 
 //CKEditor
@@ -18,7 +18,7 @@ import { TagDisplayPipe } from './tag-display.pipe';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
+    //ReactiveFormsModule,
     RouterModule,
     CKEditorModule
   ],

@@ -24,13 +24,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   private selectedTag: string = '';
   public SignInStatus = SignInStatus;
 
-  SignedIn(): boolean {
-    let signedIn = this.coreDataService.SignInData.SignInStatus == SignInStatus.SignInSuccess
-    //console.log('Menu Component Sign In Check: ' + signedIn);
-    return signedIn;
-  }
-
-
   isActive(link): boolean {
     //console.log(this.SelectedTag + ' ' + this.activatedRoute.url);
     switch (link) {

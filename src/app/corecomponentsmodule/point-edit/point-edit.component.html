@@ -3,13 +3,14 @@
 
 
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-horizontal mt-3">
-
+<form #f="ngForm" (ngSubmit)="onSubmit(f)" class="form-horizontal mt-3">
+  <!--[formGroup]="form"-->
   <div class="form-group">
-    <ckeditor [ngModel]="point" formControlname="point" [config]="{}" [readonly]="false" debounce="500">
+    <ckeditor [ngModel]="point" name="point" [config]="{}" [readonly]="false" debounce="500">
     </ckeditor>
   </div>
 
+  <input type="checkbox" name="draft" ngModel>
   <div class="form-group row mb-4">
     <Button (click)="button='signIn'" Class="btn btn-primary">save</Button>
   </div>

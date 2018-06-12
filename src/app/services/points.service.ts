@@ -34,7 +34,7 @@ export class PointsService {
 
     let route = ""
     let data = { "FromDate": fromDate, "ToDate": toDate, "ContainingText": containingText };
-    let success = false;
+    //let success = false;
 
     switch (pointSelectionType) {
       case PointSelectionTypes.MyPoints:
@@ -56,7 +56,7 @@ export class PointsService {
         console.log(data);
         return data as PointSelectionResult;
       })
-  
+
 
     // .subscribe(response => {
 
@@ -70,7 +70,17 @@ export class PointsService {
     //   });
   }
 
+  PointUpdate(pointID: number, point: string, draft: boolean): Promise<boolean> {
 
+    let data = { "PointID": pointID, "Point": point, "Draft": draft };
+
+    return this.httpClientService
+      .post("points/pointupdate", data)
+      .then(result => {
+        return result as boolean;
+      })
+
+  }
 
 
 }
@@ -97,24 +107,24 @@ export class Point {
   PointID: number;
   VoterIDPoint: number;
 
-  PointTypeID:number;
-  PointTypeIDVoter:number;
+  PointTypeID: number;
+  PointTypeIDVoter: number;
 
   PointText: string;
 
-  Draft : boolean;
+  Draft: boolean;
   Source: string;
   URL: string;
   Archived: boolean;
   DateTimeUpdated: string;
 
-  Sequence:number;
-  LastRowNumber:number;
+  Sequence: number;
+  LastRowNumber: number;
   LastRow: boolean;
 
   FeedbackGiven: boolean;
-  FeedbackID:number;
-  SupportLevelID:number;
+  FeedbackID: number;
+  SupportLevelID: number;
   Comment: string;
   FeedbackDate: string;
   FeedbackIsUpdatable: boolean;
@@ -125,14 +135,14 @@ export class Point {
   Adoptable: boolean;
   Unadoptable: boolean;
 
-  TotalFeedback:number;
-  NetSupport:number;
-  PerCentInFavour:number;
+  TotalFeedback: number;
+  NetSupport: number;
+  PerCentInFavour: number;
 
-  Support:number;
-  Opposition:number;
-  Abstentions:number;
-  Reports:number;
+  Support: number;
+  Opposition: number;
+  Abstentions: number;
+  Reports: number;
 
   IsInOpenedSurvey: boolean;
   IsInClosedSurvey: boolean;

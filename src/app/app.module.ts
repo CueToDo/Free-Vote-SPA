@@ -1,7 +1,7 @@
 //Angular
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from "@angular/router"
 
@@ -45,7 +45,7 @@ const appRoutes: Routes = [
   { path: 'sign-out', component: SignOutComponent },
   { path: 'trending', component: TagsComponent },
   { path: 'point-of-the-week', component: PointOfTheWeekComponent },
-  { path: 'my', loadChildren: './my/my.module#MyModule' },
+  { path: 'my', loadChildren: './my/my.module#MyModule', canActivate: [LoginRouteGuardService] },
   { path: 'personal', loadChildren: './private/private.module#PrivateModule', canActivate: [LoginRouteGuardService] },
   { path: ':tag', component: PointsComponent }
 ];
