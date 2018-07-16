@@ -17,7 +17,7 @@ export class SelectedTagComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
+    // https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
     this.routeChangeSubscription = this.activatedRoute.params.subscribe(params => {
       this.Tag = params['tag'];
       console.log('SELECTED COMPONENT ROUTE CHANGED');

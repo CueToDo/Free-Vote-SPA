@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class FBTestComponent implements OnInit {
 
 
-  connectedFB: boolean = false;
+  connectedFB = false;
 
   constructor() {
 

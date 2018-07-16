@@ -1,28 +1,28 @@
-//Angular
+// Angular
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from "@angular/router"
+import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from '@angular/router';
 
-//Bootstrap
+// Bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'; /* Bootstrap dropdowns */
 
-//Facebook
+// Facebook
 import { FacebookModule } from 'ngx-facebook';
 import { FBTestComponent } from './fbtest/fbtest.component';
 
-//Modules
+// Modules
 import { MyModule } from './my/my.module';
 import { CoreComponentsModule } from './corecomponentsmodule/corecomponents.module';
 
-//Global Singleton Services imported from Services Module
-import { ServicesModule } from './services/services.module';
+// Global Singleton Services imported from Services Module
+import { ServicesModule } from './coreservices/services.module';
 
-//LoginRouteGuardService imported for Routes, but not provided
-import { LoginRouteGuardService } from './services/login-route-guard.service'; //currently needed in Routes below
+// LoginRouteGuardService imported for Routes, but not provided
+import { LoginRouteGuardService } from './coreservices/login-route-guard.service'; // currently needed in Routes below
 
-//App Components
+// App Components
 import { AppComponent } from './app.component';
 import { MenuComponent } from './public/menu/menu.component';
 import { HomeComponent } from './public/home/home.component';
@@ -35,8 +35,8 @@ import { SignOutComponent } from './authentication/sign-out/sign-out.component';
 import { PointsComponent } from './corecomponentsmodule/points/points.component';
 
 
-//Other Module Components
-//import { TrendingComponent } from './posts-public/trending/trending.component';
+// Other Module Components
+// import { TrendingComponent } from './posts-public/trending/trending.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -74,7 +74,7 @@ const appRoutes: Routes = [
     PointOfTheWeekComponent,
     SelectedTagComponent
   ],
-  //ALL Services are provided in imported Services module
+  // ALL Services are provided in imported Services module
   providers: [],
   bootstrap: [AppComponent]
 })

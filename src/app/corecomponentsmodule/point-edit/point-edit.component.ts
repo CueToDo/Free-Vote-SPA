@@ -1,8 +1,8 @@
-import { PointsService } from './../../services/points.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 
-import { CoreDataService } from '../../services/coredata.service';
+import { CoreDataService } from '../../coreservices/coredata.service';
+import { PointsService } from './../../coreservices/points.service';
 
 @Component({
   selector: 'app-point-edit',
@@ -11,12 +11,12 @@ import { CoreDataService } from '../../services/coredata.service';
 })
 export class PointEditComponent implements OnInit {
 
-  inputPointID: number = -1;
+  inputPointID = -1;
 
-  ckeditorContent: string = '<p>Some html</p>';
+  ckeditorContent = '<p>Some html</p>';
 
   form: FormGroup;
-  point = new FormControl("", Validators.required);
+  point = new FormControl('', Validators.required);
 
   slashTag: string;
   tagDisplay: string;
@@ -40,10 +40,7 @@ export class PointEditComponent implements OnInit {
   PointUpdate(point: string, draft: boolean) {
 
     this.pointsService.PointUpdate(this.inputPointID, point, draft)
-      .then(
-        response => {
-          console.log(response);
-        })
+      .then(response => console.log(response));
   }
 
   onSubmit(f: NgForm) {

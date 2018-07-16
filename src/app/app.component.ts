@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
-//Rx
-import { Observable } from 'rxjs';
-import { Observer } from 'rxjs';
-import { Subscription } from 'rxjs';
+// Rx
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { Subscription } from 'rxjs/Subscription';
 
-import { CoreDataService } from './services/coredata.service';
+import { CoreDataService } from './coreservices/coredata.service';
 import { FBTestComponent } from './fbtest/fbtest.component';
 
 
@@ -16,14 +16,14 @@ import { FBTestComponent } from './fbtest/fbtest.component';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
 
   website: string;
   serviceUrl: string;
 
   title = 'Free.Vote';
   strapline = 'express yourself honestly, disagree without fear, agree without favour';
-  pageTitle = "";
+  pageTitle = '';
 
   pageTitleSubscription: Subscription;
 
@@ -31,7 +31,7 @@ export class AppComponent implements OnDestroy {
 
     this.website = coreDataService.Website;
     this.serviceUrl = coreDataService.ServiceUrl;
-    
+
     this.pageTitleSubscription = this.coreDataService.GetPageTitle()
       .subscribe(pageTitle => {
         this.pageTitle = pageTitle;

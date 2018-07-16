@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CoreDataService } from '../../services/coredata.service';
+import { CoreDataService } from '../../coreservices/coredata.service';
 
 @Component({
   templateUrl: './point-of-the-week.component.html',

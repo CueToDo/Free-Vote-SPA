@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { AuthenticationService } from '../../services/authentication.service';
+import { AuthenticationService } from '../../coreservices/authentication.service';
 
 @Component({
   selector: 'app-sign-out',
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 })
 export class SignOutComponent implements OnInit {
 
-  constructor(private authenticationService: AuthenticationService,) {
+  constructor(private authenticationService: AuthenticationService) {
     this.authenticationService.SignOut();
    }
 

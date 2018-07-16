@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule /*ReactiveFormsModule*/ } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 
-//CKEditor
+// CKEditor
 import { CKEditorModule } from 'ng2-ckeditor';
 
 import { TagsComponent } from './tags/tags.component';
@@ -11,14 +11,14 @@ import { PointsComponent } from './points/points.component';
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 
-//Pipes
+// Pipes
 import { TagDisplayPipe } from './tag-display.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    //ReactiveFormsModule,
+    // ReactiveFormsModule,
     RouterModule,
     CKEditorModule
   ],
@@ -39,3 +39,5 @@ import { TagDisplayPipe } from './tag-display.pipe';
 export class CoreComponentsModule {
 
 }
+
+

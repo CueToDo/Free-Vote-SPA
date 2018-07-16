@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
-import { CoreDataService, SignInStatus } from '../../services/coredata.service';
-import { HttpClientService } from '../../services/http-client.service';
+import { SignInStatuses } from '../../coreservices/enums';
+import { CoreDataService } from '../../coreservices/coredata.service';
+import { HttpClientService } from '../../coreservices/http-client.service';
 
 @Component({
   selector: 'app-menu',
@@ -16,32 +17,32 @@ export class MenuComponent implements OnInit, OnDestroy {
     private coreDataService: CoreDataService, private httpClientService: HttpClientService) {
   }
 
-  //ToDo TagURLs
+  // ToDo TagURLs
   TagURLs: string[] = ['/trending', '/private/following-tags'];
   PostURLs: string[] = ['/private/favourite-posts', '/private/my-posts', '/post-of-the-week', '/private/post-of-the-week-vote'];
 
   private tagChangeSubscription: any;
-  private selectedTag: string = '';
-  public SignInStatus = SignInStatus;
+  private selectedTag = '';
+  public SignInStatus = SignInStatuses;
 
   isActive(link): boolean {
-    //console.log(this.SelectedTag + ' ' + this.activatedRoute.url);
+    // console.log(this.SelectedTag + ' ' + this.activatedRoute.url);
     switch (link) {
-      case "tags": {
-        return this.TagURLs.indexOf(this.router.url) > -1 || this.selectedTag == this.router.url.replace('/', '');
+      case 'tags': {
+        return this.TagURLs.indexOf(this.router.url) > -1 || this.selectedTag === this.router.url.replace('/', '');
       }
-      case "posts": {
+      case 'posts': {
         return this.PostURLs.indexOf(this.router.url) > -1;
       }
       default: {
-        return link == this.router.url;
+        return link === this.router.url;
       }
     }
   }
 
   ngOnInit() {
-    //https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
-    //https://stackoverflow.com/questions/37144999/angular2-get-router-params-outside-of-router-outlet
+    // https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
+    // https://stackoverflow.com/questions/37144999/angular2-get-router-params-outside-of-router-outlet
 
     this.tagChangeSubscription = this.coreDataService.GetTagDisplay()
       .subscribe(tagDisplay => {
@@ -53,4 +54,4 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.tagChangeSubscription.unsubscribe();
   }
 
-} 
+}
