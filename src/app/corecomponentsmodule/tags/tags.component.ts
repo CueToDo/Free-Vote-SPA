@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { CoreDataService } from '../../coreservices/coredata.service';
 import { TagsService, Tag } from '../../coreservices/tags.service';
-import { TagDisplayPipe } from '../tag-display.pipe';
+import { TagDisplayPipe } from '../../coreservices/tag-display.pipe';
 
 @Component({
   templateUrl: './tags.component.html',

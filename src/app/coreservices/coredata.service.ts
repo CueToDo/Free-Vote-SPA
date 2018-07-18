@@ -3,8 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Cookie } from 'ng2-cookies';
 
-import { SignInStatuses } from './enums';
-import { SignInData } from './classes';
+import { SignInStatuses } from '../models/enums';
+import { SignInData } from '../models/signin.model';
 
 @Injectable()
 export class CoreDataService {
@@ -34,6 +34,7 @@ export class CoreDataService {
 
   constructor() {
 
+    // check if running locally to determine service url
     this.SpaDomain = window.location.origin.split('//')[1].split(':')[0].replace('api.', '');
 
     if (this.SpaDomain === 'localhost') {

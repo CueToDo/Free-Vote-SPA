@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Point } from '../../coreservices/classes';
+import { Point } from '../../models/point.model';
 
 @Component({
   selector: 'app-point',

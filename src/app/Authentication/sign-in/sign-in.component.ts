@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Component } from '@angular/core';
 import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -7,7 +9,7 @@ import { Router } from '@angular/router';
 
 // import { HttpClientService } from '../../services/http-client.service';
 import { AuthenticationService } from '../../coreservices/authentication.service';
-import { SignInStatuses } from '../../coreservices/enums';
+import { SignInStatuses } from '../../models/enums';
 import { CoreDataService } from '../../coreservices/coredata.service';
 
 @Component({
@@ -17,21 +19,18 @@ import { CoreDataService } from '../../coreservices/coredata.service';
 })
 export class SignInComponent implements OnInit, OnDestroy {
 
-  router: Router; // Router is injected to navigateByUrl after signIn
-
   form: FormGroup;
   emailAddress = new FormControl('', Validators.required);
   password = new FormControl('');
 
+  signInStatusChange: Subscription;
   button: string;
   waiting = false;
 
   constructor(private formBuilder: FormBuilder,
-    private _router: Router,
+    private router: Router,
     private authenticationService: AuthenticationService,
     private coreDataService: CoreDataService) {
-
-    this.router = _router;
 
     this.coreDataService.SetPageTitle(this.router.url === '/sign-in' ? 'sign in' : 'join');
 
@@ -46,28 +45,27 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.authenticationService.SignInStatusChange.unsubscribe();
+    console.log('destroying');
+    this.signInStatusChange.unsubscribe();
   }
 
 
 
   onSubmit() {
+
     console.log('submit');
-    if (this.button === 'signIn') {
 
-      // just tell me something changed???
-      this.authenticationService.SignInStatusChange.subscribe(
-        (signInData) => {
-
-          if (signInData.SignInStatus === SignInStatuses.SignInSuccess) {
-            this._router.navigateByUrl('trending');
-          }
+    // just tell me something changed???
+    this.signInStatusChange = this.authenticationService.GetSignInStatusChange().subscribe(
+      signInStatus => {
+        if (signInStatus === SignInStatuses.SignInSuccess) {
+          this.router.navigateByUrl('trending');
         }
-      );
+      }
+    );
 
-      this.authenticationService.SignIn('free.vote', this.emailAddress.value, this.password.value);
+    this.authenticationService.SignIn('free.vote', this.emailAddress.value, this.password.value);
 
-    }
   }
 }
 

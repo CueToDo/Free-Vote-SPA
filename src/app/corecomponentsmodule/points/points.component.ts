@@ -3,8 +3,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ParamMap, ActivatedRoute } from '@angular/router';
 
-import { PointSelectionTypes } from '../../coreservices/enums';
-import { Point } from '../../coreservices/classes';
+import { PointSelectionTypes } from '../../models/enums';
+import { Point } from '../../models/point.model';
 import { CoreDataService } from '../../coreservices/coredata.service';
 import { PointsService } from '../../coreservices/points.service';
 

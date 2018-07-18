@@ -19,4 +19,4 @@ const routes: Routes = [
   ],
   declarations: [DetailsComponent, LocationComponent, GroupMembershipComponent]
 })
-export class PrivateModule { }
+export class ProfileModule { }

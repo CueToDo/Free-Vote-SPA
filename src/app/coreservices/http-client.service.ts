@@ -7,8 +7,8 @@ import { Cookie } from 'ng2-cookies';
 import { } from 'rxjs/add/operator/map';
 
 import { CoreDataService } from './coredata.service';
-import { SignInStatuses } from './enums';
-import { SignInData } from './classes';
+import { SignInStatuses } from '../models/enums';
+import { SignInData } from '../models/signin.model';
 
 @Injectable()
 export class HttpClientService {

@@ -3,8 +3,8 @@ import { HttpClientService } from './http-client.service';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 
-import { PointSelectionTypes } from './enums';
-import { PointSelectionResult } from './classes';
+import { PointSelectionTypes } from '../models/enums';
+import { PointSelectionResult } from '../models/point.model';
 
 @Injectable()
 export class PointsService {

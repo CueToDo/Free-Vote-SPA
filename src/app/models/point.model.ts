@@ -1,6 +1,5 @@
-import { SignInStatuses } from './enums';
-
 export class Point {
+
     PointID: number;
     VoterIDPoint: number;
 
@@ -46,22 +45,10 @@ export class Point {
     IsQuestionAnswer: boolean;
   }
 
+
   export class PointSelectionResult {
     PointsSelected: number;
     FromDate: string;
     ToDate: string;
     Points: Point[];
   }
-
-  // API return object
-export class SignInData {
-  // Server Error
-  Error = '';
-  // SignIn Status
-  public SignInStatus = SignInStatuses.SignedOut;
-  // SignIn Failure
-  public AttemptsRemaining = 0;
-  // SignIn Success
-  public JWT  = '';
-  public roles: string[] = [];
-}

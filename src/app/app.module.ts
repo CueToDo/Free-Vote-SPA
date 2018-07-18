@@ -46,7 +46,7 @@ const appRoutes: Routes = [
   { path: 'trending', component: TagsComponent },
   { path: 'point-of-the-week', component: PointOfTheWeekComponent },
   { path: 'my', loadChildren: './my/my.module#MyModule', canActivate: [LoginRouteGuardService] },
-  { path: 'personal', loadChildren: './private/private.module#PrivateModule', canActivate: [LoginRouteGuardService] },
+  { path: 'profile', loadChildren: './profile/profile.module#ProfileModule', canActivate: [LoginRouteGuardService] },
   { path: ':tag', component: PointsComponent }
 ];
 

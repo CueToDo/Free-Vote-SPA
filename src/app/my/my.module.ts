@@ -16,8 +16,8 @@ import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-t
 // Services
 import { LoginRouteGuardService } from '../coreservices/login-route-guard.service';
 
-// Private Module Routes
-const privateRoutes: Routes = [
+// Profile Module Routes
+const profileRoutes: Routes = [
   { path: 'following-tags', component: TagsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'favourite-points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
@@ -29,7 +29,7 @@ const privateRoutes: Routes = [
   imports: [
     CommonModule,
     CoreComponentsModule,
-    RouterModule.forChild(privateRoutes),
+    RouterModule.forChild(profileRoutes),
     FormsModule
   ],
   declarations: [

@@ -12,7 +12,7 @@ import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 
 // Pipes
-import { TagDisplayPipe } from './tag-display.pipe';
+import { TagDisplayPipe } from '../coreservices/tag-display.pipe';
 
 @NgModule({
   imports: [

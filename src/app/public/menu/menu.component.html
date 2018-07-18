@@ -1,7 +1,7 @@
 <div id="free-vote">
   <!--for css overrides-->
 
-  <button class="btn btn-primary" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</button>
+  <button class="btn btn-primary" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">home</button>
 
   <div class="btn-group" dropdown>
     <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('tags') }">tags</button>
@@ -9,7 +9,7 @@
       <li role="menuitem">
         <a routerLink="/trending" class="dropdown-item" routerLinkActive="active">trending</a>
       </li>
-      <li role="menuitem" *ngIf="coreDataService.SignedIn()">
+      <li role="menuitem" *ngIf="signedIn">
         <a routerLink="/my/following-tags" class="dropdown-item" routerLinkActive="active">following</a>
       </li>
       <li role="menuitem">
@@ -21,45 +21,45 @@
   <div class="btn-group" dropdown>
     <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('posts') }">points</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
-      <li role="menuitem" *ngIf="coreDataService.SignedIn()">
+      <li role="menuitem" *ngIf="signedIn">
         <a routerLink="/my/favourite-points" class="dropdown-item" routerLinkActive="active">favourite points</a>
       </li>
-      <li role="menuitem" *ngIf="coreDataService.SignedIn()">
+      <li role="menuitem" *ngIf="signedIn">
         <a routerLink="/my/points" class="dropdown-item" routerLinkActive="active">my points</a>
       </li>
 
       <li role="menuitem">
         <a routerLink="/point-of-the-week" class="dropdown-item" routerLinkActive="active">point of the week</a>
       </li>
-      <li role="menuitem" *ngIf="coreDataService.SignedIn()">
+      <li role="menuitem" *ngIf="signedIn">
         <a routerLink="/my/point-of-the-week-vote" class="dropdown-item" routerLinkActive="active">point-o-t-w vote</a>
       </li>
-      <li role="menuitem" *ngIf="coreDataService.SignedIn()">
+      <li role="menuitem" *ngIf="signedIn">
         <a routerLink="/my/new-point" class="dropdown-item" routerLinkActive="active">new point</a>
       </li>
     </ul>
   </div>
 
-  <div class="btn-group" dropdown *ngIf="coreDataService.SignedIn()">
-    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('Personal') }">Personal</button>
+  <div class="btn-group" dropdown *ngIf="signedIn">
+    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('Personal') }">profile</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
       <li role="menuitem">
-        <a routerLink="/personal/details" class="dropdown-item" routerLinkActive="active">personal details</a>
+        <a routerLink="/profile/details" class="dropdown-item" routerLinkActive="active">personal details</a>
       </li>
       <li role="menuitem">
-        <a routerLink="/personal/location" class="dropdown-item" routerLinkActive="active">location</a>
+        <a routerLink="/profile/location" class="dropdown-item" routerLinkActive="active">location</a>
       </li>
       <li role="menuitem">
-        <a routerLink="/personal/group-membership" class="dropdown-item" routerLinkActive="active">group membership</a>
+        <a routerLink="/profile/group-membership" class="dropdown-item" routerLinkActive="active">group membership</a>
       </li>
     </ul>
   </div>
 
-  <button routerLink="/join" class="btn btn-primary" routerLinkActive="active" *ngIf="!coreDataService.SignedIn()">Join</button>
+  <button routerLink="/join" class="btn btn-primary" routerLinkActive="active" *ngIf="!signedIn">join</button>
 
-  <button routerLink="/sign-in" class="btn btn-primary" routerLinkActive="active" *ngIf="!coreDataService.SignedIn()">Sign In</button>
+  <button routerLink="/sign-in" class="btn btn-primary" routerLinkActive="active" *ngIf="!signedIn">sign In</button>
 
-  <button routerLink="/sign-out" class="btn btn-primary" routerLinkActive="active" *ngIf="coreDataService.SignedIn()">Sign out</button>
+  <button routerLink="/sign-out" class="btn btn-primary" routerLinkActive="active" *ngIf="signedIn">sign out</button>
   
 </div>
 

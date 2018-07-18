@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SignInData } from './classes';
+import { SignInData } from '../models/signin.model';
 
 // App wide singleton services
 import { HttpClientService } from './http-client.service';

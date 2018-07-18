@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 
-import { SignInStatuses } from './enums';
-import { SignInData } from './classes';
+import { SignInStatuses } from '../models/enums';
+import { SignInData } from '../models/signin.model';
 import { CoreDataService } from './coredata.service';
 
 @Injectable()

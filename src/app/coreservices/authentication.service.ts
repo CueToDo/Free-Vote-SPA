@@ -1,26 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClientService } from './http-client.service';
 import { Cookie } from 'ng2-cookies';
 
-import { SignInStatuses } from './enums';
-import { SignInData } from './classes';
+import { SignInStatuses } from '../models/enums';
+import { SignInData } from '../models/signin.model';
 import { CoreDataService } from './coredata.service';
 
 @Injectable()
 export class AuthenticationService {
 
     // Let the service handle the communication and the response data
-    // Notify service users via Subject
-    public SignInStatusChange = new Subject<SignInData>();
+    // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).
+    // Could use Promise for sign-in component, but other components such as menu need to know sign-in status
+
+    public SignInStatusChange$ = new BehaviorSubject<SignInStatuses>(SignInStatuses.SignedOut);
+
+    public GetSignInStatusChange() {
+        return this.SignInStatusChange$;
+    }
 
     constructor(private httpClientService: HttpClientService) {
 
     }
 
-
     SignIn(website: string, email: string, password: string): void {
+
+        console.log('signing in');
 
         let success = false;
         const data = { 'website': website, 'email': email, 'password': password };
@@ -42,7 +50,7 @@ export class AuthenticationService {
                 }
 
                 // Notify any observers that didn't initiate the SignIn Request
-                this.SignInStatusChange.next(signInData);
+                this.SignInStatusChange$.next(signInData.SignInStatus);
             },
                 error => {
                     console.log('Sign-In Error' + error);
@@ -51,10 +59,12 @@ export class AuthenticationService {
 
     SignOut() {
         Cookie.delete('SignInData');
+
         const signInData = new SignInData();
         signInData.SignInStatus = SignInStatuses.SignedOut;
         Cookie.set('SignInData', JSON.stringify(signInData));
-        this.SignInStatusChange.next(null);
+
+        this.SignInStatusChange$.next(SignInStatuses.SignedOut);
     }
 
 }
