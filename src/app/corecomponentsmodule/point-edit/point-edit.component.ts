@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
+import { Validators, NgForm } from '@angular/forms';
 
 import { CoreDataService } from '../../coreservices/coredata.service';
 import { PointsService } from './../../coreservices/points.service';
@@ -15,21 +15,17 @@ export class PointEditComponent implements OnInit {
 
   ckeditorContent = '<p>Some html</p>';
 
-  form: FormGroup;
-  point = new FormControl('', Validators.required);
+  point;
+  draft;
 
   slashTag: string;
   tagDisplay: string;
 
-  constructor(private formBuilder: FormBuilder, private coreDataService: CoreDataService, private pointsService: PointsService) {
+  constructor(private coreDataService: CoreDataService, private pointsService: PointsService) {
 
     this.coreDataService.SetPageTitle('new point');
     this.slashTag = coreDataService.SlashTag;
     this.tagDisplay = coreDataService.TagDisplay;
-
-    this.form = formBuilder.group({
-      point: this.point
-    });
 
   }
 
@@ -43,9 +39,8 @@ export class PointEditComponent implements OnInit {
       .then(response => console.log(response));
   }
 
-  onSubmit(f: NgForm) {
-    console.log(f);
-    this.PointUpdate(f.value.point, f.value.draft);
+  onSubmit() {
+    this.PointUpdate(this.point, this.draft);
   }
 
 }

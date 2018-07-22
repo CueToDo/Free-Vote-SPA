@@ -2,12 +2,11 @@ import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Component } from '@angular/core';
 import { OnInit, OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 // import 'rxjs/add/operator/map'; //removed (angular 6)
 // https://stackoverflow.com/questions/34515173/angular-2-http-get-with-typescript-error-http-get-map-is-not-a-function-in
 
-// import { HttpClientService } from '../../services/http-client.service';
 import { AuthenticationService } from '../../coreservices/authentication.service';
 import { SignInStatuses } from '../../models/enums';
 import { CoreDataService } from '../../coreservices/coredata.service';
@@ -19,37 +18,34 @@ import { CoreDataService } from '../../coreservices/coredata.service';
 })
 export class SignInComponent implements OnInit, OnDestroy {
 
-  form: FormGroup;
-  emailAddress = new FormControl('', Validators.required);
-  password = new FormControl('');
+  email;
+  password;
 
   signInStatusChange: Subscription;
   button: string;
   waiting = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
     private coreDataService: CoreDataService) {
 
     this.coreDataService.SetPageTitle(this.router.url === '/sign-in' ? 'sign in' : 'join');
-
-    this.form = formBuilder.group({
-      'emailAddress': this.emailAddress,
-      'password': this.password
-    });
-
   }
 
   ngOnInit() {
   }
 
   ngOnDestroy() {
+
     console.log('destroying');
-    this.signInStatusChange.unsubscribe();
+
+    // might leave page and destroy without calling onSubmit
+    if (this.signInStatusChange !== undefined) {
+      this.signInStatusChange.unsubscribe();
+    }
+
   }
-
-
 
   onSubmit() {
 
@@ -64,7 +60,7 @@ export class SignInComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.authenticationService.SignIn('free.vote', this.emailAddress.value, this.password.value);
+    this.authenticationService.SignIn('free.vote', this.email, this.password);
 
   }
 }

@@ -1,18 +1,27 @@
-(change)="onChange($event)" (editorChange)="onEditorChange($event)" (ready)="onReady($event)" (focus)="onFocus($event)" (blur)="onBlur($event)"
-(contentDom)="onContentDom($event)" (fileUploadRequest)="onFileUploadRequest($event)"
+(change)="onChange($event)" 
+(editorChange)="onEditorChange($event)" 
+(ready)="onReady($event)" 
+(focus)="onFocus($event)" 
+(blur)="onBlur($event)"
+(contentDom)="onContentDom($event)" 
+(fileUploadRequest)="onFileUploadRequest($event)"
 
 
 
-<form #f="ngForm" (ngSubmit)="onSubmit(f)" class="form-horizontal mt-3">
+<form (ngSubmit)="onSubmit()" class="form-horizontal mt-3">
+  
   <!--[formGroup]="form"-->
+  
   <div class="form-group">
-    <ckeditor [ngModel]="point" name="point" [config]="{}" [readonly]="false" debounce="500">
+    <ckeditor [(ngModel)]="point" name="point" [config]="{}" 
+    [readonly]="false" debounce="500">
     </ckeditor>
   </div>
 
-  <input type="checkbox" name="draft" ngModel>
+  <input type="checkbox" [(ngModel)]=draft name="draft" ngModel>
+
   <div class="form-group row mb-4">
-    <Button (click)="button='signIn'" Class="btn btn-primary">save</Button>
+    <Button Class="btn btn-primary">save</Button>
   </div>
 
 </form>

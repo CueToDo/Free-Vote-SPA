@@ -1,23 +1,36 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-horizontal mt-3">
+<div class="row">
 
-  <div class="form-group row mb-0">
-    <label class="control-label col-sm-3 col-form-label-lg" for="emailAddress">email</label>
-    <div class="col-sm-9">
-      <input formControlName="emailAddress" type="email" class="form-control" id="emailAddress" required />
-    </div>
+  <div class="col-sm-3"></div>
+
+  <div class="col-sm-6">
+
+    <form (ngSubmit)="onSubmit()" class="form-horizontal mt-3">
+
+      <div class="form-group row mb-0">
+        <label class="control-label col-sm-3 col-form-label-lg" for="emailAddress">email</label>
+        <div class="col-sm-9">
+          <input [(ngModel)]="email" name="email" type="email" class="form-control" id="emailAddress" autocomplete="off" required />
+        </div>
+      </div>
+
+      <div class="form-group row mb-0">
+        <label class="control-label col-sm-3 col-form-label-lg" for="password">password</label>
+        <div class="col-sm-9">
+          <input [(ngModel)]="password" name="password" type="password" class="form-control" id="password" autocomplete="off" required
+          />
+        </div>
+      </div>
+
+      <div class="form-group row mb-4">
+        <div class="col-sm-9 offset-sm-3">
+          <Button *ngIf="router.url==='/sign-in' || router.url==='/join'" Class="btn btn-primary">{{router.url=='/sign-in'?'sign in':'join'}}</Button>
+        </div>
+      </div>
+
+    </form>
+
   </div>
 
-  <div class="form-group row mb-0">
-    <label class="control-label col-sm-3 col-form-label-lg" for="password">password</label>
-    <div class="col-sm-9">
-      <input formControlName="password" type="password" class="form-control" id="password" required />
-    </div>
-  </div>
+  <div class="col-sm-3"></div>
 
-  <div class="form-group row mb-4">
-    <div class="col-sm-9 offset-sm-3">
-      <Button *ngIf="router.url==='/sign-in' || router.url==='/join'" Class="btn btn-primary">{{router.url=='/sign-in'?'sign in':'join'}}</Button>
-    </div>
-  </div>
-
-</form>
+</div>
