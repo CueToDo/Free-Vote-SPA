@@ -13,6 +13,7 @@ export class CoreDataService {
   public Website: string;
   public ServiceUrl: string;
 
+  // All Pages?
   public PageTitle: string;
   public SlashTag: string;
   public TagDisplay: string;

@@ -1,15 +1,24 @@
-(change)="onChange($event)" (editorChange)="onEditorChange($event)" (ready)="onReady($event)" (focus)="onFocus($event)" (blur)="onBlur($event)"
-(contentDom)="onContentDom($event)" (fileUploadRequest)="onFileUploadRequest($event)"
+<!--
+(change)="onChange($event)" 
+(editorChange)="onEditorChange($event)" 
+(ready)="onReady($event)" 
+(focus)="onFocus($event)" 
+(blur)="onBlur($event)"
+(contentDom)="onContentDom($event)" (fileUploadRequest
+)="onFileUploadRequest($event)"
+-->
 
-<form (ngSubmit)="onSubmit()" class="form-horizontal mt-3">
+<form (ngSubmit)="onSubmit()" class="form-horizontal mt-3" #formPoint="ngForm">
 
   <div class="form-group">
-    <ckeditor [(ngModel)]="point" name="point" [config]="{}" [readonly]="false" debounce="500">
+    <ckeditor [(ngModel)]="point" name="point" [config]="{}" [readonly]="false" 
+    debounce="500" required #tvPoint="ngModel" (blur)="onCKEBlur()">
     </ckeditor>
   </div>
 
   <div class="form-group">
-    <input type="text" [(ngModel)]="tags" class="form-control" placeholder='slash tags - separate each tag with a "/"' />
+    <input type="text" [(ngModel)]="slashTags" name="slashTags" class="form-control" placeholder='slash tags - separate each tag with a "/"'
+    />
   </div>
 
   <div class="form-check mb-4">
@@ -18,7 +27,14 @@
   </div>
 
   <div class="form-group mb-4">
-    <Button Class="btn btn-primary">save</Button>
+    <Button Class="btn btn-primary" [disabled]="!formPoint.valid">save</Button>
+    <span class="fv-error" *ngIf="userTouched && !tvPoint.valid">
+      Point text is required
+    </span>
+    <span class="fv-error" *ngIf="error != ''">
+      {{ error }}
+    </span>
   </div>
+
 
 </form>

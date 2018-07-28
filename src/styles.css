@@ -37,12 +37,15 @@
 .pagetitle h1 {margin-top: 8px; font-size: 2em; }
 
 
-.ng-valid[required], .ng-valid.required  {
+.ng-valid[required]:not(ckeditor), .ng-valid.required  {
   border-left: 5px solid #42A948; /* green */
 }
   
-.ng-invalid:not(form)  {
+
+.ng-invalid.ng-touched:not(form):not(ckeditor)  {
   border-left: 5px solid #a94442; /* red */
 }
 
- 
+.fv-error{color:red;}
+
+button + span {margin-left:5px;}

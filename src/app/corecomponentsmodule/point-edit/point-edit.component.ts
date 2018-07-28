@@ -15,17 +15,15 @@ export class PointEditComponent implements OnInit {
 
   ckeditorContent = '<p>Some html</p>';
 
-  point;
-  draft;
-
-  slashTag: string;
-  tagDisplay: string;
+  point: string;
+  slashTags: string;
+  draft: boolean;
+  error: string;
+  userTouched = false;
 
   constructor(private coreDataService: CoreDataService, private pointsService: PointsService) {
 
     this.coreDataService.SetPageTitle('new point');
-    this.slashTag = coreDataService.SlashTag;
-    this.tagDisplay = coreDataService.TagDisplay;
 
   }
 
@@ -33,14 +31,20 @@ export class PointEditComponent implements OnInit {
 
   }
 
-  PointUpdate(point: string, draft: boolean) {
+  PointUpdate(point: string, slashTags: string, draft: boolean) {
 
-    this.pointsService.PointUpdate(this.inputPointID, point, draft)
-      .then(response => console.log(response));
+    this.pointsService.PointUpdate(this.inputPointID, point, slashTags, draft)
+      .then(response => {
+        console.log('response:' + response);
+        this.inputPointID = response;
+      })
+      .catch(serverError => this.error = serverError.error.error);
   }
 
   onSubmit() {
-    this.PointUpdate(this.point, this.draft);
+    this.PointUpdate(this.point, this.slashTags, this.draft);
   }
+
+  onCKEBlur() { this.userTouched = true; }
 
 }

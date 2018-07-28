@@ -73,14 +73,14 @@ export class PointsService {
     //   });
   }
 
-  PointUpdate(pointID: number, point: string, draft: boolean): Promise<boolean> {
+  PointUpdate(pointID: number, point: string, slashTags: string, draft: boolean): Promise<number> {
 
-    const postData = { 'PointID': pointID, 'Point': point, 'Draft': draft };
+    const postData = { 'PointID': pointID, 'Point': point, 'SlashTags': slashTags, 'Draft': draft };
 
     return this.httpClientService
       .post('points/pointupdate', postData)
       .then(result => {
-        return result as boolean;
+        return result as number;
       });
   }
 
