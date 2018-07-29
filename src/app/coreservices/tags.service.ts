@@ -28,4 +28,5 @@ export class TagsService {
 export class Tag {
   TagName: string;
   TagWeight: number;
+  Embedded: boolean;
 }
