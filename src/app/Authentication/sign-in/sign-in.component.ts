@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 // import 'rxjs/add/operator/map'; //removed (angular 6)
 // https://stackoverflow.com/questions/34515173/angular-2-http-get-with-typescript-error-http-get-map-is-not-a-function-in
 
-import { AuthenticationService } from '../../coreservices/authentication.service';
 import { SignInStatuses } from '../../models/enums';
 import { CoreDataService } from '../../coreservices/coredata.service';
 
@@ -23,11 +22,9 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   signInStatusChange: Subscription;
   button: string;
-  waiting = false;
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
     private coreDataService: CoreDataService) {
 
     this.coreDataService.SetPageTitle(this.router.url === '/sign-in' ? 'sign in' : 'join');
@@ -38,8 +35,6 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
 
-    console.log('destroying');
-
     // might leave page and destroy without calling onSubmit
     if (this.signInStatusChange !== undefined) {
       this.signInStatusChange.unsubscribe();
@@ -49,10 +44,8 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
-    console.log('submit');
-
-    // just tell me something changed???
-    this.signInStatusChange = this.authenticationService.GetSignInStatusChange().subscribe(
+    // Subscribe to the SignInStatus change
+    this.signInStatusChange = this.coreDataService.GetSignInStatusChange().subscribe(
       signInStatus => {
         if (signInStatus === SignInStatuses.SignInSuccess) {
           this.router.navigateByUrl('trending');
@@ -60,7 +53,9 @@ export class SignInComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.authenticationService.SignIn('free.vote', this.email, this.password);
+
+    // SignIn
+    this.coreDataService.SignIn('free.vote', this.email, this.password);
 
   }
 }

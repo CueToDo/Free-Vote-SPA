@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import { RequestOptionsArgs, Headers  } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 import { Cookie } from 'ng2-cookies';
+import { SignInStatuses } from '../models/enums';
+import { SignInData } from '../models/signin.model';
 
 import { } from 'rxjs/add/operator/map';
 
-import { CoreDataService } from './coredata.service';
-import { SignInStatuses } from '../models/enums';
-import { SignInData } from '../models/signin.model';
 
 @Injectable()
 export class HttpClientService {
@@ -21,12 +18,33 @@ export class HttpClientService {
     return id === '' ? '0' : id;
   }
 
-  constructor(private httpClient: HttpClient, private coreDataService: CoreDataService) {
+  public get SignInData(): SignInData {
 
-    this.website = coreDataService.Website;
-    this.serviceUrl = coreDataService.ServiceUrl;
+    let signInData = new SignInData();
 
-    if (!coreDataService.SignInData.JWT) {
+    if (Cookie.get('SignInData') !== '') {
+      signInData = JSON.parse(Cookie.get('SignInData').valueOf());
+    }
+
+    return signInData;
+  }
+
+  constructor(private httpClient: HttpClient) {
+
+    // check if running locally to determine service url
+    const spaDomain = window.location.origin.split('//')[1].split(':')[0].replace('api.', '');
+
+    if (spaDomain === 'localhost') {
+      this.website = 'free.vote';
+      this.serviceUrl = 'http://localhost:56529/';
+    } else {
+      this.website = spaDomain;
+      this.serviceUrl = 'https://api.free.vote/';
+    }
+
+    console.log({ Website: this.website, ServiceUrl: this.serviceUrl });
+
+    if (!this.SignInData.JWT) {
       console.log('NO JWT - renew SessionID in constructor');
       this.SessionKeepAlive();
     }
@@ -58,7 +76,7 @@ export class HttpClientService {
       .set('Content-Type', 'application/json; charset=utf-8')
       .set('Website', this.website)
       .set('SessionID', this.sessionID())
-      .set('JWT', this.coreDataService.SignInData.JWT);
+      .set('JWT', this.SignInData.JWT);
 
     return { headers: headers };
   }

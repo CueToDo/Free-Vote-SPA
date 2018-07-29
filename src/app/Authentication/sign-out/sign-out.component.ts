@@ -1,6 +1,6 @@
+import { CoreDataService } from './../../coreservices/coredata.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { AuthenticationService } from '../../coreservices/authentication.service';
 
 @Component({
   selector: 'app-sign-out',
@@ -10,8 +10,8 @@ import { AuthenticationService } from '../../coreservices/authentication.service
 })
 export class SignOutComponent implements OnInit {
 
-  constructor(private authenticationService: AuthenticationService) {
-    this.authenticationService.SignOut();
+  constructor(private coreDataService: CoreDataService) {
+    this.coreDataService.SignOut();
    }
 
   ngOnInit() {

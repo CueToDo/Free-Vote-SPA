@@ -2,8 +2,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Routes, RouterModule, ParamMap, ActivatedRouteSnapshot } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { Routes, RouterModule } from '@angular/router';
 
 // Bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'; /* Bootstrap dropdowns */

@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { SignInStatuses } from '../../models/enums';
 import { CoreDataService } from '../../coreservices/coredata.service';
-import { AuthenticationService } from '../../coreservices/authentication.service';
 
 @Component({
   selector: 'app-menu',
@@ -16,10 +15,9 @@ import { AuthenticationService } from '../../coreservices/authentication.service
 export class MenuComponent implements OnInit, OnDestroy {
 
   constructor(
-    private activatedRoute: ActivatedRoute,
+    // private activatedRoute: ActivatedRoute,
     private router: Router,
-    private coreDataService: CoreDataService,
-    private authenticationService: AuthenticationService) {
+    private coreDataService: CoreDataService) {
   }
 
   // ToDo TagURLs
@@ -57,7 +55,11 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.selectedTag = tagDisplay;
       });
 
-    this.signInStatusChangeSubscription = this.authenticationService.GetSignInStatusChange()
+    // get sign in staus on launch
+    this.signedIn = this.coreDataService.SignedIn();
+
+    // Subscribe to SignInStatus change
+    this.signInStatusChangeSubscription = this.coreDataService.GetSignInStatusChange()
       .subscribe(status => {
         this.signedIn = status === SignInStatuses.SignInSuccess;
       });
