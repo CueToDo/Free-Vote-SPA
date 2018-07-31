@@ -4,9 +4,16 @@
 {{point.PointID}} {{point.LastRow}} {{point.DateTimeUpdated}}
 
 <div>
-    <span *ngFor="let tag of point.Tags.ListOfTags">
-        {{ tag.TagDisplay }}
-    </span>
+    <a *ngFor="let tag of tags" routerLink="{{ tag }}">
+        {{ tag }}
+    </a>
+</div>
+
+
+{{ point.SlashTags | json }}
+
+<div>
+    {{ router.url }}
 </div>
 
 <hr *ngIf="!point.LastRow" />

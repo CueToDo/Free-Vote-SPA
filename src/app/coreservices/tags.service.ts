@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { HttpClientService } from './http-client.service';
-import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
+import { Tag } from '../models/tag.model';
 
 @Injectable()
 export class TagsService {
@@ -22,11 +21,4 @@ export class TagsService {
       .then(data => data as Tag[]);
   }
 
-}
-
-
-export class Tag {
-  TagName: string;
-  TagWeight: number;
-  Embedded: boolean;
 }

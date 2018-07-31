@@ -1,54 +1,56 @@
 export class Point {
 
-    PointID: number;
-    VoterIDPoint: number;
+  PointID: number;
+  VoterIDPoint: number;
 
-    PointTypeID: number;
-    PointTypeIDVoter: number;
+  PointTypeID: number;
+  PointTypeIDVoter: number;
 
-    PointText: string;
+  PointText: string;
 
-    Draft: boolean;
-    Source: string;
-    URL: string;
-    Archived: boolean;
-    DateTimeUpdated: string;
+  Draft: boolean;
+  Source: string;
+  URL: string;
+  Archived: boolean;
+  DateTimeUpdated: string;
 
-    Sequence: number;
-    LastRowNumber: number;
-    LastRow: boolean;
+  Sequence: number;
+  LastRowNumber: number;
+  LastRow: boolean;
 
-    FeedbackGiven: boolean;
-    FeedbackID: number;
-    SupportLevelID: number;
-    Comment: string;
-    FeedbackDate: string;
-    FeedbackIsUpdatable: boolean;
-    WoWVote: boolean;
+  FeedbackGiven: boolean;
+  FeedbackID: number;
+  SupportLevelID: number;
+  Comment: string;
+  FeedbackDate: string;
+  FeedbackIsUpdatable: boolean;
+  WoWVote: boolean;
 
-    Attached: boolean;
+  Attached: boolean;
 
-    Adoptable: boolean;
-    Unadoptable: boolean;
+  Adoptable: boolean;
+  Unadoptable: boolean;
 
-    TotalFeedback: number;
-    NetSupport: number;
-    PerCentInFavour: number;
+  TotalFeedback: number;
+  NetSupport: number;
+  PerCentInFavour: number;
 
-    Support: number;
-    Opposition: number;
-    Abstentions: number;
-    Reports: number;
+  Support: number;
+  Opposition: number;
+  Abstentions: number;
+  Reports: number;
 
-    IsInOpenedSurvey: boolean;
-    IsInClosedSurvey: boolean;
-    IsQuestionAnswer: boolean;
-  }
+  IsInOpenedSurvey: boolean;
+  IsInClosedSurvey: boolean;
+  IsQuestionAnswer: boolean;
+
+  SlashTags: string[];
+}
 
 
-  export class PointSelectionResult {
-    PointsSelected: number;
-    FromDate: string;
-    ToDate: string;
-    Points: Point[];
-  }
+export class PointSelectionResult {
+  PointsSelected: number;
+  FromDate: string;
+  ToDate: string;
+  Points: Point[];
+}

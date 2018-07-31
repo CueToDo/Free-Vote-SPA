@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClientService } from '../../coreservices/http-client.service';
 import { Router } from '@angular/router';
 
 import { CoreDataService } from '../../coreservices/coredata.service';
-import { TagsService, Tag } from '../../coreservices/tags.service';
+import { TagsService } from '../../coreservices/tags.service';
+
+import { Tag } from '../../models/tag.model';
 import { TagDisplayPipe } from '../../coreservices/tag-display.pipe';
 
 @Component({
