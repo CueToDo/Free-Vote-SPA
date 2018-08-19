@@ -27,26 +27,22 @@ export class CoreDataService implements OnInit {
   private SignInStatusChange$: BehaviorSubject<SignInStatuses>;
 
   constructor(private httpClientService: HttpClientService) {
-
-    alert('coredata service constructor');
-
     // get actual SignInStatus from httpClientService (from cookie)
     this.SignInStatusChange$ = new BehaviorSubject<SignInStatuses>(this.httpClientService.SignInData.SignInStatus);
   }
 
   ngOnInit() {
-    alert('coredata Service onInit: ' + this.httpClientService.SignInData.SignInStatus);
   }
 
   SetTagRoute(tagRoute: string) {
 
     this.SlashTag = tagRoute;
-    this.PageTitle = this.TagDisplay;
+    this.PageTitle = this.TagDisplay; /// where do we set TagDisplay?
+    this.PageTitle = tagRoute;
 
     this.tagDisplaySubject.next(this.TagDisplay);
     this.titleSubject.next(this.TagDisplay);
 
-    return;
   }
 
   GetTagDisplay(): Observable<string> {

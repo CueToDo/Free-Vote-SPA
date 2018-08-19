@@ -49,3 +49,5 @@
 .fv-error{color:red;}
 
 button + span {margin-left:5px;}
+
+a + a {margin-left:5px;}

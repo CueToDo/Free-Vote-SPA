@@ -1,0 +1,37 @@
+.circle {
+    display:inline-block;
+    margin-right:8px;
+
+    border-radius: 50%;
+    width: 16px;
+    height: 16px; 
+    
+    color:white;
+    background-color:white;
+  
+    font-family:Arial Black, Gadget, sans-serif;
+    font-size:.7em;
+    line-height: 11px;
+    text-align: center;
+  }
+  
+  .circle:hover{
+    cursor:pointer;
+  }
+  
+  .report {border:solid 2px black;}
+  .report:hover, .report.chosen {background-color:black;  color:yellow}
+  
+  .oppose {border:solid 2px red;}
+  .oppose:hover, .oppose.chosen {background-color:red;}
+  
+  .neutral {border:solid 2px gray; }
+  .neutral:hover, .neutral.chosen {background-color:gray;}
+  
+  .support {border:solid 2px green;}
+  .support:hover, .support.chosen {background-color:green;}
+  
+  .wow {border:solid 2px blue;}
+  .wow:hover, .wow.chosen {background-color:blue;}
+  
+  .chosen:hover {background-color:white;}

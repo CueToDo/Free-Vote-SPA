@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Point } from '../../models/point.model';
-import { Tag } from '../../models/tag.model';
+import { CoreDataService } from '../../coreservices/coredata.service';
 
 @Component({
   selector: 'app-point',
@@ -15,7 +15,9 @@ export class PointComponent implements OnInit {
 
   tags: string[];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
 
-  constructor(private router: Router) { }
+  signedIn = false;
+
+  constructor(private router: Router, private coreDataService: CoreDataService) { }
 
   ngOnInit() {
     // Angular Workshop filter is not a function
@@ -34,6 +36,7 @@ export class PointComponent implements OnInit {
 
     this.tags = this.point.SlashTags.filter(tag => tag !== this.router.url);
 
+    this.signedIn = this.coreDataService.SignedIn();
   }
 
 }
