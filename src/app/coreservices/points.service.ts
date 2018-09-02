@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClientService } from './http-client.service';
-import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 
 import { PointSelectionTypes } from '../models/enums';
+import { PointSupportLevels } from '../models/enums';
 import { PointSelectionResult } from '../models/point.model';
 
 @Injectable()
@@ -84,4 +84,14 @@ export class PointsService {
       });
   }
 
+  PointFeedback(pointID: number, pointSupportLevel: PointSupportLevels, comment: string, feedbackAnon: boolean): Promise<string> {
+
+    const postData = { 'PointID': pointID, 'PointSupportLevel': pointSupportLevel, 'Comment': comment, 'FeedbackAnon': feedbackAnon };
+
+    return this.httpClientService
+      .post('points/PointFeedback', postData)
+      .then(result => {
+        return result as string;
+      });
+  }
 }

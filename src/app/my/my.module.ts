@@ -18,7 +18,7 @@ import { LoginRouteGuardService } from '../coreservices/login-route-guard.servic
 
 // Profile Module Routes
 const profileRoutes: Routes = [
-  { path: 'following-tags', component: TagsComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'following', component: TagsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'favourite-points', component: PointsComponent, canActivate: [LoginRouteGuardService] },
   { path: 'point-of-the-week-vote', component: PointOfTheWeekVoteComponent, canActivate: [LoginRouteGuardService] },

@@ -8,8 +8,8 @@ import { CoreDataService } from '../../coreservices/coredata.service';
 })
 export class PointOfTheWeekComponent implements OnInit {
 
-  constructor(private coreDataService: CoreDataService) {
-    this.coreDataService.SetPageTitle('point of the week');
+  constructor() {
+
   }
 
   ngOnInit() {

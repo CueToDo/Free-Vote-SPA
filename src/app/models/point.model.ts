@@ -1,3 +1,5 @@
+import { PointSupportLevels } from './enums';
+
 export class Point {
 
   PointID: number;
@@ -20,7 +22,7 @@ export class Point {
 
   FeedbackGiven: boolean;
   FeedbackID: number;
-  SupportLevelID: number;
+  SupportLevelID: PointSupportLevels;
   Comment: string;
   FeedbackDate: string;
   FeedbackIsUpdatable: boolean;

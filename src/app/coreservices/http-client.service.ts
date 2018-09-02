@@ -83,6 +83,7 @@ export class HttpClientService {
 
 
   get(url): Promise<any> {
+    console.log('httpClientService GET:' + url);
     if (!url.includes('sessionidrenew')) { this.SessionKeepAlive(); }
     return this.httpClient.get(this.serviceUrl + url, this.RequestHeaders()).toPromise();
   }

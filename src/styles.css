@@ -1,17 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 
-
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
+html, body {
+  height: 100%;
+}
+
 /*title, subtile, menu, header, footer background-color*/
-.title{background-color:#279FBB; color:white;}
-.subtitle{background-color:black; color:white; padding-top: 5px; padding-bottom:5px; }
-.menu{background-color:#070707; color:white;padding-top: 5px;padding-bottom:5px;}
-.pagetitle{background-color:#333333; color:white;}
+.title {background-color:#279FBB; color:white;}
+.pagetitle{background-color:black; color:white;}
+.subtitle{background-color:#070707; color:white; padding-top: 5px; padding-bottom:5px; }
+.menu{background-color:#333333; color:white;padding-top: 5px;padding-bottom:5px;}
+
+.content, .smallprint, .final {background-color: #f5ffff; }
+.content .container, .smallprint .container, .final .container  {background-color: white; padding-left: 40px; padding-right:40px; padding-top:10px; padding-bottom: 10px;}
 .site-content{margin-top:10px; margin-bottom:10px;} /* Site Content in Router-Outlet */
 .footer{background-color:black;color:white;padding-top: 5px;padding-bottom:15px;}
 .footer .col-xs-12{margin-top:10px;}
-
+.final, .final .container {height:100%;}
 
 #free-vote .btn-primary,
 #free-vote ul li a:hover, 

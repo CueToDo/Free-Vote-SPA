@@ -30,19 +30,49 @@ export enum SignInStatuses {
 }
 
 export enum PointSelectionTypes {
-    // Not used in database
-    Tag,
-    TagSurvey,
-    CDMPProposal,
+  // Not used in database
+  Tag,
+  TagSurvey,
+  CDMPProposal,
 
-    POTW,
-    POTWVote,
-    WoWAdmin,
+  POTW,
+  POTWVote,
+  WoWAdmin,
 
-    MyPoints,
-    FavouritePoints,
-    Point,
+  MyPoints,
+  FavouritePoints,
+  Point,
 
-    Group,
-    Popular
-  }
+  Group,
+  Popular
+}
+
+export enum PointSupportLevels {
+  Support = 1,
+  Oppose = -1,
+  None = 0,
+  StandAside = -8,
+  Report = -9
+}
+
+export enum PointTypesEnum {
+  NotSelected = -1,
+  RhetoricalQuestion = 1,
+  Fact = 2,
+  Meaning = 4,
+  Action = 9,
+  Opinion = 10,
+  Prediction = 12,
+  Quote = 13,
+  Assumption = 14,
+  Anecdote = 15,
+  Belief = 16,
+  Commonsense = 17,
+  Definition = 18,
+  SurveyQuestionSingle = 19,
+  SurveyQuestionMulti = 20,
+  SurveyQuestionRank = 21,
+  RecommendedReading = 22,
+  RecommendedViewing = 23,
+  Tweet = 24
+}

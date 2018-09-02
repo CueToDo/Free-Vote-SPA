@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   constructor(private coreDataService: CoreDataService) { }
 
   ngOnInit() {
-    this.coreDataService.SetPageTitle('Home');
+    this.coreDataService.SetPageTitle('/home');
   }
 
 }

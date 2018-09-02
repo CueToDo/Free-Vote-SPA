@@ -9,7 +9,7 @@ import { SignInStatuses } from '../models/enums';
 import { SignInData } from '../models/signin.model';
 
 @Injectable()
-export class CoreDataService implements OnInit {
+export class CoreDataService {
 
   // All Pages?
   public PageTitle: string;
@@ -26,24 +26,26 @@ export class CoreDataService implements OnInit {
 
   private SignInStatusChange$: BehaviorSubject<SignInStatuses>;
 
+  public PointTypes: Array<[number, string]>; // Tuple array
+
   constructor(private httpClientService: HttpClientService) {
     // get actual SignInStatus from httpClientService (from cookie)
     this.SignInStatusChange$ = new BehaviorSubject<SignInStatuses>(this.httpClientService.SignInData.SignInStatus);
+
+    console.log('coreDataService constructor');
   }
 
-  ngOnInit() {
-  }
 
-  SetTagRoute(tagRoute: string) {
+  // SetTagRoute(tagRoute: string) {
 
-    this.SlashTag = tagRoute;
-    this.PageTitle = this.TagDisplay; /// where do we set TagDisplay?
-    this.PageTitle = tagRoute;
+  //   this.SlashTag = tagRoute;
+  //   this.PageTitle = this.TagDisplay; /// where do we set TagDisplay?
+  //   this.PageTitle = tagRoute;
 
-    this.tagDisplaySubject.next(this.TagDisplay);
-    this.titleSubject.next(this.TagDisplay);
+  //   this.tagDisplaySubject.next(this.TagDisplay);
+  //   this.titleSubject.next(this.TagDisplay);
 
-  }
+  // }
 
   GetTagDisplay(): Observable<string> {
     return this.tagDisplaySubject.asObservable();
@@ -108,6 +110,16 @@ export class CoreDataService implements OnInit {
     Cookie.set('SignInData', JSON.stringify(signInData));
 
     this.SignInStatusChange$.next(SignInStatuses.SignedOut);
+  }
+
+  GetPointTypes() {
+    this.httpClientService
+      .get('lookups/point-types')
+      .then(response => {
+        this.PointTypes = response;
+        console.log('pointTypes From Service');
+        console.log(this.PointTypes);
+      });
   }
 
 }

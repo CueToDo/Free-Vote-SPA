@@ -3,6 +3,7 @@ import { Validators, NgForm } from '@angular/forms';
 
 import { CoreDataService } from '../../coreservices/coredata.service';
 import { PointsService } from './../../coreservices/points.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-point-edit',
@@ -21,14 +22,16 @@ export class PointEditComponent implements OnInit {
   error: string;
   userTouched = false;
 
-  constructor(private coreDataService: CoreDataService, private pointsService: PointsService) {
+  pointTypes: Array<[number, string]>;
 
-    this.coreDataService.SetPageTitle('new point');
-
+  constructor(private router: Router, private coreDataService: CoreDataService, private pointsService: PointsService) {
+    coreDataService.SetPageTitle(router.url);
   }
 
   ngOnInit() {
-
+    this.pointTypes = this.coreDataService.PointTypes;
+    console.log('POINT-EDIT COMPONENT');
+    console.log(this.pointTypes);
   }
 
   PointUpdate(point: string, slashTags: string, draft: boolean) {

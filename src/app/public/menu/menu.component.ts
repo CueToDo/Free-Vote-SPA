@@ -21,8 +21,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   // ToDo TagURLs
-  TagURLs: string[] = ['/trending', '/private/following-tags'];
-  PostURLs: string[] = ['/private/favourite-posts', '/private/my-posts', '/post-of-the-week', '/private/post-of-the-week-vote'];
+  TagURLs: string[] = ['/trending', '/my/following'];
+  PostURLs: string[] = ['/my/favourite-points', '/my/points', '/my/new-point', '/point-of-the-week', '/my/point-of-the-week-vote'];
+  ProfileURLs: string[] = ['/profile/location', '/profile/details', '/profile/group-membership'];
 
   selectedTag = '';
   tagChangeSubscription: Subscription;
@@ -35,10 +36,14 @@ export class MenuComponent implements OnInit, OnDestroy {
     // console.log(this.SelectedTag + ' ' + this.activatedRoute.url);
     switch (link) {
       case 'tags': {
-        return this.TagURLs.indexOf(this.router.url) > -1 || this.selectedTag === this.router.url.replace('/', '');
+        return this.TagURLs.indexOf(this.router.url) > -1
+          || this.selectedTag !== '' && this.selectedTag === this.router.url.replace('/', '');
       }
       case 'posts': {
         return this.PostURLs.indexOf(this.router.url) > -1;
+      }
+      case 'profile': {
+        return this.ProfileURLs.indexOf(this.router.url) > -1;
       }
       default: {
         return link === this.router.url;

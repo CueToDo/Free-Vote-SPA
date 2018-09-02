@@ -10,7 +10,7 @@
         <a routerLink="/trending" class="dropdown-item" routerLinkActive="active">trending</a>
       </li>
       <li role="menuitem" *ngIf="signedIn">
-        <a routerLink="/my/following-tags" class="dropdown-item" routerLinkActive="active">following</a>
+        <a routerLink="/my/following" class="dropdown-item" routerLinkActive="active">following</a>
       </li>
       <li role="menuitem">
         <a *ngIf="selectedTag !=''" [routerLink]="selectedTag" class="dropdown-item" routerLinkActive="active">{{ selectedTag}}</a>
@@ -41,7 +41,7 @@
   </div>
 
   <div class="btn-group" dropdown *ngIf="signedIn">
-    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('Personal') }">profile</button>
+    <button dropdownToggle class="btn btn-primary dropdown-toggle" [ngClass]="{ active: isActive('profile') }">profile</button>
     <ul *dropdownMenu class="dropdown-menu" role="menu">
       <li role="menuitem">
         <a routerLink="/profile/details" class="dropdown-item" routerLinkActive="active">personal details</a>
@@ -62,4 +62,6 @@
   <button routerLink="/sign-out" class="btn btn-primary" routerLinkActive="active" *ngIf="signedIn">sign out</button>
   
 </div>
+
+<div>Menu Component - tslint no-debugger: set to true for release</div>
 

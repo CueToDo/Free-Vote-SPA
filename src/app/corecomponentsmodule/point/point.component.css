@@ -19,19 +19,19 @@
     cursor:pointer;
   }
   
-  .report {border:solid 2px black;}
-  .report:hover, .report.chosen {background-color:black;  color:yellow}
-  
-  .oppose {border:solid 2px red;}
-  .oppose:hover, .oppose.chosen {background-color:red;}
+  .wow {border:solid 2px blue;}
+  .wow.chosen {background-color:blue;}
+  .wow:hover {border:solid 2px #b3b3ff; background-color:#b3b3ff;}
+  .wow.chosen:hover {border:solid 2px #6666ff; background-color:#6666ff;}
+
+  .support {border:solid 2px green;}
+  .support:hover, .support.chosen {background-color:green;}
   
   .neutral {border:solid 2px gray; }
   .neutral:hover, .neutral.chosen {background-color:gray;}
   
-  .support {border:solid 2px green;}
-  .support:hover, .support.chosen {background-color:green;}
+  .oppose {border:solid 2px red;}
+  .oppose:hover, .oppose.chosen {background-color:red;}
   
-  .wow {border:solid 2px blue;}
-  .wow:hover, .wow.chosen {background-color:blue;}
-  
-  .chosen:hover {background-color:white;}
+  .report {border:solid 2px black;}
+  .report:hover, .report.chosen {background-color:black;  color:yellow}

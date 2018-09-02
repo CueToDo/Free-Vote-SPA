@@ -5,7 +5,6 @@ import { CoreDataService } from '../../coreservices/coredata.service';
 import { TagsService } from '../../coreservices/tags.service';
 
 import { Tag } from '../../models/tag.model';
-import { TagDisplayPipe } from '../../coreservices/tag-display.pipe';
 
 @Component({
   templateUrl: './tags.component.html',
@@ -19,13 +18,7 @@ export class TagsComponent implements OnInit {
   tags: Tag[];
 
   constructor(private router: Router, private coreDataService: CoreDataService, private tagsService: TagsService) {
-
-    if (this.router.url === '/trending') {
-      this.coreDataService.SetPageTitle('trending');
-    } else if (this.router.url === '/my/following-tags') {
-      this.coreDataService.SetPageTitle('following');
-    }
-
+    this.coreDataService.SetPageTitle(router.url);
   }
 
   ngOnInit() {

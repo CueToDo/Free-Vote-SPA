@@ -11,8 +11,7 @@
 <form (ngSubmit)="onSubmit()" class="form-horizontal mt-3" #formPoint="ngForm">
 
   <div class="form-group">
-    <ckeditor [(ngModel)]="point" name="point" [config]="{}" [readonly]="false" 
-    debounce="500" required #tvPoint="ngModel" (blur)="onCKEBlur()">
+    <ckeditor [(ngModel)]="point" name="point" [config]="{}" [readonly]="false" debounce="500" required #tvPoint="ngModel" (blur)="onCKEBlur()">
     </ckeditor>
   </div>
 
@@ -36,5 +35,10 @@
     </span>
   </div>
 
+  <div>
+    <select>
+      <option [value]="pointType" *ngFor="let pointType of pointTypes">{{ pointType.Value}}</option>
+    </select>
+  </div>
 
 </form>

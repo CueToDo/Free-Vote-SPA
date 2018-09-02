@@ -17,9 +17,9 @@ import { PointsService } from '../../coreservices/points.service';
 })
 export class PointsComponent implements OnInit, OnDestroy {
 
-
   // Subscriptions
   private routeChangeSubscription: any;
+
   // private PointSelectionSubscription: any;
 
   // Controls
@@ -35,7 +35,8 @@ export class PointsComponent implements OnInit, OnDestroy {
   private tagRoute: string;
 
   constructor(private formBuilder: FormBuilder,
-    private router: Router, private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private coreDataService: CoreDataService,
     private pointsService: PointsService) {
 
@@ -51,30 +52,33 @@ export class PointsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     // need to detect route to determine point selection type
 
     // https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
     // Need to do following to get route params
     this.routeChangeSubscription = this.activatedRoute.params.subscribe(params => {
 
+      this.coreDataService.SetPageTitle(this.router.url);
+
       if (params['tag'] !== undefined) {
         this.tagRoute = params['tag'];
-        this.coreDataService.SetTagRoute(this.tagRoute);
-        this.pointSelectionType = PointSelectionTypes.Tag;
+        // this.coreDataService.SetTagRoute(this.tagRoute);
+        this.pointSelectionType = PointSelectionTypes.Tag; // remember for re-submit with different filter
         // initiate selection
         this.PointsTaggedMinDate();
       } else if (this.router.url === '/my/points') {
         this.pointSelectionType = PointSelectionTypes.MyPoints;
-        this.coreDataService.SetPageTitle('my points');
+        this.SelectPoints();
       } else if (this.router.url === '/my/favourite-points') {
         this.pointSelectionType = PointSelectionTypes.FavouritePoints;
-        this.coreDataService.SetPageTitle('favourite points');
+        this.SelectPoints();
       } else {
         this.pointSelectionType = PointSelectionTypes.Popular;
-        this.coreDataService.SetPageTitle('popular points');
+        this.SelectPoints();
       }
+
     });
+
   }
 
 
