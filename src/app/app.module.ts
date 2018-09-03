@@ -13,7 +13,6 @@ import { FacebookModule } from 'ngx-facebook';
 import { FBTestComponent } from './fbtest/fbtest.component';
 
 // Modules
-import { MyModule } from './my/my.module';
 import { CoreComponentsModule } from './corecomponentsmodule/corecomponents.module';
 
 // Global Singleton Services imported from Services Module
@@ -61,8 +60,7 @@ const appRoutes: Routes = [
     FacebookModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServicesModule,
-    CoreComponentsModule,
-    MyModule
+    CoreComponentsModule
   ],
   declarations: [
     AppComponent,
