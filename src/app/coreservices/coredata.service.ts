@@ -1,3 +1,4 @@
+import { PointTypesEnum } from './../models/enums';
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClientService } from './http-client.service';
 import { Observable } from 'rxjs/Observable';
@@ -26,13 +27,12 @@ export class CoreDataService {
 
   private SignInStatusChange$: BehaviorSubject<SignInStatuses>;
 
-  public PointTypes: Array<[number, string]>; // Tuple array
+  // public PointTypes: Array<[number, string]>; // Tuple array
+  public PointTypes: Map<string, string>;
 
   constructor(private httpClientService: HttpClientService) {
     // get actual SignInStatus from httpClientService (from cookie)
     this.SignInStatusChange$ = new BehaviorSubject<SignInStatuses>(this.httpClientService.SignInData.SignInStatus);
-
-    console.log('coreDataService constructor');
   }
 
 
@@ -112,14 +112,32 @@ export class CoreDataService {
     this.SignInStatusChange$.next(SignInStatuses.SignedOut);
   }
 
+  GetMapValue(obj, key): string {
+    if (obj.hasOwnProperty(key)) {
+      return obj[key];
+    }
+    throw new Error('Invalid map key.');
+  }
+
+
   GetPointTypes() {
     this.httpClientService
       .get('lookups/point-types')
       .then(response => {
-        this.PointTypes = response;
-        console.log('pointTypes From Service');
-        console.log(this.PointTypes);
+        this.PointTypes = new Map<string, string>();
+        for (const kvp of response) {
+          this.PointTypes.set(kvp.Key, kvp.Value);
+        }
       });
+  }
+
+  PointType(pointTypeID: string): string {
+    return this.PointTypes.get(pointTypeID);
+  }
+
+
+  ArrayFromMap(map: Map<string, string>): any[] {
+    return Array.from(map.entries()).map(([key, val]) => ({ key, val }));
   }
 
 }

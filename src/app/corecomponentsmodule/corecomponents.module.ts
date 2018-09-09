@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule /*ReactiveFormsModule*/ } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 
+// Bootstrap
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown'; /* Bootstrap dropdowns */
+
 // CKEditor
 import { CKEditorModule } from 'ng2-ckeditor';
 
@@ -13,8 +16,8 @@ import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 
 // Pipes
-import { TagDisplayPipe } from '../coreservices/tag-display.pipe';
-
+import { TagDisplayPipe } from './pipes/tag-display.pipe';
+import { NbspPipe } from './pipes/nbsp.pipe';
 
 @NgModule({
   imports: [
@@ -22,14 +25,16 @@ import { TagDisplayPipe } from '../coreservices/tag-display.pipe';
     FormsModule,
     // ReactiveFormsModule,
     RouterModule,
-    CKEditorModule
+    CKEditorModule,
+    BsDropdownModule // https://stackoverflow.com/questions/47874840/how-to-inject-ngx-bootstrap-modules-into-child-module-angular-4
   ],
   declarations: [
     TagsComponent,
     PointComponent,
     PointsComponent,
     PointEditComponent,
-    TagDisplayPipe
+    TagDisplayPipe,
+    NbspPipe
   ],
   providers: [],
   exports: [

@@ -1,25 +1,76 @@
-<div [innerHTML]="point.PointText"></div>
+<ng-container *ngIf="!editing">
 
-<div>
-    {{point.DateTimeUpdated}}
-</div>
+    <div [innerHTML]="point.PointText"></div>
 
-<div>
-    {{ router.url }} <a *ngFor="let tag of tags" routerLink="{{ tag }}">{{ tag }}</a>
-</div>
 
-<ng-container *ngIf="signedIn">
-    <!-- https://getbootstrap.com/docs/4.1/components/tooltips/ -->
-    <div class="circle wow" [ngClass]="point.WoWVote? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom" title="WoW vote" (click)="WoW()">w</div>
-    <div class="circle support" [ngClass]="point.SupportLevelID==1? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom" title="support" (click)="Support()">+</div>
-    <div class="circle neutral" [ngClass]="point.SupportLevelID==-8? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom" title="neutral" (click)="Neutral()">~</div>
-    <div class="circle oppose" [ngClass]="point.SupportLevelID==-1? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom" title="oppose" (click)="Oppose()">--</div>
-    <div class="circle report" [ngClass]="point.SupportLevelID==-9? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom" title="report" (click)="Report()">!</div>
-    {{ point.FeedbackDate }}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-xs-4 col-sm-4">
+                {{ router.url }} <a *ngFor="let tag of tags" routerLink="{{ tag }}">{{ tag }}</a>
+            </div>
+
+            <div class="col-xs-3 col-sm-3">
+                <div>
+                    <span [innerHtml]="this.coreDataService.PointType(point.PointTypeID)"></span>
+                    <span [innerHtml]="point.DateTimeUpdated | nbsp"></span>
+                </div>
+                <div>
+                    quote source
+                </div>
+            </div>
+
+            <div class="col-xs-5 col-sm-5">
+
+                <div>
+
+                    <ng-container *ngIf="signedIn">
+                        <!-- https://getbootstrap.com/docs/4.1/components/tooltips/ -->
+                        <div class="circle wow" [ngClass]="point.WoWVote? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom" title="WoW vote"
+                            (click)="WoW()">w</div>
+                        <div class="circle support" [ngClass]="point.SupportLevelID==1? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom"
+                            title="support" (click)="Support()">+</div>
+                        <div class="circle neutral" [ngClass]="point.SupportLevelID==-8? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom"
+                            title="neutral" (click)="Neutral()">~</div>
+                        <div class="circle oppose" [ngClass]="point.SupportLevelID==-1? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom"
+                            title="oppose" (click)="Oppose()">--</div>
+                        <div class="circle report" [ngClass]="point.SupportLevelID==-9? 'chosen' : ''" data-toggle="tooltip" data-placement="bottom"
+                            title="report" (click)="Report()">!</div>
+                    </ng-container>
+
+                    <span [innerHtml]="point.FeedbackDate | nbsp"></span>
+                </div>
+
+                <div class="btn-group" dropdown>
+                    <a href (click)="false" dropdownToggle class="dropdown-toggle">commands</a>
+                    <ul *dropdownMenu class="dropdown-menu" role="menu">
+                        <li role="menuitem" *ngIf="point.IsPointOwner">
+                            <a href [routerLink]="" class="dropdown-item" (click)="edit()">edit</a>
+                        </li>
+                        <li role="menuitem" *ngIf="point.IsPointOwner">
+                            <a href [routerLink]="" class="dropdown-item" (click)="delete()">delete</a>
+                        </li>
+                        <li role="menuitem">
+                            <a href [routerLink]="" class="dropdown-item" (click)="favourite()">add to favourites</a>
+                        </li>
+                        <li role="menuitem" *ngIf="point.IsPointOwner">
+                            <a href [routerLink]="" class="dropdown-item" (click)="addRemoveTags()">add/remove tags</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="fv-error" *ngIf="error != ''">
+        {{ error }}
+    </div>
+
 </ng-container>
 
-<div class="fv-error" *ngIf="error != ''">
-    {{ error }}
-</div>
+<app-point-edit *ngIf="editing" (Cancel)="onCancel($event)"></app-point-edit>
 
 <hr *ngIf="!point.LastRow" />

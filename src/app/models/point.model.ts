@@ -4,6 +4,7 @@ export class Point {
 
   PointID: number;
   VoterIDPoint: number;
+  IsPointOwner: boolean;
 
   PointTypeID: number;
   PointTypeIDVoter: number;

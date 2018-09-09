@@ -13,7 +13,7 @@ html, body {
 .menu{background-color:#333333; color:white;padding-top: 5px;padding-bottom:5px;}
 
 .content, .smallprint, .final {background-color: #f5ffff; }
-.content .container, .smallprint .container, .final .container  {background-color: white; padding-left: 40px; padding-right:40px; padding-top:10px; padding-bottom: 10px;}
+.content .container, .smallprint .container, .final .container  {background-color: white; max-width:920px; padding-left: 20px; padding-right:20px; padding-top:10px; padding-bottom: 10px;}
 .site-content{margin-top:10px; margin-bottom:10px;} /* Site Content in Router-Outlet */
 .footer{background-color:black;color:white;padding-top: 5px;padding-bottom:15px;}
 .footer .col-xs-12{margin-top:10px;}
@@ -57,3 +57,6 @@ html, body {
 button + span {margin-left:5px;}
 
 a + a {margin-left:5px;}
+
+/* https://stackoverflow.com/questions/38576503/how-to-remove-the-arrow-in-dropdown-in-bootstrap-4 */
+.dropdown-toggle::after {  display:none;}

@@ -12,7 +12,6 @@ import { Tag } from '../../models/tag.model';
   providers: [], //  Need HttpClientService as well as TagsService. NO: do not decorate components with service providers.
   preserveWhitespaces: true
 })
-
 export class TagsComponent implements OnInit {
 
   tags: Tag[];

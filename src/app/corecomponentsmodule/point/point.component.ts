@@ -4,13 +4,16 @@ import { Router } from '@angular/router';
 import { Point } from '../../models/point.model';
 import { PointSupportLevels } from '../../models/enums';
 
+import { PointEditComponent } from '../point-edit/point-edit.component';
+
 import { CoreDataService } from '../../coreservices/coredata.service';
 import { PointsService } from '../../coreservices/points.service';
 
 @Component({
   selector: 'app-point',
   templateUrl: './point.component.html',
-  styleUrls: ['./point.component.css']
+  styleUrls: ['./point.component.css'],
+  preserveWhitespaces: true
 })
 export class PointComponent implements OnInit {
 
@@ -19,11 +22,12 @@ export class PointComponent implements OnInit {
   tags: string[];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
 
   signedIn = false;
+  editing = false;
   error: string;
 
   constructor(private router: Router, private coreDataService: CoreDataService, private pointsService: PointsService) {
     this.coreDataService.SetPageTitle(this.router.url);
-   }
+  }
 
   ngOnInit() {
     // Angular Workshop filter is not a function
@@ -89,5 +93,19 @@ export class PointComponent implements OnInit {
       })
       .catch(serverError => this.error = serverError.error.error);
   }
+
+  edit() { this.editing = true; }
+
+  delete() {
+    if (confirm('Are you sure you wish to delete this point?')) {
+      alert('Go delete');
+    }
+  }
+
+  favourite() { alert('favourite'); }
+
+  addRemoveTags() { alert('add remove tags'); }
+
+  onCancel() { this.editing = false; }
 
 }

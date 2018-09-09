@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Validators, NgForm } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { CoreDataService } from '../../coreservices/coredata.service';
 import { PointsService } from './../../coreservices/points.service';
@@ -12,7 +11,10 @@ import { Router } from '@angular/router';
 })
 export class PointEditComponent implements OnInit {
 
+  @Output() Cancel = new EventEmitter();
+
   inputPointID = -1;
+  selectedPointType;
 
   ckeditorContent = '<p>Some html</p>';
 
@@ -22,7 +24,9 @@ export class PointEditComponent implements OnInit {
   error: string;
   userTouched = false;
 
-  pointTypes: Array<[number, string]>;
+  // pointTypes: Array<[number, string]>;
+  pointTypes: Map<string, string>;
+  arrPointTypes: Array<[string, string]>;
 
   constructor(private router: Router, private coreDataService: CoreDataService, private pointsService: PointsService) {
     coreDataService.SetPageTitle(router.url);
@@ -30,8 +34,8 @@ export class PointEditComponent implements OnInit {
 
   ngOnInit() {
     this.pointTypes = this.coreDataService.PointTypes;
-    console.log('POINT-EDIT COMPONENT');
-    console.log(this.pointTypes);
+    this.arrPointTypes = this.coreDataService.ArrayFromMap(this.pointTypes);
+    console.log(this.arrPointTypes);
   }
 
   PointUpdate(point: string, slashTags: string, draft: boolean) {
@@ -44,10 +48,17 @@ export class PointEditComponent implements OnInit {
       .catch(serverError => this.error = serverError.error.error);
   }
 
+  onCKEBlur() { this.userTouched = true; }
+
   onSubmit() {
     this.PointUpdate(this.point, this.slashTags, this.draft);
   }
 
-  onCKEBlur() { this.userTouched = true; }
+  onCancel() {
+    this.Cancel.next();
+  }
 
+  onChange(val) {
+    console.log(val);
+  }
 }
