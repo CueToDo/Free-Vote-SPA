@@ -1,4 +1,4 @@
-import { PointSupportLevels } from './enums';
+import { PointSupportLevels, PointTypesEnum } from './enums';
 
 export class Point {
 
@@ -6,7 +6,7 @@ export class Point {
   VoterIDPoint: number;
   IsPointOwner: boolean;
 
-  PointTypeID: number;
+  PointTypeID: PointTypesEnum;
   PointTypeIDVoter: number;
 
   PointText: string;

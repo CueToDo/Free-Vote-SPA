@@ -12,7 +12,7 @@
 
             <div class="col-xs-3 col-sm-3">
                 <div>
-                    <span [innerHtml]="this.coreDataService.PointType(point.PointTypeID)"></span>
+                    <b><span [innerHtml]="this.coreDataService.PointType(point.PointTypeID)"></span></b>
                     <span [innerHtml]="point.DateTimeUpdated | nbsp"></span>
                 </div>
                 <div>
@@ -71,6 +71,6 @@
 
 </ng-container>
 
-<app-point-edit *ngIf="editing" (Cancel)="onCancel($event)"></app-point-edit>
+<app-point-edit *ngIf="editing" (Cancel)="onCancel($event)" [point]="point"></app-point-edit>
 
 <hr *ngIf="!point.LastRow" />

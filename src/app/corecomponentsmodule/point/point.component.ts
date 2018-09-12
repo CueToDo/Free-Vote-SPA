@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Point } from '../../models/point.model';
 import { PointSupportLevels } from '../../models/enums';
 
-import { PointEditComponent } from '../point-edit/point-edit.component';
+// import { PointEditComponent } from '../point-edit/point-edit.component';
 
 import { CoreDataService } from '../../coreservices/coredata.service';
 import { PointsService } from '../../coreservices/points.service';

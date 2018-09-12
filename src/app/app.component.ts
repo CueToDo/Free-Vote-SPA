@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.pageTitle = pageTitle;
       });
 
-      this.coreDataService.GetPointTypes();
+    this.coreDataService.GetPointTypes();
   }
 
   ngOnDestroy() {

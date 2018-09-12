@@ -1,4 +1,3 @@
-import { PointTypesEnum } from './../models/enums';
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClientService } from './http-client.service';
 import { Observable } from 'rxjs/Observable';
@@ -8,6 +7,8 @@ import { Cookie } from 'ng2-cookies';
 
 import { SignInStatuses } from '../models/enums';
 import { SignInData } from '../models/signin.model';
+
+import { Kvp } from '../models/kvp.model';
 
 @Injectable()
 export class CoreDataService {
@@ -28,7 +29,7 @@ export class CoreDataService {
   private SignInStatusChange$: BehaviorSubject<SignInStatuses>;
 
   // public PointTypes: Array<[number, string]>; // Tuple array
-  public PointTypes: Map<string, string>;
+  public PointTypes: Kvp[];
 
   constructor(private httpClientService: HttpClientService) {
     // get actual SignInStatus from httpClientService (from cookie)
@@ -120,24 +121,27 @@ export class CoreDataService {
   }
 
 
+  // DO NOT WORK WITH Map
+  // https://stackoverflow.com/questions/48187362/how-to-iterate-using-ngfor-loop-map-containing-key-as-string-and-values-as-map-i
   GetPointTypes() {
     this.httpClientService
       .get('lookups/point-types')
       .then(response => {
-        this.PointTypes = new Map<string, string>();
+        this.PointTypes = new Array<Kvp>();
         for (const kvp of response) {
-          this.PointTypes.set(kvp.Key, kvp.Value);
+          this.PointTypes.push(<Kvp>({ Key: kvp.Key, Value: kvp.Value }));
         }
+        console.log('GOT EM', this.PointTypes);
       });
   }
 
-  PointType(pointTypeID: string): string {
-    return this.PointTypes.get(pointTypeID);
+  PointType(pointTypeID: number): string {
+    return this.PointTypes.filter(pt => pt.Key === pointTypeID)[0].Value;
   }
 
-
-  ArrayFromMap(map: Map<string, string>): any[] {
-    return Array.from(map.entries()).map(([key, val]) => ({ key, val }));
-  }
+  // Do Not Use map
+  // ArrayFromMap(map: Map<number, string>): any[] {
+  //   return Array.from(map.entries()).map(([key, val]) => ({ key, val }));
+  // }
 
 }

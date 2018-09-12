@@ -1,8 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { CoreDataService } from '../../coreservices/coredata.service';
 import { PointsService } from './../../coreservices/points.service';
 import { Router } from '@angular/router';
+
+import { Point } from '../../models/point.model';
+import { Kvp } from '../../models/kvp.model';
 
 @Component({
   selector: 'app-point-edit',
@@ -11,22 +14,24 @@ import { Router } from '@angular/router';
 })
 export class PointEditComponent implements OnInit {
 
+  @Input() point: Point;
   @Output() Cancel = new EventEmitter();
 
-  inputPointID = -1;
   selectedPointType;
 
   ckeditorContent = '<p>Some html</p>';
 
-  point: string;
   slashTags: string;
   draft: boolean;
   error: string;
   userTouched = false;
 
   // pointTypes: Array<[number, string]>;
-  pointTypes: Map<string, string>;
-  arrPointTypes: Array<[string, string]>;
+  // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
+  pointTypes: Kvp[];
+
+  // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
+  // pointKeys: IterableIterator<number>;
 
   constructor(private router: Router, private coreDataService: CoreDataService, private pointsService: PointsService) {
     coreDataService.SetPageTitle(router.url);
@@ -34,16 +39,15 @@ export class PointEditComponent implements OnInit {
 
   ngOnInit() {
     this.pointTypes = this.coreDataService.PointTypes;
-    this.arrPointTypes = this.coreDataService.ArrayFromMap(this.pointTypes);
-    console.log(this.arrPointTypes);
+    console.log(this.point.PointTypeID);
   }
 
   PointUpdate(point: string, slashTags: string, draft: boolean) {
 
-    this.pointsService.PointUpdate(this.inputPointID, point, slashTags, draft)
+    this.pointsService.PointUpdate(this.point.PointID, point, slashTags, draft)
       .then(response => {
         console.log('response:' + response);
-        this.inputPointID = response;
+        this.point.PointID = response;
       })
       .catch(serverError => this.error = serverError.error.error);
   }
@@ -51,7 +55,7 @@ export class PointEditComponent implements OnInit {
   onCKEBlur() { this.userTouched = true; }
 
   onSubmit() {
-    this.PointUpdate(this.point, this.slashTags, this.draft);
+    this.PointUpdate(this.point.PointText, this.slashTags, this.draft);
   }
 
   onCancel() {

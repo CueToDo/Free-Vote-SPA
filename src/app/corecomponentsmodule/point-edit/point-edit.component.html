@@ -11,7 +11,7 @@
 <form (ngSubmit)="onSubmit()" class="form-horizontal mt-3" #formPoint="ngForm">
 
   <div class="form-group">
-    <ckeditor [(ngModel)]="point" name="point" [config]="{}" [readonly]="false" debounce="500" required #tvPoint="ngModel" (blur)="onCKEBlur()">
+    <ckeditor [(ngModel)]="point.PointText" name="point" [config]="{}" [readonly]="false" debounce="500" required #tvPoint="ngModel" (blur)="onCKEBlur()">
     </ckeditor>
   </div>
 
@@ -36,11 +36,12 @@
     </span>
   </div>
 
-  <div>
-    <select [ngModel]="selectedPointType" (ngModelChange)="onChange($event)" name="pt">
-      <option *ngFor="let pointType of arrPointTypes" [ngValue]="pointType">{{ pointType.val}}</option>
+  <div> 
+      <!-- Using [(ngModel)] is the correct way to do this 
+      https://stackoverflow.com/questions/46000950/angular-4-setting-selected-option-in-dropdown -->
+    <select (ngModelChange)="onChange($event)" name="pt" [(ngModel)]="point.PointTypeID">
+      <option *ngFor="let pointType of pointTypes" [value]="pointType.Key">{{ pointType.Value }}</option>
     </select>
-    {{pointType | json}}
   </div>
 
 </form>
