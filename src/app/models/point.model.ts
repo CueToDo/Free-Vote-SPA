@@ -9,7 +9,7 @@ export class Point {
   PointTypeID: PointTypesEnum;
   PointTypeIDVoter: number;
 
-  PointText: string;
+  PointHTML: string;
 
   Draft: boolean;
   Source: string;
@@ -50,6 +50,12 @@ export class Point {
   SlashTags: string[];
 }
 
+export class PointEdit {
+  PointID: number;
+  PointHTML: string;
+  SlashTags: string; // However the use inputs them, pass them to the server to decode
+  Draft: boolean;
+}
 
 export class PointSelectionResult {
   PointsSelected: number;

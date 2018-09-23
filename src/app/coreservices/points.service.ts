@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { PointSelectionTypes } from '../models/enums';
 import { PointSupportLevels } from '../models/enums';
-import { PointSelectionResult } from '../models/point.model';
+import { PointSelectionResult, PointEdit } from '../models/point.model';
 
 @Injectable()
 export class PointsService {
@@ -73,9 +73,12 @@ export class PointsService {
     //   });
   }
 
-  PointUpdate(pointID: number, point: string, slashTags: string, draft: boolean): Promise<number> {
+  PointUpdate(point: PointEdit): Promise<number> {
 
-    const postData = { 'PointID': pointID, 'Point': point, 'SlashTags': slashTags, 'Draft': draft };
+    console.log('PointUpdate: ', point);
+
+    const postData = { 'PointID': point.PointID, 'PointHTML': point.PointHTML,
+      'SlashTags': point.SlashTags, 'Draft': point.Draft };
 
     return this.httpClientService
       .post('points/pointupdate', postData)

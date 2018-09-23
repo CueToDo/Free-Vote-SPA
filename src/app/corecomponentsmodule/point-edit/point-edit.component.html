@@ -11,17 +11,18 @@
 <form (ngSubmit)="onSubmit()" class="form-horizontal mt-3" #formPoint="ngForm">
 
   <div class="form-group">
-    <ckeditor [(ngModel)]="point.PointText" name="point" [config]="{}" [readonly]="false" debounce="500" required #tvPoint="ngModel" (blur)="onCKEBlur()">
+    <ckeditor [(ngModel)]="pointEdit.PointHTML" name="point" [config]="{}" [readonly]="false" debounce="500" required #tvPoint="ngModel"
+      (blur)="onCKEBlur()">
     </ckeditor>
   </div>
 
   <div class="form-group">
-    <input type="text" [(ngModel)]="slashTags" name="slashTags" class="form-control" placeholder='slash tags - separate each tag with a "/"'
+    <input type="text" [(ngModel)]="pointEdit.SlashTags" name="slashTags" class="form-control" placeholder='slash tags - separate each tag with a "/"'
     />
   </div>
 
   <div class="form-check mb-4">
-    <input type="checkbox" [(ngModel)]=draft name="draft" class="form-check-input">
+    <input type="checkbox" [(ngModel)]="pointEdit.Draft" name="draft" class="form-check-input">
     <label class="form-check-label" for="draft">save as draft</label>
   </div>
 
@@ -36,10 +37,10 @@
     </span>
   </div>
 
-  <div> 
-      <!-- Using [(ngModel)] is the correct way to do this 
+  <div>
+    <!-- Using [(ngModel)] is the correct way to do this 
       https://stackoverflow.com/questions/46000950/angular-4-setting-selected-option-in-dropdown -->
-    <select (ngModelChange)="onChange($event)" name="pt" [(ngModel)]="point.PointTypeID">
+    <select (ngModelChange)="onChange($event)" name="pt" [(ngModel)]="pointEdit.PointTypeID">
       <option *ngFor="let pointType of pointTypes" [value]="pointType.Key">{{ pointType.Value }}</option>
     </select>
   </div>
