@@ -1,6 +1,6 @@
 <ng-container *ngIf="!editing">
 
-    <div [innerHTML]="point.PointHTML"></div>
+    <div [innerHTML]="point.PointHTML" class="ugc"></div>
 
 
     <div class="container">
@@ -17,8 +17,8 @@
                 <div>
                     <b><span [innerHtml]="this.coreDataService.PointType(point.PointTypeID)"></span></b>
                 </div>
-                <div>
-                    quote source
+                <div *ngIf="point.FeedbackGiven">
+                    <a [href]="point.URL" [innerText]="point.Source"></a>
                 </div>
             </div>
 
@@ -41,6 +41,7 @@
                     </ng-container>
 
                     <div [innerHtml]="point.FeedbackDate | nbsp"></div>
+                    <div>Allow user to delete feedback</div>
                 </div>
 
 

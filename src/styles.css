@@ -60,3 +60,5 @@ a + a {margin-left:5px;}
 
 /* https://stackoverflow.com/questions/38576503/how-to-remove-the-arrow-in-dropdown-in-bootstrap-4 */
 .dropdown-toggle::after {  display:none;}
+
+.ugc p{font-size: larger}
