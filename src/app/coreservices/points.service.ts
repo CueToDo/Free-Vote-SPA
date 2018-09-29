@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { PointSelectionTypes } from '../models/enums';
 import { PointSupportLevels } from '../models/enums';
-import { PointSelectionResult, PointEdit } from '../models/point.model';
+import { PointSelectionResult, PointEdit, WoWWeekInfoVote } from '../models/point.model';
 
 @Injectable()
 export class PointsService {
@@ -16,6 +16,10 @@ export class PointsService {
 
   // Pages retrieved from server
   pages: number[];
+
+  // Only get the WoWWeekInfo when voting for the first time - update after vote
+  public WoWWeekInfoVote: WoWWeekInfoVote;
+  public Anon: boolean;
 
   constructor(private httpClientService: HttpClientService, private route: ActivatedRoute) {
 
@@ -77,14 +81,14 @@ export class PointsService {
 
     console.log('PointUpdate: ', point);
 
-    const postData = { 'PointID': point.PointID, 'PointHTML': point.PointHTML,
-      'SlashTags': point.SlashTags, 'Draft': point.Draft };
+    const postData = {
+      'PointID': point.PointID, 'PointHTML': point.PointHTML,
+      'SlashTags': point.SlashTags, 'Draft': point.Draft
+    };
 
     return this.httpClientService
       .post('points/pointupdate', postData)
-      .then(result => {
-        return result as number;
-      });
+      .then(result => result as number);
   }
 
   PointFeedback(pointID: number, pointSupportLevel: PointSupportLevels, comment: string, feedbackAnon: boolean): Promise<string> {
@@ -93,8 +97,48 @@ export class PointsService {
 
     return this.httpClientService
       .post('points/PointFeedback', postData)
-      .then(result => {
-        return result as string;
+      .then(result => result);
+  }
+
+
+  // WoWWeekInfo for Vote is the current voting WeekID and Date
+  // Simply return saved value, or fetch from service
+  GetWoWWeekInfoVote(): Promise<WoWWeekInfoVote> {
+    if (this.WoWWeekInfoVote) {
+      console.log('WoWWeekInfoVoteClient:', this.WoWWeekInfoVote);
+      return Promise.resolve(this.WoWWeekInfoVote);
+    } else {
+      return this.httpClientService
+        .get('points/WoWWeekInfoVote')
+        .then(result => {
+          this.WoWWeekInfoVote = result as WoWWeekInfoVote;
+          console.log('WoWWeekInfoVoteService:', this.WoWWeekInfoVote);
+          return this.WoWWeekInfoVote;
+        });
+    }
+  }
+
+//
+  PointWoWVote(pointID: number, wow: boolean): Promise<string> {
+
+    // Get WoW Voting Week Info to submit. Updated after vote.
+    return this.GetWoWWeekInfoVote().then(
+      wwiv => {
+        // standard construction of post data
+        const postData = {
+          'WeekID': wwiv.WeekID, 'WeekEndingDate': wwiv.WeekEndingDate, 'PointID': pointID, 'WoW': wow, 'Anon': this.Anon
+        };
+
+        // return datetime of vote as promise<string>
+        return this.httpClientService
+          .post('points/PointWoWVote', postData)
+          .then(result => {
+            this.WoWWeekInfoVote = result as WoWWeekInfoVote; // always update regardless
+            return this.WoWWeekInfoVote.PointWoWDateTime;
+          });
+
       });
   }
+
+
 }

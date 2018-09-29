@@ -49,50 +49,85 @@ export class PointComponent implements OnInit {
     this.signedIn = this.coreDataService.SignedIn();
   }
 
-  WoW() {
-    this.point.WoWVote = !this.point.WoWVote;
+  PointFeedback(pointSupportLevel: PointSupportLevels): Promise<boolean> {
 
-    // Angular Workshop: Cannot read property 'name' of undefined
-    // point.SupportLevelID was a number
-    if (this.point.WoWVote) {
-      this.Support();
+    return new Promise((resolve, reject) => {
+
+      if (!this.point.FeedbackIsUpdatable) {
+
+        alert('Feedback is not updatable');
+        return reject(false);
+      } else {
+
+        if (this.point.SupportLevelID === pointSupportLevel) {
+          // If clicked on the current support level then delete it
+          if (confirm('Are you sure you wish to delete your feedback?')) {
+            pointSupportLevel = PointSupportLevels.None;
+          } else { return reject(false); } // Cancel feedback delete
+        }
+
+        this.pointsService.PointFeedback(this.point.PointID, pointSupportLevel, '', false)
+          .then(response => {
+            this.point.FeedbackDate = response;
+            this.point.SupportLevelID = pointSupportLevel;
+            console.log('ERE PointSupportlevel: ', this.point.SupportLevelID);
+            return resolve(true); // Angular workshop - NOT Promise.resolve
+          })
+          .catch(serverError => {
+            console.log('PointFeedback Error');
+            this.error = serverError.error.error;
+            return reject(false);
+          });
+      }
+    });
+  }
+
+  WoW() {
+
+    console.log('BEGIN WoW');
+
+    // ToDo Angular Workshop: Cannot read property 'name' of undefined
+    // point.SupportLevelID was a number. Loosely typed
+    if (!this.point.WoWVote && this.point.SupportLevelID !== PointSupportLevels.Support) {
+      console.log('10-6: ', this.point.SupportLevelID);
+      this.PointFeedback(PointSupportLevels.Support).then(
+        success => {
+          console.log(success, 'Success PointSupportlevel: ', this.point.SupportLevelID);
+          this.WoW();
+        },
+        fail => console.log('fail: ', fail) );
     } else {
-      this.PointFeedback();
+      // Update WoW
+      console.log('CAN now WoW');
+      this.pointsService.PointWoWVote(this.point.PointID, !this.point.WoWVote)
+        .then(
+          wowDate => {
+            this.point.WoWVote = !this.point.WoWVote; // Toggle the WoW vote
+            this.point.FeedbackDate = wowDate; // Display the updated vote time
+          });
     }
   }
 
-
   Support() {
-    this.point.SupportLevelID = PointSupportLevels.Support;
-    this.PointFeedback();
+    this.PointFeedback(PointSupportLevels.Support);
   }
 
   Neutral() {
-    this.point.SupportLevelID = PointSupportLevels.StandAside;
     this.point.WoWVote = false;
-    this.PointFeedback();
+    this.PointFeedback(PointSupportLevels.StandAside);
   }
 
   Oppose() {
-    this.point.SupportLevelID = PointSupportLevels.Oppose;
     this.point.WoWVote = false;
-    this.PointFeedback();
+    this.PointFeedback(PointSupportLevels.Oppose);
   }
 
   Report() {
-    this.point.SupportLevelID = PointSupportLevels.Report;
     this.point.WoWVote = false;
-    this.PointFeedback();
+    this.PointFeedback(PointSupportLevels.Report);
   }
 
-  PointFeedback() {
 
-    this.pointsService.PointFeedback(this.point.PointID, this.point.SupportLevelID, '', false)
-      .then(response => {
-        this.point.FeedbackDate = response;
-      })
-      .catch(serverError => this.error = serverError.error.error);
-  }
 
   edit() { this.editing = true; }
 

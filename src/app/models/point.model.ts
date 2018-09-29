@@ -25,7 +25,7 @@ export class Point {
   FeedbackID: number;
   SupportLevelID: PointSupportLevels;
   Comment: string;
-  FeedbackDate: string;
+  FeedbackDate: string; // Date pipe eugh!
   FeedbackIsUpdatable: boolean;
   WoWVote: boolean;
 
@@ -62,4 +62,10 @@ export class PointSelectionResult {
   FromDate: string;
   ToDate: string;
   Points: Point[];
+}
+
+export class WoWWeekInfoVote {
+  WeekID: number;
+  WeekEndingDate: string;
+  PointWoWDateTime: string; // damn dates
 }

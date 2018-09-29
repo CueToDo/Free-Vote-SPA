@@ -50,8 +50,8 @@ export enum PointSelectionTypes {
 export enum PointSupportLevels {
   Support = 1,
   Oppose = -1,
-  None = 0,
-  StandAside = -8,
+  None = 0, // None given or deleted
+  StandAside = -8, // ~ Neutral
   Report = -9
 }
 
