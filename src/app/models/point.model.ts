@@ -66,6 +66,6 @@ export class PointSelectionResult {
 
 export class WoWWeekInfoVote {
   WeekID: number;
-  WeekEndingDate: string;
-  PointWoWDateTime: string; // damn dates
+  WeekEndingDate: Date; //  Does not need to be formatted
+  PointWoWDateTime: string; // damn date formatting
 }
