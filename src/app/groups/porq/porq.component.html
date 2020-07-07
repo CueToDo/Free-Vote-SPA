@@ -1,0 +1,46 @@
+<div class="ProposalsInactive porQ py-2" *ngIf="!deleted && !porQEdit" [routerLink]="detailsLink">
+
+    <div fxLayout="column" class="px-3">
+
+        <div fxLayout="row" fxLayoutAlign="start start">
+
+            <h3>{{ porQ.title }}</h3>
+
+            <div fxFlex></div>
+
+            <button mat-stroked-button *ngIf="porQ.porQOwner" (click)="delete()">
+                <mat-icon>cancel</mat-icon>
+                delete
+            </button>
+
+            <button mat-stroked-button *ngIf="porQ.porQOwner" (click)="edit()">
+                <mat-icon>edit</mat-icon>
+                edit
+            </button>
+
+        </div>
+
+        <div [innerHtml]="porQ.porQ">
+        </div>
+
+        <div class="smaller tar">
+            <strong>{{ porQ.points }}</strong> points, <strong>{{ porQ.feedback }}</strong> feedback, <strong>{{ porQ.voteCount }}</strong> votes.
+        </div>
+
+        <div class="smaller tar" *ngIf="porQ.porQTypeID!==PorQTypes.Question">
+            Support level: <strong>{{ porQ.supportLevel }}</strong>
+            Adopt: <strong>{{ porQ.adoptYNS }}</strong>
+            Adopted: <strong>{{ porQ.adopted? 'Yes': 'No' }}</strong>
+        </div>
+
+        <div class="smaller tar">
+            Created <strong>{{ porQ.dateTime }}</strong>
+            Latest Activity <strong>{{ porQ.latestActivity }}</strong>
+        </div>
+    </div>
+
+</div>
+
+<ng-container *ngIf="porQEdit">
+    <app-porq-edit [porQ]="porQ" (CompleteEdit)="completeEdit($event)" (CancelEdit)="cancelEdit()"></app-porq-edit>
+</ng-container>

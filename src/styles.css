@@ -1,64 +1,333 @@
 /* You can add global styles to this file, and also import other style files */
+/* Bootstrap in index.html */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-html, body {
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow: hidden;
+  /* for slide right transistion */
+}
+
+.primary {
+  color: #3700b3;
+}
+
+/* Need waiting to begin save: Can't transition to 0 opacity if already transparent */
+.waiting {
+  opacity: 1;
+}
+
+.success {
+  opacity: 0;
+  -webkit-transition: opacity 3s;
+  -moz-transition: opacity 3s;
+  -o-transition: opacity 3s;
+  -ms-transition: opacity 3s;
+  transition: opacity 3s;
+}
+
+div.toolbar {
+  background-color: whitesmoke;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+div.toolbar mat-form-field {
+  margin-bottom: -20px;
+}
+
+/* Ha won that fight! */
+
+/* FreeVote Tabs */
+
+.tabContainer {
+  overflow: hidden;
+  position: relative;
   height: 100%;
 }
 
-/*title, subtile, menu, header, footer background-color*/
-.title {background-color:#279FBB; color:white;}
-.pagetitle{background-color:black; color:white;}
-.subtitle{background-color:#070707; color:white; padding-top: 5px; padding-bottom:5px; }
-.menu{background-color:#333333; color:white;padding-top: 5px;padding-bottom:5px;}
-
-.content, .smallprint, .final {background-color: #f5ffff; }
-.content .container, .smallprint .container, .final .container  {background-color: white; max-width:920px; padding-left: 20px; padding-right:20px; padding-top:10px; padding-bottom: 10px;}
-.site-content{margin-top:10px; margin-bottom:10px;} /* Site Content in Router-Outlet */
-.footer{background-color:black;color:white;padding-top: 5px;padding-bottom:15px;}
-.footer .col-xs-12{margin-top:10px;}
-.final, .final .container {height:100%;}
-
-#free-vote .btn-primary,
-#free-vote ul li a:hover, 
-#free-vote ul li a.active
-{background-color: #279FBB; color:white}
-
-/*Active menu item and hover color*/
-#free-vote .btn-primary:hover, 
-#free-vote .btn-primary.active
-{background-color:#1b6c7f; color:white}
-
-#free-vote button:focus {outline:none;}
-
-#free-vote .btn-primary.active:not(.dropdown-toggle):hover
-{cursor:default}
-
-
-#free-vote ul {background-color:#333; border:solid 1px #666;}
-#free-vote ul li a {color:white}
-
-
-.title h1  {margin-top: 12px; }
-.pagetitle h1 {margin-top: 8px; font-size: 2em; }
-
-
-.ng-valid[required]:not(ckeditor), .ng-valid.required  {
-  border-left: 5px solid #42A948; /* green */
-}
-  
-
-.ng-invalid.ng-touched:not(form):not(ckeditor)  {
-  border-left: 5px solid #a94442; /* red */
+@media(max-width:940px) {
+  .tabContainer {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }
 
-.fv-error{color:red;}
+.tabContent {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
 
-button + span {margin-left:5px;}
+.scroller {
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
 
-a + a {margin-left:5px;}
+.content {
+  width: 100%;
+  max-width: 940px;
+  margin: auto;
+}
 
-/* https://stackoverflow.com/questions/38576503/how-to-remove-the-arrow-in-dropdown-in-bootstrap-4 */
-.dropdown-toggle::after {  display:none;}
 
-.ugc p{font-size: larger}
+.centerStage {
+  position: relative;
+  left: 0px;
+  min-width: 320px;
+  width: 100%;
+  opacity: 1;
+  z-index: 5;
+}
+
+.stageLeft {
+  position: relative;
+  left: -1000px;
+  min-width: 800px;
+  opacity: 0;
+
+  /* [matches - for no scrollbars on recent and trending] */
+  max-height: 80vh;
+  overflow: hidden;
+  z-index: -1;
+  /* Otherwise links still active with 0 opacity */
+}
+
+.stageRight {
+  position: relative;
+  left: 1000px;
+  min-width: 800px;
+  /* Allow to leave with respectable width */
+  opacity: 0;
+
+  /* for no scrollbars on recent and trending */
+  max-height: 80vh;
+  overflow: hidden;
+  z-index: -1;
+  /* Otherwise links still active with 0 opacity */
+}
+
+.centerStage,
+.stageLeft,
+.stageRight {
+  /*Animation*/
+  -webkit-transition: left .25s ease-out, opacity .25s ease-out, height .25s ease-out;
+  -moz-transition: left .25s ease-out, opacity .25s ease-out, height .25s ease-out;
+  -o-transition: left .25s ease-out, opacity .25s ease-out, height .25s ease-out;
+  -ms-transition: left .25s ease-out, opacity .25s ease-out, height .25s ease-out;
+  transition: left .25s ease-out, opacity .25s ease-out, height .25s ease-out;
+}
+
+
+.topZ {
+  z-index: 10;
+}
+
+/* align-middle is a Material class???
+https://daemonite.github.io/material/docs/4.1/utilities/vertical-align/ ???? 
+https://css-tricks.com/centering-css-complete-guide/ */
+.align-middle {
+  height: 40px;
+  line-height: 40px;
+  white-space: nowrap;
+}
+
+.tar {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+button+span {
+  margin-left: 5px;
+}
+
+span+mat-icon {
+  margin-left: 8px;
+}
+
+/* bootstrap override */
+button:focus {
+  outline: none;
+}
+
+.btn {
+  margin-right: 10px;
+}
+
+a {
+  color: #3700b3;
+}
+
+a+a {
+  margin-left: 10px;
+}
+
+a:hover,
+.selected {
+  background-color: #e7e7e7;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.b {
+  font-weight: bold;
+}
+
+
+
+/* DO NOT MOVE UGC styles to component */
+/* injected content without view encapsulation None */
+/* https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling */
+
+.ugc.xs,
+.ugc.sm {
+  margin: 0 12px;
+}
+
+.ugc p {
+  font-size: larger;
+}
+
+.ugc.xs p {
+  font-size: medium;
+}
+
+.ugc.xs h1 {
+  font-size: x-large;
+}
+
+.ugc img {
+  width: 100%;
+  height: auto;
+}
+
+.issueContext p {
+  margin-bottom: 0 !important;
+}
+
+/* end injected content */
+
+.tags {
+  margin-top: 20px;
+}
+
+.fv-error {
+  color: red;
+}
+
+.Feedback * {
+  line-height: 100%;
+  vertical-align: middle;
+}
+
+/* Validation, Errors */
+
+/* [attribute selector] */
+/* .ng-valid[required]:not(ckeditor), .ng-valid.required  {
+      border-left: 5px solid #42A948;  green 
+    }
+    */
+
+/* .ng-invalid.ng-touched:not(form):not(ckeditor)  { */
+/* border-left: 5px solid #a94442; red */
+/* }  */
+
+
+/*passive link input Angular https://stackoverflow.com/questions/35639174/passive-link-in-angular-2-a-href-equivalent*/
+.topicsCloud a,
+a.slashTag,
+a.clicker {
+  color: #3F51B5;
+  text-decoration: none;
+  cursor: pointer
+}
+
+.topicsCloud a:hover,
+a.slashTag:hover,
+a.clicker:hover {
+  text-decoration: underline;
+  color: #3F51B5 !important;
+  /* Bootstrap override */
+}
+
+.slashTag+.slashTag {
+  margin-left: 10px;
+}
+
+/* https://www.canva.com/colors/color-wheel/ */
+.HeadInactive {
+  text-align: center;
+  font-weight: bold;
+  background-color: #FFFCF2;
+  border-bottom: solid 2px #FFD85D;
+  border-top: solid 2px #FFD85D;
+}
+
+.Issue {
+  background-color: #F9FAFF;
+}
+
+.IssuesInactive {
+  background-color: #F2F5FF;
+}
+
+.ProposalsInactive {
+  background-color: #F2FFF5;
+}
+
+
+.HeadActive {
+  background-color: #FFF4D0;
+  border: solid 2px #FFD85D;
+  font-weight: bold;
+}
+
+.IssuesActive {
+  background-color: #D0DBFF;
+  border: solid 1px #5D84FF;
+  font-weight: bold;
+}
+
+.ProposalsActive {
+  background-color: #D0FFDC;
+  border: solid 2px #5DFF87;
+  font-weight: bold;
+}
+
+
+.HeadInactiveHover {
+  background-color: #FFF4D0;
+  cursor: pointer;
+}
+
+.IssuesInactive:hover {
+  background-color: #D0DBFF;
+  cursor: pointer;
+}
+
+.ProposalsInactive:hover {
+  background-color: #D0FFDC;
+  cursor: pointer;
+}
+
+.smaller {
+  font-size: .8rem;
+  color: gray;
+}
+
+.small {
+  font-size: .7rem;
+  color: gray;
+}

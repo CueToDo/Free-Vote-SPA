@@ -1,0 +1,13 @@
+.edit {
+    background-color: #f0f0f0;
+    padding: 15px 15px;
+}
+
+button+button,
+mat-radio-button+mat-radio-button {
+    margin-left: 10px;
+}
+
+.alert {
+    margin-top: 15px;
+}

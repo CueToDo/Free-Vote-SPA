@@ -1,0 +1,19 @@
+.groupDiv {
+    margin-bottom: 20px;
+}
+
+button+button {
+    margin-left: 10px;
+}
+
+.alert {
+    margin-top: 10px;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.data {
+    font-weight: bold;
+}

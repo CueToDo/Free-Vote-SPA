@@ -1,71 +1,125 @@
+
+import { ID } from './common';
 import { PointSupportLevels, PointTypesEnum } from './enums';
+
+export class PointEdit {
+
+    // However the user inputs them, pass them to the server to decode
+
+    pointID: number;
+    title: string;
+    linkTitle: string;
+    pointHTML: string;
+    csvImageIDs = '';
+    pointTypeID: PointTypesEnum;
+    source: string;
+    url: string;
+    youTubeID: string;
+    soundCloudTrackID: string;
+    slashTags: string[] = [];
+    draft: boolean;
+
+}
+
+
+
+// Always use camelCase properties
+// https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_Serialization_CamelCasePropertyNamesContractResolver.htm
+export class PointSelectionResult {
+    // My server and client code agreed these should be capitalised,
+    // but after updating to VS Angular project, framework intervenes and insists lower case
+    tagID: number;
+    pointCount: number;
+
+    pointIDs: ID[];
+    fromDate: string;
+    toDate: string;
+
+    points: Point[];
+}
+
+export class PointFeedback {
+    woWWeekEndingDate: Date; // Does not need to be formatted
+    feedbackDate: string; // Date pipe eugh!
+    feedbackGiven: boolean;
+    feedbackID: number;
+    supportLevelID: PointSupportLevels;
+    pointModified: boolean; // has the point been modified after feedback was given?
+    woWVote: boolean;
+    comment: string;
+    feedbackIsUpdatable: boolean;
+    isFavourite: boolean;
+}
+
+export class PointFeedbackFormData {
+    pointID: number;
+    pointSupportLevel: PointSupportLevels;
+    comment: string;
+    feedbackAnon: boolean;
+}
+
+export class PointWoWFormData {
+    pointID: number;
+    woW: boolean;
+    feedbackAnon: boolean;
+}
+
+export class WoWWeekInfoVoteNotNeeded {
+    woWWeekID: number;
+    woWWeekEndingDate: Date; //  Does not need to be formatted
+}
+
+// Don't even think of making public properties Pascal Case
 
 export class Point {
 
-  PointID: number;
-  VoterIDPoint: number;
-  IsPointOwner: boolean;
+    pointID: number;
+    voterIDPoint: number;
+    isPointOwner: boolean;
 
-  PointTypeID: PointTypesEnum;
-  PointTypeIDVoter: number;
+    pointTypeID = PointTypesEnum.Opinion;
+    pointTypeIDVoter: number;
 
-  PointHTML: string;
+    title: string;
+    linkTitle: string;
+    pointHTML: string;
+    csvImageIDs = '';
 
-  Draft: boolean;
-  Source: string;
-  URL: string;
-  Archived: boolean;
-  DateTimeUpdated: string;
+    dateTimeCreated: string;
+    dateTimeUpdated: string; // How many times am I going to attempt to make this a Date to use DateTime Pipe
+    youTubeID: string;
+    soundCloudTrackID: string;
+    slashTags: string[] = [];
 
-  Sequence: number;
-  LastRowNumber: number;
-  LastRow: boolean;
+    draft: boolean;
+    source: string;
+    url: string;
 
-  FeedbackGiven: boolean;
-  FeedbackID: number;
-  SupportLevelID: PointSupportLevels;
-  Comment: string;
-  FeedbackDate: string; // Date pipe eugh!
-  FeedbackIsUpdatable: boolean;
-  WoWVote: boolean;
 
-  Attached: boolean;
+    archived: boolean;
 
-  Adoptable: boolean;
-  Unadoptable: boolean;
+    rowNumber: number;
+    lastRowNumber: number;
+    lastRow: boolean;
 
-  TotalFeedback: number;
-  NetSupport: number;
-  PerCentInFavour: number;
+    pointFeedback = new PointFeedback();
 
-  Support: number;
-  Opposition: number;
-  Abstentions: number;
-  Reports: number;
+    isFavourite: boolean;
 
-  IsInOpenedSurvey: boolean;
-  IsInClosedSurvey: boolean;
-  IsQuestionAnswer: boolean;
+    attached: boolean;
+    adoptable: boolean;
+    unadoptable: boolean;
 
-  SlashTags: string[];
-}
+    totalFeedback: number;
+    netSupport: number;
+    perCentInFavour: number;
 
-export class PointEdit {
-  PointID: number;
-  PointHTML: string;
-  SlashTags: string; // However the use inputs them, pass them to the server to decode
-  Draft: boolean;
-}
+    support: number;
+    opposition: number;
+    abstentions: number;
+    reports: number;
 
-export class PointSelectionResult {
-  PointsSelected: number;
-  FromDate: string;
-  ToDate: string;
-  Points: Point[];
-}
-
-export class WoWWeekInfoVote {
-  WeekID: number;
-  WeekEndingDate: Date; //  Does not need to be formatted
-  PointWoWDateTime: string; // damn date formatting
+    isInOpenedSurvey: boolean;
+    isInClosedSurvey: boolean;
+    isQuestionAnswer: boolean;
 }

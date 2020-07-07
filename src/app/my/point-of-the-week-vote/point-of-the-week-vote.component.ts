@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CoreDataService } from '../../coreservices/coredata.service';
+import { AppDataService } from '../../services/app-data.service';
 
 @Component({
   selector: 'app-point-of-the-week-vote',
@@ -9,8 +9,8 @@ import { CoreDataService } from '../../coreservices/coredata.service';
 })
 export class PointOfTheWeekVoteComponent implements OnInit {
 
-  constructor(private coreDataService: CoreDataService) {
-    this.coreDataService.SetPageTitle('point of the week VOTE');
+  constructor(private appDataService: AppDataService) {
+
    }
 
   ngOnInit() {

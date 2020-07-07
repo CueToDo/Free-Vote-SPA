@@ -1,0 +1,75 @@
+.point {
+    margin-top: 30px;
+    border-bottom: solid 3px #BBB;
+}
+
+.pointSource {
+    margin-bottom: 10px;
+}
+
+.pointSource.ltmd {
+    margin: 0 10px 10px 10px;
+}
+
+.selected {
+    /* hacky override */
+    background-color: #e7e7e7;
+}
+
+/* "passive" link input Angular https://stackoverflow.com/questions/35639174/passive-link-in-angular-2-a-href-equivalent*/
+
+
+/* https://stackoverflow.com/questions/21647920/responsive-iframe-with-max-width-and-height */
+
+.youTube {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+}
+
+.youTube iframe,
+.youTube object,
+.youTube embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.textXSmall {
+    font-size: small;
+}
+
+.textSmall {
+    font-size: medium;
+}
+
+.textMedium {
+    font-size: large;
+}
+
+.textLarge {
+    font-size: x-large;
+}
+
+.draft {
+    font-weight: bold;
+    color: #3700b3;
+}
+
+button img {
+    width: 28px;
+    margin-right: 10px;
+}
+
+.hr {
+    border: solid 1px lightgray;
+    margin: 0;
+}
+
+.hrTitle {
+    margin-bottom: 10px;
+}

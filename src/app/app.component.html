@@ -1,69 +1,67 @@
-<div class="title">
-  <div class="container">
-    <div class="row">
-      <div class="mx-auto text-center">
-        <h1>
-          {{title}}
-        </h1>
+<div fxFill fxLayout="column" class="app">
+
+  <div class="primary" fxLayoutAlign="center center">
+
+    <!-- Burger menu for small screens -->
+    <div class="btn-group burger" dropdown *ngIf="showBurger">
+      <button id="button-animated" dropdownToggle type="button" class="btn dropdown-toggle"
+        aria-controls="dropdown-animated">
+        <mat-icon aria-label="drop down menu">menu</mat-icon>
+      </button>
+      <div id="dropdown-animated" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-animated">
+        <app-nav></app-nav>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="pagetitle">
-  <div class="container">
-    <div class="row">
-      <div class="mx-auto text-center">
-        <h1>
-          {{ pageTitle }}
-        </h1>
-      </div>
-    </div>
-  </div>
-</div>
+    <!-- Big URL confirmation -->
+    <h1 [title]="pageTitleToolTip" class="title" [ngClass]="{titleOffset:showBurger, under500:under500}">
+      {{ localData.website }}{{ pageTitle }}
+    </h1>
 
-<div class="menu">
-  <div class="container">
-    <div class="row">
-      <div class="mx-auto text-center">
-        <app-menu></app-menu>
-      </div>
-    </div>
   </div>
-</div>
 
-<div class="content">
-  <div class="container">
+  <!-- Main Menu on large screens -->
+  <nav fxLayoutAlign="center" *ngIf="!showBurger">
+    <app-nav></app-nav>
+  </nav>
+
+  <!-- Use of main element is messing with flexLayout -->
+  <div fxFlex>
     <router-outlet></router-outlet>
   </div>
-</div>
 
-<div class="footer">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 mx-auto text-center">
-        {{ strapline }}
+  <!-- https://stackoverflow.com/questions/47829727/sticky-footer-at-bottom-in-angular -->
+
+  <div [ngClass]="{footerShow:showVulcan, footerHide:!showVulcan}">
+
+    <div fxLayoutAlign="center">
+      <div class="content" fxLayoutAlign="start end">
+        <img [src]="imgVulcan" [alt]="altVulcan" class="ml-3" height="143">
+        <span class="imgCredit" *ngIf="localData.website==='break-out.group'">Image by <a
+            href="https://www.flaticon.com/authors/freepik" title="Freepik" target="_blank">Freepik</a> from<a
+            href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></span>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="smallprint">
-  <div class="container w-100">
-    <div class="row">
-      <div class="col-6">
+    <div fxLayout="row" [ngClass.lt-sm]="'x-small'" [ngClass.sm]="'small'" [ngClass.gt-sm]="'gt-small'" class="footer">
+
+      <div fxFlex fxHide.lt-sm></div>
+
+      <div fxFlex class="center" [ngClass.lt-sm]="'x-small'">
+        <span class="align-middle" [ngClass.xs]="'xs-strapline'">
+          {{ localData.strapline }}
+        </span>
       </div>
-      <div class="col-3">
+
+      <div fxFlex fxHide.xs>
+        <span fxFlex></span>
+        <span class="align-middle copyright">
+          {{ localData.website }} 2020
+        </span>
       </div>
-      <div class="col-3">
-        <div class="text-right">
-          © free.vote, 2018
-        </div>
-      </div>
+
     </div>
-  </div>
-</div>
 
-<div class="final">
-  <div class="container"></div>
+  </div>
+
 </div>

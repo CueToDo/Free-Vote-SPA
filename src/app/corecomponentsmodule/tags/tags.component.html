@@ -1,6 +1,0 @@
-<div class="text-center">
-  <ng-container *ngFor="let tag of tags">
-    <a routerLink="{{ tag.SlashTag }}" [innerHTML]="tag.TagDisplay | TagDisplay" [ngStyle]="{'font-size':FontSize(tag.TagWeight),'padding-right':'10px'}"></a>
-    <span> </span>
-  </ng-container>
-</div>

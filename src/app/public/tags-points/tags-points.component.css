@@ -1,0 +1,33 @@
+@media (max-width:600px) {
+
+  button.mat-button.mat-button-base {
+    padding: 0 !important;
+    min-width: 50px !important;
+    /* reduced min width */
+  }
+
+  .tagCloud {
+    margin-top: 20px;
+  }
+}
+
+@media (min-width:600px) {
+  .tagCloud {
+    margin-top: 50px;
+  }
+}
+
+.buttonBar {
+  width: 100%;
+}
+
+.content {
+  margin-top: 20px;
+}
+
+
+hr {
+  margin: 0px;
+  height: 2px;
+  background-color: #3700b3;
+}

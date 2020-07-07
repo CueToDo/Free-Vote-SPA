@@ -1,0 +1,35 @@
+.profile {
+    padding-top: 20px;
+    width: 100%;
+    max-width: 540px;
+}
+
+.profile img {
+    min-width: 180px;
+    max-width: 100%
+}
+
+.buttons {
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+button {
+    margin-bottom: 12px;
+}
+
+button+button {
+    margin-left: 12px;
+}
+
+mat-radio-button {
+    margin-right: 12px;
+}
+
+.uploading {
+    margin-bottom: 12px;
+}
+
+.uploading span {
+    vertical-align: middle;
+}

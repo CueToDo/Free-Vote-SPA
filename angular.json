@@ -13,14 +13,18 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/free.vote",
+            "aot": true,
+            "progress": true,
+            "extractCss": true,
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.json"
             ],
             "styles": [
               "src/styles.css"
@@ -29,6 +33,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -43,14 +53,16 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "serviceWorker": true
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "free.vote:build"
+            "browserTarget": "free.vote:build",
+            "port": 4200
           },
           "configurations": {
             "production": {
@@ -77,7 +89,8 @@
             "scripts": [],
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.json"
             ]
           }
         },
@@ -118,5 +131,8 @@
       }
     }
   },
-  "defaultProject": "free.vote"
+  "defaultProject": "free.vote",
+  "cli": {
+    "analytics": "085c8bd1-a44b-46f5-8017-81ed7bccbd5d"
+  }
 }

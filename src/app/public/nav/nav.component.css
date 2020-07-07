@@ -1,0 +1,15 @@
+.selected {
+    background-color: #9066ee;
+    border: solid 1px #6033aa;
+}
+
+.burgerButton {
+    width: 100% !important;
+    min-width: unset !important;
+    text-align: left;
+}
+
+.burgerButton.selected {
+    background-color: #e6e6fa;
+    border: solid 1px #6033aa;
+}

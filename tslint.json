@@ -11,11 +11,13 @@
       "check-space"
     ],
     "curly": true,
+    "deprecation": {
+      "severity": "warn"
+    },
     "eofline": true,
     "forin": true,
     "import-blacklist": [
       true,
-      "rxjs",
       "rxjs/Rx"
     ],
     "import-spacing": true,
@@ -52,7 +54,7 @@
       "trace"
     ],
     "no-construct": true,
-    "no-debugger": false,
+    "no-debugger": true,
     "no-duplicate-super": true,
     "no-empty": false,
     "no-empty-interface": true,
@@ -114,24 +116,13 @@
       "check-separator",
       "check-type"
     ],
-    "directive-selector": [
-      true,
-      "attribute",
-      "app",
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      "app",
-      "kebab-case"
-    ],
-    "use-input-property-decorator": true,
-    "use-output-property-decorator": true,
-    "use-host-property-decorator": true,
+    "no-output-on-prefix": true,
+    "no-inputs-metadata-property": true,
+    "no-outputs-metadata-property": true,
+    "no-host-metadata-property": true,
     "no-input-rename": true,
     "no-output-rename": true,
-    "use-life-cycle-interface": true,
+    "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
     "directive-class-suffix": true

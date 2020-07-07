@@ -1,0 +1,55 @@
+.pill {
+    font-weight: bold;
+    border-radius: 10px;
+    display: inline-block;
+    white-space: nowrap;
+    /* Keep icon on same line as text on small screens */
+    margin-bottom: 10px;
+}
+
+.item {
+    background-color: #ffd700;
+}
+
+.item+.item,
+.pill {
+    margin-left: 10px;
+}
+
+.addCancel {
+    background-color: #ccccff;
+}
+
+.addCancel:hover {
+    cursor: pointer;
+}
+
+mat-icon {
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+
+
+input {
+
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: solid 1px lightgray;
+    height: 40px;
+    min-width: 260px;
+    max-width: 260px;
+    margin-bottom: 10px;
+}
+
+input:focus {
+    outline: 0px !important;
+    box-shadow: none;
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    border-image: radial-gradient(#6900ff, #9155ff) 50;
+    transition: border-width 1s;
+}

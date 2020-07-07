@@ -1,0 +1,32 @@
+.topic {
+  font-weight: bold;
+  background-color: #ffd700;
+  border-radius: 16px;
+  display: inline-block;
+  white-space: nowrap; /* Keep icon on sme line as text on small screens */
+}
+
+.topic+.topic {
+  margin-left: 10px;
+}
+
+mat-icon {
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+input {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: solid 1px lightgray;
+}
+
+input:focus {
+  outline: 0px !important;
+  box-shadow: none;
+  border-width: 0 0 2px 0;
+  border-style: solid;
+  border-image: radial-gradient(#6900ff, #9155ff) 50;
+  transition: border-width 1s;
+}

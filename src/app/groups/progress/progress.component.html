@@ -1,0 +1,82 @@
+<div fxLayout="row" class="stages">
+
+    <div fxFlex="33" fxLayout="column">
+
+        <div fxFlex="25" class="HeadInactive">
+            Issue Prioritisation
+        </div>
+
+        <div fxFlex="25" class="stage IssuesInactive" (click)="newIssue()" [ngClass]="{
+            'IssuesActive' : NewIssue,
+            'IssuesInactive':!NewIssue}">
+            Submit new issue
+        </div>
+        
+        <div fxFlex="25" (click)="setIssueStatus(IssueStatuses.PrioritisationYetToStart)" class="stage" [ngClass]="{
+            'IssuesActive' : issueStatusID===IssueStatuses.PrioritisationYetToStart,
+            'IssuesInactive':issueStatusID!==IssueStatuses.PrioritisationYetToStart}">
+            Issues not yet valid: {{SubGroup.issuesNotInPrioritisation}}
+        </div>
+
+        <div fxFlex="25" (click)="setIssueStatus(IssueStatuses.Prioritisation)" class="stage" [ngClass]="{
+            'IssuesActive' : issueStatusID===IssueStatuses.Prioritisation,
+            'IssuesInactive':issueStatusID!==IssueStatuses.Prioritisation}">
+            Issues in Prioritisation: {{ SubGroup.issuesInPrioritisation }}
+        </div>
+
+    </div>
+
+
+    <div fxFlex="33" fxLayout="column">
+
+        <div fxFlex="25" class="HeadInactive">
+            Current
+        </div>
+
+        <div fxFlex="25" (click)="setIssueStatus(IssueStatuses.Discussion)" class="stage" [ngClass]="{
+            'IssuesActive' : issueStatusID===IssueStatuses.Discussion,
+            'IssuesInactive': issueStatusID!==IssueStatuses.Discussion}">
+            Discussion, Q&A: {{ SubGroup.issuesInDiscussion }}
+        </div>
+
+        <div fxFlex="25" (click)="setIssueStatus(IssueStatuses.ProposalVoting)" class="stage" [ngClass]="{
+            'IssuesActive' : issueStatusID===IssueStatuses.ProposalVoting,
+            'IssuesInactive': issueStatusID!==IssueStatuses.ProposalVoting}">
+            Issue Voting: {{ SubGroup.issuesInProposalVoting }}
+        </div>
+
+        <div fxFlex="25" (click)="setProposalStatus(ProposalStatuses.VotingInProgress)" class="stage" [ngClass]="{
+            'ProposalsActive' : proposalStatusID===ProposalStatuses.VotingInProgress,
+            'ProposalsInactive' : proposalStatusID!==ProposalStatuses.VotingInProgress}">
+            Proposal Voting: {{ SubGroup.proposalsVotingInProgress }}
+        </div>
+
+    </div>
+
+    <div fxFlex="34" fxLayout="column">
+
+        <div fxFlex="25" class="HeadInactive">
+            Results
+        </div>
+
+        <div fxFlex="25" (click)="setIssueStatus(IssueStatuses.Closed)" class="stage" [ngClass]="{
+            'IssuesActive' : issueStatusID===IssueStatuses.Closed,
+            'IssuesInactive':issueStatusID!==IssueStatuses.Closed}">
+            Issues Closed: {{ SubGroup.issuesClosed }}
+        </div>
+
+        <div fxFlex="25" (click)="setProposalStatus(ProposalStatuses.ProposalNotAccepted)" class="stage" [ngClass]="{
+            'ProposalsActive' : proposalStatusID===ProposalStatuses.ProposalNotAccepted,
+            'ProposalsInactive' : proposalStatusID!==ProposalStatuses.ProposalNotAccepted}">
+            Proposal(s) Rejected: {{ SubGroup.proposalsRejected }}
+        </div>
+
+        <div fxFlex="25" (click)="setProposalStatus(ProposalStatuses.ProposalAccepted)" class="stage" [ngClass]="{
+            'ProposalsActive' : proposalStatusID===ProposalStatuses.ProposalAccepted,
+            'ProposalsInactive' : proposalStatusID!==ProposalStatuses.ProposalAccepted}">
+            Proposal(s) Accepted: {{ SubGroup.proposalsAccepted }}
+        </div>
+
+    </div>
+
+</div>

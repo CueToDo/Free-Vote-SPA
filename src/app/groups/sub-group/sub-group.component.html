@@ -1,0 +1,129 @@
+<div fxFill fxLayout="column" class="mt-3">
+
+    <div fxLayout="column" class="tabContainer">
+
+        <div class="tabContent scroller">
+
+            <div class="content">
+
+                <!-- Sub-Group display -->
+                <div [ngClass]="{'show':!subGroupEdit, 'hide':subGroupEdit}">
+
+                    <div>
+                        <a [routerLink]="'/groups/membership'">List all groups</a><a
+                            [routerLink]="['/groups/view', groupNameKebab]">{{ groupName }}</a>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayoutAlign="start center">
+
+                        <div>
+                            <h1>{{ subGroup.subGroupName }}</h1>
+                        </div>
+
+                        <span fxFlex></span>
+
+                        <button mat-stroked-button (click)="delete()">
+                            <mat-icon>cancel</mat-icon>
+                            delete sub-group
+                        </button>
+                        <button mat-stroked-button (click)="edit()">
+                            <mat-icon>edit</mat-icon>edit
+                        </button>
+                    </div>
+
+                    <div class="smaller">
+                        <span *ngIf="subGroup.open">
+                            Open to everyone.
+                        </span>
+
+                        <span *ngIf="!subGroup.open">
+                            Closed sub-group.
+                        </span>
+
+                        <span *ngIf="subGroup.meetingIntervalID==='1'">
+                            Every:<strong>{{ appData.DayName(subGroup.selectionDayOfWeek) }}</strong>
+                        </span>
+
+                        <span *ngIf="subGroup.meetingIntervalID==='2'">
+                            Every:<strong>{{ appData.ordinal(subGroup.selectionDayOfMonth) }} of month</strong>
+                        </span>
+
+                        <span *ngIf="subGroup.meetingIntervalID==='3'">
+                            <strong>Variable discussion dates</strong>
+                        </span>
+
+                        <span *ngIf="subGroup.meetingIntervalID==='4'">
+                            <strong>From {{ appData.ordinal(subGroup.selectionWeekOfMonth) }}
+                                {{ appData.DayName(subGroup.selectionDayOfWeek) }}</strong>
+                        </span>
+
+                        <span *ngIf="subGroup.meetingIntervalID!=='3'"><strong>
+                                at {{ subGroup.selectionTimeOfDay }}</strong>
+                        </span>
+
+                        <span>
+                            Decision basis:<strong>{{DecisionBasisOption.get(subGroup.decisionBasisOptionID)}}</strong>
+                            <span *ngIf="subGroup.decisionBasisOptionID==='2'">({{subGroup.superMajority}})</span>
+                        </span>
+
+                        <span>
+                            Next issue selection:<strong>{{ subGroup.nextIssueSelectionDate | date:'dd MMM yyyy' }}
+                                {{ subGroup.nextIssueSelectionTime }}</strong>
+                            <span *ngIf="subGroup.subGroupOwner" class="ml-1">
+                                <a routerLink="." (click)="selectIssueNow()">select now</a>
+                            </span>
+                            <span [ngClass]="{'success':!startingDiscussion, 'waiting':startingDiscussion}"
+                                class="primary">
+                                <span *ngIf="!startingDiscussion">
+                                    {{ startedMessage }}
+                                </span>
+                            </span>
+                        </span>
+
+                    </div>
+
+                    <div *ngIf="!!error" class="alert alert-danger mt-3">
+                        {{ error }}
+                    </div>
+
+
+
+                </div>
+
+                <!-- Sub Group Edit -->
+                <div [ngClass]="{'show':subGroupEdit, 'hide':!subGroupEdit}">
+                    <app-sub-group-edit *ngIf="subGroupEdit" (cancelled)="editCancelled()" (complete)="editComplete()"
+                        [(subGroup)]="subGroup">
+                    </app-sub-group-edit>
+                </div>
+
+                <!-- Issue and Proposal Progress -->
+                <div class="mt-3">
+                    <strong>Issues and Proposals</strong>
+                </div>
+
+                <app-progress [SubGroup]="subGroup" (IssueStatusSelected)="getIssues($event)"
+                    (ProposalStatusSelected)="getPsOrQs($event)" (NewIssueRequest)="createNewIssue()"
+                    [NewIssue]="newIssue" #progress>
+                </app-progress>
+
+                <!-- New Issue -->
+                <div *ngIf="newIssue" class="mt-3">
+                    <app-issue-edit [issue]="newIssueEdit" (CompleteEdit)="issueCreated($event)"
+                        (CancelEdit)="newIssueCancelled()">
+                    </app-issue-edit>
+                </div>
+
+                <!-- List Issues -->
+                <ng-container *ngIf="!newIssue && !showPsAndQs">
+                    <div *ngFor="let issue of issues" class="mb-2">
+                        <app-issue [issue]="issue" (Deleted)="issueDeleted()" [groupName]="groupName"
+                            [subGroupName]="subGroupName" [linkToDetails]="true">
+                        </app-issue>
+                    </div>
+                </ng-container>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div fxLayout="row wrap">
+    <div *ngFor="let item of Items" class="px-3 py-2 pill item">
+        {{item}}
+        <mat-icon (click)="remove(item)">remove_circle</mat-icon>
+    </div>
+    <div class="px-3 py-2 pill addCancel" *ngIf="!addItem" (click)="addItem=true">
+        add
+        <mat-icon>add_circle</mat-icon>
+    </div>
+</div>
+
+<div *ngIf="addItem">
+    <input fxFlex placeholder="type new {{ ItemName }} and press enter" (keydown.shift.enter)="$event.preventDefault()"
+        (keyup)="check()" (keydown.enter)="$event.preventDefault()" (keyup.enter)="add()" (blur)="add()"
+        [(ngModel)]="newItem" class="px-2">
+    <div class="px-3 py-2 pill addCancel" *ngIf="addItem" (click)="addItem=false">
+        cancel
+        <mat-icon (click)="addItem=false">cancel</mat-icon>
+    </div>
+</div>
+
+<div class="alert alert-danger m-2" *ngIf="error">
+    {{ error }}
+</div>

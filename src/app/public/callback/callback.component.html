@@ -1,0 +1,19 @@
+<div fxFill fxLayout="column" fxLayoutAlign="center center">
+
+  <div *ngIf="handlingCallback">
+    Getting FreeVote Profile
+    <span class="spinner-grow text-primary ml-3" role="status">
+      <span class="sr-only">Loading...</span>
+    </span>
+  </div>
+
+  <div class="text-danger mx-3" *ngIf="!handlingCallback">
+    {{ error }}
+  </div>
+
+  <button mat-stroked-button (click)="signOut()" *ngIf="!handlingCallback" class="mt-5">
+    <mat-icon matTooltip="home">home</mat-icon>
+    home
+  </button>
+
+</div>

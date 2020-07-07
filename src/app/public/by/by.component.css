@@ -1,0 +1,16 @@
+div {
+  text-align: center;
+}
+
+.highlight {
+  background-color: #c5cae9;
+  text-decoration: none !important;
+  /* https://material-ui.com/style/color/ */
+}
+
+@media(max-width:940px) {
+  .topicsCloud {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}

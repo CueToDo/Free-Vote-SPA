@@ -1,0 +1,28 @@
+<!-- 
+  Tab contents can be lazy loaded by declaring the body in a ng-template with the matTabContent attribute.
+  https://material.angular.io/components/tabs/overview
+-->
+
+<div fxLayoutAlign="center">
+
+  <div class="content">
+
+    <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex">
+
+      <mat-tab label="following">
+        <ng-template matTabContent>
+          <app-by></app-by>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="point of the week">
+        <ng-template matTabContent>
+          <app-point [point]="point" (newOnTopic)="newTopic($event)"></app-point>
+        </ng-template>
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </div>
+
+</div>

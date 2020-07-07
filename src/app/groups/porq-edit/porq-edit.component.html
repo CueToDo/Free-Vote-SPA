@@ -1,0 +1,45 @@
+
+<form (ngSubmit)="onSubmit()" #formPorQ="ngForm">
+
+    <!-- Title -->
+    <div class="mx-3 mt-3">
+        <mat-form-field class="porQTitle">
+            <input matInput [placeholder]="'Your ' + appData.PorQType(porQEdit.porQTypeID)" [(ngModel)]="porQEdit.title" type="text" name="porQTitle">
+        </mat-form-field>
+    </div>
+
+    <!-- The Editor -->
+    <ckeditor [(ngModel)]="porQEdit.porQ" name="ckeIssue" [config]="config" [readonly]="false" debounce="250" required
+        #tvPorQ="ngModel" (blur)="onCKEBlur()">
+    </ckeditor>
+
+    <!-- ToolBar -->
+    <div class="toolbar py-3" fxLayout="row wrap" fxLayoutAlign="start center">
+
+        <div id="cbxDraft">
+            <mat-checkbox [(ngModel)]="porQEdit.draft" name="porQDraft" class="mr-3">
+                draft only
+            </mat-checkbox>
+        </div>
+
+        <button mat-stroked-button class="mr-3">
+            <mat-icon>save</mat-icon>
+            save
+        </button>
+
+        <button mat-stroked-button type="button" (click)="cancel()">
+            <mat-icon>cancel</mat-icon>
+            cancel
+        </button>
+
+        <span class="spinner-grow text-primary ml-3" role="status" *ngIf="saving">
+            <span class="sr-only">Loading...</span>
+        </span>
+
+        <div class="fv-error mt-2 ml-2" *ngIf="!!error">
+            {{ error }}
+        </div>
+
+    </div>
+
+</form>

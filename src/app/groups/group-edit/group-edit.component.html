@@ -1,0 +1,76 @@
+<div [ngClass]="{edit: group.groupID > 0}">
+
+    <div fxLayout="column">
+
+        <mat-form-field>
+            <input matInput placeholder="group name" [(ngModel)]="group.groupName">
+            <button mat-button *ngIf="group.groupName" matSuffix mat-icon-button aria-label="clear"
+                (click)="group.groupName='';">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="group description" [(ngModel)]="group.description">
+            <button mat-button *ngIf="group.description" matSuffix mat-icon-button aria-label="clear"
+                (click)="group.description='';">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="group website" [(ngModel)]="group.groupWebsite">
+            <button mat-button *ngIf="group.groupWebsite" matSuffix mat-icon-button aria-label="clear"
+                (click)="group.groupWebsite='';">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-select (ngModelChange)="extentSelected($event)" name="selectExtent"
+                [(ngModel)]="group.geographicalExtentID" placeholder="group type/geographical extent">
+                <mat-option *ngFor="let extent of extents" [value]="extent.value.toString()">{{ extent.key }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="group.geographicalExtentID===GeographicalExtentID.PrivateGroup.toString()">
+            <mat-radio-group [(ngModel)]="group.invitationOnly">
+                <mat-radio-button labelPosition="before" [value]="true">new members by invitation only
+                </mat-radio-button>
+                <mat-radio-button labelPosition="before" [value]="false">accept requests
+                </mat-radio-button>
+              </mat-radio-group>  
+        </div>
+
+        <div *ngIf="showCountries">
+            Country or Countries
+            <app-list [(Items)]="group.countries" [ItemName]="'country'"></app-list>
+        </div>
+
+        <div *ngIf="showCities">
+            City or Cities
+            <app-list [(Items)]="group.cities" [ItemName]="'city'"></app-list>
+        </div>
+
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="end">
+
+        <button mat-stroked-button (click)="CancelEdit()" matTooltip="cancel edit">
+            <span>cancel</span>
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <button mat-stroked-button (click)="Update()" matTooltip="update group details">
+            <span>{{ saveDescription }}</span>
+            <mat-icon>check</mat-icon>
+        </button>
+
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+    </div>
+
+</div>

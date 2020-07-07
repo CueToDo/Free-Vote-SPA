@@ -1,50 +1,38 @@
-export enum SignInStatuses {
-  AlreadyAuthenticated = -1, // Does not prevent user logging in: User may already be authenticated but require higher permissions
-
-  EmailNotProvided = 1,
-  EmailFormatNotValid = 2,
-  EmailNotRegistered = 3,
-  EmailNotVerified = 4,
-
-  PasswordNotProvided = 10,
-  PasswordTooShort = 11,
-  PasswordTooLong = 12,
-
-  TokenSent = 20, // Upon Request
-  TokenNotProvided = 21, // Sign In with Token
-  TokenNotValid = 22, // Token validation
-
-  SignInSuccess = 30,
-  SignInFailure = 31,
-  AccountLocked = 32,
-  SignedOut = 33, // SPA only
-
-  RegistrationSuccess = 40,
-  RegistrationFailure = 41,
-  RequestToJoinNotYetApproved = 42,
-
-  IPAddressBlocked = 50,
-  IPAddressValid = 51,
-
-  ErrorOccurred = 99
+// HttpHeaders
+export enum ContentType {
+  json,
+  form
 }
 
 export enum PointSelectionTypes {
   // Not used in database
-  Tag,
-  TagSurvey,
-  CDMPProposal,
 
-  POTW,
-  POTWVote,
-  WoWAdmin,
+  // Standard slection
+  SlashTag = 0,
 
-  MyPoints,
-  FavouritePoints,
-  Point,
+  // Custom selection
+  Filtered = 1,
 
-  Group,
-  Popular
+  // Individual Point
+  Point = 2,
+
+  // WoW
+  POTW = 3,
+  POTWVote = 4,
+  WoWAdmin = 5,
+
+  TagSurvey = 6,
+  CDMPProposal = 7
+
+}
+
+export enum PointSortTypes {
+  DateDescend = -1, // For new point at top of selection
+  NoChange = 0,
+  DateCreated = 1,
+  TrendingActivity = 2,
+  AllTimePopularity = 3,
+  Random = 4
 }
 
 export enum PointSupportLevels {
@@ -67,12 +55,111 @@ export enum PointTypesEnum {
   Assumption = 14,
   Anecdote = 15,
   Belief = 16,
-  Commonsense = 17,
+  CommonSense = 17,
   Definition = 18,
   SurveyQuestionSingle = 19,
   SurveyQuestionMulti = 20,
   SurveyQuestionRank = 21,
   RecommendedReading = 22,
   RecommendedViewing = 23,
-  Tweet = 24
+  Tweet = 24,
+  ReportOrSurvey = 25,
+  RecommendedListening = 26,
+  Petition = 27,
+  Question = 28,
+  CommentOrEditorial = 29
+}
+
+export enum TagCloudTypes {
+  Trending,
+  Recent
+}
+
+export enum PointFlags {
+  Any = 0,
+  Favourite = 1,
+  Important = 2
+}
+
+export enum DraftStatusFilter {
+  Any = 0,
+  Published = 1,
+  Draft = 2
+}
+
+export enum PointFeedbackFilter {
+  Any = 0,
+  Yes = 1,
+  No = 2,
+  Confirmation = 3
+}
+
+// Numeric enum
+export enum GeographicalExtentID {
+  GlobalGroup = 1,
+  Union = 7,
+  National = 2,
+  Regional = 3,
+  City = 4,
+  Local = 5,
+  PrivateGroup = 6
+}
+
+// https://stackoverflow.com/questions/50784444/add-description-attribute-to-enum-and-read-this-description-in-typescript
+// but, but, but ... wtf?
+// javascript can have numeric and string enums
+// We get strings from a dropdowns, so ...
+export const GeographicalExtent = new Map<string, string>([
+  [GeographicalExtentID.GlobalGroup.toString(), 'Global'],
+  [GeographicalExtentID.Union.toString(), 'Union'],
+  [GeographicalExtentID.National.toString(), 'National'],
+  [GeographicalExtentID.Regional.toString(), 'Regional'],
+  [GeographicalExtentID.City.toString(), 'City'],
+  [GeographicalExtentID.Local.toString(), 'Local'],
+  [GeographicalExtentID.PrivateGroup.toString(), 'Private']
+]);
+
+export enum GroupDecisionBasisOption {
+  SimpleMajority = 1,
+  SuperMajority = 2,
+  Unanimous = 3
+}
+
+export const DecisionBasisOption = new Map<string, string>([
+  [GroupDecisionBasisOption.SimpleMajority.toString(), 'Simple Majority'],
+  [GroupDecisionBasisOption.SuperMajority.toString(), 'Super Majority'],
+  [GroupDecisionBasisOption.Unanimous.toString(), 'Unanimous']
+]);
+
+
+export enum IssuePhases {
+  Unpublished = 0,
+  Prioritise = 1,
+  DiscussAndDecide = 2,
+  Closed = 3
+}
+
+export enum IssueStatuses {
+  None = -1,
+  PrioritisationYetToStart = 1, /// Only Issue Owner can see these, includes draft issues
+  Prioritisation = 2,
+  Discussion = 4,
+  ProposalVoting = 5,
+  Closed = 6
+}
+
+export enum ProposalStatuses {
+  None = -1,
+  Question = 0,
+  VotingYetToStart = 1,
+  VotingInProgress = 2,
+  ProposalAccepted = 3,
+  ProposalNotAccepted = 4
+}
+
+export enum PorQTypes {
+  Proposal = 1,
+  Question = 2,
+  Perspective = 3,
+  ProPer = 4 // Proposal Or Perspective
 }

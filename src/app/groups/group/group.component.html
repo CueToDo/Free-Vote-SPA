@@ -1,0 +1,138 @@
+<div class="tabContainer mt-3">
+
+    <div class="tabContent scroller">
+
+        <div class="content">
+
+            <!-- Group Display -->
+            <div *ngIf="!groupEdit">
+
+                <div>
+                    <a routerLink="/groups/membership">List all groups</a>
+                </div>
+                
+                <h1>{{ GroupDisplay.groupName }}<span *ngIf="!GroupDisplay.active"> (Inactive)</span></h1>
+
+                <p>{{ GroupDisplay.description }}</p>
+
+                <p>
+                    Group Type: <strong>{{ GroupDisplay.geographicalExtent }}</strong>
+                    <span
+                        *ngIf="GroupDisplay.geographicalExtentID===GeographicalExtentID.PrivateGroup.toString() && GroupDisplay.invitationOnly">(invitation
+                        only)</span>
+                </p>
+
+                <p *ngIf="showCountries">
+                    Countries: <span *ngFor="let country of GroupDisplay.countries; let i = index"
+                        class="data">{{ country }}<span *ngIf="i != GroupDisplay.countries.length - 1">, </span></span>
+                </p>
+
+                <p *ngIf="showRegions">
+                    Regions: <span *ngFor="let region of GroupDisplay.regions" class="data">{{ region }}</span>
+                </p>
+
+                <p *ngIf="showCities">
+                    Cities: <span *ngFor="let city of GroupDisplay.cities" class="data">{{ city }} </span>
+                </p>
+
+                <p *ngIf="!!GroupDisplay.subGroups && GroupDisplay.subGroups.length > 0">
+                    sub-groups:
+                    <span *ngFor="let subGroup of GroupDisplay.subGroups; let i = index">
+                        <a [routerLink]="issuesLink(subGroup)">{{ subGroup }}</a>
+                        <ng-container *ngIf="i != GroupDisplay.subGroups.length - 1">, </ng-container>
+                    </span>
+                </p>
+
+                <p>
+                    members <span class="data">{{ GroupDisplay.members }}</span>,
+                    issues <span class="data">{{ GroupDisplay.issues }}</span>
+                    <span class="primary" [ngClass]="{'success': !!membershipMessage}">{{ membershipMessage }}</span>
+                </p>
+
+                <p *ngIf="!!GroupDisplay.groupWebsite">Website: <a [href]="GroupDisplay.groupWebsite"
+                        target="_blank">{{ GroupDisplay.groupWebsite.replace('http://','').replace('https://','') }}</a>
+                </p>
+            </div>
+
+            <!-- Group Edit -->
+            <div *ngIf="groupEdit && (GroupDisplay.groupAdministrator || GroupDisplay.groupOwner)">
+
+                <app-group-edit (Cancel)="Cancel()" (Complete)="Complete($event)" [(group)]="GroupDisplay">
+                </app-group-edit>
+
+            </div>
+
+            <!-- Commands -->
+            <div fxLayout="row" *ngIf="!groupEdit">
+                
+
+                <span fxFlex></span>
+
+                <button mat-stroked-button *ngIf="GroupDisplay.groupOwner" (click)="Delete()"
+                    matTooltip="permanently delete the group">
+                    <span>delete</span>
+                    <mat-icon>clear</mat-icon>
+                </button>
+
+                <button mat-stroked-button
+                    *ngIf="GroupDisplay.active && (GroupDisplay.groupAdministrator || GroupDisplay.groupOwner)"
+                    (click)="DeActivate()" matTooltip="de-activate group">
+                    <span>de-activate</span>
+                    <mat-icon>block</mat-icon>
+                </button>
+
+                <button mat-stroked-button
+                    *ngIf="!GroupDisplay.active && (GroupDisplay.groupAdministrator || GroupDisplay.groupOwner)"
+                    (click)="Activate()" matTooltip="activate group">
+                    <span>activate</span>
+                    <mat-icon>accessibility_new</mat-icon>
+                </button>
+
+                <button mat-stroked-button
+                    *ngIf="!groupEdit && (GroupDisplay.groupAdministrator || GroupDisplay.groupOwner)" (click)="Edit()"
+                    matTooltip="edit group details">
+                    <span>edit</span>
+                    <mat-icon>create</mat-icon>
+                </button>
+
+                <button mat-stroked-button
+                    *ngIf="GroupDisplay.active && GroupDisplay.groupMember && !GroupDisplay.groupOwner"
+                    (click)="Leave()" matTooltip="leave this group">
+                    <span>leave</span>
+                    <mat-icon>directions_walk</mat-icon>
+                </button>
+
+                <button mat-stroked-button *ngIf="GroupDisplay.active && GroupDisplay.groupMember"
+                    matTooltip="invite others to join the group" [disabled]="!GroupDisplay.canInviteMembers">
+                    <span>invite</span>
+                    <mat-icon>person_add</mat-icon>
+                </button>
+
+                <button mat-stroked-button *ngIf="GroupDisplay.active && !GroupDisplay.groupMember" (click)="Join()"
+                    matTooltip="join group">
+                    <span>join</span>
+                    <mat-icon>group_add</mat-icon>
+                </button>
+
+
+                <button mat-stroked-button (click)="newSubGroup()">
+                    <mat-icon>add</mat-icon>Create new sub-group
+                </button>
+
+            </div>
+
+            <app-sub-group-edit *ngIf="creatingNewSubGroup" [subGroup]="newSubGroupTemplate"
+                (complete)="newSubgroupCreated($event)" (cancelled)="creatingNewSubGroup=false">
+            </app-sub-group-edit>
+
+            <div *ngIf="error" class="alert alert-danger">
+                {{ error }}
+            </div>
+
+            <hr>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,19 @@
+.stretcher {
+    position: relative;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+
+.scrollable {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.newcontent {
+    width: 100%;
+    max-width: 940px;
+    margin: auto;
+    overflow: hidden;
+}

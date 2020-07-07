@@ -1,0 +1,105 @@
+.app {
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+/* https://colorhunt.co/palette/161649 */
+.primary {
+    color: white;
+    background-color: #6900ff;
+    height: 60px;
+}
+
+nav {
+    width: 100%;
+    color: white;
+    background-color: #9155ff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.primary h1 {
+    margin: 0;
+}
+
+.primary button {
+    margin-left: 10px;
+}
+
+.burger {
+    position: absolute;
+    left: 0;
+    margin-top: 4px;
+}
+
+.title {
+    margin-left: 30px !important;
+    margin-right: 30px !important;
+}
+
+.titleOffset {
+    margin-left: 60px !important;
+    font-size: 1.1em;
+}
+
+.under500 {
+    font-size: .9em;
+}
+
+
+.dropdown-toggle {
+    color: white;
+}
+
+.dropdown-toggle:focus {
+    border: none;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+h1 {
+    font-size: 1.5em;
+}
+
+.imgCredit {
+    font-size: small;
+}
+
+.footerHide {
+    max-height: 0px;
+    overflow: hidden;
+}
+
+.footerShow {
+    max-height: 190px;
+}
+
+.footerShow, .footerHide{
+    transition: max-height .5s ease-out;
+}
+
+.footer {
+    width: 100%;
+    z-index: 100;
+    background-color: black;
+    color: white;
+}
+
+.footer .x-small {
+    font-size: x-small;
+}
+
+.footer .small {
+    font-size: small;
+}
+
+.footer .gt-small {
+    font-size: medium;
+}
+
+.copyright {
+    margin-left: 10px;
+    margin-right: 10px;
+}
