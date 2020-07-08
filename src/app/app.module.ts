@@ -1,6 +1,3 @@
-// Read json files
-import { HighlightModule } from 'ngx-highlightjs';
-import json from 'highlight.js/lib/languages/json';
 
 // Angular
 import { BrowserModule, Title } from '@angular/platform-browser';
@@ -54,10 +51,6 @@ import { VotersMenuComponent } from './public/voters-menu/voters-menu.component'
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
 import { ScrollerComponent } from './public/scroller/scroller.component'; // test scrolling
 
-export function hljsLanguages() {
-  return [{ name: 'json', func: json }];
-}
-
 const appRoutes: Routes = [
 
   // route order must avoid ambiguities between route and parameters (alias, tag, tab)
@@ -106,7 +99,6 @@ const appRoutes: Routes = [
 
 @NgModule({
   imports: [
-    HighlightModule,
     BrowserModule,
     BrowserAnimationsModule,
     ClipboardModule,
@@ -121,7 +113,6 @@ const appRoutes: Routes = [
     DeviceDetectorModule.forRoot(), // Other
     // FacebookModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    // FreeVote
     CustomModule,
     PublicModule
   ],
