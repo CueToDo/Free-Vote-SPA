@@ -35,6 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
   pageTitle = '';
   pageTitleToolTip = '';
 
+  localAPI: string;
+
   widthBand: number; // 0 400, 1 550, 2 700, 3 800, 4 900
 
   public showBurger = false;
@@ -65,6 +67,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.imgVulcan = '../assets/lightbulb-idea.png';
         this.altVulcan = 'lightbulb idea';
         break;
+    }
+
+    if (this.localData.GetItem('localAPI') === 'true') {
+      this.localAPI = 'Local API';
     }
 
     this.htmlDocument.getElementById('appFavicon').setAttribute('href', `/assets/${favicon}?d=${Date.now()}`);
@@ -216,6 +222,19 @@ export class AppComponent implements OnInit, OnDestroy {
       this.widthBand = band;
       this.appData.DisplayWidth$.next(band);
     }
+  }
+
+  toggleLocalAPI() {
+
+    if (this.localData.GetItem('localAPI') === 'true') {
+      this.localData.SetItem('localAPI', 'false');
+      this.localAPI = '';
+    } else {
+      this.localData.SetItem('localAPI', 'true');
+      this.localAPI = 'Local API';
+    }
+
+    this.localData.SetServiceURL();
   }
 
   ngOnDestroy() {

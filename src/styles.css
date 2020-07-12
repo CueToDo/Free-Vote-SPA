@@ -213,6 +213,11 @@ a:hover {
   height: auto;
 }
 
+.ugc.porQ p:last-of-type{
+  margin-bottom: 0;
+} 
+
+
 .issueContext p {
   margin-bottom: 0 !important;
 }

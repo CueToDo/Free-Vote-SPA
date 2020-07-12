@@ -62,7 +62,9 @@ import { ScrollerComponent } from './scroller/scroller.component';
     ScrollerComponent
   ],
   exports: [
+    PointComponent,
     PointsComponent,
+    PointEditComponent,
     NavComponent,
     ListComponent
   ]

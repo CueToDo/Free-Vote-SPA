@@ -1,6 +1,5 @@
+
 <div *ngIf="!editing" class="point">
-
-
 
   <!-- Point Display -->
   <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
@@ -360,5 +359,5 @@
 </div> <!-- End Point Display -->
 
 <!-- Removing the banana from the box [(point)] is not necessary - https://medium.com/@preethi.s/angular-custom-two-way-data-binding-3e618309d6c7 -->
-<app-point-edit *ngIf="editing" (CancelEdit)="onCancelEdit()" (CompleteEdit)="onCompleteEdit()" [(point)]="point">
+<app-point-edit *ngIf="editing" [isPorQPoint]="isPorQPoint" (CancelEdit)="onCancelEdit()" (CompleteEdit)="onCompleteEdit()" [(point)]="point">
 </app-point-edit>

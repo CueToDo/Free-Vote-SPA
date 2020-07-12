@@ -19,6 +19,7 @@ export class PointComponent implements OnInit {
 
   @Input() point: Point;
   @Input() pointCount: number;
+  @Input() isPorQPoint: boolean;
 
   @Output() PointDeleted = new EventEmitter();
 

@@ -81,6 +81,19 @@ export class PsandQsService {
       );
   }
 
+  PorQSelectSpecific(porQId: number): Observable<PorQSelectionResult> {
+
+    const apiUrl = `issues/PorQSelectSpecific/${porQId}`;
+
+    return this.httpClientService
+      .get(apiUrl)
+      .pipe(
+        tap(returnData => console.log('FFS', returnData)),
+        map(returnData =>
+          this.CastToPorQSelectionResult(returnData))
+      );
+  }
+
   CastToPorQSelectionResult(sourceData): PorQSelectionResult {
 
     const PQSR = new PorQSelectionResult();
@@ -118,6 +131,11 @@ export class PsandQsService {
   PorQDelete(issueID: number, porQID: number) {
     return this.httpClientService
       .get(`issues/porQDelete/${issueID}/${porQID}`);
+  }
+
+  PointAttachToPorQ(pointID: number, porQID: number): Observable<boolean> {
+    return this.httpClientService
+      .get(`issues/pointAttachToPorQ/${pointID}/${porQID}`);
   }
 
 }

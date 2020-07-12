@@ -1,19 +1,22 @@
-import { concatMap, tap, map } from 'rxjs/operators';
-import { PorQTypes } from './../../models/enums';
-import { PorQEdit, PorQ, PorQSelectionResult } from './../../models/porq.model';
+
+
 // Angular
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+// rxjs
+import { concatMap } from 'rxjs/operators';
+
 // Models, Enums
 import { ProposalStatuses, IssueStatuses } from 'src/app/models/enums';
 import { Issue, IssuePorQCounts } from 'src/app/models/issue.model';
+import { PorQTypes } from 'src/app/models/enums';
+import { PorQEdit, PorQ, PorQSelectionResult } from 'src/app/models/porq.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { IssuesService } from 'src/app/services/issues.service';
 import { PsandQsService } from 'src/app/services/psandqs.service';
-import { of } from 'rxjs';
 
 
 @Component({

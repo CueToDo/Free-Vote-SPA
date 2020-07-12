@@ -55,7 +55,10 @@
 
       <div fxFlex fxHide.xs>
         <span fxFlex></span>
-        <span class="align-middle copyright">
+        <span class="align-middle yellow">
+          {{ localAPI }}
+        </span>
+        <span class="align-middle copyright" (click)="toggleLocalAPI()">
           {{ localData.website }} 2020
         </span>
       </div>

@@ -99,6 +99,17 @@ export class PointsService {
       .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
   }
 
+  PorQPoints(porQID: number): Observable<PointSelectionResult> {
+
+    const apiUrl = `points/getFirstBatchForPorQ/${porQID}/${this.batchSize}/${this.pageSize}`;
+
+    return this.httpClientService
+      .get(apiUrl)
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+
+  }
+
+
   NewPointSelectionOrder(pointSortOrder: PointSortTypes, reversalOnly: boolean): Observable<PointSelectionResult> {
 
     const apiUrl = `points/pointsSelectedReOrder/${pointSortOrder}/${reversalOnly ? 'Y' : 'N'}`;
@@ -158,7 +169,7 @@ export class PointsService {
     return PSR;
   }
 
-  PointUpdate(point: PointEdit): Observable<Point> {
+  PointUpdate(point: PointEdit, isPorQPoint: boolean): Observable<Point> {
 
     // Input parameter is Point not PointEdit
     // construct a new PointEdit (all that's needed)
@@ -170,6 +181,7 @@ export class PointsService {
       'pointHTML': point.pointHTML,
       'csvImageIDs': point.csvImageIDs,
       'pointTypeID': point.pointTypeID,
+      'isPorQPoint': isPorQPoint, // not a point property
       'source': point.source,
       'url': point.url,
       'youTubeID': point.youTubeID,
@@ -182,7 +194,6 @@ export class PointsService {
       .post('points/pointUpdate', postData)
       .pipe(map(result => result as Point));
   }
-
 
   // Not really needed: when we update an existing point,
   // we get the updated point back from the API along with YouTubeID

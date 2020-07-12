@@ -76,7 +76,8 @@ h1 {
     max-height: 190px;
 }
 
-.footerShow, .footerHide{
+.footerShow,
+.footerHide {
     transition: max-height .5s ease-out;
 }
 
@@ -102,4 +103,8 @@ h1 {
 .copyright {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.yellow {
+    color: yellow;
 }

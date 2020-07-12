@@ -51,10 +51,8 @@ export class LocalDataService {
         // Lifecycle hooks, like OnInit() work with Directives and Components.
         // They do not work with other types, like a service.
 
-        this.website = 'free.vote';
-        this.siteUrl = 'https://free.vote/';
+        this.SetServiceURL();
 
-        this.serviceUrl = this.siteUrl + 'api/';
         this.LoadValues();
     }
 
@@ -67,6 +65,42 @@ export class LocalDataService {
         let value = localStorage.getItem(name);
         if (value === 'null') { value = null; }
         return value;
+    }
+
+    public SetServiceURL() {
+
+        // check if running locally to determine service url
+
+        const localAPI: boolean = this.GetItem('localAPI') === 'true';
+
+        if (localAPI) {
+
+            const spaDomain = window.location.origin.split('//')[1].split(':')[0].replace('api.', '');
+
+            if (spaDomain === 'localhost' || spaDomain === '127.0.0.1') {
+                // Visual Studio debugging, or VS Code/Angular ng serve
+                this.website = 'break-out.group';
+                this.website = 'free.vote';
+                this.siteUrl = 'http://localhost:54357/';
+                // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
+                // As CORS is configured, we could also use local IIS http://freevotetest.com or live https://free.vote
+            } else if (spaDomain === 'freevotetest.com') {
+                // IIS local testing - service url is same, but we could set to live and redeploy SPA to local IIS
+                // So it's unlikely the CORS configration for freevotetest.com will actually be used
+                this.website = 'free.vote';
+                this.siteUrl = 'http://freevotetest.com/';
+            } else {
+                this.website = spaDomain;
+                // Live deployment - service url is always same
+                this.siteUrl = 'https://free.vote/';
+            }
+
+        } else {
+            this.website = 'free.vote';
+            this.siteUrl = 'https://free.vote/';
+        }
+
+        this.serviceUrl = this.siteUrl + 'api/';
     }
 
     public LoadValues() {
@@ -174,14 +208,16 @@ export class LocalDataService {
 
     public set PreviousSlashTagSelected(slashTag: string) {
 
-        if (slashTag.charAt(0) !== '/') {
-            // Expecting a slash, but we got a topic - no need to convert slashTag to topic - it is a topic
-            this.previousTopicSelected = slashTag;
-        } else {
-            this.previousTopicSelected = this.SlashTagToTopic(slashTag);
-        }
+        if (!!slashTag) {
+            if (slashTag.charAt(0) !== '/') {
+                // Expecting a slash, but we got a topic - no need to convert slashTag to topic - it is a topic
+                this.previousTopicSelected = slashTag;
+            } else {
+                this.previousTopicSelected = this.SlashTagToTopic(slashTag);
+            }
 
-        this.SetItem('PreviousTopicSelected', this.previousTopicSelected);
+            this.SetItem('PreviousTopicSelected', this.previousTopicSelected);
+        }
     }
 
     // Saved Alias

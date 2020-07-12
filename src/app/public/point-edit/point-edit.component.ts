@@ -31,6 +31,8 @@ export class PointEditComponent implements OnInit, OnDestroy {
   @Input() point: Point;
   @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
 
+  @Input() isPorQPoint = false;
+
   public pointClone: PointEdit; // manual control of 2 way binding (need to handle cancel edit)
 
   // Above banana in a box 2 way data binding works, but for some reason,
@@ -87,7 +89,13 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    if (!this.point) { this.pointClone = new PointEdit(); } else {
+    let slashTag = '';
+
+    if (!this.isPorQPoint) {
+      slashTag = this.localData.PreviousSlashTagSelected;
+    }
+
+    if (!this.point) { this.NewPoint(slashTag); } else {
       this.pointClone = <PointEdit><any>this.appData.deep(this.point);
     }
 
@@ -203,8 +211,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
     this.error = '';
 
-
-    if (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0) {
+    if (!this.isPorQPoint && (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0)) {
       this.error = 'Points must have at least one slash tag';
     } else if (!(!!this.pointClone.title && !!this.pointClone.url)
       && !(!!this.pointClone.pointHTML || !!this.pointClone.youTubeID || !!this.pointClone.soundCloudTrackID
@@ -238,7 +245,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
             this.pointClone.csvImageIDs += imageID + ',';
           }),
           // but we'll always update point after any image upload
-          concatMap(() => this.pointsService.PointUpdate(this.pointClone))
+          concatMap(() => this.pointsService.PointUpdate(this.pointClone, this.isPorQPoint))
         )
         .subscribe({
           next: (response: Point) => {
@@ -260,7 +267,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
             // Communicate the change to PointComponent (No subscriptions)
             // Emit to TagsPoints component for sort descending indication only
             // But don't get parent TagsPoints to trigger reselection in sibling points now
-            this.CompleteEdit.emit();
+            this.CompleteEdit.emit(response.pointID); // emit pointID for porq to attach
 
             // Communicate change to sibling PointsComponent
             // where Points ReSelection Takes place:
@@ -287,7 +294,13 @@ export class PointEditComponent implements OnInit, OnDestroy {
     this.pointClone.pointID = -1;
     this.pointClone.pointHTML = '';
     this.pointClone.pointTypeID = PointTypesEnum.Opinion;
-    this.pointClone.slashTags = [slashTag];
+
+    if (!!slashTag) {
+      this.pointClone.slashTags = [slashTag];
+    } else {
+      this.pointClone.slashTags = [];
+    }
+
     this.error = '';
     this.userTouched = false;
   }
