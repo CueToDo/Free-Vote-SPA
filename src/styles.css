@@ -213,9 +213,9 @@ a:hover {
   height: auto;
 }
 
-.ugc.porQ p:last-of-type{
+.ugc.porQ p:last-of-type {
   margin-bottom: 0;
-} 
+}
 
 
 .issueContext p {
@@ -281,13 +281,21 @@ a.clicker:hover {
 }
 
 .Issue {
-  background-color: #F9FAFF;
+  background-color: #FFFCF2;
 }
 
-.IssuesInactive {
+.Issues,
+.Questions,
+.QuestionsInactive {
+  background-color: #FFFCF2;
+}
+
+.Perspectives,
+.PerspectivesInactive {
   background-color: #F2F5FF;
 }
 
+.Proposals,
 .ProposalsInactive {
   background-color: #F2FFF5;
 }
@@ -299,10 +307,16 @@ a.clicker:hover {
   font-weight: bold;
 }
 
-.IssuesActive {
+.IssuesActive,
+.QuestionsActive {
+  background-color: #FFF4D0;
+  border: solid 2px #FFD85D;
+  font-weight: bold;
+}
+
+.PerspectivesActive {
   background-color: #D0DBFF;
   border: solid 1px #5D84FF;
-  font-weight: bold;
 }
 
 .ProposalsActive {
@@ -317,12 +331,18 @@ a.clicker:hover {
   cursor: pointer;
 }
 
-.IssuesInactive:hover {
+.Issues:hover,
+.Questions:hover {
+  background-color: #FFF4D0;
+  cursor: pointer;
+}
+
+.Perspectives:hover {
   background-color: #D0DBFF;
   cursor: pointer;
 }
 
-.ProposalsInactive:hover {
+.Proposals:hover {
   background-color: #D0FFDC;
   cursor: pointer;
 }

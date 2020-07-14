@@ -1,6 +1,6 @@
 <!-- Issue Listing -->
 <div class="mt-2 Issue" *ngIf="!issueEdit && !issueDeleted">
-
+    
     <hr *ngIf="!inFocus">
 
     <div class="px-3 pb-3">
@@ -52,6 +52,15 @@
             <div
                 *ngIf="issue.statusID===IssueStatuses.PrioritisationYetToStart || issue.statusID===IssueStatuses.Prioritisation">
 
+                <!-- class on the outer span, ngIf on the inner -->
+                <span [ngClass]="{'success':!saving, 'waiting':saving}" class="primary">
+                    <span *ngIf="!saving">
+                        {{ saveMessage }}
+                    </span>
+                </span>
+
+
+
                 prioritise this issue for discussion
                 <mat-slider [max]="10" [min]="1" [step]="1" [thumbLabel]="true" [tickInterval]="1"
                     [(ngModel)]="issue.voterPriority" #voteSlider (input)="instantVoteChange($event)">
@@ -61,16 +70,15 @@
                     {{ this.issue.voterPriority }}
                 </span>
 
+                <span *ngIf="issue.voteCastDateTime">
+                    Vote cast:
+                    <strong>{{ issue.voteCastDateTime }}</strong>
+                </span>
+
                 <span class="spinner-grow text-primary ml-3" role="status" *ngIf="savingVote">
                     <span class="sr-only">Loading...</span>
                 </span>
 
-                <!-- class on the outer span, ngIf on the inner -->
-                <span [ngClass]="{'success':!saving, 'waiting':saving}" class="primary">
-                    <span *ngIf="!saving">
-                        {{ saveMessage }}
-                    </span>
-                </span>
             </div>
 
             <div class="primary"
@@ -80,12 +88,13 @@
 
         </div>
 
-        <div fxLayoutAlign="end">
+        <div fxLayoutAlign="end" class="smaller">
             <span *ngIf="issue.statusID < 4">
-                <span *ngIf="issue.statusID===IssueStatuses.PrioritisationYetToStart">Valid
-                    from
+                <span *ngIf="issue.statusID===IssueStatuses.PrioritisationYetToStart">
+                    Valid from
                     <strong>{{ issue.selectionDateEarliest | date:'dd MMM yyyy' }}</strong></span>
-                <span *ngIf="issue.statusID===IssueStatuses.Prioritisation">Valid to
+                <span *ngIf="issue.statusID===IssueStatuses.Prioritisation">
+                    Valid to
                     <strong>{{ issue.selectionDateLatest | date:'dd MMM yyyy' }}</strong></span>
             </span>
             <span *ngIf="issue.statusID >= 4">
@@ -96,17 +105,15 @@
                     Decision time <strong>{{ issue.decisionDeadline }}</strong>
                 </span>
             </span>
-        </div>
-
-        <div *ngIf="issue.statusID===IssueStatuses.Prioritisation || issue.statusID===IssueStatuses.PrioritisationYetToStart"
-            class="prioritisationActive pl-3">
-            Prioritisation Votes:
-            <strong>{{ issue.prioritisationVotes }}</strong>
-            <span *ngIf="issue.voteCastDateTime">
-                Vote cast:
-                <strong>{{ issue.voteCastDateTime }}</strong>
+            <span
+                *ngIf="issue.statusID===IssueStatuses.Prioritisation || issue.statusID===IssueStatuses.PrioritisationYetToStart"
+                class="prioritisationActive smaller pl-3">
+                Prioritisation Votes:
+                <strong>{{ issue.prioritisationVotes }}</strong>
             </span>
         </div>
+
+
 
         <div *ngIf="linkToDetails && issue.statusID > 3" class="focusActive pl-3 smaller tar">
             Questions {{ issue.questions }}

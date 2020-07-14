@@ -13,23 +13,8 @@
 }
 
 
-.issue,
-.issueInactive {
-    background-color: #F2F5FF;
-}
-
-.issue:hover {
-    background-color: #D0DBFF;
-    cursor: pointer;
-}
-
-.issueActive {
-    background-color: #D0DBFF;
-    border: solid 1px #5D84FF;
-    font-weight: bold;
-}
-
-.question {
+.question,
+.questionInactive {
     background-color: #FFFCF2;
 }
 
@@ -44,8 +29,22 @@
     font-weight: bold;
 }
 
-.proposal,
-.proposalInactive {
+.perspective {
+    background-color: #F2F5FF;
+}
+
+.perspective:hover {
+    background-color: #D0DBFF;
+    cursor: pointer;
+}
+
+.perspectiveActive {
+    background-color: #D0DBFF;
+    border: solid 1px #5D84FF;
+    font-weight: bold;
+}
+
+.proposal {
     background-color: #F2FFF5;
 }
 

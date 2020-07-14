@@ -26,17 +26,23 @@
                         <div fxFlex="33" fxLayout="column">
 
                             <div fxFlex (click)="setPorQType(PorQTypes.Question)" class="stage" [ngClass]="{
-                            'questionActive' : porQTypeID===PorQTypes.Question,
-                            'question': porQTypeID!==PorQTypes.Question}">
-                                {{ issue.questions }} Questions
+                                'questionActive' : porQTypeID===PorQTypes.Question,
+                                'question': porQTypeID!==PorQTypes.Question}">
+                                {{ issue.questions }} Question{{ appData.plural(issue.questions) }}
+                            </div>
+
+                            <div *ngIf="issueStatusID < IssueStatuses.Discussion">
+                                &nbsp;
                             </div>
 
                             <div fxFlex *ngIf="issueStatusID === IssueStatuses.Discussion"
                                 (click)="setProposalStatus(ProposalStatuses.VotingYetToStart)" class="stage"
                                 [ngClass]="{
-                            'proposalInactive' : porQTypeID === PorQTypes.Question,
-                            'proposalActive' : porQTypeID !== PorQTypes.Question && proposalStatusID === ProposalStatuses.VotingYetToStart,
-                            'proposal' : porQTypeID !== PorQTypes.Question && proposalStatusID !== ProposalStatuses.VotingYetToStart}">
+                                    'questionInactive': porQTypeID === PorQTypes.Question, 
+                                    'perspective' : porQTypeID === PorQTypes.Perspective && proposalStatusID !== ProposalStatuses.VotingYetToStart,
+                                    'perspectiveActive' : porQTypeID === PorQTypes.Perspective && proposalStatusID === ProposalStatuses.VotingYetToStart,
+                                    'proposal' : porQTypeID === PorQTypes.Proposal && proposalStatusID !== ProposalStatuses.VotingYetToStart,
+                                    'proposalActive' : porQTypeID === PorQTypes.Proposal && proposalStatusID === ProposalStatuses.VotingYetToStart}">
                                 <span *ngIf="porQTypeID === PorQTypes.Perspective">{{ issue.perspectivesInDiscussion }}
                                     in </span>
                                 <span *ngIf="porQTypeID === PorQTypes.Proposal">{{ issue.proposalsInDiscussion }} in
@@ -47,9 +53,11 @@
                             <div fxFlex *ngIf="issueStatusID > 4"
                                 (click)="setProposalStatus(ProposalStatuses.VotingInProgress)" class="stage"
                                 [ngClass]="{
-                            'proposalInactive' : porQTypeID === PorQTypes.Question,
-                            'proposalActive' : porQTypeID !== PorQTypes.Question && proposalStatusID === ProposalStatuses.VotingInProgress,
-                            'proposal' : porQTypeID !== PorQTypes.Question && proposalStatusID !== ProposalStatuses.VotingInProgress}">
+                                    'questionInactive': porQTypeID === PorQTypes.Question,
+                                    'perspective' : porQTypeID === PorQTypes.Perspective && proposalStatusID !== ProposalStatuses.VotingInProgress,
+                                    'perspectiveActive' : porQTypeID === PorQTypes.Perspective && proposalStatusID === ProposalStatuses.VotingInProgress,
+                                    'proposal' : porQTypeID === PorQTypes.Proposal && proposalStatusID !== ProposalStatuses.VotingInProgress,
+                                    'proposalActive' : porQTypeID === PorQTypes.Proposal && proposalStatusID === ProposalStatuses.VotingInProgress}">
                                 <span *ngIf="porQTypeID === PorQTypes.Perspective">{{ issue.perspectivesInDiscussion }}
                                     where </span>
                                 <span *ngIf="porQTypeID === PorQTypes.Proposal">{{ issue.proposalsInDiscussion }} where
@@ -61,16 +69,18 @@
                         <div fxFlex="33" fxLayout="column">
 
                             <div fxFlex (click)="setPorQType(PorQTypes.Perspective)" class="stage" [ngClass]="{
-                            'proposalActive' : porQTypeID === PorQTypes.Perspective,
-                            'proposal': porQTypeID !== PorQTypes.Perspective}">
-                                {{ issue.perspectives }} Perspectives
+                                'perspectiveActive' : porQTypeID === PorQTypes.Perspective,
+                                'perspective': porQTypeID !== PorQTypes.Perspective}">
+                                {{ issue.perspectives }} Perspective{{ appData.plural(issue.perspectives) }}
                             </div>
 
                             <div fxFlex (click)="setProposalStatus(ProposalStatuses.ProposalAccepted)" class="stage"
                                 [ngClass]="{
-                            'proposalInactive' : porQTypeID === PorQTypes.Question,
-                            'proposalActive' : porQTypeID !== PorQTypes.Question && proposalStatusID === ProposalStatuses.ProposalAccepted,
-                            'proposal' : porQTypeID !== PorQTypes.Question && proposalStatusID !== ProposalStatuses.ProposalAccepted}">
+                                    'questionInactive': porQTypeID === PorQTypes.Question,
+                                    'perspective' : porQTypeID === PorQTypes.Perspective && proposalStatusID !== ProposalStatuses.ProposalAccepted,
+                                    'perspectiveActive' : porQTypeID === PorQTypes.Perspective && proposalStatusID === ProposalStatuses.ProposalAccepted,
+                                    'proposal' : porQTypeID === PorQTypes.Proposal && proposalStatusID !== ProposalStatuses.ProposalAccepted,
+                                    'proposalActive' : porQTypeID === PorQTypes.Proposal && proposalStatusID === ProposalStatuses.ProposalAccepted}">
                                 <span *ngIf="porQTypeID === PorQTypes.Perspective">{{ issue.perspectivesAccepted }}
                                 </span>
                                 <span *ngIf="porQTypeID === PorQTypes.Proposal">{{ issue.proposalsAccepted }} </span>
@@ -81,16 +91,18 @@
                         <div fxFlex="34" fxLayout="column">
 
                             <div fxFlex (click)="setPorQType(PorQTypes.Proposal)" class="stage" [ngClass]="{
-                            'proposalActive' : porQTypeID===PorQTypes.Proposal,
-                            'proposal': porQTypeID!==PorQTypes.Proposal}">
-                                {{ issue.proposals }} Proposals
+                                'proposalActive' : porQTypeID===PorQTypes.Proposal,
+                                'proposal': porQTypeID!==PorQTypes.Proposal}">
+                                {{ issue.proposals }} Proposal{{ appData.plural(issue.proposals) }}
                             </div>
 
                             <div fxFlex (click)="setProposalStatus(ProposalStatuses.ProposalNotAccepted)" class="stage"
                                 [ngClass]="{
-                            'proposalInactive' : porQTypeID === PorQTypes.Question,
-                            'proposalActive' : porQTypeID !== PorQTypes.Question && proposalStatusID === ProposalStatuses.ProposalNotAccepted,
-                            'proposal' : porQTypeID !== PorQTypes.Question && proposalStatusID !== ProposalStatuses.ProposalNotAccepted}">
+                                    'questionInactive': porQTypeID === PorQTypes.Question,
+                                    'perspective' : porQTypeID === PorQTypes.Perspective && proposalStatusID !== ProposalStatuses.ProposalNotAccepted,
+                                    'perspectiveActive' : porQTypeID === PorQTypes.Perspective && proposalStatusID === ProposalStatuses.ProposalNotAccepted,
+                                    'proposal' : porQTypeID === PorQTypes.Proposal && proposalStatusID !== ProposalStatuses.ProposalNotAccepted,
+                                    'proposalActive' : porQTypeID === PorQTypes.Proposal && proposalStatusID === ProposalStatuses.ProposalNotAccepted}">
                                 <span *ngIf="porQTypeID === PorQTypes.Perspective">{{ issue.perspectivesRejected }}
                                 </span>
                                 <span *ngIf="porQTypeID === PorQTypes.Proposal">{{ issue.proposalsRejected }} </span>
@@ -101,10 +113,10 @@
 
                     </div>
                 </div>
+
                 <div *ngIf="!!error" class="alert alert-danger">
                     {{ error }}
                 </div>
-
 
                 <button mat-stroked-button class="mr-3" (click)="NewPorQ()" [disabled]="newPorQ">
                     <mat-icon>add</mat-icon>

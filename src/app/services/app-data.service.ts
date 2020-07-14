@@ -401,6 +401,15 @@ export class AppDataService {
     return i + 'th';
   }
 
+  public plural(i: number) {
+    switch (i) {
+      case 1:
+        return '';
+      default:
+        return 's';
+    }
+  }
+
   PointType(pointTypeID: number): Observable<string> {
     // Don't subscribe, just return map within pipe
     return this.PointTypes().pipe(

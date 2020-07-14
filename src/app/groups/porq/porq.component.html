@@ -1,4 +1,12 @@
-<div class="ProposalsInactive porQ py-2" *ngIf="!deleted && !porQEdit" [routerLink]="detailsLink">
+<div class="porQ py-2 mb-3" *ngIf="!deleted && !porQEdit" [routerLink]="detailsLink"
+    [ngClass]="{
+        'Questions': !inFocus && porQ.porQTypeID === PorQTypes.Question,
+        'Perspectives': !inFocus && porQ.porQTypeID === PorQTypes.Perspective,
+        'Proposals': !inFocus && porQ.porQTypeID === PorQTypes.Proposal,
+        'QuestionsActive': inFocus && porQ.porQTypeID === PorQTypes.Question,
+        'PerspectivesActive': inFocus && porQ.porQTypeID === PorQTypes.Perspective,
+        'ProposalsActive': inFocus && porQ.porQTypeID === PorQTypes.Proposal
+    }">
 
     <div fxLayout="column" class="px-3">
 

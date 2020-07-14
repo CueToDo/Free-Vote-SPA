@@ -23,6 +23,7 @@ export class PorqComponent implements OnInit {
 
   public PorQTypes = PorQTypes;
 
+  @Input() inFocus = false;
   porQEdit = false;
   deleted = false;
   error = '';

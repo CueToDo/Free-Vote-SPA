@@ -10,7 +10,7 @@
                 <div>
                     <a routerLink="/groups/membership">List all groups</a>
                 </div>
-                
+
                 <h1>{{ GroupDisplay.groupName }}<span *ngIf="!GroupDisplay.active"> (Inactive)</span></h1>
 
                 <p>{{ GroupDisplay.description }}</p>
@@ -20,20 +20,23 @@
                     <span
                         *ngIf="GroupDisplay.geographicalExtentID===GeographicalExtentID.PrivateGroup.toString() && GroupDisplay.invitationOnly">(invitation
                         only)</span>
+
+                    <span *ngIf="showCountries">
+                        Countries: <span *ngFor="let country of GroupDisplay.countries; let i = index"
+                            class="data">{{ country }}<span *ngIf="i != GroupDisplay.countries.length - 1">,
+                            </span></span>
+                    </span>
+
+                    <span *ngIf="showRegions">
+                        Regions: <span *ngFor="let region of GroupDisplay.regions" class="data">{{ region }}</span>
+                    </span>
+
+                    <span *ngIf="showCities">
+                        Cities: <span *ngFor="let city of GroupDisplay.cities" class="data">{{ city }} </span>
+                    </span>
                 </p>
 
-                <p *ngIf="showCountries">
-                    Countries: <span *ngFor="let country of GroupDisplay.countries; let i = index"
-                        class="data">{{ country }}<span *ngIf="i != GroupDisplay.countries.length - 1">, </span></span>
-                </p>
 
-                <p *ngIf="showRegions">
-                    Regions: <span *ngFor="let region of GroupDisplay.regions" class="data">{{ region }}</span>
-                </p>
-
-                <p *ngIf="showCities">
-                    Cities: <span *ngFor="let city of GroupDisplay.cities" class="data">{{ city }} </span>
-                </p>
 
                 <p *ngIf="!!GroupDisplay.subGroups && GroupDisplay.subGroups.length > 0">
                     sub-groups:
@@ -64,7 +67,7 @@
 
             <!-- Commands -->
             <div fxLayout="row" *ngIf="!groupEdit">
-                
+
 
                 <span fxFlex></span>
 
