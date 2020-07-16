@@ -1,9 +1,9 @@
 // Angular
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // Models
-import { GeographicalExtentID } from 'src/app/models/enums';
+import { GeographicalExtentID, MeetingIntervals } from 'src/app/models/enums';
 import { Group } from 'src/app/models/group.model';
 import { SubGroup } from 'src/app/models/sub-group.model';
 
@@ -51,6 +51,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private appData: AppDataService,
     private groupsService: GroupsService
@@ -141,12 +142,13 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
   Delete() {
+    this.error = '';
     if (confirm(`Are you sure you wish to permanently delete this group?
 This cannot be undone.`)) {
       this.groupsService.Delete(this.GroupDisplay.groupID)
         .subscribe(
           {
-            next: _ => this.Refresh.emit(),
+            next: _ => this.router.navigate(['/groups', 'membership']), // this.Refresh.emit(),
             error: serverError => this.error = serverError.error.detail
           }
         );
@@ -166,6 +168,12 @@ This cannot be undone.`)) {
   newSubGroup() {
     this.newSubGroupTemplate = new SubGroup();
     this.newSubGroupTemplate.groupID = this.GroupDisplay.groupID;
+    this.newSubGroupTemplate.open = true;
+    this.newSubGroupTemplate.meetingIntervalID = MeetingIntervals.Weekly.toString();
+    this.newSubGroupTemplate.selectionDayOfWeek = '1';
+    this.newSubGroupTemplate.selectionTimeOfDay = '19:00';
+    this.newSubGroupTemplate.nextIssueSelectionDate = this.appData.NextMonday();
+    this.newSubGroupTemplate.nextIssueSelectionTime = '19:00';
     this.creatingNewSubGroup = true;
   }
 

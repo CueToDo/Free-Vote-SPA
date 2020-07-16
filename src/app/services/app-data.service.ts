@@ -113,7 +113,7 @@ export class AppDataService {
     return udf;
   }
 
-  // Unambiguous Date Format
+  // Unambiguous DateTime Format
   public UDTF(date: Date): string {
     let udtf = '';
     if (date) {
@@ -408,6 +408,12 @@ export class AppDataService {
       default:
         return 's';
     }
+  }
+
+  public NextMonday(): string {
+    const nextMon = new Date();
+    nextMon.setDate(nextMon.getDate() - nextMon.getDay() + 8);
+    return this.UDF(nextMon);
   }
 
   PointType(pointTypeID: number): Observable<string> {

@@ -29,8 +29,6 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() issue: Issue;
   @Input() inFocus: boolean;
 
-  @Input() linkToDetails = false;
-
   @Output() Deleted = new EventEmitter();
 
   public IssueStatuses = IssueStatuses;
@@ -48,12 +46,13 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public get issueTitleLink(): string {
-    if (this.linkToDetails) {
+    // statusID > 2 for clickable link to issue details (ie NOT if still in prioritisation)
+    if (!this.inFocus && this.issue.statusID > 2) {
       // for subGroup component
       return `/groups/${this.groupNameKB}/${this.subGroupNameKB}/${this.issueTitleKB}`;
     } else {
       // for details component
-      return '';
+      return '.'; // . = same page - empty string = home
     }
   }
 
@@ -68,7 +67,6 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   deleteTooltip = 'delete issue';
   editTooltip = 'edit issue';
 
-  public viewProposals = false;
 
   @ViewChild('voteSlider') voteSlider: MatSlider;
   votechange$: Subscription;

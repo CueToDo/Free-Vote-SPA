@@ -98,10 +98,6 @@
                 </div>
 
                 <!-- Issue and Proposal Progress -->
-                <div class="mt-3">
-                    <strong>Issues and Proposals</strong>
-                </div>
-
                 <app-progress [SubGroup]="subGroup" (IssueStatusSelected)="getIssues($event)"
                     (ProposalStatusSelected)="getPsOrQs($event)" (NewIssueRequest)="createNewIssue()"
                     [NewIssue]="newIssue" #progress>
@@ -118,7 +114,7 @@
                 <ng-container *ngIf="!newIssue && !showPsAndQs">
                     <div *ngFor="let issue of issues" class="mb-2">
                         <app-issue [issue]="issue" (Deleted)="issueDeleted()" [groupName]="groupName"
-                            [subGroupName]="subGroupName" [linkToDetails]="true">
+                            [subGroupName]="subGroupName" [inFocus]="false">
                         </app-issue>
                     </div>
                 </ng-container>

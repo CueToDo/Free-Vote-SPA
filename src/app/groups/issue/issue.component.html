@@ -1,5 +1,6 @@
 <!-- Issue Listing -->
-<div class="mt-2 Issue" *ngIf="!issueEdit && !issueDeleted">
+<div class="mt-2" *ngIf="!issueEdit && !issueDeleted" 
+[routerLink]="issueTitleLink" [ngClass]="{'Issues': !inFocus, 'IssuesActive':inFocus}">
     
     <hr *ngIf="!inFocus">
 
@@ -7,11 +8,7 @@
 
         <div fxLayout="row wrap" fxLayoutAlign="start center">
 
-            <h2 *ngIf="!linkToDetails" [ngClass]="{'py-4':inFocus}">{{ issue.title }}</h2>
-
-            <a *ngIf="linkToDetails" [routerLink]="issueTitleLink">
-                <h2 [ngClass]="{'py-4':inFocus}">{{ issue.title }}</h2>
-            </a>
+            <h2 [ngClass]="{'py-2':inFocus}">{{ issue.title }}</h2>
 
             <div fxFlex></div>
 
@@ -115,14 +112,14 @@
 
 
 
-        <div *ngIf="linkToDetails && issue.statusID > 3" class="focusActive pl-3 smaller tar">
+        <div *ngIf="!inFocus && issue.statusID > 3" class="focusActive pl-3 smaller tar">
             Questions {{ issue.questions }}
             Proposals {{ issue.proposals }}
             Points {{ issue.points }}
             Feedback {{ issue.feedback }}
         </div>
 
-        <div [ngClass]="{'showDetails':inFocus, 'hideDetails':!inFocus}">
+        <!-- <div [ngClass]="{'showDetails':inFocus, 'hideDetails':!inFocus}">
             <button mat-stroked-button class="mr-3" (click)="viewProposals=false"
                 [class.buttonSelected]="!viewProposals">
                 <mat-icon>live_help</mat-icon>
@@ -133,7 +130,7 @@
                 proposals
             </button>
 
-        </div>
+        </div> -->
 
     </div>
 

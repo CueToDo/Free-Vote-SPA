@@ -132,6 +132,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   delete() {
+    this.error = '';
     if (confirm(`Are you sure you wish to delete the subgroup "${this.subGroup.subGroupName}"?`)) {
       this.groupsService.SubGroupDelete(this.subGroup.groupID, this.subGroup.subGroupID).subscribe(
         {

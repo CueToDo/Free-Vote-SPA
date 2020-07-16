@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div fxLayout="column" class="tabContainer">
+    <div fxLayout="column" class="tabContainer mt-2">
 
         <div class="tabContent scroller">
 
@@ -18,7 +18,7 @@
                 <!-- Issue Details. Check if we have an issue otherwise any error details are not rendered -->
                 <div *ngIf="!!issue">
 
-                    <app-issue [issue]="issue" [groupName]="groupName" [subGroupName]="subGroupName"></app-issue>
+                    <app-issue [issue]="issue" [groupName]="groupName" [subGroupName]="subGroupName" [inFocus]="true"></app-issue>
 
                     <!-- Status -->
                     <div fxLayout="row" class="stages my-3">
@@ -27,7 +27,8 @@
 
                             <div fxFlex (click)="setPorQType(PorQTypes.Question)" class="stage" [ngClass]="{
                                 'questionActive' : porQTypeID===PorQTypes.Question,
-                                'question': porQTypeID!==PorQTypes.Question}">
+                                'question': porQTypeID!==PorQTypes.Question}" fxLayoutAlign="center center">
+                                <mat-icon class="mr-1">live_help</mat-icon>
                                 {{ issue.questions }} Question{{ appData.plural(issue.questions) }}
                             </div>
 
@@ -70,7 +71,8 @@
 
                             <div fxFlex (click)="setPorQType(PorQTypes.Perspective)" class="stage" [ngClass]="{
                                 'perspectiveActive' : porQTypeID === PorQTypes.Perspective,
-                                'perspective': porQTypeID !== PorQTypes.Perspective}">
+                                'perspective': porQTypeID !== PorQTypes.Perspective}" fxLayoutAlign="center center">
+                                <mat-icon class="mr-1">comment</mat-icon>
                                 {{ issue.perspectives }} Perspective{{ appData.plural(issue.perspectives) }}
                             </div>
 
@@ -92,7 +94,8 @@
 
                             <div fxFlex (click)="setPorQType(PorQTypes.Proposal)" class="stage" [ngClass]="{
                                 'proposalActive' : porQTypeID===PorQTypes.Proposal,
-                                'proposal': porQTypeID!==PorQTypes.Proposal}">
+                                'proposal': porQTypeID!==PorQTypes.Proposal}" fxLayoutAlign="center center">
+                                <mat-icon class="mr-1">campaign</mat-icon>
                                 {{ issue.proposals }} Proposal{{ appData.plural(issue.proposals) }}
                             </div>
 

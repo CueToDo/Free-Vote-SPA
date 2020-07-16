@@ -280,9 +280,6 @@ a.clicker:hover {
   border-top: solid 2px #FFD85D;
 }
 
-.Issue {
-  background-color: #FFFCF2;
-}
 
 .Issues,
 .Questions,
@@ -311,7 +308,6 @@ a.clicker:hover {
 .QuestionsActive {
   background-color: #FFF4D0;
   border: solid 2px #FFD85D;
-  font-weight: bold;
 }
 
 .PerspectivesActive {
@@ -322,7 +318,6 @@ a.clicker:hover {
 .ProposalsActive {
   background-color: #D0FFDC;
   border: solid 2px #5DFF87;
-  font-weight: bold;
 }
 
 

@@ -22,7 +22,7 @@ app-issue{
 }
 
 .show {
-    max-height: 540px;
+    max-height: 580px;
     overflow: hidden;
     opacity: 1;
 }

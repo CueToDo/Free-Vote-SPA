@@ -163,3 +163,10 @@ export enum PorQTypes {
   Perspective = 3,
   ProPer = 4 // Proposal Or Perspective
 }
+
+export enum MeetingIntervals {
+  Weekly = 1,
+  MonthlyByDate = 2,
+  Variable = 3,
+  MonthlyByWeekNumber = 4
+}
