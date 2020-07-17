@@ -41,7 +41,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   public subGroup: SubGroup;
 
   public get groupNameKebab(): string {
-    return this.appData.kebab(this.groupName);
+    return this.appData.kebabUri(this.groupName);
   }
 
   public DecisionBasisOption = DecisionBasisOption;
@@ -77,8 +77,8 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
 
     const routeParams = this.activeRoute.snapshot.params;
-    this.groupName = this.appData.unKebab(routeParams.groupName);
-    this.subGroupName = this.appData.unKebab(routeParams.subGroupName);
+    this.groupName = this.appData.unKebabUri(routeParams.groupName);
+    this.subGroupName = this.appData.unKebabUri(routeParams.subGroupName);
 
     this.getSubGroup(this.groupName, this.subGroupName);
   }
@@ -138,7 +138,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
         {
           next: _ => {
             // this.subGroupDeleted.emit();
-            this.router.navigateByUrl('/groups/view/' + this.appData.kebab(this.groupName));
+            this.router.navigateByUrl('/groups/view/' + this.appData.kebabUri(this.groupName));
           },
           error: serverError => this.error = serverError.error.detail
         }

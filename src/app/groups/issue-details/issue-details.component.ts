@@ -64,9 +64,9 @@ export class IssueDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const routeParams = this.activeRoute.snapshot.params;
-    this.groupName = this.appData.unKebab(routeParams.groupName);
-    this.subGroupName = this.appData.unKebab(routeParams.subGroupName);
-    this.issueTitle = this.appData.unKebab(routeParams.issue);
+    this.groupName = this.appData.unKebabUri(routeParams.groupName);
+    this.subGroupName = this.appData.unKebabUri(routeParams.subGroupName);
+    this.issueTitle = this.appData.unKebabUri(routeParams.issue);
 
     this.issuesService.GetIssue(this.groupName, this.subGroupName, this.issueTitle).pipe(
       concatMap(issue => {

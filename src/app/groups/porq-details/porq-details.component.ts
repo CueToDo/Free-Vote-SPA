@@ -53,9 +53,9 @@ export class PorqDetailsComponent implements OnInit {
     const routeParams = this.activeRoute.snapshot.params;
 
     this.porQID = routeParams.porqId;
-    this.groupName = this.appData.unKebab(routeParams.groupName);
-    this.subGroupName = this.appData.unKebab(routeParams.subGroupName);
-    this.issueTitle = this.appData.unKebab(routeParams.issue);
+    this.groupName = this.appData.unKebabUri(routeParams.groupName);
+    this.subGroupName = this.appData.unKebabUri(routeParams.subGroupName);
+    this.issueTitle = this.appData.unKebabUri(routeParams.issue);
 
     this.psAndQsService.PorQSelectSpecific(this.porQID)
       .subscribe(

@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Auth0
@@ -20,7 +20,7 @@ import { AppDataService } from '../../services/app-data.service';
 export class HomeComponent implements OnInit {
 
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
-  // @ViewChild('tvSlashTag', { static: false }) tvSlashTag: ElementRef;
+  @ViewChild('tvSlashTag', { static: false }) tvSlashTag: ElementRef;
 
   public slashTag: string;
 
@@ -52,6 +52,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     // Don't emit InputSlashTagOnMobile$ here as it triggers error in app.component
     // ExpressionChangedAfterItHasBeenCheckedError
+    this.restartSearch();
   }
 
   epicFunction() {
@@ -77,39 +78,65 @@ export class HomeComponent implements OnInit {
     }
   }
 
+
   restartSearch(): void {
+
     this.slashTag = '/';
+
+    // Don't start off with focus on input on mobile (Vulcan will never be shown)
+    if (!this.isMobile) {
+      window.setTimeout(() => {
+
+        const el = this.tvSlashTag.nativeElement;
+        el.focus();
+
+        // Place cursor at end
+        if (typeof el.selectionStart === 'number') {
+          el.selectionStart = el.selectionEnd = el.value.length;
+        } else if (typeof el.createTextRange !== 'undefined') {
+          const range = el.createTextRange();
+          range.collapse(false);
+          range.select();
+        }
+      }, 500);
+    }
+
   }
-
-  // restartSearch(): void {
-  //   this.slashTag = '/';
-  //   window.setTimeout(() => {
-
-  //     const el = this.tvSlashTag.nativeElement;
-
-  //     // Don't satrt off with focus on input - mobile will never see Vulcan
-  //     // el.focus();
-
-  //     if (typeof el.selectionStart === 'number') {
-  //       el.selectionStart = el.selectionEnd = el.value.length;
-  //     } else if (typeof el.createTextRange !== 'undefined') {
-  //       const range = el.createTextRange();
-  //       range.collapse(false);
-  //       range.select();
-  //     }
-  //   }, 500);
-
-  // }
 
 
   slashTagChanged() {
-    this.slashTag = this.appData.kebab(this.slashTag);
+
+    // can't use same kebab function as kebabUri - we need to allow ending "-" while typing
+    // .filter - an empty string evaluates to boolean false. It works with all falsy values like 0, false, null, undefined
+
+    if (!this.slashTag) { this.restartSearch(); }
+
+    if (this.slashTag && this.slashTag.length > 1) {
+
+      let lastChar = this.slashTag.charAt(this.slashTag.length - 1);
+
+      const regx = /^[-A-Za-z0-9\s]+$/;
+      console.log(lastChar, regx.test(lastChar));
+
+      if (!regx.test(lastChar)) {
+        lastChar = '';
+        this.slashTag = this.slashTag.slice(0, -1);
+      }
+
+      if (lastChar === ' ') { lastChar = '-'; }
+      if (lastChar !== '-') { lastChar = ''; }
+
+      let output = this.slashTag.split(' ').filter(item => item).join('-'); // remove double spaces, replace spaces with dash
+      output = output.split('-').filter(item => item).join('-'); // remove double-dashes, no dash start or end
+
+      this.slashTag = output + lastChar; // preserve trailing dash while typing
+    }
   }
 
   showTagPoints() {
 
     if (!this.slashTag || this.slashTag === '/') {
-      // this.restartSearch();
+      this.restartSearch();
     } else {
       // Remove trailing dash after user finished typing
       let value = this.slashTag;

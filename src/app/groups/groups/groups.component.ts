@@ -90,6 +90,6 @@ export class GroupsComponent implements OnInit, AfterViewInit {
 
   StartNewGroup() {
     this.NewGroup = new Group();
-    this.NewGroup.countries = [];
+    this.NewGroup.countries = ['UK'];
   }
 }

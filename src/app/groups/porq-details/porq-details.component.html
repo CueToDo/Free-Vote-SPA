@@ -4,10 +4,10 @@
     <div class="groupTrail">
         <div class="content mt-3">
             <a [routerLink]="'/groups/membership'">List all groups</a> >
-            <a [routerLink]="['/group/view', appData.kebab(groupName)]">{{ groupName }}</a> >
-            <a [routerLink]="['/group', appData.kebab(groupName), appData.kebab(subGroupName)]">{{ subGroupName }}</a> >
+            <a [routerLink]="['/group/view', appData.kebabUri(groupName)]">{{ groupName }}</a> >
+            <a [routerLink]="['/group', appData.kebabUri(groupName), appData.kebabUri(subGroupName)]">{{ subGroupName }}</a> >
             <a
-                [routerLink]="['/group', appData.kebab(groupName), appData.kebab(subGroupName), appData.kebab(issueTitle)]">{{ issueTitle }}</a>
+                [routerLink]="['/group', appData.kebabUri(groupName), appData.kebabUri(subGroupName), appData.kebabUri(issueTitle)]">{{ issueTitle }}</a>
         </div>
     </div>
 

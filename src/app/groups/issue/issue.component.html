@@ -1,6 +1,6 @@
 <!-- Issue Listing -->
 <div class="mt-2" *ngIf="!issueEdit && !issueDeleted" 
-[routerLink]="issueTitleLink" [ngClass]="{'Issues': !inFocus, 'IssuesActive':inFocus}">
+[routerLink]="issueTitleLink" [ngClass]="{'Issues': !inFocus && this.issue.statusID > 2, 'IssuesActive':inFocus && this.issue.statusID <= 2}">
     
     <hr *ngIf="!inFocus">
 

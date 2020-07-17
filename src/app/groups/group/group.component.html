@@ -39,7 +39,7 @@
 
 
                 <p *ngIf="!!GroupDisplay.subGroups && GroupDisplay.subGroups.length > 0">
-                    sub-groups:
+                    Discussion groups:
                     <span *ngFor="let subGroup of GroupDisplay.subGroups; let i = index">
                         <a [routerLink]="issuesLink(subGroup)">{{ subGroup }}</a>
                         <ng-container *ngIf="i != GroupDisplay.subGroups.length - 1">, </ng-container>

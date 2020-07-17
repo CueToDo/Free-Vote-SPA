@@ -173,20 +173,18 @@ export class AppDataService {
   }
 
   // For groupnames in urls. replace spaces first, then encode
-  kebab(input: string): string {
+  kebabUri(input: string): string {
     // But not converted to lower case
-
+    // filter - an empty string evaluates to boolean false. It works with all falsy values like 0, false, null, undefined
     let output = input.split(' ').filter(item => item).join('-'); // remove double spaces, replace spaces with dash
     output = output.split('-').filter(item => item).join('-'); // remove double-dashes, no dash start or end
     output = encodeURIComponent(output);
     return output;
   }
 
-  unKebab(input: string): string {
+  unKebabUri(input: string): string {
     return (input.split('-').filter(item => item).join(' '));
   }
-
-
 
   public Date1IsLessThanDate2(dateFrom, dateTo): boolean {
     if (!dateFrom || !dateTo) { return false; }

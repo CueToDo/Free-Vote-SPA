@@ -68,7 +68,7 @@
             <div fxLayout="row" fxLayoutAlign="center center">
 
               <input type="text" [(ngModel)]="slashTag" (keyup)="slashTagChanged()" (keyup.enter)="showTagPoints()"
-                (focus)="beginInput()" (blur)="endInput()" class="form-control" id="slashTagInput"
+                (focus)="beginInput()" (blur)="endInput()" class="form-control" id="slashTagInput" #tvSlashTag
                 placeholder="/slash tag">
 
               <button mat-stroked-button (click)="showTagPoints()">

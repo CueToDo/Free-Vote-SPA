@@ -34,15 +34,15 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   public IssueStatuses = IssueStatuses;
 
   get groupNameKB(): string {
-    return this.appData.kebab(this.groupName);
+    return this.appData.kebabUri(this.groupName);
   }
 
   get subGroupNameKB(): string {
-    return this.appData.kebab(this.subGroupName);
+    return this.appData.kebabUri(this.subGroupName);
   }
 
   get issueTitleKB(): string {
-    return this.appData.kebab(this.issue.title);
+    return this.appData.kebabUri(this.issue.title);
   }
 
   public get issueTitleLink(): string {

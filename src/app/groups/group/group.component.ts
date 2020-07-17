@@ -47,7 +47,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
   issuesLink(subGroup: string): string {
-    return `/group/${this.appData.kebab(this.GroupDisplay.groupName)}/${this.appData.kebab(subGroup)}`;
+    return `/group/${this.appData.kebabUri(this.GroupDisplay.groupName)}/${this.appData.kebabUri(subGroup)}`;
   }
 
   constructor(
@@ -64,7 +64,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   getGroup() {
 
     let groupName = this.activatedRoute.snapshot.params['groupName'];
-    groupName = this.appData.unKebab(groupName);
+    groupName = this.appData.unKebabUri(groupName);
 
     this.groupsService.Group(groupName, true).subscribe(
       {
