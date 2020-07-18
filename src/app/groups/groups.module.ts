@@ -32,8 +32,10 @@ import { PorqEditComponent } from './porq-edit/porq-edit.component';
 import { PorqDetailsComponent } from './porq-details/porq-details.component';
 
 const routes: Routes = [
-  { path: ':tab', component: GroupsComponent },
-  { path: 'view/:groupName', component: GroupComponent },
+  { path: 'membership', component: GroupsComponent },
+  { path: 'available', component: GroupsComponent },
+  { path: 'new', component: GroupsComponent },
+  { path: ':groupName', component: GroupComponent },
   { path: ':groupName/:subGroupName', component: SubGroupComponent },
   { path: ':groupName/:subGroupName/:issue', component: IssueDetailsComponent },
   { path: ':groupName/:subGroupName/:issue/:porqId', component: PorqDetailsComponent }

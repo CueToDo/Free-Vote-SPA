@@ -37,6 +37,10 @@ export class PorqDetailsComponent implements OnInit {
 
   public PorQTypes = PorQTypes;
 
+  public get porQType(): string {
+    return this.appData.PorQType(this.porQ.porQTypeID);
+  }
+
   editNewPoint = false;
 
   error = '';

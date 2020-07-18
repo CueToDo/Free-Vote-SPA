@@ -1,13 +1,14 @@
 <div fxFill fxLayout="column">
 
     <!-- Group Details -->
-    <div class="groupTrail">
-        <div class="content mt-3">
+    <div class="groupTrail my-3">
+        <div class="content">
             <a [routerLink]="'/groups/membership'">List all groups</a> >
-            <a [routerLink]="['/group/view', appData.kebabUri(groupName)]">{{ groupName }}</a> >
+            <a [routerLink]="['/group', appData.kebabUri(groupName)]">{{ groupName }}</a> >
             <a [routerLink]="['/group', appData.kebabUri(groupName), appData.kebabUri(subGroupName)]">{{ subGroupName }}</a> >
             <a
                 [routerLink]="['/group', appData.kebabUri(groupName), appData.kebabUri(subGroupName), appData.kebabUri(issueTitle)]">{{ issueTitle }}</a>
+                > {{ porQType }}
         </div>
     </div>
 

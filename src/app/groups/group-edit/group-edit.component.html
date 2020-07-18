@@ -1,9 +1,9 @@
-<div [ngClass]="{edit: group.groupID > 0}">
+<div [ngClass]="{edit: group.groupID || 0 > 0}">
 
     <div fxLayout="column">
 
         <mat-form-field>
-            <input matInput placeholder="group name" [(ngModel)]="group.groupName">
+            <input matInput placeholder="group name" [(ngModel)]="group.groupName" #groupName (keyup.enter)="nameComplete()">
             <button mat-button *ngIf="group.groupName" matSuffix mat-icon-button aria-label="clear"
                 (click)="group.groupName='';">
                 <mat-icon>close</mat-icon>
@@ -11,7 +11,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput placeholder="group description" [(ngModel)]="group.description">
+            <input matInput placeholder="group description" [(ngModel)]="group.description" #groupDescription (keyup.enter)="descriptionComplete()">
             <button mat-button *ngIf="group.description" matSuffix mat-icon-button aria-label="clear"
                 (click)="group.description='';">
                 <mat-icon>close</mat-icon>
@@ -19,7 +19,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput placeholder="group website" [(ngModel)]="group.groupWebsite">
+            <input matInput placeholder="group website" [(ngModel)]="group.groupWebsite" #groupWebsite (keyup.enter)="websiteComplete()">
             <button mat-button *ngIf="group.groupWebsite" matSuffix mat-icon-button aria-label="clear"
                 (click)="group.groupWebsite='';">
                 <mat-icon>close</mat-icon>
@@ -27,7 +27,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <mat-select (ngModelChange)="extentSelected($event)" name="selectExtent"
+            <mat-select #geoExtent (ngModelChange)="extentSelected($event)" name="selectExtent"
                 [(ngModel)]="group.geographicalExtentID" placeholder="group type/geographical extent">
                 <mat-option *ngFor="let extent of extents" [value]="extent.value.toString()">{{ extent.key }}
                 </mat-option>

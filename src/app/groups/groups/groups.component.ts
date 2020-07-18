@@ -1,7 +1,7 @@
 import { GroupEditComponent } from 'src/app/groups/group-edit/group-edit.component';
 // Angular
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // Model
 import { Group } from 'src/app/models/group.model';
@@ -27,14 +27,22 @@ export class GroupsComponent implements OnInit, AfterViewInit {
   private tabSelected: string;
   public NewGroup: Group;
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private appDataService: AppDataService) {
 
   }
 
   ngOnInit() {
 
-    this.tabSelected = this.activatedRoute.snapshot.params['tab'];
+    this.StartNewGroup(); // For GroupEdit, do this early
+
+    // tab is not a route parameter, but a route segment
+    // this.tabSelected = this.activatedRoute.snapshot.params['tab'];
+
+    // https://stackoverflow.com/questions/49684409/how-to-get-angular-5-route-segments-from-activatedroute
+    this.tabSelected = this.activatedRoute.snapshot.url[0].path;
 
     if (!this.tabSelected) {
       this.tabSelected = 'membership';
@@ -44,17 +52,19 @@ export class GroupsComponent implements OnInit, AfterViewInit {
       case 'membership':
         this.tabIndex = 0;
         break;
-      case 'other':
+      case 'available':
         this.tabIndex = 1;
         break;
+      case 'new':
+        this.tabIndex = 2;
+        break;
     }
-
-    this.StartNewGroup();
 
   }
 
   ngAfterViewInit() {
     this.groupMembership.Refresh();
+    this.groupsAvailable.Refresh();
     this.newGroupComponent.ClearError();
   }
 
@@ -84,8 +94,8 @@ export class GroupsComponent implements OnInit, AfterViewInit {
     this.ChangeTab(0);
   }
 
-  CompleteNew() {
-    this.ChangeTab(0);
+  CompleteNew(group: Group) {
+    this.router.navigate(['/groups', group.groupName]);
   }
 
   StartNewGroup() {

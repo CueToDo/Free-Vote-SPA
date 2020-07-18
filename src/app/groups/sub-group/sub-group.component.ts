@@ -138,7 +138,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
         {
           next: _ => {
             // this.subGroupDeleted.emit();
-            this.router.navigateByUrl('/groups/view/' + this.appData.kebabUri(this.groupName));
+            this.router.navigateByUrl('/groups/' + this.appData.kebabUri(this.groupName));
           },
           error: serverError => this.error = serverError.error.detail
         }

@@ -4,12 +4,13 @@
     <div class="groupTrail">
         <div class="content mt-3">
             <a [routerLink]="'/groups/membership'">List all groups</a> > <a
-                [routerLink]="['/group/view', appData.kebabUri(groupName)]">{{ groupName }}</a> > <a
+                [routerLink]="['/group', appData.kebabUri(groupName)]">{{ groupName }}</a> > <a
                 [routerLink]="['/group', appData.kebabUri(groupName), appData.kebabUri(subGroupName)]">{{ subGroupName }}</a>
+                > Issue
         </div>
     </div>
 
-    <div fxLayout="column" class="tabContainer mt-2">
+    <div fxLayout="column" class="tabContainer">
 
         <div class="tabContent scroller">
 
@@ -121,11 +122,13 @@
                     {{ error }}
                 </div>
 
+                <!-- New PorQ button -->
                 <button mat-stroked-button class="mr-3" (click)="NewPorQ()" [disabled]="newPorQ">
                     <mat-icon>add</mat-icon>
                     new {{ porQType }}
                 </button>
 
+                <!-- New PorQ -->
                 <div class="mt-3">
                     <app-porq-edit *ngIf="newPorQ" (CancelEdit)="cancelNewPorQ()" (CompleteEdit)="completeNewPorQ()"
                         [porQ]="newPorQTemplate">

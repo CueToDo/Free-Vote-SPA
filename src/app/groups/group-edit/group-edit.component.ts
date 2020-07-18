@@ -1,5 +1,7 @@
+
 // Angular
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { MatSelect } from '@angular/material/select';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -24,6 +26,12 @@ export class GroupEditComponent implements OnInit, OnDestroy {
 
   @Output() Cancel = new EventEmitter();
   @Output() Complete = new EventEmitter<Group>();
+
+  @ViewChild('groupName', { static: true }) elGroupName: ElementRef;
+  @ViewChild('groupDescription', { static: true }) elGroupDescription: ElementRef;
+  @ViewChild('groupWebsite', { static: true }) elGroupWebsite: ElementRef;
+  @ViewChild('geoExtent', { static: true }) elGeoExtent: MatSelect;
+
 
   private groups$: Subscription;
   private extents$: Subscription;
@@ -66,6 +74,19 @@ export class GroupEditComponent implements OnInit, OnDestroy {
 
   public ClearError() {
     this.error = '';
+    this.elGroupName.nativeElement.focus();
+  }
+
+  nameComplete() {
+    this.elGroupDescription.nativeElement.focus();
+  }
+
+  descriptionComplete() {
+    this.elGroupWebsite.nativeElement.focus();
+  }
+
+  websiteComplete() {
+    this.elGeoExtent.focus();
   }
 
   extentSelected(extent: string) {

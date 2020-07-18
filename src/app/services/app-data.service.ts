@@ -422,7 +422,6 @@ export class AppDataService {
   }
 
   PorQType(porQTypeID: PorQTypes): string {
-    console.log('PTID', porQTypeID, this.porQTypes);
     return this.porQTypes.filter(pt => pt.value === <number>porQTypeID)[0].key;
   }
 

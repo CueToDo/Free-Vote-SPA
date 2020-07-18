@@ -11,10 +11,10 @@
 
                     <div>
                         <a [routerLink]="'/groups/membership'">List all groups</a> > <a
-                            [routerLink]="['/groups/view', groupNameKebab]">{{ groupName }}</a>
+                            [routerLink]="['/groups', groupNameKebab]">{{ groupName }}</a>
                     </div>
 
-                    <div fxLayout="row wrap" fxLayoutAlign="start center">
+                    <div fxLayout="row wrap" fxLayoutAlign="start center" class="mt-3">
 
                         <div>
                             <h1>{{ subGroup.subGroupName }}</h1>

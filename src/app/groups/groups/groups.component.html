@@ -59,7 +59,7 @@
         'stageRight': tabIndex<2}" fxFill>
         <div fxLayoutAlign="center">
           <div class="content">
-            <app-group-edit (Cancel)="CancelNew()" (Complete)="CompleteNew()" [group]="NewGroup" #NewGroupComponent></app-group-edit>
+            <app-group-edit (Cancel)="CancelNew()" (Complete)="CompleteNew($event)" [group]="NewGroup" #NewGroupComponent></app-group-edit>
           </div>
         </div>
       </div>

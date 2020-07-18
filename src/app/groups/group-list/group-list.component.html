@@ -16,7 +16,7 @@
 </div>
 
 <div *ngFor="let group of groups" class="groupDiv">
-  <a [routerLink]="['/groups/view', appData.kebabUri(group.groupName)]">{{ group.groupName }}</a>
+  <a [routerLink]="['/groups', appData.kebabUri(group.groupName)]">{{ group.groupName }}</a>
 </div>
 
 <div *ngIf="waiting" fxLayoutAlign="center">
