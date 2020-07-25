@@ -1,4 +1,4 @@
-import { PorQTypes } from './../models/enums';
+import { PorQTypes, PointTypesEnum } from './../models/enums';
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
@@ -419,6 +419,21 @@ export class AppDataService {
     return this.PointTypes().pipe(
       map(response => response.filter(pt => pt.value === pointTypeID)[0].key)
     );
+  }
+
+  ShowSource(pointTypeID: PointTypesEnum): boolean {
+    switch (pointTypeID) {
+      // It doesn't matter WHO said it - should not sway vote
+      case PointTypesEnum.Fact:
+      case PointTypesEnum.RecommendedReading:
+      case PointTypesEnum.RecommendedListening:
+      case PointTypesEnum.RecommendedViewing:
+      case PointTypesEnum.ReportOrSurvey:
+      case PointTypesEnum.Petition:
+        return true;
+      default:
+        return false;
+    }
   }
 
   PorQType(porQTypeID: PorQTypes): string {

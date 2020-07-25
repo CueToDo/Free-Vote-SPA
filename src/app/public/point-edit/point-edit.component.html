@@ -19,13 +19,22 @@
     <div fxLayout="column" fxLayoutAlign="space-around">
 
       <div *ngIf="hasLink">
+        
         <!-- To Be Animated with css transition -->
-        <mat-form-field fxFill>
-          <input matInput placeholder="quote or link text" [(ngModel)]="pointClone.source" name="quoteSource">
-        </mat-form-field>
+        <div fxLayoutAlign="row">
+          
+          <mat-form-field fxFlex>
+            <input matInput placeholder="quote or link text" [(ngModel)]="pointClone.source" name="quoteSource">
+          </mat-form-field>
+
+          <mat-checkbox [(ngModel)]="pointClone.showLinkBeforeVote" name="showLinkbeforeVote">show before vote</mat-checkbox>
+
+        </div>
+
         <mat-form-field fxFill>
           <input matInput placeholder="quote or link url" [(ngModel)]="pointClone.url" name="quoteURL">
         </mat-form-field>
+
       </div>
 
       <div *ngIf="hasMedia">

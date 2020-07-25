@@ -167,7 +167,7 @@
       <div class="pointCount">
 
         <span *ngIf="!alreadyFetchingPointsFromDB && !singlePoint">
-          {{ points.length }} points displayed of {{ pointCount }}<span *ngIf="!allPointsDisplayed">: <a routerLink="."
+          {{ points.length }} {{qa}}{{ appData.plural(points.length) }} displayed of {{ pointCount }}<span *ngIf="!allPointsDisplayed">: <a routerLink="."
               (click)="fetchMorePoints()">more</a></span>
         </span>
 

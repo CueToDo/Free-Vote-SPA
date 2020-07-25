@@ -14,6 +14,7 @@ export class PointEdit {
     pointTypeID: PointTypesEnum;
     source: string;
     url: string;
+    showLinkBeforeVote: boolean;
     youTubeID: string;
     soundCloudTrackID: string;
     slashTags: string[] = [];
@@ -94,7 +95,7 @@ export class Point {
     draft: boolean;
     source: string;
     url: string;
-
+    showLinkBeforeVote: boolean;
 
     archived: boolean;
 

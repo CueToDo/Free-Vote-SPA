@@ -1,6 +1,10 @@
+import { PointTypesEnum } from './../../models/enums';
 // Angular
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+// Material
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -49,6 +53,9 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   public TagCloudTypes = TagCloudTypes;
   public haveRecentSlashTags = false;
   refreshRecent = false;
+
+  questions = false;
+  qp = 'point';
 
   showingFilter = false;
   public filterIcon = 'star';
@@ -253,6 +260,18 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     if (hasChanged && !this.externalTrigger) {
       this.appData.RouteParamChange$.next(switchedTo);
     }
+  }
+
+  changeQA() {
+    let filterQuestions = false;
+    if (this.questions) {
+      this.qp = 'question';
+      filterQuestions = true;
+    } else {
+      this.qp = 'point';
+    }
+    this.ChangeTab(2);
+    this.appPoints.FilterQuestions(filterQuestions);
   }
 
   // From the template filter button and directly from child Points Component

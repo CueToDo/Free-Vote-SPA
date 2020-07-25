@@ -184,6 +184,7 @@ export class PointsService {
       'isPorQPoint': isPorQPoint, // not a point property
       'source': point.source,
       'url': point.url,
+      'showLinkBeforeVote': point.showLinkBeforeVote,
       'youTubeID': point.youTubeID,
       'soundCloudTrackID': point.soundCloudTrackID,
       'slashTags': point.slashTags,

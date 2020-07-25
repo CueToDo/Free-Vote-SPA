@@ -1,3 +1,4 @@
+import { AppDataService } from 'src/app/services/app-data.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // Models & enums
@@ -27,7 +28,11 @@ export class PointComponent implements OnInit {
   slashTags: string[];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
 
   editing = false;
-  recommended = false;
+
+  get showLink(): boolean {
+    return this.appData.ShowSource(this.point.pointTypeID);
+  }
+
   error: string;
 
   // https://stackoverflow.com/questions/37277527/how-to-use-enum-in-angular-2-templates
@@ -37,6 +42,7 @@ export class PointComponent implements OnInit {
 
   constructor(
     public localData: LocalDataService, // public - used in template
+    private appData: AppDataService,
     private pointsService: PointsService
   ) { }
 
@@ -60,19 +66,6 @@ export class PointComponent implements OnInit {
     // No subscriptions
 
     this.AssignTags();
-
-    switch (this.point.pointTypeID) {
-      case PointTypesEnum.RecommendedReading:
-      case PointTypesEnum.RecommendedListening:
-      case PointTypesEnum.RecommendedViewing:
-      case PointTypesEnum.ReportOrSurvey:
-      case PointTypesEnum.Petition:
-        this.recommended = true;
-        break;
-      default:
-        this.recommended = false;
-        break;
-    }
 
   }
 

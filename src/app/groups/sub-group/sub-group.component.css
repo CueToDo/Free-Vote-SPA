@@ -1,4 +1,3 @@
-
 a.selected {
     background-color: #F0E6FF;
 }
@@ -8,11 +7,11 @@ button+button {
 }
 
 hr {
-    border: solid 1px #32007C;;
+    border: solid 1px #32007C;
 }
 
-app-issue{
-    margin-top:200px;
+app-issue {
+    margin-top: 200px;
 }
 
 .hide {
@@ -31,4 +30,8 @@ app-issue{
 .hide {
     transition: max-height .3s ease-out,
         opacity .3s ease-out;
+}
+
+a+a {
+    margin-left: 0px;
 }

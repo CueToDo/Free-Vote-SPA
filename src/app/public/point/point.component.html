@@ -30,9 +30,9 @@
       src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/597736656&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true"></iframe>
   </div> -->
 
-  <!-- Can only see quote source if Feedback given. Can view link for all recommended point types -->
+  <!-- Can only see quote source if ShowLinkBeforeVote or Feedback given. Can view link for all recommended point types -->
 
-  <div *ngIf="point.pointFeedback.feedbackGiven || recommended" class="pointSource" [ngClass.lt-md]="'ltmd'">
+  <div *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink" class="pointSource" [ngClass.lt-md]="'ltmd'">
     <a *ngIf="point.url" [href]="point.url" target="_blank">{{ point.source }}</a>
     <span *ngIf="!point.url">{{ point.source }}</span>
   </div>

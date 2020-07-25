@@ -2,7 +2,7 @@
 
   <!-- Begin tab selection and point sort order -->
 
-  <div class="buttonBar" ngClass.gt-xs="py-1" fxLayout="row wrap" fxLayoutAlign="center">
+  <div class="buttonBar" ngClass.gt-xs="py-1" fxLayout="row wrap" fxLayoutAlign="center center">
 
     <button mat-button (click)="ChangeTab(0)" [class.selected]="tabIndex===0">
       <span *ngIf="widthBand > 2">trending</span>
@@ -19,8 +19,10 @@
       <mat-icon matTooltip="{{ topicSelected }}">bookmark_border</mat-icon>
     </button>
 
-    <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3" *ngIf="localData.loggedInToAuth0">
-      <span *ngIf="widthBand > 2">new point</span>
+    <mat-slide-toggle [(ngModel)]="questions" (change)="changeQA()" class="mx-2">questions</mat-slide-toggle>
+
+    <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3" *ngIf="localData.loggedInToAuth0" id="newQP">
+      <span *ngIf="widthBand > 2">new {{ qp }}</span>
       <mat-icon>library_add</mat-icon>
     </button>
 

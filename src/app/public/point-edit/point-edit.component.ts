@@ -330,27 +330,24 @@ export class PointEditComponent implements OnInit, OnDestroy {
   autoShowLinkEdit(pointTypeID: PointTypesEnum) {
 
     // Automatically show link input for certain point types
-
-    switch (pointTypeID) {
-      case PointTypesEnum.Quote:
-      case PointTypesEnum.Petition:
-      case PointTypesEnum.RecommendedReading:
-      case PointTypesEnum.RecommendedListening:
-      case PointTypesEnum.RecommendedViewing:
+    if (this.appData.ShowSource(pointTypeID)) {
+      this.showLinkEdit();
+    } else {
+      if (this.pointClone.source || this.pointClone.url) {
         this.showLinkEdit();
-        break;
-      default:
-        if (this.pointClone.source || this.pointClone.url) {
-          this.showLinkEdit();
-        } else {
-          this.hideLinkEdit();
-        }
-        break;
+      } else {
+        this.hideLinkEdit();
+      }
     }
   }
 
   onPointTypeChange(pointTypeID: PointTypesEnum) {
+
     this.autoShowLinkEdit(pointTypeID);
+
+    // Automatically update default "show" if voter changes point type
+    this.pointClone.showLinkBeforeVote = this.appData.ShowSource(pointTypeID);
+
   }
 
   showLinkEdit() {

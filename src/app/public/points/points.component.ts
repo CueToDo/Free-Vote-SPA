@@ -1,7 +1,7 @@
 // import { BreakpointState } from '@angular/cdk/layout';
 
 // Angular
-import { OnDestroy, EventEmitter, Output } from '@angular/core';
+import { OnDestroy, EventEmitter, Output, Input } from '@angular/core';
 
 // import { Pipe } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
@@ -83,6 +83,8 @@ export class PointsComponent implements OnInit, OnDestroy {
   previouslyShowingTypeFilter = false;
   pointTypeIDFilter = PointTypesEnum.Opinion;
   previousPointTypeIDFilter = PointTypesEnum.Opinion;
+  filterQuestions = false; // from parent Tags-Points component
+  qa = 'point';
   pointTypes: Kvp[];
 
   // Date Filter
@@ -382,6 +384,7 @@ export class PointsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Check whether we're filtering on type
   FilterOnType() {
     if (this.showTypeFilter) {
       this.pointTypeIDFilter = this.previousPointTypeIDFilter;
@@ -389,6 +392,21 @@ export class PointsComponent implements OnInit, OnDestroy {
       this.pointTypeIDFilter = PointTypesEnum.NotSelected;
     }
     this.SelectPoints();
+  }
+
+  // Filter by Type from Tags-Points (Select Questions)
+  public FilterQuestions(filterQuestions: boolean) {
+
+    this.filterQuestions = filterQuestions;
+
+    if (filterQuestions) {
+      this.qa = 'question';
+      this.points = [];
+    } else {
+      this.qa = 'point';
+      this.SelectPoints();
+    }
+
   }
 
   PointTypeFilterChange() {
