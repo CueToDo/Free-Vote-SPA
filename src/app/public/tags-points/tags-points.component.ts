@@ -1,25 +1,26 @@
-import { PointTypesEnum } from './../../models/enums';
+
 // Angular
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // Material
-import { MatSlideToggle } from '@angular/material/slide-toggle';
+// import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 // rxjs
 import { Subscription } from 'rxjs';
 
 // Model/Enums
-import { TagCloudTypes, PointSortTypes } from '../../models/enums';
+import { TagCloudTypes, PointSortTypes } from 'src/app/models/enums';
 
 // Services
-import { AppDataService } from '../../services/app-data.service';
+import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 // Components
-import { PointsComponent } from '../../public/points/points.component';
-import { TagsComponent } from '../tags/tags.component';
-import { PointEditComponent } from '../point-edit/point-edit.component';
+import { PointsComponent } from 'src/app/public/points/points.component';
+import { TagsComponent } from 'src/app/public/tags/tags.component';
+import { PointEditComponent } from 'src/app/public//point-edit/point-edit.component';
+import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
 
 enum tabs {
   trendingTags = 0,
@@ -77,6 +78,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   @ViewChild(PointsComponent, { static: false }) appPoints: PointsComponent;
   @ViewChild('tagsRecent') tagsRecent: TagsComponent;
   @ViewChild('newPoint') newPointComponent: PointEditComponent;
+  @ViewChild('newQuestion') newQuestionComponent: QuestionEditComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -249,7 +251,12 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
         }
         break;
       case tabs.newPoint:
-        this.newPointComponent.NewPoint(this.slashTagSelected);
+        if (this.questions) {
+          this.newQuestionComponent.NewQuestion(this.slashTagSelected);
+        } else {
+          this.newPointComponent.NewPoint(this.slashTagSelected);
+        }
+
         this.TabChangeComplete(tabChanged, '/new-point');
         break;
     }
@@ -262,7 +269,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeQA() {
+  changeQP() {
     let filterQuestions = false;
     if (this.questions) {
       this.qp = 'question';
@@ -270,7 +277,14 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     } else {
       this.qp = 'point';
     }
-    this.ChangeTab(2);
+
+    // Switch to points display if on trending or recent
+    switch (this.tabIndex) {
+      case tabs.trendingTags:
+      case tabs.recentTags:
+        this.ChangeTab(tabs.points);
+    }
+
     this.appPoints.FilterQuestions(filterQuestions);
   }
 

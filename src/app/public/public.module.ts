@@ -30,6 +30,10 @@ import { TagsComponent } from './tags/tags.component';
 import { TagsPointsComponent } from './tags-points/tags-points.component';
 import { ListComponent } from './list/list.component';
 import { ScrollerComponent } from './scroller/scroller.component';
+import { PointsListComponent } from './points-list/points-list.component';
+import { QuestionsListComponent } from './questions-list/questions-list.component';
+import { QuestionEditComponent } from './question-edit/question-edit.component';
+import { QuestionComponent } from './question/question.component';
 
 
 @NgModule({
@@ -59,7 +63,11 @@ import { ScrollerComponent } from './scroller/scroller.component';
     TagsComponent,
     TagsPointsComponent,
     ListComponent,
-    ScrollerComponent
+    ScrollerComponent,
+    PointsListComponent,
+    QuestionsListComponent,
+    QuestionEditComponent,
+    QuestionComponent
   ],
   exports: [
     PointComponent,

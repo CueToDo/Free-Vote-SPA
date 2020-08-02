@@ -27,7 +27,7 @@
             <input matInput placeholder="quote or link text" [(ngModel)]="pointClone.source" name="quoteSource">
           </mat-form-field>
 
-          <mat-checkbox [(ngModel)]="pointClone.showLinkBeforeVote" name="showLinkbeforeVote">show before vote</mat-checkbox>
+          <mat-checkbox [(ngModel)]="pointClone.showLinkBeforeVote" name="showLinkbeforeVote" [disabled]="showLinkBeforeVoteDisabled">show before vote</mat-checkbox>
 
         </div>
 

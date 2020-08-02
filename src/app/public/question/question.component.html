@@ -1,0 +1,147 @@
+<div *ngIf="!editing" class="Question">
+
+    <h1>{{ question.question }}</h1>
+
+    <div class="fv-error" *ngIf="!!error">
+        {{ error }}
+    </div>
+
+    <!-- Toolbar -->
+
+    <div class="toolbar" fxLayout="row wrap" fxLayoutAlign="left center">
+
+        <div *ngIf="question.draft" fxFlex class="draft">
+            Draft Only
+        </div>
+
+
+        <!-- Toolbar Remainder -->
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+
+            <!-- QuestionNumber/Count -->
+
+            <div [ngClass.xs]="'textXSmall'" [ngClass.sm]="'textSmall'" [ngClass.gt-sm]="'textMedium'">
+                {{ question.rowNumber }}/{{ questionCount }}
+            </div>
+
+            <!-- DateTimeUpdated -->
+
+            <div [ngClass.xs]="'textXSmall'" [ngClass.sm]="'textSmall'" [ngClass.gt-sm]="'textMedium'"
+                [innerHtml]="question.updated | nbsp">
+            </div>
+
+
+            <!-- Question Owner Commands -->
+
+            <div *ngIf="localData.loggedInToAuth0 && question.isQuestionOwner">
+
+                <button mat-icon-button [matMenuTriggerFor]="questionOwnerCommands">
+                    <mat-icon *ngIf="!question.draft" matTooltip="edit">edit</mat-icon>
+                    <mat-icon *ngIf="question.draft" matTooltip="draft question - not public">visibility_off</mat-icon>
+                </button>
+
+                <mat-menu #questionOwnerCommands="matMenu">
+
+                    <button mat-menu-item (click)="edit()">
+                        <mat-icon>edit</mat-icon>
+                        edit
+                    </button>
+
+                    <button mat-menu-item (click)="delete()">
+                        <mat-icon>delete_forever</mat-icon>
+                        delete
+                    </button>
+
+                </mat-menu>
+
+            </div>
+
+            <!-- Voter Question Feedback Menu -->
+
+            <div *ngIf="localData.loggedInToAuth0">
+
+                <!-- type='button' https://stackoverflow.com/questions/12319758/clicking-a-button-within-a-form-causes-page-refresh -->
+                <!-- https://stackblitz.com/angular/rllvqdkjedar -->
+                <button mat-icon-button [matMenuTriggerFor]="questionCommands" type='button'>
+
+                    <mat-icon *ngIf="!question.voteIsUpdatable" matTooltip="anon vote locked">lock</mat-icon>
+
+                    <mat-icon *ngIf="question.voteIsUpdatable && !question.supportLevelID"
+                        matTooltip="feedback options">menu</mat-icon>
+
+                    <img src="./assets/Modified.png" *ngIf="question.questionModified"
+                        matTooltip="Question has been updated. Please confirm your feedback.">
+                    <img src="./assets/Agree.png"
+                        *ngIf="!question.questionModified && question.supportLevelID===1"
+                        matTooltip="Agree">
+                    <img src="./assets/Disagree.png"
+                        *ngIf="!question.questionModified && question.supportLevelID===-8"
+                        matTooltip="Neutral">
+                    <img src="./assets/Oppose.png"
+                        *ngIf="!question.questionModified && question.supportLevelID===-1"
+                        matTooltip="Oppose">
+                    <img src="./assets/Block.png"
+                        *ngIf="!question.questionModified && question.supportLevelID===-9"
+                        matTooltip="Block">
+
+
+                </button>
+
+                <!-- Voter Question Feedback Options -->
+
+                <mat-menu #questionCommands="matMenu">
+
+                    <button mat-menu-item (click)="Support()" *ngIf="question.voteIsUpdatable"
+                        [ngClass]="{selected:question.supportLevelID===1}">
+                        <img src="./assets/Agree.png" alt="Agree"> vote up
+                    </button>
+
+                    <button mat-menu-item (click)="Neutral()" *ngIf="question.voteIsUpdatable"
+                        [ngClass]="{selected:question.supportLevelID===-8}">
+                        <img src="./assets/Disagree.png" alt="Neutral"> neutral
+                    </button>
+
+                    <button mat-menu-item (click)="Oppose()" *ngIf="question.voteIsUpdatable"
+                        [ngClass]="{selected:question.supportLevelID===-1}">
+                        <img src="./assets/Oppose.png" alt="Oppose"> vote down
+                    </button>
+
+                    <!-- <button mat-menu-item (click)="Report()" *ngIf="question.voteIsUpdatable"
+                        [ngClass]="{selected:question.supportLevelID===-9}">
+                        <img src="./assets/Block.png" alt="Block"> block
+                    </button> -->
+
+                    <!-- <button mat-menu-item (click)="OccupyHandSignals()" *ngIf="question.voteIsUpdatable">
+                        <img src="./assets/Clarify.png" alt="Clarify"> all meeting signs
+                    </button> -->
+
+                    <hr class="hr" *ngIf="question.voted && question.voteIsUpdatable" />
+
+                    <button mat-menu-item *ngIf="question.voted" matTooltip="date feedback given">
+                        <mat-icon>date_range</mat-icon>
+                        <span [innerHTML]="question.votedDate | nbsp"></span>
+                    </button>
+
+                    <button mat-menu-item (click)="anon()" *ngIf="question.voted && question.voteIsUpdatable">
+                        <mat-icon>lock</mat-icon>
+                        anonymous feedback
+                    </button>
+
+                </mat-menu>
+
+
+
+
+            </div>
+
+        </div>
+
+    </div> <!-- End Toolbar -->
+
+</div> <!-- End Question Display -->
+
+
+<app-question-edit *ngIf="editing" (CancelEdit)="onCancelEdit()" (CompleteEdit)="onCompleteEdit()"
+    [(question)]="question">
+</app-question-edit>

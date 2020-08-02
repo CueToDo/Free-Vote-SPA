@@ -1,0 +1,49 @@
+<div fxFill appElementScrollEnd (scrollEnd)="fetchMorePoints()" class="scroller">
+
+    <div class="content">
+
+        <div *ngIf="error!=''" class="text-danger mx-3">
+            {{ error }}
+        </div>
+
+        <!-- Top Spinner for reselect -->
+        <div *ngIf="alreadyFetchingPointsFromDB && pointCount > 0" fxLayoutAlign="center center">
+            <span>reselecting points</span>
+            <span class="spinner-grow text-primary ml-3" role="status">
+                <span class="sr-only">Loading...</span>
+            </span>
+        </div>
+
+        <!-- Points List -->
+        <div *ngFor="let point of points">
+            <app-point [point]="point" [pointCount]="pointCount" (PointDeleted)="onPointDeleted($event)">
+            </app-point>
+        </div>
+
+        <!-- Count -->
+        <div class="pointCount">
+
+            <span *ngIf="!alreadyFetchingPointsFromDB && !filter.single">
+                {{ points.length }} point{{ appData.plural(points.length) }} displayed of {{ pointCount }}<span
+                    *ngIf="!allPointsDisplayed">
+                    <a *ngIf="points.length < pointCount" routerLink="." (click)="fetchMorePoints()">more</a></span>
+            </span>
+
+            <span *ngIf="filter.single">
+                <a [routerLink]="slashTagFilter">show all</a>
+            </span>
+
+            <span *ngIf="alreadyFetchingPointsFromDB">
+                ... fetching next batch of points
+            </span>
+
+            <!-- Bottom spinner -->
+            <span class="spinner-grow text-primary ml-3" role="status" *ngIf="alreadyFetchingPointsFromDB">
+                <span class="sr-only">Loading...</span>
+            </span>
+
+        </div>
+
+    </div>
+
+</div>

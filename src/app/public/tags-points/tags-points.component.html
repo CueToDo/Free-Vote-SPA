@@ -19,7 +19,7 @@
       <mat-icon matTooltip="{{ topicSelected }}">bookmark_border</mat-icon>
     </button>
 
-    <mat-slide-toggle [(ngModel)]="questions" (change)="changeQA()" class="mx-2">questions</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="questions" (change)="changeQP()" class="mx-2">questions</mat-slide-toggle>
 
     <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3" *ngIf="localData.loggedInToAuth0" id="newQP">
       <span *ngIf="widthBand > 2">new {{ qp }}</span>
@@ -141,8 +141,9 @@
         'stageRight': tabIndex<3 }" fxFill>
         <div fxLayoutAlign="center">
           <div class="content mt-5 mb-3">
-            <app-point-edit (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()" #newPoint>
+            <app-point-edit *ngIf="!questions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()" #newPoint>
             </app-point-edit>
+            <app-question-edit *ngIf="questions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()" #newQuestion></app-question-edit>
           </div>
         </div>
       </div>

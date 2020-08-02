@@ -145,7 +145,7 @@ export class PointComponent implements OnInit {
     // } else {
 
     // Update WoW
-    console.log('CAN now WoW');
+
     this.pointsService.PointWoWVote(this.point.pointID, !this.point.pointFeedback.woWVote)
       .subscribe(
         pointFeedback => {
@@ -172,6 +172,9 @@ export class PointComponent implements OnInit {
     this.PointFeedback(PointSupportLevels.Report);
   }
 
+  anon() {
+    alert('ToDo');
+  }
 
 
   edit() {

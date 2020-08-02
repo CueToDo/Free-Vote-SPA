@@ -6,14 +6,7 @@
     margin: 0 !important;
 }
 
-.pointCount {
-    margin: 20px 10px 60px 0px;
-    text-align: right;
-}
 
-.pointCount span {
-    vertical-align: middle;
-}
 
 button.mat-stroked-button.mat-button-base {
     margin: 0;
@@ -73,4 +66,10 @@ hr {
 
 .myMatInput {
     width: 160px;
+}
+
+app-points-list, app-questions-list {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
 }

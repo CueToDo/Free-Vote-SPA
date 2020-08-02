@@ -68,6 +68,7 @@ div.toolbar mat-form-field {
 .scroller {
   overflow-y: auto;
   overflow-x: hidden;
+  /* height:100%; */
   width: 100%;
 }
 

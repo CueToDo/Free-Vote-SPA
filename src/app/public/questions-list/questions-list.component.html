@@ -1,0 +1,49 @@
+<div appElementScrollEnd (scrollEnd)="fetchMoreQuestions()" class="scroller">
+
+    <div class="content">
+
+        <div *ngIf="error!=''" class="text-danger mx-3">
+            {{ error }}
+        </div>
+
+        <!-- Top Spinner for reselect -->
+        <div *ngIf="alreadyFetchingFromDB && questionCount > 0" fxLayoutAlign="center center">
+            <span>reselecting questions</span>
+            <span class="spinner-grow text-primary ml-3" role="status">
+                <span class="sr-only">Loading...</span>
+            </span>
+        </div>
+
+        <!-- Questions List -->
+        <div *ngFor="let question of questions">
+            <app-question [question]="question" [questionCount]="questionCount"
+                (QuestionDeleted)="onQuestionDeleted($event)">
+            </app-question>
+        </div>
+
+        <!-- Count -->
+        <div class="questionCount">
+
+            <span *ngIf="!alreadyFetchingFromDB && !filter.single">
+                {{ questions.length }} question{{ appData.plural(questions.length) }} displayed of {{ questionCount }}<span
+                    *ngIf="!allQuestionsDisplayed"> <a *ngIf="questions.length < questionCount" routerLink="." (click)="fetchMorePoints()">more</a></span>
+            </span>
+
+            <span *ngIf="filter.single">
+                <a [routerLink]="slashTagFilter">show all</a>
+            </span>
+
+            <span *ngIf="alreadyFetchingFromDB">
+                ... fetching next batch of questions
+            </span>
+
+            <!-- Bottom spinner -->
+            <span class="spinner-grow text-primary ml-3" role="status" *ngIf="alreadyFetchingFromDB">
+                <span class="sr-only">Loading...</span>
+            </span>
+
+        </div>
+
+    </div>
+
+</div>

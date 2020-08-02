@@ -53,6 +53,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
   hasLink = false;
   imageFileForUpload: File;
   imageName: string;
+  showLinkBeforeVoteDisabled: boolean;
 
   userTouched = false;
   cancelled = false;
@@ -346,6 +347,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     this.autoShowLinkEdit(pointTypeID);
 
     // Automatically update default "show" if voter changes point type
+    this.showLinkBeforeVoteDisabled = this.appData.ShowSource(pointTypeID);
     this.pointClone.showLinkBeforeVote = this.appData.ShowSource(pointTypeID);
 
   }
