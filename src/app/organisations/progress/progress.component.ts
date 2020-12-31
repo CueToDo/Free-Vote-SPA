@@ -4,7 +4,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 // Models, Enums
 import { SubGroup } from 'src/app/models/sub-group.model';
-import { IssueStatuses, ProposalStatuses } from './../../models/enums';
+import { IssueStatuses, ProposalStatuses } from '../../models/enums';
 
 @Component({
   selector: 'app-progress',

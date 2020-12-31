@@ -9,10 +9,10 @@ import { concatMap } from 'rxjs/operators';
 // Models and Enums
 import { SubGroup } from 'src/app/models/sub-group.model';
 import { Issue } from 'src/app/models/issue.model';
-import { PorQ } from './../../models/porq.model';
+import { PorQ } from '../../models/porq.model';
 import { DecisionBasisOption, IssueStatuses } from 'src/app/models/enums';
-import { ProposalStatuses } from './../../models/enums';
-import { IssueSelectionResult } from './../../models/issue.model';
+import { ProposalStatuses } from '../../models/enums';
+import { IssueSelectionResult } from '../../models/issue.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';

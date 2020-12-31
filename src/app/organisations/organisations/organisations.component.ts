@@ -1,4 +1,3 @@
-import { GroupEditComponent } from 'src/app/groups/group-edit/group-edit.component';
 // Angular
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,18 +9,19 @@ import { Organisation } from 'src/app/models/group.model';
 import { AppDataService } from 'src/app/services/app-data.service';
 
 // Components
-import { GroupListComponent } from 'src/app/groups//group-list/group-list.component';
+import { OrganisationListComponent } from 'src/app/organisations/organisation-list/organisation-list.component';
+import { OrganisationEditComponent } from 'src/app/organisations/organisation-edit/organisation-edit.component';
 
 @Component({
-  selector: 'app-groups',
-  templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.css']
+  selector: 'app-organisations',
+  templateUrl: './organisations.component.html',
+  styleUrls: ['./organisations.component.css']
 })
-export class GroupsComponent implements OnInit, AfterViewInit {
+export class OrganisationsComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('GroupMembership') groupMembership: GroupListComponent;
-  @ViewChild('GroupsAvailable') groupsAvailable: GroupListComponent;
-  @ViewChild('NewGroupComponent') newGroupComponent: GroupEditComponent;
+  @ViewChild('OrganisationMembership') organisationMembership: OrganisationListComponent;
+  @ViewChild('OrganisationsAvailable') groupsAvailable: OrganisationListComponent;
+  @ViewChild('NewGroupComponent') newGroupComponent: OrganisationEditComponent;
 
   public tabIndex = 0;
   private tabSelected: string;
@@ -63,7 +63,7 @@ export class GroupsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.groupMembership.Refresh();
+    this.organisationMembership.Refresh();
     this.groupsAvailable.Refresh();
     this.newGroupComponent.ClearError();
   }
@@ -74,7 +74,7 @@ export class GroupsComponent implements OnInit, AfterViewInit {
 
     switch (tabIndex) {
       case 0:
-        this.groupMembership.Refresh();
+        this.organisationMembership.Refresh();
         this.appDataService.RouteParamChange$.next('/groups/membership');
         break;
       case 1:

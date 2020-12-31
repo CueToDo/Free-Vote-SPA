@@ -17,10 +17,10 @@ import { CustomModule } from 'src/app/custommodule/custom.module';
 
 
 // This module Components
-import { GroupsComponent } from './groups/groups.component';
-import { GroupListComponent } from './group-list/group-list.component';
-import { GroupComponent } from './group/group.component';
-import { GroupEditComponent } from './group-edit/group-edit.component';
+import { OrganisationsComponent } from './organisations/organisations.component';
+import { OrganisationListComponent } from './organisation-list/organisation-list.component';
+import { OrganisationComponent } from './organisation/organisation.component';
+import { OrganisationEditComponent } from './organisation-edit/organisation-edit.component';
 import { SubGroupComponent } from './sub-group/sub-group.component';
 import { SubGroupEditComponent } from './sub-group-edit/sub-group-edit.component';
 import { IssueComponent } from './issue/issue.component';
@@ -30,15 +30,18 @@ import { IssueDetailsComponent } from './issue-details/issue-details.component';
 import { PorqComponent } from './porq/porq.component';
 import { PorqEditComponent } from './porq-edit/porq-edit.component';
 import { PorqDetailsComponent } from './porq-details/porq-details.component';
+import { TagsPointsComponent } from '../public/tags-points/tags-points.component';
 
 const routes: Routes = [
-  { path: 'membership', component: GroupsComponent },
-  { path: 'available', component: GroupsComponent },
-  { path: 'new', component: GroupsComponent },
-  { path: ':groupName', component: GroupComponent },
-  { path: ':groupName/:subGroupName', component: SubGroupComponent },
-  { path: ':groupName/:subGroupName/:issue', component: IssueDetailsComponent },
-  { path: ':groupName/:subGroupName/:issue/:porqId', component: PorqDetailsComponent }
+  { path: 'membership', component: OrganisationsComponent },
+  { path: 'available', component: OrganisationsComponent },
+  { path: 'new', component: OrganisationsComponent },
+  { path: ':organisationName', component: OrganisationComponent },
+  { path: ':organisationName/:subGroupName', component: SubGroupComponent },
+  { path: ':organisationName/:subGroupName/:issue', component: IssueDetailsComponent },
+  { path: ':organisationName/:subGroupName/:issue/:porqId', component: PorqDetailsComponent },
+  // This can't work
+  { path: ':group/:tag', component: TagsPointsComponent }
 ];
 
 @NgModule({
@@ -53,10 +56,10 @@ const routes: Routes = [
     CustomModule
   ],
   declarations: [
-    GroupsComponent,
-    GroupListComponent,
-    GroupComponent,
-    GroupEditComponent,
+    OrganisationsComponent,
+    OrganisationListComponent,
+    OrganisationComponent,
+    OrganisationEditComponent,
     SubGroupComponent,
     SubGroupEditComponent,
     IssueComponent,

@@ -68,12 +68,12 @@ const appRoutes: Routes = [
 
   // groups and profile
   {
-    path: 'groups', loadChildren:
-      () => import('./groups/groups.module').then(m => m.GroupsModule), canActivate: [LoginRouteGuardService]
+    path: 'organisations', loadChildren:
+      () => import('./organisations/organisations.module').then(m => m.GroupsModule), canActivate: [LoginRouteGuardService]
   },
   {
     path: 'group', loadChildren:
-      () => import('./groups/groups.module').then(m => m.GroupsModule), canActivate: [LoginRouteGuardService]
+      () => import('./organisations/organisations.module').then(m => m.GroupsModule), canActivate: [LoginRouteGuardService]
   },
   {
     path: 'my/:tab', loadChildren:
@@ -87,8 +87,6 @@ const appRoutes: Routes = [
   { path: 'slash-tags/trending', component: TagsPointsComponent }, // TAGS
   { path: 'slash-tags/recent', component: TagsPointsComponent }, // TAGS personal - recent selection - works on anon?
   { path: 'new-point', component: TagsPointsComponent },
-
-  { path: 'groups/:group/:tag', component: TagsPointsComponent },
   { path: 'slash-tag/:tag/:title', component: TagsPointsComponent },
   { path: ':tag/by/:alias', component: TagsPointsComponent },
   { path: ':tag/:pointId', component: TagsPointsComponent },

@@ -18,9 +18,9 @@ export class Organisation {
     cities: string[] = [];
     members: number;
     issues: number; // Topics
-    groupOwner: boolean;
-    groupAdministrator: boolean;
-    groupMember: boolean;
+    organisationOwner: boolean;
+    organisationAdministrator: boolean;
+    organisationMember: boolean;
     canInviteMembers: boolean;
     row: number;
 }

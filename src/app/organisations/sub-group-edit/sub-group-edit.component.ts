@@ -4,11 +4,11 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, E
 // rxjs
 
 // Services
-import { AppDataService } from './../../services/app-data.service';
+import { AppDataService } from '../../services/app-data.service';
 import { OrganisationsService } from 'src/app/services/groups.service';
 
 // Models and Enums
-import { GroupDecisionBasisOption } from './../../models/enums';
+import { GroupDecisionBasisOption } from '../../models/enums';
 import { SubGroup, SubGroupUpdate } from 'src/app/models/sub-group.model';
 
 @Component({

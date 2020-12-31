@@ -1,5 +1,5 @@
 import { AppDataService } from 'src/app/services/app-data.service';
-import { IssueStatuses } from './../../models/enums';
+import { IssueStatuses } from '../../models/enums';
 
 // Angular
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';

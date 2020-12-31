@@ -1,7 +1,7 @@
 <div fxLayoutAlign="center center" fxLayoutGap="20px" class="mb-4">
 
   <mat-form-field>
-    <input matInput placeholder="group filter" [(ngModel)]="organisationFilter" (keyup.enter)="Refresh()">
+    <input matInput placeholder="group search" [(ngModel)]="organisationFilter" (keyup.enter)="Refresh()">
     <button mat-button *ngIf="organisationFilter" matSuffix mat-icon-button aria-label="clear"
       (click)="organisationFilter='';Refresh()">
       <mat-icon>close</mat-icon>
@@ -15,8 +15,10 @@
 
 </div>
 
+<h1>Select an organisation</h1>
+
 <div *ngFor="let organisation of organisations" class="groupDiv">
-  <a [routerLink]="['/groups', appData.kebabUri(organisation.organisationName)]">{{ organisation.organisationName }}</a>
+  <a [routerLink]="['/organisations', appData.kebabUri(organisation.organisationName)]">{{ organisation.organisationName }}</a>
 </div>
 
 <div *ngIf="waiting" fxLayoutAlign="center">

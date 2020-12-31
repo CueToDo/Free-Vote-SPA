@@ -16,11 +16,11 @@ import { AppDataService } from 'src/app/services/app-data.service';
 import { OrganisationsService } from 'src/app/services/groups.service';
 
 @Component({
-  selector: 'app-group-edit',
-  templateUrl: './group-edit.component.html',
-  styleUrls: ['./group-edit.component.css']
+  selector: 'app-organisation-edit',
+  templateUrl: './organisation-edit.component.html',
+  styleUrls: ['./organisation-edit.component.css']
 })
-export class GroupEditComponent implements OnInit, OnDestroy {
+export class OrganisationEditComponent implements OnInit, OnDestroy {
 
   @Input() organisation: Organisation;
 

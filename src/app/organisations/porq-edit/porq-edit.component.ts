@@ -3,12 +3,12 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 // Models and Enums
-import { PorQEdit, PorQ } from './../../models/porq.model';
+import { PorQEdit, PorQ } from '../../models/porq.model';
 import { PorQTypes } from 'src/app/models/enums';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
-import { PsandQsService } from './../../services/psandqs.service';
+import { PsandQsService } from '../../services/psandqs.service';
 
 @Component({
   selector: 'app-porq-edit',

@@ -33,7 +33,7 @@
         'stageLeft': tabIndex>0 }" fxFill>
         <div fxLayoutAlign="center">
           <div class="content">
-            <app-group-list #GroupMembership [CurrentMembership]="true"></app-group-list>
+            <app-organisation-list #OrganisationMembership [CurrentMembership]="true"></app-organisation-list>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
         'stageRight': tabIndex<1}" fxFill>
         <div fxLayoutAlign="center">
           <div class="content">
-            <app-group-list #GroupsAvailable [CurrentMembership]="false"></app-group-list>
+            <app-organisation-list #OrganisationsAvailable [CurrentMembership]="false"></app-organisation-list>
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
         'stageRight': tabIndex<2}" fxFill>
         <div fxLayoutAlign="center">
           <div class="content">
-            <app-group-edit (Cancel)="CancelNew()" (Complete)="CompleteNew($event)" [organisation]="NewOrganisation" #NewGroupComponent></app-group-edit>
+            <app-organisation-edit (Cancel)="CancelNew()" (Complete)="CompleteNew($event)" [organisation]="NewOrganisation" #NewGroupComponent></app-organisation-edit>
           </div>
         </div>
       </div>

@@ -183,7 +183,7 @@ export class AppDataService {
   }
 
   unKebabUri(input: string): string {
-    return (input.split('-').filter(item => item).join(' '));
+    return (input?.split('-').filter(item => item).join(' '));
   }
 
   public Date1IsLessThanDate2(dateFrom, dateTo): boolean {

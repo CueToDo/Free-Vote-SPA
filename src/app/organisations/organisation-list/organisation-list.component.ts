@@ -6,15 +6,15 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Organisation } from 'src/app/models/group.model';
 
 // Services
-import { AppDataService } from './../../services/app-data.service';
+import { AppDataService } from '../../services/app-data.service';
 import { OrganisationsService } from 'src/app/services/groups.service';
 
 @Component({
-  selector: 'app-group-list',
-  templateUrl: './group-list.component.html',
-  styleUrls: ['./group-list.component.css']
+  selector: 'app-organisation-list',
+  templateUrl: './organisation-list.component.html',
+  styleUrls: ['./organisation-list.component.css']
 })
-export class GroupListComponent implements OnInit, OnDestroy {
+export class OrganisationListComponent implements OnInit, OnDestroy {
 
   @Input() CurrentMembership: boolean;
 
@@ -68,9 +68,9 @@ export class GroupListComponent implements OnInit, OnDestroy {
               this.organisationCount = groups.length;
               if (this.organisationCount === 0) {
                 if (this.organisationFilter) {
-                  this.message = 'No groups are available to join that match the search';
+                  this.message = 'No organisations are available to join that match the search';
                 } else {
-                  this.message = 'No more groups are available to join';
+                  this.message = 'No more organisations are available to join';
                 }
               }
             },

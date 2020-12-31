@@ -13,11 +13,11 @@ import { OrganisationsService } from 'src/app/services/groups.service';
 
 
 @Component({
-  selector: 'app-group',
-  templateUrl: 'group.component.html',
-  styleUrls: ['group.component.css']
+  selector: 'app-organisation',
+  templateUrl: 'organisation.component.html',
+  styleUrls: ['organisation.component.css']
 })
-export class GroupComponent implements OnInit, OnDestroy {
+export class OrganisationComponent implements OnInit, OnDestroy {
 
   public OrganisationDisplay: Organisation;
   @Output() Refresh = new EventEmitter();
@@ -46,7 +46,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
   issuesLink(subGroup: string): string {
-    return `/group/${this.appData.kebabUri(this.OrganisationDisplay.organisationName)}/${this.appData.kebabUri(subGroup)}`;
+    return `/organisation/${this.appData.kebabUri(this.OrganisationDisplay.organisationName)}/${this.appData.kebabUri(subGroup)}`;
   }
 
   constructor(
@@ -59,23 +59,20 @@ export class GroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('witzend');
     this.getGroup();
   }
 
   getGroup() {
 
-    let organisationName = this.activatedRoute.snapshot.params['groupName'];
+    let organisationName = this.activatedRoute.snapshot.params['organisationName'];
     organisationName = this.appData.unKebabUri(organisationName);
 
     this.groupsService.Organisation(organisationName, true).subscribe(
       {
-        next: (group: Organisation) => {
-          console.log('Jezuz', group.organisationName);
-          this.OrganisationDisplay = group;
+        next: (organisation: Organisation) => {
+          this.OrganisationDisplay = organisation;
         },
         error: serverError => {
-          console.log('WTF', this.error);
           this.error = serverError.error.detail;
         }
       }
@@ -90,7 +87,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     this.groupsService.Join(this.OrganisationDisplay.organisationID).subscribe(
       {
         next: members => {
-          this.OrganisationDisplay.groupMember = true;
+          this.OrganisationDisplay.organisationMember = true;
           this.OrganisationDisplay.members = members;
           this.membershipMessage = 'you have joined the group';
         },
@@ -107,7 +104,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     this.groupsService.Leave(this.OrganisationDisplay.organisationID).subscribe(
       {
         next: members => {
-          this.OrganisationDisplay.groupMember = false;
+          this.OrganisationDisplay.organisationMember = false;
           this.OrganisationDisplay.members = members;
           this.membershipMessage = 'you have left the group';
         },

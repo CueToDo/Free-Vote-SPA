@@ -8,7 +8,7 @@
             <div *ngIf="!groupEdit && OrganisationDisplay"> <!-- Elvis Operator or ngIf: https://stackoverflow.com/questions/54536126/angular-cannot-read-property-of-undefined-but-still-displays-data -->
 
                 <div>
-                    <a routerLink="/groups/membership">List all groups</a>
+                    <a routerLink="/organisations/membership">List all organisations</a>
                 </div>
 
                 <h1 class="mt-3">{{ OrganisationDisplay.organisationName }}<span *ngIf="!OrganisationDisplay.active"> (Inactive)</span></h1>
@@ -52,66 +52,65 @@
                     <span class="primary" [ngClass]="{'success': !!membershipMessage}">{{ membershipMessage }}</span>
                 </p>
 
-                <p *ngIf="!!OrganisationDisplay.groupWebsite">Website: <a [href]="OrganisationDisplay.groupWebsite"
-                        target="_blank">{{ OrganisationDisplay.groupWebsite.replace('http://','').replace('https://','') }}</a>
+                <p *ngIf="!!OrganisationDisplay.organisationWebsite">Website: <a [href]="OrganisationDisplay.organisationWebsite"
+                        target="_blank">{{ OrganisationDisplay.organisationWebsite.replace('http://','').replace('https://','') }}</a>
                 </p>
             </div>
 
             <!-- Group Edit -->
-            <div *ngIf="groupEdit && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.groupOwner)">
+            <div *ngIf="groupEdit && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.organisationOwner)">
 
-                <app-group-edit (Cancel)="Cancel()" (Complete)="Complete($event)" [(group)]="OrganisationDisplay">
-                </app-group-edit>
+                <app-organisation-edit (Cancel)="Cancel()" (Complete)="Complete($event)" [(organisation)]="OrganisationDisplay">
+                </app-organisation-edit>
 
             </div>
 
             <!-- Commands -->
             <div fxLayout="row" *ngIf="!groupEdit && OrganisationDisplay">
 
-
                 <span fxFlex></span>
 
-                <button mat-stroked-button *ngIf="OrganisationDisplay.groupOwner" (click)="Delete()"
+                <button mat-stroked-button *ngIf="OrganisationDisplay.organisationOwner" (click)="Delete()"
                     matTooltip="permanently delete the group">
                     <span>delete</span>
                     <mat-icon>clear</mat-icon>
                 </button>
 
                 <button mat-stroked-button
-                    *ngIf="OrganisationDisplay.active && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.groupOwner)"
+                    *ngIf="OrganisationDisplay.active && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.organisationOwner)"
                     (click)="DeActivate()" matTooltip="de-activate group">
                     <span>de-activate</span>
                     <mat-icon>block</mat-icon>
                 </button>
 
                 <button mat-stroked-button
-                    *ngIf="!OrganisationDisplay.active && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.groupOwner)"
+                    *ngIf="!OrganisationDisplay.active && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.organisationOwner)"
                     (click)="Activate()" matTooltip="activate group">
                     <span>activate</span>
                     <mat-icon>accessibility_new</mat-icon>
                 </button>
 
                 <button mat-stroked-button
-                    *ngIf="!groupEdit && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.groupOwner)" (click)="Edit()"
+                    *ngIf="!groupEdit && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.organisationOwner)" (click)="Edit()"
                     matTooltip="edit group details">
                     <span>edit</span>
                     <mat-icon>create</mat-icon>
                 </button>
 
                 <button mat-stroked-button
-                    *ngIf="OrganisationDisplay.active && OrganisationDisplay.groupMember && !OrganisationDisplay.groupOwner"
+                    *ngIf="OrganisationDisplay.active && OrganisationDisplay.organisationMember && !OrganisationDisplay.organisationOwner"
                     (click)="Leave()" matTooltip="leave this group">
                     <span>leave</span>
                     <mat-icon>directions_walk</mat-icon>
                 </button>
 
-                <button mat-stroked-button *ngIf="OrganisationDisplay.active && OrganisationDisplay.groupMember"
+                <button mat-stroked-button *ngIf="OrganisationDisplay.active && OrganisationDisplay.organisationMember"
                     matTooltip="invite others to join the group" [disabled]="!OrganisationDisplay.canInviteMembers">
                     <span>invite</span>
                     <mat-icon>person_add</mat-icon>
                 </button>
 
-                <button mat-stroked-button *ngIf="OrganisationDisplay.active && !OrganisationDisplay.groupMember" (click)="Join()"
+                <button mat-stroked-button *ngIf="OrganisationDisplay.active && !OrganisationDisplay.organisationMember" (click)="Join()"
                     matTooltip="join group">
                     <span>join</span>
                     <mat-icon>group_add</mat-icon>
@@ -119,7 +118,7 @@
 
 
                 <button mat-stroked-button (click)="newSubGroup()">
-                    <mat-icon>add</mat-icon>Create new sub-group
+                    <mat-icon>add</mat-icon>Create new group
                 </button>
 
             </div>
