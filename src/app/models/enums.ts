@@ -96,13 +96,13 @@ export enum PointFeedbackFilter {
 
 // Numeric enum
 export enum GeographicalExtentID {
-  GlobalGroup = 1,
+  GlobalOrganisation = 1,
   Union = 7,
   National = 2,
   Regional = 3,
   City = 4,
   Local = 5,
-  PrivateGroup = 6
+  PrivateOrganisation = 6
 }
 
 // https://stackoverflow.com/questions/50784444/add-description-attribute-to-enum-and-read-this-description-in-typescript
@@ -110,13 +110,13 @@ export enum GeographicalExtentID {
 // javascript can have numeric and string enums
 // We get strings from a dropdowns, so ...
 export const GeographicalExtent = new Map<string, string>([
-  [GeographicalExtentID.GlobalGroup.toString(), 'Global'],
+  [GeographicalExtentID.GlobalOrganisation.toString(), 'Global'],
   [GeographicalExtentID.Union.toString(), 'Union'],
   [GeographicalExtentID.National.toString(), 'National'],
   [GeographicalExtentID.Regional.toString(), 'Regional'],
   [GeographicalExtentID.City.toString(), 'City'],
   [GeographicalExtentID.Local.toString(), 'Local'],
-  [GeographicalExtentID.PrivateGroup.toString(), 'Private']
+  [GeographicalExtentID.PrivateOrganisation.toString(), 'Private']
 ]);
 
 export enum GroupDecisionBasisOption {

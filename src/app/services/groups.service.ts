@@ -8,7 +8,7 @@ import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 // Model
-import { Group } from '../models/group.model';
+import { Organisation } from '../models/group.model';
 import { SubGroup, SubGroupUpdate } from '../models/sub-group.model';
 
 // Base Services
@@ -16,110 +16,130 @@ import { HttpService } from './http.service';
 import { AppDataService } from './app-data.service';
 
 @Injectable({ providedIn: 'root' })
-export class GroupsService {
+export class OrganisationsService {
 
     constructor(
-        private httpClientService: HttpService,
-        private appData: AppDataService
+        private httpClientService: HttpService
     ) { }
 
-    groupsSelected: Group[];
+    organisationsSelected: Organisation[];
 
-    GroupMembership(searchTerms: string): Observable<Group[]> {
-
-        const postData = {
-            'SearchTerms': searchTerms
-        };
-
-        return this.httpClientService
-            .post('groups/membership', postData)
-            .pipe(
-                // save copy to look up groupID in group-issues.component
-                tap(returnData => this.groupsSelected = returnData as Group[]),
-                map(returnData => returnData as Group[])
-            );
-    }
-
-    GroupsAvailable(searchTerms: string): Observable<Group[]> {
+    OrganisationMembership(searchTerms: string): Observable<Organisation[]> {
 
         const postData = {
             'SearchTerms': searchTerms
         };
 
         return this.httpClientService
-            .post('groups/available', postData)
+            .post('organisations/membership', postData)
             .pipe(
                 // save copy to look up groupID in group-issues.component
-                tap(returnData => this.groupsSelected = returnData as Group[]),
-                map(returnData => returnData as Group[])
+                tap(returnData => this.organisationsSelected = returnData as Organisation[]),
+                map(returnData => returnData as Organisation[])
             );
     }
 
-    GroupSearchByName(groupName: string): Observable<Group> {
+    OrganisationsAvailable(searchTerms: string): Observable<Organisation[]> {
 
         const postData = {
-            'SearchTerms': groupName
+            'SearchTerms': searchTerms
         };
 
         return this.httpClientService
-            .post('groups/search', postData)
+            .post('organisations/available', postData)
+            .pipe(
+                // save copy to look up groupID in group-issues.component
+                tap(returnData => this.organisationsSelected = returnData as Organisation[]),
+                map(returnData => returnData as Organisation[])
+            );
+    }
+
+    OrganisationSearchByName(organisationName: string): Observable<Organisation> {
+
+        const postData = {
+            'SearchTerms': organisationName
+        };
+
+        return this.httpClientService
+            .post('organisations/search', postData)
             .pipe(
                 // add group to saved groups
                 tap(returnData => {
-                    if (!this.groupsSelected) {
-                        this.groupsSelected = [returnData as Group];
-                    } else if (!this.groupsSelected.includes(returnData as Group)) {
-                        this.groupsSelected.push(returnData as Group);
+                    if (!this.organisationsSelected) {
+                        this.organisationsSelected = [returnData as Organisation];
+                    } else if (!this.organisationsSelected.includes(returnData as Organisation)) {
+                        this.organisationsSelected.push(returnData as Organisation);
                     }
                 }),
-                map(returnData => returnData as Group)
+                map(returnData => returnData as Organisation)
             );
+    }
+
+    Organisation(organisationName: string, refresh: boolean): Observable<Organisation> {
+
+        let organisationsFiltered: Organisation[];
+        let organisationChosen: Organisation;
+
+        if (!refresh && !!this.organisationsSelected) {
+            organisationsFiltered = this.organisationsSelected.filter(
+                organisation => organisation.organisationName === organisationName
+            );
+            if (!!organisationsFiltered && organisationsFiltered.length === 1) {
+                organisationChosen = organisationsFiltered[0];
+            }
+        }
+
+        if (!!organisationChosen) {
+            return of(organisationChosen);
+        } else {
+            return this.OrganisationSearchByName(organisationName);
+        }
     }
 
     Join(groupID: number): Observable<number> {
 
         return this.httpClientService
-            .get(`group/join/${groupID}`);
+            .get(`organisation/join/${groupID}`);
     }
 
     Leave(groupID: number): Observable<number> {
 
         return this.httpClientService
-            .get(`group/leave/${groupID}`);
+            .get(`organisation/leave/${groupID}`);
     }
 
     Activate(groupID: number, active: boolean): Observable<boolean> {
 
         return this.httpClientService
-            .get(`group/activate/${groupID}/${active ? 'Y' : 'N'}`);
+            .get(`organisation/activate/${groupID}/${active ? 'Y' : 'N'}`);
     }
 
-    Update(group: Group): Observable<Group> {
+    Update(group: Organisation): Observable<Organisation> {
         return this.httpClientService
-            .post('group/update', group);
+            .post('organisation/update', group);
     }
 
     Delete(groupID: number): Observable<boolean> {
         return this.httpClientService
-            .get(`group/delete/${groupID}`);
+            .get(`organisation/delete/${groupID}`);
     }
 
-    SubGroups(groupID: number): Observable<SubGroup[]> {
+
+
+    Groups(groupID: number): Observable<SubGroup[]> {
         return this.httpClientService
-            .get(`group/subgroups/${groupID}`);
+            .get(`organisation/groups/${groupID}`);
     }
 
-    SubGroup(subGroupID: number): Observable<SubGroup> {
+    Group(subGroupID: number): Observable<SubGroup> {
         return this.httpClientService
-            .get(`group/subgroup/${subGroupID}`);
+            .get(`organisation/group/${subGroupID}`);
     }
 
-    SubGroupByName(groupName: string, subGroupName: string): Observable<SubGroup> {
+    GroupByName(groupName: string, subGroupName: string): Observable<SubGroup> {
         return this.httpClientService
-            .get(`group/subGroupByName/${groupName}/${subGroupName}`);
+            .get(`organisation/groupByName/${groupName}/${subGroupName}`);
     }
-
-
 
     GroupID(groupName: string): number {
 
@@ -127,52 +147,30 @@ export class GroupsService {
         //     return 0;
         // }
 
-        const groupChosen = this.groupsSelected.filter(
-            group => group.groupName === groupName
+        const groupChosen = this.organisationsSelected.filter(
+            group => group.organisationName === groupName
         );
 
         if (!!groupChosen && groupChosen.length === 1) {
-            const groupID = groupChosen[0].groupID;
+            const groupID = groupChosen[0].organisationID;
             return groupID;
         } else {
             return 0;
         }
     }
 
-    Group(groupName: string, refresh: boolean): Observable<Group> {
-
-        let groupsFiltered: Group[];
-        let groupChosen: Group;
-
-        if (!refresh && !!this.groupsSelected) {
-            groupsFiltered = this.groupsSelected.filter(
-                group => group.groupName === groupName
-            );
-            if (!!groupsFiltered && groupsFiltered.length === 1) {
-                groupChosen = groupsFiltered[0];
-            }
-        }
-
-        if (!!groupChosen) {
-            return of(groupChosen);
-        } else {
-            return this.GroupSearchByName(groupName);
-        }
+    GroupUpdate(subGroup: SubGroupUpdate): Observable<SubGroup> {
+        return this.httpClientService
+            .post('organisation/group/update', subGroup);
     }
 
-    SubGroupUpdate(subGroup: SubGroupUpdate): Observable<SubGroup> {
+    GroupStartDiscussionNow(subGroupID: number): Observable<boolean> {
         return this.httpClientService
-            .post('group/subgroup/update', subGroup);
+            .get(`organisation/group/${subGroupID}/startDiscussion`);
     }
 
-    SubGroupStartDiscussionNow(subGroupID: number): Observable<boolean> {
+    GroupDelete(groupID: number, subGroupID: number): Observable<boolean> {
         return this.httpClientService
-            .get(`group/subgroup/${subGroupID}/startDiscussion`);
-    }
-
-
-    SubGroupDelete(groupID: number, subGroupID: number): Observable<boolean> {
-        return this.httpClientService
-            .get(`group/${groupID}/subgroup/${subGroupID}/delete`);
+            .get(`organisation/${groupID}/group/${subGroupID}/delete`);
     }
 }

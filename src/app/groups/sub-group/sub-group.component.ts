@@ -16,7 +16,7 @@ import { IssueSelectionResult } from './../../models/issue.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
-import { GroupsService } from 'src/app/services/groups.service';
+import { OrganisationsService } from 'src/app/services/groups.service';
 import { IssuesService } from 'src/app/services/issues.service';
 import { PsandQsService } from 'src/app/services/psandqs.service';
 
@@ -69,7 +69,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private activeRoute: ActivatedRoute,
     public appData: AppDataService,
-    private groupsService: GroupsService,
+    private groupsService: OrganisationsService,
     private issuesService: IssuesService,
     private psandQsService: PsandQsService) { }
 
@@ -87,7 +87,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.error = '';
 
-    this.groupsService.SubGroupByName(groupName, subGroupName).subscribe(
+    this.groupsService.GroupByName(groupName, subGroupName).subscribe(
       {
         next: subGroup => {
           this.subGroup = subGroup as SubGroup;
@@ -134,7 +134,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   delete() {
     this.error = '';
     if (confirm(`Are you sure you wish to delete the subgroup "${this.subGroup.subGroupName}"?`)) {
-      this.groupsService.SubGroupDelete(this.subGroup.groupID, this.subGroup.subGroupID).subscribe(
+      this.groupsService.GroupDelete(this.subGroup.groupID, this.subGroup.subGroupID).subscribe(
         {
           next: _ => {
             // this.subGroupDeleted.emit();
@@ -158,7 +158,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // After submit new issue or delete issue, update counts
   refreshSubGroup() {
-    this.groupsService.SubGroup(this.subGroup.subGroupID).subscribe(
+    this.groupsService.Group(this.subGroup.subGroupID).subscribe(
       {
         next: subGroup => this.subGroup = subGroup,
         error: serverError => {
@@ -175,7 +175,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.newIssue = false;
 
-    this.issuesService.GetIssuesForSubGroup(this.subGroup.subGroupID, issueStatusID).subscribe(
+    this.issuesService.GetIssuesForGroup(this.subGroup.subGroupID, issueStatusID).subscribe(
       {
         next: isr => {
           this.issues = isr.issues;
@@ -266,7 +266,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.newIssue = false;
 
-    this.psandQsService.PsAndQsSelectSubGroup(this.subGroup.subGroupID, proposalStatus, false).subscribe(
+    this.psandQsService.PsAndQsSelectGroup(this.subGroup.subGroupID, proposalStatus, false).subscribe(
       {
         next: proposals => {
           console.log(proposals);
@@ -283,24 +283,24 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.error = '';
     if (confirm('Select issue for discussion now?')) {
       this.startingDiscussion = true;
-      this.groupsService.SubGroupStartDiscussionNow(this.subGroup.subGroupID)
+      this.groupsService.GroupStartDiscussionNow(this.subGroup.subGroupID)
         .pipe(
           // Discussion is started - boolean value back from service call is irrelevant
           // Refresh the subGroup
           concatMap(() => {
             console.log('STARTED');
-            return this.groupsService.SubGroup(this.subGroup.subGroupID);
+            return this.groupsService.Group(this.subGroup.subGroupID);
           }),
           concatMap((subGroup: SubGroup) => {
             console.log('We got a subgroup', subGroup);
             this.subGroup = subGroup as SubGroup;
             // Now update issues and return the observable
-            return this.issuesService.GetIssuesForSubGroup(this.subGroup.subGroupID, IssueStatuses.Discussion);
+            return this.issuesService.GetIssuesForGroup(this.subGroup.subGroupID, IssueStatuses.Discussion);
           })
         )
         .subscribe(
           {
-            next: isr => {
+            next: (isr: IssueSelectionResult) => {
               console.log('AND some issues', isr);
               // GetIssuesForSubGroup returns an IssueSelectionResult
               this.issues = isr.issues;

@@ -1,10 +1,10 @@
 import { GeographicalExtentID } from './enums';
 
-export class Group {
-    groupID = 0;
-    groupName: string;
-    subGroups: string[] = [];
-    groupWebsite: string;
+export class Organisation {
+    organisationID = 0;
+    organisationName: string;
+    groups: string[] = [];
+    organisationWebsite: string;
     description: string;
     active: boolean;
     geographicalExtentID = GeographicalExtentID.National.toString(); // for html binding use string

@@ -302,8 +302,8 @@ export class AppDataService {
   ShowCountries(geographicalExtentID: string): boolean {
     switch (geographicalExtentID) {
       // Don't Show Countries if:
-      case GeographicalExtentID.GlobalGroup.toString():
-      case GeographicalExtentID.PrivateGroup.toString():
+      case GeographicalExtentID.GlobalOrganisation.toString():
+      case GeographicalExtentID.PrivateOrganisation.toString():
         return false;
       default:
         return true;
@@ -313,10 +313,10 @@ export class AppDataService {
   ShowRegions(geographicalExtentID: string) {
     switch (geographicalExtentID) {
       // Don't Show Regions if:
-      case GeographicalExtentID.GlobalGroup.toString():
+      case GeographicalExtentID.GlobalOrganisation.toString():
       case GeographicalExtentID.National.toString():
       case GeographicalExtentID.City.toString():
-      case GeographicalExtentID.PrivateGroup.toString():
+      case GeographicalExtentID.PrivateOrganisation.toString():
         return false;
       default:
         return true;
@@ -326,10 +326,10 @@ export class AppDataService {
   ShowCities(geographicalExtentID: string) {
     switch (geographicalExtentID) {
       // Don't Show Cities if:
-      case GeographicalExtentID.GlobalGroup.toString():
+      case GeographicalExtentID.GlobalOrganisation.toString():
       case GeographicalExtentID.National.toString():
       case GeographicalExtentID.Regional.toString():
-      case GeographicalExtentID.PrivateGroup.toString():
+      case GeographicalExtentID.PrivateOrganisation.toString():
         return false;
       default:
         return true;

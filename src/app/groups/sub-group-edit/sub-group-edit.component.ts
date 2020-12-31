@@ -5,7 +5,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, E
 
 // Services
 import { AppDataService } from './../../services/app-data.service';
-import { GroupsService } from 'src/app/services/groups.service';
+import { OrganisationsService } from 'src/app/services/groups.service';
 
 // Models and Enums
 import { GroupDecisionBasisOption } from './../../models/enums';
@@ -33,7 +33,7 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private appData: AppDataService,
-    private groupsService: GroupsService
+    private groupsService: OrganisationsService
   ) { }
 
   ngOnInit(): void {
@@ -73,7 +73,7 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
       this.saving = true;
       this.error = '';
 
-      this.groupsService.SubGroupUpdate(this.subGroup as SubGroupUpdate).subscribe(
+      this.groupsService.GroupUpdate(this.subGroup as SubGroupUpdate).subscribe(
         {
           next: subGroup => {
             this.subGroup = this.appData.deep(subGroup) as SubGroup;

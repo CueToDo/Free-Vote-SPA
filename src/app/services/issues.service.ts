@@ -33,10 +33,10 @@ export class IssuesService {
   // 1) First batch
   // 2) Subsequent batch (very similar to above, can these be consolidated?)
   // 3) Page of points for all selection methods
-  GetIssuesForSubGroup(subGroupID: number, statusID: IssueStatuses): Observable<IssueSelectionResult> {
+  GetIssuesForGroup(groupID: number, statusID: IssueStatuses): Observable<IssueSelectionResult> {
 
     // No Filters + infinite scroll on DateOrder desc
-    const apiUrl = `issues/getFirstBatchForSubGroup/${subGroupID}/${statusID}/${this.batchSize}/${this.pageSize}`;
+    const apiUrl = `issues/getFirstBatchForGroup/${groupID}/${statusID}/${this.batchSize}/${this.pageSize}`;
 
     return this.httpClientService
       .get(apiUrl)

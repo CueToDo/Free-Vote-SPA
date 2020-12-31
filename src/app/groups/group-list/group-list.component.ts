@@ -3,11 +3,11 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 // Model
-import { Group } from 'src/app/models/group.model';
+import { Organisation } from 'src/app/models/group.model';
 
 // Services
 import { AppDataService } from './../../services/app-data.service';
-import { GroupsService } from 'src/app/services/groups.service';
+import { OrganisationsService } from 'src/app/services/groups.service';
 
 @Component({
   selector: 'app-group-list',
@@ -18,16 +18,16 @@ export class GroupListComponent implements OnInit, OnDestroy {
 
   @Input() CurrentMembership: boolean;
 
-  public groups: Group[];
-  public groupCount: number;
-  public groupFilter = '';
+  public organisations: Organisation[];
+  public organisationCount: number;
+  public organisationFilter = '';
   public waiting = false;
   public message = '';
   public error = '';
 
   constructor(
     public appData: AppDataService,
-    private groupsService: GroupsService
+    private groupsService: OrganisationsService
   ) { }
 
   ngOnInit() {
@@ -35,20 +35,20 @@ export class GroupListComponent implements OnInit, OnDestroy {
 
   @Input() Refresh() {
 
-    this.groups = [];
+    this.organisations = [];
     this.waiting = true;
     this.message = '';
     this.error = '';
 
     if (this.CurrentMembership) {
-      this.groupsService.GroupMembership(this.groupFilter)
+      this.groupsService.OrganisationMembership(this.organisationFilter)
         .subscribe(
           {
             next: groups => {
-              this.groups = groups;
-              this.groupCount = groups.length;
-              if (this.groupCount === 0) {
-                if (this.groupFilter) {
+              this.organisations = groups;
+              this.organisationCount = groups.length;
+              if (this.organisationCount === 0) {
+                if (this.organisationFilter) {
                   this.message = 'You are not a member of any groups that match the search';
                 } else {
                   this.message = 'You are not a member of any groups';
@@ -60,14 +60,14 @@ export class GroupListComponent implements OnInit, OnDestroy {
           }
         );
     } else {
-      this.groupsService.GroupsAvailable(this.groupFilter)
+      this.groupsService.OrganisationsAvailable(this.organisationFilter)
         .subscribe(
           {
             next: groups => {
-              this.groups = groups;
-              this.groupCount = groups.length;
-              if (this.groupCount === 0) {
-                if (this.groupFilter) {
+              this.organisations = groups;
+              this.organisationCount = groups.length;
+              if (this.organisationCount === 0) {
+                if (this.organisationFilter) {
                   this.message = 'No groups are available to join that match the search';
                 } else {
                   this.message = 'No more groups are available to join';

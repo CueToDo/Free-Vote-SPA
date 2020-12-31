@@ -9,11 +9,11 @@ import { Subscription } from 'rxjs';
 // Model
 import { Kvp } from 'src/app/models/kvp.model';
 import { GeographicalExtent, GeographicalExtentID } from 'src/app/models/enums';
-import { Group } from 'src/app/models/group.model';
+import { Organisation } from 'src/app/models/group.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
-import { GroupsService } from 'src/app/services/groups.service';
+import { OrganisationsService } from 'src/app/services/groups.service';
 
 @Component({
   selector: 'app-group-edit',
@@ -22,10 +22,10 @@ import { GroupsService } from 'src/app/services/groups.service';
 })
 export class GroupEditComponent implements OnInit, OnDestroy {
 
-  @Input() group: Group;
+  @Input() organisation: Organisation;
 
   @Output() Cancel = new EventEmitter();
-  @Output() Complete = new EventEmitter<Group>();
+  @Output() Complete = new EventEmitter<Organisation>();
 
   @ViewChild('groupName', { static: true }) elGroupName: ElementRef;
   @ViewChild('groupDescription', { static: true }) elGroupDescription: ElementRef;
@@ -42,23 +42,23 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   extents: Kvp[];
 
   get showCountries(): boolean {
-    return this.appData.ShowCountries(this.group.geographicalExtentID);
+    return this.appData.ShowCountries(this.organisation.geographicalExtentID);
   }
 
   get showRegions(): boolean {
-    return this.appData.ShowRegions(this.group.geographicalExtentID);
+    return this.appData.ShowRegions(this.organisation.geographicalExtentID);
   }
 
   get showCities(): boolean {
-    return this.appData.ShowCities(this.group.geographicalExtentID);
+    return this.appData.ShowCities(this.organisation.geographicalExtentID);
   }
 
-  get saveDescription() { return this.group.groupID > 0 ? 'update' : 'save'; }
+  get saveDescription() { return this.organisation.organisationID > 0 ? 'update' : 'save'; }
   error = '';
 
   constructor(
     private appData: AppDataService,
-    private groupsService: GroupsService
+    private groupsService: OrganisationsService
   ) { }
 
   ngOnInit(): void {
@@ -92,30 +92,30 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   extentSelected(extent: string) {
     // NB: Value from a drop down will be a string
     // extent is a string, even if we did type it as a number
-    this.group.geographicalExtent = GeographicalExtent.get(extent);
+    this.organisation.geographicalExtent = GeographicalExtent.get(extent);
   }
 
   Update() {
 
-    if (this.appData.isUrlNameUnSafe(this.group.groupName)) {
+    if (this.appData.isUrlNameUnSafe(this.organisation.organisationName)) {
       if (confirm('Sub Group name contains invalid characters. Remove them now?')) {
-        this.group.groupName = this.appData.urlSafeName(this.group.groupName);
+        this.organisation.organisationName = this.appData.urlSafeName(this.organisation.organisationName);
       } else {
         return;
       }
     }
 
     this.error = '';
-    const newGroup = this.group.groupID < 1;
+    const newGroup = this.organisation.organisationID < 1;
 
-    this.groups$ = this.groupsService.Update(this.group)
+    this.groups$ = this.groupsService.Update(this.organisation)
       .subscribe(
         {
           next: group => {
             this.Complete.emit(group);
             if (newGroup) {
-              this.group = new Group();
-              this.group.geographicalExtentID = GeographicalExtentID.National.toString();
+              this.organisation = new Organisation();
+              this.organisation.geographicalExtentID = GeographicalExtentID.National.toString();
             }
           },
           error: serverError => {

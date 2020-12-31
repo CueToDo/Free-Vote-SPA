@@ -64,14 +64,14 @@ export class PsandQsService {
       );
   }
 
-  PsAndQsSelectSubGroup(subGroupID: number, proposalStatusID: ProposalStatuses, myPorQsOnly: boolean): Observable<PorQSelectionResult> {
+  PsAndQsSelectGroup(groupID: number, proposalStatusID: ProposalStatuses, myPorQsOnly: boolean): Observable<PorQSelectionResult> {
 
     const batchSize = 50;
     const pageSize = 10;
     const sort = 1;
 
     // No Filters + infinite scroll on ...
-    const apiUrl = `issues/PsAndQsSelectSubGroup/${subGroupID}/${proposalStatusID}/${myPorQsOnly}/${sort}/${batchSize}/${pageSize}`;
+    const apiUrl = `issues/PsAndQsSelectGroup/${groupID}/${proposalStatusID}/${myPorQsOnly}/${sort}/${batchSize}/${pageSize}`;
 
     return this.httpClientService
       .get(apiUrl)

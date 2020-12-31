@@ -4,7 +4,7 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Model
-import { Group } from 'src/app/models/group.model';
+import { Organisation } from 'src/app/models/group.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -25,7 +25,7 @@ export class GroupsComponent implements OnInit, AfterViewInit {
 
   public tabIndex = 0;
   private tabSelected: string;
-  public NewGroup: Group;
+  public NewOrganisation: Organisation;
 
   constructor(
     private router: Router,
@@ -94,12 +94,12 @@ export class GroupsComponent implements OnInit, AfterViewInit {
     this.ChangeTab(0);
   }
 
-  CompleteNew(group: Group) {
-    this.router.navigate(['/groups', group.groupName]);
+  CompleteNew(group: Organisation) {
+    this.router.navigate(['/groups', group.organisationName]);
   }
 
   StartNewGroup() {
-    this.NewGroup = new Group();
-    this.NewGroup.countries = ['UK'];
+    this.NewOrganisation = new Organisation();
+    this.NewOrganisation.countries = ['UK'];
   }
 }
