@@ -9,7 +9,7 @@ import { map, tap } from 'rxjs/operators';
 // Models, Enums
 import { IssueStatuses, ProposalStatuses } from './../models/enums';
 import { IssueSelectionResult, Issue, IssueEdit, IssuePrioritisationVote, IssuePorQCounts } from '../models/issue.model';
-import { SubGroupIssueCounts } from './../models/issue.model';
+import { GroupIssueCounts } from './../models/issue.model';
 
 // Services
 import { HttpService } from './http.service';
@@ -61,7 +61,7 @@ export class IssuesService {
 
     console.log(sourceData);
 
-    ISR.subGroupIssueCounts = <SubGroupIssueCounts>this.appDataService.deep(sourceData.subGroupIssueCounts);
+    ISR.groupIssueCounts = <GroupIssueCounts>this.appDataService.deep(sourceData.subGroupIssueCounts);
 
     return ISR;
   }
@@ -96,8 +96,8 @@ export class IssuesService {
     const postData = <IssueEdit>{
 
       // Ownership
-      'groupIDOwner': issue.groupIDOwner,
-      'subGroupID': issue.subGroupID,
+      'groupIDOwner': issue.organisationID,
+      'subGroupID': issue.groupID,
 
       // Issue Details
       'issueID': issue.issueID,

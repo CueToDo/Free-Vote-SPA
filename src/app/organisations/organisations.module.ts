@@ -21,8 +21,9 @@ import { OrganisationsComponent } from './organisations/organisations.component'
 import { OrganisationListComponent } from './organisation-list/organisation-list.component';
 import { OrganisationComponent } from './organisation/organisation.component';
 import { OrganisationEditComponent } from './organisation-edit/organisation-edit.component';
-import { SubGroupComponent } from './sub-group/sub-group.component';
-import { SubGroupEditComponent } from './sub-group-edit/sub-group-edit.component';
+import { GroupsComponent } from './group/groups.component';
+import { GroupComponent } from './group/group.component';
+import { GroupEditComponent } from './group-edit/group-edit.component';
 import { IssueComponent } from './issue/issue.component';
 import { IssueEditComponent } from './issue-edit/issue-edit.component';
 import { ProgressComponent } from './progress/progress.component';
@@ -37,7 +38,7 @@ const routes: Routes = [
   { path: 'available', component: OrganisationsComponent },
   { path: 'new', component: OrganisationsComponent },
   { path: ':organisationName', component: OrganisationComponent },
-  { path: ':organisationName/:subGroupName', component: SubGroupComponent },
+  { path: ':organisationName/:subGroupName', component: GroupComponent },
   { path: ':organisationName/:subGroupName/:issue', component: IssueDetailsComponent },
   { path: ':organisationName/:subGroupName/:issue/:porqId', component: PorqDetailsComponent },
   // This can't work
@@ -60,8 +61,9 @@ const routes: Routes = [
     OrganisationListComponent,
     OrganisationComponent,
     OrganisationEditComponent,
-    SubGroupComponent,
-    SubGroupEditComponent,
+    // GroupsComponent,
+    GroupComponent,
+    GroupEditComponent,
     IssueComponent,
     IssueEditComponent,
     ProgressComponent,

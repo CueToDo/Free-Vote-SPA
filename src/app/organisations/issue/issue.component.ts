@@ -105,7 +105,7 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   delete() {
     if (confirm('Are you sure you wish to delete this issue?')) {
       this.saving = true;
-      this.issuesService.IssueDelete(this.issue.subGroupID, this.issue.issueID).subscribe(
+      this.issuesService.IssueDelete(this.issue.groupID, this.issue.issueID).subscribe(
         {
           next: () => {
             this.saving = false;

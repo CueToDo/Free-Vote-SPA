@@ -72,7 +72,7 @@ export class IssueDetailsComponent implements OnInit {
       concatMap(issue => {
         this.issue = issue;
         const proposalStatusID = this.issuesService.DefaultProposalStatus(issue.statusID);
-        return this.psandQsService.PsAndQsSelectIssue(this.issue.subGroupID,
+        return this.psandQsService.PsAndQsSelectIssue(this.issue.groupID,
           this.issue.issueID, this.porQTypeID, proposalStatusID, false);
       })).subscribe(
         {
@@ -137,7 +137,7 @@ export class IssueDetailsComponent implements OnInit {
 
     this.error = '';
 
-    this.psandQsService.PsAndQsSelectIssue(this.issue.subGroupID,
+    this.psandQsService.PsAndQsSelectIssue(this.issue.groupID,
       this.issue.issueID, this.porQTypeID, this.proposalStatusID, false)
       .subscribe(
         {

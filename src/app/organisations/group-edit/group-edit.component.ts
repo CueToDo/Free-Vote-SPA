@@ -12,19 +12,19 @@ import { GroupDecisionBasisOption } from '../../models/enums';
 import { Group, GroupUpdate } from 'src/app/models/group.model';
 
 @Component({
-  selector: 'app-sub-group-edit',
-  templateUrl: './sub-group-edit.component.html',
-  styleUrls: ['./sub-group-edit.component.css']
+  selector: 'app-group-edit',
+  templateUrl: './group-edit.component.html',
+  styleUrls: ['./group-edit.component.css']
 })
-export class SubGroupEditComponent implements OnInit, OnDestroy {
+export class GroupEditComponent implements OnInit, OnDestroy {
 
   @Input() group: Group;
-  @Output() subGroupChange = new EventEmitter(); // Still need to emit
+  @Output() groupChange = new EventEmitter(); // Still need to emit
 
   @Output() complete = new EventEmitter();
   @Output() cancelled = new EventEmitter();
 
-  @ViewChild('subGroupName', { static: true }) elSubGroupName: ElementRef;
+  @ViewChild('groupName', { static: true }) elSubGroupName: ElementRef;
 
   subGroupCopy: Group;
 
@@ -77,7 +77,7 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
         {
           next: subGroup => {
             this.group = this.appData.deep(subGroup) as Group;
-            this.subGroupChange.emit(this.group);
+            this.groupChange.emit(this.group);
             this.complete.emit(this.group.groupName);
           },
           error: serverError => {
@@ -92,7 +92,7 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
 
   cancel() {
     this.group = this.appData.deep(this.subGroupCopy) as Group;
-    this.subGroupChange.emit(this.group);
+    this.groupChange.emit(this.group);
     this.cancelled.emit();
   }
 

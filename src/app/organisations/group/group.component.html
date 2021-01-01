@@ -6,8 +6,8 @@
 
             <div class="content">
 
-                <!-- Sub-Group display -->
-                <div [ngClass]="{'show':!subGroupEdit, 'hide':subGroupEdit}">
+                <!-- Group display -->
+                <div [ngClass]="{'show':!groupEdit, 'hide':groupEdit}">
 
                     <div>
                         <a [routerLink]="'/groups/membership'">List all groups</a> > <a
@@ -24,7 +24,7 @@
 
                         <button mat-stroked-button (click)="delete()">
                             <mat-icon>cancel</mat-icon>
-                            delete sub-group
+                            delete group
                         </button>
                         <button mat-stroked-button (click)="edit()">
                             <mat-icon>edit</mat-icon>edit
@@ -37,15 +37,15 @@
                         </span>
 
                         <span *ngIf="!group.open">
-                            Closed sub-group.
+                            Closed group.
                         </span>
 
                         <span *ngIf="group.meetingIntervalID==='1'">
-                            Every:<strong>{{ appData.DayName(subGroup.selectionDayOfWeek) }}</strong>
+                            Every:<strong>{{ appData.DayName(group.selectionDayOfWeek) }}</strong>
                         </span>
 
                         <span *ngIf="group.meetingIntervalID==='2'">
-                            Every:<strong>{{ appData.ordinal(subGroup.selectionDayOfMonth) }} of month</strong>
+                            Every:<strong>{{ appData.ordinal(group.selectionDayOfMonth) }} of month</strong>
                         </span>
 
                         <span *ngIf="group.meetingIntervalID==='3'">
@@ -53,8 +53,8 @@
                         </span>
 
                         <span *ngIf="group.meetingIntervalID==='4'">
-                            <strong>From {{ appData.ordinal(subGroup.selectionWeekOfMonth) }}
-                                {{ appData.DayName(subGroup.selectionDayOfWeek) }}</strong>
+                            <strong>From {{ appData.ordinal(group.selectionWeekOfMonth) }}
+                                {{ appData.DayName(group.selectionDayOfWeek) }}</strong>
                         </span>
 
                         <span *ngIf="group.meetingIntervalID!=='3'"><strong>
@@ -90,11 +90,11 @@
 
                 </div>
 
-                <!-- Sub Group Edit -->
-                <div [ngClass]="{'show':subGroupEdit, 'hide':!subGroupEdit}">
-                    <app-sub-group-edit *ngIf="subGroupEdit" (cancelled)="editCancelled()" (complete)="editComplete()"
-                        [(subGroup)]="subGroup">
-                    </app-sub-group-edit>
+                <!-- Group Edit -->
+                <div [ngClass]="{'show':groupEdit, 'hide':!groupEdit}">
+                    <app-group-edit *ngIf="groupEdit" (cancelled)="editCancelled()" (complete)="editComplete()"
+                        [(group)]="group">
+                    </app-group-edit>
                 </div>
 
                 <!-- Issue and Proposal Progress -->
@@ -114,7 +114,7 @@
                 <ng-container *ngIf="!newIssue && !showPsAndQs">
                     <div *ngFor="let issue of issues" class="mb-2">
                         <app-issue [issue]="issue" (Deleted)="issueDeleted()" [groupName]="groupName"
-                            [subGroupName]="subGroupName" [inFocus]="false">
+                            [groupName]="groupName" [inFocus]="false">
                         </app-issue>
                     </div>
                 </ng-container>

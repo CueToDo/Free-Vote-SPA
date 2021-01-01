@@ -5,7 +5,7 @@
 import { IssuePhases, IssueStatuses } from './enums';
 import { ID } from './common';
 
-export class SubGroupIssueCounts {
+export class GroupIssueCounts {
   countsUpdated: number;
   issuesNotInPrioritisation: number;
   issuesInPrioritisation: number;
@@ -16,7 +16,7 @@ export class SubGroupIssueCounts {
 
 export class IssueSelectionResult {
 
-  issueCount: number; // number of issues selcted
+  issueCount: number; // number of issues selected
 
   issueIDs: ID[];
   fromDate: string;
@@ -24,14 +24,14 @@ export class IssueSelectionResult {
 
   issues: Issue[];
 
-  subGroupIssueCounts: SubGroupIssueCounts; // subGroup totals
+  groupIssueCounts: GroupIssueCounts; // Group totals
 }
 
 export class Issue {
 
   // Ownership
-  groupIDOwner: number;
-  subGroupID: number;
+  organisationID: number;
+  groupID: number;
   isIssueOwner: boolean;
 
   // Issue details

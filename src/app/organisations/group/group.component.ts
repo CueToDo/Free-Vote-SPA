@@ -9,10 +9,10 @@ import { concatMap } from 'rxjs/operators';
 // Models and Enums
 import { Group } from 'src/app/models/group.model';
 import { Issue } from 'src/app/models/issue.model';
-import { PorQ } from '../../models/porq.model';
+import { PorQ } from 'src/app/models/porq.model';
 import { DecisionBasisOption, IssueStatuses } from 'src/app/models/enums';
-import { ProposalStatuses } from '../../models/enums';
-import { IssueSelectionResult } from '../../models/issue.model';
+import { ProposalStatuses } from 'src/app/models/enums';
+import { IssueSelectionResult } from 'src/app/models/issue.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -24,19 +24,20 @@ import { PsandQsService } from 'src/app/services/psandqs.service';
 import { ProgressComponent } from '../progress/progress.component';
 
 @Component({
-  selector: 'app-sub-group',
-  templateUrl: './sub-group.component.html',
-  styleUrls: ['./sub-group.component.css']
+  selector: 'app-group',
+  templateUrl: './group.component.html',
+  styleUrls: ['./group.component.css']
 })
-export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
+export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  // Not currently used - may do if resurrect SubGroupsComponent
-  @Output() subGroupUpdated = new EventEmitter();
-  @Output() subGroupDeleted = new EventEmitter();
+  // Not currently used - may do if resurrect GroupsComponent
+  @Output() groupUpdated = new EventEmitter();
+  @Output() groupDeleted = new EventEmitter();
 
   @ViewChild('progress') progressComponent: ProgressComponent;
 
   organisationName: string;
+
   groupName: string;
   public group: Group;
 
@@ -46,7 +47,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public DecisionBasisOption = DecisionBasisOption;
 
-  subGroupEdit = false;
+  groupEdit = false;
 
   public issues: Issue[];
   public IssueStatuses = IssueStatuses;
@@ -80,17 +81,17 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.organisationName = this.appData.unKebabUri(routeParams.groupName);
     this.groupName = this.appData.unKebabUri(routeParams.subGroupName);
 
-    this.getSubGroup(this.organisationName, this.groupName);
+    this.getGroup(this.organisationName, this.groupName);
   }
 
-  getSubGroup(groupName: string, subGroupName: string) {
+  getGroup(organisationName: string, groupName: string) {
 
     this.error = '';
 
-    this.groupsService.GroupByName(groupName, subGroupName).subscribe(
+    this.groupsService.GroupByName(organisationName, groupName).subscribe(
       {
-        next: subGroup => {
-          this.group = subGroup as Group;
+        next: group => {
+          this.group = group as Group;
           // this.SelectSubGroup();
         },
         error: serverError => this.error = serverError.error.detail
@@ -128,7 +129,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   edit() {
     this.error = '';
-    this.subGroupEdit = true;
+    this.groupEdit = true;
   }
 
   delete() {
@@ -147,13 +148,13 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   editComplete() {
-    this.subGroupEdit = false;
+    this.groupEdit = false;
     // this.subGroupUpdated.emit();
     // this.getIssues(IssueStatuses.Prioritisation);
   }
 
   editCancelled() {
-    this.subGroupEdit = false;
+    this.groupEdit = false;
   }
 
   // After submit new issue or delete issue, update counts
@@ -192,13 +193,13 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // If there was an auto count update, refresh counts in progress component
   updateIssueCountsAfterFetch(isr: IssueSelectionResult) {
-    if (isr.subGroupIssueCounts.countsUpdated) {
+    if (isr.groupIssueCounts.countsUpdated) {
       // subGroup is already bound to progress component
-      this.group.issuesNotInPrioritisation = isr.subGroupIssueCounts.issuesNotInPrioritisation;
-      this.group.issuesInPrioritisation = isr.subGroupIssueCounts.issuesInPrioritisation;
-      this.group.issuesInDiscussion = isr.subGroupIssueCounts.issuesInDiscussion;
-      this.group.issuesInProposalVoting = isr.subGroupIssueCounts.issuesInProposalVoting;
-      this.group.issuesClosed = isr.subGroupIssueCounts.issuesClosed;
+      this.group.issuesNotInPrioritisation = isr.groupIssueCounts.issuesNotInPrioritisation;
+      this.group.issuesInPrioritisation = isr.groupIssueCounts.issuesInPrioritisation;
+      this.group.issuesInDiscussion = isr.groupIssueCounts.issuesInDiscussion;
+      this.group.issuesInProposalVoting = isr.groupIssueCounts.issuesInProposalVoting;
+      this.group.issuesClosed = isr.groupIssueCounts.issuesClosed;
     }
 
   }
@@ -226,8 +227,8 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   createNewIssue() {
     this.newIssue = true;
     this.newIssueEdit = new Issue();
-    this.newIssueEdit.groupIDOwner = this.group.organisationID;
-    this.newIssueEdit.subGroupID = this.group.groupID;
+    this.newIssueEdit.organisationID = this.group.organisationID;
+    this.newIssueEdit.groupID = this.group.groupID;
     this.newIssueEdit.issueID = -1;
     this.newIssueEdit.publish = true;
     const earliest = new Date();
