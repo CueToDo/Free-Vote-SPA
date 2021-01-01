@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { concatMap } from 'rxjs/operators';
 
 // Models and Enums
-import { SubGroup } from 'src/app/models/sub-group.model';
+import { Group } from 'src/app/models/group.model';
 import { Issue } from 'src/app/models/issue.model';
 import { PorQ } from '../../models/porq.model';
 import { DecisionBasisOption, IssueStatuses } from 'src/app/models/enums';
@@ -36,12 +36,12 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('progress') progressComponent: ProgressComponent;
 
+  organisationName: string;
   groupName: string;
-  subGroupName: string;
-  public subGroup: SubGroup;
+  public group: Group;
 
   public get groupNameKebab(): string {
-    return this.appData.kebabUri(this.groupName);
+    return this.appData.kebabUri(this.organisationName);
   }
 
   public DecisionBasisOption = DecisionBasisOption;
@@ -77,10 +77,10 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
 
     const routeParams = this.activeRoute.snapshot.params;
-    this.groupName = this.appData.unKebabUri(routeParams.groupName);
-    this.subGroupName = this.appData.unKebabUri(routeParams.subGroupName);
+    this.organisationName = this.appData.unKebabUri(routeParams.groupName);
+    this.groupName = this.appData.unKebabUri(routeParams.subGroupName);
 
-    this.getSubGroup(this.groupName, this.subGroupName);
+    this.getSubGroup(this.organisationName, this.groupName);
   }
 
   getSubGroup(groupName: string, subGroupName: string) {
@@ -90,7 +90,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.groupsService.GroupByName(groupName, subGroupName).subscribe(
       {
         next: subGroup => {
-          this.subGroup = subGroup as SubGroup;
+          this.group = subGroup as Group;
           // this.SelectSubGroup();
         },
         error: serverError => this.error = serverError.error.detail
@@ -104,13 +104,13 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   reInitialise() {
     // ToDo Draft Issues, Proposals
-    if (this.subGroup.issuesInProposalVoting > 0) {
+    if (this.group.issuesInProposalVoting > 0) {
       this.issueStatusID = IssueStatuses.ProposalVoting;
-    } else if (this.subGroup.issuesInDiscussion > 0) {
+    } else if (this.group.issuesInDiscussion > 0) {
       this.issueStatusID = IssueStatuses.Discussion;
-    } else if (this.subGroup.issuesInPrioritisation > 0) {
+    } else if (this.group.issuesInPrioritisation > 0) {
       this.issueStatusID = IssueStatuses.Prioritisation;
-    } else if (this.subGroup.issuesClosed > 0) {
+    } else if (this.group.issuesClosed > 0) {
       this.issueStatusID = IssueStatuses.Closed;
       // } else if (this.subGroupDisplay.proposalsRejected > 0) {
       //   issueStatusID = IssueStages.ProposalRejected;
@@ -133,12 +133,12 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   delete() {
     this.error = '';
-    if (confirm(`Are you sure you wish to delete the subgroup "${this.subGroup.subGroupName}"?`)) {
-      this.groupsService.GroupDelete(this.subGroup.groupID, this.subGroup.subGroupID).subscribe(
+    if (confirm(`Are you sure you wish to delete the subgroup "${this.group.groupName}"?`)) {
+      this.groupsService.GroupDelete(this.group.organisationID, this.group.groupID).subscribe(
         {
           next: _ => {
             // this.subGroupDeleted.emit();
-            this.router.navigateByUrl('/groups/' + this.appData.kebabUri(this.groupName));
+            this.router.navigateByUrl('/groups/' + this.appData.kebabUri(this.organisationName));
           },
           error: serverError => this.error = serverError.error.detail
         }
@@ -158,9 +158,9 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // After submit new issue or delete issue, update counts
   refreshSubGroup() {
-    this.groupsService.Group(this.subGroup.subGroupID).subscribe(
+    this.groupsService.Group(this.group.groupID).subscribe(
       {
-        next: subGroup => this.subGroup = subGroup,
+        next: subGroup => this.group = subGroup,
         error: serverError => {
           console.log(serverError);
           this.error = serverError.error.detail;
@@ -175,7 +175,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.newIssue = false;
 
-    this.issuesService.GetIssuesForGroup(this.subGroup.subGroupID, issueStatusID).subscribe(
+    this.issuesService.GetIssuesForGroup(this.group.groupID, issueStatusID).subscribe(
       {
         next: isr => {
           this.issues = isr.issues;
@@ -194,11 +194,11 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   updateIssueCountsAfterFetch(isr: IssueSelectionResult) {
     if (isr.subGroupIssueCounts.countsUpdated) {
       // subGroup is already bound to progress component
-      this.subGroup.issuesNotInPrioritisation = isr.subGroupIssueCounts.issuesNotInPrioritisation;
-      this.subGroup.issuesInPrioritisation = isr.subGroupIssueCounts.issuesInPrioritisation;
-      this.subGroup.issuesInDiscussion = isr.subGroupIssueCounts.issuesInDiscussion;
-      this.subGroup.issuesInProposalVoting = isr.subGroupIssueCounts.issuesInProposalVoting;
-      this.subGroup.issuesClosed = isr.subGroupIssueCounts.issuesClosed;
+      this.group.issuesNotInPrioritisation = isr.subGroupIssueCounts.issuesNotInPrioritisation;
+      this.group.issuesInPrioritisation = isr.subGroupIssueCounts.issuesInPrioritisation;
+      this.group.issuesInDiscussion = isr.subGroupIssueCounts.issuesInDiscussion;
+      this.group.issuesInProposalVoting = isr.subGroupIssueCounts.issuesInProposalVoting;
+      this.group.issuesClosed = isr.subGroupIssueCounts.issuesClosed;
     }
 
   }
@@ -206,19 +206,19 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   refreshIssueCount(statusID: IssueStatuses, count: number) {
     switch (statusID) {
       case IssueStatuses.PrioritisationYetToStart:
-        this.subGroup.issuesNotInPrioritisation = count;
+        this.group.issuesNotInPrioritisation = count;
         break;
       case IssueStatuses.Prioritisation:
-        this.subGroup.issuesNotInPrioritisation = count;
+        this.group.issuesNotInPrioritisation = count;
         break;
       case IssueStatuses.Discussion:
-        this.subGroup.issuesInDiscussion = count;
+        this.group.issuesInDiscussion = count;
         break;
       case IssueStatuses.ProposalVoting:
-        this.subGroup.issuesInProposalVoting = count;
+        this.group.issuesInProposalVoting = count;
         break;
       case IssueStatuses.Closed:
-        this.subGroup.issuesClosed = count;
+        this.group.issuesClosed = count;
         break;
     }
   }
@@ -226,8 +226,8 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   createNewIssue() {
     this.newIssue = true;
     this.newIssueEdit = new Issue();
-    this.newIssueEdit.groupIDOwner = this.subGroup.groupID;
-    this.newIssueEdit.subGroupID = this.subGroup.subGroupID;
+    this.newIssueEdit.groupIDOwner = this.group.organisationID;
+    this.newIssueEdit.subGroupID = this.group.groupID;
     this.newIssueEdit.issueID = -1;
     this.newIssueEdit.publish = true;
     const earliest = new Date();
@@ -266,7 +266,7 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.newIssue = false;
 
-    this.psandQsService.PsAndQsSelectGroup(this.subGroup.subGroupID, proposalStatus, false).subscribe(
+    this.psandQsService.PsAndQsSelectGroup(this.group.groupID, proposalStatus, false).subscribe(
       {
         next: proposals => {
           console.log(proposals);
@@ -283,19 +283,19 @@ export class SubGroupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.error = '';
     if (confirm('Select issue for discussion now?')) {
       this.startingDiscussion = true;
-      this.groupsService.GroupStartDiscussionNow(this.subGroup.subGroupID)
+      this.groupsService.GroupStartDiscussionNow(this.group.groupID)
         .pipe(
           // Discussion is started - boolean value back from service call is irrelevant
           // Refresh the subGroup
           concatMap(() => {
             console.log('STARTED');
-            return this.groupsService.Group(this.subGroup.subGroupID);
+            return this.groupsService.Group(this.group.groupID);
           }),
-          concatMap((subGroup: SubGroup) => {
+          concatMap((subGroup: Group) => {
             console.log('We got a subgroup', subGroup);
-            this.subGroup = subGroup as SubGroup;
+            this.group = subGroup as Group;
             // Now update issues and return the observable
-            return this.issuesService.GetIssuesForGroup(this.subGroup.subGroupID, IssueStatuses.Discussion);
+            return this.issuesService.GetIssuesForGroup(this.group.groupID, IssueStatuses.Discussion);
           })
         )
         .subscribe(

@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 // Model
 import { Kvp } from 'src/app/models/kvp.model';
 import { GeographicalExtent, GeographicalExtentID } from 'src/app/models/enums';
-import { Organisation } from 'src/app/models/group.model';
+import { Organisation } from 'src/app/models/organisation.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -53,7 +53,6 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
     return this.appData.ShowCities(this.organisation.geographicalExtentID);
   }
 
-  get saveDescription() { return this.organisation.organisationID > 0 ? 'update' : 'save'; }
   error = '';
 
   constructor(

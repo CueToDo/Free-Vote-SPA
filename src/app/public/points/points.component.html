@@ -140,7 +140,7 @@
   <!-- End tab selection and filters -->
 
 
-
+  <!-- Don't use *ngIf - can't read property of undefined. Use hidden instead. -->
   <app-points-list [filter]="filter" #PointsList [hidden]="filter.questions"></app-points-list>
 
   <app-questions-list [filter]="filter" #QuestionsList [hidden]="!filter.questions"></app-questions-list>

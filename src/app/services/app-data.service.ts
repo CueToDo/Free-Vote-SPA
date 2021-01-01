@@ -424,6 +424,7 @@ export class AppDataService {
   ShowSource(pointTypeID: PointTypesEnum): boolean {
     switch (pointTypeID) {
       // It doesn't matter WHO said it - should not sway vote
+      case PointTypesEnum.Quote:
       case PointTypesEnum.Fact:
       case PointTypesEnum.RecommendedReading:
       case PointTypesEnum.RecommendedListening:

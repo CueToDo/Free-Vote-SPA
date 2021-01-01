@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 // Models
 import { GeographicalExtentID, MeetingIntervals } from 'src/app/models/enums';
-import { Organisation } from 'src/app/models/group.model';
-import { SubGroup } from 'src/app/models/sub-group.model';
+import { Organisation } from 'src/app/models/organisation.model';
+import { Group } from 'src/app/models/group.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -28,7 +28,7 @@ export class OrganisationComponent implements OnInit, OnDestroy {
   groupEdit = false;
   membershipMessage = '';
 
-  newSubGroupTemplate: SubGroup;
+  newSubGroupTemplate: Group;
   creatingNewSubGroup = false;
 
   error: string;
@@ -167,8 +167,8 @@ This cannot be undone.`)) {
   }
 
   newSubGroup() {
-    this.newSubGroupTemplate = new SubGroup();
-    this.newSubGroupTemplate.groupID = this.OrganisationDisplay.organisationID;
+    this.newSubGroupTemplate = new Group();
+    this.newSubGroupTemplate.organisationID = this.OrganisationDisplay.organisationID;
     this.newSubGroupTemplate.open = true;
     this.newSubGroupTemplate.meetingIntervalID = MeetingIntervals.Weekly.toString();
     this.newSubGroupTemplate.selectionDayOfWeek = '1';

@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 
 // Model
 import { SubGroup } from 'src/app/models/sub-group.model';
-import { Issue } from 'src/app/models/issue.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';

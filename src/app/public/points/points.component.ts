@@ -1,7 +1,6 @@
 
 // Angular
-import { OnDestroy, EventEmitter, Output, ViewChild } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, EventEmitter, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // auth0
@@ -23,6 +22,7 @@ import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 import { PointsListComponent } from '../points-list/points-list.component';
 import { QuestionsListComponent } from './../questions-list/questions-list.component';
 
+
 @Component({
   selector: 'app-points', // is router-outlet
   templateUrl: './points.component.html',
@@ -30,7 +30,7 @@ import { QuestionsListComponent } from './../questions-list/questions-list.compo
   preserveWhitespaces: true // [DOESN'T WORK see component css - doesn't work in styles.css???]
   // for space between buttons - https://github.com/angular/material2/issues/11397
 })
-export class PointsComponent implements OnInit, OnDestroy {
+export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() applyFilter = new EventEmitter<boolean>();
   @Output() pointSortTypeChanged = new EventEmitter<PointSortTypes>();
@@ -75,7 +75,20 @@ export class PointsComponent implements OnInit, OnDestroy {
       pointTypes => this.pointTypes = pointTypes
     );
 
-    // Also, there’s no need to unsubscribe from the paramMap.
+    this.widthSubject$ = this.appData.DisplayWidth$.subscribe(
+      width => { if (width === 0) { this.favouritesText = 'favs'; } else { this.favouritesText = 'favourites'; } }
+    );
+
+  }
+
+  ngAfterViewInit() {
+
+    /* Anything that references child components pointsList or questionsList
+    (inc any calls to this.Select() which invokes SelectQuestions or SelectPoints on the child components)
+    inc any subscription initialisations
+    must be in AfterViewInit */
+
+     // Also, there’s no need to unsubscribe from the paramMap.
     // The ActivatedRoute dies with the routed component and so
     // the subscription dies with it.
     this.activatedRoute.paramMap.subscribe(params => {
@@ -108,6 +121,7 @@ export class PointsComponent implements OnInit, OnDestroy {
         this.filter.single = true;
         this.pointsList.SelectSpecificPoint(tagParam, titleParam);
       } else if (tag || alias) {
+        console.log('selecting');
         this.filter.single = false;
         this.Select();
       }
@@ -214,16 +228,10 @@ export class PointsComponent implements OnInit, OnDestroy {
           }
         }
 
-
         this.SetAppComponentTitle();
       }
+
     );
-
-
-    this.widthSubject$ = this.appData.DisplayWidth$.subscribe(
-      width => { if (width === 0) { this.favouritesText = 'favs'; } else { this.favouritesText = 'favourites'; } }
-    );
-
   }
 
   MyFilter() {

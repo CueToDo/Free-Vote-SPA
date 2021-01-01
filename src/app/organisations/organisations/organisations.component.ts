@@ -3,7 +3,7 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Model
-import { Organisation } from 'src/app/models/group.model';
+import { Organisation } from 'src/app/models/organisation.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';

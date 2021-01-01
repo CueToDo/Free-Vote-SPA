@@ -1,26 +1,62 @@
-import { GeographicalExtentID } from './enums';
+export class Group {
 
-export class Organisation {
-    organisationID = 0;
-    organisationName: string;
-    groups: string[] = [];
-    organisationWebsite: string;
-    description: string;
-    active: boolean;
-    geographicalExtentID = GeographicalExtentID.National.toString(); // for html binding use string
-    // AND API must return string otherwise javascript overrides specified type making it a number
-    geographicalExtent: string;
-    invitationOnly: boolean; // Only private groups can be invitation only
-    Sections: string[] = [];  // database sorts
-    defaultSection: string;
-    countries: string[] = [];  // database sorts
-    regions: string[] = [];
-    cities: string[] = [];
-    members: number;
-    issues: number; // Topics
-    organisationOwner: boolean;
-    organisationAdministrator: boolean;
-    organisationMember: boolean;
-    canInviteMembers: boolean;
-    row: number;
+    organisationID: number;
+
+    groupID: number;
+    groupName: string;
+    groupOwner: boolean;
+    open: boolean;
+
+    // Decision basis
+    decisionBasisOptionID: string; // for binding
+    superMajority: number;
+
+    // Meeting Interval
+    meetingIntervalID: string; // for binding
+    selectionWeekOfMonth: string;
+    selectionDayOfWeek: string;
+    selectionDayOfMonth: string;
+    selectionTimeOfDay: string;
+
+    // Actual selection date
+    nextIssueSelectionDate: string;
+    nextIssueSelectionTime: string;
+
+    // Issues
+    issuesNotInPrioritisation: number;
+    issuesInPrioritisation: number;
+    issuesInDiscussion: number;
+    issuesInProposalVoting: number;
+    issuesClosed: number;
+    issuesTotal: number;
+
+    // Proposals
+    proposalsVotingInProgress: number;
+    proposalsAccepted: number;
+    proposalsRejected: number;
 }
+
+export class GroupUpdate {
+
+    organisationID: number;
+    groupID: number;
+    groupName: string;
+    groupOwner: boolean;
+    open: boolean;
+
+    // Decision Basis
+    decisionBasisOptionID: string;
+    superMajority: number;
+
+    // Meeting Interval
+    meetingIntervalID: string;
+    selectionWeekOfMonth: string; // first, second, third
+    selectionDayOfWeek: string; // thursday
+    selectionDayOfMonth: string; // 21st
+    selectionTimeOfDay: string;
+
+    // Actual selection date
+    nextIssueSelectionDate: string;
+    nextIssueSelectionTime: string;
+}
+

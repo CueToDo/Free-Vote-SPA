@@ -3,7 +3,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 // Models, Enums
-import { SubGroup } from 'src/app/models/sub-group.model';
+import { Group } from 'src/app/models/group.model';
 import { IssueStatuses, ProposalStatuses } from '../../models/enums';
 
 @Component({
@@ -13,7 +13,7 @@ import { IssueStatuses, ProposalStatuses } from '../../models/enums';
 })
 export class ProgressComponent implements OnInit {
 
-  @Input() SubGroup: SubGroup;
+  @Input() Group: Group;
   @Input() issueStatusID: IssueStatuses;
   @Input() proposalStatusID: ProposalStatuses;
 

@@ -8,8 +8,8 @@ import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 // Model
-import { Organisation } from '../models/group.model';
-import { SubGroup, SubGroupUpdate } from '../models/sub-group.model';
+import { Organisation } from '../models/organisation.model';
+import { Group, GroupUpdate } from '../models/group.model';
 
 // Base Services
 import { HttpService } from './http.service';
@@ -126,17 +126,17 @@ export class OrganisationsService {
 
 
 
-    Groups(groupID: number): Observable<SubGroup[]> {
+    Groups(groupID: number): Observable<Group[]> {
         return this.httpClientService
             .get(`organisation/groups/${groupID}`);
     }
 
-    Group(subGroupID: number): Observable<SubGroup> {
+    Group(subGroupID: number): Observable<Group> {
         return this.httpClientService
             .get(`organisation/group/${subGroupID}`);
     }
 
-    GroupByName(groupName: string, subGroupName: string): Observable<SubGroup> {
+    GroupByName(groupName: string, subGroupName: string): Observable<Group> {
         return this.httpClientService
             .get(`organisation/groupByName/${groupName}/${subGroupName}`);
     }
@@ -159,7 +159,7 @@ export class OrganisationsService {
         }
     }
 
-    GroupUpdate(subGroup: SubGroupUpdate): Observable<SubGroup> {
+    GroupUpdate(subGroup: GroupUpdate): Observable<Group> {
         return this.httpClientService
             .post('organisation/group/update', subGroup);
     }

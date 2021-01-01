@@ -9,7 +9,7 @@ import { OrganisationsService } from 'src/app/services/groups.service';
 
 // Models and Enums
 import { GroupDecisionBasisOption } from '../../models/enums';
-import { SubGroup, SubGroupUpdate } from 'src/app/models/sub-group.model';
+import { Group, GroupUpdate } from 'src/app/models/group.model';
 
 @Component({
   selector: 'app-sub-group-edit',
@@ -18,7 +18,7 @@ import { SubGroup, SubGroupUpdate } from 'src/app/models/sub-group.model';
 })
 export class SubGroupEditComponent implements OnInit, OnDestroy {
 
-  @Input() subGroup: SubGroup;
+  @Input() group: Group;
   @Output() subGroupChange = new EventEmitter(); // Still need to emit
 
   @Output() complete = new EventEmitter();
@@ -26,7 +26,7 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
 
   @ViewChild('subGroupName', { static: true }) elSubGroupName: ElementRef;
 
-  subGroupCopy: SubGroup;
+  subGroupCopy: Group;
 
   saving = false;
   error = '';
@@ -37,10 +37,10 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.subGroupCopy = this.appData.deep(this.subGroup) as SubGroup;
+    this.subGroupCopy = this.appData.deep(this.group) as Group;
     this.elSubGroupName.nativeElement.focus();
-    if (!this.subGroup.subGroupID || this.subGroup.subGroupID < 1) {
-      this.subGroup.decisionBasisOptionID = GroupDecisionBasisOption.SimpleMajority.toString();
+    if (!this.group.groupID || this.group.groupID < 1) {
+      this.group.decisionBasisOptionID = GroupDecisionBasisOption.SimpleMajority.toString();
     }
   }
 
@@ -48,9 +48,9 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
 
     this.error = '';
 
-    if (this.subGroup.decisionBasisOptionID !== GroupDecisionBasisOption.SuperMajority.toString()) {
+    if (this.group.decisionBasisOptionID !== GroupDecisionBasisOption.SuperMajority.toString()) {
       return true;
-    } else if (this.subGroup.superMajority < 52 || this.subGroup.superMajority > 99) {
+    } else if (this.group.superMajority < 52 || this.group.superMajority > 99) {
       this.error = 'super majority must be a value between 52 and 99';
       return false;
     } else {
@@ -60,9 +60,9 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
 
   update() {
 
-    if (this.appData.isUrlNameUnSafe(this.subGroup.subGroupName)) {
+    if (this.appData.isUrlNameUnSafe(this.group.groupName)) {
       if (confirm('Sub Group name contains invalid characters. Remove them now?')) {
-        this.subGroup.subGroupName = this.appData.urlSafeName(this.subGroup.subGroupName);
+        this.group.groupName = this.appData.urlSafeName(this.group.groupName);
       } else {
         return;
       }
@@ -73,12 +73,12 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
       this.saving = true;
       this.error = '';
 
-      this.groupsService.GroupUpdate(this.subGroup as SubGroupUpdate).subscribe(
+      this.groupsService.GroupUpdate(this.group as GroupUpdate).subscribe(
         {
           next: subGroup => {
-            this.subGroup = this.appData.deep(subGroup) as SubGroup;
-            this.subGroupChange.emit(this.subGroup);
-            this.complete.emit(this.subGroup.subGroupName);
+            this.group = this.appData.deep(subGroup) as Group;
+            this.subGroupChange.emit(this.group);
+            this.complete.emit(this.group.groupName);
           },
           error: serverError => {
             this.error = serverError.error.detail;
@@ -91,8 +91,8 @@ export class SubGroupEditComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.subGroup = this.appData.deep(this.subGroupCopy) as SubGroup;
-    this.subGroupChange.emit(this.subGroup);
+    this.group = this.appData.deep(this.subGroupCopy) as Group;
+    this.subGroupChange.emit(this.group);
     this.cancelled.emit();
   }
 

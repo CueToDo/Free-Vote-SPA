@@ -3,7 +3,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 // Model
-import { Organisation } from 'src/app/models/group.model';
+import { Organisation } from 'src/app/models/organisation.model';
 
 // Services
 import { AppDataService } from '../../services/app-data.service';

@@ -58,7 +58,7 @@
             </div>
 
             <!-- Group Edit -->
-            <div *ngIf="groupEdit && (OrganisationDisplay.groupAdministrator || OrganisationDisplay.organisationOwner)">
+            <div *ngIf="groupEdit && (OrganisationDisplay.organisationAdministrator || OrganisationDisplay.organisationOwner)">
 
                 <app-organisation-edit (Cancel)="Cancel()" (Complete)="Complete($event)" [(organisation)]="OrganisationDisplay">
                 </app-organisation-edit>
