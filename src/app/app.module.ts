@@ -16,7 +16,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 // Other
-import { DeviceDetectorModule } from 'ngx-device-detector';
+// import { DeviceDetectorModule } from 'ngx-device-detector';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -108,7 +108,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
 
     BsDropdownModule.forRoot(), // Bootstrap DropDowns
-    DeviceDetectorModule.forRoot(), // Other
+    // DeviceDetectorModule.forRoot(), // Other
     // FacebookModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     CustomModule,

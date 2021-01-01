@@ -11,7 +11,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CallbackComponent } from './callback/callback.component';
 
 // CKEditor
-import { CKEditorModule } from 'ng2-ckeditor';
+import { CKEditorModule } from '@ckeditor/ckeditor5-build-classic';
 
 // FreeVote Modules
 import { CustomModule } from '../custommodule/custom.module';

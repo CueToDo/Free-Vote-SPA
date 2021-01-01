@@ -9,7 +9,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '../material.module';
 
 // CKEditor
-import { CKEditorModule } from 'ng2-ckeditor';
+import { CKEditorModule } from '@ckeditor/ckeditor5-build-classic';
 
 // Modules
 import { PublicModule } from 'src/app/public/public.module';
@@ -21,7 +21,7 @@ import { OrganisationsComponent } from './organisations/organisations.component'
 import { OrganisationListComponent } from './organisation-list/organisation-list.component';
 import { OrganisationComponent } from './organisation/organisation.component';
 import { OrganisationEditComponent } from './organisation-edit/organisation-edit.component';
-import { GroupsComponent } from './group/groups.component';
+import { GroupsComponent } from './groups/groups.component';
 import { GroupComponent } from './group/group.component';
 import { GroupEditComponent } from './group-edit/group-edit.component';
 import { IssueComponent } from './issue/issue.component';
@@ -61,7 +61,7 @@ const routes: Routes = [
     OrganisationListComponent,
     OrganisationComponent,
     OrganisationEditComponent,
-    // GroupsComponent,
+    GroupsComponent,
     GroupComponent,
     GroupEditComponent,
     IssueComponent,
