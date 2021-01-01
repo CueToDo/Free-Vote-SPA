@@ -42,7 +42,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.12.29",
     "codelyzer": "^6.0.0",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.4.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.1.1",
