@@ -83,7 +83,7 @@ export class IssueDetailsComponent implements OnInit {
   }
 
 
-  NewPorQ() {
+  NewPorQ(): void {
     this.newPorQTemplate = new PorQEdit();
     this.newPorQTemplate.issueID = this.issue.issueID;
     this.newPorQTemplate.porQID = -1;
@@ -91,17 +91,17 @@ export class IssueDetailsComponent implements OnInit {
     this.newPorQ = true;
   }
 
-  cancelNewPorQ() {
+  cancelNewPorQ(): void {
     this.newPorQ = false;
   }
 
-  completeNewPorQ() {
+  completeNewPorQ(): void {
     this.newPorQ = false;
     this.getPsOrQs();
     this.getCounts();
   }
 
-  setPorQType(porQTypeID: PorQTypes) {
+  setPorQType(porQTypeID: PorQTypes): void {
 
     // If switching from question to perspective or proposal, set proposalStatusID
     if (this.porQTypeID === PorQTypes.Question && porQTypeID !== PorQTypes.Question) {
@@ -125,7 +125,7 @@ export class IssueDetailsComponent implements OnInit {
     this.getPsOrQs();
   }
 
-  setProposalStatus(proposalStatusID: ProposalStatuses) {
+  setProposalStatus(proposalStatusID: ProposalStatuses): void {
     if (this.porQTypeID !== PorQTypes.Question) {
       // Proposal Status is not relevant to Questions
       this.proposalStatusID = proposalStatusID;
@@ -133,7 +133,7 @@ export class IssueDetailsComponent implements OnInit {
     }
   }
 
-  getPsOrQs() {
+  getPsOrQs(): void {
 
     this.error = '';
 
@@ -147,7 +147,7 @@ export class IssueDetailsComponent implements OnInit {
       );
   }
 
-  getCounts() {
+  getCounts(): void {
     this.issuesService.IssuePorQCounts(this.issue.issueID)
       .subscribe(
         {
@@ -169,7 +169,7 @@ export class IssueDetailsComponent implements OnInit {
         });
   }
 
-  PorQDeleted() {
+  PorQDeleted(): void {
     this.getCounts();
   }
 

@@ -1,6 +1,6 @@
 // Angular
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpEventType } from '@angular/common/http';
+import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 
 // rxjs
 import { tap, map, filter } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { FreeVoteProfile } from 'src/app/models/FreeVoteProfile';
 import { AppDataService } from './../../services/app-data.service';
 import { LocalDataService } from './../../services/local-data.service';
 import { HttpService } from 'src/app/services/http.service';
+import { ProfilePicture } from 'src/app/models/Image.model';
 
 
 @Component({
@@ -44,12 +45,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private httpService: HttpService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit(): void { }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
   }
 
-  edit() {
+  edit(): void {
     this.error = false;
     this.success = false;
     this.editing = true;
@@ -60,7 +61,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.GetCountries();
   }
 
-  save() {
+  save(): void {
 
     if (this.editNewCountry) {
       // Save new text & get ID
@@ -108,7 +109,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   }
 
-  cancel() {
+  cancel(): void {
 
     this.saving = false;
     this.error = false;
@@ -123,7 +124,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
 
-  deleteProfilePictue() {
+  deleteProfilePictue(): void {
     this.httpService.profilePictureDelete().subscribe(
       {
         next: () => {
@@ -135,52 +136,62 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  profilePictureSelected(event) {
+  profilePictureSelected(event: Event): void {
 
     this.uploading = true;
     this.uploadPercentDone = 0;
-    const picture = <File>event.target.files[0];
 
-    this.httpService.uploadProfilePicture(picture)
-      .pipe(
-        tap(serverSvent => {
-          // tap changes nothing in the pipe. What came in goes out
-          switch (serverSvent.type) {
-            case HttpEventType.Sent:
-              console.log(`Uploading file of size ${picture.size}.`);
-              break;
-            case HttpEventType.UploadProgress:
-              // Compute and show the % done:
-              const percentDone = Math.round(100 * serverSvent.loaded / serverSvent.total);
-              this.uploadPercentDone = percentDone;
-              console.log(`File is ${percentDone}% uploaded.`);
-              break;
-            case HttpEventType.Response:
-              console.log(`File was completely uploaded!`);
-              console.log(serverSvent.body);
-              this.localData.freeVoteProfile.profilePicture = serverSvent.body.pictureUrl;
-              break;
-            default:
-              console.log(`Surprising upload event: ${serverSvent.type}.`);
+    const files: FileList | null = (event.target as HTMLInputElement).files;
+
+    if (!!files) {
+
+      const picture: File = files[0] as File;
+
+      this.httpService.uploadProfilePicture(picture)
+        .pipe(
+          tap((serverEvent: HttpEvent<ProfilePicture>) => {
+            // tap changes nothing in the pipe. What came in goes out
+            if (serverEvent !== null) {
+              switch (serverEvent.type) {
+                case HttpEventType.Sent:
+                  console.log(`Uploading file of size ${picture.size}.`);
+                  break;
+                case HttpEventType.UploadProgress:
+                  // Compute and show the % done:
+                  const percentDone = Math.round(100 * serverEvent.loaded / serverEvent.total!);
+                  this.uploadPercentDone = percentDone;
+                  console.log(`File is ${percentDone}% uploaded.`);
+                  break;
+                case HttpEventType.Response:
+                  console.log(`File was completely uploaded!`);
+                  console.log((serverEvent as HttpResponse<ProfilePicture>).body);
+                  this.localData.freeVoteProfile.profilePicture = (serverEvent as HttpResponse<ProfilePicture>).body!.pictureUrl;
+                  break;
+                default:
+                  console.log(`Surprising upload event: ${serverEvent.type}.`);
+              }
+            }
+          }),
+          filter((serverEvent: HttpEvent<ProfilePicture>) => serverEvent.type === HttpEventType.Response),
+          tap((serverEvent: HttpEvent<ProfilePicture>) => console.log(serverEvent)),
+          map((serverEvent: HttpEvent<ProfilePicture>) => {
+            return (serverEvent as HttpResponse<ProfilePicture>).body!.pictureUrl;
+          })
+        ).subscribe(
+          {
+            next: file => {
+              this.localData.freeVoteProfile.profilePicture = file;
+              this.localData.freeVoteProfile.profilePictureOptionID = '2';
+              this.localData.SaveValues();
+            },
+            error: serverError => this.ShowError(serverError.error.detail),
+            complete: () => this.uploading = false
           }
-        }),
-        filter(serverSvent => serverSvent.type === HttpEventType.Response),
-        tap(serverSvent => console.log(serverSvent)),
-        map(serverSvent => serverSvent['body'].pictureUrl)
-      ).subscribe(
-        {
-          next: file => {
-            this.localData.freeVoteProfile.profilePicture = file;
-            this.localData.freeVoteProfile.profilePictureOptionID = '2';
-            this.localData.SaveValues();
-          },
-          error: serverError => this.ShowError(serverError.error.detail),
-          complete: () => this.uploading = false
-        }
-      );
+        );
+    }
   }
 
-  profilePictureOptionUpdate() {
+  profilePictureOptionUpdate(): void {
     this.appDataService.profilePictureOptionUpdate(this.localData.freeVoteProfile.profilePictureOptionID).subscribe(
       {
         next: () => { },
@@ -189,24 +200,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  newCountry() {
+  newCountry(): void {
     this.editNewCountry = true;
     this.localData.freeVoteProfile.country = '';
     this.localData.freeVoteProfile.city = '';
   }
 
-  newCity() {
+  newCity(): void {
     this.editNewCity = true;
     this.localData.freeVoteProfile.city = '';
   }
 
-  onCountrySelect(countryId) {
+  onCountrySelect(countryId: string): void {
     // (already bound to profile countryId)
     this.GetCities(countryId, true);
     this.editNewCity = false;
   }
 
-  GetCountries() {
+  GetCountries(): void {
     this.appDataService.GetCountries().subscribe(
       value => {
         this.countries = value;
@@ -215,7 +226,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  GetCities(countryId: string, newCountry: boolean) {
+  GetCities(countryId: string, newCountry: boolean): void {
     this.appDataService.GetCities(countryId).subscribe(
       value => {
         this.cities = value;
@@ -226,7 +237,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  saveCountry() {
+  saveCountry(): void {
 
     this.Saving();
 
@@ -242,7 +253,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  saveCity() {
+  saveCity(): void {
 
     this.Saving();
 
@@ -259,14 +270,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
       );
   }
 
-  Saving() {
+  Saving(): void {
     this.saving = true;
     this.updateMessage = 'saving';
     this.success = false;
     this.error = false;
   }
 
-  Saved() {
+  Saved(): void {
     // End the edit
     this.saving = false;
     this.success = true;
@@ -275,7 +286,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.editNewCity = false;
   }
 
-  ShowError(err) {
+  ShowError(err: any): void {
     if (err.error.detail) {
       this.updateMessage = err.error.detail;
     } else if (err.error) {

@@ -84,7 +84,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getGroup(this.organisationName, this.groupName);
   }
 
-  getGroup(organisationName: string, groupName: string) {
+  getGroup(organisationName: string, groupName: string): void {
 
     this.error = '';
 
@@ -99,11 +99,11 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.reInitialise();
   }
 
-  reInitialise() {
+  reInitialise(): void {
     // ToDo Draft Issues, Proposals
     if (this.group.issuesInProposalVoting > 0) {
       this.issueStatusID = IssueStatuses.ProposalVoting;
@@ -127,12 +127,12 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getIssues(this.issueStatusID);
   }
 
-  edit() {
+  edit(): void {
     this.error = '';
     this.groupEdit = true;
   }
 
-  delete() {
+  delete(): void {
     this.error = '';
     if (confirm(`Are you sure you wish to delete the subgroup "${this.group.groupName}"?`)) {
       this.groupsService.GroupDelete(this.group.organisationID, this.group.groupID).subscribe(
@@ -147,18 +147,18 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  editComplete() {
+  editComplete(): void {
     this.groupEdit = false;
     // this.subGroupUpdated.emit();
     // this.getIssues(IssueStatuses.Prioritisation);
   }
 
-  editCancelled() {
+  editCancelled(): void {
     this.groupEdit = false;
   }
 
   // After submit new issue or delete issue, update counts
-  refreshSubGroup() {
+  refreshSubGroup(): void {
     this.groupsService.Group(this.group.groupID).subscribe(
       {
         next: subGroup => this.group = subGroup,
@@ -170,7 +170,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  getIssues(issueStatusID: IssueStatuses) {
+  getIssues(issueStatusID: IssueStatuses): void {
 
     this.error = '';
 
@@ -192,7 +192,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // If there was an auto count update, refresh counts in progress component
-  updateIssueCountsAfterFetch(isr: IssueSelectionResult) {
+  updateIssueCountsAfterFetch(isr: IssueSelectionResult): void {
     if (isr.groupIssueCounts.countsUpdated) {
       // subGroup is already bound to progress component
       this.group.issuesNotInPrioritisation = isr.groupIssueCounts.issuesNotInPrioritisation;
@@ -204,7 +204,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  refreshIssueCount(statusID: IssueStatuses, count: number) {
+  refreshIssueCount(statusID: IssueStatuses, count: number): void {
     switch (statusID) {
       case IssueStatuses.PrioritisationYetToStart:
         this.group.issuesNotInPrioritisation = count;
@@ -224,7 +224,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  createNewIssue() {
+  createNewIssue(): void {
     this.newIssue = true;
     this.newIssueEdit = new Issue();
     this.newIssueEdit.organisationID = this.group.organisationID;
@@ -233,35 +233,35 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.newIssueEdit.publish = true;
     const earliest = new Date();
     const latest = this.appData.addMonths(earliest, 3);
-    this.newIssueEdit.selectionDateEarliest = this.appData.UDTF(earliest);
-    this.newIssueEdit.selectionDateLatest = this.appData.UDTF(latest);
+    this.newIssueEdit.selectionDateEarliest = earliest; // this.appData.UDTF(earliest);
+    this.newIssueEdit.selectionDateLatest = latest; // this.appData.UDTF(latest);
   }
 
 
   // Highlight selected status
-  initialiseIssueProgressDisplay() {
+  initialiseIssueProgressDisplay(): void {
     this.progressComponent.issueStatusID = this.issueStatusID;
     this.progressComponent.proposalStatusID = this.proposalStatusID;
   }
 
-  issueCreated(statusID) {
+  issueCreated(statusID: IssueStatuses): void {
     this.newIssue = false;
     this.refreshSubGroup();
     this.getIssues(statusID);
     this.progressComponent.issueStatusID = statusID;
   }
 
-  newIssueCancelled() {
+  newIssueCancelled(): void {
     this.newIssue = false;
     this.reInitialise();
   }
 
 
-  issueDeleted() {
+  issueDeleted(): void {
     this.refreshSubGroup();
   }
 
-  getPsOrQs(proposalStatus: ProposalStatuses) {
+  getPsOrQs(proposalStatus: ProposalStatuses): void {
 
     this.error = '';
 
@@ -280,7 +280,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  selectIssueNow() {
+  selectIssueNow(): void {
     this.error = '';
     if (confirm('Select issue for discussion now?')) {
       this.startingDiscussion = true;
@@ -321,7 +321,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
 
   }
 }

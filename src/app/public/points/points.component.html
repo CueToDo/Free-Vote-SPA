@@ -11,7 +11,7 @@
           </mat-checkbox>
           <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyAliasFilter" (change)="VoterFilter()">voter
           </mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.favourites" (change)="FilterFavs($event)">
+          <mat-checkbox labelPosition="before" [(ngModel)]="filter.favourites" #checkbox="matCheckbox" (change)="FilterFavs(checkbox)">
             {{ favouritesText }}</mat-checkbox>
           <mat-checkbox labelPosition="before" [(ngModel)]="filter.anyTag" (change)="FilterOnTag()">any tag
           </mat-checkbox>
@@ -19,7 +19,7 @@
           </mat-checkbox>
           <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyTypeFilter" (change)="FilterOnType()">type
           </mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyDateFilter" (change)="FilterOnDates($event)">
+          <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyDateFilter" #checkbox="matCheckbox" (change)="FilterOnDates(checkbox)">
             dates
           </mat-checkbox>
           <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyFeedbackFilter" (change)="FilterOnFeedback()">
@@ -53,7 +53,7 @@
           <input matInput name="aliasTextFilter" [(ngModel)]="filter.byAlias" placeholder="enter voter alias"
             (keyup.enter)="Select()">
           <button mat-button *ngIf="filter.byAlias" matSuffix mat-icon-button aria-label="Clear"
-            (click)="byAliasFilter=''" type="button">
+            (click)="filter.byAlias=''" type="button">
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
@@ -74,7 +74,7 @@
           <input matInput name="pointTextFilter" [(ngModel)]="filter.text" placeholder="enter point filter text"
             (keyup.enter)="Select()">
           <button mat-button *ngIf="filter.text" matSuffix mat-icon-button aria-label="Clear"
-            (click)="pointTextFilter=''" type="button">
+            (click)="filter.text=''" type="button">
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>

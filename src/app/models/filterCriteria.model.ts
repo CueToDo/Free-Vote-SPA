@@ -60,7 +60,7 @@ export class FilterCriteria {
     sortType = PointSortTypes.TrendingActivity;
     sortAscending = false;
 
-    get activeFilters(): Boolean {
+    get activeFilters(): boolean {
         return this.myPoints || this.applyAliasFilter || this.applyDraftFilter || this.anyTag || this.applyTextFilter
             || this.applyDateFilter || this.applyFeedbackFilter || this.favourites;
     }

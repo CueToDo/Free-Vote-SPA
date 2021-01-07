@@ -13,7 +13,6 @@ import { Group, GroupUpdate } from '../models/group.model';
 
 // Base Services
 import { HttpService } from './http.service';
-import { AppDataService } from './app-data.service';
 
 @Injectable({ providedIn: 'root' })
 export class OrganisationsService {
@@ -22,12 +21,12 @@ export class OrganisationsService {
         private httpClientService: HttpService
     ) { }
 
-    organisationsSelected: Organisation[];
+    organisationsSelected: Organisation[] = [];
 
     OrganisationMembership(searchTerms: string): Observable<Organisation[]> {
 
         const postData = {
-            'SearchTerms': searchTerms
+            SearchTerms: searchTerms
         };
 
         return this.httpClientService
@@ -42,7 +41,7 @@ export class OrganisationsService {
     OrganisationsAvailable(searchTerms: string): Observable<Organisation[]> {
 
         const postData = {
-            'SearchTerms': searchTerms
+            SearchTerms: searchTerms
         };
 
         return this.httpClientService
@@ -57,7 +56,7 @@ export class OrganisationsService {
     OrganisationSearchByName(organisationName: string): Observable<Organisation> {
 
         const postData = {
-            'SearchTerms': organisationName
+            SearchTerms: organisationName
         };
 
         return this.httpClientService
@@ -86,14 +85,11 @@ export class OrganisationsService {
             );
             if (!!organisationsFiltered && organisationsFiltered.length === 1) {
                 organisationChosen = organisationsFiltered[0];
+                return of(organisationChosen!); // No need to search
             }
         }
 
-        if (!!organisationChosen) {
-            return of(organisationChosen);
-        } else {
-            return this.OrganisationSearchByName(organisationName);
-        }
+        return this.OrganisationSearchByName(organisationName);
     }
 
     Join(groupID: number): Observable<number> {

@@ -18,16 +18,14 @@ export class DatepickerComponent {
     this.dateValue = new Date(value); // Important that a new date object is created
   }
 
+  @Output() DateChange = new EventEmitter<Date>();
+
   @Input()
   set UserPrompt(value: string) {
     this.placeholder = value;
   }
 
-  @Output()
-  DateChange = new EventEmitter<Date>();
-
-
-  DateSelected() {
+  DateSelected(): void {
     this.DateChange.emit(this.dateValue);
   }
 

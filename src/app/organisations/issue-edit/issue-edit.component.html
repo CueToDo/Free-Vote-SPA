@@ -8,8 +8,8 @@
     </div>
 
     <!-- The Editor -->
-    <ckeditor [(ngModel)]="issueClone.context" name="ckeIssue" [config]="config" [readonly]="false" debounce="250" required
-        #tvIssue="ngModel" (blur)="onCKEBlur()">
+    <ckeditor [(ngModel)]="issueClone.context" name="ckeIssue" [config]="config" debounce="250" required
+        (blur)="onCKEBlur()"> <!-- 3/1/2021 TS4 #tvIssue="ngModel" -->
     </ckeditor>
 
     <!-- ToolBar -->

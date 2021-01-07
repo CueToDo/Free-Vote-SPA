@@ -1,13 +1,14 @@
-import { AppDataService } from 'src/app/services/app-data.service';
-import { IssueStatuses } from '../../models/enums';
-
 // Angular
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+
+// Lodash https://github.com/lodash/lodash/issues/3192
+const cloneDeep = require('lodash/cloneDeep');
 
 // Models
 import { Issue } from 'src/app/models/issue.model';
 
 // Services
+import { IssueStatuses } from '../../models/enums'; 
 import { IssuesService } from 'src/app/services/issues.service';
 
 @Component({
@@ -48,22 +49,21 @@ export class IssueEditComponent implements OnInit {
   };
 
   constructor(
-    private issuesService: IssuesService,
-    private appData: AppDataService
+    private issuesService: IssuesService
   ) { }
 
   ngOnInit(): void {
     // For some reason need to cast to any before cast to issue ???
-    this.issueClone = <Issue><any>this.appData.deep(this.issue);
+    this.issueClone = cloneDeep(this.issue) as Issue;
   }
 
   // https://stackoverflow.com/questions/44012321/meaning-of-var-ngmodel
 
-  onCKEBlur() {
+  onCKEBlur(): void {
 
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.saving = true;
     this.issuesService.IssueUpdate(this.issueClone).subscribe(
       {
@@ -82,8 +82,7 @@ export class IssueEditComponent implements OnInit {
     );
   }
 
-  Cancel() {
-    // this.point = new Point();
+  Cancel(): void {
     this.CancelEdit.next();
   }
 }

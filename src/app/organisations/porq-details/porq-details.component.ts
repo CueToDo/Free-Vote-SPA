@@ -80,7 +80,7 @@ export class PorqDetailsComponent implements OnInit {
     this.getPoints();
   }
 
-  getPoints() {
+  getPoints(): void {
     this.pointsService.PorQPoints(this.porQID).subscribe(
       {
         next: (psr: PointSelectionResult) => {
@@ -92,20 +92,21 @@ export class PorqDetailsComponent implements OnInit {
     );
   }
 
-  newPoint() {
+  newPoint(): void {
     this.editNewPoint = true;
   }
 
-  cancelNewPoint() {
+  cancelNewPoint(): void {
     this.editNewPoint = false;
   }
 
-  attachNewPoint($event) {
+  attachNewPoint(pointID: number): void {
 
     this.editNewPoint = false; // point saved
 
     // now attach to this porQ
-    this.psAndQsService.PointAttachToPorQ($event, this.porQ.porQID)
+    // https://stackoverflow.com/questions/47152847/angular2getting-event-target-value
+    this.psAndQsService.PointAttachToPorQ(pointID, this.porQ.porQID)
       .pipe(
         // point attached, now fetch all points for PorQ
         concatMap(res => this.pointsService.PorQPoints(this.porQ.porQID)
@@ -119,7 +120,7 @@ export class PorqDetailsComponent implements OnInit {
       );
   }
 
-  onPointDeleted(pointID: number) {
+  onPointDeleted(pointID: number): void {
     this.getPoints();
   }
 

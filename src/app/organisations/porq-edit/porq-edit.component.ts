@@ -2,8 +2,13 @@
 // Angular
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
+// Lodash https://github.com/lodash/lodash/issues/3192
+const cloneDeep = require('lodash/cloneDeep');
+
+import * as CKEditor from '@ckeditor/ckeditor5-build-classic';
+
 // Models and Enums
-import { PorQEdit, PorQ } from '../../models/porq.model';
+import { PorQEdit } from '../../models/porq.model';
 import { PorQTypes } from 'src/app/models/enums';
 
 // Services
@@ -20,7 +25,9 @@ export class PorqEditComponent implements OnInit {
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
 
-  @Input() public porQ: PorQ;
+  @Input() public porQ: PorQEdit;
+
+  public ckeditor = CKEditor;
 
   public porQEdit: PorQEdit;
   public PorQTypes = PorQTypes;
@@ -47,14 +54,14 @@ export class PorqEditComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.porQEdit = <PorQEdit><any>this.appData.deep(this.porQ);
+    this.porQEdit = cloneDeep(this.porQ);
   }
 
-  onCKEBlur() {
+  onCKEBlur(): void {
 
   }
 
-  onSubmit() {
+  onSubmit(): void {
 
     this.PsAndQs.PorQUpdate(this.porQEdit).subscribe(
       {
@@ -65,7 +72,7 @@ export class PorqEditComponent implements OnInit {
 
   }
 
-  cancel() {
+  cancel(): void {
     this.CancelEdit.emit();
   }
 

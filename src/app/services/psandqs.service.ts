@@ -47,7 +47,8 @@ export class PsandQsService {
   // 1) First batch
   // 2) Subsequent batch (very similar to above, can these be consolidated?)
   // 3) Page of points for all selection methods
-  PsAndQsSelectIssue(subGroupID: number, issueID: number, porQTypeID: PorQTypes,
+  PsAndQsSelectIssue(
+    subGroupID: number, issueID: number, porQTypeID: PorQTypes,
     proposalStatusID: ProposalStatuses, myPorQsOnly: boolean): Observable<PorQSelectionResult> {
 
     const batchSize = 50;
@@ -94,7 +95,7 @@ export class PsandQsService {
       );
   }
 
-  CastToPorQSelectionResult(sourceData): PorQSelectionResult {
+  CastToPorQSelectionResult(sourceData: any): PorQSelectionResult {
 
     const PQSR = new PorQSelectionResult();
 
@@ -115,20 +116,20 @@ export class PsandQsService {
   PorQUpdate(porQ: PorQEdit): Observable<number> {
 
     // construct a new PorQEdit
-    const postData = <PorQEdit>{
-      'issueID': porQ.issueID,
-      'porQID': porQ.porQID,
-      'porQTypeID': porQ.porQTypeID,
-      'title': porQ.title,
-      'porQ': porQ.porQ,
-      'draft': porQ.draft,
-    };
+    const postData = {
+      issueID: porQ.issueID,
+      porQID: porQ.porQID,
+      porQTypeID: porQ.porQTypeID,
+      title: porQ.title,
+      porQ: porQ.porQ,
+      draft: porQ.draft,
+    } as PorQEdit;
 
     return this.httpClientService
       .post('issues/porQUpdate', postData);
   }
 
-  PorQDelete(issueID: number, porQID: number) {
+  PorQDelete(issueID: number, porQID: number): Observable<any> {
     return this.httpClientService
       .get(`issues/porQDelete/${issueID}/${porQID}`);
   }

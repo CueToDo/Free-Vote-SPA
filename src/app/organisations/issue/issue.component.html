@@ -20,7 +20,7 @@
                 </button>
             </div>
 
-            <div [matTooltip]="editToolTip">
+            <div [matTooltip]="editTooltip">
                 <button mat-stroked-button (click)="edit()" *ngIf="issue.isIssueOwner" class="mr-3"
                     [disabled]="issue.statusID === 6">
                     <mat-icon>edit</mat-icon>
@@ -72,7 +72,7 @@
                     <strong>{{ issue.voteCastDateTime }}</strong>
                 </span>
 
-                <span class="spinner-grow text-primary ml-3" role="status" *ngIf="savingVote">
+                <span class="spinner-grow text-primary ml-3" role="status" *ngIf="saving">
                     <span class="sr-only">Loading...</span>
                 </span>
 

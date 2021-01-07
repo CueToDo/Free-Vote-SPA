@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   threats = false;
   threads = false;
 
-  isMobile = null;
+  isMobile = false; // Was null - was there a reason?
 
   privacyUrl = this.localData.siteUrl + 'policy.html';
 
@@ -49,13 +49,13 @@ export class HomeComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Don't emit InputSlashTagOnMobile$ here as it triggers error in app.component
     // ExpressionChangedAfterItHasBeenCheckedError
     this.restartSearch();
   }
 
-  epicFunction() {
+  epicFunction(): void {
     this.isMobile = this.deviceService.isMobile();
   }
 
@@ -64,14 +64,14 @@ export class HomeComponent implements OnInit {
   }
 
 
-  beginInput() {
+  beginInput(): void {
     // Only update if we are on mobile
     if (this.isMobile) {
       this.appData.InputSlashTagOnMobile$.next(true);
     }
   }
 
-  endInput() {
+  endInput(): void {
     // Only update if we are on mobile
     if (this.isMobile) {
       this.appData.InputSlashTagOnMobile$.next(false);
@@ -104,7 +104,7 @@ export class HomeComponent implements OnInit {
   }
 
 
-  slashTagChanged() {
+  slashTagChanged(): void {
 
     // can't use same kebab function as kebabUri - we need to allow ending "-" while typing
     // .filter - an empty string evaluates to boolean false. It works with all falsy values like 0, false, null, undefined
@@ -133,7 +133,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  showTagPoints() {
+  showTagPoints(): void {
 
     if (!this.slashTag || this.slashTag === '/') {
       this.restartSearch();

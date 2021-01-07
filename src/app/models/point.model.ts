@@ -61,7 +61,7 @@ export class PointFeedbackFormData {
 
 export class PointWoWFormData {
     pointID: number;
-    woW: boolean;
+    wow: boolean;
     feedbackAnon: boolean;
 }
 

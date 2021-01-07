@@ -36,7 +36,7 @@
                 </div>
 
                 <app-point-edit *ngIf="editNewPoint" [isPorQPoint]="true" (CancelEdit)="cancelNewPoint()"
-                    (CompleteEdit)="attachNewPoint($event)"></app-point-edit>
+                    (CompleteEdit)="attachNewPoint($event.target.value)"></app-point-edit>
 
                 <!-- Points List -->
                 <ng-container *ngIf="!editNewPoint">

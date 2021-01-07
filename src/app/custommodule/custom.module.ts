@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../material.module';
 
 // CKEditor
-import { CKEditorModule } from '@ckeditor/ckeditor5-build-classic';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 // Pipes
 import { TagDisplayPipe } from './pipes/tag-display.pipe';

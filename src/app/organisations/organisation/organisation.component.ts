@@ -2,6 +2,9 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+// Lodash https://github.com/lodash/lodash/issues/3192
+const cloneDeep = require('lodash/cloneDeep');
+
 // Models
 import { GeographicalExtentID, MeetingIntervals } from 'src/app/models/enums';
 import { Organisation } from 'src/app/models/organisation.model';
@@ -28,8 +31,8 @@ export class OrganisationComponent implements OnInit, OnDestroy {
   groupEdit = false;
   membershipMessage = '';
 
-  newSubGroupTemplate: Group;
-  creatingNewSubGroup = false;
+  newGroupTemplate: Group;
+  creatingNewGroup = false;
 
   error: string;
 
@@ -45,8 +48,8 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     return this.appData.ShowCities(this.OrganisationDisplay.geographicalExtentID);
   }
 
-  issuesLink(subGroup: string): string {
-    return `/organisation/${this.appData.kebabUri(this.OrganisationDisplay.organisationName)}/${this.appData.kebabUri(subGroup)}`;
+  issuesLink(group: string): string {
+    return `/organisation/${this.appData.kebabUri(this.OrganisationDisplay.organisationName)}/${this.appData.kebabUri(group)}`;
   }
 
   constructor(
@@ -62,9 +65,9 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     this.getGroup();
   }
 
-  getGroup() {
+  getGroup(): void {
 
-    let organisationName = this.activatedRoute.snapshot.params['organisationName'];
+    let organisationName = this.activatedRoute.snapshot.params.organisationName;
     organisationName = this.appData.unKebabUri(organisationName);
 
     this.groupsService.Organisation(organisationName, true).subscribe(
@@ -79,7 +82,7 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     );
   }
 
-  Join() {
+  Join(): void {
 
     this.error = '';
     this.membershipMessage = '';
@@ -96,7 +99,7 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     );
   }
 
-  Leave() {
+  Leave(): void {
 
     this.error = '';
     this.membershipMessage = '';
@@ -113,7 +116,7 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     );
   }
 
-  Activate() {
+  Activate(): void {
 
     this.error = '';
 
@@ -125,7 +128,7 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     );
   }
 
-  DeActivate() {
+  DeActivate(): void {
 
     this.error = '';
 
@@ -137,12 +140,12 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     );
   }
 
-  Edit() {
-    this.groupCopy = <Organisation>this.appData.deep(this.OrganisationDisplay); // If we decide to cancel
+  Edit(): void {
+    this.groupCopy = cloneDeep(this.OrganisationDisplay) as Organisation; // If we decide to cancel
     this.groupEdit = true;
   }
 
-  Delete() {
+  Delete(): void {
     this.error = '';
     if (confirm(`Are you sure you wish to permanently delete this group?
 This cannot be undone.`)) {
@@ -156,36 +159,36 @@ This cannot be undone.`)) {
     }
   }
 
-  Cancel() {
-    this.OrganisationDisplay = <Organisation>this.appData.deep(this.groupCopy);
+  Cancel(): void {
+    this.OrganisationDisplay = cloneDeep(this.groupCopy) as Organisation;
     this.groupEdit = false;
   }
 
-  Complete(group: Organisation) {
+  Complete(group: Organisation): void {
     this.OrganisationDisplay = group;
     this.groupEdit = false;
   }
 
-  newSubGroup() {
-    this.newSubGroupTemplate = new Group();
-    this.newSubGroupTemplate.organisationID = this.OrganisationDisplay.organisationID;
-    this.newSubGroupTemplate.open = true;
-    this.newSubGroupTemplate.meetingIntervalID = MeetingIntervals.Weekly.toString();
-    this.newSubGroupTemplate.selectionDayOfWeek = '1';
-    this.newSubGroupTemplate.selectionTimeOfDay = '19:00';
-    this.newSubGroupTemplate.nextIssueSelectionDate = this.appData.NextMonday();
-    this.newSubGroupTemplate.nextIssueSelectionTime = '19:00';
-    this.creatingNewSubGroup = true;
+  newGroup(): void {
+    this.newGroupTemplate = new Group();
+    this.newGroupTemplate.organisationID = this.OrganisationDisplay.organisationID;
+    this.newGroupTemplate.open = true;
+    this.newGroupTemplate.meetingIntervalID = MeetingIntervals.Weekly.toString();
+    this.newGroupTemplate.selectionDayOfWeek = 1;
+    this.newGroupTemplate.selectionTimeOfDay = '19:00';
+    this.newGroupTemplate.nextIssueSelectionDate = this.appData.NextMonday();
+    this.newGroupTemplate.nextIssueSelectionTime = '19:00';
+    this.creatingNewGroup = true;
   }
 
 
-  newSubgroupCreated(newSubGroup: string) {
-    this.creatingNewSubGroup = false;
+  newGroupCreated(): void {
+    this.creatingNewGroup = false;
     this.getGroup();
   }
 
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
 
   }
 }

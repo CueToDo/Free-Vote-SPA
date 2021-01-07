@@ -56,7 +56,7 @@ export class LocalDataService {
         this.LoadValues();
     }
 
-    SetItem(name: string, value: string) {
+    SetItem(name: string, value: string): void {
         if (value === 'null') { value = ''; }
         localStorage.setItem(name, value);
     }
@@ -64,10 +64,10 @@ export class LocalDataService {
     GetItem(name: string): string {
         let value = localStorage.getItem(name);
         if (value === 'null') { value = null; }
-        return value;
+        return '' + value;
     }
 
-    public SetServiceURL() {
+    public SetServiceURL(): void {
 
         // check if running locally to determine service url
 
@@ -103,7 +103,7 @@ export class LocalDataService {
         this.serviceUrl = this.siteUrl + 'api/';
     }
 
-    public LoadValues() {
+    public LoadValues(): void {
 
         this.loggingInToAuth0 = this.GetItem('loggingInToAuth0') === 'true';
         this.loggedInToAuth0 = this.GetItem('loggedInToAuth0') === 'true';
@@ -135,7 +135,7 @@ export class LocalDataService {
         this.ActiveAliasForFilter = this.previousAliasSelected;  // may be ''
     }
 
-    public SaveValues() {
+    public SaveValues(): void {
 
         this.SetItem('loggingInToAuth0', String(this.loggingInToAuth0));
         this.SetItem('loggedInToAuth0', String(this.loggedInToAuth0));
@@ -168,7 +168,7 @@ export class LocalDataService {
     }
 
     // DIY rather than Object.Assign
-    public AssignServerValues(values: any) {
+    public AssignServerValues(values: any): void {
 
         if (values) {
 
@@ -193,7 +193,7 @@ export class LocalDataService {
 
     // Saved Topic/SlashTag
     public get PreviousTopicSelected(): string { return this.previousTopicSelected; }
-    public get PreviousSlashTagSelected(): string { return this.TopicToSlashTag(this.previousTopicSelected); }
+
 
     public set PreviousTopisSelected(topic: string) {
         if (topic.charAt(0) === '/') {
@@ -205,6 +205,8 @@ export class LocalDataService {
 
         this.SetItem('PreviousTopicSelected', this.previousTopicSelected);
     }
+
+    public get PreviousSlashTagSelected(): string { return this.TopicToSlashTag(this.previousTopicSelected); }
 
     public set PreviousSlashTagSelected(slashTag: string) {
 
@@ -227,11 +229,11 @@ export class LocalDataService {
         this.SetItem('PreviousAliasSelected', alias);
     }
 
-    public ClearAliasFilter() { this.ActiveAliasForFilter = ''; }
-    public RestoreAliasFilter() { this.ActiveAliasForFilter = this.previousAliasSelected; }
+    public ClearAliasFilter(): void { this.ActiveAliasForFilter = ''; }
+    public RestoreAliasFilter(): void { this.ActiveAliasForFilter = this.previousAliasSelected; }
 
 
-    public SignedOut() {
+    public SignedOut(): void {
 
         // Clear in memory values
         this.loggingInToAuth0 = false;
@@ -260,7 +262,7 @@ export class LocalDataService {
 
 
 
-    onDestroy() {
+    onDestroy(): void {
         this.SaveValues();
     }
 

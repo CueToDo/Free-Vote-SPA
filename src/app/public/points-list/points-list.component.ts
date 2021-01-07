@@ -56,7 +56,7 @@ export class PointsListComponent implements OnInit {
 
 
   constructor(
-    private appData: AppDataService,
+    public appData: AppDataService,
     public localData: LocalDataService,
     private pointsService: PointsService
   ) { }
@@ -73,7 +73,7 @@ export class PointsListComponent implements OnInit {
     return onTopic;
   }
 
-  SelectPointsByVoter() {
+  SelectPointsByVoter(): void {
 
     this.localData.ActiveAliasForFilter = this.filter.byAlias;
 
@@ -84,7 +84,7 @@ export class PointsListComponent implements OnInit {
     this.SelectPoints();
   }
 
-  SelectPoints() {
+  SelectPoints(): void {
 
     if (!this.alreadyFetchingPointsFromDB) {
 
@@ -107,14 +107,14 @@ export class PointsListComponent implements OnInit {
           let pointTypeID = PointTypesEnum.NotSelected;
           if (this.filter.applyTypeFilter) { pointTypeID = this.filter.pointTypeID; }
 
-          let dateFrom: Date;
-          let dateTo: Date;
+          let dateFrom = new Date();
+          let dateTo = new Date();
 
           // Switch dates if dateFrom > dateTo
           if (this.filter.applyDateFilter) {
             dateFrom = this.filter.dateFrom;
             dateTo = this.filter.dateTo;
-            if (this.appData.Date1IsLessThanDate2(dateTo, dateFrom)) {
+            if (this.appData.Date1IsLessThanDate2(dateTo.toString(), dateFrom.toString())) {
               const dateSwitch = dateFrom;
               dateFrom = dateTo;
               dateTo = dateSwitch;
@@ -158,7 +158,7 @@ export class PointsListComponent implements OnInit {
   }
 
 
-  public SelectSpecificPoint(slashTag: string, pointTitle: string) {
+  public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
 
     this.alreadyFetchingPointsFromDB = true;
 
@@ -174,7 +174,7 @@ export class PointsListComponent implements OnInit {
       );
   }
 
-  newSortType(pointSortType: PointSortTypes) {
+  newSortType(pointSortType: PointSortTypes): void {
 
     if (this.pointCount > 1) {
       // Don't go to server to re-sort if only 1 point selected
@@ -197,7 +197,7 @@ export class PointsListComponent implements OnInit {
     }
   }
 
-  DisplayPoints(psr: PointSelectionResult) {
+  DisplayPoints(psr: PointSelectionResult): void {
 
     this.alreadyFetchingPointsFromDB = false;
 
@@ -205,13 +205,13 @@ export class PointsListComponent implements OnInit {
     if (psr.pointCount > 0) {
       // If we don't have dateFrom and fromDate is returned, OR
       // returned date is LESS than original, use returned date
-      if (!this.filter.dateFrom && psr.fromDate || this.appData.Date1IsLessThanDate2(psr.fromDate, this.filter.dateFrom)) {
+      if (!this.filter.dateFrom && psr.fromDate || this.appData.Date1IsLessThanDate2(psr.fromDate, this.filter.dateFrom.toString())) {
         this.filter.dateFrom = new Date(psr.fromDate);
       }
 
       // If we don't have dateTo and toDate is returned, OR
       // returned date is GREATER than original, use returned date
-      if (!this.filter.dateTo && psr.toDate || this.appData.Date1IsLessThanDate2(this.filter.dateTo, psr.toDate)) {
+      if (!this.filter.dateTo && psr.toDate || this.appData.Date1IsLessThanDate2(this.filter.dateTo.toString(), psr.toDate)) {
         this.filter.dateTo = new Date(psr.toDate);
       }
     }
@@ -226,7 +226,7 @@ export class PointsListComponent implements OnInit {
   }
 
   // https://stackblitz.com/edit/free-vote-infinite-scroll
-  fetchMorePoints() {
+  fetchMorePoints(): void {
 
     if (!this.alreadyFetchingPointsFromDB) {
 
@@ -275,13 +275,13 @@ export class PointsListComponent implements OnInit {
     }
   }
 
-  NewPointsDisplayed() {
+  NewPointsDisplayed(): void {
     this.alreadyFetchingPointsFromDB = false;
     this.allPointsDisplayed = (this.points.length >= this.pointCount);
     this.appData.PointsSelected$.next();
   }
 
-  onPointDeleted(id: number) {
+  onPointDeleted(id: number): void {
     // this.SelectPoints(); No need to reselect.
     // Already deleted from server, now remove from the array
     // https://love2dev.com/blog/javascript-remove-from-array/

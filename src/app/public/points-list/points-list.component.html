@@ -30,7 +30,7 @@
             </span>
 
             <span *ngIf="filter.single">
-                <a [routerLink]="slashTagFilter">show all</a>
+                <a>show all</a> <!-- [routerLink]="slashTagFilter" -->
             </span>
 
             <span *ngIf="alreadyFetchingPointsFromDB">

@@ -42,7 +42,7 @@ export class QuestionsService {
       );
   }
 
-  CastToQuestionSelectionResult(sourceData): QuestionSelectionResult {
+  CastToQuestionSelectionResult(sourceData: any): QuestionSelectionResult {
 
     const QSR = new QuestionSelectionResult();
 
@@ -71,16 +71,17 @@ export class QuestionsService {
 
     if (!pointIDs || pointIDs.length === 0) {
       console.log('No points to select');
-      return of(new QuestionSelectionResult);
+      return of(new QuestionSelectionResult());
     } else {
       const apiUrl = 'points/getPage';
 
+      // ToDo Removed 03/01/2021 ids not used
       // https://stackoverflow.com/questions/16553561/passing-list-of-keyvaluepair-or-idictionary-to-web-api-controller-from-javascrip
       // construct an object from an array
-      const ids = {}; // a const where you can add new properties with values
+      // const ids = {}; // a const where you can add new properties with values
 
-      pointIDs.forEach(item =>
-        ids[item.rowNumber] = item.id);
+      // pointIDs.forEach(item =>
+      //   ids[item.rowNumber] = item.id);
 
       return this.httpClientService
         .post(apiUrl, pointIDs)
@@ -102,12 +103,12 @@ export class QuestionsService {
 
     const apiUrl = 'questions/questionUpdate';
 
-    const postData = <QuestionEdit>{
-      'questionID': questionEdit.questionID,
-      'question': questionEdit.question,
-      'draft': questionEdit.draft,
-      'slashTag': questionEdit.slashTag
-    };
+    const postData = {
+      questionID: questionEdit.questionID,
+      question: questionEdit.question,
+      draft: questionEdit.draft,
+      slashTag: questionEdit.slashTag
+    } as QuestionEdit;
 
     return this.httpClientService
       .post(apiUrl, postData);

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
-import { filter, flatMap, map, tap } from 'rxjs/operators';
+import { filter, map, mergeMap, tap } from 'rxjs/operators';
 
 // Models
 import { ID } from '../models/common';
@@ -27,7 +27,7 @@ export class AppDataService {
   // 0 to 11
   months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  public promptEvent;
+  public promptEvent: BeforeInstallPromptEvent;
 
   // Any subscriptions to the following must be unsubscribed
   public RouteParamChange$ = new Subject<string>(); // next url with route parameters
@@ -53,7 +53,10 @@ export class AppDataService {
   // Could use Promise for sign-in component, but other components such as menu need to know sign-in status
 
   // Not looked up in database - static types
-  public porQTypes = <Kvp[]>[{ 'key': 'Proposal', 'value': 1 }, { 'key': 'Question', 'value': 2 }, { 'key': 'Perspective', 'value': 3 }];
+  public porQTypes = [
+    { key: 'Proposal', value: 1 },
+    { key: 'Question', value: 2 },
+    { key: 'Perspective', value: 3 }] as Kvp[];
 
   // Lookup - could add more
   private pointTypes: Kvp[];
@@ -66,7 +69,7 @@ export class AppDataService {
       return this.httpService
         .get('lookups/point-types')
         .pipe(
-          map(types => <Kvp[]>types),
+          map(types => types as Kvp[]),
           tap(types => this.pointTypes = types)
         );
     }
@@ -79,7 +82,7 @@ export class AppDataService {
     } else {
       return this.httpService.get('lookups/geographicalExtents')
         .pipe(
-          map(value => <Kvp[]>value),
+          map(value => value as Kvp[]),
           tap(extents => this.extents = extents)
         );
     }
@@ -94,9 +97,8 @@ export class AppDataService {
     // PWA https://love2dev.com/blog/beforeinstallprompt/
     window.addEventListener('beforeinstallprompt', event => {
 
-      this.promptEvent = event;
+      this.promptEvent = event as BeforeInstallPromptEvent;
 
-      console.log('BEFORE INSTALL PROMPT');
     });
 
   }
@@ -132,7 +134,7 @@ export class AppDataService {
     return result;
   }
 
-  public addMonths(date: Date, months: number) {
+  public addMonths(date: Date, months: number): Date {
     const result = new Date(date);
     result.setMonth(result.getMonth() + months);
     return result;
@@ -186,7 +188,7 @@ export class AppDataService {
     return (input?.split('-').filter(item => item).join(' '));
   }
 
-  public Date1IsLessThanDate2(dateFrom, dateTo): boolean {
+  public Date1IsLessThanDate2(dateFrom: string, dateTo: string): boolean {
     if (!dateFrom || !dateTo) { return false; }
     const date1 = new Date(dateFrom);
     const date2 = new Date(dateTo);
@@ -205,7 +207,7 @@ export class AppDataService {
 
   // App start only - get previous Alias and Topic Selected from Local Storage or database
   // But NOT on return from sign out
-  InitialisePreviousSlashTagSelected() {
+  InitialisePreviousSlashTagSelected(): void {
 
     // LocalData LoadValues (called from its constructor) handles initial set up
 
@@ -227,12 +229,15 @@ export class AppDataService {
     return this.httpService.get('tags/tagLatestActivity');
   }
 
-  InitialiseStrapline() {
+  InitialiseStrapline(): void {
 
-    this.localData.strapline = localStorage.getItem('strapline');
+    // this.localData.strapline = localStorage.getItem('strapline');
+    // strapline is not saved to localStorage, just to localData (in-memory)
+    // '' | null is the string 'null', not an empty string
+    // string value 'null' is truthy
 
     if (!this.localData.strapline) {
-      return this.httpService.get(`lookups/website-strapline/${this.localData.website}`)
+      this.httpService.get(`lookups/website-strapline/${this.localData.website}`)
         .subscribe(
           strapline => {
             this.localData.strapline = strapline.value;
@@ -259,7 +264,7 @@ export class AppDataService {
 
 
 
-  SetSlashTag(slashTag: string, pointSortType: PointSortTypes) {
+  SetSlashTag(slashTag: string, pointSortType: PointSortTypes): void {
 
     this.localData.PreviousSlashTagSelected = slashTag;
     this.localData.ActiveAliasForFilter = '';
@@ -310,7 +315,7 @@ export class AppDataService {
     }
   }
 
-  ShowRegions(geographicalExtentID: string) {
+  ShowRegions(geographicalExtentID: string): boolean {
     switch (geographicalExtentID) {
       // Don't Show Regions if:
       case GeographicalExtentID.GlobalOrganisation.toString():
@@ -323,7 +328,7 @@ export class AppDataService {
     }
   }
 
-  ShowCities(geographicalExtentID: string) {
+  ShowCities(geographicalExtentID: string): boolean {
     switch (geographicalExtentID) {
       // Don't Show Cities if:
       case GeographicalExtentID.GlobalOrganisation.toString():
@@ -336,7 +341,7 @@ export class AppDataService {
     }
   }
 
-  GetMapValue(obj, key): string {
+  GetMapValue(obj: any, key: string): string {
     if (obj.hasOwnProperty(key)) {
       return obj[key];
     }
@@ -352,39 +357,43 @@ export class AppDataService {
   //   return Array.from(map.entries()).map(([key, val]) => ({ key, val }));
   // }
 
-  MeetingInterval(intervalID: string): string {
+  MeetingInterval(intervalID: number): string {
     switch (intervalID) {
-      case '1':
+      case 1:
         return 'Weekly';
-      case '2':
+      case 2:
         return 'Monthly Date';
-      case '3':
+      case 3:
         return 'Variable';
-      case '4':
+      case 4:
         return 'Monthly';
+      default:
+        return '';
     }
   }
 
-  public DayName(day: string): string {
+  public DayName(day: number): string {
     switch (day) {
-      case '1':
+      case 1:
         return 'Monday';
-      case '2':
+      case 2:
         return 'Tuesday';
-      case '3':
+      case 3:
         return 'Wednesday';
-      case '4':
+      case 4:
         return 'Thursday';
-      case '5':
+      case 5:
         return 'Friday';
-      case '6':
+      case 6:
         return 'Saturday';
-      case '7':
+      case 7:
         return 'Sunday';
+      default:
+        return '';
     }
   }
 
-  public ordinal(i): string {
+  public ordinal(i: number): string {
     const j = i % 10;
     const k = i % 100;
     if (j === 1 && k !== 11) {
@@ -399,7 +408,7 @@ export class AppDataService {
     return i + 'th';
   }
 
-  public plural(i: number) {
+  public plural(i: number): string {
     switch (i) {
       case 1:
         return '';
@@ -408,10 +417,10 @@ export class AppDataService {
     }
   }
 
-  public NextMonday(): string {
+  public NextMonday(): Date {
     const nextMon = new Date();
     nextMon.setDate(nextMon.getDate() - nextMon.getDay() + 8);
-    return this.UDF(nextMon);
+    return nextMon;
   }
 
   PointType(pointTypeID: number): Observable<string> {
@@ -438,14 +447,14 @@ export class AppDataService {
   }
 
   PorQType(porQTypeID: PorQTypes): string {
-    return this.porQTypes.filter(pt => pt.value === <number>porQTypeID)[0].key;
+    return this.porQTypes.filter(pt => pt.value === porQTypeID as number)[0].key;
   }
 
   // https://stackoverflow.com/questions/52419658/efficient-way-to-get-route-parameter-in-angular
   onNavigationEndReadParamByKey(route: ActivatedRoute, key: string): Observable<string> {
     return this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      flatMap(() => {
+      mergeMap(() => { /* flatMap deprecated - is this a direct replacement? */
         return route.params.pipe(
           filter(params => params[key]),
           map(params => params[key])
@@ -454,7 +463,7 @@ export class AppDataService {
     );
   }
 
-  CastObjectToIDs(sourceObject): ID[] {
+  CastObjectToIDs(sourceObject: any): ID[] {
     // construct an Array of objects from an object
     return Object.keys(sourceObject).map(key => {
       return { rowNumber: Number(key), id: sourceObject[key] };
@@ -464,7 +473,7 @@ export class AppDataService {
   ArrayOfKVP(source: any): Array<Kvp> {
     const output = new Array<Kvp>();
     for (const kvp of source) {
-      output.push(<Kvp>({ key: kvp.key, value: kvp.value }));
+      output.push(({ key: kvp.key, value: kvp.value }) as Kvp);
     }
     return output;
   }
@@ -494,29 +503,31 @@ export class AppDataService {
   // We call the copy shallow because the properties in the target object
   // can still hold references to those in the source object. WTF
 
-  deep<T>(value: T): T | any[] {
-    if (typeof value !== 'object' || value === null) {
-      return value;
-    }
-    if (Array.isArray(value)) {
-      return this.deepArray(value);
-    }
-    return this.deepObject(value);
-  }
+  // Now using lodash for deep copy and potentially other methods to manuipulate objects and arrays
 
-  deepArray<T extends any[]>(collection: T) {
-    return collection.map((value) => {
-      return this.deep(value);
-    });
-  }
+  // deep<T>(value: T): T | any[] {
+  //   if (typeof value !== 'object' || value === null) {
+  //     return value;
+  //   }
+  //   if (Array.isArray(value)) {
+  //     return this.deepArray(value as any[]);
+  //   }
+  //   return this.deepObject(value);
+  // }
 
-  deepObject<T>(source: T): T {
-    const result = {};
-    Object.keys(source).forEach((key) => {
-      const value = source[key];
-      result[key] = this.deep(value);
-    }, {});
-    return result as T;
-  }
+  // deepArray<T extends any[]>(collection: T): any[] {
+  //   return collection.map((value) => {
+  //     return this.deep(value);
+  //   });
+  // }
+
+  // deepObject<T>(source: T): T {
+  //   const result = {};
+  //   Object.keys(source).forEach((key) => {
+  //     const value = source[key];
+  //     result[key] = this.deep(value);
+  //   }, {});
+  //   return result as T;
+  // }
 
 }

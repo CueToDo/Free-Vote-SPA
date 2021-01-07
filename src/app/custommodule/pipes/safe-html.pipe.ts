@@ -1,4 +1,4 @@
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PipeTransform, Pipe } from '@angular/core';
 
 // https://stackoverflow.com/questions/39628007/angular2-innerhtml-binding-remove-style-attribute/39630507
@@ -9,7 +9,7 @@ import { PipeTransform, Pipe } from '@angular/core';
 @Pipe({ name: 'SafeHtml' })
 export class SafeHtmlPipe implements PipeTransform {
   constructor(private sanitized: DomSanitizer) { }
-  transform(value) {
+  transform(value: string): SafeHtml {
     return this.sanitized.bypassSecurityTrustHtml(value);
   }
 }

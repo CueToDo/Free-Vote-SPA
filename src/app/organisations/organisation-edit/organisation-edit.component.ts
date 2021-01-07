@@ -23,6 +23,7 @@ import { OrganisationsService } from 'src/app/services/groups.service';
 export class OrganisationEditComponent implements OnInit, OnDestroy {
 
   @Input() organisation: Organisation;
+  @Output() organisationChange = new EventEmitter();
 
   @Output() Cancel = new EventEmitter();
   @Output() Complete = new EventEmitter<Organisation>();
@@ -71,30 +72,30 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
 
   }
 
-  public ClearError() {
+  public ClearError(): void {
     this.error = '';
     this.elGroupName.nativeElement.focus();
   }
 
-  nameComplete() {
+  nameComplete(): void {
     this.elGroupDescription.nativeElement.focus();
   }
 
-  descriptionComplete() {
+  descriptionComplete(): void {
     this.elGroupWebsite.nativeElement.focus();
   }
 
-  websiteComplete() {
+  websiteComplete(): void {
     this.elGeoExtent.focus();
   }
 
-  extentSelected(extent: string) {
+  extentSelected(extent: string): void {
     // NB: Value from a drop down will be a string
     // extent is a string, even if we did type it as a number
-    this.organisation.geographicalExtent = GeographicalExtent.get(extent);
+    this.organisation.geographicalExtent = '' + GeographicalExtent.get(extent);
   }
 
-  Update() {
+  Update(): void {
 
     if (this.appData.isUrlNameUnSafe(this.organisation.organisationName)) {
       if (confirm('Sub Group name contains invalid characters. Remove them now?')) {
@@ -125,11 +126,11 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
 
   }
 
-  CancelEdit() {
+  CancelEdit(): void {
     this.Cancel.emit();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.groups$) { this.groups$.unsubscribe(); }
     if (this.extents$) { this.extents$.unsubscribe(); }
   }

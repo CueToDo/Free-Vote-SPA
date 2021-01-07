@@ -41,7 +41,7 @@ export class ByComponent implements OnInit, OnDestroy {
     private tagsService: TagsService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     // Get Aliases
     this.aliases$ = this.tagsService.ByAliases('1 jan 2000', '31 dec 2050')
@@ -54,7 +54,7 @@ export class ByComponent implements OnInit, OnDestroy {
     // the subscription dies with it.
     this.activatedRoute.paramMap
       .subscribe(
-        (params: ParamMap) => this.ListTopicsByAlias(params.get('alias'))
+        (params: ParamMap) => this.ListTopicsByAlias('' + params.get('alias'))
       );
 
   }
@@ -64,14 +64,14 @@ export class ByComponent implements OnInit, OnDestroy {
   }
 
 
-  highlight(byAlias: string) {
+  highlight(byAlias: string): void {
     for (let i = 0; i < this.byAliases.length; i++) {
       this.highlightStatus[i] = this.byAliases[i].byOn === byAlias;
     }
   }
 
 
-  ListTopicsByAlias(byAlias: string) {
+  ListTopicsByAlias(byAlias: string): void {
 
     if (byAlias) {
 
@@ -96,7 +96,7 @@ export class ByComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.aliases$.unsubscribe();
   }
 }

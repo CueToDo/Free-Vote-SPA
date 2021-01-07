@@ -2,6 +2,8 @@
 // Angular
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
+import { cloneDeep } from 'lodash';
+
 // Models, enums
 import { Question, QuestionEdit } from 'src/app/models/question.model';
 import { PointSortTypes } from 'src/app/models/enums';
@@ -17,7 +19,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
 })
 export class QuestionEditComponent implements OnInit {
 
-  @Input() question = new Question();
+  @Input() public question = new Question();
   questionEdit: QuestionEdit;
 
   @Output() CancelEdit = new EventEmitter();
@@ -35,13 +37,13 @@ export class QuestionEditComponent implements OnInit {
 
   ngOnInit(): void {
     if (!!this.question) {
-      this.questionEdit = <QuestionEdit><any>this.appData.deep(this.question);
+      this.questionEdit = cloneDeep(this.question) as any as QuestionEdit;
       // this.questionEdit.slashTag = this.localData.PreviousSlashTagSelected;
     }
     // If a new question, parent must initialise with NewQuestion
   }
 
-  NewQuestion(slashTag: string) {
+  NewQuestion(slashTag: string): void {
     // Clear old Values when edit complete
     this.questionEdit = new QuestionEdit();
     this.ClearQuestion();
@@ -49,7 +51,7 @@ export class QuestionEditComponent implements OnInit {
     console.log('New Question;', slashTag);
   }
 
-  ClearQuestion() {
+  ClearQuestion(): void {
     this.questionEdit.questionID = -1;
     this.questionEdit.question = '';
     this.questionEdit.draft = false;
@@ -59,11 +61,11 @@ export class QuestionEditComponent implements OnInit {
     // Leave slashtag
   }
 
-  onQuestionBlur() {
+  onQuestionBlur(): void {
     this.userTouched = true;
   }
 
-  onSubmit() {
+  onSubmit(): void {
 
     const isNew = this.questionEdit.questionID < 1;
 
@@ -94,7 +96,7 @@ export class QuestionEditComponent implements OnInit {
 
   }
 
-  Cancel() {
+  Cancel(): void {
     this.ClearQuestion();
     // this.cancelled = true;
     this.CancelEdit.next();

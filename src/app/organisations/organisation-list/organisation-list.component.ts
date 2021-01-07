@@ -16,10 +16,10 @@ import { OrganisationsService } from 'src/app/services/groups.service';
 })
 export class OrganisationListComponent implements OnInit, OnDestroy {
 
-  @Input() CurrentMembership: boolean;
+  @Input() CurrentMembership = false;
 
-  public organisations: Organisation[];
-  public organisationCount: number;
+  public organisations: Organisation[] = [];
+  public organisationCount = 0;
   public organisationFilter = '';
   public waiting = false;
   public message = '';
@@ -30,10 +30,10 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
     private groupsService: OrganisationsService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  @Input() Refresh() {
+  @Input() Refresh(): void {
 
     this.organisations = [];
     this.waiting = true;
@@ -81,7 +81,8 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
 
   }
+
 }

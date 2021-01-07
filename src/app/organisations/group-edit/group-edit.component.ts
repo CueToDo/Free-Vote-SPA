@@ -1,7 +1,8 @@
 // Angular
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
-// rxjs
+// Lodash https://github.com/lodash/lodash/issues/3192
+const cloneDeep = require('lodash/cloneDeep');
 
 // Services
 import { AppDataService } from '../../services/app-data.service';
@@ -21,8 +22,9 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   @Input() group: Group;
   @Output() groupChange = new EventEmitter(); // Still need to emit
 
-  @Output() complete = new EventEmitter();
-  @Output() cancelled = new EventEmitter();
+  // ToDo Following renamed
+  @Output() editcompleted = new EventEmitter();
+  @Output() editcancelled = new EventEmitter();
 
   @ViewChild('groupName', { static: true }) elSubGroupName: ElementRef;
 
@@ -37,7 +39,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.subGroupCopy = this.appData.deep(this.group) as Group;
+    this.subGroupCopy = cloneDeep(this.group) as Group;
     this.elSubGroupName.nativeElement.focus();
     if (!this.group.groupID || this.group.groupID < 1) {
       this.group.decisionBasisOptionID = GroupDecisionBasisOption.SimpleMajority.toString();
@@ -58,7 +60,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  update() {
+  update(): void {
 
     if (this.appData.isUrlNameUnSafe(this.group.groupName)) {
       if (confirm('Sub Group name contains invalid characters. Remove them now?')) {
@@ -73,12 +75,12 @@ export class GroupEditComponent implements OnInit, OnDestroy {
       this.saving = true;
       this.error = '';
 
-      this.groupsService.GroupUpdate(this.group as GroupUpdate).subscribe(
+      this.groupsService.GroupUpdate(this.group as any as GroupUpdate).subscribe(
         {
           next: subGroup => {
-            this.group = this.appData.deep(subGroup) as Group;
+            this.group = cloneDeep(subGroup) as Group;
             this.groupChange.emit(this.group);
-            this.complete.emit(this.group.groupName);
+            this.editcompleted.emit(this.group.groupName);
           },
           error: serverError => {
             this.error = serverError.error.detail;
@@ -90,13 +92,13 @@ export class GroupEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  cancel() {
-    this.group = this.appData.deep(this.subGroupCopy) as Group;
+  cancel(): void {
+    this.group = cloneDeep(this.subGroupCopy) as Group;
     this.groupChange.emit(this.group);
-    this.cancelled.emit();
+    this.editcancelled.emit();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
 
   }
 }

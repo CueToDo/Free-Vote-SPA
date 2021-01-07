@@ -2,7 +2,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 // Models, enums
-import { PointSortTypes, DraftStatusFilter, PointFeedbackFilter } from 'src/app/models/enums';
+import { PointSortTypes } from 'src/app/models/enums';
 import { ID } from 'src/app/models/common';
 import { Question, QuestionSelectionResult } from 'src/app/models/question.model';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
@@ -63,7 +63,7 @@ export class QuestionsListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  SelectQuestions() {
+  SelectQuestions(): void {
 
     if (!this.alreadyFetchingFromDB) {
 
@@ -85,7 +85,7 @@ export class QuestionsListComponent implements OnInit {
     }
   }
 
-  newSortType(pointSortType: PointSortTypes) {
+  newSortType(pointSortType: PointSortTypes): void {
 
     if (this.questionCount > 1) {
       // Don't go to server to re-sort if only 1 point selected
@@ -108,7 +108,7 @@ export class QuestionsListComponent implements OnInit {
     }
   }
 
-  DisplayQuestions(qsr: QuestionSelectionResult) {
+  DisplayQuestions(qsr: QuestionSelectionResult): void {
 
     this.alreadyFetchingFromDB = false;
 
@@ -122,7 +122,7 @@ export class QuestionsListComponent implements OnInit {
   }
 
   // https://stackblitz.com/edit/free-vote-infinite-scroll
-  fetchMoreQuestions() {
+  fetchMoreQuestions(): void {
 
     if (!this.alreadyFetchingFromDB) {
 
@@ -171,13 +171,13 @@ export class QuestionsListComponent implements OnInit {
     }
   }
 
-  NewQuestionsDisplayed() {
+  NewQuestionsDisplayed(): void {
     this.alreadyFetchingFromDB = false;
     this.allQuestionsDisplayed = (this.questions.length >= this.questionCount);
     this.appData.PointsSelected$.next();
   }
 
-  onQuestionDeleted(id: number) {
+  onQuestionDeleted(id: number): void {
     // this.SelectPoints(); No need to reselect.
     // Already deleted from server, now remove from the array
     // https://love2dev.com/blog/javascript-remove-from-array/

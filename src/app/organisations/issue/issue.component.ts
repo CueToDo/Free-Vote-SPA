@@ -3,7 +3,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 
 // Material
-import { MatSlider } from '@angular/material/slider';
+import { MatSlider, MatSliderChange } from '@angular/material/slider';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -87,22 +87,22 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     // voteSlider may not be visible
     if (this.voteSlider) {
       this.votechange$ = this.voteSlider.valueChange
         // Don't need a debounce time - slider does not emit value until user releases slider
         .subscribe(
-          { next: value => this.voteToDiscuss(value) }
+          { next: (value: number) => this.voteToDiscuss(value) }
         );
     }
   }
 
-  edit() {
+  edit(): void {
     this.issueEdit = true;
   }
 
-  delete() {
+  delete(): void {
     if (confirm('Are you sure you wish to delete this issue?')) {
       this.saving = true;
       this.issuesService.IssueDelete(this.issue.groupID, this.issue.issueID).subscribe(
@@ -120,7 +120,7 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  issuepublish(publish: boolean) {
+  issuepublish(publish: boolean): void {
     this.saving = true;
     this.issuesService.IssuePublish(this.issue.issueID, publish).subscribe(
       {
@@ -133,11 +133,13 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  instantVoteChange(event) {
-    this.issue.voterPriority = event.value;
+  instantVoteChange(event: MatSliderChange): void {
+    let priority = 0;
+    if (event.value) { priority = event.value; }
+    this.issue.voterPriority = priority;
   }
 
-  voteToDiscuss(priority: number) {
+  voteToDiscuss(priority: number): void {
     this.saving = true;
     this.issuesService.VoteToDiscuss(this.issue.issueID, priority).subscribe(
       {
@@ -152,7 +154,7 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.votechange$) {
       this.votechange$.unsubscribe();
     }

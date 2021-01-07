@@ -17,7 +17,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
 })
 export class QuestionComponent implements OnInit {
 
-  @Input() question: Question;
+  @Input() public question: Question;
   @Input() questionCount: number;
 
   @Output() QuestionDeleted = new EventEmitter();
@@ -34,11 +34,11 @@ export class QuestionComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  edit() {
+  edit(): void {
     this.editing = true;
   }
 
-  delete() {
+  delete(): void {
     if (confirm('Are you sure you wish to delete this question?')) {
       this.questionsService.QuestionDelete(this.question.questionID)
         .subscribe(
@@ -54,15 +54,15 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  onCompleteEdit() {
+  onCompleteEdit(): void {
     this.editing = false;
   }
 
-  onCancelEdit() {
+  onCancelEdit(): void {
     this.editing = false;
   }
 
-  QuestionFeedback(supportLevelID: PointSupportLevels) {
+  QuestionFeedback(supportLevelID: PointSupportLevels): void {
 
     if (!this.question.voteIsUpdatable) {
       alert('Question vote up/down is not updatable');
@@ -92,21 +92,21 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  Support() {
+  Support(): void {
     this.QuestionFeedback(PointSupportLevels.Support);
   }
 
-  Neutral() {
+  Neutral(): void {
     // this.point.pointFeedback.woWVote = false;
     this.QuestionFeedback(PointSupportLevels.StandAside);
   }
 
-  Oppose() {
+  Oppose(): void {
     // this.point.pointFeedback.woWVote = false;
     this.QuestionFeedback(PointSupportLevels.Oppose);
   }
 
-  Report() {
+  Report(): void {
     // this.point.pointFeedback.woWVote = false;
     this.QuestionFeedback(PointSupportLevels.Report);
   }
@@ -115,7 +115,7 @@ export class QuestionComponent implements OnInit {
   //   window.open('https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals', '_blank');
   // }
 
-  anon() {
+  anon(): void {
     alert('ToDo');
   }
 

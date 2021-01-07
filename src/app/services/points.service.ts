@@ -1,3 +1,4 @@
+
 // Angular
 import { Injectable } from '@angular/core';
 
@@ -64,7 +65,8 @@ export class PointsService {
 
 
   // ToDo this is what needs to change for new selection methods
-  GetFirstBatchFiltered(myPoints: boolean, byAlias: string, onTopic: string,
+  GetFirstBatchFiltered(
+    myPoints: boolean, byAlias: string, onTopic: string,
     draftStatusFilter: DraftStatusFilter, feedbackFilter: PointFeedbackFilter, pointFlag: PointFlags, pointTextFilter: string,
     pointTypeID: PointTypesEnum, from: Date, to: Date,
     pointSortOrder: PointSortTypes, sortAscending: boolean): Observable<PointSelectionResult> {
@@ -76,12 +78,12 @@ export class PointsService {
     const apiUrl = 'points/getFirstBatchFiltered';
 
     const postData = {
-      'myPoints': myPoints, 'byAlias': byAlias, 'onTopic': onTopic,
-      'draftStatusFilter': draftStatusFilter, 'feedbackFilter': feedbackFilter,
-      'pointFlag': pointFlag, 'pointTextFilter': pointTextFilter,
-      'pointTypeID': pointTypeID, 'fromDate': fromDate, 'toDate': toDate,
-      'pointSortOrder': pointSortOrder, 'sortAscending': sortAscending,
-      'batchSize': this.batchSize, 'pageSize': this.pageSize
+      myPoints, byAlias, onTopic,
+      draftStatusFilter, feedbackFilter,
+      pointFlag, pointTextFilter,
+      pointTypeID, fromDate, toDate,
+      pointSortOrder, sortAscending,
+      batchSize: this.batchSize, pageSize: this.pageSize
     };
 
     return this.httpClientService
@@ -90,7 +92,7 @@ export class PointsService {
 
   }
 
-  GetSpecificPoint(slashTag: string, pointTitle: string) {
+  GetSpecificPoint(slashTag: string, pointTitle: string): Observable<PointSelectionResult> {
 
     const apiUrl = `points/point/${slashTag}/${pointTitle}`;
 
@@ -134,16 +136,17 @@ export class PointsService {
 
     if (!pointIDs || pointIDs.length === 0) {
       console.log('No points to select');
-      return of(new PointSelectionResult);
+      return of(new PointSelectionResult());
     } else {
       const apiUrl = 'points/getPage';
 
+      // ToDo Removed 03/01/2021 const ids not used???
       // https://stackoverflow.com/questions/16553561/passing-list-of-keyvaluepair-or-idictionary-to-web-api-controller-from-javascrip
       // construct an object from an array
-      const ids = {}; // a const where you can add new properties with values
+      // const ids = {}; // a const where you can add new properties with values
 
-      pointIDs.forEach(item =>
-        ids[item.rowNumber] = item.id);
+      // pointIDs.forEach(item =>
+      //   ids[item.rowNumber] = item.id);
 
       return this.httpClientService
         .post(apiUrl, pointIDs)
@@ -153,7 +156,7 @@ export class PointsService {
 
 
 
-  CastToPointSelectionResult(sourceData): PointSelectionResult {
+  CastToPointSelectionResult(sourceData: any): PointSelectionResult {
 
     const PSR = new PointSelectionResult();
 
@@ -174,22 +177,22 @@ export class PointsService {
     // Input parameter is Point not PointEdit
     // construct a new PointEdit (all that's needed)
 
-    const postData = <PointEdit>{
-      'pointID': point.pointID,
-      'title': point.title,
-      'linkTitle': point.linkTitle,
-      'pointHTML': point.pointHTML,
-      'csvImageIDs': point.csvImageIDs,
-      'pointTypeID': point.pointTypeID,
-      'isPorQPoint': isPorQPoint, // not a point property
-      'source': point.source,
-      'url': point.url,
-      'showLinkBeforeVote': point.showLinkBeforeVote,
-      'youTubeID': point.youTubeID,
-      'soundCloudTrackID': point.soundCloudTrackID,
-      'slashTags': point.slashTags,
-      'draft': point.draft
-    };
+    const postData = {
+      pointID: point.pointID,
+      title: point.title,
+      linkTitle: point.linkTitle,
+      pointHTML: point.pointHTML,
+      csvImageIDs: point.csvImageIDs,
+      pointTypeID: point.pointTypeID,
+      isPorQPoint, // not a point property
+      source: point.source,
+      url: point.url,
+      showLinkBeforeVote: point.showLinkBeforeVote,
+      youTubeID: point.youTubeID,
+      soundCloudTrackID: point.soundCloudTrackID,
+      slashTags: point.slashTags,
+      draft: point.draft
+    } as PointEdit;
 
     return this.httpClientService
       .post('points/pointUpdate', postData)
@@ -214,14 +217,15 @@ export class PointsService {
       .pipe(map(result => result as boolean));
   }
 
-  PointFeedback(pointID: number, pointSupportLevel: PointSupportLevels,
+  PointFeedback(
+    pointID: number, pointSupportLevel: PointSupportLevels,
     comment: string, feedbackAnon: boolean): Observable<PointFeedback> {
 
     const postData: PointFeedbackFormData = {
-      'pointID': pointID,
-      'pointSupportLevel': pointSupportLevel,
-      'comment': comment,
-      'feedbackAnon': feedbackAnon,
+      pointID,
+      pointSupportLevel,
+      comment,
+      feedbackAnon,
     };
 
     return this.httpClientService
@@ -233,7 +237,8 @@ export class PointsService {
   }
 
 
-  PointFlag(deleteFlag: boolean, pointID: number,
+  PointFlag(
+    deleteFlag: boolean, pointID: number,
     pointFlagType: PointFlags): Observable<boolean> {
 
     let apiUrl = 'points/PointFlag';
@@ -252,7 +257,7 @@ export class PointsService {
     // standard construction of post data
     const postData: PointWoWFormData = {
       // 'WeekID': this.WoWWeekInfoVote.WoWWeekID, 'WeekEndingDate': this.WoWWeekInfoVote.WoWWeekEndingDate,
-      'pointID': pointID, 'woW': wow, 'feedbackAnon': this.Anon
+      pointID, wow, feedbackAnon: this.Anon
     };
 
     console.log('PointWoWVote postData:', postData);

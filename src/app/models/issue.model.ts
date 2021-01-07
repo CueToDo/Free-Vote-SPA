@@ -42,8 +42,8 @@ export class Issue {
   dateTimeCreated: string;
 
   // Prioritisation
-  selectionDateEarliest: string;
-  selectionDateLatest: string;
+  selectionDateEarliest: Date;
+  selectionDateLatest: Date;
   prioritisationVotes: number;
   prioritisationPoints: number;
   prioritisationRank: number;
@@ -98,8 +98,8 @@ export class IssueEdit {
 
   // Prioritisation
   public publish: boolean;
-  public selectionDateEarliest: string;
-  public selectionDateLatest: string;
+  public selectionDateEarliest: Date;
+  public selectionDateLatest: Date;
 }
 
 export class IssuePrioritisationVote {

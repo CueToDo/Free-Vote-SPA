@@ -8,7 +8,9 @@ import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
 // auth0
 import createAuth0Client from '@auth0/auth0-spa-js';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
-import * as config from '../../auth_config.json';
+
+// https://mariusschulz.com/blog/importing-json-modules-in-typescript
+const config = require ('../../auth_config.json');
 
 // Services
 import { LocalDataService } from './local-data.service';
@@ -54,7 +56,7 @@ export class AuthService {
 
     // When calling, options can be passed if desired
     // https://auth0.github.io/auth0-spa-js/classes/auth0client.html#getuser
-    getUser$(options?): Observable<any> {
+    getUser$(options?: any): Observable<any> {
         return this.auth0Client$.pipe(
             concatMap((client: Auth0Client) => from(client.getUser(options)))
         );
@@ -62,13 +64,13 @@ export class AuthService {
 
     // When calling, options can be passed if desired
     // https://auth0.github.io/auth0-spa-js/classes/auth0client.html#gettokensilently
-    getTokenSilently$(options?): Observable<string> {
+    getTokenSilently$(options?: any): Observable<string> {
         return this.auth0Client$.pipe(
             concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
         );
     }
 
-    localAuthSetup() {
+    localAuthSetup(): void {
 
         // This should only be called on app initialization
         // Set up local authentication streams
@@ -97,7 +99,7 @@ export class AuthService {
         );
     }
 
-    login(redirectPath: string = '/slash-tags/trending') {
+    login(redirectPath: string = '/slash-tags/trending'): void {
 
         this.localData.SignedOut(); // Clear anon session and start afresh
 
@@ -161,7 +163,7 @@ export class AuthService {
     }
 
 
-    logout() {
+    logout(): void {
         // Ensure Auth0 client instance exists
         this.auth0Client$.subscribe((client: Auth0Client) => {
             // Call method to log out

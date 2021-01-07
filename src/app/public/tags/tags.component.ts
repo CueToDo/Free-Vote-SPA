@@ -55,7 +55,7 @@ export class TagsComponent implements OnInit, OnDestroy {
     private tagsService: TagsService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     this.fetchTags();
 
@@ -73,10 +73,11 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   }
 
-  public fetchTags() {
+  public fetchTags(): void {
     this.tags$ = this.tagsService.TagCloud(this.tagCloudType)
       .subscribe({
         next: response => {
+          console.log('FETCH TAGS', response);
           this.tags = response;
           this.waiting = false;
           this.haveTags.emit(response && response.length > 0);
@@ -108,7 +109,7 @@ export class TagsComponent implements OnInit, OnDestroy {
   }
 
 
-  setSlashTag(slashTag: string) {
+  setSlashTag(slashTag: string): void {
 
     // Get appDataService to broadcast (method shared by PointEditComponent)
     this.appDataService.SetSlashTag(slashTag, PointSortTypes.NoChange);
@@ -116,7 +117,7 @@ export class TagsComponent implements OnInit, OnDestroy {
     this.NewSlashTagSelected.emit(slashTag);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.pointsSelected$) { this.pointsSelected$.unsubscribe(); } // Not set for Trending
     this.tags$.unsubscribe();
     this.width$.unsubscribe();

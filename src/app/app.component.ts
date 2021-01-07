@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private htmlDocument: HTMLDocument) { }
 
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     // https://stackoverflow.com/questions/39845082/angular-2-change-favicon-icon-as-per-configuration/45753615
     let favicon = 'favicon.ico';
@@ -73,7 +73,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.localAPI = 'Local API';
     }
 
-    this.htmlDocument.getElementById('appFavicon').setAttribute('href', `/assets/${favicon}?d=${Date.now()}`);
+    this.htmlDocument.getElementById('appFavicon')?.setAttribute('href', `/assets/${favicon}?d=${Date.now()}`);
 
     // On initial load, check authentication state with authorization server
     // Set up local auth streams if user is already authenticated
@@ -96,11 +96,9 @@ export class AppComponent implements OnInit, OnDestroy {
     // It can then dispense this throughout the app via coredata service
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-
+      .subscribe(_ => {
         // broadcast showing tags
         this.RouteOrParamsUpdated(this.router.url);
-
       });
 
     // app.compnent responds to child component changes
@@ -145,12 +143,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
-  setDocTitle(title: string) {
+  setDocTitle(title: string): void {
     // https://blog.bitsrc.io/dynamic-page-titles-in-angular-98ce20b5c334
     this.titleService.setTitle(title);
   }
 
-  public RouteOrParamsUpdated(url: string) {
+  public RouteOrParamsUpdated(url: string): void {
 
     this.appData.Route = url;
 
@@ -197,7 +195,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
-  SetVPW() {
+  SetVPW(): void {
 
     const vpw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
@@ -224,7 +222,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleLocalAPI() {
+  toggleLocalAPI(): void {
 
     if (this.localData.GetItem('localAPI') === 'true') {
       this.localData.SetItem('localAPI', 'false');
@@ -237,7 +235,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.localData.SetServiceURL();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // No need to create subscriptions to unsubscribe in app.component
   }
 

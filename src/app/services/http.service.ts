@@ -28,7 +28,7 @@ export class HttpService {
 
 
   // The API JWT is the FreeVote user profile
-  getApiJwt(): Observable<boolean> {
+  getApiJwt(): Observable<boolean | undefined> {
 
     // It doesn't matter if you're logged in with Auth0, you still need a FreeVote JWT
     // For Anon or authenticated
@@ -70,14 +70,14 @@ export class HttpService {
             // we don't return the jwt, we return a boolean
             if (!this.localData.jwt) {
               throwError('No JWT'); // must be handled by the subscriber
-            } else {
-              this.localData.gettingFreeVoteJwt = false;
-              this.jwtFetched$.next(true); // Any subsequently queued requests are now unlocked
-              this.jwtFetched$.complete();
-              return true; // now fulfil the original (promise) which DIDN'T return jwtFetched$
-              // the jwt request is complete, should now be able to make the actual queued request
-
             }
+
+            this.localData.gettingFreeVoteJwt = false;
+            this.jwtFetched$.next(true); // Any subsequently queued requests are now unlocked
+            this.jwtFetched$.complete();
+            return true; // now fulfil the original (promise) which DIDN'T return jwtFetched$
+            // the jwt request is complete, should now be able to make the actual queued request
+
           })
         );
     }
@@ -106,7 +106,7 @@ export class HttpService {
     return httpHeaders;
   }
 
-  private RequestOptions(type: ContentType) {
+  private RequestOptions(type: ContentType): any {
 
     // https://stackoverflow.com/questions/45286764/angular-4-3-httpclient-doesnt-send-header/45286959#45286959
     // The instances of the new HttpHeader class are immutable objects.
@@ -253,7 +253,11 @@ export class HttpService {
 
   ImageUploadCancel(csvImageIDs: string): Observable<boolean> {
 
-    const ImagesUploadCancel = { csvImageIDs: csvImageIDs };
+    // https://rules.sonarsource.com/typescript/RSPEC-3498
+    // When an already-defined variable is given the same name within a new object,
+    // object-shorthand syntax is preferred as being more compact.
+    // Similarly, object-shorthand is also preferred for the definition of functions in object literals.
+    const ImagesUploadCancel = { csvImageIDs };
     const url = 'points/imagesUploadCancel';
 
     return this.post(url, ImagesUploadCancel).pipe(

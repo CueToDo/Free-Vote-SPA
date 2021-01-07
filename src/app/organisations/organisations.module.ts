@@ -2,45 +2,50 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
-import { MaterialModule } from '../material.module';
+import { MaterialModule } from 'src/app/material.module';
 
 // CKEditor
-import { CKEditorModule } from '@ckeditor/ckeditor5-build-classic';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 // Modules
 import { PublicModule } from 'src/app/public/public.module';
 import { CustomModule } from 'src/app/custommodule/custom.module';
 
+// Components not declared here
+import { TagsPointsComponent } from '../public/tags-points/tags-points.component';
 
 // This module Components
-import { OrganisationsComponent } from './organisations/organisations.component';
-import { OrganisationListComponent } from './organisation-list/organisation-list.component';
-import { OrganisationComponent } from './organisation/organisation.component';
-import { OrganisationEditComponent } from './organisation-edit/organisation-edit.component';
-import { GroupsComponent } from './groups/groups.component';
-import { GroupComponent } from './group/group.component';
-import { GroupEditComponent } from './group-edit/group-edit.component';
-import { IssueComponent } from './issue/issue.component';
-import { IssueEditComponent } from './issue-edit/issue-edit.component';
 import { ProgressComponent } from './progress/progress.component';
-import { IssueDetailsComponent } from './issue-details/issue-details.component';
-import { PorqComponent } from './porq/porq.component';
+
 import { PorqEditComponent } from './porq-edit/porq-edit.component';
+import { PorqComponent } from './porq/porq.component';
 import { PorqDetailsComponent } from './porq-details/porq-details.component';
-import { TagsPointsComponent } from '../public/tags-points/tags-points.component';
+
+import { IssueEditComponent } from './issue-edit/issue-edit.component';
+import { IssueComponent } from './issue/issue.component';
+import { IssueDetailsComponent } from './issue-details/issue-details.component';
+
+import { GroupEditComponent } from './group-edit/group-edit.component';
+import { GroupComponent } from './group/group.component';
+import { GroupsComponent } from './groups/groups.component';
+
+import { OrganisationEditComponent } from './organisation-edit/organisation-edit.component';
+import { OrganisationComponent } from './organisation/organisation.component';
+import { OrganisationListComponent } from './organisation-list/organisation-list.component';
+import { OrganisationsComponent } from './organisations/organisations.component';
 
 const routes: Routes = [
   { path: 'membership', component: OrganisationsComponent },
   { path: 'available', component: OrganisationsComponent },
   { path: 'new', component: OrganisationsComponent },
   { path: ':organisationName', component: OrganisationComponent },
-  { path: ':organisationName/:subGroupName', component: GroupComponent },
-  { path: ':organisationName/:subGroupName/:issue', component: IssueDetailsComponent },
-  { path: ':organisationName/:subGroupName/:issue/:porqId', component: PorqDetailsComponent },
+  { path: ':organisationName/:groupName', component: GroupComponent },
+  { path: ':organisationName/:groupName/:issue', component: IssueDetailsComponent },
+  { path: ':organisationName/:groupName/:issue/:porqId', component: PorqDetailsComponent },
   // This can't work
   { path: ':group/:tag', component: TagsPointsComponent }
 ];
@@ -49,6 +54,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes),
     FlexLayoutModule,
     MaterialModule,
@@ -57,20 +63,24 @@ const routes: Routes = [
     CustomModule
   ],
   declarations: [
-    OrganisationsComponent,
-    OrganisationListComponent,
-    OrganisationComponent,
-    OrganisationEditComponent,
-    GroupsComponent,
-    GroupComponent,
-    GroupEditComponent,
-    IssueComponent,
-    IssueEditComponent,
     ProgressComponent,
-    IssueDetailsComponent,
-    PorqComponent,
+
     PorqEditComponent,
-    PorqDetailsComponent
+    PorqComponent,
+    PorqDetailsComponent,
+
+    IssueEditComponent,
+    IssueComponent,
+    IssueDetailsComponent,
+
+    GroupEditComponent,
+    GroupComponent,
+    GroupsComponent,
+
+    OrganisationEditComponent,
+    OrganisationComponent,
+    OrganisationListComponent,
+    OrganisationsComponent
   ]
 })
-export class GroupsModule { }
+export class OrganisationsModule { }

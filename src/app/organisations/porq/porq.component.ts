@@ -2,8 +2,11 @@
 // Angular
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+// Lodash https://github.com/lodash/lodash/issues/3192
+const cloneDeep = require('lodash/cloneDeep');
+
 // Models, Enums
-import { PorQ } from 'src/app/models/porq.model';
+import { PorQ, PorQEdit } from 'src/app/models/porq.model';
 import { PorQTypes } from 'src/app/models/enums';
 
 // Services
@@ -21,10 +24,14 @@ export class PorqComponent implements OnInit {
   @Input() public porQ: PorQ;
   @Output() Deleted = new EventEmitter();
 
+  public get porQEdit(): PorQEdit {
+    return this.porQ as any as PorQEdit;
+  }
+
   public PorQTypes = PorQTypes;
 
   @Input() inFocus = false;
-  porQEdit = false;
+  editing = false;
   deleted = false;
   error = '';
 
@@ -41,20 +48,20 @@ export class PorqComponent implements OnInit {
 
   }
 
-  edit() {
-    this.porQEdit = true;
+  edit(): void {
+    this.editing = true;
   }
 
-  completeEdit(porQUpdated: PorQ) {
-    this.porQ = <PorQ>this.appData.deep(porQUpdated);
-    this.porQEdit = false;
+  completeEdit(porQUpdated: PorQ): void {
+    this.porQ = cloneDeep(porQUpdated);
+    this.editing = false;
   }
 
-  cancelEdit() {
-    this.porQEdit = false;
+  cancelEdit(): void {
+    this.editing = false;
   }
 
-  delete() {
+  delete(): void {
 
     // CANNOT use public property on PorQ - WHY?
     // const pq = new PorQ; // : PorQ = <PorQ>this.appData.deep(this.porQ);

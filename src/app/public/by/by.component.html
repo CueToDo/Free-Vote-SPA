@@ -27,7 +27,7 @@
 
   <ng-container *ngFor="let onTopic of onTopics">
     <a [innerHTML]="onTopic.byOn | TagDisplay" [ngStyle]="{'font-size':FontSize(onTopic.weight),'padding-right':'10px'}"
-      [routerLink]="[appData.UrlEncode(onTopic.byOn), 'by', byAlias]"></a>
+      [routerLink]="[appData.kebabUri(onTopic.byOn), 'by', byAlias]"></a>
   </ng-container>
 
 </div>

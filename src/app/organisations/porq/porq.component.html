@@ -1,4 +1,4 @@
-<div class="porQ py-2 mb-3" *ngIf="!deleted && !porQEdit" [routerLink]="detailsLink"
+<div class="porQ py-2 mb-3" *ngIf="!deleted && !editing" [routerLink]="detailsLink"
     [ngClass]="{
         'Questions': !inFocus && porQ.porQTypeID === PorQTypes.Question,
         'Perspectives': !inFocus && porQ.porQTypeID === PorQTypes.Perspective,
@@ -49,6 +49,6 @@
 
 </div>
 
-<ng-container *ngIf="porQEdit">
-    <app-porq-edit [porQ]="porQ" (CompleteEdit)="completeEdit($event)" (CancelEdit)="cancelEdit()"></app-porq-edit>
+<ng-container *ngIf="editing">
+    <app-porq-edit [porQ]="porQEdit" (CompleteEdit)="completeEdit($event)" (CancelEdit)="cancelEdit()"></app-porq-edit>
 </ng-container>

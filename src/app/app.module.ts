@@ -7,16 +7,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
 import { MaterialModule } from './material.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 // ngx-bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 // Other
-// import { DeviceDetectorModule } from 'ngx-device-detector';
+// import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -32,6 +32,7 @@ import { InterceptorService } from './services/interceptor.service';
 // Modules
 import { CustomModule } from './custommodule/custom.module';
 import { PublicModule } from './public/public.module';
+import { OrganisationsModule } from './organisations/organisations.module';
 
 // Global Singleton Services imported from Services Module
 // https://angular.io/guide/singleton-services
@@ -47,7 +48,6 @@ import { HomeComponent } from './public/home/home.component';
 import { CallbackComponent } from './public/callback/callback.component';
 
 import { TagsPointsComponent } from './public/tags-points/tags-points.component';
-import { VotersMenuComponent } from './public/voters-menu/voters-menu.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
 import { ScrollerComponent } from './public/scroller/scroller.component'; // test scrolling
 
@@ -61,19 +61,17 @@ const appRoutes: Routes = [
 
   { path: 'callback', component: CallbackComponent },
 
-  { path: 'voters', component: VotersMenuComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'voters/:alias', component: VotersMenuComponent, canActivate: [LoginRouteGuardService] },
   { path: 'by/:alias', component: TagsPointsComponent },
   { path: 'point-of-the-week', component: PointOfTheWeekComponent, canActivate: [LoginRouteGuardService] },
 
-  // groups and profile
+  // organisations, groups and profile
   {
     path: 'organisations', loadChildren:
-      () => import('./organisations/organisations.module').then(m => m.GroupsModule), canActivate: [LoginRouteGuardService]
+      () => import('./organisations/organisations.module').then(m => m.OrganisationsModule), canActivate: [LoginRouteGuardService]
   },
   {
     path: 'group', loadChildren:
-      () => import('./organisations/organisations.module').then(m => m.GroupsModule), canActivate: [LoginRouteGuardService]
+      () => import('./organisations/organisations.module').then(m => m.OrganisationsModule), canActivate: [LoginRouteGuardService]
   },
   {
     path: 'my/:tab', loadChildren:
@@ -108,11 +106,12 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
 
     BsDropdownModule.forRoot(), // Bootstrap DropDowns
-    // DeviceDetectorModule.forRoot(), // Other
+    // DeviceDetectorService, // Other
     // FacebookModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     CustomModule,
-    PublicModule
+    PublicModule,
+    OrganisationsModule
   ],
   declarations: [
     AppComponent

@@ -6,6 +6,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
+// Lodash https://github.com/lodash/lodash/issues/3192
+const cloneDeep = require('lodash/cloneDeep');
+
 // Models, Enums
 import { IssueStatuses, ProposalStatuses } from './../models/enums';
 import { IssueSelectionResult, Issue, IssueEdit, IssuePrioritisationVote, IssuePorQCounts } from '../models/issue.model';
@@ -46,7 +49,7 @@ export class IssuesService {
   }
 
 
-  CastToIssuesSelectionResult(sourceData): IssueSelectionResult {
+  CastToIssuesSelectionResult(sourceData: any): IssueSelectionResult {
 
     const ISR = new IssueSelectionResult();
 
@@ -61,7 +64,7 @@ export class IssuesService {
 
     console.log(sourceData);
 
-    ISR.groupIssueCounts = <GroupIssueCounts>this.appDataService.deep(sourceData.subGroupIssueCounts);
+    ISR.groupIssueCounts = cloneDeep(sourceData.subGroupIssueCounts) as GroupIssueCounts;
 
     return ISR;
   }
@@ -93,22 +96,22 @@ export class IssuesService {
     // Input parameter is Point not PointEdit
     // construct a new PointEdit (all that's needed)
 
-    const postData = <IssueEdit>{
+    const postData = {
 
       // Ownership
-      'groupIDOwner': issue.organisationID,
-      'subGroupID': issue.groupID,
+      groupIDOwner: issue.organisationID,
+      subGroupID: issue.groupID,
 
       // Issue Details
-      'issueID': issue.issueID,
-      'title': issue.title,
-      'context': issue.context,
+      issueID: issue.issueID,
+      title: issue.title,
+      context: issue.context,
 
       // Prioritisation
-      'publish': issue.publish,
-      'selectionDateEarliest': issue.selectionDateEarliest,
-      'selectionDateLatest': issue.selectionDateLatest
-    };
+      publish: issue.publish,
+      selectionDateEarliest: issue.selectionDateEarliest,
+      selectionDateLatest: issue.selectionDateLatest
+    } as IssueEdit;
 
     return this.httpClientService
       .post('issues/issueUpdate', postData);

@@ -21,6 +21,7 @@ import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 // Components
 import { PointsListComponent } from '../points-list/points-list.component';
 import { QuestionsListComponent } from './../questions-list/questions-list.component';
+import { MatCheckbox, MatCheckboxClickAction } from '@angular/material/checkbox';
 
 
 @Component({
@@ -67,7 +68,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     this.filter.byAlias = this.localData.ActiveAliasForFilter;
 
@@ -81,14 +82,14 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
 
     /* Anything that references child components pointsList or questionsList
     (inc any calls to this.Select() which invokes SelectQuestions or SelectPoints on the child components)
     inc any subscription initialisations
     must be in AfterViewInit */
 
-     // Also, there’s no need to unsubscribe from the paramMap.
+    // Also, there’s no need to unsubscribe from the paramMap.
     // The ActivatedRoute dies with the routed component and so
     // the subscription dies with it.
     this.activatedRoute.paramMap.subscribe(params => {
@@ -96,9 +97,9 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
       let tag = false;
       let alias = false;
 
-      const titleParam = params.get('title');
-      const tagParam = params.get('tag');
-      const aliasParam = params.get('alias');
+      const titleParam = '' + params.get('title');
+      const tagParam = '' + params.get('tag');
+      const aliasParam = '' + params.get('alias');
 
       if (tagParam) {
         this.filter.anyTag = false;
@@ -234,7 +235,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  MyFilter() {
+  MyFilter(): void {
     if (this.filter.myPoints) {
       this.filter.applyAliasFilter = false;
     }
@@ -243,7 +244,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.Select();
   }
 
-  VoterFilter() {
+  VoterFilter(): void {
     let changeAlias = false;
 
     if (!this.filter.byAlias) { this.filter.byAlias = ''; } // ensure compare empty with empty not nulls
@@ -268,16 +269,16 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.SetAppComponentTitle();
   }
 
-  SelectPointsByVoter() {
+  SelectPointsByVoter(): void {
     this.pointsList.SelectPointsByVoter();
   }
 
-  FilterOnTag() {
+  FilterOnTag(): void {
     this.SetAppComponentTitle();
     this.Select();
   }
 
-  FilterOnText() {
+  FilterOnText(): void {
     // Whether we're now filtering on text or not, only reselect points if there is a filter
     if (!!this.filter.text) {
       this.Select();
@@ -285,7 +286,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Check whether we're filtering on type
-  FilterOnType() {
+  FilterOnType(): void {
     if (this.filter.applyTypeFilter) {
       this.filter.pointTypeID = this.filter.previousPointTypeID;
     } else {
@@ -295,7 +296,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Filter by Type from Tags-Points (Select Questions)
-  public FilterQuestions(filterQuestions: boolean) {
+  public FilterQuestions(filterQuestions: boolean): void {
 
     this.filter.questions = filterQuestions;
 
@@ -303,14 +304,16 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  PointTypeFilterChange() {
+  PointTypeFilterChange(): void {
     this.filter.previousPointTypeID = this.filter.pointTypeID;
     this.Select();
   }
 
-  FilterOnDates(event$) {
+  // Allow mat-checkbox click event to read checked value
+  // https://github.com/angular/components/issues/13156
+  FilterOnDates(checkbox: MatCheckbox): void {
 
-    if (event$.checked) {
+    if (checkbox.checked) {
       if (this.filter.sortType !== PointSortTypes.DateCreated) {
         this.filter.sortType = PointSortTypes.DateCreated;
         this.pointSortTypeChanged.next(this.filter.sortType);
@@ -319,7 +322,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.Select(); // Always Descending initially
   }
 
-  FilterOnFeedback() {
+  FilterOnFeedback(): void {
     if (this.filter.applyFeedbackFilter) {
       this.filter.feedbackFilter = PointFeedbackFilter.No;
     } else {
@@ -329,12 +332,12 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // From Template
-  FilterFavs($event) {
-    this.FilterFavourites($event.checked);
+  FilterFavs(checkbox: MatCheckbox): void {
+    this.FilterFavourites(checkbox.checked);
   }
 
   // From ngOnInit Subscription
-  FilterFavourites(filter: Boolean) {
+  FilterFavourites(filter: boolean): void {
 
     if (filter) {
       this.filter.pointFlag = PointFlags.Favourite;
@@ -353,7 +356,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.filter.HasSavedFilter();
   }
 
-  SetAppComponentTitle() {
+  SetAppComponentTitle(): void {
     // Don't call from SelectPoints() (which may be called from a subscription triggered externally)
     let title = '';
 
@@ -369,7 +372,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.appData.RouteParamChange$.next(title);
   }
 
-  Select() {
+  Select(): void {
     if (this.filter.questions) {
       this.questionsList.SelectQuestions();
     } else {
@@ -377,11 +380,11 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  SelectSpecific() {
+  SelectSpecific(): void {
 
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.pointSelection$.unsubscribe();
     this.pointSortType$.unsubscribe();
     this.pointSortAscending$.unsubscribe();

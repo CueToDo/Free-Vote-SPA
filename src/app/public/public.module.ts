@@ -1,23 +1,24 @@
+
+// Angular
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
 import { MaterialModule } from '../material.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Auth0
 import { CallbackComponent } from './callback/callback.component';
 
 // CKEditor
-import { CKEditorModule } from '@ckeditor/ckeditor5-build-classic';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 // FreeVote Modules
 import { CustomModule } from '../custommodule/custom.module';
 
 // FreeVote Components
-import { VotersMenuComponent } from './voters-menu/voters-menu.component';
 import { HomeComponent } from './home/home.component';
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
@@ -44,14 +45,12 @@ import { QuestionComponent } from './question/question.component';
     MaterialModule,
     FlexLayoutModule,
     CKEditorModule,
-    // FreeVote
     CustomModule
   ],
   declarations: [
     // Auth0
     CallbackComponent,
-    // FreeVote
-    VotersMenuComponent,
+    // VotersMenuComponent,
     HomeComponent,
     PointComponent,
     PointEditComponent,

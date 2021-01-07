@@ -1,62 +1,62 @@
 export class Group {
 
-    organisationID: number;
+    organisationID = 0;
 
-    groupID: number;
-    groupName: string;
-    groupOwner: boolean;
-    open: boolean;
+    groupID = 0;
+    groupName = '';
+    groupOwner = false;
+    open = false;
 
     // Decision basis
-    decisionBasisOptionID: string; // for binding
-    superMajority: number;
+    decisionBasisOptionID = ''; // for binding
+    superMajority = 0;
 
     // Meeting Interval
-    meetingIntervalID: string; // for binding
-    selectionWeekOfMonth: string;
-    selectionDayOfWeek: string;
-    selectionDayOfMonth: string;
-    selectionTimeOfDay: string;
+    meetingIntervalID = ''; // for binding
+    selectionWeekOfMonth = 0;
+    selectionDayOfWeek = 0;
+    selectionDayOfMonth = 0;
+    selectionTimeOfDay = '';
 
     // Actual selection date
-    nextIssueSelectionDate: string;
-    nextIssueSelectionTime: string;
+    nextIssueSelectionDate: Date;
+    nextIssueSelectionTime = '';
 
     // Issues
-    issuesNotInPrioritisation: number;
-    issuesInPrioritisation: number;
-    issuesInDiscussion: number;
-    issuesInProposalVoting: number;
-    issuesClosed: number;
-    issuesTotal: number;
+    issuesNotInPrioritisation = 0;
+    issuesInPrioritisation = 0;
+    issuesInDiscussion = 0;
+    issuesInProposalVoting = 0;
+    issuesClosed = 0;
+    issuesTotal = 0;
 
     // Proposals
-    proposalsVotingInProgress: number;
-    proposalsAccepted: number;
-    proposalsRejected: number;
+    proposalsVotingInProgress = 0;
+    proposalsAccepted = 0;
+    proposalsRejected = 0;
 }
 
 export class GroupUpdate {
 
-    organisationID: number;
-    groupID: number;
-    groupName: string;
-    groupOwner: boolean;
-    open: boolean;
+    organisationID = 0;
+    groupID = 0;
+    groupName = '';
+    groupOwner = false;
+    open = false;
 
     // Decision Basis
-    decisionBasisOptionID: string;
-    superMajority: number;
+    decisionBasisOptionID = '';
+    superMajority = 0;
 
     // Meeting Interval
-    meetingIntervalID: string;
-    selectionWeekOfMonth: string; // first, second, third
-    selectionDayOfWeek: string; // thursday
-    selectionDayOfMonth: string; // 21st
-    selectionTimeOfDay: string;
+    meetingIntervalID = '';
+    selectionWeekOfMonth = ''; // first, second, third
+    selectionDayOfWeek = ''; // thursday
+    selectionDayOfMonth = ''; // 21st
+    selectionTimeOfDay = '';
 
     // Actual selection date
-    nextIssueSelectionDate: string;
-    nextIssueSelectionTime: string;
+    nextIssueSelectionDate = '';
+    nextIssueSelectionTime = '';
 }
 

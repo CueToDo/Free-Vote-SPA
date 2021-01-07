@@ -7,15 +7,17 @@ import {
 } from '@angular/core';
 
 // https://stackoverflow.com/questions/44634992/debounce-hostlistener-event
+// Modified for Typescript 4 - does it work?
 export function Debounce(delay: number = 300): MethodDecorator {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+
+  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
 
     const original = descriptor.value;
-    const key = `__timeout__${propertyKey}`;
+    const key = `__timeout__${String(propertyKey)}`;
 
-    descriptor.value = function (...args) {
-      clearTimeout(this[key]);
-      this[key] = setTimeout(() => original.apply(this, args), delay);
+    descriptor.value = (...args: any[]) => {
+      clearTimeout(target[key]);
+      target[key] = setTimeout(() => original.apply(target, args), delay);
     };
 
     return descriptor;
@@ -32,7 +34,7 @@ export class ElementScrollDirective {
 
   @HostListener('scroll', ['$event.target'])
   @Debounce()
-  onScroll(elem) {
+  onScroll(elem: HTMLElement): void {
 
     if (elem.offsetHeight + elem.scrollTop >= 0.99 * elem.scrollHeight) {
       // https://angular.io/api/core/NgZone#runy

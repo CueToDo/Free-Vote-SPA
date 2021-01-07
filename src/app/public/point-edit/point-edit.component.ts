@@ -1,16 +1,21 @@
-import { PointEdit } from './../../models/point.model';
+
 // Angular
 import { Component, OnInit, Input, Output, EventEmitter, ɵbypassSanitizationTrustResourceUrl, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { HttpEventType } from '@angular/common/http';
+import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 
 // rxjs
 import { Observable, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
+// Lodash https://github.com/lodash/lodash/issues/3192
+const cloneDeep = require('lodash/cloneDeep');
+
 // Models
 import { Point } from 'src/app/models/point.model';
+import { PointEdit } from 'src/app/models/point.model';
 import { PointTypesEnum, PointSortTypes } from 'src/app/models/enums';
 import { Kvp } from 'src/app/models/kvp.model';
+import { Image } from 'src/app/models/Image.model';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -51,7 +56,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
   pointTypes: Kvp[];
   hasMedia = false;
   hasLink = false;
-  imageFileForUpload: File;
+  imageFileForUpload: File | null;
   imageName: string;
   showLinkBeforeVoteDisabled: boolean;
 
@@ -88,7 +93,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     // Host can override with Input value
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     let slashTag = '';
 
@@ -97,7 +102,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     }
 
     if (!this.point) { this.NewPoint(slashTag); } else {
-      this.pointClone = <PointEdit><any>this.appData.deep(this.point);
+      this.pointClone = cloneDeep(this.point) as PointEdit;
     }
 
     this.appData.PointTypes().subscribe(
@@ -110,25 +115,26 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
   }
 
-  onCKEBlur() {
+  onCKEBlur(): void {
     this.userTouched = !this.cancelled;
     this.cancelled = false;
   }
 
-  addVideo() {
+  addVideo(): void {
     this.hasMedia = true;
   }
 
-  removeVideo() {
+  removeVideo(): void {
     this.pointClone.youTubeID = '';
     this.hasMedia = false;
   }
 
-  imageSelected(event) {
-    this.imageFileForUpload = <File>event.target.files[0];
-    this.imageName = this.imageFileForUpload.name;
+  imageSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const files = target.files;
+    this.imageFileForUpload = files ? files[0] : null;
+    this.imageName = '' + this.imageFileForUpload?.name;
   }
-
 
   ImageUploadObservable(): Observable<string> {
     // Initialised each time before use to check whether there is an image to uplaod
@@ -139,33 +145,48 @@ export class PointEditComponent implements OnInit, OnDestroy {
     if (this.imageFileForUpload) {
       return this.httpService.uploadImage(this.imageFileForUpload)
         .pipe(
-          tap(event => {
+          tap(response => {
             // tap changes nothing in the pipe. What came in goes out
-            switch (event.type) {
+
+            switch (response.type) {
+
               case HttpEventType.Sent:
-                console.log(`Uploading file "${this.imageName}" of size ${this.imageFileForUpload.size}.`);
+                console.log(`Uploading file "${this.imageName}" of size ${this.imageFileForUpload?.size}.`);
                 break;
+
               case HttpEventType.UploadProgress:
                 // Compute and show the % done:
-                const percentDone = Math.round(100 * event.loaded / event.total);
+
+                // Get round possibility of response.total being undefined
+                const total = response.total ? response.total : 2 * response.loaded;
+
+                const percentDone = Math.round(100 * response.loaded / total);
                 this.imageUploadProgress = percentDone;
                 console.log(`File "${this.imageName}" is ${percentDone}% uploaded.`);
                 break;
+
               case HttpEventType.Response:
                 this.uploadingImage = false;
+                const responseBody = (response as HttpResponse<Image>).body;
+
                 console.log(`File "${this.imageName}" was completely uploaded!`);
-                console.log(event.body.imageFileName, event.body.imageID);
-                this.pointClone.pointHTML += `<img src="${event.body.imageFileName}">`;
+                console.log(responseBody?.imageFileName, responseBody?.imageID);
+
+                this.pointClone.pointHTML += `<img src="${responseBody?.imageFileName}">`;
                 this.imageName = '';
                 this.imageFileForUpload = null;
                 this.imageSelect.nativeElement.value = '';
                 break;
+
               default:
-                console.log(`File "${this.imageName}" surprising upload event: ${event.type}.`);
+                console.log(`File "${this.imageName}" surprising upload event: ${response.type}.`);
             }
           }),
-          filter(event => event.type === HttpEventType.Response),
-          map(event => event['body'].imageID)
+          filter(response => response.type === HttpEventType.Response),
+          map((response: HttpEvent<Image>) => {
+            const x = response as HttpResponse<Image>;
+            return '' + x.body?.imageID;
+          })
         );
     } else {
       // This is the important conditional "Do Nothing"
@@ -175,7 +196,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
 
   // Upload Image before saving point to get a server filename and ImageID
-  uploadImage() {
+  uploadImage(): void {
 
     this.error = '';
 
@@ -198,13 +219,13 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
   }
 
-  imageRemove() {
+  imageRemove(): void {
     this.imageFileForUpload = null;
   }
 
 
 
-  onSubmit() {
+  onSubmit(): void {
 
     // if the full url has been pasted get the id after the "="
     // What about tiny urls without the = but with the id?
@@ -259,7 +280,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
             } else {
               // pointID only needed for new points, but parent reselects - we're not dependent on 2 way binding
               // save response to point not pointClone, and manually emit
-              this.point = <Point><any>this.appData.deep(response);
+              this.point = cloneDeep(response);
               this.pointChange.emit(this.point);
             }
 
@@ -289,7 +310,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  NewPoint(slashTag: string) {
+  NewPoint(slashTag: string): void {
     // Clear old Values when edit complete
     this.pointClone = new Point();
     this.pointClone.pointID = -1;
@@ -307,7 +328,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
   }
 
 
-  Cancel() {
+  Cancel(): void {
 
     // Delete any uploaded images from server
     if (!!this.pointClone.csvImageIDs) {
@@ -328,7 +349,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  autoShowLinkEdit(pointTypeID: PointTypesEnum) {
+  autoShowLinkEdit(pointTypeID: PointTypesEnum): void {
 
     // Automatically show link input for certain point types
     if (this.appData.ShowSource(pointTypeID)) {
@@ -342,7 +363,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPointTypeChange(pointTypeID: PointTypesEnum) {
+  onPointTypeChange(pointTypeID: PointTypesEnum): void {
 
     this.autoShowLinkEdit(pointTypeID);
 
@@ -352,17 +373,17 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
   }
 
-  showLinkEdit() {
+  showLinkEdit(): void {
     this.hasLink = true;
   }
 
-  hideLinkEdit() {
+  hideLinkEdit(): void {
     this.hasLink = false;
     this.pointClone.source = '';
     this.pointClone.url = '';
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // When an Observable issues an OnError or OnComplete notification to its observers,
     // this ends the subscription.
     // Observers do not need to issue an Unsubscribe notification to end subscriptions
