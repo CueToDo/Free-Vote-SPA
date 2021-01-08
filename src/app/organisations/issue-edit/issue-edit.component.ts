@@ -2,14 +2,18 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
-const cloneDeep = require('lodash/cloneDeep');
+import { cloneDeep } from 'lodash-es';
+
+// CKEditor
+import * as CKECustom from 'src/ckeditor.js';
 
 // Models
 import { Issue } from 'src/app/models/issue.model';
 
 // Services
-import { IssueStatuses } from '../../models/enums'; 
+import { IssueStatuses } from 'src/app/models/enums';
 import { IssuesService } from 'src/app/services/issues.service';
+import { AppDataService } from 'src/app/services/app-data.service';
 
 @Component({
   selector: 'app-issue-edit',
@@ -25,6 +29,7 @@ export class IssueEditComponent implements OnInit {
   @Input() issue: Issue;
   @Output() issueChange = new EventEmitter();
 
+  public ckeditor = CKECustom;
   public issueClone: Issue;
 
   @Output() CancelEdit = new EventEmitter();
@@ -36,20 +41,9 @@ export class IssueEditComponent implements OnInit {
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
   // pointKeys: IterableIterator<number>;
 
-  config = {
-    toolbar:
-      [
-        ['SpellChecker', 'Bold', 'Italic', 'Underline'], ['TextColor', 'BGColor'],
-        ['NumberedList', 'BulletedList'], ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-        ['Link', 'Unlink', 'Source'], ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
-        ['Format', 'Font', 'FontSize']
-      ],
-    // htmlEncodeOutput: false
-    allowedContent: true
-  };
-
   constructor(
-    private issuesService: IssuesService
+    private issuesService: IssuesService,
+    public appData: AppDataService
   ) { }
 
   ngOnInit(): void {

@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
-const cloneDeep = require('lodash/cloneDeep');
+import { cloneDeep } from 'lodash-es';
 
 // Models
 import { GeographicalExtentID, MeetingIntervals } from 'src/app/models/enums';

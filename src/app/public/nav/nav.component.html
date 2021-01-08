@@ -13,7 +13,7 @@
 </button>
 
 <button mat-button routerLink="/organisations/membership" routerLinkActive="active" [class.selected]="tabSelected==='organisations'"
-    [class.burgerButton]="showBurger" (click)="tabSelected='organisations'" matTooltip="groups">
+    [class.burgerButton]="showBurger" (click)="tabSelected='organisations'" matTooltip="groups" *ngIf="localData.loggedInToAuth0">
     <mat-icon>people</mat-icon>
     groups
 </button>

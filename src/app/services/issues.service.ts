@@ -4,10 +4,10 @@ import { Injectable } from '@angular/core';
 
 // rxjs
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
-const cloneDeep = require('lodash/cloneDeep');
+import { cloneDeep } from 'lodash-es';
 
 // Models, Enums
 import { IssueStatuses, ProposalStatuses } from './../models/enums';

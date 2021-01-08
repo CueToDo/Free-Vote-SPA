@@ -92,7 +92,10 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
   extentSelected(extent: string): void {
     // NB: Value from a drop down will be a string
     // extent is a string, even if we did type it as a number
-    this.organisation.geographicalExtent = '' + GeographicalExtent.get(extent);
+    const geoExtent = GeographicalExtent.get(extent);
+    if (geoExtent) {
+      this.organisation.geographicalExtent = geoExtent;
+    }
   }
 
   Update(): void {

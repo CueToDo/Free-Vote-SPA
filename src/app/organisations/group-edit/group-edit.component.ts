@@ -2,7 +2,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
-const cloneDeep = require('lodash/cloneDeep');
+import { cloneDeep } from 'lodash-es';
 
 // Services
 import { AppDataService } from '../../services/app-data.service';

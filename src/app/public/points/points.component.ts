@@ -97,9 +97,13 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
       let tag = false;
       let alias = false;
 
-      const titleParam = '' + params.get('title');
-      const tagParam = '' + params.get('tag');
-      const aliasParam = '' + params.get('alias');
+      let titleParam = params.get('title');
+      let tagParam = params.get('tag');
+      let aliasParam = params.get('alias');
+
+      if (!titleParam) { titleParam = ''; }
+      if (!tagParam) { tagParam = ''; }
+      if (!aliasParam) { aliasParam = ''; }
 
       if (tagParam) {
         this.filter.anyTag = false;

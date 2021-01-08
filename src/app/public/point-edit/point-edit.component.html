@@ -8,7 +8,7 @@
   </div>
 
   <!-- The Editor -->
-  <ckeditor [(ngModel)]="pointClone.pointHTML" name="point" [config]="config" debounce="250" required
+  <ckeditor [editor]="ckeditor" [(ngModel)]="pointClone.pointHTML" name="point" [config]="appData.ckeConfig" debounce="250" required
     #tvPoint="ngModel" (blur)="onCKEBlur()">
   </ckeditor>
 

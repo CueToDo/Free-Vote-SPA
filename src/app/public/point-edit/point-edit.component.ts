@@ -8,7 +8,10 @@ import { Observable, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
-const cloneDeep = require('lodash/cloneDeep');
+import { cloneDeep } from 'lodash-es';
+
+// CKEditor
+import * as CKECustom from 'src/ckeditor.js';
 
 // Models
 import { Point } from 'src/app/models/point.model';
@@ -38,6 +41,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
   @Input() isPorQPoint = false;
 
+  public ckeditor = CKECustom;
   public pointClone: PointEdit; // manual control of 2 way binding (need to handle cancel edit)
 
   // Above banana in a box 2 way data binding works, but for some reason,
@@ -70,23 +74,11 @@ export class PointEditComponent implements OnInit, OnDestroy {
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
   // pointKeys: IterableIterator<number>;
 
-  config = {
-    toolbar:
-      [
-        ['SpellChecker', 'Bold', 'Italic', 'Underline'], ['TextColor', 'BGColor'],
-        ['NumberedList', 'BulletedList'], ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-        ['Link', 'Unlink', 'Source'], ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
-        ['Format', 'Font', 'FontSize']
-      ],
-    // htmlEncodeOutput: false
-    allowedContent: true
-  };
-
   imageUploadObservable: Observable<string>;
 
   constructor(
     private localData: LocalDataService,
-    private appData: AppDataService,
+    public appData: AppDataService,
     private pointsService: PointsService,
     private httpService: HttpService) {
     // Must provide default values to bind before ngOnOnit
@@ -133,7 +125,10 @@ export class PointEditComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     const files = target.files;
     this.imageFileForUpload = files ? files[0] : null;
-    this.imageName = '' + this.imageFileForUpload?.name;
+    const name = this.imageFileForUpload?.name;
+    if (name) {
+      this.imageName = name;
+    }
   }
 
   ImageUploadObservable(): Observable<string> {
@@ -185,7 +180,9 @@ export class PointEditComponent implements OnInit, OnDestroy {
           filter(response => response.type === HttpEventType.Response),
           map((response: HttpEvent<Image>) => {
             const x = response as HttpResponse<Image>;
-            return '' + x.body?.imageID;
+            let id = x.body?.imageID;
+            if (!id) { id = ''; }
+            return id;
           })
         );
     } else {

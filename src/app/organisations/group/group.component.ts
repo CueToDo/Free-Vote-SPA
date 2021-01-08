@@ -78,10 +78,10 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
 
     const routeParams = this.activeRoute.snapshot.params;
-    this.organisationName = this.appData.unKebabUri(routeParams.groupName);
-    this.groupName = this.appData.unKebabUri(routeParams.subGroupName);
+    this.organisationName = this.appData.unKebabUri(routeParams.organisationName);
+    this.groupName = this.appData.unKebabUri(routeParams.groupName);
 
-    this.getGroup(this.organisationName, this.groupName);
+    this.getGroup(this.organisationName, this.organisationName);
   }
 
   getGroup(organisationName: string, groupName: string): void {

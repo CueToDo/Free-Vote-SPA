@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   threats = false;
   threads = false;
 
-  isMobile = false; // Was null - was there a reason?
+  isMobile = false;
 
   privacyUrl = this.localData.siteUrl + 'policy.html';
 
@@ -57,6 +57,7 @@ export class HomeComponent implements OnInit {
 
   epicFunction(): void {
     this.isMobile = this.deviceService.isMobile();
+    console.log(this.deviceService.getDeviceInfo(), this.deviceService.isMobile());
   }
 
   installPwa(): void {

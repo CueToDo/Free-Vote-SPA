@@ -2,7 +2,8 @@
 // Angular
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
-import { cloneDeep } from 'lodash';
+// Other
+import { cloneDeep } from 'lodash-es';
 
 // Models, enums
 import { Question, QuestionEdit } from 'src/app/models/question.model';
@@ -11,6 +12,7 @@ import { PointSortTypes } from 'src/app/models/enums';
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
+
 
 @Component({
   selector: 'app-question-edit',

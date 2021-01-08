@@ -54,7 +54,12 @@ export class ByComponent implements OnInit, OnDestroy {
     // the subscription dies with it.
     this.activatedRoute.paramMap
       .subscribe(
-        (params: ParamMap) => this.ListTopicsByAlias('' + params.get('alias'))
+        (params: ParamMap) => {
+          const alias = params.get('alias');
+          if (alias) {
+            this.ListTopicsByAlias(alias);
+          }
+        }
       );
 
   }

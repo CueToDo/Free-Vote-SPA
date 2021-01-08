@@ -8,9 +8,9 @@
   </div>
 
   <ng-container *ngFor="let slashTag of tags">
-    <a [innerHTML]="slashTag.TagDisplay | TagDisplay"
-      [ngStyle]="{'font-size':FontSize(slashTag.TagWeight),'padding-right':'10px'}"
-      (click)="setSlashTag(slashTag.SlashTag)"></a>
+    <a [innerHTML]="slashTag.tagDisplay | TagDisplay"
+      [ngStyle]="{'font-size':FontSize(slashTag.tagWeight),'padding-right':'10px'}"
+      (click)="setSlashTag(slashTag.slashTag)"></a>
   </ng-container>
 
   <div *ngIf="error" class="text-danger mx-3">

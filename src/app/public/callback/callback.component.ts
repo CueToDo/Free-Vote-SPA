@@ -21,7 +21,7 @@ export class CallbackComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     // Don't call this.appDataService.PageTitleChangeSubject$.next
     // app.component subscribes to this and calls this.location.replaceState
@@ -49,11 +49,11 @@ export class CallbackComponent implements OnInit, OnDestroy {
 
   }
 
-  signOut() {
+  signOut(): void {
     this.auth.logout();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.callback$.unsubscribe();
   }
 }

@@ -3,7 +3,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
-const cloneDeep = require('lodash/cloneDeep');
+import { cloneDeep } from 'lodash-es';
 
 // Models, Enums
 import { PorQ, PorQEdit } from 'src/app/models/porq.model';

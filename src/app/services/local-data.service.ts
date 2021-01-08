@@ -64,7 +64,7 @@ export class LocalDataService {
     GetItem(name: string): string {
         let value = localStorage.getItem(name);
         if (value === 'null') { value = null; }
-        return '' + value;
+        return value ? value : '';
     }
 
     public SetServiceURL(): void {
@@ -203,7 +203,7 @@ export class LocalDataService {
             this.previousTopicSelected = topic;
         }
 
-        this.SetItem('PreviousTopicSelected', this.previousTopicSelected);
+        this.SetItem('previousTopicSelected', this.previousTopicSelected);
     }
 
     public get PreviousSlashTagSelected(): string { return this.TopicToSlashTag(this.previousTopicSelected); }
@@ -218,7 +218,7 @@ export class LocalDataService {
                 this.previousTopicSelected = this.SlashTagToTopic(slashTag);
             }
 
-            this.SetItem('PreviousTopicSelected', this.previousTopicSelected);
+            this.SetItem('previousTopicSelected', this.previousTopicSelected);
         }
     }
 
@@ -226,7 +226,7 @@ export class LocalDataService {
     public get PreviousAliasSelected(): string { return this.previousAliasSelected; }
     public set PreviousAliasSelected(alias: string) {
         this.previousAliasSelected = alias;
-        this.SetItem('PreviousAliasSelected', alias);
+        this.SetItem('previousAliasSelected', alias);
     }
 
     public ClearAliasFilter(): void { this.ActiveAliasForFilter = ''; }
@@ -257,7 +257,7 @@ export class LocalDataService {
 
         // clear local storage
         localStorage.clear();
-        this.SetItem('PreviousTopicSelected', 'SignedOut'); // Used in AppDataService InitialisePreviousAliasAndTopic
+        this.SetItem('previousTopicSelected', 'SignedOut'); // Used in AppDataService InitialisePreviousAliasAndTopic
     }
 
 

@@ -49,7 +49,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   public tabIndex = tabs.recentTags;
 
   public topicSelected: string;
-  public get slashTagSelected() { return this.localData.TopicToSlashTag(this.topicSelected); }
+  public get slashTagSelected(): string { return this.localData.TopicToSlashTag(this.topicSelected); }
 
   public TagCloudTypes = TagCloudTypes;
   public haveRecentSlashTags = false;
@@ -86,7 +86,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     public localData: LocalDataService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     this.appData.TagsPointsActive$.next(true);
 
@@ -202,17 +202,17 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     });
   }
 
-  NewSlashTagSelected(slashTag: string) {
+  NewSlashTagSelected(slashTag: string): void {
     this.topicSelected = this.localData.SlashTagToTopic(slashTag);
   }
 
-  haveRecentTags(haveTags: boolean) {
+  haveRecentTags(haveTags: boolean): void {
     this.haveRecentSlashTags = haveTags;
   }
 
 
   /// Change Tab and notify app component in TabChangeComplete
-  ChangeTab(tabIndex: tabs) {
+  ChangeTab(tabIndex: tabs): void {
 
     // Actual tab change, or just title change (due to voter filters)
     const tabChanged = this.tabIndex !== tabIndex;
@@ -263,13 +263,13 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   // Tell the App Component that the route has changed
-  TabChangeComplete(hasChanged: boolean, switchedTo: string) {
+  TabChangeComplete(hasChanged: boolean, switchedTo: string): void {
     if (hasChanged && !this.externalTrigger) {
       this.appData.RouteParamChange$.next(switchedTo);
     }
   }
 
-  changeQP() {
+  changeQP(): void {
     let filterQuestions = false;
     if (this.questions) {
       this.qp = 'question';
@@ -289,7 +289,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   // From the template filter button and directly from child Points Component
-  applyFilter(filter: boolean) {
+  applyFilter(filter: boolean): void {
 
     this.displayFilter(filter); /// may be recalled in ChangeTab
 
@@ -299,7 +299,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   // init, subscription, ChangeTab, applyFilter
-  displayFilter(filter: boolean) {
+  displayFilter(filter: boolean): void {
 
     this.showingFilter = filter;
 
@@ -337,13 +337,13 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   // From child Points Component
-  pointSortTypeChanged(pointSortType: PointSortTypes) {
+  pointSortTypeChanged(pointSortType: PointSortTypes): void {
     this.externalTrigger = true;
     this.SetSortTypeIcon(pointSortType);
     this.externalTrigger = false;
   }
 
-  SetSortTypeIcon(pointSortType: PointSortTypes) {
+  SetSortTypeIcon(pointSortType: PointSortTypes): void {
 
     if (pointSortType !== PointSortTypes.NoChange) {
 
@@ -372,7 +372,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     }
   }
 
-  SetSortDescending(descending: boolean) {
+  SetSortDescending(descending: boolean): void {
 
     this.sortDescending = descending;
     this.savedSortDescending = descending;
@@ -391,7 +391,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
 
   }
 
-  sortBy(pointSortType: PointSortTypes) {
+  sortBy(pointSortType: PointSortTypes): void {
 
     if (this.pointSortType !== pointSortType || pointSortType === PointSortTypes.Random) {
 
@@ -420,17 +420,17 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     }
   }
 
-  refresh() {
+  refresh(): void {
     this.externalTrigger = true; // prevent further communication to points component
     this.appData.PointSortAscending$.next(this.sortAscending); // This communicates to points component
     this.externalTrigger = false;
   }
 
-  onCancelNew() {
+  onCancelNew(): void {
     this.tabIndex = tabs.points;
   }
 
-  onCompleteNew() {
+  onCompleteNew(): void {
     // Do nothing, this component also handles subscriptions
     // this.NewSlashTagSelected(this.appDataService.PreviousSlashTagSelected); // Set in PointEdit
     // this.tabIndex = tabs.points;

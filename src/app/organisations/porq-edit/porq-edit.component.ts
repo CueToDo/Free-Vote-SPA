@@ -3,9 +3,10 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
-const cloneDeep = require('lodash/cloneDeep');
+import { cloneDeep } from 'lodash-es';
 
-import * as CKEditor from '@ckeditor/ckeditor5-build-classic';
+// CKEditor
+import * as CKECustom from 'src/ckeditor.js';
 
 // Models and Enums
 import { PorQEdit } from '../../models/porq.model';
@@ -27,7 +28,7 @@ export class PorqEditComponent implements OnInit {
 
   @Input() public porQ: PorQEdit;
 
-  public ckeditor = CKEditor;
+  public ckeditor = CKECustom;
 
   public porQEdit: PorQEdit;
   public PorQTypes = PorQTypes;
@@ -35,18 +36,6 @@ export class PorqEditComponent implements OnInit {
   saving = false;
 
   error = '';
-
-  config = {
-    toolbar:
-      [
-        ['SpellChecker', 'Bold', 'Italic', 'Underline'], ['TextColor', 'BGColor'],
-        ['NumberedList', 'BulletedList'], ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-        ['Link', 'Unlink', 'Source'], ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
-        ['Format', 'Font', 'FontSize']
-      ],
-    // htmlEncodeOutput: false
-    allowedContent: true
-  };
 
   constructor(
     private PsAndQs: PsandQsService,

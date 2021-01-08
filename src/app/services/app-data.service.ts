@@ -52,6 +52,21 @@ export class AppDataService {
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).
   // Could use Promise for sign-in component, but other components such as menu need to know sign-in status
 
+  public ckeConfig = {
+    toolbar: {
+      items: ['Bold', 'Italic', 'Underline',
+        '|', 'bulletedList', 'numberedList',
+        '|', 'indent', 'outdent',
+        '|', 'heading', 'fontSize',
+        '|', 'fontColor', 'fontBackgroundColor',
+        '|', 'link', 'image', 'mediaEmbed', 'insertTable', 'horizontalLine',
+        '|', 'undo', 'redo'],
+      shouldNotGroupWhenFull: true
+    },
+    // htmlEncodeOutput: false
+    allowedContent: true
+  };
+
   // Not looked up in database - static types
   public porQTypes = [
     { key: 'Proposal', value: 1 },
@@ -250,7 +265,7 @@ export class AppDataService {
 
   //   // Following not necessary on INITIALISE??
   // // BehaviourSubjects already initialised with empty topic
-  // this.SetByOnTopic(this.previousAliasSelected, this.previousTopicSelected);
+  // this.SetByOnTopic(this.previousAliasSelected, this.PreviousTopicSelected);
 
   // // Following not necessary on INITIALISE??
   // this.RouteParamChange$.next(this.PreviousSlashTagSelected);
@@ -258,7 +273,7 @@ export class AppDataService {
   // else {
   //   // Following not necessary on INITIALISE??
   //   // BehaviourSubjects already initialised with empty topic
-  //   this.SetByOnTopic(this.previousAliasSelected, this.previousTopicSelected);
+  //   this.SetByOnTopic(this.previousAliasSelected, this.PreviousTopicSelected);
   //   this.RouteParamChange$.next(this.PreviousSlashTagSelected);
   // }
 
@@ -497,7 +512,6 @@ export class AppDataService {
       return '';
     }
   }
-
 
   // https://blog.logrocket.com/4-different-techniques-for-copying-objects-in-javascript-511e422ceb1e/
   // We call the copy shallow because the properties in the target object
