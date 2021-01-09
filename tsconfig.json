@@ -12,7 +12,7 @@
     "declaration": false,
     "strictPropertyInitialization": false,
     "downlevelIteration": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": true, // https://www.typescriptlang.org/docs/handbook/decorators.html
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
@@ -21,7 +21,10 @@
       "es2018",
       "dom"
     ],
-    "types" : ["node", "lodash"]
+    "types": [
+      "node",
+      "lodash"
+    ]
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

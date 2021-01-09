@@ -40,6 +40,8 @@ import { OrganisationsModule } from './organisations/organisations.module';
 // App Components
 import { AppComponent } from './app.component';
 
+// Angular #StopTheSteal
+// https://indepth.dev/posts/1015/beware-angular-can-steal-your-time
 
 @NgModule({
   imports: [
@@ -49,7 +51,6 @@ import { AppComponent } from './app.component';
     MaterialModule,
     FlexLayoutModule,
     FormsModule,
-    // ReactiveFormsModule, // ToDo Remove
     HttpClientModule,
     AppRoutingModule,
 
