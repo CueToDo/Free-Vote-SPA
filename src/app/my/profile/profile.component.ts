@@ -153,21 +153,26 @@ export class ProfileComponent implements OnInit, OnDestroy {
             // tap changes nothing in the pipe. What came in goes out
             if (serverEvent !== null) {
               switch (serverEvent.type) {
-                case HttpEventType.Sent:
+
+                case HttpEventType.Sent: // 0
                   console.log(`Uploading file of size ${picture.size}.`);
                   break;
-                case HttpEventType.UploadProgress:
+                case HttpEventType.UploadProgress: // 1
+                case HttpEventType.DownloadProgress: // 3
                   // Compute and show the % done:
                   const percentDone = Math.round(100 * serverEvent.loaded / serverEvent.total!);
                   this.uploadPercentDone = percentDone;
                   console.log(`File is ${percentDone}% uploaded.`);
                   break;
-                case HttpEventType.Response:
+                case HttpEventType.Response: // 4
                   console.log(`File was completely uploaded!`);
                   console.log((serverEvent as HttpResponse<ProfilePicture>).body);
                   this.localData.freeVoteProfile.profilePicture = (serverEvent as HttpResponse<ProfilePicture>).body!.pictureUrl;
                   break;
-                default:
+                case HttpEventType.ResponseHeader: // 2
+                  console.log(`Response Header: ${serverEvent.type}.`);
+                  break;
+                case HttpEventType.User: // 5
                   console.log(`Surprising upload event: ${serverEvent.type}.`);
               }
             }
