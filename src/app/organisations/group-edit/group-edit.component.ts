@@ -23,12 +23,12 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   @Output() groupChange = new EventEmitter(); // Still need to emit
 
   // ToDo Following renamed
-  @Output() editcompleted = new EventEmitter();
-  @Output() editcancelled = new EventEmitter();
+  @Output() editCompleted = new EventEmitter();
+  @Output() editCancelled = new EventEmitter();
 
   @ViewChild('groupName', { static: true }) elSubGroupName: ElementRef;
 
-  subGroupCopy: Group;
+  groupCopy: Group;
 
   saving = false;
   error = '';
@@ -39,7 +39,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.subGroupCopy = cloneDeep(this.group) as Group;
+    this.groupCopy = cloneDeep(this.group) as Group;
     this.elSubGroupName.nativeElement.focus();
     if (!this.group.groupID || this.group.groupID < 1) {
       this.group.decisionBasisOptionID = GroupDecisionBasisOption.SimpleMajority.toString();
@@ -62,12 +62,19 @@ export class GroupEditComponent implements OnInit, OnDestroy {
 
   update(): void {
 
+    this.error = '';
+
     if (this.appData.isUrlNameUnSafe(this.group.groupName)) {
       if (confirm('Sub Group name contains invalid characters. Remove them now?')) {
         this.group.groupName = this.appData.urlSafeName(this.group.groupName);
       } else {
         return;
       }
+    }
+
+    if (!this.group.nextIssueSelectionDate) {
+      this.error = 'Next discussion start date is required';
+      return;
     }
 
     if (this.superMajorityCheck()) {
@@ -80,7 +87,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
           next: subGroup => {
             this.group = cloneDeep(subGroup) as Group;
             this.groupChange.emit(this.group);
-            this.editcompleted.emit(this.group.groupName);
+            this.editCompleted.emit(this.group.groupName);
           },
           error: serverError => {
             this.error = serverError.error.detail;
@@ -93,9 +100,9 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   }
 
   cancel(): void {
-    this.group = cloneDeep(this.subGroupCopy) as Group;
+    this.group = cloneDeep(this.groupCopy) as Group;
     this.groupChange.emit(this.group);
-    this.editcancelled.emit();
+    this.editCancelled.emit();
   }
 
   ngOnDestroy(): void {

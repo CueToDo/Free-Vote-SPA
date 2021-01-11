@@ -102,6 +102,7 @@ export class PorqDetailsComponent implements OnInit {
 
   attachNewPoint(pointID: number): void {
 
+    // ToDo Test: changed on update to Angular 11/TS4 $event.target.value
     this.editNewPoint = false; // point saved
 
     // now attach to this porQ

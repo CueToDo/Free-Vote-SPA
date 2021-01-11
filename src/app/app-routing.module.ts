@@ -8,6 +8,7 @@ import { CallbackComponent } from './public/callback/callback.component';
 import { HomeComponent } from './public/home/home.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
 import { ScrollerComponent } from './public/scroller/scroller.component';
+import { VotersMenuComponent } from './public/voters-menu/voters-menu.component';
 import { TagsPointsComponent } from './public/tags-points/tags-points.component';
 
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
@@ -24,16 +25,14 @@ const appRoutes: Routes = [
 
   { path: 'callback', component: CallbackComponent },
 
+  { path: 'voters', component: VotersMenuComponent, canActivate: [LoginRouteGuardService] },
+  { path: 'voters/:alias', component: VotersMenuComponent, canActivate: [LoginRouteGuardService] },
   { path: 'by/:alias', component: TagsPointsComponent },
   { path: 'point-of-the-week', component: PointOfTheWeekComponent, canActivate: [LoginRouteGuardService] },
 
   // organisations, groups and profile
   {
     path: 'organisations', loadChildren:
-      () => import('./organisations/organisations.module').then(m => m.OrganisationsModule), canActivate: [LoginRouteGuardService]
-  },
-  {
-    path: 'group', loadChildren:
       () => import('./organisations/organisations.module').then(m => m.OrganisationsModule), canActivate: [LoginRouteGuardService]
   },
   {

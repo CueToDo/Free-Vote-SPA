@@ -26,8 +26,8 @@ import { PsandQsService } from 'src/app/services/psandqs.service';
 })
 export class IssueDetailsComponent implements OnInit {
 
+  organisationName: string;
   groupName: string;
-  subGroupName: string;
   issueTitle: string;
   issue: Issue;
 
@@ -64,11 +64,11 @@ export class IssueDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const routeParams = this.activeRoute.snapshot.params;
+    this.organisationName = this.appData.unKebabUri(routeParams.organisationName);
     this.groupName = this.appData.unKebabUri(routeParams.groupName);
-    this.subGroupName = this.appData.unKebabUri(routeParams.subGroupName);
     this.issueTitle = this.appData.unKebabUri(routeParams.issue);
 
-    this.issuesService.GetIssue(this.groupName, this.subGroupName, this.issueTitle).pipe(
+    this.issuesService.GetIssue(this.organisationName, this.groupName, this.issueTitle).pipe(
       concatMap(issue => {
         this.issue = issue;
         const proposalStatusID = this.issuesService.DefaultProposalStatus(issue.statusID);

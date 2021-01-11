@@ -23,8 +23,8 @@ import { IssuesService } from 'src/app/services/issues.service';
 })
 export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  @Input() organisationName: string;
   @Input() groupName: string;
-  @Input() subGroupName: string;
 
   @Input() issue: Issue;
   @Input() inFocus: boolean;
@@ -34,11 +34,11 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   public IssueStatuses = IssueStatuses;
 
   get groupNameKB(): string {
-    return this.appData.kebabUri(this.groupName);
+    return this.appData.kebabUri(this.organisationName);
   }
 
   get subGroupNameKB(): string {
-    return this.appData.kebabUri(this.subGroupName);
+    return this.appData.kebabUri(this.groupName);
   }
 
   get issueTitleKB(): string {

@@ -49,7 +49,7 @@ export class OrganisationComponent implements OnInit, OnDestroy {
   }
 
   issuesLink(group: string): string {
-    return `/organisation/${this.appData.kebabUri(this.OrganisationDisplay.organisationName)}/${this.appData.kebabUri(group)}`;
+    return `/organisations/${this.appData.kebabUri(this.OrganisationDisplay.organisationName)}/${this.appData.kebabUri(group)}`;
   }
 
   constructor(
@@ -57,9 +57,7 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private appData: AppDataService,
     private groupsService: OrganisationsService
-  ) {
-    console.log('constructor');
-  }
+  ) { }
 
   ngOnInit(): void {
     this.getGroup();

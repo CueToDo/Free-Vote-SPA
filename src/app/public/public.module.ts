@@ -29,6 +29,7 @@ import { ByComponent } from './by/by.component';
 import { NavComponent } from './nav/nav.component';
 import { TagsComponent } from './tags/tags.component';
 import { TagsPointsComponent } from './tags-points/tags-points.component';
+import { VotersMenuComponent } from './voters-menu/voters-menu.component';
 import { ListComponent } from './list/list.component';
 import { ScrollerComponent } from './scroller/scroller.component';
 import { PointsListComponent } from './points-list/points-list.component';
@@ -50,7 +51,7 @@ import { QuestionComponent } from './question/question.component';
   declarations: [
     // Auth0
     CallbackComponent,
-    // VotersMenuComponent,
+    VotersMenuComponent,
     HomeComponent,
     PointComponent,
     PointEditComponent,

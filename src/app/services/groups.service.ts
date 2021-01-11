@@ -132,9 +132,9 @@ export class OrganisationsService {
             .get(`organisation/group/${subGroupID}`);
     }
 
-    GroupByName(groupName: string, subGroupName: string): Observable<Group> {
+    GroupByName(organisationName: string, groupName: string): Observable<Group> {
         return this.httpClientService
-            .get(`organisation/groupByName/${groupName}/${subGroupName}`);
+            .get(`organisation/groupByName/${organisationName}/${groupName}`);
     }
 
     GroupID(groupName: string): number {

@@ -64,7 +64,7 @@ export class IssuesService {
 
     console.log(sourceData);
 
-    ISR.groupIssueCounts = cloneDeep(sourceData.subGroupIssueCounts) as GroupIssueCounts;
+    ISR.groupIssueCounts = cloneDeep(sourceData.groupIssueCounts) as GroupIssueCounts;
 
     return ISR;
   }

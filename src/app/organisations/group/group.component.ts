@@ -41,7 +41,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
   groupName: string;
   public group: Group;
 
-  public get groupNameKebab(): string {
+  public get organisationNameKebab(): string {
     return this.appData.kebabUri(this.organisationName);
   }
 
@@ -81,7 +81,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.organisationName = this.appData.unKebabUri(routeParams.organisationName);
     this.groupName = this.appData.unKebabUri(routeParams.groupName);
 
-    this.getGroup(this.organisationName, this.organisationName);
+    this.getGroup(this.organisationName, this.groupName);
   }
 
   getGroup(organisationName: string, groupName: string): void {
@@ -147,7 +147,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  editComplete(): void {
+  editCompleted(): void {
     this.groupEdit = false;
     // this.subGroupUpdated.emit();
     // this.getIssues(IssueStatuses.Prioritisation);
@@ -161,7 +161,7 @@ export class GroupComponent implements OnInit, OnDestroy, AfterViewInit {
   refreshSubGroup(): void {
     this.groupsService.Group(this.group.groupID).subscribe(
       {
-        next: subGroup => this.group = subGroup,
+        next: group => this.group = group,
         error: serverError => {
           console.log(serverError);
           this.error = serverError.error.detail;

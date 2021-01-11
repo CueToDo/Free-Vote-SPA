@@ -77,7 +77,6 @@ export class TagsComponent implements OnInit, OnDestroy {
     this.tags$ = this.tagsService.TagCloud(this.tagCloudType)
       .subscribe({
         next: response => {
-          console.log('FETCH TAGS', response);
           this.tags = response;
           this.waiting = false;
           this.haveTags.emit(response && response.length > 0);
