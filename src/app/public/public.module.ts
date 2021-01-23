@@ -36,6 +36,7 @@ import { PointsListComponent } from './points-list/points-list.component';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionComponent } from './question/question.component';
+import { QuestionAnswersComponent } from './question-answers/question-answers.component';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { QuestionComponent } from './question/question.component';
     PointsListComponent,
     QuestionsListComponent,
     QuestionEditComponent,
-    QuestionComponent
+    QuestionComponent,
+    QuestionAnswersComponent
   ],
   exports: [
     PointComponent,

@@ -1,3 +1,9 @@
+app-points-list, app-questions-list {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
 .fullWidth {
     width: 100%
 }
@@ -66,10 +72,4 @@ hr {
 
 .myMatInput {
     width: 160px;
-}
-
-app-points-list, app-questions-list {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
 }

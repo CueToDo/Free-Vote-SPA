@@ -130,4 +130,10 @@ export class QuestionsService {
 
   }
 
+  QuestionPointAddRemove(add: boolean, questionID: number, pointID: number): Observable<boolean> {
+
+    return this.httpClientService
+      .get(`questions/questionPoint/${add ? 'add' : 'remove'}/${questionID}/${pointID}`);
+  }
+
 }

@@ -11,6 +11,9 @@ export class FilterCriteria {
     anyTag = false;
     previouslyFilteringAnyTag = false;
 
+    // Answers to Questions
+    questionId = 0;
+
     // Alias Filter
     applyAliasFilter: boolean;
     byAlias = '';
@@ -45,6 +48,9 @@ export class FilterCriteria {
     // My Points or Questions
     myPoints: boolean;
     previouslyFilteringMyPoints = false;
+
+    // QuestionPoints
+    unAttachedToQuestion = false;
 
     // Draft Status Filter
     applyDraftFilter = false;

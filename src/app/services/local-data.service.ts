@@ -30,6 +30,8 @@ export class LocalDataService {
     public roles: string[];
     public freeVoteProfile = new FreeVoteProfile(); // For client updates to API
 
+    public questionSelected = '';
+
     public ActiveAliasForFilter = ''; // May be empty string
     private previousAliasSelected = '';
     private previousTopicSelected = ''; // Convert to SlashTag in PreviousSlashTagSelected

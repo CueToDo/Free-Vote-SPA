@@ -11,6 +11,7 @@ export class QuestionEdit {
 export class Question {
 
     question: string;
+    points: number;
     draft: boolean;
     questionID: number;
     rowNumber: number;

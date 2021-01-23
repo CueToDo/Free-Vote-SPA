@@ -1,6 +1,6 @@
 
 // Angular
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 // Models, enums
 import { ID } from 'src/app/models/common';
@@ -22,10 +22,15 @@ import { PointsService } from 'src/app/services/points.service';
 export class PointsListComponent implements OnInit {
 
   @Input() public filter: FilterCriteria;
+  @Input() public attachedToQuestion: boolean;
+
+  @Output() AddPointToAnswers = new EventEmitter();
+  @Output() RemovePointFromAnswers = new EventEmitter();
 
   public pointCount: number;
   public IDs: ID[] = [];
   public points: Point[] = [];
+  public possibleAnswers = false;
 
   public error: string;
   public alreadyFetchingPointsFromDB = false;
@@ -86,6 +91,8 @@ export class PointsListComponent implements OnInit {
 
   SelectPoints(): void {
 
+    this.possibleAnswers = false;
+
     if (!this.alreadyFetchingPointsFromDB) {
 
       this.alreadyFetchingPointsFromDB = true;
@@ -94,6 +101,7 @@ export class PointsListComponent implements OnInit {
       this.error = '';
 
       switch (this.filter.pointSelectionType) {
+
         case PointSelectionTypes.Filtered:
 
           let aliasFilter = '';
@@ -107,7 +115,7 @@ export class PointsListComponent implements OnInit {
           let pointTypeID = PointTypesEnum.NotSelected;
           if (this.filter.applyTypeFilter) { pointTypeID = this.filter.pointTypeID; }
 
-          let dateFrom = new Date();
+          let dateFrom = new Date('1 Jan 2000');
           let dateTo = new Date();
 
           // Switch dates if dateFrom > dateTo
@@ -137,6 +145,26 @@ export class PointsListComponent implements OnInit {
                 }
               });
           break;
+
+        case PointSelectionTypes.QuestionPoints:
+
+          this.possibleAnswers = this.filter.unAttachedToQuestion;
+
+          this.pointsService.GetFirstBatchQuestionPoints(
+            this.filter.slashTag, this.filter.questionId, this.filter.myPoints,
+            this.filter.unAttachedToQuestion, this.filter.sortType, this.filter.sortAscending)
+            .subscribe(
+              {
+                next: psr => this.DisplayPoints(psr),
+                error: err => {
+                  console.log(err);
+                  this.error = err.error.detail;
+                  this.alreadyFetchingPointsFromDB = false;
+                }
+              });
+
+          break;
+
         default:
           // Infinite Scroll: Get points in batches
           this.filter.slashTag = this.localData.PreviousSlashTagSelected; // how does this relate to getting from route param?
@@ -292,6 +320,11 @@ export class PointsListComponent implements OnInit {
     this.NewPointsDisplayed();
   }
 
+  AddToAnswers(pointID: number): void {
+    this.AddPointToAnswers.emit(pointID);
+  }
 
-
+  RemoveFromAnswers(pointID: number): void {
+    this.RemovePointFromAnswers.emit(pointID);
+  }
 }

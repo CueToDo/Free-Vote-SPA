@@ -44,6 +44,20 @@ export class PointsService {
     // this.GetWoWWeekInfoVote();
   }
 
+  GetFirstBatchQuestionPoints(
+    slashTag: string, questionID: number, myPointsOnly: boolean, unAttached: boolean,
+    pointSortOrder: PointSortTypes, sortAscending: boolean): Observable<PointSelectionResult> {
+
+    const apiUrl =
+      `points/getFirstBatchQuestionPoints/${slashTag.replace('/', '')}/${questionID}/${myPointsOnly ? 'Y' : 'N'}`
+      + `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortAscending}/${this.batchSize}/${this.pageSize}`;
+
+    return this.httpClientService
+      .get(apiUrl)
+      .pipe(
+        map(returnData => this.CastToPointSelectionResult(returnData))
+      );
+  }
 
   // The standard selections for a Tag:
   // 1) First batch

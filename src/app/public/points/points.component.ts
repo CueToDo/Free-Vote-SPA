@@ -71,6 +71,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
 
     this.filter.byAlias = this.localData.ActiveAliasForFilter;
+    this.filter.questions = true; // Default first selection
 
     this.appData.PointTypes().subscribe(
       pointTypes => this.pointTypes = pointTypes

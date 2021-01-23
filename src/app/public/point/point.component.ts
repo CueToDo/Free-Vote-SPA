@@ -21,8 +21,12 @@ export class PointComponent implements OnInit {
   @Input() point: Point;
   @Input() pointCount: number;
   @Input() isPorQPoint: boolean;
+  @Input() possibleAnswer: boolean;
+  @Input() isMyAnswer: boolean;
 
   @Output() PointDeleted = new EventEmitter();
+  @Output() AddPointToAnswers = new EventEmitter();
+  @Output() RemovePointFromAnswers = new EventEmitter();
 
   // bind to point slashtags (not topic)
   slashTags: string[];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
@@ -47,7 +51,7 @@ export class PointComponent implements OnInit {
   ) { }
 
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Angular Workshop filter is not a function
 
     // this.tags = this.tags.filter(x => x.SlashTag !== '/hash');
@@ -69,7 +73,7 @@ export class PointComponent implements OnInit {
 
   }
 
-  AssignTags() {
+  AssignTags(): void {
     // Filter out current tag
     // SlashTagSelected updated as soon as tag clicked
     this.slashTags = this.point.slashTags.filter(tag => tag.toLowerCase() !== this.localData.PreviousSlashTagSelected.toLowerCase());
@@ -84,7 +88,7 @@ export class PointComponent implements OnInit {
     }
   }
 
-  PointFeedback(pointSupportLevel: PointSupportLevels) {
+  PointFeedback(pointSupportLevel: PointSupportLevels): void {
 
     if (!this.point.pointFeedback.feedbackIsUpdatable) {
       alert('Feedback is not updatable');
@@ -115,15 +119,23 @@ export class PointComponent implements OnInit {
     }
   }
 
-  PointTypeVote(pointTypesEnum: PointTypesEnum) {
+  PointTypeVote(pointTypesEnum: PointTypesEnum): void {
 
+  }
+
+  AddToAnswers(pointID: number): void {
+    this.AddPointToAnswers.emit(pointID);
+  }
+
+  RemoveFromAnswers(pointID: number): void {
+    this.RemovePointFromAnswers.emit(pointID);
   }
 
   favoriteIcon(): string {
     return this.point.isFavourite ? 'favorite' : 'favorite_border';
   }
 
-  WoW() {
+  WoW(): void {
 
     console.log('BEGIN WoW');
 
@@ -153,35 +165,35 @@ export class PointComponent implements OnInit {
         });
   }
 
-  Support() {
+  Support(): void {
     this.PointFeedback(PointSupportLevels.Support);
   }
 
-  Neutral() {
+  Neutral(): void {
     // this.point.pointFeedback.woWVote = false;
     this.PointFeedback(PointSupportLevels.StandAside);
   }
 
-  Oppose() {
+  Oppose(): void {
     // this.point.pointFeedback.woWVote = false;
     this.PointFeedback(PointSupportLevels.Oppose);
   }
 
-  Report() {
+  Report(): void {
     // this.point.pointFeedback.woWVote = false;
     this.PointFeedback(PointSupportLevels.Report);
   }
 
-  anon() {
+  anon(): void {
     alert('ToDo');
   }
 
 
-  edit() {
+  edit(): void {
     this.editing = true;
   }
 
-  delete() {
+  delete(): void {
     if (confirm('Are you sure you wish to delete this point?')) {
       this.pointsService.PointDelete(this.point.pointID)
         .subscribe(
@@ -198,18 +210,18 @@ export class PointComponent implements OnInit {
   }
 
 
-  favourite() {
+  favourite(): void {
     const deleteFavourite = this.point.isFavourite;
 
     this.pointsService.PointFlag(deleteFavourite, this.point.pointID, PointFlags.Favourite)
       .subscribe(() => this.point.isFavourite = !deleteFavourite);
   }
 
-  onCancelEdit() {
+  onCancelEdit(): void {
     this.editing = false;
   }
 
-  onCompleteEdit() {
+  onCompleteEdit(): void {
     this.AssignTags();
     if (this.point.pointFeedback.supportLevelID !== PointSupportLevels.None) {
       this.point.pointFeedback.pointModified = true;
@@ -217,7 +229,7 @@ export class PointComponent implements OnInit {
     this.editing = false;
   }
 
-  OccupyHandSignals() {
+  OccupyHandSignals(): void {
     window.open('https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals', '_blank');
   }
 

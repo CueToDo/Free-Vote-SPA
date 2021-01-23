@@ -55,8 +55,11 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   public haveRecentSlashTags = false;
   refreshRecent = false;
 
-  questions = false;
-  qp = 'point';
+  qp = 'question';
+
+  public get questions(): boolean {
+    return this.qp === 'question';
+  }
 
   showingFilter = false;
   public filterIcon = 'star';
@@ -251,7 +254,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
         }
         break;
       case tabs.newPoint:
-        if (this.questions) {
+        if (this.qp === 'question') {
           this.newQuestionComponent.NewQuestion(this.slashTagSelected);
         } else {
           this.newPointComponent.NewPoint(this.slashTagSelected);
@@ -270,13 +273,8 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   changeQP(): void {
-    let filterQuestions = false;
-    if (this.questions) {
-      this.qp = 'question';
-      filterQuestions = true;
-    } else {
-      this.qp = 'point';
-    }
+
+    const filterQuestions = this.qp === 'question';
 
     // Switch to points display if on trending or recent
     switch (this.tabIndex) {

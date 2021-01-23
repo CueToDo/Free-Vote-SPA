@@ -49,7 +49,7 @@ export class GroupsComponent implements OnInit {
     this.getGroups();
   }
 
-  getGroups() {
+  getGroups(): void {
 
     this.error = '';
 
@@ -64,7 +64,7 @@ export class GroupsComponent implements OnInit {
     // );
   }
 
-  SelectGroup() {
+  SelectGroup(): void {
     // this.groupsFiltered = this.groups.filter(group => group['groupName'] === this.groupSelected);
   }
 

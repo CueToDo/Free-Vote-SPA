@@ -1,0 +1,14 @@
+app-points-list {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+span+a {
+    margin-left: 10px;
+}
+
+hr {
+    height: 5px;
+    background: gray;
+}

@@ -8,6 +8,7 @@ import { PointSupportLevels } from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { AppDataService } from 'src/app/services/app-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 
 @Component({
@@ -28,6 +29,7 @@ export class QuestionComponent implements OnInit {
 
   constructor(
     public localData: LocalDataService, // public - used in template
+    public appData: AppDataService,
     private questionsService: QuestionsService
   ) { }
 
@@ -114,6 +116,14 @@ export class QuestionComponent implements OnInit {
   // OccupyHandSignals() {
   //   window.open('https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals', '_blank');
   // }
+
+  QuestionLink(): string {
+    return `${this.localData.PreviousSlashTagSelected}/question/${this.question.questionID}`;
+  }
+
+  SelectQuestion(): void {
+    this.localData.questionSelected = this.question.question;
+  }
 
   anon(): void {
     alert('ToDo');

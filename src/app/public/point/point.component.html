@@ -1,4 +1,3 @@
-
 <div *ngIf="!editing" class="point">
 
   <!-- Point Display -->
@@ -32,7 +31,8 @@
 
   <!-- Can only see quote source if ShowLinkBeforeVote or Feedback given. Can view link for all recommended point types -->
 
-  <div *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink" class="pointSource" [ngClass.lt-md]="'ltmd'">
+  <div *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink" class="pointSource"
+    [ngClass.lt-md]="'ltmd'">
     <a *ngIf="point.url" [href]="point.url" target="_blank">{{ point.source }}</a>
     <span *ngIf="!point.url">{{ point.source }}</span>
   </div>
@@ -44,6 +44,18 @@
   <!-- Toolbar -->
 
   <div class="toolbar" fxLayout="row wrap" fxLayoutAlign="left center">
+
+    <div *ngIf="possibleAnswer">
+      <button mat-menu-item (click)="AddToAnswers(point.pointID)" matTooltip="Add to answers">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="isMyAnswer">
+      <button mat-menu-item (click)="RemoveFromAnswers(point.pointID)" matTooltip="Remove from answers">
+        <mat-icon>remove_circle</mat-icon>
+      </button>
+    </div>
 
     <div *ngIf="point.draft" fxFlex class="draft">
       Draft Only
@@ -359,5 +371,6 @@
 </div> <!-- End Point Display -->
 
 <!-- Removing the banana from the box [(point)] is not necessary - https://medium.com/@preethi.s/angular-custom-two-way-data-binding-3e618309d6c7 -->
-<app-point-edit *ngIf="editing" [isPorQPoint]="isPorQPoint" (CancelEdit)="onCancelEdit()" (CompleteEdit)="onCompleteEdit()" [(point)]="point">
+<app-point-edit *ngIf="editing" [isPorQPoint]="isPorQPoint" (CancelEdit)="onCancelEdit()"
+  (CompleteEdit)="onCompleteEdit()" [(point)]="point">
 </app-point-edit>

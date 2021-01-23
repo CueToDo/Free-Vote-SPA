@@ -3,7 +3,7 @@
     <!-- Title -->
     <div class="mx-3 mt-3">
       <mat-form-field class="questionEdit">
-        <input matInput placeholder="question" [(ngModel)]="questionEdit.question" type="text" name="questionEdit" #tvQuestion="ngModel"  (blur)="onQuestionBlur()">
+        <textarea matInput placeholder="question" [(ngModel)]="questionEdit.question" name="questionEdit" #tvQuestion="ngModel"  (blur)="onQuestionBlur()"></textarea>
       </mat-form-field>
     </div>
     

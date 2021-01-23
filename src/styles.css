@@ -250,6 +250,10 @@ a:hover {
 /* border-left: 5px solid #a94442; red */
 /* }  */
 
+.ck-editor__editable {
+  min-height: 200px;
+}
+
 
 /*passive link input Angular https://stackoverflow.com/questions/35639174/passive-link-in-angular-2-a-href-equivalent*/
 .topicsCloud a,

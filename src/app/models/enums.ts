@@ -5,24 +5,21 @@ export enum ContentType {
 }
 
 export enum PointSelectionTypes {
+
   // Not used in database
 
-  // Standard slection
-  SlashTag = 0,
-
-  // Custom selection
-  Filtered = 1,
-
-  // Individual Point
-  Point = 2,
+  SlashTag = 0, // Standard slection
+  Filtered = 1, // Custom selection
+  QuestionPoints = 2,
+  Point = 3, // Individual Point
 
   // WoW
-  POTW = 3,
-  POTWVote = 4,
-  WoWAdmin = 5,
+  POTW = 4,
+  POTWVote = 5,
+  WoWAdmin = 6,
 
-  TagSurvey = 6,
-  CDMPProposal = 7
+  TagSurvey = 7,
+  CDMPProposal = 8
 
 }
 

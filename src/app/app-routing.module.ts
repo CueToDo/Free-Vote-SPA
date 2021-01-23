@@ -10,10 +10,12 @@ import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the
 import { ScrollerComponent } from './public/scroller/scroller.component';
 import { VotersMenuComponent } from './public/voters-menu/voters-menu.component';
 import { TagsPointsComponent } from './public/tags-points/tags-points.component';
+import { QuestionAnswersComponent } from './public/question-answers/question-answers.component';
 
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from './services/login-route-guard.service';
+
 
 const appRoutes: Routes = [
 
@@ -49,6 +51,7 @@ const appRoutes: Routes = [
   { path: 'new-point', component: TagsPointsComponent },
   { path: 'slash-tag/:tag/:title', component: TagsPointsComponent },
   { path: ':tag/by/:alias', component: TagsPointsComponent },
+  { path: ':tag/question/:questionId', component: QuestionAnswersComponent },
   { path: ':tag/:pointId', component: TagsPointsComponent },
   { path: ':tag', component: TagsPointsComponent } // POINTS: still like the SlashTag
 

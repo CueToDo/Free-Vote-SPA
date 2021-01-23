@@ -17,7 +17,13 @@
 
         <!-- Toolbar Remainder -->
 
-        <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+
+            <div>
+                <a [routerLink]="QuestionLink()" (click)="SelectQuestion()">{{ question.points }} answer{{ appData.plural(question.points) }}</a>
+            </div>
+
+            <div fxFlex></div>
 
             <!-- QuestionNumber/Count -->
 
@@ -72,17 +78,13 @@
 
                     <img src="./assets/Modified.png" *ngIf="question.questionModified"
                         matTooltip="Question has been updated. Please confirm your feedback.">
-                    <img src="./assets/Agree.png"
-                        *ngIf="!question.questionModified && question.supportLevelID===1"
+                    <img src="./assets/Agree.png" *ngIf="!question.questionModified && question.supportLevelID===1"
                         matTooltip="Agree">
-                    <img src="./assets/Disagree.png"
-                        *ngIf="!question.questionModified && question.supportLevelID===-8"
+                    <img src="./assets/Disagree.png" *ngIf="!question.questionModified && question.supportLevelID===-8"
                         matTooltip="Neutral">
-                    <img src="./assets/Oppose.png"
-                        *ngIf="!question.questionModified && question.supportLevelID===-1"
+                    <img src="./assets/Oppose.png" *ngIf="!question.questionModified && question.supportLevelID===-1"
                         matTooltip="Oppose">
-                    <img src="./assets/Block.png"
-                        *ngIf="!question.questionModified && question.supportLevelID===-9"
+                    <img src="./assets/Block.png" *ngIf="!question.questionModified && question.supportLevelID===-9"
                         matTooltip="Block">
 
 
