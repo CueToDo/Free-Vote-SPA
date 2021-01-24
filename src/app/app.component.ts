@@ -1,6 +1,6 @@
 // Angular
 import { Component, Inject } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser'; // Meta
 import { OnInit, OnDestroy } from '@angular/core';
 import { Location, DOCUMENT } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -54,6 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private location: Location,
     private titleService: Title,
+    // private metaService: Meta,
     @Inject(DOCUMENT) private htmlDocument: HTMLDocument) { }
 
 
@@ -143,10 +144,53 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
-  setDocTitle(title: string): void {
+  setDocTitle(
+    pagePath: string, title: string, description: string,
+    imagePath: string, csvKeywords: string): void {
+
     // https://blog.bitsrc.io/dynamic-page-titles-in-angular-98ce20b5c334
     this.titleService.setTitle(title);
+
+    // const url = this.localData.siteUrl + this.appData.removeBookEnds(pagePath, '/');
+    // const imageUrl = this.localData.siteUrl + imagePath;
+
+    // // https://css-tricks.com/essential-meta-tags-social-media/
+    // this.metaService.removeTag(`name='keywords'`);
+    // this.metaService.removeTag(`name='description'`);
+
+    // this.metaService.removeTag(`property='og:title'`);
+    // this.metaService.removeTag(`property='og:description'`);
+    // this.metaService.removeTag(`property='og:image'`);
+    // this.metaService.removeTag(`property='og:url'`);
+
+    // this.metaService.removeTag(`name='twitter:title'`);
+    // this.metaService.removeTag(`name='twitter:description'`);
+    // this.metaService.removeTag(`name='twitter:image'`);
+    // this.metaService.removeTag(`name='twitter:card'`);
+
+    // // Tags get added, but does not work
+    // // Need Angular Universal Server Side Rendering
+    // // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
+    // this.metaService.addTags([
+    //   { name: 'keywords', content: `Free Vote, voting, democracy, ${csvKeywords}` },
+    //   { name: 'description', content: description },
+
+    //   { property: 'og:title', content: title },
+    //   { property: 'og:description', content: description },
+    //   { property: 'og:image', content: imageUrl },
+    //   { property: 'og:url', content: url },
+
+    //   { name: 'twitter:title', content: title },
+    //   { name: 'twitter:description', content: description },
+    //   { name: 'twitter:image', content: imageUrl },
+    //   { name: 'twitter:card', content: 'summary_large_image' }
+
+    // ]);
+
+
   }
+
+
 
   public RouteOrParamsUpdated(url: string): void {
 
@@ -156,7 +200,7 @@ export class AppComponent implements OnInit, OnDestroy {
       // Home page
       this.home = true;
       this.pageTitle = '';
-      this.setDocTitle(this.localData.website);
+      this.setDocTitle('', this.localData.website, 'Free Vote anonymous voting platform', 'assets/Vulcan.png', 'Free, Vote, anonymous, voting, platform');
       // Set ShowVulcan to true on route change to home page
       // If home page emits InputSlashTagOnMobile in ngOnInit, get error
       // ExpressionChangedAfterItHasBeenCheckedError
@@ -172,12 +216,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
       if (url.indexOf('slash-tags') > -1) {
         this.appData.PageName$.next('slashTags');
-        this.setDocTitle('Slash Tags');
+        this.setDocTitle(url, 'Slash Tags', 'slash tag cloud', 'assets/Slash Tag Cloud.PNG', 'slash, tag, cloud');
       } else if (url.indexOf('/my/details') > -1) {
         this.appData.PageName$.next('profile');
-        this.setDocTitle('Voter Profile');
+        this.setDocTitle(url, 'Voter Profile', 'free vote voter profile', 'assets/Vulcan.png', 'free, vote, voter, profile');
       } else {
-        this.setDocTitle(this.localData.SlashTagToTopic(this.pageTitle));
+        const topic = this.localData.SlashTagToTopic(this.pageTitle);
+        this.setDocTitle(url, topic, `points on ${topic}`, 'assets/Slash Tag Cloud.PNG', `${topic}, slash, tag`);
       }
 
       // https://angular.io/api/common/Location#!#replaceState-anchor

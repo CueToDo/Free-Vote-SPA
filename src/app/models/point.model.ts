@@ -7,19 +7,20 @@ export class PointEdit {
     // However the user inputs them, pass them to the server to decode
 
     pointID: number;
-    title: string;
-    linkTitle: string;
+    pointTitle: string; // pointLink constructed in API
     pointHTML: string;
     csvImageIDs = '';
     pointTypeID: PointTypesEnum;
-    source: string;
-    url: string;
+
+    source: string; // May not be a link, could just be a name
+    link: string; // link url to the source if any
     showLinkBeforeVote: boolean;
+    showLinkPreview: boolean;
+
     youTubeID: string;
     soundCloudTrackID: string;
     slashTags: string[] = [];
     draft: boolean;
-
 }
 
 
@@ -78,13 +79,14 @@ export class Point {
     voterIDPoint: number;
     isPointOwner: boolean;
 
-    pointTypeID = PointTypesEnum.Opinion;
-    pointTypeIDVoter: number;
-
-    title: string;
-    linkTitle: string;
+    pointTitle: string;
+    pointLink: string;
     pointHTML: string;
     csvImageIDs = '';
+    draft: boolean;
+
+    pointTypeID = PointTypesEnum.Opinion;
+    pointTypeIDVoter: number;
 
     dateTimeCreated: string;
     dateTimeUpdated: string; // How many times am I going to attempt to make this a Date to use DateTime Pipe
@@ -92,10 +94,15 @@ export class Point {
     soundCloudTrackID: string;
     slashTags: string[] = [];
 
-    draft: boolean;
+    // Manually added link info
     source: string;
-    url: string;
+    link: string;
     showLinkBeforeVote: boolean;
+    showLinkPreview: boolean;
+    // Additional link info from site meta data
+    linkTitle: string;
+    linkDescription: string;
+    linkImage: string;
 
     archived: boolean;
 
@@ -123,4 +130,11 @@ export class Point {
     isInOpenedSurvey: boolean;
     isInClosedSurvey: boolean;
     isQuestionAnswer: boolean;
+}
+
+export class SiteMetaData {
+    title: string;
+    description: string;
+    image: string;
+    url: string;
 }

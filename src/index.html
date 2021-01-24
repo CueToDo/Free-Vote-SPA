@@ -8,17 +8,30 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link id="appFavicon" rel="icon" type="image/x-icon" href="assets/favicon.ico?v=5">
-  
+
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
 
-  <!--<script>window.__theme = 'bs4';</script>--> <!-- https://github.com/valor-software/ngx-bootstrap/issues/1553 -->
+  <!--<script>window.__theme = 'bs4';</script>-->
+  <!-- https://github.com/valor-software/ngx-bootstrap/issues/1553 -->
+
+  <!-- https://stackoverflow.com/questions/39455813/twitter-embedded-for-angular-2 -->
+  <!-- This cannot be made dynamic without server side rendering -->
+  <meta property="og:title" content="Free Vote">
+  <meta property="og:description" content="Free Vote anonymous voting platform.">
+  <meta property="og:image" content="https://free.vote/assets/Vulcan-384.png">
+  <meta property="og:url" content="https://free.vote">
+
+  <meta name="twitter:title" content="Free Vote">
+  <meta name="twitter:description" content="Free Vote anonymous voting platform.">
+  <meta name="twitter:image" content="https://free.vote/assets/Vulcan-384.png">
+  <meta name="twitter:card" content="summary_large_image">
 
   <script>
     /* Facebook Script Requires jQuery !!! can't have it*/
     /* Lazy load using modules on sign in? */
     // var FBAccessToken;
-  
+
     // window.fbAsyncInit = function () {
     //   FB.init({
     //     appId: '1114396292039346',
@@ -26,19 +39,19 @@
     //     xfbml: true,
     //     version: 'v2.9'
     //   });
-  
-  
-  
+
+
+
     //   FB.AppEvents.logPageView();
-  
-  
+
+
     //   function basicAPIRequest() {
     //     FB.api('/me?fields=name,picture,email', function (response) {
     //       document.getElementById('accountInfo').innerHTML =
     //         ('<img src="' + response.picture.data.url + '"> ' + response.email);
     //     });
     //   }
-  
+
     //   FB.getLoginStatus(function (response) {
     //     if (response.status === 'connected') {
     //       FBAccessToken = response.authResponse.accessToken;
@@ -46,9 +59,9 @@
     //       basicAPIRequest();
     //     }
     //   });
-  
+
     // };
-  
+
     // (function (d, s, id) {
     //   var js, fjs = d.getElementsByTagName(s)[0];
     //   if (d.getElementById(id)) { return; }
@@ -56,9 +69,9 @@
     //   js.src = "//connect.facebook.net/en_US/sdk.js";
     //   fjs.parentNode.insertBefore(js, fjs);
     // }(document, 'script', 'facebook-jssdk'));
-  
+
     // function greet() { alert(FBAccessToken); }
-  
+
   </script>
 
   <link rel="manifest" href="manifest.json">

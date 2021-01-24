@@ -3,9 +3,9 @@
   <!-- Point Display -->
   <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
 
-    <h1>{{ point.title }}</h1>
+    <h1>{{ point.pointTitle }}</h1>
 
-    <hr *ngIf="!!point.title" class="hr hrTitle">
+    <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
 
     <div [innerHTML]="point.pointHTML | SafeHtml"></div>
 
@@ -31,10 +31,25 @@
 
   <!-- Can only see quote source if ShowLinkBeforeVote or Feedback given. Can view link for all recommended point types -->
 
-  <div *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink" class="pointSource"
+  <div *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink || justUpdated" class="pointSource"
     [ngClass.lt-md]="'ltmd'">
-    <a *ngIf="point.url" [href]="point.url" target="_blank">{{ point.source }}</a>
-    <span *ngIf="!point.url">{{ point.source }}</span>
+    <!-- Link -->
+    <a *ngIf="point.link" [href]="point.link" target="_blank">
+      <!-- Link Preview -->
+      <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row">
+        <img [src]="point.linkImage" alt="">
+        <div class="linkMetaData">
+          <div class="linkTitle">{{ point.linkTitle }}</div>
+          {{ point.linkDescription }}
+        </div>
+      </div>
+      <!-- No Link Preview -->
+      <div *ngIf="!point.showLinkPreview">
+        {{ point.source }}
+      </div>
+    </a>
+    <!-- No link -->
+    <span *ngIf="!point.link">{{ point.source }}</span>
   </div>
 
   <div class="fv-error" *ngIf="!!error">

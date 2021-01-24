@@ -3,13 +3,13 @@
   <!-- Title -->
   <div class="mx-3 mt-3">
     <mat-form-field class="pointTitle">
-      <input matInput placeholder="point title" [(ngModel)]="pointClone.title" type="text" name="pointTitle">
+      <input matInput placeholder="point title" [(ngModel)]="pointClone.pointTitle" type="text" name="pointTitle">
     </mat-form-field>
   </div>
 
   <!-- The Editor -->
-  <ckeditor [editor]="ckeditor" [(ngModel)]="pointClone.pointHTML" name="point" [config]="appData.ckeConfig" debounce="250" required
-    #tvPoint="ngModel" (blur)="onCKEBlur()">
+  <ckeditor [editor]="ckeditor" [(ngModel)]="pointClone.pointHTML" name="point" [config]="appData.ckeConfig"
+    debounce="250" required #tvPoint="ngModel" (blur)="onCKEBlur()">
   </ckeditor>
 
 
@@ -19,21 +19,29 @@
     <div fxLayout="column" fxLayoutAlign="space-around">
 
       <div *ngIf="hasLink">
-        
+
         <!-- To Be Animated with css transition -->
         <div fxLayoutAlign="row">
-          
+
           <mat-form-field fxFlex>
             <input matInput placeholder="quote or link text" [(ngModel)]="pointClone.source" name="quoteSource">
           </mat-form-field>
 
-          <mat-checkbox [(ngModel)]="pointClone.showLinkBeforeVote" name="showLinkbeforeVote" [disabled]="showLinkBeforeVoteDisabled">show before vote</mat-checkbox>
+          <mat-checkbox [(ngModel)]="pointClone.showLinkBeforeVote" name="showLinkbeforeVote"
+            [disabled]="showLinkBeforeVoteDisabled">show before vote</mat-checkbox>
 
         </div>
+        
+        <div fxLayoutAlign="row">
 
-        <mat-form-field fxFill>
-          <input matInput placeholder="quote or link url" [(ngModel)]="pointClone.url" name="quoteURL">
-        </mat-form-field>
+          <mat-form-field fxFlex>
+            <input matInput placeholder="quote or link url" [(ngModel)]="pointClone.link" name="quoteURL">
+          </mat-form-field>
+
+          <mat-checkbox [(ngModel)]="pointClone.showLinkPreview" name="showLinkPreview"
+            [disabled]="showLinkBeforeVoteDisabled">show preview</mat-checkbox>
+
+        </div>
 
       </div>
 
@@ -84,7 +92,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-checkbox [(ngModel)]="pointClone.draft" name="draftPoint">
+    <mat-checkbox [(ngModel)]="pointClone.draft" name="draftPoint" class="draft">
       draft
     </mat-checkbox>
 

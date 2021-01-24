@@ -32,6 +32,7 @@ export class PointComponent implements OnInit {
   slashTags: string[];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
 
   editing = false;
+  justUpdated = false;
 
   get showLink(): boolean {
     return this.appData.ShowSource(this.point.pointTypeID);
@@ -79,10 +80,10 @@ export class PointComponent implements OnInit {
     this.slashTags = this.point.slashTags.filter(tag => tag.toLowerCase() !== this.localData.PreviousSlashTagSelected.toLowerCase());
   }
 
-  // PointTitle or PointID to be able to sleect single point
+  // PointTitle or PointID to be able to select single point
   get SelectSingleTitle(): string {
-    if (!!this.point.linkTitle) {
-      return this.point.linkTitle;
+    if (!!this.point.pointLink) {
+      return this.point.pointLink;
     } else {
       return this.point.pointID.toString();
     }
@@ -222,12 +223,28 @@ export class PointComponent implements OnInit {
   }
 
   onCompleteEdit(): void {
+
     this.AssignTags();
+
     if (this.point.pointFeedback.supportLevelID !== PointSupportLevels.None) {
       this.point.pointFeedback.pointModified = true;
     }
+
+    this.justUpdated = true;
+
+    if (this.point.showLinkPreview) {
+      // Get Link metadata for preview
+      this.pointsService.PointSourceMetaDataUpdate(this.point.pointID, this.point.link)
+        .subscribe(metaData => {
+          this.point.linkTitle = metaData.title;
+          this.point.linkDescription = metaData.description;
+          this.point.linkImage = metaData.image;
+        });
+    }
+
     this.editing = false;
   }
+
 
   OccupyHandSignals(): void {
     window.open('https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals', '_blank');

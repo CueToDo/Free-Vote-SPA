@@ -203,6 +203,11 @@ export class AppDataService {
     return (input?.split('-').filter(item => item).join(' '));
   }
 
+  public removeBookEnds(withEnds: string, removeEnd: string): string {
+    // filter - an empty string evaluates to boolean false. It works with all falsy values like 0, false, null, undefined
+    return withEnds.split(removeEnd).filter(item => item).join(removeEnd);
+  }
+
   public Date1IsLessThanDate2(dateFrom: string, dateTo: string): boolean {
     if (!dateFrom || !dateTo) { return false; }
     const date1 = new Date(dateFrom);

@@ -1,3 +1,4 @@
+import { SiteMetaData } from './../models/point.model';
 
 // Angular
 import { Injectable } from '@angular/core';
@@ -193,15 +194,15 @@ export class PointsService {
 
     const postData = {
       pointID: point.pointID,
-      title: point.title,
-      linkTitle: point.linkTitle,
+      pointTitle: point.pointTitle, // pointLink constructed in API
       pointHTML: point.pointHTML,
       csvImageIDs: point.csvImageIDs,
       pointTypeID: point.pointTypeID,
       isPorQPoint, // not a point property
       source: point.source,
-      url: point.url,
+      link: point.link,
       showLinkBeforeVote: point.showLinkBeforeVote,
+      showLinkPreview: point.showLinkPreview,
       youTubeID: point.youTubeID,
       soundCloudTrackID: point.soundCloudTrackID,
       slashTags: point.slashTags,
@@ -211,6 +212,15 @@ export class PointsService {
     return this.httpClientService
       .post('points/pointUpdate', postData)
       .pipe(map(result => result as Point));
+  }
+
+  PointSourceMetaDataUpdate(pointID: number, link: string): Observable<SiteMetaData> {
+
+    const postData = { pointID, link };
+
+    return this.httpClientService
+      .post('points/pointSourceMetaDataUpdate', postData)
+      .pipe(map(result => result as SiteMetaData));
   }
 
   // Not really needed: when we update an existing point,
@@ -223,6 +233,7 @@ export class PointsService {
       .get(`points/youTubeID/${youTubeLink}`)
       .pipe(map(result => result));
   }
+
 
   PointDelete(pointID: number): Observable<boolean> {
 

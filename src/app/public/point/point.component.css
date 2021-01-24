@@ -18,6 +18,26 @@
 
 /* "passive" link input Angular https://stackoverflow.com/questions/35639174/passive-link-in-angular-2-a-href-equivalent*/
 
+.linkFromMeta {
+    border: solid 1px black;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.linkFromMeta img {
+    width: 40%;
+    height: auto;
+}
+
+.linkTitle {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.linkMetaData {
+    padding: 10px;
+}
 
 /* https://stackoverflow.com/questions/21647920/responsive-iframe-with-max-width-and-height */
 

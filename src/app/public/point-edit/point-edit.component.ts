@@ -62,7 +62,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
   hasLink = false;
   imageFileForUpload: File | null;
   imageName: string;
-  showLinkBeforeVoteDisabled: boolean;
+  showLinkBeforeVoteDisabled = false;
 
   userTouched = false;
   cancelled = false;
@@ -232,7 +232,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
     if (!this.isPorQPoint && (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0)) {
       this.error = 'Points must have at least one slash tag';
-    } else if (!(!!this.pointClone.title && !!this.pointClone.url)
+    } else if (!(!!this.pointClone.pointTitle && !!this.pointClone.link)
       && !(!!this.pointClone.pointHTML || !!this.pointClone.youTubeID || !!this.pointClone.soundCloudTrackID
         || !!this.pointClone.csvImageIDs || !!this.imageSelect.nativeElement.value)) {
       this.error = 'Point title and text OR url OR image OR media link must be provided';
@@ -352,7 +352,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     if (this.appData.ShowSource(pointTypeID)) {
       this.showLinkEdit();
     } else {
-      if (this.pointClone.source || this.pointClone.url) {
+      if (this.pointClone.source || this.pointClone.link) {
         this.showLinkEdit();
       } else {
         this.hideLinkEdit();
@@ -366,7 +366,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
     // Automatically update default "show" if voter changes point type
     this.showLinkBeforeVoteDisabled = this.appData.ShowSource(pointTypeID);
-    this.pointClone.showLinkBeforeVote = this.appData.ShowSource(pointTypeID);
+    this.pointClone.showLinkBeforeVote = this.showLinkBeforeVoteDisabled;
 
   }
 
@@ -377,7 +377,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
   hideLinkEdit(): void {
     this.hasLink = false;
     this.pointClone.source = '';
-    this.pointClone.url = '';
+    this.pointClone.link = '';
   }
 
   ngOnDestroy(): void {
