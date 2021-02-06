@@ -37,6 +37,7 @@ export class PointComponent implements OnInit {
 
   editing = false;
   justUpdated = false;
+  updatingPreview = false;
 
   get showLink(): boolean {
     return this.appData.ShowSource(this.point.pointTypeID);
@@ -300,14 +301,16 @@ export class PointComponent implements OnInit {
   FetchMetaData(): void {
     // If it's a newSource, it will be showLinkPreview
     // but could be called from point update where isNew is false and showLinkPreview is true
-    if (this.point.showLinkPreview) {
+    if (this.point.linkAddress && this.point.showLinkPreview) {
       // Get Link metadata for preview
-      // Also handled in bew point in tags-points component
+      // Also handled in new point in tags-points component
+      this.updatingPreview = true;
       this.pointsService.PointSourceMetaDataUpdate(this.point.pointID, this.point.linkAddress)
         .subscribe(metaData => {
           this.point.linkTitle = metaData.title;
           this.point.linkDescription = metaData.description;
           this.point.linkImage = metaData.image;
+          this.updatingPreview = false;
         });
     }
   }

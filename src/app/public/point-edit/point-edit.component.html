@@ -39,7 +39,7 @@
           </mat-checkbox>
 
           <mat-form-field fxFlex>
-            <input matInput placeholder="quote or link text" [(ngModel)]="pointClone.linkText" name="quoteSource"
+            <input matInput [placeholder]="quoteOrLinkTextPlaceholder" [(ngModel)]="pointClone.linkText" name="quoteSource"
               [disabled]="pointClone.showLinkPreview">
           </mat-form-field>
 

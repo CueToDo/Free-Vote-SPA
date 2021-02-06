@@ -63,6 +63,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
   linkTextSave = '';
   imageFileForUpload: File | null;
   imageName: string;
+  quoteOrLinkTextPlaceholder = 'quote or link text';
   showLinkBeforeVoteDisabled = false;
 
   userTouched = false;
@@ -387,9 +388,11 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
   showLinkPreview(show: boolean): void {
     if (show) {
+      this.quoteOrLinkTextPlaceholder = 'quote or link text not required';
       this.linkTextSave = this.pointClone.linkText;
       this.pointClone.linkText = '';
     } else {
+      this.quoteOrLinkTextPlaceholder = 'quote or link text';
       this.pointClone.linkText = this.linkTextSave;
     }
   }

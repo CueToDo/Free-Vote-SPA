@@ -18,6 +18,10 @@
 
 /* "passive" link input Angular https://stackoverflow.com/questions/35639174/passive-link-in-angular-2-a-href-equivalent*/
 
+.spinner {
+    vertical-align: middle;
+}
+
 .linkFromMeta {
     border: solid 1px black;
     border-radius: 12px;
@@ -31,8 +35,7 @@
 }
 
 .linkFromMeta img {
-    width: 40%;
-    height: auto;
+    width: 100%;
 }
 
 .linkTitle {
@@ -65,8 +68,8 @@
     height: 100%;
 }
 
-.youTube + .youTube{
-    margin-top:20px;
+.youTube+.youTube {
+    margin-top: 20px;
 }
 
 .textXSmall {

@@ -35,15 +35,24 @@
 
   <!-- Can only see quote source if ShowLinkBeforeVote or Feedback given. Can view link for all recommended point types -->
 
+  <div *ngIf="updatingPreview">
+    <span class="spinner-grow text-primary ml-3 spinner" role="status">
+      <span class="sr-only">Loading...</span>
+    </span>
+    updating link preview
+  </div>
+
   <div
     *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink || justUpdated || point.isNewSource"
     class="pointSource" [ngClass.lt-md]="'ltmd'">
     <!-- Link -->
     <a *ngIf="point.linkAddress" [href]="point.linkAddress" target="_blank">
       <!-- Link Preview -->
-      <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row">
-        <img [src]="point.linkImage" alt="">
-        <div class="linkMetaData">
+      <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center">
+        <div fxFlex="30">
+          <img [src]="point.linkImage" alt="">
+        </div>
+        <div fxFlex="70" class="linkMetaData">
           <div class="linkTitle">{{ point.linkTitle }}</div>
           {{ point.linkDescription }}
         </div>
