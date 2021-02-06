@@ -1,6 +1,10 @@
 <div *ngIf="!editing" class="Question">
 
-    <h1>{{ question.question }}</h1>
+    <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
+
+        <h1>{{ question.question }}</h1>
+
+    </div>
 
     <div class="fv-error" *ngIf="!!error">
         {{ error }}
@@ -20,7 +24,8 @@
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
 
             <div>
-                <a [routerLink]="QuestionLink()" (click)="SelectQuestion()">{{ question.points }} answer{{ appData.plural(question.points) }}</a>
+                <a [routerLink]="QuestionLink()" (click)="SelectQuestion()">{{ question.points }} answer{{
+                    appData.plural(question.points) }}</a>
             </div>
 
             <div fxFlex></div>

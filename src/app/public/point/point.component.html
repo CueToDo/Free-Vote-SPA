@@ -7,22 +7,26 @@
 
     <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
 
-    <div [innerHTML]="point.pointHTML | SafeHtml"></div>
+    <div [innerHTML]="pointHTMLwithoutEmbed | SafeHtml"></div>
 
   </div>
 
   <!-- YouTube video -->
 
-  <div class="youTube" *ngIf="point.youTubeID">
-    <iframe [src]="'https://www.youtube.com/embed/' + point.youTubeID | SafeURL" allowfullscreen></iframe>
-  </div>
+  <ng-container *ngIf="youTubeIDs.length > 0">
+    <div *ngFor="let youTubeID of youTubeIDs" class="youTube">
+      <iframe [src]="'https://www.youtube.com/embed/' + youTubeID | SafeURL" allowfullscreen></iframe>
+    </div>
+  </ng-container>
 
   <!-- SoundCloud -->
 
-  <div class="youTube" *ngIf="point.soundCloudTrackID">
-    <iframe
-      [src]="'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/' + point.soundCloudTrackID +  '&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true' | SafeURL"></iframe>
-  </div>
+  <ng-container class="youTube" *ngIf="soundCloudTrackIDs.length > 0">
+    <div *ngFor="let soundCloudTrackID of soundCloudTrackIDs">
+      <iframe
+        [src]="'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/' + soundCloudTrackID +  '&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true' | SafeURL"></iframe>
+    </div>
+  </ng-container>
 
   <!-- <div *ngIf="point.pointID==1551">
     <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
@@ -31,10 +35,11 @@
 
   <!-- Can only see quote source if ShowLinkBeforeVote or Feedback given. Can view link for all recommended point types -->
 
-  <div *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink || justUpdated" class="pointSource"
-    [ngClass.lt-md]="'ltmd'">
+  <div
+    *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink || justUpdated || point.isNewSource"
+    class="pointSource" [ngClass.lt-md]="'ltmd'">
     <!-- Link -->
-    <a *ngIf="point.link" [href]="point.link" target="_blank">
+    <a *ngIf="point.linkAddress" [href]="point.linkAddress" target="_blank">
       <!-- Link Preview -->
       <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row">
         <img [src]="point.linkImage" alt="">
@@ -45,11 +50,11 @@
       </div>
       <!-- No Link Preview -->
       <div *ngIf="!point.showLinkPreview">
-        {{ point.source }}
+        {{ point.linkText }}
       </div>
     </a>
     <!-- No link -->
-    <span *ngIf="!point.link">{{ point.source }}</span>
+    <span *ngIf="!point.linkAddress">{{ point.linkText }}</span>
   </div>
 
   <div class="fv-error" *ngIf="!!error">

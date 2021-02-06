@@ -3,7 +3,7 @@ form {
 }
 
 mat-checkbox {
-    padding-left: 20px;
+    padding-right: 20px;
     padding-bottom: 0px;
     position: relative;
     top: 20px;

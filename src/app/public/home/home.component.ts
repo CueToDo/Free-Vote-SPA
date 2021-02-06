@@ -116,7 +116,6 @@ export class HomeComponent implements OnInit {
       let lastChar = this.slashTag.charAt(this.slashTag.length - 1);
 
       const regx = /^[-A-Za-z0-9\s]+$/;
-      console.log(lastChar, regx.test(lastChar));
 
       if (!regx.test(lastChar)) {
         lastChar = '';

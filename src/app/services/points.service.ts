@@ -199,8 +199,8 @@ export class PointsService {
       csvImageIDs: point.csvImageIDs,
       pointTypeID: point.pointTypeID,
       isPorQPoint, // not a point property
-      source: point.source,
-      link: point.link,
+      linkText: point.linkText,
+      linkAddress: point.linkAddress,
       showLinkBeforeVote: point.showLinkBeforeVote,
       showLinkPreview: point.showLinkPreview,
       youTubeID: point.youTubeID,

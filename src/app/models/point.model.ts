@@ -12,8 +12,9 @@ export class PointEdit {
     csvImageIDs = '';
     pointTypeID: PointTypesEnum;
 
-    source: string; // May not be a link, could just be a name
-    link: string; // link url to the source if any
+    // Link meta data update is handled in the server API
+    linkText: string; // May not be a link, could just be a name
+    linkAddress: string; // link url to the source if any
     showLinkBeforeVote: boolean;
     showLinkPreview: boolean;
 
@@ -95,14 +96,15 @@ export class Point {
     slashTags: string[] = [];
 
     // Manually added link info
-    source: string;
-    link: string;
+    linkText: string;
+    linkAddress: string;
     showLinkBeforeVote: boolean;
     showLinkPreview: boolean;
     // Additional link info from site meta data
     linkTitle: string;
     linkDescription: string;
     linkImage: string;
+    isNewSource: boolean;
 
     archived: boolean;
 

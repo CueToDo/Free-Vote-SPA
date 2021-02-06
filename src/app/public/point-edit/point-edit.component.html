@@ -12,34 +12,36 @@
     debounce="250" required #tvPoint="ngModel" (blur)="onCKEBlur()">
   </ckeditor>
 
-
   <!-- Link, YouTube and SoundCloud -->
   <div class="mx-3 pt-3">
 
     <div fxLayout="column" fxLayoutAlign="space-around">
 
       <div *ngIf="hasLink">
+        <!-- hasLink or link required on point type -->
 
         <!-- To Be Animated with css transition -->
         <div fxLayoutAlign="row">
 
           <mat-form-field fxFlex>
-            <input matInput placeholder="quote or link text" [(ngModel)]="pointClone.source" name="quoteSource">
+            <input matInput placeholder="quote or link url" [(ngModel)]="pointClone.linkAddress" name="quoteURL">
           </mat-form-field>
+
+        </div>
+
+        <div fxLayoutAlign="row">
 
           <mat-checkbox [(ngModel)]="pointClone.showLinkBeforeVote" name="showLinkbeforeVote"
             [disabled]="showLinkBeforeVoteDisabled">show before vote</mat-checkbox>
 
-        </div>
-        
-        <div fxLayoutAlign="row">
+          <mat-checkbox [(ngModel)]="pointClone.showLinkPreview" name="showLinkPreview"
+            (ngModelChange)="showLinkPreview($event)" [disabled]="showLinkBeforeVoteDisabled">show preview
+          </mat-checkbox>
 
           <mat-form-field fxFlex>
-            <input matInput placeholder="quote or link url" [(ngModel)]="pointClone.link" name="quoteURL">
+            <input matInput placeholder="quote or link text" [(ngModel)]="pointClone.linkText" name="quoteSource"
+              [disabled]="pointClone.showLinkPreview">
           </mat-form-field>
-
-          <mat-checkbox [(ngModel)]="pointClone.showLinkPreview" name="showLinkPreview"
-            [disabled]="showLinkBeforeVoteDisabled">show preview</mat-checkbox>
 
         </div>
 
@@ -109,13 +111,13 @@
     </button>
 
     <!-- To be animated with css transition -->
-    <button *ngIf="!hasMedia" mat-stroked-button type="button" (click)="addVideo()">
+    <button *ngIf="!hasMedia" mat-stroked-button type="button" (click)="addMedia()">
       <mat-icon>play_circle_filled</mat-icon>
       add media
     </button>
 
     <!-- To be animated with css transition -->
-    <button *ngIf="hasMedia" mat-stroked-button type="button" (click)="removeVideo()">
+    <button *ngIf="hasMedia" mat-stroked-button type="button" (click)="removeMedia()">
       <mat-icon>clear</mat-icon>
       remove media
     </button>

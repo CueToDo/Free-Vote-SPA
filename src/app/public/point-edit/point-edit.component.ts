@@ -60,6 +60,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
   pointTypes: Kvp[];
   hasMedia = false;
   hasLink = false;
+  linkTextSave = '';
   imageFileForUpload: File | null;
   imageName: string;
   showLinkBeforeVoteDisabled = false;
@@ -112,12 +113,13 @@ export class PointEditComponent implements OnInit, OnDestroy {
     this.cancelled = false;
   }
 
-  addVideo(): void {
+  addMedia(): void {
     this.hasMedia = true;
   }
 
-  removeVideo(): void {
+  removeMedia(): void {
     this.pointClone.youTubeID = '';
+    this.pointClone.soundCloudTrackID = '';
     this.hasMedia = false;
   }
 
@@ -232,7 +234,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
     if (!this.isPorQPoint && (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0)) {
       this.error = 'Points must have at least one slash tag';
-    } else if (!(!!this.pointClone.pointTitle && !!this.pointClone.link)
+    } else if (!(!!this.pointClone.pointTitle && !!this.pointClone.linkAddress)
       && !(!!this.pointClone.pointHTML || !!this.pointClone.youTubeID || !!this.pointClone.soundCloudTrackID
         || !!this.pointClone.csvImageIDs || !!this.imageSelect.nativeElement.value)) {
       this.error = 'Point title and text OR url OR image OR media link must be provided';
@@ -265,6 +267,8 @@ export class PointEditComponent implements OnInit, OnDestroy {
           }),
           // but we'll always update point after any image upload
           concatMap(() => this.pointsService.PointUpdate(this.pointClone, this.isPorQPoint))
+          // Don't get link meta data here from API - it slows user repsonse
+          // but we will need to handle separately on new point and existing point edit
         )
         .subscribe({
           next: (response: Point) => {
@@ -313,6 +317,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     this.pointClone.pointID = -1;
     this.pointClone.pointHTML = '';
     this.pointClone.pointTypeID = PointTypesEnum.Opinion;
+    this.showLinkBeforeVoteDisabled = false;
 
     if (!!slashTag) {
       this.pointClone.slashTags = [slashTag];
@@ -323,7 +328,6 @@ export class PointEditComponent implements OnInit, OnDestroy {
     this.error = '';
     this.userTouched = false;
   }
-
 
   Cancel(): void {
 
@@ -352,7 +356,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     if (this.appData.ShowSource(pointTypeID)) {
       this.showLinkEdit();
     } else {
-      if (this.pointClone.source || this.pointClone.link) {
+      if (this.pointClone.linkText || this.pointClone.linkAddress) {
         this.showLinkEdit();
       } else {
         this.hideLinkEdit();
@@ -365,19 +369,29 @@ export class PointEditComponent implements OnInit, OnDestroy {
     this.autoShowLinkEdit(pointTypeID);
 
     // Automatically update default "show" if voter changes point type
-    this.showLinkBeforeVoteDisabled = this.appData.ShowSource(pointTypeID);
-    this.pointClone.showLinkBeforeVote = this.showLinkBeforeVoteDisabled;
-
+    this.showLinkBeforeVoteDisabled = !this.appData.ShowSource(pointTypeID);
+    this.pointClone.showLinkBeforeVote = false;
+    this.pointClone.showLinkPreview = !this.showLinkBeforeVoteDisabled;
   }
 
   showLinkEdit(): void {
     this.hasLink = true;
+    this.showLinkBeforeVoteDisabled = false;
   }
 
   hideLinkEdit(): void {
     this.hasLink = false;
-    this.pointClone.source = '';
-    this.pointClone.link = '';
+    this.pointClone.linkText = '';
+    this.pointClone.linkAddress = '';
+  }
+
+  showLinkPreview(show: boolean): void {
+    if (show) {
+      this.linkTextSave = this.pointClone.linkText;
+      this.pointClone.linkText = '';
+    } else {
+      this.pointClone.linkText = this.linkTextSave;
+    }
   }
 
   ngOnDestroy(): void {

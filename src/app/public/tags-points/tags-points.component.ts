@@ -434,6 +434,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     // this.tabIndex = tabs.points;
     // this.pointSortType = PointSortTypes.DateUpdated;
     // this.setSortIcon(this.pointSortType);
+
     this.externalTrigger = true;
     this.SetSortDescending(true);
     this.externalTrigger = false;

@@ -205,6 +205,11 @@ a:hover {
   font-size: medium;
 }
 
+.ugc h1 {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+
 .ugc.xs h1 {
   font-size: x-large;
 }

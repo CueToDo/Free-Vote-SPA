@@ -8,6 +8,7 @@ import { PointSupportLevels, PointFlags, PointTypesEnum } from '../../models/enu
 // Services
 import { PointsService } from '../../services/points.service';
 import { LocalDataService } from '../../services/local-data.service';
+import { stringify } from '@angular/compiler/src/util';
 
 
 @Component({
@@ -30,6 +31,9 @@ export class PointComponent implements OnInit {
 
   // bind to point slashtags (not topic)
   slashTags: string[];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
+  youTubeIDs: string[];
+  soundCloudTrackIDs: string[];
+  pointHTMLwithoutEmbed: string;
 
   editing = false;
   justUpdated = false;
@@ -72,6 +76,13 @@ export class PointComponent implements OnInit {
 
     this.AssignTags();
 
+    if (this.point.isNewSource) {
+      // Will not be newSource if not showLinkPreview - so no redundant check
+      // A new point has been added to the list but meta data has not been retrieved yet for source
+      this.FetchMetaData();
+    }
+
+    this.extractMediaEmbeds();
   }
 
   AssignTags(): void {
@@ -87,6 +98,54 @@ export class PointComponent implements OnInit {
     } else {
       return this.point.pointID.toString();
     }
+  }
+
+  extractMediaEmbeds(): void {
+
+    // https://ckeditor.com/docs/ckeditor5/latest/features/media-embed.html
+
+    this.youTubeIDs = [];
+    if (this.point.youTubeID) {
+      this.youTubeIDs.push(this.point.youTubeID);
+    }
+
+    this.soundCloudTrackIDs = [];
+    if (this.point.soundCloudTrackID) {
+      this.soundCloudTrackIDs.push(this.point.soundCloudTrackID);
+    }
+
+    const split = this.point.pointHTML.split('<figure class="media">');
+
+    console.log(split.length, split[1]);
+
+    if (split.length > 0) {
+
+      let i: number;
+      let oembedPlus: string[];
+      let url: string;
+      let id = '';
+      let urlParts = [];
+
+      for (i = 1; i < split.length; i++) {
+
+        oembedPlus = split[i].split('</figure>');
+        url = oembedPlus[0].split('"')[1];
+        urlParts = url.split('/');
+
+        if (url.includes('youtu.be')) {
+          id = urlParts[urlParts.length - 1];
+          this.youTubeIDs.push(id);
+        } else if (url.includes('youtube.com')) {
+          id = urlParts[urlParts.length - 1].split('v=')[1];
+          this.youTubeIDs.push(id);
+        } else if (url.includes('soundcloud')) {
+
+        }
+        split[i] = oembedPlus[1]; // Use only what's after the figure element
+      }
+    }
+
+    this.pointHTMLwithoutEmbed = split.join(''); // pointHTML stripped of <figure> elements added by ckEditor for media embed
   }
 
   PointFeedback(pointSupportLevel: PointSupportLevels): void {
@@ -225,6 +284,7 @@ export class PointComponent implements OnInit {
   onCompleteEdit(): void {
 
     this.AssignTags();
+    this.extractMediaEmbeds();
 
     if (this.point.pointFeedback.supportLevelID !== PointSupportLevels.None) {
       this.point.pointFeedback.pointModified = true;
@@ -232,19 +292,25 @@ export class PointComponent implements OnInit {
 
     this.justUpdated = true;
 
+    this.FetchMetaData();
+
+    this.editing = false;
+  }
+
+  FetchMetaData(): void {
+    // If it's a newSource, it will be showLinkPreview
+    // but could be called from point update where isNew is false and showLinkPreview is true
     if (this.point.showLinkPreview) {
       // Get Link metadata for preview
-      this.pointsService.PointSourceMetaDataUpdate(this.point.pointID, this.point.link)
+      // Also handled in bew point in tags-points component
+      this.pointsService.PointSourceMetaDataUpdate(this.point.pointID, this.point.linkAddress)
         .subscribe(metaData => {
           this.point.linkTitle = metaData.title;
           this.point.linkDescription = metaData.description;
           this.point.linkImage = metaData.image;
         });
     }
-
-    this.editing = false;
   }
-
 
   OccupyHandSignals(): void {
     window.open('https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals', '_blank');
