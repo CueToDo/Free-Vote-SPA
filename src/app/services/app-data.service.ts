@@ -59,7 +59,7 @@ export class AppDataService {
         '|', 'indent', 'outdent',
         '|', 'heading', 'fontSize',
         '|', 'fontColor', 'fontBackgroundColor',
-        '|', 'link', 'image', 'mediaEmbed', 'insertTable', 'horizontalLine',
+        '|', 'link', 'image', 'insertTable', 'horizontalLine',
         '|', 'undo', 'redo'],
       shouldNotGroupWhenFull: true
     },

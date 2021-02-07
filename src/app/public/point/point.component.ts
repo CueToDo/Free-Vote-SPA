@@ -32,6 +32,7 @@ export class PointComponent implements OnInit {
   // bind to point slashtags (not topic)
   slashTags: string[];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
   youTubeIDs: string[];
+  vimeoIDs: string[];
   soundCloudTrackIDs: string[];
   pointHTMLwithoutEmbed: string;
 
@@ -115,6 +116,8 @@ export class PointComponent implements OnInit {
       this.soundCloudTrackIDs.push(this.point.soundCloudTrackID);
     }
 
+    this.vimeoIDs = [];
+
     const split = this.point.pointHTML.split('<figure class="media">');
 
     console.log(split.length, split[1]);
@@ -139,6 +142,9 @@ export class PointComponent implements OnInit {
         } else if (url.includes('youtube.com')) {
           id = urlParts[urlParts.length - 1].split('v=')[1];
           this.youTubeIDs.push(id);
+        } else if (url.includes('vimeo.com')) {
+          id = urlParts[urlParts.length - 1];
+          this.vimeoIDs.push(id);
         } else if (url.includes('soundcloud')) {
 
         }

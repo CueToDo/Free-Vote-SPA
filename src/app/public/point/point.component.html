@@ -19,6 +19,14 @@
     </div>
   </ng-container>
 
+  <!-- Vimeo video -->
+
+  <ng-container *ngIf="vimeoIDs.length > 0">
+    <div *ngFor="let vimeoID of vimeoIDs" class="youTube">
+      <iframe [src]="'https://player.vimeo.com/video/' + vimeoID | SafeURL" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </ng-container>
+
   <!-- SoundCloud -->
 
   <ng-container class="youTube" *ngIf="soundCloudTrackIDs.length > 0">
