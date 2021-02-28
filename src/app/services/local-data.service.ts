@@ -257,8 +257,13 @@ export class LocalDataService {
         this.freeVoteProfile.profilePictureOptionID = '';
         this.freeVoteProfile.profilePicture = '';
 
+        // Preserve use of localAPI after sign out/sign in
+        const localAPI = this.GetItem('localAPI');
+
         // clear local storage
         localStorage.clear();
+
+        this.SetItem('localAPI', localAPI);
         this.SetItem('previousTopicSelected', 'SignedOut'); // Used in AppDataService InitialisePreviousAliasAndTopic
     }
 
