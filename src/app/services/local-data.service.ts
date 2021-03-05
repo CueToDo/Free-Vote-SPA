@@ -71,7 +71,11 @@ export class LocalDataService {
 
     public SetServiceURL(): void {
 
-        // check if running locally to determine service url
+        this.website = 'free.vote';
+        this.siteUrl = 'https://free.vote/';
+
+        // No longer used: check if running locally to determine service url
+        // Always use live unless there is a manual override
 
         const localAPI: boolean = this.GetItem('localAPI') === 'true';
 
@@ -79,30 +83,14 @@ export class LocalDataService {
 
             const spaDomain = window.location.origin.split('//')[1].split(':')[0].replace('api.', '');
 
-            if (spaDomain === 'localhost' || spaDomain === '127.0.0.1') {
-                // Visual Studio debugging, or VS Code/Angular ng serve
-                this.website = 'break-out.group';
-                this.website = 'free.vote';
-                this.siteUrl = 'http://localhost:54357/';
-                // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
-                // As CORS is configured, we could also use local IIS http://freevotetest.com or live https://free.vote
-            } else if (spaDomain === 'freevotetest.com') {
-                // IIS local testing - service url is same, but we could set to live and redeploy SPA to local IIS
-                // So it's unlikely the CORS configration for freevotetest.com will actually be used
-                this.website = 'free.vote';
-                this.siteUrl = 'http://freevotetest.com/';
-            } else {
-                this.website = spaDomain;
-                // Live deployment - service url is always same
-                this.siteUrl = 'https://free.vote/';
-            }
+            this.serviceUrl = 'http://localhost:54357/';
+            // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
+            // As CORS is configured, we could also use local IIS http://freevotetest.com or live https://free.vote
 
         } else {
-            this.website = 'free.vote';
-            this.siteUrl = 'https://free.vote/';
+            this.serviceUrl = 'https://api.free.vote/';
         }
 
-        this.serviceUrl = this.siteUrl + 'api/';
     }
 
     public LoadValues(): void {

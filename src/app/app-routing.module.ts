@@ -18,6 +18,12 @@ import { LoginRouteGuardService } from './services/login-route-guard.service';
 
 
 const appRoutes: Routes = [
+  // Refresh in browser fails - when route is specified
+  // Make a web.config file in the root directory.
+  // https://stackoverflow.com/questions/35284988/angular-2-404-error-occur-when-i-refresh-through-the-browser
+
+  // https://stackoverflow.com/questions/49566446/how-can-i-have-iis-properly-serve-webmanifest-files-on-my-web-site
+  // Map the .webmanifest file extension to its appropriate MIME type.
 
   // route order must avoid ambiguities between route and parameters (alias, tag, tab)
   { path: 'scroller', component: ScrollerComponent }, // a test component
