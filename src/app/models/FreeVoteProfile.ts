@@ -2,14 +2,14 @@
 
 export class FreeVoteProfile {
 
-    public alias: string;
+    public alias = '';
 
-    public country: string;
-    public city: string;
+    public country = '';
+    public city = '';
 
-    public countryId: string; // for html binding use string
-    public cityId: string;
+    public countryId = ''; // for html binding use string
+    public cityId = '';
 
-    public profilePicture: string;
-    public profilePictureOptionID: string;
+    public profilePicture = '';
+    public profilePictureOptionID = '';
 }

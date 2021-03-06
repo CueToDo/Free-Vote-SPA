@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, PLATFORM_ID, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Auth0
@@ -11,6 +11,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 // FreeVote
 import { LocalDataService } from './../../services/local-data.service';
 import { AppDataService } from '../../services/app-data.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -20,9 +21,9 @@ import { AppDataService } from '../../services/app-data.service';
 export class HomeComponent implements OnInit {
 
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
-  @ViewChild('tvSlashTag', { static: false }) tvSlashTag: ElementRef;
+  @ViewChild('tvSlashTag', { static: false }) tvSlashTag: ElementRef | undefined;
 
-  public slashTag: string;
+  public slashTag = '';
 
   tabIndex = 0;
 
@@ -36,14 +37,15 @@ export class HomeComponent implements OnInit {
 
   isMobile = false;
 
-  privacyUrl = this.localData.siteUrl + 'policy.html';
+  privacyUrl = this.localData.websiteUrl + 'policy.html';
 
   constructor(
     private router: Router,
     private deviceService: DeviceDetectorService,
     public localData: LocalDataService,
     public appData: AppDataService,
-    public auth: AuthService) {
+    public auth: AuthService,
+    @Inject(PLATFORM_ID) private platformId: object) {
 
     this.epicFunction();
 
@@ -60,7 +62,7 @@ export class HomeComponent implements OnInit {
   }
 
   installPwa(): void {
-    this.appData.promptEvent.prompt();
+    this.appData?.promptEvent?.prompt();
   }
 
 
@@ -81,26 +83,30 @@ export class HomeComponent implements OnInit {
 
   restartSearch(): void {
 
-    this.slashTag = '/';
+    // Client side only
 
-    // Don't start off with focus on input on mobile (Vulcan will never be shown)
-    if (!this.isMobile) {
-      window.setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
 
-        const el = this.tvSlashTag.nativeElement;
-        el.focus();
+      this.slashTag = '/';
 
-        // Place cursor at end
-        if (typeof el.selectionStart === 'number') {
-          el.selectionStart = el.selectionEnd = el.value.length;
-        } else if (typeof el.createTextRange !== 'undefined') {
-          const range = el.createTextRange();
-          range.collapse(false);
-          range.select();
-        }
-      }, 500);
+      // Don't start off with focus on input on mobile (Vulcan will never be shown)
+      if (!this.isMobile) {
+        window.setTimeout(() => {
+
+          const el = this.tvSlashTag?.nativeElement;
+          el?.focus();
+
+          // Place cursor at end
+          if (typeof el.selectionStart === 'number') {
+            el.selectionStart = el.selectionEnd = el.value.length;
+          } else if (typeof el.createTextRange !== 'undefined') {
+            const range = el.createTextRange();
+            range.collapse(false);
+            range.select();
+          }
+        }, 500);
+      }
     }
-
   }
 
 

@@ -22,12 +22,12 @@ import { ProfilePicture } from 'src/app/models/Image.model';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
-  countries: Kvp[];
-  cities: Kvp[];
+  countries: Kvp[] = [];
+  cities: Kvp[] = [];
 
   // Save old values when begin edit
   oldProfile = new FreeVoteProfile();
-  public uploadPercentDone: number;
+  public uploadPercentDone = 0;
 
   editing = false;
   editNewCountry = false;
@@ -160,14 +160,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 case HttpEventType.UploadProgress: // 1
                 case HttpEventType.DownloadProgress: // 3
                   // Compute and show the % done:
-                  const percentDone = Math.round(100 * serverEvent.loaded / serverEvent.total!);
-                  this.uploadPercentDone = percentDone;
-                  console.log(`File is ${percentDone}% uploaded.`);
+                  const total = serverEvent.total;
+                  if (total) {
+                    const percentDone = Math.round(100 * serverEvent.loaded / total);
+                    this.uploadPercentDone = percentDone;
+                    console.log(`File is ${percentDone}% uploaded.`);
+                  }
                   break;
                 case HttpEventType.Response: // 4
                   console.log(`File was completely uploaded!`);
                   console.log((serverEvent as HttpResponse<ProfilePicture>).body);
-                  this.localData.freeVoteProfile.profilePicture = (serverEvent as HttpResponse<ProfilePicture>).body!.pictureUrl;
+                  const pictureUrl = (serverEvent as HttpResponse<ProfilePicture>).body?.pictureUrl;
+                  if (pictureUrl) {
+                    this.localData.freeVoteProfile.profilePicture = pictureUrl;
+                  }
                   break;
                 case HttpEventType.ResponseHeader: // 2
                   console.log(`Response Header: ${serverEvent.type}.`);
@@ -180,14 +186,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
           filter((serverEvent: HttpEvent<ProfilePicture>) => serverEvent.type === HttpEventType.Response),
           tap((serverEvent: HttpEvent<ProfilePicture>) => console.log(serverEvent)),
           map((serverEvent: HttpEvent<ProfilePicture>) => {
-            return (serverEvent as HttpResponse<ProfilePicture>).body!.pictureUrl;
+            return (serverEvent as HttpResponse<ProfilePicture>).body?.pictureUrl;
           })
         ).subscribe(
           {
             next: file => {
-              this.localData.freeVoteProfile.profilePicture = file;
-              this.localData.freeVoteProfile.profilePictureOptionID = '2';
-              this.localData.SaveValues();
+              if (file) {
+                this.localData.freeVoteProfile.profilePicture = file;
+                this.localData.freeVoteProfile.profilePictureOptionID = '2';
+                this.localData.SaveValues();
+              }
             },
             error: serverError => this.ShowError(serverError.error.detail),
             complete: () => this.uploading = false

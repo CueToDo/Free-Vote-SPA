@@ -1,4 +1,4 @@
 export class ByOn {
-    byOn: string;   // either "by" alias or "on" slashtag
-    weight: number;
+    byOn = '';   // either "by" alias or "on" slashtag
+    weight = 0;
 }

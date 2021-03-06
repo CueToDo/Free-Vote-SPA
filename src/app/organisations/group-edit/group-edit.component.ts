@@ -19,16 +19,16 @@ import { Group, GroupUpdate } from 'src/app/models/group.model';
 })
 export class GroupEditComponent implements OnInit, OnDestroy {
 
-  @Input() group: Group;
+  @Input() group = new Group();
   @Output() groupChange = new EventEmitter(); // Still need to emit
 
   // ToDo Following renamed
   @Output() editCompleted = new EventEmitter();
   @Output() editCancelled = new EventEmitter();
 
-  @ViewChild('groupName', { static: true }) elSubGroupName: ElementRef;
+  @ViewChild('groupName', { static: true }) elSubGroupName: ElementRef | undefined;
 
-  groupCopy: Group;
+  groupCopy = new Group();
 
   saving = false;
   error = '';
@@ -39,10 +39,14 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+
     this.groupCopy = cloneDeep(this.group) as Group;
-    this.elSubGroupName.nativeElement.focus();
-    if (!this.group.groupID || this.group.groupID < 1) {
-      this.group.decisionBasisOptionID = GroupDecisionBasisOption.SimpleMajority.toString();
+    this.elSubGroupName?.nativeElement.focus();
+
+    if (this.group) {
+      if (!this.group.groupID || this.group.groupID < 1) {
+        this.group.decisionBasisOptionID = GroupDecisionBasisOption.SimpleMajority.toString();
+      }
     }
   }
 
@@ -50,7 +54,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
 
     this.error = '';
 
-    if (this.group.decisionBasisOptionID !== GroupDecisionBasisOption.SuperMajority.toString()) {
+    if (this.group?.decisionBasisOptionID !== GroupDecisionBasisOption.SuperMajority.toString()) {
       return true;
     } else if (this.group.superMajority < 52 || this.group.superMajority > 99) {
       this.error = 'super majority must be a value between 52 and 99';
@@ -62,40 +66,45 @@ export class GroupEditComponent implements OnInit, OnDestroy {
 
   update(): void {
 
-    this.error = '';
+    if (!this.group) {
+      this.error = 'No group to update';
+    } else {
 
-    if (this.appData.isUrlNameUnSafe(this.group.groupName)) {
-      if (confirm('Sub Group name contains invalid characters. Remove them now?')) {
-        this.group.groupName = this.appData.urlSafeName(this.group.groupName);
-      } else {
-        return;
-      }
-    }
-
-    if (!this.group.nextIssueSelectionDate) {
-      this.error = 'Next discussion start date is required';
-      return;
-    }
-
-    if (this.superMajorityCheck()) {
-
-      this.saving = true;
       this.error = '';
 
-      this.groupsService.GroupUpdate(this.group as any as GroupUpdate).subscribe(
-        {
-          next: subGroup => {
-            this.group = cloneDeep(subGroup) as Group;
-            this.groupChange.emit(this.group);
-            this.editCompleted.emit(this.group.groupName);
-          },
-          error: serverError => {
-            this.error = serverError.error.detail;
-            this.saving = false;
-          },
-          complete: () => this.saving = false // error means complete!
+      if (this.appData.isUrlNameUnSafe(this.group.groupName)) {
+        if (confirm('Sub Group name contains invalid characters. Remove them now?')) {
+          this.group.groupName = this.appData.urlSafeName(this.group.groupName);
+        } else {
+          return;
         }
-      );
+      }
+
+      if (!this.group.nextIssueSelectionDate) {
+        this.error = 'Next discussion start date is required';
+        return;
+      }
+
+      if (this.superMajorityCheck()) {
+
+        this.saving = true;
+        this.error = '';
+
+        this.groupsService.GroupUpdate(this.group as any as GroupUpdate).subscribe(
+          {
+            next: subGroup => {
+              this.group = cloneDeep(subGroup) as Group;
+              this.groupChange.emit(this.group);
+              this.editCompleted.emit(this.group.groupName);
+            },
+            error: serverError => {
+              this.error = serverError.error.detail;
+              this.saving = false;
+            },
+            complete: () => this.saving = false // error means complete!
+          }
+        );
+      }
     }
   }
 

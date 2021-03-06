@@ -6,22 +6,22 @@ export class PointEdit {
 
     // However the user inputs them, pass them to the server to decode
 
-    pointID: number;
-    pointTitle: string; // pointLink constructed in API
-    pointHTML: string;
+    pointID = 0;
+    pointTitle = ''; // pointLink constructed in API
+    pointHTML = '';
     csvImageIDs = '';
-    pointTypeID: PointTypesEnum;
+    pointTypeID = PointTypesEnum.NotSelected;
 
     // Link meta data update is handled in the server API
-    linkText: string; // May not be a link, could just be a name
-    linkAddress: string; // link url to the source if any
-    showLinkBeforeVote: boolean;
-    showLinkPreview: boolean;
+    linkText = ''; // May not be a link, could just be a name
+    linkAddress = ''; // link url to the source if any
+    showLinkBeforeVote = false;
+    showLinkPreview = false;
 
-    youTubeID: string;
-    soundCloudTrackID: string;
+    youTubeID = '';
+    soundCloudTrackID = '';
     slashTags: string[] = [];
-    draft: boolean;
+    draft = false;
 }
 
 
@@ -31,112 +31,114 @@ export class PointEdit {
 export class PointSelectionResult {
     // My server and client code agreed these should be capitalised,
     // but after updating to VS Angular project, framework intervenes and insists lower case
-    tagID: number;
-    pointCount: number;
+    tagID = 0;
+    pointCount = 0;
 
-    pointIDs: ID[];
-    fromDate: string;
-    toDate: string;
+    pointIDs: ID[] = [];
+    fromDate = '';
+    toDate = '';
 
-    points: Point[];
+    points: Point[] = [];
 }
 
 export class PointFeedback {
-    woWWeekEndingDate: Date; // Does not need to be formatted
-    feedbackDate: string; // Date pipe eugh!
-    feedbackGiven: boolean;
-    feedbackID: number;
-    supportLevelID: PointSupportLevels;
-    pointModified: boolean; // has the point been modified after feedback was given?
-    woWVote: boolean;
-    comment: string;
-    feedbackIsUpdatable: boolean;
-    isFavourite: boolean;
+    woWWeekEndingDate = new Date(); // Does not need to be formatted
+    feedbackDate = ''; // Date pipe eugh!
+    feedbackGiven = false;
+    feedbackID = 0;
+    supportLevelID = PointSupportLevels.None;
+    pointModified = false; // has the point been modified after feedback was given?
+    woWVote = false;
+    comment = '';
+    feedbackIsUpdatable = false;
+    isFavourite = false;
 }
 
 export class PointFeedbackFormData {
-    pointID: number;
-    pointSupportLevel: PointSupportLevels;
-    comment: string;
-    feedbackAnon: boolean;
+    pointID = 0;
+    pointSupportLevel = PointSupportLevels.None;
+    comment = '';
+    feedbackAnon = false;
 }
 
 export class PointWoWFormData {
-    pointID: number;
-    wow: boolean;
-    feedbackAnon: boolean;
+    pointID = 0;
+    wow = false;
+    feedbackAnon = false;
 }
 
 export class WoWWeekInfoVoteNotNeeded {
-    woWWeekID: number;
-    woWWeekEndingDate: Date; //  Does not need to be formatted
+    woWWeekID = 0;
+    woWWeekEndingDate = new Date(); //  Does not need to be formatted
 }
 
 // Don't even think of making public properties Pascal Case
 
 export class Point {
 
-    pointID: number;
-    voterIDPoint: number;
-    isPointOwner: boolean;
+    pointID = 0;
+    voterIDPoint = 0;
+    isPointOwner = false;
 
-    pointTitle: string;
-    pointLink: string;
-    pointHTML: string;
+    pointTitle = '';
+    pointLink = '';
+    pointHTML = '';
+    preview = '';
+    previewImage = '';
     csvImageIDs = '';
-    draft: boolean;
+    draft = false;
 
     pointTypeID = PointTypesEnum.Opinion;
-    pointTypeIDVoter: number;
+    pointTypeIDVoter = 0;
 
-    dateTimeCreated: string;
-    dateTimeUpdated: string; // How many times am I going to attempt to make this a Date to use DateTime Pipe
-    youTubeID: string;
-    soundCloudTrackID: string;
+    dateTimeCreated = '';
+    dateTimeUpdated = ''; // How many times am I going to attempt to make this a Date to use DateTime Pipe
+    youTubeID = '';
+    soundCloudTrackID = '';
     slashTags: string[] = [];
 
     // Manually added link info
-    linkText: string;
-    linkAddress: string;
-    showLinkBeforeVote: boolean;
-    showLinkPreview: boolean;
+    linkText = '';
+    linkAddress = '';
+    showLinkBeforeVote = false;
+    showLinkPreview = false;
     // Additional link info from site meta data
-    linkTitle: string;
-    linkDescription: string;
-    linkImage: string;
-    isNewSource: boolean;
+    linkTitle = '';
+    linkDescription = '';
+    linkImage = '';
+    isNewSource = false;
 
-    archived: boolean;
+    archived = false;
 
-    rowNumber: number;
-    lastRowNumber: number;
-    lastRow: boolean;
+    rowNumber = 0;
+    lastRowNumber = 0;
+    lastRow = false;
 
     pointFeedback = new PointFeedback();
 
-    isFavourite: boolean;
+    isFavourite = false;
 
-    attached: boolean;
-    adoptable: boolean;
-    unadoptable: boolean;
+    attached = false;
+    adoptable = false;
+    unadoptable = false;
 
-    totalFeedback: number;
-    netSupport: number;
-    perCentInFavour: number;
+    totalFeedback = 0;
+    netSupport = 0;
+    perCentInFavour = 0;
 
-    support: number;
-    opposition: number;
-    abstentions: number;
-    reports: number;
+    support = 0;
+    opposition = 0;
+    abstentions = 0;
+    reports = 0;
 
-    isInOpenedSurvey: boolean;
-    isInClosedSurvey: boolean;
-    isQuestionAnswer: boolean;
+    isInOpenedSurvey = false;
+    isInClosedSurvey = false;
+    isQuestionAnswer = false;
 }
 
-export class SiteMetaData {
-    title: string;
-    description: string;
-    image: string;
-    url: string;
+export class PagePreviewMetaData {
+    title = '';
+    preview = '';
+    previewImage = '';
+    url = '';
 }

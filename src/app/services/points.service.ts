@@ -1,4 +1,4 @@
-import { SiteMetaData } from './../models/point.model';
+
 
 // Angular
 import { Injectable } from '@angular/core';
@@ -10,7 +10,7 @@ import { map, tap } from 'rxjs/operators';
 // Models, Enums
 import { ID } from 'src/app/models/common';
 import { PointTypesEnum, DraftStatusFilter } from 'src/app/models/enums';
-import { PointSelectionResult, Point, PointEdit } from 'src/app/models/point.model';
+import { PointSelectionResult, Point, PointEdit, PagePreviewMetaData } from 'src/app/models/point.model';
 import { PointFeedback, PointFeedbackFormData, PointWoWFormData } from 'src/app/models/point.model';
 import { PointSortTypes, PointSelectionTypes, PointSupportLevels, PointFlags, PointFeedbackFilter } from 'src/app/models/enums';
 
@@ -25,19 +25,19 @@ export class PointsService {
   // public PointsSelected = new Subject<any>();
   // public PointsSelectionError = new Subject<any>();
 
-  public PointSelectionType: PointSelectionTypes;
+  public PointSelectionType = PointSelectionTypes.Point;
 
   private batchSize = 50;
   private pageSize = 10;
 
   // Pages retrieved from server
-  pages: number[];
+  pages: number[] = [];
 
   // Only get the WoWWeekInfo when voting for the first time - update after vote
   // Never trust the client to cache API values
   // public WoWWeekInfoVote: WoWWeekInfoVote;
 
-  public Anon: boolean;
+  public Anon = false;
 
   constructor(
     private httpClientService: HttpService,
@@ -110,6 +110,8 @@ export class PointsService {
   GetSpecificPoint(slashTag: string, pointTitle: string): Observable<PointSelectionResult> {
 
     const apiUrl = `points/point/${slashTag}/${pointTitle}`;
+
+    console.log('GET SPECIFIC', apiUrl);
 
     return this.httpClientService
       .get(apiUrl)
@@ -214,13 +216,13 @@ export class PointsService {
       .pipe(map(result => result as Point));
   }
 
-  PointSourceMetaDataUpdate(pointID: number, link: string): Observable<SiteMetaData> {
+  PointSourceMetaDataUpdate(pointID: number, link: string): Observable<PagePreviewMetaData> {
 
     const postData = { pointID, link };
 
     return this.httpClientService
       .post('points/pointSourceMetaDataUpdate', postData)
-      .pipe(map(result => result as SiteMetaData));
+      .pipe(map(result => result as PagePreviewMetaData));
   }
 
   // Not really needed: when we update an existing point,

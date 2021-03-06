@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class CallbackComponent implements OnInit, OnDestroy {
 
-  private callback$: Subscription;
+  private callback$: Subscription | undefined;
 
   handlingCallback = true;
   error = '';
@@ -54,6 +54,6 @@ export class CallbackComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.callback$.unsubscribe();
+    this.callback$?.unsubscribe();
   }
 }

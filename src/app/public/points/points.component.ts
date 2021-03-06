@@ -21,7 +21,7 @@ import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 // Components
 import { PointsListComponent } from '../points-list/points-list.component';
 import { QuestionsListComponent } from './../questions-list/questions-list.component';
-import { MatCheckbox, MatCheckboxClickAction } from '@angular/material/checkbox';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 
 @Component({
@@ -37,11 +37,11 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() pointSortTypeChanged = new EventEmitter<PointSortTypes>();
 
   // Subscriptions
-  private pointSelection$: Subscription;
-  private pointSortType$: Subscription;
-  private pointSortAscending$: Subscription;
-  private pointFilter$: Subscription;
-  private widthSubject$: Subscription;
+  private pointSelection$: Subscription | undefined;
+  private pointSortType$: Subscription | undefined;
+  private pointSortAscending$: Subscription | undefined;
+  private pointFilter$: Subscription | undefined;
+  private widthSubject$: Subscription | undefined;
 
   // Point selection filters
   showFilters = false;
@@ -50,7 +50,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public favouritesText = 'favourites';
 
-  pointTypes: Kvp[];
+  pointTypes: Kvp[] = [];
 
   // enums in template
   public DraftStatusFilter = DraftStatusFilter;
@@ -58,8 +58,8 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // https://stackoverflow.com/questions/34947154/angular-2-viewchild-annotation-returns-undefined
   // just use hidden insead of ngIf
-  @ViewChild('PointsList') pointsList: PointsListComponent;
-  @ViewChild('QuestionsList') questionsList: QuestionsListComponent;
+  @ViewChild('PointsList') pointsList!: PointsListComponent;
+  @ViewChild('QuestionsList') questionsList!: QuestionsListComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -125,7 +125,8 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (titleParam) {
         this.filter.single = true;
-        this.pointsList.SelectSpecificPoint(tagParam, titleParam);
+        this.filter.questions = false; // show single point, not questions
+        this.pointsList?.SelectSpecificPoint(tagParam, titleParam);
       } else if (tag || alias) {
         console.log('selecting');
         this.filter.single = false;
@@ -159,9 +160,9 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pointSortType$ = this.appData.PointSortType$.subscribe(
       (pointSortType: PointSortTypes) => {
         if (this.filter.questions) {
-          this.questionsList.newSortType(pointSortType);
+          this.questionsList?.newSortType(pointSortType);
         } else {
-          this.pointsList.newSortType(pointSortType);
+          this.pointsList?.newSortType(pointSortType);
         }
       }
     );
@@ -275,7 +276,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   SelectPointsByVoter(): void {
-    this.pointsList.SelectPointsByVoter();
+    this.pointsList?.SelectPointsByVoter();
   }
 
   FilterOnTag(): void {
@@ -379,9 +380,9 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   Select(): void {
     if (this.filter.questions) {
-      this.questionsList.SelectQuestions();
+      this.questionsList?.SelectQuestions();
     } else {
-      this.pointsList.SelectPoints();
+      this.pointsList?.SelectPoints();
     }
   }
 
@@ -390,11 +391,11 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.pointSelection$.unsubscribe();
-    this.pointSortType$.unsubscribe();
-    this.pointSortAscending$.unsubscribe();
-    this.pointFilter$.unsubscribe();
-    this.widthSubject$.unsubscribe();
+    this.pointSelection$?.unsubscribe();
+    this.pointSortType$?.unsubscribe();
+    this.pointSortAscending$?.unsubscribe();
+    this.pointFilter$?.unsubscribe();
+    this.widthSubject$?.unsubscribe();
   }
 
 }

@@ -53,12 +53,15 @@ const appRoutes: Routes = [
   { path: ':tag/by/:alias', component: TagsPointsComponent },
   { path: ':tag/question/:questionId', component: QuestionAnswersComponent },
   { path: ':tag/:pointId', component: TagsPointsComponent },
-  { path: ':tag', component: TagsPointsComponent } // POINTS: still like the SlashTag
-
+  { path: ':tag', component: TagsPointsComponent }, // POINTS: still like the SlashTag
+  // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
+  { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes)],
+  imports: [RouterModule.forRoot(appRoutes, {
+    initialNavigation: 'enabled'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

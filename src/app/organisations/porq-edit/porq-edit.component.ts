@@ -6,7 +6,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 
 // CKEditor
-import * as CKECustom from 'src/ckeditor.js';
+// import * as CKECustom from 'src/ckeditor.js';
 
 // Models and Enums
 import { PorQEdit } from '../../models/porq.model';
@@ -26,11 +26,11 @@ export class PorqEditComponent implements OnInit {
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
 
-  @Input() public porQ: PorQEdit;
+  @Input() public porQ = new PorQEdit();
 
-  public ckeditor = CKECustom;
+  // public ckeditor = CKECustom;
 
-  public porQEdit: PorQEdit;
+  public porQEdit = new PorQEdit();
   public PorQTypes = PorQTypes;
 
   saving = false;
@@ -52,13 +52,16 @@ export class PorqEditComponent implements OnInit {
 
   onSubmit(): void {
 
-    this.PsAndQs.PorQUpdate(this.porQEdit).subscribe(
-      {
-        next: _ => this.CompleteEdit.emit(this.porQEdit),
-        error: serverError => this.error = serverError.error.detail
-      }
-    );
-
+    if (!this.porQEdit) {
+      this.error = 'Nothing to update';
+    } else {
+      this.PsAndQs.PorQUpdate(this.porQEdit).subscribe(
+        {
+          next: _ => this.CompleteEdit.emit(this.porQEdit),
+          error: serverError => this.error = serverError.error.detail
+        }
+      );
+    }
   }
 
   cancel(): void {

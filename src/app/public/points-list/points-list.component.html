@@ -25,13 +25,13 @@
         <!-- Count -->
         <div class="pointCount">
 
-            <span *ngIf="!alreadyFetchingPointsFromDB && !filter.single">
+            <span *ngIf="!alreadyFetchingPointsFromDB && !filter?.single">
                 {{ points.length }} point{{ appData.plural(points.length) }} displayed of {{ pointCount }}<span
                     *ngIf="!allPointsDisplayed">
                     <a *ngIf="points.length < pointCount" routerLink="." (click)="fetchMorePoints()">more</a></span>
             </span>
 
-            <span *ngIf="filter.single">
+            <span *ngIf="filter?.single">
                 <a [routerLink]="filter.slashTag">show all</a>
             </span>
 

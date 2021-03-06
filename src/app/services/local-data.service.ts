@@ -1,5 +1,5 @@
-import { AppDataService } from './app-data.service';
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 // Models
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
@@ -7,10 +7,10 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
 
-    public website: string;
-    public strapline: string;
-    public siteUrl: string;
-    public serviceUrl: string;
+    public website = '';
+    public strapline = '';
+    public websiteUrl = '';
+    public apiUrl = '';
 
     // Auth0
     public loggingInToAuth0 = false;
@@ -26,8 +26,8 @@ export class LocalDataService {
     // Anon sessionIDs should be renewed opportunistically and returned if updated?
 
     // SessionID is baked into jwt for anon or signed-in users
-    public jwt: string;
-    public roles: string[];
+    public jwt = '';
+    public roles: string[] = [];
     public freeVoteProfile = new FreeVoteProfile(); // For client updates to API
 
     public questionSelected = '';
@@ -48,7 +48,10 @@ export class LocalDataService {
         return topic;
     }
 
-    constructor() {
+    constructor(
+        // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
+        @Inject(PLATFORM_ID) private platformId: object
+    ) {
 
         // Lifecycle hooks, like OnInit() work with Directives and Components.
         // They do not work with other types, like a service.
@@ -59,12 +62,22 @@ export class LocalDataService {
     }
 
     SetItem(name: string, value: string): void {
-        if (value === 'null') { value = ''; }
-        localStorage.setItem(name, value);
+
+        // localStorage not available in Universal SSR
+        if (isPlatformBrowser(this.platformId)) {
+            if (value === 'null') { value = ''; }
+            localStorage.setItem(name, value);
+        }
     }
 
     GetItem(name: string): string {
-        let value = localStorage.getItem(name);
+
+        let value: string | null = '';
+
+        // localStorage not available in Universal SSR
+        if (isPlatformBrowser(this.platformId)) {
+            value = localStorage.getItem(name);
+        }
         if (value === 'null') { value = null; }
         return value ? value : '';
     }
@@ -75,34 +88,44 @@ export class LocalDataService {
 
         const localAPI: boolean = this.GetItem('localAPI') === 'true';
 
-        if (localAPI) {
+        if (isPlatformBrowser(this.platformId) && localAPI) {
 
+            // window not available on server
             const spaDomain = window.location.origin.split('//')[1].split(':')[0].replace('api.', '');
 
             if (spaDomain === 'localhost' || spaDomain === '127.0.0.1') {
-                // Visual Studio debugging, or VS Code/Angular ng serve
-                this.website = 'break-out.group';
+                // Local debugging
                 this.website = 'free.vote';
-                this.siteUrl = 'http://localhost:54357/';
+                this.websiteUrl = 'http://localhost:7027/';
+                this.apiUrl = 'http://localhost:54357/api/';
                 // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
                 // As CORS is configured, we could also use local IIS http://freevotetest.com or live https://free.vote
             } else if (spaDomain === 'freevotetest.com') {
                 // IIS local testing - service url is same, but we could set to live and redeploy SPA to local IIS
                 // So it's unlikely the CORS configration for freevotetest.com will actually be used
                 this.website = 'free.vote';
-                this.siteUrl = 'http://freevotetest.com/';
+                this.websiteUrl = 'http://freevotetest.com/';
+                this.apiUrl = 'http://localhost:54357/api/';
             } else {
                 this.website = spaDomain;
                 // Live deployment - service url is always same
-                this.siteUrl = 'https://free.vote/';
+                this.websiteUrl = `https://${spaDomain}/`;
+                this.apiUrl = 'https://api.free.vote/api/';
             }
 
         } else {
+
+            // Local
+            // this.website = 'free.vote';
+            // this.websiteUrl = 'http://localhost:7027/';
+            // this.apiUrl = 'http://localhost:54357/api/';
+
+            // Production
             this.website = 'free.vote';
-            this.siteUrl = 'https://free.vote/';
+            this.websiteUrl = 'https://free.vote/';
+            this.apiUrl = 'https://api.free.vote/api/';
         }
 
-        this.serviceUrl = this.siteUrl + 'api/';
     }
 
     public LoadValues(): void {
@@ -257,8 +280,13 @@ export class LocalDataService {
         this.freeVoteProfile.profilePictureOptionID = '';
         this.freeVoteProfile.profilePicture = '';
 
+        // Preserve use of localAPI after sign out/sign in
+        const localAPI = this.GetItem('localAPI');
+
         // clear local storage
         localStorage.clear();
+
+        this.SetItem('localAPI', localAPI);
         this.SetItem('previousTopicSelected', 'SignedOut'); // Used in AppDataService InitialisePreviousAliasAndTopic
     }
 

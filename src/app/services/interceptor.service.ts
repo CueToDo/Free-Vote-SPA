@@ -1,30 +1,35 @@
+import { isPlatformServer } from '@angular/common';
 // angular
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 
 // rxjs
-import { Observable, throwError } from 'rxjs';
-import { mergeMap, catchError } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { mergeMap, catchError, tap } from 'rxjs/operators';
 
 // auth0
 import { AuthService } from './auth.service';
 
 // FreeVote
 import { LocalDataService } from './local-data.service';
+import { _MatSlideToggleRequiredValidatorModule } from '@angular/material/slide-toggle';
+
 
 @Injectable({ providedIn: 'root' })
 export class InterceptorService implements HttpInterceptor {
 
-
-
     constructor(
         private auth: AuthService,
-        private localData: LocalDataService
+        private localData: LocalDataService,
+        private transferState: TransferState,
+        @Inject(PLATFORM_ID) private platformId: object
     ) { }
 
 
     // input parameters are both the request and the handler
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         // https://stackoverflow.com/questions/48683476/how-to-add-multiple-headers-in-angular-5-httpinterceptor
         // To add headers rather than override
@@ -33,26 +38,52 @@ export class InterceptorService implements HttpInterceptor {
         // There's getting a user and there's getting a token
         // Login gets the user but does not get the token ???
 
+        console.log('INTERCEPTED');
 
-        if (this.localData.loggedInToAuth0) {
-            return this.auth.getTokenSilently$().pipe(
-                mergeMap(token => {
+        const key: StateKey<string> = makeStateKey<string>(request.url);
 
-                    localStorage.setItem('Access-Token', token);
+        if (isPlatformServer(this.platformId)) {
 
-                    const tokenReq = req.clone({
-                        setHeaders: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
+            // https://www.twilio.com/blog/faster-javascript-web-apps-angular-universal-transferstate-api-watchdog
+            // Save the state on the server
+            return next.handle(request).pipe(
+                tap((event: any) => {
+                    const body = (event as HttpResponse<any>).body;
+                    this.transferState.set(key, body);
+                }));
 
-                    return next.handle(tokenReq);
-                }),
-                // https://stackoverflow.com/questions/43115390/type-void-is-not-assignable-to-type-observableinput
-                catchError(err => this.handleError(err))
-            );
         } else {
-            return next.handle(req);
+
+            // Check if we already have this response
+            const storedResponse = this.transferState.get<any>(key, null);
+
+            if (storedResponse) {
+                this.transferState.remove(key);
+                const response = new HttpResponse({ body: storedResponse, status: 200 });
+                return of(response);
+            } else if (this.localData.loggedInToAuth0) {
+
+                return this.auth.getTokenSilently$().pipe(
+                    mergeMap(token => {
+
+                        this.localData.SetItem('Access-Token', token);
+
+                        const tokenReq = request.clone({
+                            setHeaders: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                        console.log('CLONED');
+                        return next.handle(tokenReq);
+                    }),
+                    // https://stackoverflow.com/questions/43115390/type-void-is-not-assignable-to-type-observableinput
+                    catchError(err => this.handleError(err))
+                );
+            } else {
+                console.log('JUST HANDLE');
+                return next.handle(request);
+            }
         }
     }
 

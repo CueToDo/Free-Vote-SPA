@@ -1,6 +1,6 @@
 export class Tag {
-    tagDisplay: string;
-    slashTag: string;
-    tagWeight: number;
-    embedded: boolean;
+    tagDisplay = '';
+    slashTag = '';
+    tagWeight = 0;
+    embedded = false;
 }

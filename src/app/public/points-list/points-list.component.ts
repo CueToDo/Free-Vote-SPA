@@ -1,11 +1,12 @@
 
 // Angular
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 // Models, enums
 import { ID } from 'src/app/models/common';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-import { Point, PointSelectionResult } from 'src/app/models/point.model';
+import { PagePreviewMetaData, Point, PointSelectionResult } from 'src/app/models/point.model';
 import { PointSelectionTypes, PointTypesEnum, PointSortTypes, DraftStatusFilter, PointFeedbackFilter } from 'src/app/models/enums';
 
 // Services
@@ -21,18 +22,18 @@ import { PointsService } from 'src/app/services/points.service';
 })
 export class PointsListComponent implements OnInit {
 
-  @Input() public filter: FilterCriteria;
-  @Input() public attachedToQuestion: boolean;
+  @Input() public filter = new FilterCriteria();
+  @Input() public attachedToQuestion = false;
 
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
 
-  public pointCount: number;
+  public pointCount = 0;
   public IDs: ID[] = [];
   public points: Point[] = [];
   public possibleAnswers = false;
 
-  public error: string;
+  public error = '';
   public alreadyFetchingPointsFromDB = false;
   public allPointsDisplayed = false;
 
@@ -63,7 +64,8 @@ export class PointsListComponent implements OnInit {
   constructor(
     public appData: AppDataService,
     public localData: LocalDataService,
-    private pointsService: PointsService
+    private pointsService: PointsService,
+    @Inject(PLATFORM_ID) private platformId: object
   ) { }
 
   ngOnInit(): void {
@@ -71,18 +73,22 @@ export class PointsListComponent implements OnInit {
 
   OnTopicSearch(): string {
     let onTopic = '';
-    if (!this.filter.anyTag) {
-      if (!!this.filter.slashTag) { this.filter.slashTag = this.localData.PreviousSlashTagSelected; }
-      onTopic = this.localData.SlashTagToTopic(this.filter.slashTag);
+    if (!this.filter?.anyTag) {
+      if (this.filter?.slashTag) {
+        this.filter.slashTag = this.localData.PreviousSlashTagSelected;
+        onTopic = this.localData.SlashTagToTopic(this.filter.slashTag);
+      }
     }
     return onTopic;
   }
 
   SelectPointsByVoter(): void {
 
-    this.localData.ActiveAliasForFilter = this.filter.byAlias;
+    this.localData.ActiveAliasForFilter = this.filter?.byAlias || '';
 
-    if (!!this.filter.slashTag) { this.localData.PreviousSlashTagSelected = this.filter.slashTag; }
+    if (this.filter?.slashTag) {
+      this.localData.PreviousSlashTagSelected = this.filter.slashTag;
+    }
 
     // Communicate Change to App Component
 
@@ -100,7 +106,7 @@ export class PointsListComponent implements OnInit {
       this.points = [];
       this.error = '';
 
-      switch (this.filter.pointSelectionType) {
+      switch (this.filter?.pointSelectionType) {
 
         case PointSelectionTypes.Filtered:
 
@@ -167,17 +173,19 @@ export class PointsListComponent implements OnInit {
 
         default:
           // Infinite Scroll: Get points in batches
-          this.filter.slashTag = this.localData.PreviousSlashTagSelected; // how does this relate to getting from route param?
-          if (this.filter.slashTag) {
-            this.pointsService.GetFirstBatchForTag(this.filter.slashTag, this.filter.sortType, this.filter.sortAscending)
-              .subscribe(
-                {
-                  next: psr => this.DisplayPoints(psr),
-                  error: err => {
-                    this.error = err.error.detail;
-                    this.alreadyFetchingPointsFromDB = false;
-                  }
-                });
+          if (this.filter) {
+            this.filter.slashTag = this.localData.PreviousSlashTagSelected; // how does this relate to getting from route param?
+            if (this.filter.slashTag) {
+              this.pointsService.GetFirstBatchForTag(this.filter.slashTag, this.filter.sortType, this.filter.sortAscending)
+                .subscribe(
+                  {
+                    next: psr => this.DisplayPoints(psr),
+                    error: err => {
+                      this.error = err.error.detail;
+                      this.alreadyFetchingPointsFromDB = false;
+                    }
+                  });
+            }
           }
           break;
       }
@@ -193,7 +201,28 @@ export class PointsListComponent implements OnInit {
     this.pointsService.GetSpecificPoint(slashTag, pointTitle)
       .subscribe(
         {
-          next: psr => this.DisplayPoints(psr),
+          next: psr => {
+
+            console.log(`IS BROWSER: ${isPlatformBrowser(this.platformId)}`);
+
+            this.DisplayPoints(psr);
+
+            // SSR Initial page render
+            if (!this.appData.initialPageRendered) {
+
+              const point = psr.points[0];
+
+              const preview = {
+                title: point.pointTitle,
+                preview: point.preview,
+                previewImage: point.previewImage
+              } as PagePreviewMetaData;
+
+              console.log('WE HAVE A POINT', preview);
+
+              this.appData.PagePreview$.next(preview);
+            }
+          },
           error: err => {
             this.error = err.error.detail;
             this.alreadyFetchingPointsFromDB = false;
@@ -208,20 +237,23 @@ export class PointsListComponent implements OnInit {
       // Don't go to server to re-sort if only 1 point selected
 
       // ReversalOnly means we can allow the database to update rownumbers on previously selected points
-      const reversalOnly = this.filter.sortType === pointSortType;
-      this.filter.sortType = pointSortType;
-      this.alreadyFetchingPointsFromDB = true;
+      if (this.filter) {
+        const reversalOnly = this.filter.sortType === pointSortType;
+        this.filter.sortType = pointSortType;
 
-      this.pointsService.NewPointSelectionOrder(pointSortType, reversalOnly)
-        .subscribe(
-          response => {
-            this.alreadyFetchingPointsFromDB = false;
+        this.alreadyFetchingPointsFromDB = true;
 
-            // pointCount is not updated for re-ordering
-            this.IDs = response.pointIDs;
-            this.points = response.points;
-            this.NewPointsDisplayed();
-          });
+        this.pointsService.NewPointSelectionOrder(pointSortType, reversalOnly)
+          .subscribe(
+            response => {
+              this.alreadyFetchingPointsFromDB = false;
+
+              // pointCount is not updated for re-ordering
+              this.IDs = response.pointIDs;
+              this.points = response.points;
+              this.NewPointsDisplayed();
+            });
+      }
     }
   }
 
@@ -233,14 +265,17 @@ export class PointsListComponent implements OnInit {
     if (psr.pointCount > 0) {
       // If we don't have dateFrom and fromDate is returned, OR
       // returned date is LESS than original, use returned date
-      if (!this.filter.dateFrom && psr.fromDate || this.appData.Date1IsLessThanDate2(psr.fromDate, this.filter.dateFrom.toString())) {
-        this.filter.dateFrom = new Date(psr.fromDate);
-      }
 
-      // If we don't have dateTo and toDate is returned, OR
-      // returned date is GREATER than original, use returned date
-      if (!this.filter.dateTo && psr.toDate || this.appData.Date1IsLessThanDate2(this.filter.dateTo.toString(), psr.toDate)) {
-        this.filter.dateTo = new Date(psr.toDate);
+      if (this.filter) {
+        if (!this.filter.dateFrom && psr.fromDate || this.appData.Date1IsLessThanDate2(psr.fromDate, this.filter.dateFrom.toString())) {
+          this.filter.dateFrom = new Date(psr.fromDate);
+        }
+
+        // If we don't have dateTo and toDate is returned, OR
+        // returned date is GREATER than original, use returned date
+        if (!this.filter.dateTo && psr.toDate || this.appData.Date1IsLessThanDate2(this.filter.dateTo.toString(), psr.toDate)) {
+          this.filter.dateTo = new Date(psr.toDate);
+        }
       }
     }
 
@@ -287,17 +322,18 @@ export class PointsListComponent implements OnInit {
         this.alreadyFetchingPointsFromDB = true;
         this.allPointsDisplayed = false;
 
-        this.pointsService.GetNextBatch(this.filter.sortType, this.lastBatchRow + 1)
-          .subscribe(
-            response => {
+        if (this.filter) {
+          this.pointsService.GetNextBatch(this.filter.sortType, this.lastBatchRow + 1)
+            .subscribe(
+              response => {
 
-              // New Batch
-              this.IDs = response.pointIDs;
-              this.points = this.points.concat(response.points);
-              this.NewPointsDisplayed();
-            }
-          );
-        // }
+                // New Batch
+                this.IDs = response.pointIDs;
+                this.points = this.points.concat(response.points);
+                this.NewPointsDisplayed();
+              }
+            );
+        }
 
       }
     }

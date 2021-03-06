@@ -57,7 +57,7 @@ export class HttpService {
       // Don't add jwt in headers when we're getting jwt
       // This is the observable which will return a boolean
       return this.httpClient
-        .get(this.localData.serviceUrl + 'profile/getApiJwt/' + this.localData.website)
+        .get(this.localData.apiUrl + 'profile/getApiJwt/' + this.localData.website)
         .pipe(
           tap(
             response => {
@@ -126,9 +126,11 @@ export class HttpService {
     // Always await a response before making the API call
     // always check we have a valid jwt first whether logged in with Auth0 or not
 
+    console.log('Calling the FreeVote API', this.localData.apiUrl + url);
+
     return this.httpClient // call the free vote api
       .get(
-        this.localData.serviceUrl + url,
+        this.localData.apiUrl + url,
         this.RequestOptions(ContentType.json) // The request is constructed without a jwt before we receive it
       );
 
@@ -139,7 +141,7 @@ export class HttpService {
 
     return this.httpClient // call the free vote api
       .post(
-        this.localData.serviceUrl + url,
+        this.localData.apiUrl + url,
         JSON.stringify(data),
         this.RequestOptions(ContentType.json)
       );
@@ -149,7 +151,7 @@ export class HttpService {
 
     return this.httpClient // call the free vote api
       .post(
-        this.localData.serviceUrl + url,
+        this.localData.apiUrl + url,
         JSON.stringify(data),
         this.RequestOptions(ContentType.form)
       );
@@ -159,7 +161,7 @@ export class HttpService {
 
     return this.httpClient // call the free vote api
       .post<T>(
-        this.localData.serviceUrl + url,
+        this.localData.apiUrl + url,
         formData,
         this.RequestOptions(ContentType.form)
       );
@@ -208,7 +210,7 @@ export class HttpService {
     const fd = new FormData();
     fd.append('image', imageUpload, imageUpload.name);
 
-    const url = this.localData.serviceUrl + 'points/imageUpload';
+    const url = this.localData.apiUrl + 'points/imageUpload';
 
     // Max Shwartzmuller https://www.youtube.com/watch?v=YkvqLNcJz3Y
     return this.getApiJwt()
@@ -229,7 +231,7 @@ export class HttpService {
     const fd = new FormData();
     fd.append('file', pictureUpload, pictureUpload.name);
 
-    const url = this.localData.serviceUrl + 'profile/pictureUpload';
+    const url = this.localData.apiUrl + 'profile/pictureUpload';
 
     // Max Shwartzmuller https://www.youtube.com/watch?v=YkvqLNcJz3Y
     return this.getApiJwt()

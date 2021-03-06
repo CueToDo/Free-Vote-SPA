@@ -11,7 +11,7 @@ import { concatMap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash-es';
 
 // CKEditor
-import * as CKECustom from 'src/ckeditor.js';
+// import * as CKECustom from 'src/ckeditor.js';
 
 // Models
 import { Point } from 'src/app/models/point.model';
@@ -36,13 +36,13 @@ import { tap, map, filter } from 'rxjs/operators';
 export class PointEditComponent implements OnInit, OnDestroy {
 
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent
-  @Input() point: Point;
+  @Input() point = new Point();
   @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
 
   @Input() isPorQPoint = false;
 
-  public ckeditor = CKECustom;
-  public pointClone: PointEdit; // manual control of 2 way binding (need to handle cancel edit)
+  // public ckeditor = CKECustom;
+  public pointClone = new PointEdit(); // manual control of 2 way binding (need to handle cancel edit)
 
   // Above banana in a box 2 way data binding works, but for some reason,
   // we must also emit new HTML to Point component after saving to database
@@ -51,18 +51,18 @@ export class PointEditComponent implements OnInit, OnDestroy {
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
 
-  @ViewChild('imageSelect', { static: true }) imageSelect: ElementRef;
+  @ViewChild('imageSelect', { static: true }) imageSelect: ElementRef | undefined;
 
-  selectedPointType: PointTypesEnum;
+  selectedPointType = PointTypesEnum.NotSelected;
 
   // pointTypes: Array<[number, string]>;
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
-  pointTypes: Kvp[];
+  pointTypes: Kvp[] = [];
   hasMedia = false;
   hasLink = false;
   linkTextSave = '';
-  imageFileForUpload: File | null;
-  imageName: string;
+  imageFileForUpload: File | undefined;
+  imageName = '';
   quoteOrLinkTextPlaceholder = 'quote or link text';
   showLinkBeforeVoteDisabled = false;
 
@@ -71,12 +71,12 @@ export class PointEditComponent implements OnInit, OnDestroy {
   saving = false;
   uploadingImage = false;
   imageUploadProgress = 0;
-  error: string;
+  error = '';
 
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
   // pointKeys: IterableIterator<number>;
 
-  imageUploadObservable: Observable<string>;
+  imageUploadObservable: Observable<string> | undefined;
 
   constructor(
     private localData: LocalDataService,
@@ -103,15 +103,17 @@ export class PointEditComponent implements OnInit, OnDestroy {
       pointTypes => this.pointTypes = pointTypes
     );
 
-    this.autoShowLinkEdit(this.pointClone.pointTypeID);
+    if (this.pointClone) {
+      this.autoShowLinkEdit(this.pointClone.pointTypeID);
 
-    this.hasMedia = (this.pointClone.youTubeID || this.pointClone.soundCloudTrackID) ? true : false;
-
+      this.hasMedia = (this.pointClone.youTubeID || this.pointClone.soundCloudTrackID) ? true : false;
+    }
   }
 
   onCKEBlur(): void {
     this.userTouched = !this.cancelled;
     this.cancelled = false;
+    console.log('OOF');
   }
 
   addMedia(): void {
@@ -119,15 +121,17 @@ export class PointEditComponent implements OnInit, OnDestroy {
   }
 
   removeMedia(): void {
-    this.pointClone.youTubeID = '';
-    this.pointClone.soundCloudTrackID = '';
-    this.hasMedia = false;
+    if (this.pointClone) {
+      this.pointClone.youTubeID = '';
+      this.pointClone.soundCloudTrackID = '';
+      this.hasMedia = false;
+    }
   }
 
   imageSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
     const files = target.files;
-    this.imageFileForUpload = files ? files[0] : null;
+    this.imageFileForUpload = files ? files[0] : undefined;
     const name = this.imageFileForUpload?.name;
     if (name) {
       this.imageName = name;
@@ -170,10 +174,14 @@ export class PointEditComponent implements OnInit, OnDestroy {
                 console.log(`File "${this.imageName}" was completely uploaded!`);
                 console.log(responseBody?.imageFileName, responseBody?.imageID);
 
-                this.pointClone.pointHTML += `<img src="${responseBody?.imageFileName}">`;
+                if (this.pointClone) {
+                  this.pointClone.pointHTML += `<img src="${responseBody?.imageFileName}">`;
+                }
                 this.imageName = '';
-                this.imageFileForUpload = null;
-                this.imageSelect.nativeElement.value = '';
+                this.imageFileForUpload = undefined;
+                if (this.imageSelect) {
+                  this.imageSelect.nativeElement.value = '';
+                }
                 break;
 
               default:
@@ -200,27 +208,30 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
     this.error = '';
 
-    // Must initialise before subscribing - may do nothing
-    this.imageUploadObservable = this.ImageUploadObservable();
+    if (this.pointClone) {
+      // Must initialise before subscribing - may do nothing
+      this.imageUploadObservable = this.ImageUploadObservable();
 
-    this.imageUploadObservable
-      .subscribe(
-        {
-          next: imageID => {
-            // Image now has a database ID, but is not yet attached to unsaved point
-            // ... will be attached when point updated
-            if (!this.pointClone.csvImageIDs) { this.pointClone.csvImageIDs = ''; } // Don't want undefined
-            this.pointClone.csvImageIDs += imageID + ',';
-          },
-          error: serverError => this.error = serverError.error.detail,
-          complete: () => this.uploadingImage = false
-        }
-      );
-
+      this.imageUploadObservable
+        .subscribe(
+          {
+            next: imageID => {
+              // Image now has a database ID, but is not yet attached to unsaved point
+              // ... will be attached when point updated
+              if (this.pointClone) {
+                if (!this.pointClone.csvImageIDs) { this.pointClone.csvImageIDs = ''; } // Don't want undefined
+                this.pointClone.csvImageIDs += imageID + ',';
+              }
+            },
+            error: serverError => this.error = serverError.error.detail,
+            complete: () => this.uploadingImage = false
+          }
+        );
+    }
   }
 
   imageRemove(): void {
-    this.imageFileForUpload = null;
+    this.imageFileForUpload = undefined;
   }
 
 
@@ -231,84 +242,99 @@ export class PointEditComponent implements OnInit, OnDestroy {
     // What about tiny urls without the = but with the id?
     // console.log('SCTID: ', this.pointClone.soundCloudTrackID);
 
-    this.error = '';
-
-    if (!this.isPorQPoint && (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0)) {
-      this.error = 'Points must have at least one slash tag';
-    } else if (!(!!this.pointClone.pointTitle && !!this.pointClone.linkAddress)
-      && !(!!this.pointClone.pointHTML || !!this.pointClone.youTubeID || !!this.pointClone.soundCloudTrackID
-        || !!this.pointClone.csvImageIDs || !!this.imageSelect.nativeElement.value)) {
-      this.error = 'Point title and text OR url OR image OR media link must be provided';
+    if (!this.pointClone) {
+      this.error = 'Missing: point to edit';
     } else {
+      this.error = '';
 
-      this.saving = true;
+      if (!this.isPorQPoint && (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0)) {
+        this.error = 'Points must have at least one slash tag';
+      } else if (!(!!this.pointClone.pointTitle && !!this.pointClone.linkAddress)
+        && !(!!this.pointClone.pointHTML || !!this.pointClone.youTubeID || !!this.pointClone.soundCloudTrackID
+          || !!this.pointClone.csvImageIDs || !!this.imageSelect?.nativeElement.value)) {
+        this.error = 'Point title and text OR url OR image OR media link must be provided';
+      } else {
 
-      const isNew = !this.pointClone.pointID || this.pointClone.pointID < 1;
+        this.saving = true;
 
-      // Has voter removed SlashTagSelected?
-      let returnToSlashTag = this.localData.PreviousSlashTagSelected;
-      let tagChange = false;
+        const isNew = !this.pointClone.pointID || this.pointClone.pointID < 1;
 
-      if (!this.pointClone.slashTags.includes(returnToSlashTag)) {
-        returnToSlashTag = this.pointClone.slashTags[0];
-        tagChange = true;
+        // Has voter removed SlashTagSelected?
+        let returnToSlashTag = this.localData.PreviousSlashTagSelected;
+        let tagChange = false;
+
+        if (!this.pointClone.slashTags.includes(returnToSlashTag)) {
+          returnToSlashTag = this.pointClone.slashTags[0];
+          tagChange = true;
+        }
+
+        // Must always initialise before subscribing - may be nothing to upload
+        this.imageUploadObservable = this.ImageUploadObservable();
+
+        this.imageUploadObservable
+          .pipe(
+            map(imageID => {
+              /// There may not be an image upload, in which case the imageID will be ''
+              // There could be a situation where we've uploaded an image
+              // and then attached another without uploading, but we're now saving
+              if (this.pointClone) {
+                if (!this.pointClone.csvImageIDs) { this.pointClone.csvImageIDs = ''; } // Don't want undefined
+                this.pointClone.csvImageIDs += imageID + ',';
+              }
+            }),
+            // but we'll always update point after any image upload
+            concatMap(_ => {
+              if (!this.pointClone) {
+                return of(new Point());
+              } else {
+                return this.pointsService.PointUpdate(this.pointClone, this.isPorQPoint);
+              }
+            })
+            // Don't get link meta data here from API - it slows user repsonse
+            // but we will need to handle separately on new point and existing point edit
+          )
+          .subscribe({
+            next: (response: Point) => {
+              this.saving = false;
+              this.userTouched = false;
+              // this.point.csvImageIDs = ''; // Only needed for upload, now complete??
+
+              if (isNew) {
+                this.NewPoint(returnToSlashTag);
+              } else {
+                // pointID only needed for new points, but parent reselects - we're not dependent on 2 way binding
+                // save response to point not pointClone, and manually emit
+                this.point = cloneDeep(response);
+                this.pointChange.emit(this.point);
+              }
+
+              this.localData.PreviousSlashTagSelected = returnToSlashTag;
+
+              // Communicate the change to PointComponent (No subscriptions)
+              // Emit to TagsPoints component for sort descending indication only
+              // But don't get parent TagsPoints to trigger reselection in sibling points now
+
+              if (response) {
+                this.CompleteEdit.emit(response.pointID); // emit pointID for porq to attach
+              }
+
+              // Communicate change to sibling PointsComponent
+              // where Points ReSelection Takes place:
+              if (isNew || tagChange) {
+                this.appData.SetSlashTag(returnToSlashTag, PointSortTypes.DateDescend);
+              }
+
+            },
+            error: serverError => {
+              this.saving = false;
+              this.error = serverError.error.detail;
+            },
+            complete: () => {
+              this.uploadingImage = false;
+              this.hasMedia = false;
+            }
+          });
       }
-
-      // Must always initialise before subscribing - may be nothing to upload
-      this.imageUploadObservable = this.ImageUploadObservable();
-
-      this.imageUploadObservable
-        .pipe(
-          map(imageID => {
-            /// There may not be an image upload, in which case the imageID will be ''
-            // There could be a situation where we've uploaded an image
-            // and then attached another without uploading, but we're now saving
-            if (!this.pointClone.csvImageIDs) { this.pointClone.csvImageIDs = ''; } // Don't want undefined
-            this.pointClone.csvImageIDs += imageID + ',';
-          }),
-          // but we'll always update point after any image upload
-          concatMap(() => this.pointsService.PointUpdate(this.pointClone, this.isPorQPoint))
-          // Don't get link meta data here from API - it slows user repsonse
-          // but we will need to handle separately on new point and existing point edit
-        )
-        .subscribe({
-          next: (response: Point) => {
-            this.saving = false;
-            this.userTouched = false;
-            // this.point.csvImageIDs = ''; // Only needed for upload, now complete??
-
-            if (isNew) {
-              this.NewPoint(returnToSlashTag);
-            } else {
-              // pointID only needed for new points, but parent reselects - we're not dependent on 2 way binding
-              // save response to point not pointClone, and manually emit
-              this.point = cloneDeep(response);
-              this.pointChange.emit(this.point);
-            }
-
-            this.localData.PreviousSlashTagSelected = returnToSlashTag;
-
-            // Communicate the change to PointComponent (No subscriptions)
-            // Emit to TagsPoints component for sort descending indication only
-            // But don't get parent TagsPoints to trigger reselection in sibling points now
-            this.CompleteEdit.emit(response.pointID); // emit pointID for porq to attach
-
-            // Communicate change to sibling PointsComponent
-            // where Points ReSelection Takes place:
-            if (isNew || tagChange) {
-              this.appData.SetSlashTag(returnToSlashTag, PointSortTypes.DateDescend);
-            }
-
-          },
-          error: serverError => {
-            this.saving = false;
-            this.error = serverError.error.detail;
-          },
-          complete: () => {
-            this.uploadingImage = false;
-            this.hasMedia = false;
-          }
-        });
     }
   }
 
@@ -333,7 +359,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
   Cancel(): void {
 
     // Delete any uploaded images from server
-    if (!!this.pointClone.csvImageIDs) {
+    if (this.pointClone?.csvImageIDs) {
       this.httpService.ImageUploadCancel(this.pointClone.csvImageIDs).subscribe(
         {
           next: () => {
@@ -357,7 +383,7 @@ export class PointEditComponent implements OnInit, OnDestroy {
     if (this.appData.ShowSource(pointTypeID)) {
       this.showLinkEdit();
     } else {
-      if (this.pointClone.linkText || this.pointClone.linkAddress) {
+      if (this.pointClone?.linkText || this.pointClone?.linkAddress) {
         this.showLinkEdit();
       } else {
         this.hideLinkEdit();
@@ -371,8 +397,11 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
     // Automatically update default "show" if voter changes point type
     this.showLinkBeforeVoteDisabled = !this.appData.ShowSource(pointTypeID);
-    this.pointClone.showLinkBeforeVote = false;
-    this.pointClone.showLinkPreview = !this.showLinkBeforeVoteDisabled;
+
+    if (this.pointClone) {
+      this.pointClone.showLinkBeforeVote = false;
+      this.pointClone.showLinkPreview = !this.showLinkBeforeVoteDisabled;
+    }
   }
 
   showLinkEdit(): void {
@@ -382,18 +411,22 @@ export class PointEditComponent implements OnInit, OnDestroy {
 
   hideLinkEdit(): void {
     this.hasLink = false;
-    this.pointClone.linkText = '';
-    this.pointClone.linkAddress = '';
+    if (this.pointClone) {
+      this.pointClone.linkText = '';
+      this.pointClone.linkAddress = '';
+    }
   }
 
   showLinkPreview(show: boolean): void {
-    if (show) {
-      this.quoteOrLinkTextPlaceholder = 'quote or link text not required';
-      this.linkTextSave = this.pointClone.linkText;
-      this.pointClone.linkText = '';
-    } else {
-      this.quoteOrLinkTextPlaceholder = 'quote or link text';
-      this.pointClone.linkText = this.linkTextSave;
+    if (this.pointClone) {
+      if (show) {
+        this.quoteOrLinkTextPlaceholder = 'quote or link text not required';
+        this.linkTextSave = this.pointClone.linkText;
+        this.pointClone.linkText = '';
+      } else {
+        this.quoteOrLinkTextPlaceholder = 'quote or link text';
+        this.pointClone.linkText = this.linkTextSave;
+      }
     }
   }
 

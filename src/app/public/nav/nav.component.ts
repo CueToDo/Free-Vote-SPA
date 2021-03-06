@@ -14,9 +14,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavComponent implements OnInit, OnDestroy {
 
-  PageName$: Subscription;
-  tagsPointsActive$: Subscription;
-  showBurger$: Subscription;
+  PageName$: Subscription | undefined;
+  tagsPointsActive$: Subscription | undefined;
+  showBurger$: Subscription | undefined;
 
   public tabSelected = '';
   public showBurger = false;
@@ -26,7 +26,7 @@ export class NavComponent implements OnInit, OnDestroy {
     private appDataService: AppDataService,
     public auth: AuthService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
 
     // https://medium.com/@tomastrajan/how-to-get-route-path-parameters-in-non-routed-angular-components-32fc90d9cb52
@@ -54,10 +54,10 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnDestroy() {
-    this.PageName$.unsubscribe();
-    this.tagsPointsActive$.unsubscribe();
-    this.showBurger$.unsubscribe();
+  ngOnDestroy(): void {
+    this.PageName$?.unsubscribe();
+    this.tagsPointsActive$?.unsubscribe();
+    this.showBurger$?.unsubscribe();
   }
 
 }

@@ -21,7 +21,7 @@ import { PointsListComponent } from '../points-list/points-list.component';
 })
 export class QuestionAnswersComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('PointsList') pointsList: PointsListComponent;
+  @ViewChild('PointsList') pointsList!: PointsListComponent;
 
   public mode = 'answers'; // myPoints, newAnswer
   private savedMode = '';

@@ -1,10 +1,10 @@
-<div [ngClass]="{edit: organisation.organisationID || 0 > 0}">
+<div [ngClass]="{edit: organisation?.organisationID || 0 > 0}">
 
     <div fxLayout="column">
 
         <mat-form-field>
             <input matInput placeholder="organisation name" [(ngModel)]="organisation.organisationName" #groupName (keyup.enter)="nameComplete()">
-            <button mat-button *ngIf="organisation.organisationName" matSuffix mat-icon-button aria-label="clear"
+            <button mat-button *ngIf="organisation?.organisationName" matSuffix mat-icon-button aria-label="clear"
                 (click)="organisation.organisationName='';">
                 <mat-icon>close</mat-icon>
             </button>
@@ -12,7 +12,7 @@
 
         <mat-form-field>
             <input matInput placeholder="organisation description" [(ngModel)]="organisation.description" #groupDescription (keyup.enter)="descriptionComplete()">
-            <button mat-button *ngIf="organisation.description" matSuffix mat-icon-button aria-label="clear"
+            <button mat-button *ngIf="organisation?.description" matSuffix mat-icon-button aria-label="clear"
                 (click)="organisation.description='';">
                 <mat-icon>close</mat-icon>
             </button>
@@ -20,7 +20,7 @@
 
         <mat-form-field>
             <input matInput placeholder="organisation website" [(ngModel)]="organisation.organisationWebsite" #groupWebsite (keyup.enter)="websiteComplete()">
-            <button mat-button *ngIf="organisation.organisationWebsite" matSuffix mat-icon-button aria-label="clear"
+            <button mat-button *ngIf="organisation?.organisationWebsite" matSuffix mat-icon-button aria-label="clear"
                 (click)="organisation.organisationWebsite='';">
                 <mat-icon>close</mat-icon>
             </button>
@@ -34,7 +34,7 @@
             </mat-select>
         </mat-form-field>
 
-        <div *ngIf="organisation.geographicalExtentID===GeographicalExtentID.PrivateOrganisation.toString()">
+        <div *ngIf="organisation?.geographicalExtentID===GeographicalExtentID.PrivateOrganisation.toString()">
             <mat-radio-group [(ngModel)]="organisation.invitationOnly">
                 <mat-radio-button labelPosition="before" [value]="true">new members by invitation only
                 </mat-radio-button>

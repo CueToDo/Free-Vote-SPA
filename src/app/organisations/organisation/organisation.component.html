@@ -11,53 +11,53 @@
                     <a routerLink="/organisations/membership">List all organisations</a>
                 </div>
 
-                <h1 class="mt-3">{{ OrganisationDisplay.organisationName }}<span *ngIf="!OrganisationDisplay.active"> (Inactive)</span></h1>
+                <h1 class="mt-3">{{ OrganisationDisplay?.organisationName }}<span *ngIf="!OrganisationDisplay?.active"> (Inactive)</span></h1>
 
-                <p>{{ OrganisationDisplay.description }}</p>
+                <p>{{ OrganisationDisplay?.description }}</p>
 
                 <p>
-                    Group Type: <strong>{{ OrganisationDisplay.geographicalExtent }}</strong>
+                    Group Type: <strong>{{ OrganisationDisplay?.geographicalExtent }}</strong>
                     <span
-                        *ngIf="OrganisationDisplay.geographicalExtentID===GeographicalExtentID.PrivateOrganisation.toString() && OrganisationDisplay.invitationOnly">(invitation
+                        *ngIf="OrganisationDisplay?.geographicalExtentID===GeographicalExtentID.PrivateOrganisation.toString() && OrganisationDisplay?.invitationOnly">(invitation
                         only)</span>
 
                     <span *ngIf="showCountries">
-                        Countries: <span *ngFor="let country of OrganisationDisplay.countries; let i = index"
-                            class="data">{{ country }}<span *ngIf="i != OrganisationDisplay.countries.length - 1">,
+                        Countries: <span *ngFor="let country of OrganisationDisplay?.countries; let i = index"
+                            class="data">{{ country }}<span *ngIf="i != OrganisationDisplay?.countries?.length - 1">,
                             </span></span>
                     </span>
 
                     <span *ngIf="showRegions">
-                        Regions: <span *ngFor="let region of OrganisationDisplay.regions" class="data">{{ region }}</span>
+                        Regions: <span *ngFor="let region of OrganisationDisplay?.regions" class="data">{{ region }}</span>
                     </span>
 
                     <span *ngIf="showCities">
-                        Cities: <span *ngFor="let city of OrganisationDisplay.cities" class="data">{{ city }} </span>
+                        Cities: <span *ngFor="let city of OrganisationDisplay?.cities" class="data">{{ city }} </span>
                     </span>
                 </p>
 
                 <!-- Discussion Groups -->
-                <p *ngIf="!!OrganisationDisplay.groups && OrganisationDisplay.groups.length > 0">
+                <p *ngIf="OrganisationDisplay?.groups && OrganisationDisplay?.groups?.length > 0">
                     Discussion groups:
-                    <span *ngFor="let group of OrganisationDisplay.groups; let i = index">
+                    <span *ngFor="let group of OrganisationDisplay?.groups; let i = index">
                         <a [routerLink]="issuesLink(group)">{{ group }}</a>
-                        <ng-container *ngIf="i != OrganisationDisplay.groups.length - 1">, </ng-container>
+                        <ng-container *ngIf="i != OrganisationDisplay?.groups?.length - 1">, </ng-container>
                     </span>
                 </p>
 
                 <p>
-                    members <span class="data">{{ OrganisationDisplay.members }}</span>,
-                    issues <span class="data">{{ OrganisationDisplay.issues }}</span>
+                    members <span class="data">{{ OrganisationDisplay?.members }}</span>,
+                    issues <span class="data">{{ OrganisationDisplay?.issues }}</span>
                     <span class="primary" [ngClass]="{'success': !!membershipMessage}">{{ membershipMessage }}</span>
                 </p>
 
-                <p *ngIf="!!OrganisationDisplay.organisationWebsite">Website: <a [href]="OrganisationDisplay.organisationWebsite"
-                        target="_blank">{{ OrganisationDisplay.organisationWebsite.replace('http://','').replace('https://','') }}</a>
+                <p *ngIf="!!OrganisationDisplay?.organisationWebsite">Website: <a [href]="OrganisationDisplay?.organisationWebsite"
+                        target="_blank">{{ OrganisationDisplay?.organisationWebsite?.replace('http://','')?.replace('https://','') }}</a>
                 </p>
             </div>
 
             <!-- Group Edit -->
-            <div *ngIf="groupEdit && (OrganisationDisplay.organisationAdministrator || OrganisationDisplay.organisationOwner)">
+            <div *ngIf="groupEdit && (OrganisationDisplay?.organisationAdministrator || OrganisationDisplay?.organisationOwner)">
 
                 <app-organisation-edit (Cancel)="Cancel()" (Complete)="Complete($event)" [(organisation)]="OrganisationDisplay">
                 </app-organisation-edit>
@@ -69,47 +69,47 @@
 
                 <span fxFlex></span>
 
-                <button mat-stroked-button *ngIf="OrganisationDisplay.organisationOwner" (click)="Delete()"
+                <button mat-stroked-button *ngIf="OrganisationDisplay?.organisationOwner" (click)="Delete()"
                     matTooltip="permanently delete the group">
                     <span>delete</span>
                     <mat-icon>clear</mat-icon>
                 </button>
 
                 <button mat-stroked-button
-                    *ngIf="OrganisationDisplay.active && (OrganisationDisplay.organisationAdministrator || OrganisationDisplay.organisationOwner)"
+                    *ngIf="OrganisationDisplay?.active && (OrganisationDisplay?.organisationAdministrator || OrganisationDisplay?.organisationOwner)"
                     (click)="DeActivate()" matTooltip="de-activate group">
                     <span>de-activate</span>
                     <mat-icon>block</mat-icon>
                 </button>
 
                 <button mat-stroked-button
-                    *ngIf="!OrganisationDisplay.active && (OrganisationDisplay.organisationAdministrator || OrganisationDisplay.organisationOwner)"
+                    *ngIf="!OrganisationDisplay?.active && (OrganisationDisplay?.organisationAdministrator || OrganisationDisplay?.organisationOwner)"
                     (click)="Activate()" matTooltip="activate group">
                     <span>activate</span>
                     <mat-icon>accessibility_new</mat-icon>
                 </button>
 
                 <button mat-stroked-button
-                    *ngIf="!groupEdit && (OrganisationDisplay.organisationAdministrator || OrganisationDisplay.organisationOwner)" (click)="Edit()"
+                    *ngIf="!groupEdit && (OrganisationDisplay?.organisationAdministrator || OrganisationDisplay?.organisationOwner)" (click)="Edit()"
                     matTooltip="edit group details">
                     <span>edit</span>
                     <mat-icon>create</mat-icon>
                 </button>
 
                 <button mat-stroked-button
-                    *ngIf="OrganisationDisplay.active && OrganisationDisplay.organisationMember && !OrganisationDisplay.organisationOwner"
+                    *ngIf="OrganisationDisplay?.active && OrganisationDisplay?.organisationMember && !OrganisationDisplay?.organisationOwner"
                     (click)="Leave()" matTooltip="leave this group">
                     <span>leave</span>
                     <mat-icon>directions_walk</mat-icon>
                 </button>
 
-                <button mat-stroked-button *ngIf="OrganisationDisplay.active && OrganisationDisplay.organisationMember"
-                    matTooltip="invite others to join the group" [disabled]="!OrganisationDisplay.canInviteMembers">
+                <button mat-stroked-button *ngIf="OrganisationDisplay?.active && OrganisationDisplay?.organisationMember"
+                    matTooltip="invite others to join the group" [disabled]="!OrganisationDisplay?.canInviteMembers">
                     <span>invite</span>
                     <mat-icon>person_add</mat-icon>
                 </button>
 
-                <button mat-stroked-button *ngIf="OrganisationDisplay.active && !OrganisationDisplay.organisationMember" (click)="Join()"
+                <button mat-stroked-button *ngIf="OrganisationDisplay?.active && !OrganisationDisplay?.organisationMember" (click)="Join()"
                     matTooltip="join group">
                     <span>join</span>
                     <mat-icon>group_add</mat-icon>

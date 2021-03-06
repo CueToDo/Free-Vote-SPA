@@ -1,8 +1,7 @@
 // Angular
-import { Component, Inject } from '@angular/core';
-import { Title } from '@angular/platform-browser'; // Meta
-import { OnInit, OnDestroy } from '@angular/core';
-import { Location, DOCUMENT } from '@angular/common';
+import { Component, OnInit, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
+import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 
 // rxjs
@@ -19,6 +18,7 @@ import { LocalDataService } from './services/local-data.service';
 import { AppDataService } from './services/app-data.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { filter, debounceTime } from 'rxjs/operators';
+import { PagePreviewMetaData } from './models/point.model';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +26,7 @@ import { filter, debounceTime } from 'rxjs/operators';
   styleUrls: ['./app.component.css'],
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: false, autoClose: true } }]
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
@@ -35,9 +35,9 @@ export class AppComponent implements OnInit, OnDestroy {
   pageTitle = '';
   pageTitleToolTip = '';
 
-  localAPI: string;
+  localAPI = '';
 
-  widthBand: number; // 0 400, 1 550, 2 700, 3 800, 4 900
+  widthBand = 4; // 0 400, 1 550, 2 700, 3 800, 4 900
 
   public showBurger = false;
   public showVulcan = true;
@@ -54,8 +54,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private location: Location,
     private titleService: Title,
-    // private metaService: Meta,
-    @Inject(DOCUMENT) private htmlDocument: HTMLDocument) { }
+    private metaService: Meta,
+    @Inject(DOCUMENT) private htmlDocument: HTMLDocument,
+    // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
+    @Inject(PLATFORM_ID) private platformId: object
+  ) { }
 
 
   ngOnInit(): void {
@@ -68,10 +71,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.imgVulcan = '../assets/lightbulb-idea.png';
         this.altVulcan = 'lightbulb idea';
         break;
-    }
-
-    if (this.localData.GetItem('localAPI') === 'true') {
-      this.localAPI = 'Local API';
     }
 
     this.htmlDocument.getElementById('appFavicon')?.setAttribute('href', `/assets/${favicon}?d=${Date.now()}`);
@@ -87,10 +86,15 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!this.localData.loggingInToAuth0 && !this.localData.gettingFreeVoteJwt) {
       // Is this now queued and can proceed without the above guard?
       this.appData.InitialisePreviousSlashTagSelected();
-      this.RouteOrParamsUpdated(this.router.url);
     }
 
+    // SSR First Page Meta Data for Social Media
+    this.appData.PagePreview$.subscribe({
+      next: preview => this.setInitialMetaData(preview)
+    });
+
     // Route and Route Parameters: Setup and subscribe to changes
+    this.RouteOrParamsUpdated(this.router.url);
 
     // Angular Workshop https://stackoverflow.com/questions/33520043/how-to-detect-a-route-change-in-angular
     // The app component is the main route change detector.
@@ -110,17 +114,20 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     );
 
+    // Viewport Width: Setup and subscribe to changes on browser only - not for Universla SSR
 
-    // Viewport Width: Setup and subscribe to changes
+    if (isPlatformBrowser(this.platformId)) {
 
-    this.SetVPW();
+      this.SetVPW();
 
-    // app component monitors width and broadcasts changes via appDataService
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(200))
-      .subscribe(() => {
-        this.SetVPW();
-      });
+      // app component monitors width and broadcasts changes via appDataService
+      fromEvent(window, 'resize')
+        .pipe(debounceTime(200))
+        .subscribe(() => {
+          this.SetVPW();
+        });
+    }
+
 
     // Observer breakpoints
 
@@ -144,53 +151,93 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
-  setDocTitle(
-    pagePath: string, title: string, description: string,
-    imagePath: string, csvKeywords: string): void {
+  ngAfterViewInit(): void {
+    if (this.localData.GetItem('localAPI') === 'true') {
+      this.localAPI = 'Local API';
+    }
+  }
 
+  setDocTitle(title: string): void {
     // https://blog.bitsrc.io/dynamic-page-titles-in-angular-98ce20b5c334
     this.titleService.setTitle(title);
+  }
 
-    // const url = this.localData.siteUrl + this.appData.removeBookEnds(pagePath, '/');
-    // const imageUrl = this.localData.siteUrl + imagePath;
+  setMetaData(title: string, preview: string, csvKeywords: string, pagePath: string, previewImage: string): void {
 
-    // // https://css-tricks.com/essential-meta-tags-social-media/
-    // this.metaService.removeTag(`name='keywords'`);
-    // this.metaService.removeTag(`name='description'`);
+    const url = this.localData.websiteUrl + this.appData.removeBookEnds(pagePath, '/');
 
-    // this.metaService.removeTag(`property='og:title'`);
-    // this.metaService.removeTag(`property='og:description'`);
-    // this.metaService.removeTag(`property='og:image'`);
-    // this.metaService.removeTag(`property='og:url'`);
+    // https://css-tricks.com/essential-meta-tags-social-media/
+    // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
+    this.metaService.removeTag(`name='keywords'`);
+    this.metaService.removeTag(`name='description'`);
+    this.metaService.removeTag(`name='twitter:description'`);
 
-    // this.metaService.removeTag(`name='twitter:title'`);
-    // this.metaService.removeTag(`name='twitter:description'`);
-    // this.metaService.removeTag(`name='twitter:image'`);
-    // this.metaService.removeTag(`name='twitter:card'`);
+    // Requires Angular Universal Server Side Rendering
+    // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
+    this.metaService.addTags([
+      { name: 'keywords', content: `Free Vote, voting, democracy, ${csvKeywords}` },
+      { name: 'description', content: preview },
+      { name: 'twitter:description', content: 'View this point on free.vote' },
+    ]);
 
-    // // Tags get added, but does not work
-    // // Need Angular Universal Server Side Rendering
-    // // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
-    // this.metaService.addTags([
-    //   { name: 'keywords', content: `Free Vote, voting, democracy, ${csvKeywords}` },
-    //   { name: 'description', content: description },
+    if (title) {
+      // Remove and title meta
+      this.metaService.removeTag(`property='og:title'`);
+      this.metaService.removeTag(`name='twitter:title'`);
 
-    //   { property: 'og:title', content: title },
-    //   { property: 'og:description', content: description },
-    //   { property: 'og:image', content: imageUrl },
-    //   { property: 'og:url', content: url },
+      this.metaService.addTags([
+        { property: 'og:title', content: title },
+        { name: 'twitter:title', content: title }
+      ]);
+    }
 
-    //   { name: 'twitter:title', content: title },
-    //   { name: 'twitter:description', content: description },
-    //   { name: 'twitter:image', content: imageUrl },
-    //   { name: 'twitter:card', content: 'summary_large_image' }
+    if (preview) {
+      // Remove and add preview meta
+      this.metaService.removeTag(`property='og:description'`);
+      this.metaService.removeTag(`name='twitter:card'`);
 
-    // ]);
+      this.metaService.addTags([
+        { property: 'og:description', content: preview },
+        { name: 'twitter:card', content: preview }
+      ]);
+    }
 
+    if (previewImage) {
+      // Remove and add previewImage meta
+      this.metaService.removeTag(`property='og:image'`);
+      this.metaService.removeTag(`name='twitter:image'`);
+
+      // Requires Angular Universal Server Side Rendering
+      // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
+      this.metaService.addTags([
+        { property: 'og:image', content: previewImage },
+        { name: 'twitter:image', content: previewImage }
+      ]);
+    }
+
+    if (url) {
+      // Remove and add url meta
+      this.metaService.removeTag(`property='og:url'`);
+
+      this.metaService.addTags([
+        { property: 'og:url', content: url }
+      ]);
+    }
 
   }
 
 
+
+  public setInitialMetaData(metaData: PagePreviewMetaData): void {
+
+    console.log('SET INITIAL META DATA', metaData.title, metaData.preview, metaData.previewImage);
+
+    this.setMetaData(metaData.title, metaData.preview,
+      'Free Vote, Free, Vote, anonymous, voting, platform', /* keywords */
+      '', metaData.previewImage); /* pagePath, imagePath */
+
+    this.appData.initialPageRendered = true;
+  }
 
   public RouteOrParamsUpdated(url: string): void {
 
@@ -200,29 +247,52 @@ export class AppComponent implements OnInit, OnDestroy {
       // Home page
       this.home = true;
       this.pageTitle = '';
-      this.setDocTitle('', this.localData.website, 'Free Vote anonymous voting platform', 'assets/Vulcan.png', 'Free, Vote, anonymous, voting, platform');
+      this.setDocTitle(this.localData.website);
+
+      console.log('>>>>>>>>> Set Meta on Route Change <<<<<<<<<<');
+      // Setting meta data on route change useful to Google and social media previews
+      // Runs after app component init in SSR for FCP (First Contentful Paint)
+      this.setMetaData(
+        `${this.localData.website} Route Change Title`, /* title */
+        'Free Vote anonymous voting platform', /* preview */
+        'Free Vote, Free, Vote, anonymous, voting, platform', /* keywords */
+        this.localData.website, `${this.localData.website}/assets/Vulcan.png`); /* pagePath, imagePath */
+
+      // Setting meta data on SSR app.component init will be of use to
+      // social media sites as well as Google
+      // , 'free vote voter profile', 'assets/Vulcan.png', 'free, vote, voter, profile'
+      //   , `points on ${topic}`, 'assets/Slash Tag Cloud.PNG', `${topic}, slash, tag`
+
+
       // Set ShowVulcan to true on route change to home page
       // If home page emits InputSlashTagOnMobile in ngOnInit, get error
       // ExpressionChangedAfterItHasBeenCheckedError
       this.showVulcan = true;
     } else {
+
       this.home = false;
+
       if (url.indexOf('?') > 0) {
         url = url.split('?')[0]; // #176 discard query string for facebook shares
       }
+
       this.pageTitle = url;
+
       this.pageTitleToolTip = url === this.localData.PreviousSlashTagSelected
         ? 'SlashTag/' + this.localData.PreviousTopicSelected : url.substr(1);
 
       if (url.indexOf('slash-tags') > -1) {
         this.appData.PageName$.next('slashTags');
-        this.setDocTitle(url, 'Slash Tags', 'slash tag cloud', 'assets/Slash Tag Cloud.PNG', 'slash, tag, cloud');
+        this.setDocTitle('Slash Tags');
+        console.log('slash tags');
       } else if (url.indexOf('/my/details') > -1) {
         this.appData.PageName$.next('profile');
-        this.setDocTitle(url, 'Voter Profile', 'free vote voter profile', 'assets/Vulcan.png', 'free, vote, voter, profile');
+        this.setDocTitle('Voter Profile');
+        console.log('my details');
       } else {
         const topic = this.localData.SlashTagToTopic(this.pageTitle);
-        this.setDocTitle(url, topic, `points on ${topic}`, 'assets/Slash Tag Cloud.PNG', `${topic}, slash, tag`);
+        this.setDocTitle(topic);
+        console.log('Set Doc Title on route change: none of the above');
       }
 
       // https://angular.io/api/common/Location#!#replaceState-anchor
@@ -242,28 +312,33 @@ export class AppComponent implements OnInit, OnDestroy {
 
   SetVPW(): void {
 
-    const vpw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    if (isPlatformBrowser(this.platformId)) {
 
-    let band: number;
+      // No window object on SSR - no need to set ViewwPort width
 
-    // Restict Weight and font-size for smaller screens
-    if (vpw < 400) {
-      band = 0;
-    } else if (vpw < 550) {
-      band = 1;
-    } else if (vpw < 700) {
-      band = 2;
-    } else if (vpw < 800) {
-      band = 3;
-    } else if (vpw < 900) {
-      band = 4;
-    } else {
-      band = 5;
-    }
+      const vpw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
-    if (this.widthBand !== band) {
-      this.widthBand = band;
-      this.appData.DisplayWidth$.next(band);
+      let band: number;
+
+      // Restict Weight and font-size for smaller screens
+      if (vpw < 400) {
+        band = 0;
+      } else if (vpw < 550) {
+        band = 1;
+      } else if (vpw < 700) {
+        band = 2;
+      } else if (vpw < 800) {
+        band = 3;
+      } else if (vpw < 900) {
+        band = 4;
+      } else {
+        band = 5;
+      }
+
+      if (this.widthBand !== band) {
+        this.widthBand = band;
+        this.appData.DisplayWidth$.next(band);
+      }
     }
   }
 

@@ -25,20 +25,25 @@ import { PointsService } from 'src/app/services/points.service';
 })
 export class PorqDetailsComponent implements OnInit {
 
-  groupName: string;
-  subGroupName: string;
-  issueTitle: string;
+  groupName = '';
+  subGroupName = '';
+  issueTitle = '';
 
-  porQID: number;
-  public porQ: PorQ;
+  porQID = 0;
+  public porQ = new PorQ();
 
-  pointCount: number;
-  public points: Point[];
+  pointCount = 0;
+  public points: Point[] = [];
 
   public PorQTypes = PorQTypes;
 
   public get porQType(): string {
-    return this.appData.PorQType(this.porQ.porQTypeID);
+    if (!this.porQ) {
+      this.error = 'Persective or question not initialised';
+      return 'unknown';
+    } else {
+      return this.appData.PorQType(this.porQ.porQTypeID);
+    }
   }
 
   editNewPoint = false;
@@ -107,18 +112,29 @@ export class PorqDetailsComponent implements OnInit {
 
     // now attach to this porQ
     // https://stackoverflow.com/questions/47152847/angular2getting-event-target-value
-    this.psAndQsService.PointAttachToPorQ(pointID, this.porQ.porQID)
-      .pipe(
-        // point attached, now fetch all points for PorQ
-        concatMap(res => this.pointsService.PorQPoints(this.porQ.porQID)
+
+    if (this.porQ) {
+
+      this.psAndQsService.PointAttachToPorQ(pointID, this.porQ.porQID)
+        .pipe(
+          // point attached, now fetch all points for PorQ
+          concatMap(_ => {
+            if (this.porQ?.porQID) {
+              return this.pointsService.PorQPoints(this.porQ.porQID);
+            } else {
+              const psr = new PointSelectionResult();
+              return of(psr);
+            }
+          }
+          )
         )
-      )
-      .subscribe(
-        {
-          next: (psr: PointSelectionResult) => this.points = psr.points,
-          error: serverError => this.error = serverError.error.detail
-        }
-      );
+        .subscribe(
+          {
+            next: (psr: PointSelectionResult) => this.points = psr.points,
+            error: serverError => this.error = serverError.error.detail
+          }
+        );
+    }
   }
 
   onPointDeleted(pointID: number): void {

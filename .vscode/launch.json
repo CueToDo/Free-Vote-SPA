@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "chrome",
+            "type": "pwa-chrome",
             "request": "launch",
-            "name": "Chrome on localhost",
-            "url": "http://localhost:7027",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}"
         }
     ]

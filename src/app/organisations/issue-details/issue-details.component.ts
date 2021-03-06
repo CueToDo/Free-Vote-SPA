@@ -26,20 +26,23 @@ import { PsandQsService } from 'src/app/services/psandqs.service';
 })
 export class IssueDetailsComponent implements OnInit {
 
-  organisationName: string;
-  groupName: string;
-  issueTitle: string;
-  issue: Issue;
+  organisationName = '';
+  groupName = '';
+  issueTitle = '';
+  issue = new Issue();
 
   public IssueStatuses = IssueStatuses;
   public ProposalStatuses = ProposalStatuses;
   public PorQTypes = PorQTypes;
 
   public get issueStatusID(): IssueStatuses {
+    if (!this.issue || !this.issue.statusID) {
+      return IssueStatuses.None;
+    }
     return this.issue.statusID;
   }
 
-  psOrQs: PorQ[];
+  psOrQs: PorQ[] = [];
 
   porQTypeID = PorQTypes.Question;
   proposalStatusID = ProposalStatuses.VotingYetToStart;
@@ -49,7 +52,7 @@ export class IssueDetailsComponent implements OnInit {
   }
 
   newPorQ = false;
-  newPorQTemplate: PorQEdit;
+  newPorQTemplate = new PorQEdit();
 
   error = '';
 
@@ -71,7 +74,7 @@ export class IssueDetailsComponent implements OnInit {
     this.issuesService.GetIssue(this.organisationName, this.groupName, this.issueTitle).pipe(
       concatMap(issue => {
         this.issue = issue;
-        const proposalStatusID = this.issuesService.DefaultProposalStatus(issue.statusID);
+        const proposalStatusID = this.issuesService.DefaultProposalStatus(issue?.statusID ? issue.statusID : IssueStatuses.None);
         return this.psandQsService.PsAndQsSelectIssue(this.issue.groupID,
           this.issue.issueID, this.porQTypeID, proposalStatusID, false);
       })).subscribe(
@@ -85,7 +88,7 @@ export class IssueDetailsComponent implements OnInit {
 
   NewPorQ(): void {
     this.newPorQTemplate = new PorQEdit();
-    this.newPorQTemplate.issueID = this.issue.issueID;
+    this.newPorQTemplate.issueID = this.issue?.issueID ? this.issue.issueID : 0;
     this.newPorQTemplate.porQID = -1;
     this.newPorQTemplate.porQTypeID = this.porQTypeID;
     this.newPorQ = true;
@@ -135,38 +138,51 @@ export class IssueDetailsComponent implements OnInit {
 
   getPsOrQs(): void {
 
-    this.error = '';
+    if (!this.issue) {
+      this.error = 'No issue selected';
+    } else {
+      this.error = '';
 
-    this.psandQsService.PsAndQsSelectIssue(this.issue.groupID,
-      this.issue.issueID, this.porQTypeID, this.proposalStatusID, false)
-      .subscribe(
-        {
-          next: (psr: PorQSelectionResult) => this.psOrQs = psr.psOrQs,
-          error: serverError => this.error = serverError.error.detail
-        }
-      );
+      this.psandQsService.PsAndQsSelectIssue(this.issue.groupID,
+        this.issue.issueID, this.porQTypeID, this.proposalStatusID, false)
+        .subscribe(
+          {
+            next: (psr: PorQSelectionResult) => this.psOrQs = psr.psOrQs,
+            error: serverError => this.error = serverError.error.detail
+          }
+        );
+    }
   }
 
   getCounts(): void {
-    this.issuesService.IssuePorQCounts(this.issue.issueID)
-      .subscribe(
-        {
-          next: (ipq: IssuePorQCounts) => {
 
-            this.issue.questions = ipq.questions;
-            this.issue.perspectives = ipq.perspectives;
-            this.issue.proposals = ipq.proposals;
+    if (!this.issue) {
+      this.error = 'No issue selected';
+    } else {
 
-            this.issue.perspectivesInDiscussion = ipq.perspectivesInDiscussion;
-            this.issue.perspectivesAccepted = ipq.perspectivesAccepted;
-            this.issue.perspectivesRejected = ipq.perspectivesRejected;
+      this.error = '';
 
-            this.issue.proposalsInDiscussion = ipq.proposalsInDiscussion;
-            this.issue.proposalsAccepted = ipq.proposalsAccepted;
-            this.issue.proposalsRejected = ipq.proposalsRejected;
-          },
-          error: serverError => this.error = serverError.error.detail
-        });
+      this.issuesService.IssuePorQCounts(this.issue.issueID)
+        .subscribe(
+          {
+            next: (ipq: IssuePorQCounts) => {
+              if (this.issue) {
+                this.issue.questions = ipq.questions;
+                this.issue.perspectives = ipq.perspectives;
+                this.issue.proposals = ipq.proposals;
+
+                this.issue.perspectivesInDiscussion = ipq.perspectivesInDiscussion;
+                this.issue.perspectivesAccepted = ipq.perspectivesAccepted;
+                this.issue.perspectivesRejected = ipq.perspectivesRejected;
+
+                this.issue.proposalsInDiscussion = ipq.proposalsInDiscussion;
+                this.issue.proposalsAccepted = ipq.proposalsAccepted;
+                this.issue.proposalsRejected = ipq.proposalsRejected;
+              }
+            },
+            error: serverError => this.error = serverError.error.detail
+          });
+    }
   }
 
   PorQDeleted(): void {

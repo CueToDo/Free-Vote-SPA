@@ -10,25 +10,26 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "strictPropertyInitialization": false,
     "downlevelIteration": true,
-    "experimentalDecorators": true, // https://www.typescriptlang.org/docs/handbook/decorators.html
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
+    "types": [
+      "node"
+    ],
+    "typeRoots": [ "../node_modules/@types" ],
     "module": "es2020",
     "lib": [
       "es2018",
       "dom"
-    ],
-    "types": [
-      "node",
-      "lodash"
     ]
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "fullTemplateTypeCheck": false,
+    "strictTemplates": false,
+    "types": [ "node" ]
   }
 }

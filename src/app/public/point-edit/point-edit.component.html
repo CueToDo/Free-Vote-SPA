@@ -8,9 +8,11 @@
   </div>
 
   <!-- The Editor -->
-  <ckeditor [editor]="ckeditor" [(ngModel)]="pointClone.pointHTML" name="point" [config]="appData.ckeConfig"
+  <!-- <ckeditor [editor]="ckeditor" [(ngModel)]="pointClone.pointHTML" name="point"
     debounce="250" required #tvPoint="ngModel" (blur)="onCKEBlur()">
-  </ckeditor>
+  </ckeditor> -->
+  <!-- [config]="appData.ckeConfig" -->
+  <app-cke-universal name="point" [(textToEdit)]="pointClone.pointHTML" (blur)="onCKEBlur()"></app-cke-universal>
 
   <!-- Link, YouTube and SoundCloud -->
   <div class="mx-3 pt-3">
@@ -32,15 +34,16 @@
         <div fxLayoutAlign="row">
 
           <mat-checkbox [(ngModel)]="pointClone.showLinkBeforeVote" name="showLinkbeforeVote"
-            [disabled]="showLinkBeforeVoteDisabled">show before vote</mat-checkbox>
+            (ngModelChange)="showLinkBeforeVote($event)" [disabled]="showLinkBeforeVoteDisabled">show before vote
+          </mat-checkbox>
 
           <mat-checkbox [(ngModel)]="pointClone.showLinkPreview" name="showLinkPreview"
             (ngModelChange)="showLinkPreview($event)" [disabled]="showLinkBeforeVoteDisabled">show preview
           </mat-checkbox>
 
           <mat-form-field fxFlex>
-            <input matInput [placeholder]="quoteOrLinkTextPlaceholder" [(ngModel)]="pointClone.linkText" name="quoteSource"
-              [disabled]="pointClone.showLinkPreview">
+            <input matInput [placeholder]="quoteOrLinkTextPlaceholder" [(ngModel)]="pointClone.linkText"
+              name="quoteSource" [disabled]="pointClone.showLinkPreview">
           </mat-form-field>
 
         </div>
@@ -148,7 +151,8 @@
       <span class="sr-only">Loading...</span>
     </span>
 
-    <span class="fv-error" *ngIf="userTouched && !tvPoint.valid">
+    <span class="fv-error" *ngIf="userTouched">
+      <!-- && !tvPoint.valid -->
       Point text is required
     </span>
 

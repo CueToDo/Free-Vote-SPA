@@ -13,7 +13,7 @@ import { MaterialModule } from '../material.module';
 import { CallbackComponent } from './callback/callback.component';
 
 // CKEditor
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+// import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 // FreeVote Modules
 import { CustomModule } from '../custommodule/custom.module';
@@ -37,6 +37,7 @@ import { QuestionsListComponent } from './questions-list/questions-list.componen
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionComponent } from './question/question.component';
 import { QuestionAnswersComponent } from './question-answers/question-answers.component';
+import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
 
 
 @NgModule({
@@ -46,7 +47,7 @@ import { QuestionAnswersComponent } from './question-answers/question-answers.co
     FormsModule,
     MaterialModule,
     FlexLayoutModule,
-    CKEditorModule,
+    // CKEditorModule,
     CustomModule
   ],
   declarations: [
@@ -69,7 +70,8 @@ import { QuestionAnswersComponent } from './question-answers/question-answers.co
     QuestionsListComponent,
     QuestionEditComponent,
     QuestionComponent,
-    QuestionAnswersComponent
+    QuestionAnswersComponent,
+    CkeUniversalComponent
   ],
   exports: [
     PointComponent,

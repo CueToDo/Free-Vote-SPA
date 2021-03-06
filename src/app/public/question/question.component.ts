@@ -18,8 +18,8 @@ import { QuestionsService } from 'src/app/services/questions.service';
 })
 export class QuestionComponent implements OnInit {
 
-  @Input() public question: Question;
-  @Input() questionCount: number;
+  @Input() public question = new Question();
+  @Input() questionCount = 0;
 
   @Output() QuestionDeleted = new EventEmitter();
 
@@ -41,20 +41,28 @@ export class QuestionComponent implements OnInit {
   }
 
   delete(): void {
-    if (confirm('Are you sure you wish to delete this question?')) {
-      this.questionsService.QuestionDelete(this.question.questionID)
-        .subscribe(
-          {
-            next: () => this.QuestionDeleted.emit(this.question.questionID),
-            // not looking at any result <<<
-            error: serverError => {
-              this.error = serverError.error.detail;
-              console.log(this.error);
-            }
-          });
 
+    this.error = '';
+    const questionID = this.question?.questionID;
+
+    if (questionID) {
+      if (confirm('Are you sure you wish to delete this question?')) {
+        this.questionsService.QuestionDelete(questionID)
+          .subscribe(
+            {
+              next: () => this.QuestionDeleted.emit(questionID),
+              // not looking at any result <<<
+              error: serverError => {
+                this.error = serverError.error.detail;
+                console.log(this.error);
+              }
+            });
+      }
+    } else {
+      this.error = 'Unknown question id - cannot be deleted';
     }
   }
+
 
   onCompleteEdit(): void {
     this.editing = false;
@@ -66,7 +74,7 @@ export class QuestionComponent implements OnInit {
 
   QuestionFeedback(supportLevelID: PointSupportLevels): void {
 
-    if (!this.question.voteIsUpdatable) {
+    if (!this.question?.voteIsUpdatable) {
       alert('Question vote up/down is not updatable');
     } else {
 
@@ -82,8 +90,10 @@ export class QuestionComponent implements OnInit {
       this.questionsService.QuestionVote(this.question.questionID, supportLevelID, false)
         .subscribe({
           next: response => {
-            this.question.supportLevelID = supportLevelID;
-            this.question.votedDate = response;
+            if (this.question) {
+              this.question.supportLevelID = supportLevelID;
+              this.question.votedDate = response;
+            }
           },
           error: serverError => {
             console.log(serverError);
@@ -113,16 +123,14 @@ export class QuestionComponent implements OnInit {
     this.QuestionFeedback(PointSupportLevels.Report);
   }
 
-  // OccupyHandSignals() {
-  //   window.open('https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals', '_blank');
-  // }
-
   QuestionLink(): string {
-    return `${this.localData.PreviousSlashTagSelected}/question/${this.question.questionID}`;
+    return `${this.localData.PreviousSlashTagSelected}/question/${this.question?.questionID}`;
   }
 
   SelectQuestion(): void {
-    this.localData.questionSelected = this.question.question;
+    if (this.question) {
+      this.localData.questionSelected = this.question.question;
+    }
   }
 
   anon(): void {

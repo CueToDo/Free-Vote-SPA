@@ -23,11 +23,11 @@ import { IssuesService } from 'src/app/services/issues.service';
 })
 export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input() organisationName: string;
-  @Input() groupName: string;
+  @Input() organisationName = '';
+  @Input() groupName = '';
 
-  @Input() issue: Issue;
-  @Input() inFocus: boolean;
+  @Input() issue= new Issue();
+  @Input() inFocus = false;
 
   @Output() Deleted = new EventEmitter();
 
@@ -42,12 +42,18 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get issueTitleKB(): string {
+    if (!this.issue || !this.issue.title) {
+      return '';
+    }
     return this.appData.kebabUri(this.issue.title);
   }
 
   public get issueTitleLink(): string {
-    // statusID > 2 for clickable link to issue details (ie NOT if still in prioritisation)
-    if (!this.inFocus && this.issue.statusID > 2) {
+    // statusID > 2 for clickable link to issue details
+    // (ie NOT if still in prioritisation)
+    if (!this.issue || !this.issue.statusID) {
+      return '.'; // Error: . = same page - empty string = home
+    } else if (this.issue.statusID > 2 && !this.inFocus) {
       // for subGroup component
       return `/groups/${this.groupNameKB}/${this.subGroupNameKB}/${this.issueTitleKB}`;
     } else {
@@ -59,7 +65,7 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   public saving = false;
   public saveMessage = '';
 
-  public error: string;
+  public error = '';
 
   public issueEdit = false;
   public issueDeleted = false;
@@ -68,8 +74,8 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   editTooltip = 'edit issue';
 
 
-  @ViewChild('voteSlider') voteSlider: MatSlider;
-  votechange$: Subscription;
+  @ViewChild('voteSlider') voteSlider!: MatSlider;
+  votechange$: Subscription | undefined;
 
   constructor(
     private issuesService: IssuesService,
@@ -78,13 +84,17 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
 
-    if (this.issue.statusID === IssueStatuses.Closed) {
-      this.editTooltip = 'Closed issues can\'t be edited';
+    if (this.issue) {
+
+      if (this.issue.statusID === IssueStatuses.Closed) {
+        this.editTooltip = 'Closed issues can\'t be edited';
+      }
+
+      if (this.issue.porQTotal > 0) {
+        this.deleteTooltip = 'Issues cannot be deleted with questions, perspectives or proposals';
+      }
     }
 
-    if (this.issue.porQTotal > 0) {
-      this.deleteTooltip = 'Issues cannot be deleted with questions, perspectives or proposals';
-    }
   }
 
   ngAfterViewInit(): void {
@@ -103,55 +113,77 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   delete(): void {
-    if (confirm('Are you sure you wish to delete this issue?')) {
-      this.saving = true;
-      this.issuesService.IssueDelete(this.issue.groupID, this.issue.issueID).subscribe(
-        {
-          next: () => {
-            this.saving = false;
-            this.issueDeleted = true;
-            this.saveMessage = 'deleted';
-          },
-          error: serverError => this.error = serverError.error.detail,
-          complete: () => this.Deleted.emit(true)
-        }
-      );
+
+    if (!this.issue) {
+      this.error = 'Issue not selected';
+    } else {
+
+      if (confirm('Are you sure you wish to delete this issue?')) {
+        this.saving = true;
+        this.issuesService.IssueDelete(this.issue.groupID, this.issue.issueID).subscribe(
+          {
+            next: () => {
+              this.saving = false;
+              this.issueDeleted = true;
+              this.saveMessage = 'deleted';
+            },
+            error: serverError => this.error = serverError.error.detail,
+            complete: () => this.Deleted.emit(true)
+          }
+        );
+      }
     }
   }
 
 
   issuepublish(publish: boolean): void {
-    this.saving = true;
-    this.issuesService.IssuePublish(this.issue.issueID, publish).subscribe(
-      {
-        next: () => {
-          this.saving = false;
-          if (publish) { this.saveMessage = 'published'; } else { this.saveMessage = 'unpublished'; }
-        },
-        error: serverError => this.error = serverError.error.detail
-      }
-    );
+
+    if (!this.issue) {
+      this.error = 'Issue not selected';
+    } else {
+
+      this.saving = true;
+      this.issuesService.IssuePublish(this.issue.issueID, publish).subscribe(
+        {
+          next: () => {
+            this.saving = false;
+            if (publish) { this.saveMessage = 'published'; } else { this.saveMessage = 'unpublished'; }
+          },
+          error: serverError => this.error = serverError.error.detail
+        }
+      );
+    }
   }
 
   instantVoteChange(event: MatSliderChange): void {
-    let priority = 0;
-    if (event.value) { priority = event.value; }
-    this.issue.voterPriority = priority;
+    if (!this.issue) {
+      this.error = 'Issue not selected';
+    } else {
+      let priority = 0;
+      if (event.value) { priority = event.value; }
+      this.issue.voterPriority = priority;
+    }
   }
 
   voteToDiscuss(priority: number): void {
-    this.saving = true;
-    this.issuesService.VoteToDiscuss(this.issue.issueID, priority).subscribe(
-      {
-        next: ipv => {
-          this.issue.prioritisationVotes = ipv.prioritisationVotes;
-          this.issue.voteCastDateTime = ipv.voteCastDateTime;
-          this.saveMessage = 'vote saved';
-          this.saving = false;
-        },
-        error: serverError => this.error = serverError.error.detail
-      }
-    );
+    if (!this.issue) {
+      this.error = 'Issue not selected';
+    } else {
+      this.saving = true;
+      this.issuesService.VoteToDiscuss(this.issue.issueID, priority).subscribe(
+        {
+          next: ipv => {
+            if (this.issue) {
+              this.issue.prioritisationVotes = ipv.prioritisationVotes;
+              this.issue.voteCastDateTime = ipv.voteCastDateTime;
+              this.saveMessage = 'vote saved';
+            }
+            this.saving = false;
+          },
+          error: serverError => this.error = serverError.error.detail
+        }
+      );
+    }
   }
 
   ngOnDestroy(): void {

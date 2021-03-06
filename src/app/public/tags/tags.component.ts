@@ -27,7 +27,7 @@ import { debounceTime } from 'rxjs/operators';
 export class TagsComponent implements OnInit, OnDestroy {
 
   tagCloudType = TagCloudTypes.Trending;
-  tags: Tag[];
+  tags: Tag[] = [];
 
   @Output() haveTags = new EventEmitter<boolean>();
   @Output() NewSlashTagSelected = new EventEmitter<string>();
@@ -36,12 +36,12 @@ export class TagsComponent implements OnInit, OnDestroy {
   hideTags = false;
   toggleText = 'hide tags';
 
-  pointsSelected$: Subscription;
-  tags$: Subscription;
+  pointsSelected$?: Subscription;
+  tags$?: Subscription;
 
   // Viewport width monitoring
-  width$: Subscription;
-  widthBand: number;
+  width$?: Subscription;
+  widthBand = 4;
 
   @Input()
   set TagCloudType(value: TagCloudTypes) {
@@ -90,6 +90,7 @@ export class TagsComponent implements OnInit, OnDestroy {
   FontSize(Weight: number): string {
 
     // Restict Weight and font-size for smaller screens
+
     if (this.widthBand < 1 && Weight > 0) {
       Weight = 0;
     } else if (this.widthBand < 2 && Weight > 1) {
@@ -118,8 +119,8 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.pointsSelected$) { this.pointsSelected$.unsubscribe(); } // Not set for Trending
-    this.tags$.unsubscribe();
-    this.width$.unsubscribe();
+    this.tags$?.unsubscribe();
+    this.width$?.unsubscribe();
   }
 
 }

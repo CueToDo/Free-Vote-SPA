@@ -18,16 +18,16 @@ import { ActivatedRoute } from '@angular/router';
 export class GroupsComponent implements OnInit {
 
   // Parent organisation
-  organisationName: string;
-  organisationID: number;
+  organisationName = '';
+  organisationID = 0;
 
   // groups: Group[];
   // groupsFiltered: Group[];
-  groupSelected: string;
+  groupSelected = '';
   // newGroupTemplate: Group;
   creatingNewGroup = false;
 
-  error: string;
+  error = '';
 
   constructor(
     private activeRoute: ActivatedRoute,

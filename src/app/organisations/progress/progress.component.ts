@@ -13,9 +13,9 @@ import { IssueStatuses, ProposalStatuses } from '../../models/enums';
 })
 export class ProgressComponent implements OnInit {
 
-  @Input() Group: Group;
-  @Input() issueStatusID: IssueStatuses;
-  @Input() proposalStatusID: ProposalStatuses;
+  @Input() Group = new Group();
+  @Input() issueStatusID = IssueStatuses.None;
+  @Input() proposalStatusID = ProposalStatuses.None;
 
   @Output() IssueStatusSelected = new EventEmitter();
   @Output() ProposalStatusSelected = new EventEmitter();
@@ -31,7 +31,7 @@ export class ProgressComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  setIssueStatus(issueStatusID: IssueStatuses) {
+  setIssueStatus(issueStatusID: IssueStatuses): void {
     // Check if in middle of entering new issue
     if (this.confirmCancelNew()) {
       this.issueStatusID = issueStatusID;
@@ -44,7 +44,7 @@ export class ProgressComponent implements OnInit {
     }
   }
 
-  setProposalStatus(proposalStatusID: ProposalStatuses) {
+  setProposalStatus(proposalStatusID: ProposalStatuses): void {
     // Check if in middle of entering new issue
     if (this.confirmCancelNew()) {
       console.log('setProposalStatus CANCEL NEW');
@@ -58,7 +58,7 @@ export class ProgressComponent implements OnInit {
     }
   }
 
-  newIssue() {
+  newIssue(): void {
 
     this.NewIssue = true;
 

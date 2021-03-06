@@ -6,7 +6,8 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../material.module';
 
 // CKEditor
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+// "@ckeditor/ckeditor5-angular": "^2.0.1", package.json
+// import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 // Pipes
 import { TagDisplayPipe } from './pipes/tag-display.pipe';
@@ -25,7 +26,7 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     CommonModule,
     FormsModule,
     RouterModule,
-    CKEditorModule,
+    // CKEditorModule,
     MaterialModule
   ],
   declarations: [

@@ -8,7 +8,6 @@ import { PointSupportLevels, PointFlags, PointTypesEnum } from '../../models/enu
 // Services
 import { PointsService } from '../../services/points.service';
 import { LocalDataService } from '../../services/local-data.service';
-import { stringify } from '@angular/compiler/src/util';
 
 
 @Component({
@@ -19,32 +18,39 @@ import { stringify } from '@angular/compiler/src/util';
 })
 export class PointComponent implements OnInit {
 
-  @Input() point: Point;
-  @Input() pointCount: number;
-  @Input() isPorQPoint: boolean;
-  @Input() possibleAnswer: boolean;
-  @Input() isMyAnswer: boolean;
+  @Input() point = new Point();
+  @Input() pointCount = 0;
+  @Input() isPorQPoint = false;
+  @Input() possibleAnswer = false;
+  @Input() isMyAnswer = false;
 
   @Output() PointDeleted = new EventEmitter();
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
 
   // bind to point slashtags (not topic)
-  slashTags: string[];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
-  youTubeIDs: string[];
-  vimeoIDs: string[];
-  soundCloudTrackIDs: string[];
-  pointHTMLwithoutEmbed: string;
+  slashTags: string[] = [];  // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
+  youTubeIDs: string[] = [];
+  vimeoIDs: string[] = [];
+  soundCloudTrackIDs: string[] = [];
+  pointHTMLwithoutEmbed = '';
 
   editing = false;
   justUpdated = false;
   updatingPreview = false;
 
+  public PointSupportLevels = PointSupportLevels;
+
   get showLink(): boolean {
-    return this.appData.ShowSource(this.point.pointTypeID);
+    if (!this.point) {
+      this.error = 'Missing: point';
+      return false;
+    } else {
+      return this.appData.ShowSource(this.point.pointTypeID);
+    }
   }
 
-  error: string;
+  error = '';
 
   // https://stackoverflow.com/questions/37277527/how-to-use-enum-in-angular-2-templates
   // https://stackoverflow.com/questions/35923744/pass-enums-in-angular2-view-templates
@@ -78,7 +84,7 @@ export class PointComponent implements OnInit {
 
     this.AssignTags();
 
-    if (this.point.isNewSource) {
+    if (this.point?.isNewSource) {
       // Will not be newSource if not showLinkPreview - so no redundant check
       // A new point has been added to the list but meta data has not been retrieved yet for source
       this.FetchMetaData();
@@ -90,15 +96,24 @@ export class PointComponent implements OnInit {
   AssignTags(): void {
     // Filter out current tag
     // SlashTagSelected updated as soon as tag clicked
-    this.slashTags = this.point.slashTags.filter(tag => tag.toLowerCase() !== this.localData.PreviousSlashTagSelected.toLowerCase());
+    if (!this.point) {
+      this.error = 'Missing: point';
+    } else {
+      this.slashTags = this.point.slashTags.filter(tag => tag.toLowerCase() !== this.localData.PreviousSlashTagSelected.toLowerCase());
+    }
   }
 
   // PointTitle or PointID to be able to select single point
   get SelectSingleTitle(): string {
-    if (!!this.point.pointLink) {
-      return this.point.pointLink;
+    if (!this.point) {
+      this.error = 'Missing: point';
+      return '';
     } else {
-      return this.point.pointID.toString();
+      if (!!this.point.pointLink) {
+        return this.point.pointLink;
+      } else {
+        return this.point.pointID.toString();
+      }
     }
   }
 
@@ -106,83 +121,92 @@ export class PointComponent implements OnInit {
 
     // https://ckeditor.com/docs/ckeditor5/latest/features/media-embed.html
 
-    this.youTubeIDs = [];
-    if (this.point.youTubeID) {
-      this.youTubeIDs.push(this.point.youTubeID);
-    }
+    if (!this.point) {
+      this.error = 'Missing: point';
+    } else {
 
-    this.soundCloudTrackIDs = [];
-    if (this.point.soundCloudTrackID) {
-      this.soundCloudTrackIDs.push(this.point.soundCloudTrackID);
-    }
-
-    this.vimeoIDs = [];
-
-    const split = this.point.pointHTML.split('<figure class="media">');
-
-    console.log(split.length, split[1]);
-
-    if (split.length > 0) {
-
-      let i: number;
-      let oembedPlus: string[];
-      let url: string;
-      let id = '';
-      let urlParts = [];
-
-      for (i = 1; i < split.length; i++) {
-
-        oembedPlus = split[i].split('</figure>');
-        url = oembedPlus[0].split('"')[1];
-        urlParts = url.split('/');
-
-        if (url.includes('youtu.be')) {
-          id = urlParts[urlParts.length - 1];
-          this.youTubeIDs.push(id);
-        } else if (url.includes('youtube.com')) {
-          id = urlParts[urlParts.length - 1].split('v=')[1];
-          this.youTubeIDs.push(id);
-        } else if (url.includes('vimeo.com')) {
-          id = urlParts[urlParts.length - 1];
-          this.vimeoIDs.push(id);
-        } else if (url.includes('soundcloud')) {
-
-        }
-        split[i] = oembedPlus[1]; // Use only what's after the figure element
+      this.youTubeIDs = [];
+      if (this.point.youTubeID) {
+        this.youTubeIDs.push(this.point.youTubeID);
       }
-    }
 
-    this.pointHTMLwithoutEmbed = split.join(''); // pointHTML stripped of <figure> elements added by ckEditor for media embed
+      this.soundCloudTrackIDs = [];
+      if (this.point.soundCloudTrackID) {
+        this.soundCloudTrackIDs.push(this.point.soundCloudTrackID);
+      }
+
+      this.vimeoIDs = [];
+
+      const split = this.point.pointHTML.split('<figure class="media">');
+
+      if (split.length > 0) {
+
+        let i: number;
+        let oembedPlus: string[];
+        let url: string;
+        let id = '';
+        let urlParts = [];
+
+        for (i = 1; i < split.length; i++) {
+
+          oembedPlus = split[i].split('</figure>');
+          url = oembedPlus[0].split('"')[1];
+          urlParts = url.split('/');
+
+          if (url.includes('youtu.be')) {
+            id = urlParts[urlParts.length - 1];
+            this.youTubeIDs.push(id);
+          } else if (url.includes('youtube.com')) {
+            id = urlParts[urlParts.length - 1].split('v=')[1];
+            this.youTubeIDs.push(id);
+          } else if (url.includes('vimeo.com')) {
+            id = urlParts[urlParts.length - 1];
+            this.vimeoIDs.push(id);
+          } else if (url.includes('soundcloud')) {
+
+          }
+          split[i] = oembedPlus[1]; // Use only what's after the figure element
+        }
+      }
+
+      this.pointHTMLwithoutEmbed = split.join(''); // pointHTML stripped of <figure> elements added by ckEditor for media embed
+    }
   }
 
   PointFeedback(pointSupportLevel: PointSupportLevels): void {
 
-    if (!this.point.pointFeedback.feedbackIsUpdatable) {
-      alert('Feedback is not updatable');
+    if (!this.point) {
+      this.error = 'Missing: point';
     } else {
 
-      if (this.point.pointFeedback.supportLevelID === pointSupportLevel && !this.point.pointFeedback.pointModified) {
-        // If clicked on the current support level then delete it
-        if (confirm('Are you sure you wish to delete your feedback?')) {
-          pointSupportLevel = PointSupportLevels.None;
-        } else {
-          return; // Cancel feedback delete
-        }
-      }
+      if (!this.point.pointFeedback.feedbackIsUpdatable) {
+        alert('Feedback is not updatable');
+      } else {
 
-      this.pointsService.PointFeedback(this.point.pointID, pointSupportLevel, '', false)
-        .subscribe({
-          next: response => {
-            console.log('FEEDBACK API RESPONSE', response);
-            this.point.pointFeedback = response as PointFeedback;
-            console.log('CLIENT DATA UPDATED PointSupportlevel: ', this.point.pointFeedback.supportLevelID);
-          },
-          error: serverError => {
-            console.log('PointFeedback Error', serverError);
-            this.error = serverError.error.detail;
+        if (this.point.pointFeedback.supportLevelID === pointSupportLevel && !this.point.pointFeedback.pointModified) {
+          // If clicked on the current support level then delete it
+          if (confirm('Are you sure you wish to delete your feedback?')) {
+            pointSupportLevel = PointSupportLevels.None;
+          } else {
+            return; // Cancel feedback delete
           }
-        });
+        }
 
+        this.pointsService.PointFeedback(this.point.pointID, pointSupportLevel, '', false)
+          .subscribe({
+            next: response => {
+              console.log('FEEDBACK API RESPONSE', response);
+              if (this.point) {
+                this.point.pointFeedback = response as PointFeedback;
+              }
+              console.log('CLIENT DATA UPDATED PointSupportlevel: ', this.point?.pointFeedback?.supportLevelID);
+            },
+            error: serverError => {
+              console.log('PointFeedback Error', serverError);
+              this.error = serverError.error.detail;
+            }
+          });
+      }
     }
   }
 
@@ -199,7 +223,12 @@ export class PointComponent implements OnInit {
   }
 
   favoriteIcon(): string {
-    return this.point.isFavourite ? 'favorite' : 'favorite_border';
+    if (!this.point) {
+      this.error = 'Missing: point';
+      return '';
+    } else {
+      return this.point.isFavourite ? 'favorite' : 'favorite_border';
+    }
   }
 
   WoW(): void {
@@ -225,11 +254,18 @@ export class PointComponent implements OnInit {
 
     // Update WoW
 
-    this.pointsService.PointWoWVote(this.point.pointID, !this.point.pointFeedback.woWVote)
-      .subscribe(
-        pointFeedback => {
-          this.point.pointFeedback = pointFeedback; // Toggle the WoW vote
-        });
+    if (!this.point) {
+      this.error = 'Missing: point';
+    } else {
+
+      this.pointsService.PointWoWVote(this.point.pointID, !this.point.pointFeedback.woWVote)
+        .subscribe(
+          pointFeedback => {
+            if (this.point) {
+              this.point.pointFeedback = pointFeedback; // Toggle the WoW vote
+            }
+          });
+    }
   }
 
   Support(): void {
@@ -261,27 +297,46 @@ export class PointComponent implements OnInit {
   }
 
   delete(): void {
-    if (confirm('Are you sure you wish to delete this point?')) {
-      this.pointsService.PointDelete(this.point.pointID)
-        .subscribe(
-          {
-            next: () => this.PointDeleted.emit(this.point.pointID),
-            // not looking at any result <<<
-            error: serverError => {
-              this.error = serverError.error.detail;
-              console.log(this.error);
-            }
-          });
 
+    if (!this.point) {
+      this.error = 'Missing: point';
+    } else {
+
+      if (confirm('Are you sure you wish to delete this point?')) {
+        this.pointsService.PointDelete(this.point.pointID)
+          .subscribe(
+            {
+              next: _ => {
+                if (this.point) {
+                  this.PointDeleted.emit(this.point.pointID);
+                }
+              },
+              // not looking at any result <<<
+              error: serverError => {
+                this.error = serverError.error.detail;
+                console.log(this.error);
+              }
+            });
+      }
     }
   }
 
 
   favourite(): void {
-    const deleteFavourite = this.point.isFavourite;
 
-    this.pointsService.PointFlag(deleteFavourite, this.point.pointID, PointFlags.Favourite)
-      .subscribe(() => this.point.isFavourite = !deleteFavourite);
+    if (!this.point) {
+      this.error = 'Missing: point';
+    } else {
+
+      const deleteFavourite = this.point.isFavourite;
+
+      this.pointsService.PointFlag(deleteFavourite, this.point.pointID, PointFlags.Favourite)
+        .subscribe(_ => {
+          if (this.point) {
+            this.point.isFavourite = !deleteFavourite;
+          }
+        });
+    }
   }
 
   onCancelEdit(): void {
@@ -290,34 +345,47 @@ export class PointComponent implements OnInit {
 
   onCompleteEdit(): void {
 
-    this.AssignTags();
-    this.extractMediaEmbeds();
+    if (!this.point) {
+      this.error = 'Missing: point';
+    } else {
 
-    if (this.point.pointFeedback.supportLevelID !== PointSupportLevels.None) {
-      this.point.pointFeedback.pointModified = true;
+      this.AssignTags();
+      this.extractMediaEmbeds();
+
+      if (this.point.pointFeedback.supportLevelID !== PointSupportLevels.None) {
+        this.point.pointFeedback.pointModified = true;
+      }
+
+      this.justUpdated = true;
+
+      this.FetchMetaData();
+
+      this.editing = false;
     }
-
-    this.justUpdated = true;
-
-    this.FetchMetaData();
-
-    this.editing = false;
   }
 
   FetchMetaData(): void {
-    // If it's a newSource, it will be showLinkPreview
-    // but could be called from point update where isNew is false and showLinkPreview is true
-    if (this.point.linkAddress && this.point.showLinkPreview) {
-      // Get Link metadata for preview
-      // Also handled in new point in tags-points component
-      this.updatingPreview = true;
-      this.pointsService.PointSourceMetaDataUpdate(this.point.pointID, this.point.linkAddress)
-        .subscribe(metaData => {
-          this.point.linkTitle = metaData.title;
-          this.point.linkDescription = metaData.description;
-          this.point.linkImage = metaData.image;
-          this.updatingPreview = false;
-        });
+
+    if (!this.point) {
+      this.error = 'Missing: point';
+    } else {
+
+      // If it's a newSource, it will be showLinkPreview
+      // but could be called from point update where isNew is false and showLinkPreview is true
+      if (this.point.linkAddress && this.point.showLinkPreview) {
+        // Get Link metadata for preview
+        // Also handled in new point in tags-points component
+        this.updatingPreview = true;
+        this.pointsService.PointSourceMetaDataUpdate(this.point.pointID, this.point.linkAddress)
+          .subscribe(metaData => {
+            if (this.point) {
+              this.point.linkTitle = metaData.title;
+              this.point.linkDescription = metaData.preview;
+              this.point.linkImage = metaData.previewImage;
+            }
+          });
+        this.updatingPreview = false;
+      }
     }
   }
 

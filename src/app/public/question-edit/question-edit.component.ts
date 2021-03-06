@@ -22,7 +22,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
 export class QuestionEditComponent implements OnInit {
 
   @Input() public question = new Question();
-  questionEdit: QuestionEdit;
+  questionEdit!: QuestionEdit;
 
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();

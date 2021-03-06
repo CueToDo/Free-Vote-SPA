@@ -7,23 +7,23 @@ import { PorQTypes } from './enums';
 import { ID } from './common';
 
 export class PorQ {
-  issueID: number;
-  porQID: number;
-  public porQTypeID: PorQTypes;
-  porQ: string;
-  title: string;
-  porQOwner: boolean;
+  issueID = 0;
+  porQID = 0;
+  public porQTypeID = PorQTypes.Perspective;
+  porQ = '';
+  title = '';
+  porQOwner = false;
 
-  points: number;
-  feedback: number;
-  voteCount: number;
+  points = 0;
+  feedback = 0;
+  voteCount = 0;
 
-  dateTime: string;
-  latestActivity: string;
+  dateTime = '';
+  latestActivity = '';
 
-  supportLevel: number;
-  adoptYNS: string;
-  adopted: boolean;
+  supportLevel = 0;
+  adoptYNS = '';
+  adopted = false;
 
   // Cannot access this as property or function even on deep copy cast as PorQ - WHY?
   // Use appData PorQType
@@ -43,20 +43,20 @@ export class PorQ {
 
 export class PorQSelectionResult {
 
-  porQCount: number;
+  porQCount = 0;
 
-  porQIDs: ID[];
-  fromDate: string;
-  toDate: string;
+  porQIDs: ID[] = [];
+  fromDate = '';
+  toDate = '';
 
-  psOrQs: PorQ[];
+  psOrQs: PorQ[] = [];
 }
 
 export class PorQEdit {
-  public issueID: number;
-  public porQID: number;
-  public porQTypeID: PorQTypes;
-  public title: string;
-  public porQ: string;
-  public draft: boolean;
+  public issueID = 0;
+  public porQID = 0;
+  public porQTypeID = PorQTypes.Perspective;
+  public title = '';
+  public porQ = '';
+  public draft = false;
 }

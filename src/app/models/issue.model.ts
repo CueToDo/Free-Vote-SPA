@@ -6,118 +6,118 @@ import { IssuePhases, IssueStatuses } from './enums';
 import { ID } from './common';
 
 export class GroupIssueCounts {
-  countsUpdated: number;
-  issuesNotInPrioritisation: number;
-  issuesInPrioritisation: number;
-  issuesInDiscussion: number;
-  issuesInProposalVoting: number;
-  issuesClosed: number;
+  countsUpdated = 0;
+  issuesNotInPrioritisation = 0;
+  issuesInPrioritisation = 0;
+  issuesInDiscussion = 0;
+  issuesInProposalVoting = 0;
+  issuesClosed = 0;
 }
 
 export class IssueSelectionResult {
 
-  issueCount: number; // number of issues selected
+  issueCount = 0; // number of issues selected
 
-  issueIDs: ID[];
-  fromDate: string;
-  toDate: string;
+  issueIDs: ID[] = [];
+  fromDate = '';
+  toDate = '';
 
-  issues: Issue[];
+  issues: Issue[] = [];
 
-  groupIssueCounts: GroupIssueCounts; // Group totals
+  groupIssueCounts = new GroupIssueCounts(); // Group totals
 }
 
 export class Issue {
 
   // Ownership
-  organisationID: number;
-  groupID: number;
-  isIssueOwner: boolean;
+  organisationID = 0;
+  groupID = 0;
+  isIssueOwner = false;
 
   // Issue details
-  issueID: number;
-  title: string;
-  context: string;
-  publish: boolean;
-  dateTimeCreated: string;
+  issueID = 0;
+  title = '';
+  context = '';
+  publish = false;
+  dateTimeCreated = '';
 
   // Prioritisation
-  selectionDateEarliest: Date;
-  selectionDateLatest: Date;
-  prioritisationVotes: number;
-  prioritisationPoints: number;
-  prioritisationRank: number;
+  selectionDateEarliest = new Date();
+  selectionDateLatest = new Date();
+  prioritisationVotes = 0;
+  prioritisationPoints = 0;
+  prioritisationRank = 0;
 
   // Voter's Prioritisation
-  voterPrioritised: boolean;
-  voterPrioritisedAnon: boolean;
-  voterPriority: number;
-  voteCastDateTime: string;
+  voterPrioritised = false;
+  voterPrioritisedAnon = false;
+  voterPriority = 0;
+  voteCastDateTime = '';
 
   // Selection and Progress
-  selectedDateTime: string;
-  proposalVotingStarts: string;
-  decisionDeadline: string;
-  jumpStarted: boolean;
+  selectedDateTime = '';
+  proposalVotingStarts = '';
+  decisionDeadline = '';
+  jumpStarted = false;
 
-  phaseID: IssuePhases;
-  statusID: IssueStatuses;
+  phaseID = IssuePhases.Prioritise;
+  statusID = IssueStatuses.None;
 
-  progress: string;
-  phase: string;
-  stage: string;
-  status: string;
+  progress = '';
+  phase = '';
+  stage = '';
+  status = '';
 
   // PorQ Count
-  perspectivesInDiscussion: number;
-  perspectivesAccepted: number;
-  perspectivesRejected: number;
+  perspectivesInDiscussion = 0;
+  perspectivesAccepted = 0;
+  perspectivesRejected = 0;
 
-  proposalsInDiscussion: number;
-  proposalsAccepted: number;
-  proposalsRejected: number;
+  proposalsInDiscussion = 0;
+  proposalsAccepted = 0;
+  proposalsRejected = 0;
 
-  questions: number;
-  perspectives: number;
-  proposals: number;
-  porQTotal: number;
-  points: number;
-  feedback: number;
+  questions = 0;
+  perspectives = 0;
+  proposals = 0;
+  porQTotal = 0;
+  points = 0;
+  feedback = 0;
 }
 
 export class IssueEdit {
 
   // Ownership
-  public groupIDOwner: number;
-  public subGroupID: number;
+  public groupIDOwner = 0;
+  public subGroupID = 0;
 
   // Issue Details
-  public issueID: number;
-  public title: string;
-  public context: string;
+  public issueID = 0;
+  public title = '';
+  public context = '';
 
   // Prioritisation
-  public publish: boolean;
-  public selectionDateEarliest: Date;
-  public selectionDateLatest: Date;
+  public publish = false;
+  public selectionDateEarliest = new Date();
+  public selectionDateLatest = new Date();
 }
 
 export class IssuePrioritisationVote {
-  public prioritisationVotes: number;
-  public voteCastDateTime: string;
+  public prioritisationVotes = 0;
+  public voteCastDateTime = '';
 }
 
 export class IssuePorQCounts {
 
-  questions: number;
-  perspectives: number;
-  proposals: number;
+  questions = 0;
+  perspectives = 0;
+  proposals = 0;
 
-  perspectivesInDiscussion: number;
-  perspectivesAccepted: number;
-  perspectivesRejected: number;
+  perspectivesInDiscussion = 0;
+  perspectivesAccepted = 0;
+  perspectivesRejected = 0;
 
-  proposalsInDiscussion: number;
-  proposalsAccepted: number;
-  proposalsRejected: number;
+  proposalsInDiscussion = 0;
+  proposalsAccepted = 0;
+  proposalsRejected = 0;
 }

@@ -36,11 +36,11 @@ enum tabs {
 export class TagsPointsComponent implements OnInit, OnDestroy {
 
   // Subscriptions
-  showPointsTab$: Subscription;
-  reSelectPoints$: Subscription;
-  pointsFilterRemove$: Subscription;
-  width$: Subscription; // Viewport width monitoring
-  widthBand: number;
+  showPointsTab$: Subscription | undefined;
+  reSelectPoints$: Subscription | undefined;
+  pointsFilterRemove$: Subscription | undefined;
+  width$: Subscription | undefined; // Viewport width monitoring
+  widthBand = 4;
 
   externalTrigger = false; // Set on subscriptions
   applyingFilter = false; // prevent cascading trigger
@@ -48,14 +48,14 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   // Public variables for use in template
   public tabIndex = tabs.recentTags;
 
-  public topicSelected: string;
+  public topicSelected = '';
   public get slashTagSelected(): string { return this.localData.TopicToSlashTag(this.topicSelected); }
 
   public TagCloudTypes = TagCloudTypes;
   public haveRecentSlashTags = false;
   refreshRecent = false;
 
-  qp = 'question';
+  qp = 'question'; // bound to radio button value
 
   public get questions(): boolean {
     return this.qp === 'question';
@@ -78,10 +78,10 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
 
   // use TRV in parent template https://stackblitz.com/edit/angular-vjbf4s?file=src%2Fapp%2Fcart-table-modal.component.ts
   // use child component type in parent component https://stackoverflow.com/questions/31013461/call-a-method-of-the-child-component
-  @ViewChild(PointsComponent, { static: false }) appPoints: PointsComponent;
-  @ViewChild('tagsRecent') tagsRecent: TagsComponent;
-  @ViewChild('newPoint') newPointComponent: PointEditComponent;
-  @ViewChild('newQuestion') newQuestionComponent: QuestionEditComponent;
+  @ViewChild(PointsComponent, { static: false }) appPoints!: PointsComponent;
+  @ViewChild('tagsRecent') tagsRecent!: TagsComponent;
+  @ViewChild('newPoint') newPointComponent!: PointEditComponent;
+  @ViewChild('newQuestion') newQuestionComponent!: QuestionEditComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -192,6 +192,11 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     // The ActivatedRoute dies with the routed component and so
     // the subscription dies with it.
     this.activatedRoute.paramMap.subscribe(params => {
+
+      const titleParam = params.get('title');
+      if (titleParam) {
+        this.qp = 'point';
+      }
 
       const tag = params.get('tag');
       if (tag) {
@@ -441,10 +446,10 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.showPointsTab$.unsubscribe();
-    this.reSelectPoints$.unsubscribe();
-    this.pointsFilterRemove$.unsubscribe();
-    this.width$.unsubscribe();
+    this.showPointsTab$?.unsubscribe();
+    this.reSelectPoints$?.unsubscribe();
+    this.pointsFilterRemove$?.unsubscribe();
+    this.width$?.unsubscribe();
   }
 
 }

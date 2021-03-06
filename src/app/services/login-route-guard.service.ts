@@ -6,11 +6,11 @@ import { LocalDataService } from './local-data.service';
 @Injectable({ providedIn: 'root' })
 export class LoginRouteGuardService implements CanActivate {
 
-  currentDate: Date;
+  currentDate = new Date();
 
   constructor(private localData: LocalDataService) { }
 
-  canActivate() {
+  canActivate(): boolean {
     this.currentDate = new Date();
     return this.localData.loggedInToAuth0;
   }

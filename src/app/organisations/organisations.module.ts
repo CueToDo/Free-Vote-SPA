@@ -9,7 +9,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from 'src/app/material.module';
 
 // CKEditor
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+// import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 // Modules
 import { PublicModule } from 'src/app/public/public.module';
@@ -57,7 +57,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     FlexLayoutModule,
     MaterialModule,
-    CKEditorModule,
+    // CKEditorModule,
     PublicModule,
     CustomModule
   ],

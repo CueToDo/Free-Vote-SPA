@@ -7,7 +7,7 @@ export class FilterCriteria {
     single = false;
 
     // SlashTag
-    slashTag: string;
+    slashTag = '';
     anyTag = false;
     previouslyFilteringAnyTag = false;
 
@@ -15,14 +15,14 @@ export class FilterCriteria {
     questionId = 0;
 
     // Alias Filter
-    applyAliasFilter: boolean;
+    applyAliasFilter = false;
     byAlias = '';
     previouslyFilteringByAlias = false;
 
     // Text Filter
-    applyTextFilter: boolean;
+    applyTextFilter = false;
     previouslyFilteringByText = false;
-    text: string;
+    text = '';
 
     // Point Type
     questions = false; // from Tags-Points component
@@ -34,19 +34,19 @@ export class FilterCriteria {
     // Date Filter
     // Typescript can help, but javascript still rules ???
     // Important that a new date object is created ???
-    applyDateFilter: boolean;
+    applyDateFilter = false;
     previouslyFilteringByDate = false;
     dateFrom = new Date(Date.now()); // Will be updated on selection
     dateTo = new Date(Date.now()); // Will be updated on selection
 
     // Flagged as Favourite/Important
-    applyFavouritesFilter: boolean;
+    applyFavouritesFilter = false;
     favourites = false;
     previouslyFilteringFavourites = false;
     pointFlag = PointFlags.Any; // Could be Favourite or Important // Currently only Favourites
 
     // My Points or Questions
-    myPoints: boolean;
+    myPoints = false;
     previouslyFilteringMyPoints = false;
 
     // QuestionPoints
@@ -58,7 +58,7 @@ export class FilterCriteria {
     draftStatus = DraftStatusFilter.Any;
 
     // Whether Feedback Given
-    applyFeedbackFilter: boolean;
+    applyFeedbackFilter = false;
     previouslyFilteringByFeedback = false;
     feedbackFilter = PointFeedbackFilter.Any;
 

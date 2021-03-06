@@ -22,33 +22,45 @@ import { OrganisationsService } from 'src/app/services/groups.service';
 })
 export class OrganisationComponent implements OnInit, OnDestroy {
 
-  public OrganisationDisplay: Organisation;
+  public OrganisationDisplay = new Organisation();
   @Output() Refresh = new EventEmitter();
 
   public GeographicalExtentID = GeographicalExtentID;
 
-  groupCopy: Organisation;
+  groupCopy = new Organisation();
   groupEdit = false;
   membershipMessage = '';
 
-  newGroupTemplate: Group;
+  newGroupTemplate = new Group();
   creatingNewGroup = false;
 
-  error: string;
+  error = '';
 
   get showCountries(): boolean {
+    if (!this.OrganisationDisplay) {
+      return false;
+    }
     return this.appData.ShowCountries(this.OrganisationDisplay.geographicalExtentID);
   }
 
   get showRegions(): boolean {
+    if (!this.OrganisationDisplay) {
+      return false;
+    }
     return this.appData.ShowRegions(this.OrganisationDisplay.geographicalExtentID);
   }
 
   get showCities(): boolean {
+    if (!this.OrganisationDisplay) {
+      return false;
+    }
     return this.appData.ShowCities(this.OrganisationDisplay.geographicalExtentID);
   }
 
   issuesLink(group: string): string {
+    if (!this.OrganisationDisplay) {
+      return '';
+    }
     return `/organisations/${this.appData.kebabUri(this.OrganisationDisplay.organisationName)}/${this.appData.kebabUri(group)}`;
   }
 
@@ -85,57 +97,89 @@ export class OrganisationComponent implements OnInit, OnDestroy {
     this.error = '';
     this.membershipMessage = '';
 
-    this.groupsService.Join(this.OrganisationDisplay.organisationID).subscribe(
-      {
-        next: members => {
-          this.OrganisationDisplay.organisationMember = true;
-          this.OrganisationDisplay.members = members;
-          this.membershipMessage = 'you have joined the group';
-        },
-        error: serverError => this.error = serverError.error.detail
-      }
-    );
+    if (!this.OrganisationDisplay) {
+      this.error = 'No organisation to display';
+    } else {
+
+      this.groupsService.Join(this.OrganisationDisplay.organisationID).subscribe(
+        {
+          next: members => {
+            if (this.OrganisationDisplay) {
+              this.OrganisationDisplay.organisationMember = true;
+              this.OrganisationDisplay.members = members;
+              this.membershipMessage = 'you have joined the group';
+            }
+          },
+          error: serverError => this.error = serverError.error.detail
+        }
+      );
+    }
   }
 
   Leave(): void {
 
-    this.error = '';
-    this.membershipMessage = '';
+    if (!this.OrganisationDisplay) {
+      this.error = 'No organisation to display';
+    } else {
+      this.error = '';
+      this.membershipMessage = '';
 
-    this.groupsService.Leave(this.OrganisationDisplay.organisationID).subscribe(
-      {
-        next: members => {
-          this.OrganisationDisplay.organisationMember = false;
-          this.OrganisationDisplay.members = members;
-          this.membershipMessage = 'you have left the group';
-        },
-        error: serverError => this.error = serverError.error.detail
-      }
-    );
+      this.groupsService.Leave(this.OrganisationDisplay.organisationID).subscribe(
+        {
+          next: members => {
+            if (this.OrganisationDisplay) {
+              this.OrganisationDisplay.organisationMember = false;
+              this.OrganisationDisplay.members = members;
+              this.membershipMessage = 'you have left the group';
+            }
+          },
+          error: serverError => this.error = serverError.error.detail
+        }
+      );
+    }
   }
 
   Activate(): void {
 
-    this.error = '';
+    if (!this.OrganisationDisplay) {
+      this.error = 'No organisation to display';
+    } else {
 
-    this.groupsService.Activate(this.OrganisationDisplay.organisationID, true).subscribe(
-      {
-        next: _ => this.OrganisationDisplay.active = true,
-        error: serverError => this.error = serverError.error.detail
-      }
-    );
+      this.error = '';
+
+      this.groupsService.Activate(this.OrganisationDisplay.organisationID, true).subscribe(
+        {
+          next: _ => {
+            if (this.OrganisationDisplay) {
+              this.OrganisationDisplay.active = true;
+            }
+          },
+          error: serverError => this.error = serverError.error.detail
+        }
+      );
+    }
   }
 
   DeActivate(): void {
 
-    this.error = '';
+    if (!this.OrganisationDisplay) {
+      this.error = 'No organisation to display';
+    } else {
 
-    this.groupsService.Activate(this.OrganisationDisplay.organisationID, false).subscribe(
-      {
-        next: _ => this.OrganisationDisplay.active = false,
-        error: serverError => this.error = serverError.error.detail
-      }
-    );
+
+      this.error = '';
+
+      this.groupsService.Activate(this.OrganisationDisplay.organisationID, false).subscribe(
+        {
+          next: _ => {
+            if (this.OrganisationDisplay) {
+              this.OrganisationDisplay.active = false;
+            }
+          },
+          error: serverError => this.error = serverError.error.detail
+        }
+      );
+    }
   }
 
   Edit(): void {
@@ -144,16 +188,21 @@ export class OrganisationComponent implements OnInit, OnDestroy {
   }
 
   Delete(): void {
-    this.error = '';
-    if (confirm(`Are you sure you wish to permanently delete this group?
+
+    if (!this.OrganisationDisplay) {
+      this.error = 'No organisation to display';
+    } else {
+      this.error = '';
+      if (confirm(`Are you sure you wish to permanently delete this group?
 This cannot be undone.`)) {
-      this.groupsService.Delete(this.OrganisationDisplay.organisationID)
-        .subscribe(
-          {
-            next: _ => this.router.navigate(['/groups', 'membership']), // this.Refresh.emit(),
-            error: serverError => this.error = serverError.error.detail
-          }
-        );
+        this.groupsService.Delete(this.OrganisationDisplay.organisationID)
+          .subscribe(
+            {
+              next: _ => this.router.navigate(['/groups', 'membership']), // this.Refresh.emit(),
+              error: serverError => this.error = serverError.error.detail
+            }
+          );
+      }
     }
   }
 
@@ -169,7 +218,7 @@ This cannot be undone.`)) {
 
   newGroup(): void {
     this.newGroupTemplate = new Group();
-    this.newGroupTemplate.organisationID = this.OrganisationDisplay.organisationID;
+    this.newGroupTemplate.organisationID = this.OrganisationDisplay?.organisationID ? this.OrganisationDisplay.organisationID : 0;
     this.newGroupTemplate.open = true;
     this.newGroupTemplate.meetingIntervalID = MeetingIntervals.Weekly.toString();
     this.newGroupTemplate.selectionDayOfWeek = 1;

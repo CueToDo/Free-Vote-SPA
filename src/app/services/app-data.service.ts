@@ -1,7 +1,11 @@
-import { PorQTypes, PointTypesEnum } from './../models/enums';
-import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
+// Angular
+import { PorQTypes, PointTypesEnum } from './../models/enums';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
+
+// rxjs
 import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
 import { filter, map, mergeMap, tap } from 'rxjs/operators';
 
@@ -10,6 +14,7 @@ import { ID } from '../models/common';
 import { PointSortTypes, GeographicalExtentID } from '../models/enums';
 import { Kvp } from '../models/kvp.model';
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
+import { PagePreviewMetaData } from '../models/point.model';
 
 // Services
 import { HttpService } from './http.service';
@@ -20,16 +25,20 @@ import { LocalDataService } from './local-data.service';
 export class AppDataService {
 
   // http://jasonwatmore.com/post/2016/12/01/angular-2-communicating-between-components-with-observable-subject
-  public Route: string;
+  public Route = '';
 
   // Can I make a function available in every controller in angular?
   // https://stackoverflow.com/questions/15025979/can-i-make-a-function-available-in-every-controller-in-angular
   // 0 to 11
   months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  public promptEvent: BeforeInstallPromptEvent;
+  // tslint:disable-next-line: deprecation
+  public promptEvent: BeforeInstallPromptEvent | undefined;
+
+  public initialPageRendered = false;
 
   // Any subscriptions to the following must be unsubscribed
+  public PagePreview$ = new Subject<PagePreviewMetaData>(); // SSR Universal PagePreview
   public RouteParamChange$ = new Subject<string>(); // next url with route parameters
   public PageName$ = new Subject<string>();
   public TagsPointsActive$ = new Subject<boolean>();   // Point Selection
@@ -52,20 +61,20 @@ export class AppDataService {
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).
   // Could use Promise for sign-in component, but other components such as menu need to know sign-in status
 
-  public ckeConfig = {
-    toolbar: {
-      items: ['Bold', 'Italic', 'Underline',
-        '|', 'bulletedList', 'numberedList',
-        '|', 'indent', 'outdent',
-        '|', 'heading', 'fontSize',
-        '|', 'fontColor', 'fontBackgroundColor',
-        '|', 'link', 'image', 'insertTable', 'horizontalLine',
-        '|', 'undo', 'redo'],
-      shouldNotGroupWhenFull: true
-    },
-    // htmlEncodeOutput: false
-    allowedContent: true
-  };
+  // public ckeConfig = {
+  //   toolbar: {
+  //     items: ['Bold', 'Italic', 'Underline',
+  //       '|', 'bulletedList', 'numberedList',
+  //       '|', 'indent', 'outdent',
+  //       '|', 'heading', 'fontSize',
+  //       '|', 'fontColor', 'fontBackgroundColor',
+  //       '|', 'link', 'image', 'insertTable', 'horizontalLine',
+  //       '|', 'undo', 'redo'],
+  //     shouldNotGroupWhenFull: true
+  //   },
+  //   // htmlEncodeOutput: false
+  //   allowedContent: true
+  // };
 
   // Not looked up in database - static types
   public porQTypes = [
@@ -74,8 +83,8 @@ export class AppDataService {
     { key: 'Perspective', value: 3 }] as Kvp[];
 
   // Lookup - could add more
-  private pointTypes: Kvp[];
-  private extents: Kvp[]; // GeographicalExtent of group
+  private pointTypes: Kvp[] = [];
+  private extents: Kvp[] = []; // GeographicalExtent of group
 
   public PointTypes(): Observable<Kvp[]> {
     if (this.pointTypes) {
@@ -106,16 +115,21 @@ export class AppDataService {
   constructor(
     private httpService: HttpService,
     private localData: LocalDataService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
 
-    // PWA https://love2dev.com/blog/beforeinstallprompt/
-    window.addEventListener('beforeinstallprompt', event => {
+    // PWA installation - browser only
+    if (isPlatformBrowser(this.platformId)) {
 
-      this.promptEvent = event as BeforeInstallPromptEvent;
+      // PWA https://love2dev.com/blog/beforeinstallprompt/
+      window.addEventListener('beforeinstallprompt', event => {
 
-    });
+        // tslint:disable-next-line: deprecation
+        this.promptEvent = event as BeforeInstallPromptEvent;
 
+      });
+    }
   }
 
   // Unambiguous Date Format
@@ -193,9 +207,12 @@ export class AppDataService {
   kebabUri(input: string): string {
     // But not converted to lower case
     // filter - an empty string evaluates to boolean false. It works with all falsy values like 0, false, null, undefined
-    let output = input.split(' ').filter(item => item).join('-'); // remove double spaces, replace spaces with dash
-    output = output.split('-').filter(item => item).join('-'); // remove double-dashes, no dash start or end
-    output = encodeURIComponent(output);
+    let output = '';
+    if (input) {
+      input.split(' ').filter(item => item).join('-'); // remove double spaces, replace spaces with dash
+      output = output.split('-').filter(item => item).join('-'); // remove double-dashes, no dash start or end
+      output = encodeURIComponent(output);
+    }
     return output;
   }
 

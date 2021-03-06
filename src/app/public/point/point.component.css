@@ -3,6 +3,8 @@
     border-bottom: solid 3px #BBB;
 }
 
+
+
 .pointSource {
     margin-bottom: 10px;
 }
@@ -28,9 +30,11 @@
     overflow: hidden;
     color: black;
     background-color: #f0f4ff;
+    max-height: 200px;
 }
 
-.linkFromMeta:hover {
+.linkFromMeta:hover,
+.preview {
     color: #3700b3;
 }
 

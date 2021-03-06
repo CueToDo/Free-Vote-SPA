@@ -1,8 +1,8 @@
 export class Image {
-    imageID: string;
-    imageFileName: string;
+    imageID = '';
+    imageFileName = '';
 }
 
 export class ProfilePicture {
-    pictureUrl: string;
+    pictureUrl = '';
 }

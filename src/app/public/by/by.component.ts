@@ -22,11 +22,11 @@ import { TagsService } from '../../services/tags.service';
 export class ByComponent implements OnInit, OnDestroy {
 
   // Subscriptions
-  private aliases$: Subscription;
+  private aliases$: Subscription | undefined;
 
-  byAliases: ByOn[];
-  onTopics: ByOn[];
-  byAlias: string;
+  byAliases: ByOn[] = [];
+  onTopics: ByOn[] = [];
+  byAlias = '';
 
   // https://stackoverflow.com/questions/37891752/angular2-add-class-to-item-on-click/37891984
   highlightStatus: Array<boolean> = [];
@@ -102,6 +102,6 @@ export class ByComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.aliases$.unsubscribe();
+    this.aliases$?.unsubscribe();
   }
 }

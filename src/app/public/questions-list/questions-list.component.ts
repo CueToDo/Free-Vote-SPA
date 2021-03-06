@@ -20,13 +20,13 @@ import { QuestionsService } from 'src/app/services/questions.service';
 })
 export class QuestionsListComponent implements OnInit {
 
-  @Input() public filter: FilterCriteria;
+  @Input() public filter!: FilterCriteria;
 
   public questions: Question[] = [];
   public IDs: ID[] = [];
   public questionCount = 0;
 
-  public error: string;
+  public error = '';
   public alreadyFetchingFromDB = false;
   public allQuestionsDisplayed = false;
 

@@ -5,7 +5,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 
 // CKEditor
-import * as CKECustom from 'src/ckeditor.js';
+// import * as CKECustom from 'src/ckeditor.js';
 
 // Models
 import { Issue } from 'src/app/models/issue.model';
@@ -26,11 +26,11 @@ export class IssueEditComponent implements OnInit {
   // and no banana in a box on parent ... WHY?
   // Now need to do manual update to prevent the 2 way binding on cancel edit
   // clone and manual 2 way introduced
-  @Input() issue: Issue;
+  @Input() issue = new Issue();
   @Output() issueChange = new EventEmitter();
 
-  public ckeditor = CKECustom;
-  public issueClone: Issue;
+  // public ckeditor = CKECustom;
+  public issueClone = new Issue();
 
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
@@ -58,22 +58,29 @@ export class IssueEditComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.saving = true;
-    this.issuesService.IssueUpdate(this.issueClone).subscribe(
-      {
-        next: (statusID: IssueStatuses) => {
-          this.issueChange.emit(this.issueClone);
-          this.CompleteEdit.emit(statusID);
-        },
-        error: serverError => {
-          this.saving = false;
-          this.error = serverError.error.detail;
-        },
-        complete: () => {
-          this.saving = false;
+
+    this.error = '';
+
+    if (!this.issueClone) {
+      this.error = 'Nothing to save';
+    } else {
+      this.saving = true;
+      this.issuesService.IssueUpdate(this.issueClone).subscribe(
+        {
+          next: (statusID: IssueStatuses) => {
+            this.issueChange.emit(this.issueClone);
+            this.CompleteEdit.emit(statusID);
+          },
+          error: serverError => {
+            this.saving = false;
+            this.error = serverError.error.detail;
+          },
+          complete: () => {
+            this.saving = false;
+          }
         }
-      }
-    );
+      );
+    }
   }
 
   Cancel(): void {

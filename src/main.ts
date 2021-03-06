@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-export function getBaseUrl() {
+export function getBaseUrl(): string {
   return document.getElementsByTagName('base')[0].href;
 }
 
@@ -16,5 +16,7 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic(providers).bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+document.addEventListener('DOMContentLoaded', () => {
+  platformBrowserDynamic(providers).bootstrapModule(AppModule)
+    .catch((err: any) => console.log(err));
+});

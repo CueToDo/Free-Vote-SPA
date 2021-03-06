@@ -19,7 +19,7 @@ export class Group {
     selectionTimeOfDay = '';
 
     // Actual selection date
-    nextIssueSelectionDate: Date;
+    nextIssueSelectionDate = new Date();
     nextIssueSelectionTime = '';
 
     // Issues

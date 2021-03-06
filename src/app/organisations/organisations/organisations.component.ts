@@ -19,13 +19,13 @@ import { OrganisationEditComponent } from 'src/app/organisations/organisation-ed
 })
 export class OrganisationsComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('OrganisationMembership') organisationMembership: OrganisationListComponent;
-  @ViewChild('OrganisationsAvailable') groupsAvailable: OrganisationListComponent;
-  @ViewChild('NewGroupComponent') newGroupComponent: OrganisationEditComponent;
+  @ViewChild('OrganisationMembership') organisationMembership!: OrganisationListComponent;
+  @ViewChild('OrganisationsAvailable') groupsAvailable!: OrganisationListComponent;
+  @ViewChild('NewGroupComponent') newGroupComponent!: OrganisationEditComponent;
 
   public tabIndex = 0;
-  private tabSelected: string;
-  public NewOrganisation: Organisation;
+  private tabSelected = '';
+  public NewOrganisation = new Organisation();
 
   constructor(
     private router: Router,
@@ -34,7 +34,7 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     this.StartNewGroup(); // For GroupEdit, do this early
 
@@ -62,43 +62,43 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
 
   }
 
-  ngAfterViewInit() {
-    this.organisationMembership.Refresh();
-    this.groupsAvailable.Refresh();
-    this.newGroupComponent.ClearError();
+  ngAfterViewInit(): void {
+    this.organisationMembership?.Refresh();
+    this.groupsAvailable?.Refresh();
+    this.newGroupComponent?.ClearError();
   }
 
-  ChangeTab(tabIndex: number) {
+  ChangeTab(tabIndex: number): void {
 
     this.tabIndex = tabIndex;
 
     switch (tabIndex) {
       case 0:
-        this.organisationMembership.Refresh();
+        this.organisationMembership?.Refresh();
         this.appDataService.RouteParamChange$.next('/groups/membership');
         break;
       case 1:
-        this.groupsAvailable.Refresh();
+        this.groupsAvailable?.Refresh();
         this.appDataService.RouteParamChange$.next('/groups/available');
         break;
       case 2:
         this.StartNewGroup();
-        this.newGroupComponent.ClearError();
+        this.newGroupComponent?.ClearError();
         this.appDataService.RouteParamChange$.next('/groups/new');
         break;
     }
 
   }
 
-  CancelNew() {
+  CancelNew(): void {
     this.ChangeTab(0);
   }
 
-  CompleteNew(group: Organisation) {
+  CompleteNew(group: Organisation): void {
     this.router.navigate(['/groups', group.organisationName]);
   }
 
-  StartNewGroup() {
+  StartNewGroup(): void {
     this.NewOrganisation = new Organisation();
     this.NewOrganisation.countries = ['UK'];
   }
