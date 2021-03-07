@@ -14,7 +14,9 @@
     "ssr": "npm run build:ssr && npm run serve:ssr",
     "prerender-dynamic": "ng run free-vote:prerender --routes-file dynamic-routes.txt",
     "prerender": "ng run free-vote:prerender",
-    "dev:ssr": "ng run free-vote:serve-ssr --port 7027"
+    "dev:ssr": "ng run free-vote:serve-ssr --port 7027",
+    "start:heroku": "node dist/free-vote/server/main.js",
+    "heroku-postbuild": "npm run build:ssr"
   },
   "private": true,
   "dependencies": {
