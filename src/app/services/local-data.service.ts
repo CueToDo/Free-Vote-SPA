@@ -85,7 +85,7 @@ export class LocalDataService {
     public SetServiceURL(): void {
 
         this.website = 'free.vote';
-        this.siteUrl = 'https://free.vote/';
+        this.websiteUrl = 'https://free.vote/';
 
         // No longer used: check if running locally to determine service url
         // Always use live unless there is a manual override
@@ -97,12 +97,12 @@ export class LocalDataService {
             // window not available on server
             const spaDomain = window.location.origin.split('//')[1].split(':')[0].replace('api.', '');
 
-            this.serviceUrl = 'http://localhost:54357/';
-                // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
-                // As CORS is configured, we could also use local IIS http://freevotetest.com or live https://free.vote
+            this.apiUrl = 'http://localhost:54357/';
+            // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
+            // As CORS is configured, we could also use local IIS http://freevotetest.com or live https://free.vote
 
         } else {
-            this.serviceUrl = 'https://api.free.vote/';
+            this.apiUrl = 'https://api.free.vote/';
         }
 
     }
