@@ -20,6 +20,8 @@ import { CustomModule } from '../custommodule/custom.module';
 
 // FreeVote Components
 import { HomeComponent } from './home/home.component';
+import { CardComponent } from './card/card.component';
+import { TakeActionComponent } from './take-action/take-action.component';
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 import { TopicEditComponent } from './topic-edit/topic-edit.component';
@@ -55,6 +57,8 @@ import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
     CallbackComponent,
     VotersMenuComponent,
     HomeComponent,
+    CardComponent,
+    TakeActionComponent,
     PointComponent,
     PointEditComponent,
     TopicEditComponent,

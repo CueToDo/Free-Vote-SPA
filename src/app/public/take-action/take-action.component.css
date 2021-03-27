@@ -1,0 +1,17 @@
+.social {
+    margin-top: -5px;
+}
+
+.gfm {
+    margin-top: -14px;
+}
+
+.flexy {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.flexy div {
+    margin: 6px;
+}

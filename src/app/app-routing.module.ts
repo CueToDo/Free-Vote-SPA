@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 // Components
 import { CallbackComponent } from './public/callback/callback.component';
 import { HomeComponent } from './public/home/home.component';
+import { CardComponent } from './public/card/card.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
 import { ScrollerComponent } from './public/scroller/scroller.component';
 import { VotersMenuComponent } from './public/voters-menu/voters-menu.component';
@@ -24,6 +25,7 @@ const appRoutes: Routes = [
 
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'card', component: CardComponent },
 
   { path: 'callback', component: CallbackComponent },
 
