@@ -84,7 +84,11 @@ export class LocalDataService {
 
     public SetServiceURL(): void {
 
-        // check if running locally to determine service url
+        this.website = 'free.vote';
+        this.siteUrl = 'https://free.vote/';
+
+        // No longer used: check if running locally to determine service url
+        // Always use live unless there is a manual override
 
         const localAPI: boolean = this.GetItem('localAPI') === 'true';
 
@@ -93,37 +97,12 @@ export class LocalDataService {
             // window not available on server
             const spaDomain = window.location.origin.split('//')[1].split(':')[0].replace('api.', '');
 
-            if (spaDomain === 'localhost' || spaDomain === '127.0.0.1') {
-                // Local debugging
-                this.website = 'free.vote';
-                this.websiteUrl = 'http://localhost:7027/';
-                this.apiUrl = 'http://localhost:54357/api/';
+            this.serviceUrl = 'http://localhost:54357/';
                 // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
                 // As CORS is configured, we could also use local IIS http://freevotetest.com or live https://free.vote
-            } else if (spaDomain === 'freevotetest.com') {
-                // IIS local testing - service url is same, but we could set to live and redeploy SPA to local IIS
-                // So it's unlikely the CORS configration for freevotetest.com will actually be used
-                this.website = 'free.vote';
-                this.websiteUrl = 'http://freevotetest.com/';
-                this.apiUrl = 'http://localhost:54357/api/';
-            } else {
-                this.website = spaDomain;
-                // Live deployment - service url is always same
-                this.websiteUrl = `https://${spaDomain}/`;
-                this.apiUrl = 'https://api.free.vote/api/';
-            }
 
         } else {
-
-            // Local
-            // this.website = 'free.vote';
-            // this.websiteUrl = 'http://localhost:7027/';
-            // this.apiUrl = 'http://localhost:54357/api/';
-
-            // Production
-            this.website = 'free.vote';
-            this.websiteUrl = 'https://free.vote/';
-            this.apiUrl = 'https://api.free.vote/api/';
+            this.serviceUrl = 'https://api.free.vote/';
         }
 
     }
