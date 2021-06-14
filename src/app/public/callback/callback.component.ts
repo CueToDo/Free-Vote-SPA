@@ -1,3 +1,4 @@
+import { LocalDataService } from './../../services/local-data.service';
 import { Subscription } from 'rxjs';
 // angular
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -19,6 +20,7 @@ export class CallbackComponent implements OnInit, OnDestroy {
 
   constructor(
     private auth: AuthService,
+    public localData: LocalDataService,
     private router: Router) { }
 
   ngOnInit(): void {

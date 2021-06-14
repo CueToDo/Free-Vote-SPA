@@ -8,7 +8,9 @@
   </div>
 
   <div class="text-danger mx-3" *ngIf="!handlingCallback">
-    {{ error }}
+    <p>Error: {{ error.detail }}</p>
+    <p>loggingInToAuth0: {{ localData.loggingInToAuth0 }}</p>
+    <p>loggedInToAuth0: {{ localData.loggedInToAuth0 }}</p>
   </div>
 
   <button mat-stroked-button (click)="signOut()" *ngIf="!handlingCallback" class="mt-5">
