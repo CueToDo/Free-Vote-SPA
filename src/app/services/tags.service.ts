@@ -50,7 +50,7 @@ export class TagsService {
 
     const WebAPIUrl = 'tags/byaliases';
 
-    const postData = { 'dateFrom': dateFrom, 'dateTo': dateTo };
+    const postData = { dateFrom, dateTo };
 
     return this.httpClientService
       .post(WebAPIUrl, postData)

@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private auth: AuthService,
+    public auth: AuthService,
     public localData: LocalDataService, /* inject to ensure constructed and values Loaded */
     public appData: AppDataService,
     private breakpointObserver: BreakpointObserver,

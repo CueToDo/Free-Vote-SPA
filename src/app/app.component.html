@@ -36,7 +36,7 @@
 
     <div fxLayoutAlign="center">
       <div class="content" fxLayoutAlign="start end">
-        <img [src]="imgVulcan" [alt]="altVulcan" class="ml-3" height="143">
+        <img [src]="imgVulcan" [alt]="altVulcan" class="ml-3" height="143" (click)="auth.logout()">
         <span class="imgCredit" *ngIf="localData.website==='break-out.group'">Image by <a
             href="https://www.flaticon.com/authors/freepik" title="Freepik" target="_blank">Freepik</a> from<a
             href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></span>
