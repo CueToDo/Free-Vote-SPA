@@ -264,7 +264,7 @@
 
       <!-- Point Owner Commands -->
 
-      <div *ngIf="localData.loggedInToAuth0 && point.isPointOwner">
+      <div *ngIf="localData.LoggedInToAuth0 && point.isPointOwner">
 
         <button mat-icon-button [matMenuTriggerFor]="pointOwnerCommands">
           <mat-icon *ngIf="!point.draft" matTooltip="edit">edit</mat-icon>
@@ -289,7 +289,7 @@
 
       <!-- Voter Point Feedback Menu -->
 
-      <div *ngIf="localData.loggedInToAuth0">
+      <div *ngIf="localData.LoggedInToAuth0">
 
         <!-- type='button' https://stackoverflow.com/questions/12319758/clicking-a-button-within-a-form-causes-page-refresh -->
         <!-- https://stackblitz.com/angular/rllvqdkjedar -->

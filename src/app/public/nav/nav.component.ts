@@ -15,16 +15,19 @@ import { AuthService } from 'src/app/services/auth.service';
 export class NavComponent implements OnInit, OnDestroy {
 
    PageName$: Subscription | undefined;
+   LoggedIn$: Subscription | undefined;
    tagsPointsActive$: Subscription | undefined;
    showBurger$: Subscription | undefined;
 
+   public loggedInToAuth0 = false;
    public tabSelected = '';
    public showBurger = false;
+   public error = '';
 
    constructor(
       public localData: LocalDataService,
       private appDataService: AppDataService,
-      public auth: AuthService) { }
+      public authService: AuthService) { }
 
    ngOnInit(): void {
 
@@ -51,11 +54,19 @@ export class NavComponent implements OnInit, OnDestroy {
          { next: pageName => this.tabSelected = pageName }
       );
 
+      this.LoggedIn$ = this.localData.LoggedInToAuth0$.subscribe(
+         {
+            // subscribe to a changing value and allow component to handle change detection internally (?)
+            next: loggedIn => this.loggedInToAuth0 = loggedIn,
+            error: err => this.error = err
+         }
+      );
    }
 
 
    ngOnDestroy(): void {
       this.PageName$?.unsubscribe();
+      this.LoggedIn$?.unsubscribe();
       this.tagsPointsActive$?.unsubscribe();
       this.showBurger$?.unsubscribe();
    }

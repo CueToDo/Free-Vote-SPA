@@ -24,7 +24,7 @@
       <mat-radio-button value="point">P</mat-radio-button>
     </mat-radio-group>
 
-    <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3" *ngIf="localData.loggedInToAuth0" id="newQP">
+    <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3" *ngIf="localData.LoggedInToAuth0" id="newQP">
       <span *ngIf="widthBand > 2">new {{ qp }}</span>
       <mat-icon>library_add</mat-icon>
     </button>

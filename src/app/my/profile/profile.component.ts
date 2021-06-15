@@ -125,11 +125,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 
   deleteProfilePictue(): void {
+
+    this.Saving();
+
     this.httpService.profilePictureDelete().subscribe(
       {
         next: () => {
           this.localData.freeVoteProfile.profilePicture = '';
           this.localData.freeVoteProfile.profilePictureOptionID = '1';
+          this.Saved();
         },
         error: serverError => this.ShowError(serverError.error.detail)
       }
@@ -138,6 +142,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   profilePictureSelected(event: Event): void {
 
+    this.Saving();
     this.uploading = true;
     this.uploadPercentDone = 0;
 
@@ -195,22 +200,26 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.localData.freeVoteProfile.profilePicture = file;
                 this.localData.freeVoteProfile.profilePictureOptionID = '2';
                 this.localData.SaveValues();
+                this.Saved();
               }
             },
-            error: serverError => this.ShowError(serverError.error.detail),
-            complete: () => this.uploading = false
+            error: serverError => this.ShowError(serverError.error.detail)
           }
         );
     }
   }
 
   profilePictureOptionUpdate(): void {
+
+    this.Saving();
+
     this.appDataService.profilePictureOptionUpdate(this.localData.freeVoteProfile.profilePictureOptionID).subscribe(
       {
-        next: () => { },
-        error: serverError => this.ShowError(serverError.error.detail)
+        next: () => this.Saved(),
+        error: serverError => this.ShowError(serverError)
       }
     );
+
   }
 
   newCountry(): void {
@@ -260,6 +269,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.localData.freeVoteProfile.countryId = countryID.toString();
           this.GetCountries();
           this.editNewCountry = false;
+          this.Saved();
         },
         error: err => this.ShowError(err)
       }
@@ -277,13 +287,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.localData.freeVoteProfile.cityId = cityID.toString();
             this.GetCities(this.localData.freeVoteProfile.countryId, false);
             this.editNewCity = false;
+            this.Saved();
           },
-          error: err => this.ShowError(err)
+          error: err => this.ShowError(err),
         }
       );
   }
 
   Saving(): void {
+    this.localData.updatingProfile = true;
     this.saving = true;
     this.updateMessage = 'saving';
     this.success = false;
@@ -292,6 +304,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   Saved(): void {
     // End the edit
+    this.localData.updatingProfile = false;
+    this.updateMessage = 'saved';
+    this.uploading = false;
     this.saving = false;
     this.success = true;
     this.editing = false;
@@ -300,6 +315,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ShowError(err: any): void {
+
     if (err.error.detail) {
       this.updateMessage = err.error.detail;
     } else if (err.error) {

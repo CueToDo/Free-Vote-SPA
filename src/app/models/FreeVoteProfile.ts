@@ -11,5 +11,5 @@ export class FreeVoteProfile {
     public cityId = '';
 
     public profilePicture = '';
-    public profilePictureOptionID = '';
+    public profilePictureOptionID = ''; // for html binding use string
 }

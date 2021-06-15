@@ -37,12 +37,12 @@ export class HttpService {
     // Anon users have a jwt
 
 
-    if (this.localData.haveFreeVoteJwt) {
+    if (this.localData.GotFreeVoteJwt) {
 
       // Already have jwt - no need to do anything
       return of(true);
 
-    } else if (this.localData.loggingInToAuth0 || this.localData.gettingFreeVoteJwt) {
+    } else if (this.localData.SigningInToAuth0 || this.localData.GettingFreeVoteJwt) {
 
       // Don't issue request yet - now's not the time,
       // or must wait for existing request to complete
@@ -52,7 +52,7 @@ export class HttpService {
 
       // Only the first jwt request comes down here
 
-      this.localData.gettingFreeVoteJwt = true; // prevent infinite loop
+      this.localData.GettingFreeVoteJwt = true; // prevent infinite loop - and communicate
 
       // Don't add jwt in headers when we're getting jwt
       // This is the observable which will return a boolean
@@ -61,7 +61,7 @@ export class HttpService {
         .pipe(
           tap(
             response => {
-              this.localData.haveFreeVoteJwt = true;
+              this.localData.GotFreeVoteJwt = true;
               this.localData.AssignServerValues(response); /// but new sessionid is not returned so can't be assigned (that's OK)
               this.localData.SaveValues();
             }
@@ -72,7 +72,7 @@ export class HttpService {
               throwError('No JWT'); // must be handled by the subscriber
             }
 
-            this.localData.gettingFreeVoteJwt = false;
+            this.localData.GettingFreeVoteJwt = false;
             this.jwtFetched$.next(true); // Any subsequently queued requests are now unlocked
             this.jwtFetched$.complete();
             return true; // now fulfil the original (promise) which DIDN'T return jwtFetched$
@@ -143,7 +143,7 @@ export class HttpService {
       .post(
         this.localData.apiUrl + url,
         JSON.stringify(data),
-        this.RequestOptions(ContentType.json)
+        this.RequestOptions(ContentType.json),
       );
   }
 

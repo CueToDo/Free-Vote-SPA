@@ -12,7 +12,7 @@ export class LoginRouteGuardService implements CanActivate {
 
   canActivate(): boolean {
     this.currentDate = new Date();
-    return this.localData.loggedInToAuth0;
+    return this.localData.LoggedInToAuth0;
   }
 
   requiresLogin(url: string): boolean {

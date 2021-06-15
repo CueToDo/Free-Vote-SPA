@@ -82,11 +82,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // The app component is initialised when we come back from Auth0 login
     // Wait until we have a pukka free.vote jwt before doing the following
-
-    if (!this.localData.loggingInToAuth0 && !this.localData.gettingFreeVoteJwt) {
-      // Is this now queued and can proceed without the above guard?
-      this.appData.InitialisePreviousSlashTagSelected();
-    }
+    this.localData.GotFreeVoteJwt$.subscribe(
+      { next: _ => this.appData.InitialisePreviousSlashTagSelected() }
+    );
 
     // SSR First Page Meta Data for Social Media
     this.appData.PagePreview$.subscribe({

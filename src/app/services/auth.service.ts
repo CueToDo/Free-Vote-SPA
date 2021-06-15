@@ -2,7 +2,7 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 // rxjs
-import { from, of, Observable, combineLatest, throwError } from 'rxjs';
+import { from, of, Observable, combineLatest, throwError, Subject } from 'rxjs';
 import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
 
 // auth0
@@ -58,7 +58,7 @@ export class AuthService {
 
             this.isAuthenticated$ = this.auth0Client$.pipe(
                 concatMap((client: Auth0Client) => from(client.isAuthenticated())),
-                tap(res => this.localData.loggedInToAuth0 = res)
+                tap(res => this.localData.LoggedInToAuth0$.next(res))
             );
 
             this.handleRedirectCallback$ = this.auth0Client$.pipe(
@@ -92,10 +92,11 @@ export class AuthService {
 
     localAuthSetup(): void {
 
+        // This should only be called on app initialization
+
+        // Set up local authentication streams
         if (this.isAuthenticated$) {
 
-            // This should only be called on app initialization
-            // Set up local authentication streams
             const checkAuth$ = this.isAuthenticated$.pipe(
                 concatMap((loggedIn: boolean) => {
                     if (loggedIn) {
@@ -114,7 +115,7 @@ export class AuthService {
                         // If authenticated, response will be user object
                         // If not authenticated, response will be 'false'
                         this.localData.auth0Profile = response;
-                        this.localData.loggedInToAuth0 = !!response; // bang bang you're boolean
+                        this.localData.SignedIn = !!response; // bang bang you're boolean
                     },
                     error: error => console.log('ERROR: localAuthSetup', error)
                 }
@@ -125,13 +126,9 @@ export class AuthService {
     login(redirectPath: string = '/slash-tags/trending'): void {
 
         if (this.auth0Client$) {
-            this.localData.SignedOut(); // Clear anon session and start afresh
 
-            this.localData.loggingInToAuth0 = true;
-            this.localData.haveFreeVoteJwt = false;
-
-            // Save the above values - Because we're going to redirect and reload the values after
-            this.localData.SaveValues();
+            // Clear session and start afresh
+            this.localData.SignedOut(); // Clears local storage and communicates state change
 
             // A desired redirect path can be passed to login method
             // (e.g., from a route guard)
@@ -177,7 +174,7 @@ export class AuthService {
                 }),
                 concatMap(user => {
                     this.localData.auth0Profile = user;
-                    this.localData.loggingInToAuth0 = false;
+                    this.localData.SignedIn = !!user;
                     // get ApiJwt for signed in user BEFORE redirecting in callback component
                     return this.httpService.getApiJwt();
                 }),
@@ -201,7 +198,8 @@ export class AuthService {
             });
         });
 
-        this.localData.SignedOut();
+        this.localData.SignedOut(); // And Communicate
+
     }
 
 

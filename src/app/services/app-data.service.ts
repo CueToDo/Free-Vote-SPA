@@ -1,4 +1,3 @@
-
 // Angular
 import { PorQTypes, PointTypesEnum } from './../models/enums';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
@@ -37,7 +36,7 @@ export class AppDataService {
 
   public initialPageRendered = false;
 
-  // Any subscriptions to the following must be unsubscribed
+  // Any subscriptions to the following must be unsubscribed (except in app.component)
   public PagePreview$ = new Subject<PagePreviewMetaData>(); // SSR Universal PagePreview
   public RouteParamChange$ = new Subject<string>(); // next url with route parameters
   public PageName$ = new Subject<string>();

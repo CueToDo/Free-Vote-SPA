@@ -61,7 +61,7 @@ export class InterceptorService implements HttpInterceptor {
                 this.transferState.remove(key);
                 const response = new HttpResponse({ body: storedResponse, status: 200 });
                 return of(response);
-            } else if (this.localData.loggedInToAuth0) {
+            } else if (this.localData.LoggedInToAuth0) {
 
                 return this.auth.getTokenSilently$().pipe(
                     mergeMap(token => {

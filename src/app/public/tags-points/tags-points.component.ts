@@ -62,8 +62,8 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   showingFilter = false;
-  public filterIcon = 'star';
-  public filterText = 'unfiltered';
+  public filterIcon = 'Search Off';
+  public filterText = 'search';
   public filterToolTip = 'not filtering point selection';
 
   public PointSortTypes = PointSortTypes; // enum - template
@@ -307,12 +307,12 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     this.showingFilter = filter;
 
     if (this.showingFilter) {
-      this.filterIcon = 'star_half';
-      this.filterText = 'filtered';
+      this.filterIcon = 'manage_search';
+      this.filterText = 'searching';
       this.filterToolTip = 'filtering point selection';
     } else {
-      this.filterIcon = 'star';
-      this.filterText = 'unfiltered';
+      this.filterIcon = 'search';
+      this.filterText = 'search';
       this.filterToolTip = 'not filtering point selection';
     }
 

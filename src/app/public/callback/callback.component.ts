@@ -13,10 +13,13 @@ import { AuthService } from '../../services/auth.service';
 })
 export class CallbackComponent implements OnInit, OnDestroy {
 
+  // Used by Auth0 only after sign in attempt
+
   private callback$: Subscription | undefined;
 
   handlingCallback = true;
   error = '';
+  targetRoute = '';
 
   constructor(
     private auth: AuthService,
@@ -37,7 +40,6 @@ export class CallbackComponent implements OnInit, OnDestroy {
           console.log('navigated');
         },
         error: serverError => {
-          this.handlingCallback = false;
           if (serverError.error.detail) {
             this.error = serverError.error.detail;
           } else if (serverError.error) {
@@ -45,7 +47,8 @@ export class CallbackComponent implements OnInit, OnDestroy {
           } else if (serverError) {
             this.error = serverError;
           }
-        }
+        },
+        complete: () => this.handlingCallback = false // even if error
       }
     );
 
