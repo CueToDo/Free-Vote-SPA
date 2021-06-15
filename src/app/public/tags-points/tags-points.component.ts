@@ -62,7 +62,7 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   showingFilter = false;
-  public filterIcon = 'Search Off';
+  public filterIcon = 'search';
   public filterText = 'search';
   public filterToolTip = 'not filtering point selection';
 

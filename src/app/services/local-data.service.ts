@@ -16,12 +16,21 @@ export class LocalDataService {
     public websiteUrl = '';
     public apiUrl = '';
 
+    // Subscribe to these in components rather than reference static values in localData
+    public LoggingInToAuth0$ = new Subject<boolean>();
+    public LoggedInToAuth0$ = new Subject<boolean>();
+    public GotFreeVoteJwt$ = new Subject<boolean>();
+
+    public auth0Profile: any; // Auth0 Profile Data saved to app on login
+
+    public freeVoteProfile = new FreeVoteProfile(); // For client updates to API
+    public updatingProfile = false; // on all backend interactions we get jwt and assignservervalues - don't reassign before backend update
+
+    public questionSelected = '';
+
     // Auth0 and FreeVote Profile - Following static values not to be used in component initialisation where a change subscription is needed
     public get LoggingInToAuth0(): boolean { return this.GetItem('loggingInToAuth0') === 'true'; }
-
-    public get LoggedInToAuth0(): boolean { return this.GetItem('loggedInToAuth0') === 'true'; }
-
-    public set SigningInToAuth0(loggingInToAuth0: boolean) {
+    public set LoggingInToAuth0(loggingInToAuth0: boolean) {
         // Save
         this.SetItem('loggingInToAuth0', String(loggingInToAuth0));
         this.SetItem('loggedInToAuth0', String(false));
@@ -30,56 +39,67 @@ export class LocalDataService {
         this.LoggedInToAuth0$.next(false);
     }
 
-    public set SignedIn(signedIn: boolean) {
+    public get LoggedInToAuth0(): boolean { return this.GetItem('loggedInToAuth0') === 'true'; }
+    public set LoggedInToAuth0(loggedIn: boolean) {
+        console.log('Now logged in:', loggedIn);
         // Save
         this.SetItem('loggingInToAuth0', String(false));
-        this.SetItem('loggedInToAuth0', String(signedIn));
+        this.SetItem('loggedInToAuth0', String(loggedIn));
         // Communicate
         this.LoggingInToAuth0$.next(false);
-        this.LoggedInToAuth0$.next(signedIn);
+        this.LoggedInToAuth0$.next(loggedIn);
     }
 
     public get GettingFreeVoteJwt(): boolean { return this.GetItem('gettingFreeVoteJwt') === 'true'; }
-    public set GettingFreeVoteJwt(gettingFreeVoteJwt: boolean) {
-        // Save
-        this.SetItem('gettingFreeVoteJwt', String(gettingFreeVoteJwt));
-        this.SetItem('gotFreeVoteJwt', String(false));
+    public set GettingFreeVoteJwt(getting: boolean) {
+        if (getting) {
+            // Clear existing
+            this.ClearAnonJwt();
+        }
+        // Save Status
+        this.SetItem('gettingFreeVoteJwt', String(getting));
         // Communicate
-        this.GettingFreeVoteJwt$.next(gettingFreeVoteJwt);
-        this.GotFreeVoteJwt$.next(false);
+        this.GotFreeVoteJwt$.next(false); // Getting, haven't yet got
     }
 
-    public get GotFreeVoteJwt(): boolean { return this.GetItem('gotFreeVoteJwt') === 'true'; }
-    public set GotFreeVoteJwt(gotFreeVoteJwt: boolean) {
-        // Save
-        this.SetItem('gettingFreeVoteJwt', String(false));
-        this.SetItem('gotFreeVoteJwt', String(gotFreeVoteJwt));
-        // Communicate
-        this.GettingFreeVoteJwt$.next(false);
-        this.GotFreeVoteJwt$.next(gotFreeVoteJwt);
-    }
-
-
-    // Subscribe to these in components rather than reference static values in localData
-    public LoggingInToAuth0$ = new Subject<boolean>();
-    public LoggedInToAuth0$ = new Subject<boolean>();
-    public GettingFreeVoteJwt$ = new Subject<boolean>();
-    public GotFreeVoteJwt$ = new Subject<boolean>();
-
-    public auth0Profile: any; // Auth0 Profile Data saved to app on login
+    // We have a jwt - signed in or not - unless just signed out or never signed in
+    public get GotFreeVoteJwt(): boolean {
+        return !!this.GetItem('jwt');
+    } // actually have a jwt
 
     // Where an anon user selects items by sessionID, so does signed in user
     // Anon sessionIDs should be renewed opportunistically and returned if updated?
 
+    // jwt contains All claims
     // SessionID is baked into jwt for anon or signed-in users
-    public jwt = '';
-    public roles: string[] = [];
-    public freeVoteProfile = new FreeVoteProfile(); // For client updates to API
-    public updatingProfile = false; // on all backend interactions we get jwt and assignservervalues - don't reassign before backend update
+    public get jwt(): string { return this.GetItem('jwt'); }
+    public set jwt(jwt: string) {
+        if (jwt === null || jwt === undefined) { jwt = ''; }
+        // Set
+        this.SetItem('jwt', jwt);
+        // Communicate
+        this.GotFreeVoteJwt$.next(!!jwt);
+    }
 
-    public questionSelected = '';
+    public ClearAnonJwt(): void {
+        this.jwt = '';
+        // Communicate
+        this.GotFreeVoteJwt$.next(false);
+    }
 
-    public ActiveAliasForFilter = ''; // May be empty string
+    public get roles(): string[] {
+        const roleString = this.GetItem('roles');
+        if (!!roleString) {
+            return roleString.split(',');
+        } else {
+            return [''];
+        }
+    }
+    public set roles(roles: string[]) {
+        let roleString = '';
+        if (roles) { roleString = roles.join(','); }
+        this.SetItem('roles', roleString);
+    }
 
     // Depending on already being sanitised - straight conversion between values as would be saved in database
     TopicToSlashTag(topic: string): string {
@@ -154,16 +174,6 @@ export class LocalDataService {
 
     public LoadValues(): void {
 
-        // jwt contains All claims
-        this.jwt = this.GetItem('jwt');
-
-        const roles = this.GetItem('roles');
-        if (!roles) {
-            this.roles = [''];
-        } else {
-            this.roles = this.GetItem('roles').split(',');
-        }
-
         // client side values - user may update and post to API
         this.freeVoteProfile.alias = this.GetItem('alias');
         this.freeVoteProfile.country = this.GetItem('country');
@@ -173,19 +183,10 @@ export class LocalDataService {
         this.freeVoteProfile.profilePictureOptionID = this.GetItem('profilePictureOptionID');
         this.freeVoteProfile.profilePicture = this.GetItem('profilePicture');
 
-        this.PreviousAliasSelected = this.GetItem('previousAliasSelected');
         this.ActiveAliasForFilter = this.PreviousAliasSelected;  // may be ''
     }
 
     public SaveValues(): void {
-
-        let roleString = '';
-        if (this.roles) { roleString = this.roles.join(','); }
-
-        if (this.jwt === null || this.jwt === undefined) { this.jwt = ''; }
-
-        this.SetItem('jwt', this.jwt);
-        this.SetItem('roles', roleString);
 
         if (this.freeVoteProfile) {
             if (this.freeVoteProfile.alias) { this.SetItem('alias', this.freeVoteProfile.alias); }
@@ -206,8 +207,13 @@ export class LocalDataService {
 
         if (values && !this.updatingProfile) {
 
-            this.GotFreeVoteJwt = !!values.jwt;
-            if (values.jwt) { this.jwt = values.jwt; }
+            if (!!values.jwt) {
+                // Set
+                this.jwt = values.jwt;
+                this.GettingFreeVoteJwt = false;
+                console.log('Your new jwt sir:', values.jwt);
+            }
+
             if (values.roles) { this.roles = values.roles.toString().split(','); }
 
             if (values.alias) { this.freeVoteProfile.alias = values.alias; }
@@ -256,24 +262,22 @@ export class LocalDataService {
     public get PreviousAliasSelected(): string { return this.GetItem('previousAliasSelected'); }
     public set PreviousAliasSelected(alias: string) { this.SetItem('previousAliasSelected', alias); }
 
+    public get ActiveAliasForFilter(): string { return this.GetItem('activeAliasForFilter'); }
+    public set ActiveAliasForFilter(activeAliasForFilter: string) { this.SetItem('activeAliasForFilter', activeAliasForFilter); }
+
     public ClearAliasFilter(): void { this.ActiveAliasForFilter = ''; }
     public RestoreAliasFilter(): void { this.ActiveAliasForFilter = this.PreviousAliasSelected; }
 
     public SignedOut(): void {
 
-        this.LoggedInToAuth0$.next(false);
+        // Save signed out state
+        this.LoggingInToAuth0 = false;
+        this.LoggedInToAuth0 = false;
 
-        this.SigningInToAuth0 = false;
-        this.SignedIn = false;
-        this.GettingFreeVoteJwt = false;
-        this.GotFreeVoteJwt = false;
+        this.ClearAnonJwt();
 
         // Communicate
         this.LoggedInToAuth0$.next(false);
-
-        // jwt contains All claims
-        this.jwt = '';
-        this.roles = [''];
 
         // client side values - user may update and post to API
         this.freeVoteProfile.alias = '';

@@ -42,7 +42,7 @@ export class HttpService {
       // Already have jwt - no need to do anything
       return of(true);
 
-    } else if (this.localData.SigningInToAuth0 || this.localData.GettingFreeVoteJwt) {
+    } else if (this.localData.LoggingInToAuth0 || this.localData.GettingFreeVoteJwt) {
 
       // Don't issue request yet - now's not the time,
       // or must wait for existing request to complete
@@ -61,7 +61,6 @@ export class HttpService {
         .pipe(
           tap(
             response => {
-              this.localData.GotFreeVoteJwt = true;
               this.localData.AssignServerValues(response); /// but new sessionid is not returned so can't be assigned (that's OK)
               this.localData.SaveValues();
             }
@@ -71,8 +70,6 @@ export class HttpService {
             if (!this.localData.jwt) {
               throwError('No JWT'); // must be handled by the subscriber
             }
-
-            this.localData.GettingFreeVoteJwt = false;
             this.jwtFetched$.next(true); // Any subsequently queued requests are now unlocked
             this.jwtFetched$.complete();
             return true; // now fulfil the original (promise) which DIDN'T return jwtFetched$

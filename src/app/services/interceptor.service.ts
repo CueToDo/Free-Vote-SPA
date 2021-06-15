@@ -38,7 +38,6 @@ export class InterceptorService implements HttpInterceptor {
         // There's getting a user and there's getting a token
         // Login gets the user but does not get the token ???
 
-        console.log('INTERCEPTED');
 
         const key: StateKey<string> = makeStateKey<string>(request.url);
 
@@ -74,14 +73,12 @@ export class InterceptorService implements HttpInterceptor {
                             }
                         });
 
-                        console.log('CLONED');
                         return next.handle(tokenReq);
                     }),
                     // https://stackoverflow.com/questions/43115390/type-void-is-not-assignable-to-type-observableinput
                     catchError(err => this.handleError(err))
                 );
             } else {
-                console.log('JUST HANDLE');
                 return next.handle(request);
             }
         }

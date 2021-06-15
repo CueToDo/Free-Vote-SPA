@@ -115,7 +115,7 @@ export class AuthService {
                         // If authenticated, response will be user object
                         // If not authenticated, response will be 'false'
                         this.localData.auth0Profile = response;
-                        this.localData.SignedIn = !!response; // bang bang you're boolean
+                        this.localData.LoggedInToAuth0 = !!response; // bang bang you're boolean
                     },
                     error: error => console.log('ERROR: localAuthSetup', error)
                 }
@@ -174,8 +174,10 @@ export class AuthService {
                 }),
                 concatMap(user => {
                     this.localData.auth0Profile = user;
-                    this.localData.SignedIn = !!user;
-                    // get ApiJwt for signed in user BEFORE redirecting in callback component
+                    this.localData.LoggedInToAuth0 = !!user;
+                    // get new ApiJwt for signed in user BEFORE redirecting in callback component
+                    // MUST clear first
+                    this.localData.ClearAnonJwt();
                     return this.httpService.getApiJwt();
                 }),
                 concatMap(
