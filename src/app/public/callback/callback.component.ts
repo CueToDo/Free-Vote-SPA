@@ -32,6 +32,8 @@ export class CallbackComponent implements OnInit, OnDestroy {
     // app.component subscribes to this and calls this.location.replaceState
     // This prevents completion of Auth0 login
 
+    console.log('callback component: initialising');
+
     this.callback$ = this.auth.handleAuthCallback().subscribe(
       {
         next: targetRoute => {

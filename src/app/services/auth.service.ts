@@ -61,6 +61,7 @@ export class AuthService {
                 tap(res => this.localData.LoggedInToAuth0$.next(res))
             );
 
+            console.log('Client only: setup handleRedirectCallback$');
             this.handleRedirectCallback$ = this.auth0Client$.pipe(
                 concatMap((client: Auth0Client) => from(client.handleRedirectCallback())));
         }
@@ -146,6 +147,9 @@ export class AuthService {
     handleAuthCallback(): Observable<string> {
 
         if (this.handleRedirectCallback$) {
+
+            console.log('auth service: handleAuthCallback');
+
             // Only the callback component should call this method
             // Call when app reloads after user logs in with Auth0
 
@@ -166,6 +170,8 @@ export class AuthService {
                 concatMap(cbRes => {
                     // Get and set target redirect route from callback results
                     targetRoute = cbRes.appState && cbRes.appState.target ? cbRes.appState.target : '/';
+
+                    console.log('callback targetroute:', targetRoute);
                     // Redirect callback complete;
                     // Go back to Auth0 for user details and login status
                     // combineLatest will not emit an initial value until each observable emits at least one value
@@ -173,6 +179,7 @@ export class AuthService {
                     return this.getUser$(); // this.isAuthenticated$
                 }),
                 concatMap(user => {
+                    console.log('Get new jwt for user:', user);
                     this.localData.auth0Profile = user;
                     this.localData.LoggedInToAuth0 = !!user;
                     // get new ApiJwt for signed in user BEFORE redirecting in callback component
