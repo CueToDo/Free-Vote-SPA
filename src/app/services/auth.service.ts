@@ -185,7 +185,7 @@ export class AuthService {
 
                     // get new ApiJwt for signed in user BEFORE redirecting in callback component
                     // MUST clear first
-                    this.localData.ClearAnonJwt();
+                    this.localData.ClearExistingJwt();
 
                     console.log('Get new jwt for user:', user);
                     return this.httpService.getApiJwt();

@@ -50,39 +50,44 @@ export class LocalDataService {
         this.LoggedInToAuth0$.next(loggedIn);
     }
 
-    public get GettingFreeVoteJwt(): boolean { return this.GetItem('gettingFreeVoteJwt') === 'true'; }
+    // Need in-memory value for server side tasks (no local storage)
+    private gettingFreevoteJwt = false;
+    public get GettingFreeVoteJwt(): boolean { return this.gettingFreevoteJwt; }
     public set GettingFreeVoteJwt(getting: boolean) {
         if (getting) {
             // Clear existing
-            this.ClearAnonJwt();
+            this.ClearExistingJwt();
         }
         // Save Status
-        this.SetItem('gettingFreeVoteJwt', String(getting));
+        this.gettingFreevoteJwt = getting; // no need to save to local storage
+
         // Communicate
         this.GotFreeVoteJwt$.next(false); // Getting, haven't yet got
     }
 
     // We have a jwt - signed in or not - unless just signed out or never signed in
-    public get GotFreeVoteJwt(): boolean {
-        return !!this.GetItem('jwt');
-    } // actually have a jwt
+    public get GotFreeVoteJwt(): boolean  // actually have a jwt
+    {
+        return !!this.JWT;
+    }
 
     // Where an anon user selects items by sessionID, so does signed in user
     // Anon sessionIDs should be renewed opportunistically and returned if updated?
 
     // jwt contains All claims
     // SessionID is baked into jwt for anon or signed-in users
-    public get jwt(): string { return this.GetItem('jwt'); }
-    public set jwt(jwt: string) {
+    // jwt must be in-memory for server side rendering
+    private jwt = '';
+    public get JWT(): string { return this.jwt; }
+    public set JWT(jwt: string) {
         if (jwt === null || jwt === undefined) { jwt = ''; }
-        // Set
-        this.SetItem('jwt', jwt);
+        this.jwt = jwt;
         // Communicate
         this.GotFreeVoteJwt$.next(!!jwt);
     }
 
-    public ClearAnonJwt(): void {
-        this.jwt = '';
+    public ClearExistingJwt(): void {
+        this.JWT = '';
         // Communicate
         this.GotFreeVoteJwt$.next(false);
     }
@@ -174,6 +179,8 @@ export class LocalDataService {
 
     public LoadValues(): void {
 
+        this.jwt = this.GetItem('jwt');
+
         // client side values - user may update and post to API
         this.freeVoteProfile.alias = this.GetItem('alias');
         this.freeVoteProfile.country = this.GetItem('country');
@@ -187,6 +194,8 @@ export class LocalDataService {
     }
 
     public SaveValues(): void {
+
+        this.SetItem('jwt', this.JWT);
 
         if (this.freeVoteProfile) {
             if (this.freeVoteProfile.alias) { this.SetItem('alias', this.freeVoteProfile.alias); }
@@ -209,7 +218,7 @@ export class LocalDataService {
 
             if (!!values.jwt) {
                 // Set
-                this.jwt = values.jwt;
+                this.JWT = values.jwt;
                 this.GettingFreeVoteJwt = false;
                 console.log('Your new jwt sir:', values.jwt);
             }
@@ -274,7 +283,7 @@ export class LocalDataService {
         this.LoggingInToAuth0 = false;
         this.LoggedInToAuth0 = false;
 
-        this.ClearAnonJwt();
+        this.ClearExistingJwt();
 
         // Communicate
         this.LoggedInToAuth0$.next(false);
