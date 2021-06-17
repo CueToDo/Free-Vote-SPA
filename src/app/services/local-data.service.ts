@@ -157,21 +157,16 @@ export class LocalDataService {
         // Defaults
         this.website = 'free.vote';
         this.websiteUrl = 'https://free.vote/';
+        this.apiUrl = 'https://api.free.vote/';
 
-        // API: Always use live unless there is a manual override
-        const localAPI: boolean = this.GetItem('localAPI') === 'true';
-
-        if (isPlatformBrowser(this.platformId) && localAPI) {
+        if (isPlatformBrowser(this.platformId)) {
 
             // window not available on server
-            this.websiteUrl = window.location.origin + '/'; // .split('//')[1].split(':')[0].replace('api.', '');
+            this.websiteUrl = window.location.origin + '/';
 
-            this.apiUrl = 'http://localhost:54357/';
-            // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
-            // As CORS is configured, we could also use local IIS http://freevotetest.com or live https://free.vote
-
-        } else {
-            this.apiUrl = 'https://api.free.vote/';
+            // API: Always use live unless there is a local manual override
+            const localAPI: boolean = this.GetItem('localAPI') === 'true';
+            if (localAPI) { this.apiUrl = 'http://localhost:54357/'; }
         }
 
     }
