@@ -196,11 +196,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // card type: “summary”, “summary_large_image”, “app”, or “player”.
-    this.metaService.removeTag(`name='og:type'`);
+    this.metaService.removeTag(`property='og:type'`);
     this.metaService.removeTag(`name='twitter:card'`);
 
     this.metaService.addTags([
-      { name: 'og:type', content: 'article' }
+      { property: 'og:type', content: 'article' }
     ]);
 
     if (preview && previewImage) {
@@ -214,9 +214,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // Remove and add preview meta
-    this.metaService.removeTag(`property='description'`);
+    this.metaService.removeTag(`name='description'`);
     this.metaService.removeTag(`property='og:description'`);
-    this.metaService.removeTag(`property='twitter:description'`);
+    this.metaService.removeTag(`name='twitter:description'`);
 
     if (preview) {
       this.metaService.addTags([
@@ -228,6 +228,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Remove and add previewImage meta
     this.metaService.removeTag(`property='og:image'`);
+    this.metaService.removeTag(`property='og:image:width'`);
+    this.metaService.removeTag(`property='og:image:height'`);
     this.metaService.removeTag(`name='twitter:image'`);
 
     if (previewImage) {
@@ -239,8 +241,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       ]);
     } else {
       this.metaService.addTags([
-        { property: 'og:image', content: websiteUrl + 'assets/vulcan.png' },
-        { name: 'twitter:image', content: websiteUrl + 'assets/vulcan.png' }
+        { property: 'og:image', content: websiteUrl + 'assets/vulcan-384.png' },
+        { property: 'og:image:width', content: websiteUrl + '384' },
+        { property: 'og:image:height', content: websiteUrl + '384' },
+        { name: 'twitter:image', content: websiteUrl + 'assets/vulcan-384.png' }
       ]);
     }
 
