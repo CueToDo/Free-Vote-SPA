@@ -86,7 +86,7 @@ export class AppDataService {
   private extents: Kvp[] = []; // GeographicalExtent of group
 
   public PointTypes(): Observable<Kvp[]> {
-    if (this.pointTypes) {
+    if (!!this.pointTypes && this.pointTypes.length > 0) {
       return of(this.pointTypes);
     } else {
       return this.httpService
