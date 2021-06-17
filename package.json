@@ -68,5 +68,8 @@
   },
   "browser": {
     "fs": false
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
