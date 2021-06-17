@@ -179,12 +179,15 @@ export class AuthService {
                     return this.getUser$(); // this.isAuthenticated$
                 }),
                 concatMap(user => {
-                    console.log('Get new jwt for user:', user);
+
                     this.localData.auth0Profile = user;
                     this.localData.LoggedInToAuth0 = !!user;
+
                     // get new ApiJwt for signed in user BEFORE redirecting in callback component
                     // MUST clear first
                     this.localData.ClearAnonJwt();
+
+                    console.log('Get new jwt for user:', user);
                     return this.httpService.getApiJwt();
                 }),
                 concatMap(

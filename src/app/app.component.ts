@@ -173,9 +173,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // Requires Angular Universal Server Side Rendering
     // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
     this.metaService.addTags([
-      { name: 'keywords', content: `Free Vote, voting, democracy, ${csvKeywords}` },
-      { name: 'description', content: preview },
-      { name: 'twitter:description', content: 'View this point on free.vote' },
+      { name: 'keywords', content: `Free Vote, voting, democracy, ${csvKeywords}` }
     ]);
 
     if (title) {
@@ -213,10 +211,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (preview) {
       // Remove and add preview meta
+      this.metaService.removeTag(`property='description'`);
       this.metaService.removeTag(`property='og:description'`);
+      this.metaService.removeTag(`property='twitter:description'`);
 
       this.metaService.addTags([
-        { property: 'og:description', content: preview }
+        { name: 'description', content: preview },
+        { property: 'og:description', content: preview },
+        { name: 'twitter:description', content: preview }
       ]);
     }
 
