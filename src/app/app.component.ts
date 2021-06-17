@@ -162,7 +162,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setMetaData(title: string, preview: string, csvKeywords: string, pagePath: string, previewImage: string): void {
 
-    const url = this.localData.websiteUrl + this.appData.removeBookEnds(pagePath, '/');
+    const websiteUrl = this.localData.websiteUrl;
+    const url = websiteUrl + this.appData.removeBookEnds(pagePath, '/');
 
     // https://css-tricks.com/essential-meta-tags-social-media/
     // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
@@ -195,7 +196,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // card type: “summary”, “summary_large_image”, “app”, or “player”.
+    this.metaService.removeTag(`name='og:type'`);
     this.metaService.removeTag(`name='twitter:card'`);
+
+    this.metaService.addTags([
+      { name: 'og:type', content: 'article' }
+    ]);
 
     if (preview && previewImage) {
       this.metaService.addTags([
@@ -231,7 +237,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         { property: 'og:image', content: previewImage },
         { name: 'twitter:image', content: previewImage }
       ]);
+    } else {
+      this.metaService.addTags([
+        { property: 'og:image', content: websiteUrl + 'assets/vulcan.png' },
+        { name: 'twitter:image', content: websiteUrl + 'assets/vulcan.png' }
+      ]);
     }
+
+    // facebook app_id
+    this.metaService.removeTag(`name='fb:app_id'`);
+    this.metaService.addTags([
+      { name: 'fb:app_id', content: '802708376543547' }
+    ]);
+
   }
 
 
