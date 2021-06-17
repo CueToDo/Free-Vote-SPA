@@ -52,10 +52,11 @@ export class PointComponent implements OnInit {
 
   error = '';
 
+  public linkShare = '';
+
   // https://stackoverflow.com/questions/37277527/how-to-use-enum-in-angular-2-templates
   // https://stackoverflow.com/questions/35923744/pass-enums-in-angular2-view-templates
   public PointTypesEnum = PointTypesEnum;
-
 
   constructor(
     public localData: LocalDataService, // public - used in template
@@ -91,6 +92,8 @@ export class PointComponent implements OnInit {
     }
 
     this.extractMediaEmbeds();
+
+    this.linkShare = this.localData.websiteUrl + 'slash-tag' + this.localData.PreviousSlashTagSelected + '/' + this.SelectSingleTitle;
   }
 
   AssignTags(): void {

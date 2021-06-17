@@ -381,9 +381,7 @@
 
         <mat-menu #shareCommands>
 
-          <!-- Until we have cdkCopyToClipboard working, just link to self -->
-          <button mat-menu-item cdkCopyToClipboard="'value'"
-            [routerLink]="'/slash-tag/' + localData.PreviousSlashTagSelected + '/' + SelectSingleTitle">
+          <button mat-menu-item [cdkCopyToClipboard]="linkShare">
             <mat-icon>playlist_add</mat-icon>
             copy link
           </button>

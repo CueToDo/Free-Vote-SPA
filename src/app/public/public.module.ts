@@ -8,6 +8,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
 import { MaterialModule } from '../material.module';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // Auth0
 import { CallbackComponent } from './callback/callback.component';
@@ -48,6 +49,7 @@ import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
     RouterModule,
     FormsModule,
     MaterialModule,
+    ClipboardModule,
     FlexLayoutModule,
     // CKEditorModule,
     CustomModule

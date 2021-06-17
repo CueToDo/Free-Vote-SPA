@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ClipboardModule } from '@angular/cdk/clipboard';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
@@ -48,16 +47,20 @@ import { AppComponent } from './app.component';
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserTransferStateModule,
     BrowserAnimationsModule,
-    ClipboardModule,
-    MaterialModule,
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
 
-    BsDropdownModule.forRoot(), // Bootstrap DropDowns
     // FacebookModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+
+    // Material
+    MaterialModule,
+
+    // Bootstrap DropDowns
+    BsDropdownModule.forRoot(),
+
     CustomModule,
     PublicModule,
     OrganisationsModule

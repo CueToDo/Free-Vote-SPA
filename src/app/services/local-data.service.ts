@@ -154,18 +154,17 @@ export class LocalDataService {
 
     public SetServiceURL(): void {
 
+        // Defaults
         this.website = 'free.vote';
         this.websiteUrl = 'https://free.vote/';
 
-        // No longer used: check if running locally to determine service url
-        // Always use live unless there is a manual override
-
+        // API: Always use live unless there is a manual override
         const localAPI: boolean = this.GetItem('localAPI') === 'true';
 
         if (isPlatformBrowser(this.platformId) && localAPI) {
 
             // window not available on server
-            const spaDomain = window.location.origin.split('//')[1].split(':')[0].replace('api.', '');
+            this.websiteUrl = window.location.origin + '/'; // .split('//')[1].split(':')[0].replace('api.', '');
 
             this.apiUrl = 'http://localhost:54357/';
             // must match the value in Visual Studio launchsettings.json (SSL enabled in Project Properties Debug)
