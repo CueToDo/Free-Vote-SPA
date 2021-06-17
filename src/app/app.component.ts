@@ -167,8 +167,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // https://css-tricks.com/essential-meta-tags-social-media/
     // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
     this.metaService.removeTag(`name='keywords'`);
-    this.metaService.removeTag(`name='description'`);
-    this.metaService.removeTag(`name='twitter:description'`);
 
     // Requires Angular Universal Server Side Rendering
     // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
@@ -176,21 +174,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       { name: 'keywords', content: `Free Vote, voting, democracy, ${csvKeywords}` }
     ]);
 
-    if (title) {
-      // Remove and title meta
-      this.metaService.removeTag(`property='og:title'`);
-      this.metaService.removeTag(`name='twitter:title'`);
+    // Remove and title meta
+    this.metaService.removeTag(`property='og:title'`);
+    this.metaService.removeTag(`name='twitter:title'`);
 
+    if (title) {
       this.metaService.addTags([
         { property: 'og:title', content: title },
         { name: 'twitter:title', content: title }
       ]);
     }
 
-    if (url) {
-      // Remove and add url meta
-      this.metaService.removeTag(`property='og:url'`);
+    // Remove and add url meta
+    this.metaService.removeTag(`property='og:url'`);
 
+    if (url) {
       this.metaService.addTags([
         { property: 'og:url', content: url }
       ]);
@@ -209,12 +207,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       ]);
     }
 
-    if (preview) {
-      // Remove and add preview meta
-      this.metaService.removeTag(`property='description'`);
-      this.metaService.removeTag(`property='og:description'`);
-      this.metaService.removeTag(`property='twitter:description'`);
+    // Remove and add preview meta
+    this.metaService.removeTag(`property='description'`);
+    this.metaService.removeTag(`property='og:description'`);
+    this.metaService.removeTag(`property='twitter:description'`);
 
+    if (preview) {
       this.metaService.addTags([
         { name: 'description', content: preview },
         { property: 'og:description', content: preview },
@@ -222,11 +220,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       ]);
     }
 
-    if (previewImage) {
-      // Remove and add previewImage meta
-      this.metaService.removeTag(`property='og:image'`);
-      this.metaService.removeTag(`name='twitter:image'`);
+    // Remove and add previewImage meta
+    this.metaService.removeTag(`property='og:image'`);
+    this.metaService.removeTag(`name='twitter:image'`);
 
+    if (previewImage) {
       // Requires Angular Universal Server Side Rendering
       // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
       this.metaService.addTags([
