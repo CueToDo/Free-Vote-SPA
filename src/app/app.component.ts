@@ -189,14 +189,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       ]);
     }
 
+    if (url) {
+      // Remove and add url meta
+      this.metaService.removeTag(`property='og:url'`);
+
+      this.metaService.addTags([
+        { property: 'og:url', content: url }
+      ]);
+    }
+
+    // card type: “summary”, “summary_large_image”, “app”, or “player”.
+    this.metaService.removeTag(`name='twitter:card'`);
+
+    if (preview && previewImage) {
+      this.metaService.addTags([
+        { name: 'twitter:card', content: 'summary_large_image' }
+      ]);
+    } else if (preview) {
+      this.metaService.addTags([
+        { name: 'twitter:card', content: 'summary' }
+      ]);
+    }
+
     if (preview) {
       // Remove and add preview meta
       this.metaService.removeTag(`property='og:description'`);
-      this.metaService.removeTag(`name='twitter:card'`);
 
       this.metaService.addTags([
-        { property: 'og:description', content: preview },
-        { name: 'twitter:card', content: preview }
+        { property: 'og:description', content: preview }
       ]);
     }
 
@@ -212,16 +232,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         { name: 'twitter:image', content: previewImage }
       ]);
     }
-
-    if (url) {
-      // Remove and add url meta
-      this.metaService.removeTag(`property='og:url'`);
-
-      this.metaService.addTags([
-        { property: 'og:url', content: url }
-      ]);
-    }
-
   }
 
 
