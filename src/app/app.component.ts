@@ -249,9 +249,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // facebook app_id
-    this.metaService.removeTag(`name='fb:app_id'`);
+    this.metaService.removeTag(`property='fb:app_id'`);
     this.metaService.addTags([
-      { name: 'fb:app_id', content: '802708376543547' }
+      { property: 'fb:app_id', content: '802708376543547' }
     ]);
 
   }
