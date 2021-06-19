@@ -33,7 +33,7 @@ import { tap, map, filter } from 'rxjs/operators';
   styleUrls: ['./point-edit.component.css'],
   preserveWhitespaces: true
 })
-export class PointEditComponent implements OnInit, OnDestroy {
+export class PointEditComponent implements OnInit {
 
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent
   @Input() point = new Point();
@@ -113,7 +113,6 @@ export class PointEditComponent implements OnInit, OnDestroy {
   onCKEBlur(): void {
     this.userTouched = !this.cancelled;
     this.cancelled = false;
-    console.log('OOF');
   }
 
   addMedia(): void {
@@ -430,12 +429,12 @@ export class PointEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    // When an Observable issues an OnError or OnComplete notification to its observers,
-    // this ends the subscription.
-    // Observers do not need to issue an Unsubscribe notification to end subscriptions
-    // that are ended by the Observable in this way.
-    /// No need to unsubscribe http calls which will end with completion or error
-  }
+  // ngOnDestroy(): void {
+  // When an Observable issues an OnError or OnComplete notification to its observers,
+  // this ends the subscription.
+  // Observers do not need to issue an Unsubscribe notification to end subscriptions
+  // that are ended by the Observable in this way.
+  /// No need to unsubscribe http calls which will end with completion or error
+  // }
 
 }

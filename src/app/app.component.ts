@@ -26,7 +26,7 @@ import { PagePreviewMetaData } from './models/point.model';
   styleUrls: ['./app.component.css'],
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: false, autoClose: true } }]
 })
-export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit {
 
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
@@ -385,8 +385,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.localData.SetServiceURL();
   }
 
-  ngOnDestroy(): void {
-    // No need to create subscriptions to unsubscribe in app.component
-  }
+  // ngOnDestroy(): void {
+  // No need to create subscriptions to unsubscribe in app.component
+  // }
 
 }

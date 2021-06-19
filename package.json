@@ -1,13 +1,14 @@
 {
   "name": "free-vote",
-  "version": "12.0.1",
+  "version": "12.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --watch",
     "pwa": "http-server -p 8080 -c-1 dist/free-vote",
     "build": "ng build --configuration production",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "eslint . --ext .ts",
     "e2e": "ng e2e",
     "build:ssr": "ng build --configuration production && ng run free-vote:server:production",
     "serve:ssr": "node dist/free-vote/server/main.js",
@@ -43,19 +44,26 @@
     "ngx-device-detector": "^2.0.5",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
-    "typescript": "^4.2.4",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^12.0.5",
+    "@angular-eslint/builder": "12.1.0",
+    "@angular-eslint/eslint-plugin": "12.1.0",
+    "@angular-eslint/eslint-plugin-template": "12.1.0",
+    "@angular-eslint/schematics": "12.1.0",
+    "@angular-eslint/template-parser": "12.1.0",
     "@angular/cli": "^12.0.5",
     "@angular/compiler-cli": "^12.0.5",
     "@nguniversal/builders": "^12.0.2",
     "@types/express": "^4.17.0",
-    "@types/jasmine": "^3.6.3",
+    "@types/jasmine": "^3.7.7",
     "@types/lodash-es": "^4.17.4",
-    "@types/node": "^12.20.0",
+    "@types/node": "^12.20.15",
+    "@typescript-eslint/eslint-plugin": "4.23.0",
+    "@typescript-eslint/parser": "4.23.0",
     "codelyzer": "^6.0.0",
+    "eslint": "^7.26.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.3.4",
@@ -65,7 +73,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
-    "tslint": "~6.1.0"
+    "typescript": "~4.2.0"
   },
   "browser": {
     "fs": false

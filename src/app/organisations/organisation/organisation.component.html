@@ -23,7 +23,7 @@
 
                     <span *ngIf="showCountries">
                         Countries: <span *ngFor="let country of OrganisationDisplay?.countries; let i = index"
-                            class="data">{{ country }}<span *ngIf="i != OrganisationDisplay?.countries?.length - 1">,
+                            class="data">{{ country }}<span *ngIf="i !== OrganisationDisplay?.countries?.length ?? 0 - 1">,
                             </span></span>
                     </span>
 
@@ -37,11 +37,11 @@
                 </p>
 
                 <!-- Discussion Groups -->
-                <p *ngIf="OrganisationDisplay?.groups && OrganisationDisplay?.groups?.length > 0">
+                <p *ngIf="OrganisationDisplay?.groups && (OrganisationDisplay?.groups?.length)?? 0 > 0">
                     Discussion groups:
                     <span *ngFor="let group of OrganisationDisplay?.groups; let i = index">
                         <a [routerLink]="issuesLink(group)">{{ group }}</a>
-                        <ng-container *ngIf="i != OrganisationDisplay?.groups?.length - 1">, </ng-container>
+                        <ng-container *ngIf="i !== OrganisationDisplay?.groups?.length ?? 0 - 1">, </ng-container>
                     </span>
                 </p>
 
