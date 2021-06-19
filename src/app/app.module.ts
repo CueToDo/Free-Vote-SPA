@@ -1,6 +1,9 @@
-
 // Angular
-import { BrowserModule, BrowserTransferStateModule, Title } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  BrowserTransferStateModule,
+  Title,
+} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -35,7 +38,6 @@ import { OrganisationsModule } from './organisations/organisations.module';
 // https://angular.io/guide/singleton-services
 // https://stackoverflow.com/questions/51502757/angular-service-singleton-constructor-called-multiple-times
 
-
 // App Components
 import { AppComponent } from './app.component';
 
@@ -53,7 +55,9 @@ import { AppComponent } from './app.component';
     AppRoutingModule,
 
     // FacebookModule.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
 
     // Material
     MaterialModule,
@@ -63,10 +67,10 @@ import { AppComponent } from './app.component';
 
     CustomModule,
     PublicModule,
-    OrganisationsModule
+    OrganisationsModule,
   ],
   declarations: [
-    AppComponent
+    AppComponent,
     // FBTestComponent
   ],
   // Singleton Services are provided in AppRoot
@@ -74,12 +78,10 @@ import { AppComponent } from './app.component';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
-      multi: true
+      multi: true,
     },
-    Title
+    Title,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-
-}
+export class AppModule {}

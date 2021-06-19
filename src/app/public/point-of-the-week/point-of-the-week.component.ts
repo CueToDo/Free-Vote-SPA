@@ -4,16 +4,10 @@ import { AppDataService } from '../../services/app-data.service';
 
 @Component({
   templateUrl: './point-of-the-week.component.html',
-  styleUrls: ['./point-of-the-week.component.css']
+  styleUrls: ['./point-of-the-week.component.css'],
 })
 export class PointOfTheWeekComponent implements OnInit {
+  constructor() {}
 
-  constructor() {
-
-  }
-
-  ngOnInit() {
-
-  }
-
+  ngOnInit() {}
 }

@@ -8,9 +8,8 @@ describe('PointOfTheWeekComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PointOfTheWeekComponent ]
-    })
-    .compileComponents();
+      declarations: [PointOfTheWeekComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -47,7 +47,7 @@
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,              
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -113,27 +113,6 @@
               "src/styles.css"
             ],
             "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "free-vote:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "free-vote:serve:production"
-            }
           }
         },
         "server": {

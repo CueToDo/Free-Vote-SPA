@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'nbsp'
+  name: 'nbsp',
 })
 export class NbspPipe implements PipeTransform {
   transform(value: string): string {

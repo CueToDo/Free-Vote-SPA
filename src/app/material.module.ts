@@ -31,11 +31,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatSlideToggleModule,
     MatTabsModule,
     MatTooltipModule,
-    MatProgressBarModule
-  ]
+    MatProgressBarModule,
+  ],
 })
-export class MaterialModule { }
-
+export class MaterialModule {}
 
 /*
   Copyright 2018 Google Inc. All Rights Reserved.

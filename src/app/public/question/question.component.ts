@@ -1,4 +1,3 @@
-
 // Angular
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
@@ -14,10 +13,9 @@ import { QuestionsService } from 'src/app/services/questions.service';
 @Component({
   selector: 'app-question',
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.css']
+  styleUrls: ['./question.component.css'],
 })
 export class QuestionComponent implements OnInit {
-
   @Input() public question = new Question();
   @Input() questionCount = 0;
 
@@ -31,38 +29,33 @@ export class QuestionComponent implements OnInit {
     public localData: LocalDataService, // public - used in template
     public appData: AppDataService,
     private questionsService: QuestionsService
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   edit(): void {
     this.editing = true;
   }
 
   delete(): void {
-
     this.error = '';
     const questionID = this.question?.questionID;
 
     if (questionID) {
       if (confirm('Are you sure you wish to delete this question?')) {
-        this.questionsService.QuestionDelete(questionID)
-          .subscribe(
-            {
-              next: () => this.QuestionDeleted.emit(questionID),
-              // not looking at any result <<<
-              error: serverError => {
-                this.error = serverError.error.detail;
-                console.log(this.error);
-              }
-            });
+        this.questionsService.QuestionDelete(questionID).subscribe({
+          next: () => this.QuestionDeleted.emit(questionID),
+          // not looking at any result <<<
+          error: serverError => {
+            this.error = serverError.error.detail;
+            console.log(this.error);
+          },
+        });
       }
     } else {
       this.error = 'Unknown question id - cannot be deleted';
     }
   }
-
 
   onCompleteEdit(): void {
     this.editing = false;
@@ -73,12 +66,13 @@ export class QuestionComponent implements OnInit {
   }
 
   QuestionFeedback(supportLevelID: PointSupportLevels): void {
-
     if (!this.question?.voteIsUpdatable) {
       alert('Question vote up/down is not updatable');
     } else {
-
-      if (this.question.supportLevelID === supportLevelID && !this.question.questionModified) {
+      if (
+        this.question.supportLevelID === supportLevelID &&
+        !this.question.questionModified
+      ) {
         // If clicked on the current support level then delete it
         if (confirm('Are you sure you wish to delete your vote?')) {
           supportLevelID = PointSupportLevels.None;
@@ -87,7 +81,8 @@ export class QuestionComponent implements OnInit {
         }
       }
 
-      this.questionsService.QuestionVote(this.question.questionID, supportLevelID, false)
+      this.questionsService
+        .QuestionVote(this.question.questionID, supportLevelID, false)
         .subscribe({
           next: response => {
             if (this.question) {
@@ -98,9 +93,8 @@ export class QuestionComponent implements OnInit {
           error: serverError => {
             console.log(serverError);
             this.error = serverError.error.detail;
-          }
+          },
         });
-
     }
   }
 
@@ -136,5 +130,4 @@ export class QuestionComponent implements OnInit {
   anon(): void {
     alert('ToDo');
   }
-
 }

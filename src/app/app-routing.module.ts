@@ -1,4 +1,3 @@
-
 // Angular
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -17,7 +16,6 @@ import { QuestionAnswersComponent } from './public/question-answers/question-ans
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from './services/login-route-guard.service';
 
-
 const appRoutes: Routes = [
   // Refresh in browser fails - when route is specified
   // Make a web.config file in the root directory.
@@ -35,19 +33,36 @@ const appRoutes: Routes = [
 
   { path: 'callback', component: CallbackComponent },
 
-  { path: 'voters', component: VotersMenuComponent, canActivate: [LoginRouteGuardService] },
-  { path: 'voters/:alias', component: VotersMenuComponent, canActivate: [LoginRouteGuardService] },
+  {
+    path: 'voters',
+    component: VotersMenuComponent,
+    canActivate: [LoginRouteGuardService],
+  },
+  {
+    path: 'voters/:alias',
+    component: VotersMenuComponent,
+    canActivate: [LoginRouteGuardService],
+  },
   { path: 'by/:alias', component: TagsPointsComponent },
-  { path: 'point-of-the-week', component: PointOfTheWeekComponent, canActivate: [LoginRouteGuardService] },
+  {
+    path: 'point-of-the-week',
+    component: PointOfTheWeekComponent,
+    canActivate: [LoginRouteGuardService],
+  },
 
   // organisations, groups and profile
   {
-    path: 'organisations', loadChildren:
-      () => import('./organisations/organisations.module').then(m => m.OrganisationsModule), canActivate: [LoginRouteGuardService]
+    path: 'organisations',
+    loadChildren: () =>
+      import('./organisations/organisations.module').then(
+        m => m.OrganisationsModule
+      ),
+    canActivate: [LoginRouteGuardService],
   },
   {
-    path: 'my/:tab', loadChildren:
-      () => import('./my/my.module').then(m => m.MyModule), canActivate: [LoginRouteGuardService]
+    path: 'my/:tab',
+    loadChildren: () => import('./my/my.module').then(m => m.MyModule),
+    canActivate: [LoginRouteGuardService],
   },
 
   // slashtags is the "internal" link to TagsPointsComponent from which all TABS are accessible
@@ -60,17 +75,18 @@ const appRoutes: Routes = [
   { path: 'slash-tag/:tag/:title', component: TagsPointsComponent },
   { path: ':tag/by/:alias', component: TagsPointsComponent },
   { path: ':tag/question/:questionId', component: QuestionAnswersComponent },
-  { path: ':tag/points', component: TagsPointsComponent },
   { path: ':tag/:pointId', component: TagsPointsComponent },
   { path: ':tag', component: TagsPointsComponent }, // POINTS: still like the SlashTag
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
-  { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )
+  { path: '**', redirectTo: '' }, // Add a wildcard route to app-routing.module.ts )
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes, {
-    initialNavigation: 'enabled'
-  })],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(appRoutes, {
+      initialNavigation: 'enabled',
+    }),
+  ],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

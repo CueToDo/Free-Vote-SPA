@@ -1,5 +1,12 @@
 // Angular
-import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -24,10 +31,14 @@ import { PagePreviewMetaData } from './models/point.model';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: false, autoClose: true } }]
+  providers: [
+    {
+      provide: BsDropdownConfig,
+      useValue: { isAnimated: false, autoClose: true },
+    },
+  ],
 })
 export class AppComponent implements OnInit, AfterViewInit {
-
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
 
@@ -45,11 +56,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   public altVulcan = 'Vulcan';
   public under500 = false;
 
-
   constructor(
     private router: Router,
     public auth: AuthService,
-    public localData: LocalDataService, /* inject to ensure constructed and values Loaded */
+    public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
     private breakpointObserver: BreakpointObserver,
     private location: Location,
@@ -58,11 +68,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     @Inject(DOCUMENT) private htmlDocument: HTMLDocument,
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
     @Inject(PLATFORM_ID) private platformId: object
-  ) { }
-
+  ) {}
 
   ngOnInit(): void {
-
     // https://stackoverflow.com/questions/39845082/angular-2-change-favicon-icon-as-per-configuration/45753615
     let favicon = 'favicon.ico';
     switch (this.localData.website) {
@@ -73,7 +81,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         break;
     }
 
-    this.htmlDocument.getElementById('appFavicon')?.setAttribute('href', `/assets/${favicon}?d=${Date.now()}`);
+    this.htmlDocument
+      .getElementById('appFavicon')
+      ?.setAttribute('href', `/assets/${favicon}?d=${Date.now()}`);
 
     // On initial load, check authentication state with authorization server
     // Set up local auth streams if user is already authenticated
@@ -82,13 +92,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // The app component is initialised when we come back from Auth0 login
     // Wait until we have a pukka free.vote jwt before doing the following
-    this.localData.GotFreeVoteJwt$.subscribe(
-      { next: _ => this.appData.InitialisePreviousSlashTagSelected() }
-    );
+    this.localData.GotFreeVoteJwt$.subscribe({
+      next: _ => this.appData.InitialisePreviousSlashTagSelected(),
+    });
 
     // SSR First Page Meta Data for Social Media
     this.appData.PagePreview$.subscribe({
-      next: preview => this.setInitialMetaData(preview)
+      next: preview => this.setInitialMetaData(preview),
     });
 
     // Route and Route Parameters: Setup and subscribe to changes
@@ -97,8 +107,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Angular Workshop https://stackoverflow.com/questions/33520043/how-to-detect-a-route-change-in-angular
     // The app component is the main route change detector.
     // It can then dispense this throughout the app via coredata service
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd))
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(_ => {
         // broadcast showing tags
         this.RouteOrParamsUpdated(this.router.url);
@@ -106,16 +116,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // app.compnent responds to child component changes
     // ie route parameters changes that it can't detect itself
-    this.appData.RouteParamChange$.subscribe(
-      (url: string) => {
-        this.RouteOrParamsUpdated(url);
-      }
-    );
+    this.appData.RouteParamChange$.subscribe((url: string) => {
+      this.RouteOrParamsUpdated(url);
+    });
 
     // Viewport Width: Setup and subscribe to changes on browser only - not for Universla SSR
 
     if (isPlatformBrowser(this.platformId)) {
-
       this.SetVPW();
 
       // app component monitors width and broadcasts changes via appDataService
@@ -126,17 +133,18 @@ export class AppComponent implements OnInit, AfterViewInit {
         });
     }
 
-
     // Observer breakpoints
 
     // https://alligator.io/angular/breakpoints-angular-cdk/
-    this.breakpointObserver.observe(['(max-width: 600px)'])
+    this.breakpointObserver
+      .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
         this.showBurger = state.matches;
         this.appData.ShowBurger$.next(this.showBurger);
       });
 
-    this.breakpointObserver.observe(['(max-width: 500px)'])
+    this.breakpointObserver
+      .observe(['(max-width: 500px)'])
       .subscribe((state: BreakpointState) => {
         this.under500 = state.matches;
       });
@@ -146,7 +154,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       // Triggered by HomeComponent (only) on begin or end input
       this.showVulcan = !istom;
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -160,8 +167,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.titleService.setTitle(title);
   }
 
-  setMetaData(title: string, preview: string, csvKeywords: string, pagePath: string, previewImage: string): void {
-
+  setMetaData(
+    title: string,
+    preview: string,
+    csvKeywords: string,
+    pagePath: string,
+    previewImage: string
+  ): void {
     const websiteUrl = this.localData.websiteUrl;
     const url = websiteUrl + this.appData.removeBookEnds(pagePath, '/');
 
@@ -172,7 +184,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Requires Angular Universal Server Side Rendering
     // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
     this.metaService.addTags([
-      { name: 'keywords', content: `Free Vote, voting, democracy, ${csvKeywords}` }
+      {
+        name: 'keywords',
+        content: `Free Vote, voting, democracy, ${csvKeywords}`,
+      },
     ]);
 
     // Remove and title meta
@@ -182,7 +197,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (title) {
       this.metaService.addTags([
         { property: 'og:title', content: title },
-        { name: 'twitter:title', content: title }
+        { name: 'twitter:title', content: title },
       ]);
     }
 
@@ -190,27 +205,21 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.metaService.removeTag(`property='og:url'`);
 
     if (url) {
-      this.metaService.addTags([
-        { property: 'og:url', content: url }
-      ]);
+      this.metaService.addTags([{ property: 'og:url', content: url }]);
     }
 
     // card type: “summary”, “summary_large_image”, “app”, or “player”.
     this.metaService.removeTag(`property='og:type'`);
     this.metaService.removeTag(`name='twitter:card'`);
 
-    this.metaService.addTags([
-      { property: 'og:type', content: 'article' }
-    ]);
+    this.metaService.addTags([{ property: 'og:type', content: 'article' }]);
 
     if (preview && previewImage) {
       this.metaService.addTags([
-        { name: 'twitter:card', content: 'summary_large_image' }
+        { name: 'twitter:card', content: 'summary_large_image' },
       ]);
     } else if (preview) {
-      this.metaService.addTags([
-        { name: 'twitter:card', content: 'summary' }
-      ]);
+      this.metaService.addTags([{ name: 'twitter:card', content: 'summary' }]);
     }
 
     // Remove and add preview meta
@@ -222,7 +231,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.metaService.addTags([
         { name: 'description', content: preview },
         { property: 'og:description', content: preview },
-        { name: 'twitter:description', content: preview }
+        { name: 'twitter:description', content: preview },
       ]);
     }
 
@@ -237,40 +246,47 @@ export class AppComponent implements OnInit, AfterViewInit {
       // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
       this.metaService.addTags([
         { property: 'og:image', content: previewImage },
-        { name: 'twitter:image', content: previewImage }
+        { name: 'twitter:image', content: previewImage },
       ]);
     } else {
       this.metaService.addTags([
         { property: 'og:image', content: websiteUrl + 'assets/vulcan-384.png' },
         { property: 'og:image:width', content: websiteUrl + '384' },
         { property: 'og:image:height', content: websiteUrl + '384' },
-        { name: 'twitter:image', content: websiteUrl + 'assets/vulcan-384.png' }
+        {
+          name: 'twitter:image',
+          content: websiteUrl + 'assets/vulcan-384.png',
+        },
       ]);
     }
 
     // facebook app_id
     this.metaService.removeTag(`property='fb:app_id'`);
     this.metaService.addTags([
-      { property: 'fb:app_id', content: '802708376543547' }
+      { property: 'fb:app_id', content: '802708376543547' },
     ]);
-
   }
 
-
-
   public setInitialMetaData(metaData: PagePreviewMetaData): void {
+    console.log(
+      'SET INITIAL META DATA',
+      metaData.title,
+      metaData.preview,
+      metaData.previewImage
+    );
 
-    console.log('SET INITIAL META DATA', metaData.title, metaData.preview, metaData.previewImage);
-
-    this.setMetaData(metaData.title, metaData.preview,
-      'Free Vote, Free, Vote, anonymous, voting, platform', /* keywords */
-      '', metaData.previewImage); /* pagePath, imagePath */
+    this.setMetaData(
+      metaData.title,
+      metaData.preview,
+      'Free Vote, Free, Vote, anonymous, voting, platform' /* keywords */,
+      '',
+      metaData.previewImage
+    ); /* pagePath, imagePath */
 
     this.appData.initialPageRendered = true;
   }
 
   public RouteOrParamsUpdated(url: string): void {
-
     this.appData.Route = url;
 
     if (url === '/' || url === '' || url.indexOf('/callback') === 0) {
@@ -283,23 +299,23 @@ export class AppComponent implements OnInit, AfterViewInit {
       // Setting meta data on route change useful to Google and social media previews
       // Runs after app component init in SSR for FCP (First Contentful Paint)
       this.setMetaData(
-        `${this.localData.website} Route Change Title`, /* title */
-        'Free Vote anonymous voting platform', /* preview */
-        'Free Vote, Free, Vote, anonymous, voting, platform', /* keywords */
-        this.localData.website, `${this.localData.website}/assets/Vulcan.png`); /* pagePath, imagePath */
+        `${this.localData.website} Route Change Title` /* title */,
+        'Free Vote anonymous voting platform' /* preview */,
+        'Free Vote, Free, Vote, anonymous, voting, platform' /* keywords */,
+        this.localData.website,
+        `${this.localData.website}/assets/Vulcan.png`
+      ); /* pagePath, imagePath */
 
       // Setting meta data on SSR app.component init will be of use to
       // social media sites as well as Google
       // , 'free vote voter profile', 'assets/Vulcan.png', 'free, vote, voter, profile'
       //   , `points on ${topic}`, 'assets/Slash Tag Cloud.PNG', `${topic}, slash, tag`
 
-
       // Set ShowVulcan to true on route change to home page
       // If home page emits InputSlashTagOnMobile in ngOnInit, get error
       // ExpressionChangedAfterItHasBeenCheckedError
       this.showVulcan = true;
     } else {
-
       this.home = false;
 
       if (url.indexOf('?') > 0) {
@@ -308,8 +324,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       this.pageTitle = url;
 
-      this.pageTitleToolTip = url === this.localData.PreviousSlashTagSelected
-        ? 'SlashTag/' + this.localData.PreviousTopicSelected : url.substr(1);
+      this.pageTitleToolTip =
+        url === this.localData.PreviousSlashTagSelected
+          ? 'SlashTag/' + this.localData.PreviousTopicSelected
+          : url.substr(1);
 
       if (url.indexOf('slash-tags') > -1) {
         this.appData.PageName$.next('slashTags');
@@ -337,16 +355,16 @@ export class AppComponent implements OnInit, AfterViewInit {
       // this will be updated on begin or end input on home page
       this.showVulcan = this.home;
     }
-
   }
 
   SetVPW(): void {
-
     if (isPlatformBrowser(this.platformId)) {
-
       // No window object on SSR - no need to set ViewwPort width
 
-      const vpw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      const vpw = Math.max(
+        document.documentElement.clientWidth,
+        window.innerWidth || 0
+      );
 
       let band: number;
 
@@ -373,7 +391,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   toggleLocalAPI(): void {
-
     if (this.localData.GetItem('localAPI') === 'true') {
       this.localData.SetItem('localAPI', 'false');
       this.localAPI = '';
@@ -388,5 +405,4 @@ export class AppComponent implements OnInit, AfterViewInit {
   // ngOnDestroy(): void {
   // No need to create subscriptions to unsubscribe in app.component
   // }
-
 }

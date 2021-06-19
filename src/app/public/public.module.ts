@@ -1,4 +1,3 @@
-
 // Angular
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -42,7 +41,6 @@ import { QuestionComponent } from './question/question.component';
 import { QuestionAnswersComponent } from './question-answers/question-answers.component';
 import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -52,7 +50,7 @@ import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
     ClipboardModule,
     FlexLayoutModule,
     // CKEditorModule,
-    CustomModule
+    CustomModule,
   ],
   declarations: [
     // Auth0
@@ -77,14 +75,14 @@ import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
     QuestionEditComponent,
     QuestionComponent,
     QuestionAnswersComponent,
-    CkeUniversalComponent
+    CkeUniversalComponent,
   ],
   exports: [
     PointComponent,
     PointsComponent,
     PointEditComponent,
     NavComponent,
-    ListComponent
-  ]
+    ListComponent,
+  ],
 })
-export class PublicModule { }
+export class PublicModule {}

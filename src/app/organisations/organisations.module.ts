@@ -44,10 +44,16 @@ const routes: Routes = [
   { path: 'new', component: OrganisationsComponent },
   { path: ':organisationName', component: OrganisationComponent },
   { path: ':organisationName/:groupName', component: GroupComponent },
-  { path: ':organisationName/:groupName/:issue', component: IssueDetailsComponent },
-  { path: ':organisationName/:groupName/:issue/:porqId', component: PorqDetailsComponent },
+  {
+    path: ':organisationName/:groupName/:issue',
+    component: IssueDetailsComponent,
+  },
+  {
+    path: ':organisationName/:groupName/:issue/:porqId',
+    component: PorqDetailsComponent,
+  },
   // This can't work
-  { path: ':group/:tag', component: TagsPointsComponent }
+  { path: ':group/:tag', component: TagsPointsComponent },
 ];
 
 @NgModule({
@@ -59,7 +65,7 @@ const routes: Routes = [
     MaterialModule,
     // CKEditorModule,
     PublicModule,
-    CustomModule
+    CustomModule,
   ],
   declarations: [
     ProgressComponent,
@@ -79,7 +85,7 @@ const routes: Routes = [
     OrganisationEditComponent,
     OrganisationComponent,
     OrganisationListComponent,
-    OrganisationsComponent
-  ]
+    OrganisationsComponent,
+  ],
 })
-export class OrganisationsModule { }
+export class OrganisationsModule {}

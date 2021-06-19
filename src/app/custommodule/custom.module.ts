@@ -27,7 +27,7 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     FormsModule,
     RouterModule,
     // CKEditorModule,
-    MaterialModule
+    MaterialModule,
   ],
   declarations: [
     DatepickerComponent,
@@ -35,7 +35,7 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     SafeURLPipe,
     ElementScrollDirective,
     TagDisplayPipe,
-    SafeHtmlPipe
+    SafeHtmlPipe,
   ],
   exports: [
     DatepickerComponent,
@@ -43,12 +43,8 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     SafeURLPipe,
     SafeHtmlPipe,
     ElementScrollDirective,
-    TagDisplayPipe
+    TagDisplayPipe,
   ],
-  providers: []
+  providers: [],
 })
-export class CustomModule {
-
-}
-
-
+export class CustomModule {}

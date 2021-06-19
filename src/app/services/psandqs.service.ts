@@ -16,19 +16,17 @@ import { PorQSelectionResult, PorQEdit } from '../models/porq.model';
 import { HttpService } from './http.service';
 import { AppDataService } from './app-data.service';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PsandQsService {
-
   // You should keep the template related logic into your component,
   // and the business related logic in your service.
 
   constructor(
     private httpClientService: HttpService,
-    private appDataService: AppDataService) {
-  }
+    private appDataService: AppDataService
+  ) {}
 
   PorQDescription(porQTypeID: PorQTypes): string {
     switch (porQTypeID) {
@@ -48,9 +46,12 @@ export class PsandQsService {
   // 2) Subsequent batch (very similar to above, can these be consolidated?)
   // 3) Page of points for all selection methods
   PsAndQsSelectIssue(
-    subGroupID: number, issueID: number, porQTypeID: PorQTypes,
-    proposalStatusID: ProposalStatuses, myPorQsOnly: boolean): Observable<PorQSelectionResult> {
-
+    subGroupID: number,
+    issueID: number,
+    porQTypeID: PorQTypes,
+    proposalStatusID: ProposalStatuses,
+    myPorQsOnly: boolean
+  ): Observable<PorQSelectionResult> {
     const batchSize = 50;
     const pageSize = 10;
     const sort = 1;
@@ -60,13 +61,14 @@ export class PsandQsService {
 
     return this.httpClientService
       .get(apiUrl)
-      .pipe(
-        map(returnData => this.CastToPorQSelectionResult(returnData))
-      );
+      .pipe(map(returnData => this.CastToPorQSelectionResult(returnData)));
   }
 
-  PsAndQsSelectGroup(groupID: number, proposalStatusID: ProposalStatuses, myPorQsOnly: boolean): Observable<PorQSelectionResult> {
-
+  PsAndQsSelectGroup(
+    groupID: number,
+    proposalStatusID: ProposalStatuses,
+    myPorQsOnly: boolean
+  ): Observable<PorQSelectionResult> {
     const batchSize = 50;
     const pageSize = 10;
     const sort = 1;
@@ -74,29 +76,22 @@ export class PsandQsService {
     // No Filters + infinite scroll on ...
     const apiUrl = `issues/PsAndQsSelectGroup/${groupID}/${proposalStatusID}/${myPorQsOnly}/${sort}/${batchSize}/${pageSize}`;
 
-    return this.httpClientService
-      .get(apiUrl)
-      .pipe(
-        tap(returnData => console.log('RETURN DATA', returnData)),
-        map(returnData => this.CastToPorQSelectionResult(returnData))
-      );
+    return this.httpClientService.get(apiUrl).pipe(
+      tap(returnData => console.log('RETURN DATA', returnData)),
+      map(returnData => this.CastToPorQSelectionResult(returnData))
+    );
   }
 
   PorQSelectSpecific(porQId: number): Observable<PorQSelectionResult> {
-
     const apiUrl = `issues/PorQSelectSpecific/${porQId}`;
 
-    return this.httpClientService
-      .get(apiUrl)
-      .pipe(
-        tap(returnData => console.log('FFS', returnData)),
-        map(returnData =>
-          this.CastToPorQSelectionResult(returnData))
-      );
+    return this.httpClientService.get(apiUrl).pipe(
+      tap(returnData => console.log('FFS', returnData)),
+      map(returnData => this.CastToPorQSelectionResult(returnData))
+    );
   }
 
   CastToPorQSelectionResult(sourceData: any): PorQSelectionResult {
-
     const PQSR = new PorQSelectionResult();
 
     PQSR.porQCount = sourceData.porQCount;
@@ -111,10 +106,7 @@ export class PsandQsService {
     return PQSR;
   }
 
-
-
   PorQUpdate(porQ: PorQEdit): Observable<number> {
-
     // construct a new PorQEdit
     const postData = {
       issueID: porQ.issueID,
@@ -125,18 +117,16 @@ export class PsandQsService {
       draft: porQ.draft,
     } as PorQEdit;
 
-    return this.httpClientService
-      .post('issues/porQUpdate', postData);
+    return this.httpClientService.post('issues/porQUpdate', postData);
   }
 
   PorQDelete(issueID: number, porQID: number): Observable<any> {
-    return this.httpClientService
-      .get(`issues/porQDelete/${issueID}/${porQID}`);
+    return this.httpClientService.get(`issues/porQDelete/${issueID}/${porQID}`);
   }
 
   PointAttachToPorQ(pointID: number, porQID: number): Observable<boolean> {
-    return this.httpClientService
-      .get(`issues/pointAttachToPorQ/${pointID}/${porQID}`);
+    return this.httpClientService.get(
+      `issues/pointAttachToPorQ/${pointID}/${porQID}`
+    );
   }
-
 }

@@ -1,11 +1,10 @@
 // HttpHeaders
 export enum ContentType {
   json,
-  form
+  form,
 }
 
 export enum PointSelectionTypes {
-
   // Not used in database
 
   SlashTag = 0, // Standard slection
@@ -19,8 +18,7 @@ export enum PointSelectionTypes {
   WoWAdmin = 6,
 
   TagSurvey = 7,
-  CDMPProposal = 8
-
+  CDMPProposal = 8,
 }
 
 export enum PointSortTypes {
@@ -29,7 +27,7 @@ export enum PointSortTypes {
   DateCreated = 1,
   TrendingActivity = 2,
   AllTimePopularity = 3,
-  Random = 4
+  Random = 4,
 }
 
 export enum PointSupportLevels {
@@ -37,7 +35,7 @@ export enum PointSupportLevels {
   Oppose = -1,
   None = 0, // None given or deleted
   StandAside = -8, // ~ Neutral
-  Report = -9
+  Report = -9,
 }
 
 export enum PointTypesEnum {
@@ -64,31 +62,31 @@ export enum PointTypesEnum {
   RecommendedListening = 26,
   Petition = 27,
   Question = 28,
-  CommentOrEditorial = 29
+  CommentOrEditorial = 29,
 }
 
 export enum TagCloudTypes {
   Trending,
-  Recent
+  Recent,
 }
 
 export enum PointFlags {
   Any = 0,
   Favourite = 1,
-  Important = 2
+  Important = 2,
 }
 
 export enum DraftStatusFilter {
   Any = 0,
   Published = 1,
-  Draft = 2
+  Draft = 2,
 }
 
 export enum PointFeedbackFilter {
   Any = 0,
   Yes = 1,
   No = 2,
-  Confirmation = 3
+  Confirmation = 3,
 }
 
 // Numeric enum
@@ -99,7 +97,7 @@ export enum GeographicalExtentID {
   Regional = 3,
   City = 4,
   Local = 5,
-  PrivateOrganisation = 6
+  PrivateOrganisation = 6,
 }
 
 // https://stackoverflow.com/questions/50784444/add-description-attribute-to-enum-and-read-this-description-in-typescript
@@ -113,27 +111,26 @@ export const GeographicalExtent = new Map<string, string>([
   [GeographicalExtentID.Regional.toString(), 'Regional'],
   [GeographicalExtentID.City.toString(), 'City'],
   [GeographicalExtentID.Local.toString(), 'Local'],
-  [GeographicalExtentID.PrivateOrganisation.toString(), 'Private']
+  [GeographicalExtentID.PrivateOrganisation.toString(), 'Private'],
 ]);
 
 export enum GroupDecisionBasisOption {
   SimpleMajority = 1,
   SuperMajority = 2,
-  Unanimous = 3
+  Unanimous = 3,
 }
 
 export const DecisionBasisOption = new Map<string, string>([
   [GroupDecisionBasisOption.SimpleMajority.toString(), 'Simple Majority'],
   [GroupDecisionBasisOption.SuperMajority.toString(), 'Super Majority'],
-  [GroupDecisionBasisOption.Unanimous.toString(), 'Unanimous']
+  [GroupDecisionBasisOption.Unanimous.toString(), 'Unanimous'],
 ]);
-
 
 export enum IssuePhases {
   Unpublished = 0,
   Prioritise = 1,
   DiscussAndDecide = 2,
-  Closed = 3
+  Closed = 3,
 }
 
 export enum IssueStatuses {
@@ -142,7 +139,7 @@ export enum IssueStatuses {
   Prioritisation = 2,
   Discussion = 4,
   ProposalVoting = 5,
-  Closed = 6
+  Closed = 6,
 }
 
 export enum ProposalStatuses {
@@ -151,19 +148,19 @@ export enum ProposalStatuses {
   VotingYetToStart = 1,
   VotingInProgress = 2,
   ProposalAccepted = 3,
-  ProposalNotAccepted = 4
+  ProposalNotAccepted = 4,
 }
 
 export enum PorQTypes {
   Proposal = 1,
   Question = 2,
   Perspective = 3,
-  ProPer = 4 // Proposal Or Perspective
+  ProPer = 4, // Proposal Or Perspective
 }
 
 export enum MeetingIntervals {
   Weekly = 1,
   MonthlyByDate = 2,
   Variable = 3,
-  MonthlyByWeekNumber = 4
+  MonthlyByWeekNumber = 4,
 }
