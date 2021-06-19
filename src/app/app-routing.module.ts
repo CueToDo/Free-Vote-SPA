@@ -60,6 +60,7 @@ const appRoutes: Routes = [
   { path: 'slash-tag/:tag/:title', component: TagsPointsComponent },
   { path: ':tag/by/:alias', component: TagsPointsComponent },
   { path: ':tag/question/:questionId', component: QuestionAnswersComponent },
+  { path: ':tag/points', component: TagsPointsComponent },
   { path: ':tag/:pointId', component: TagsPointsComponent },
   { path: ':tag', component: TagsPointsComponent }, // POINTS: still like the SlashTag
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
