@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
