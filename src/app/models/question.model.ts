@@ -9,8 +9,8 @@ export class QuestionEdit {
 }
 
 export class Question {
-
     question = '';
+    slug = '';
     points = 0;
     draft = false;
     questionID = 0;
@@ -29,7 +29,6 @@ export class Question {
     supportLevelID = PointSupportLevels.None; // How? -1, 0 +1
     questionModified = false; // PointModified after Feedback Given
 }
-
 
 export class QuestionSelectionResult {
     // My server and client code agreed these should be capitalised,
