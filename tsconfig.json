@@ -14,11 +14,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
-    "types": [
-      "node"
-    ],
-    "typeRoots": [ "../node_modules/@types" ],
+    "target": "es2017",
     "module": "es2020",
     "lib": [
       "es2018",
@@ -26,10 +22,12 @@
     ]
   },
   "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "fullTemplateTypeCheck": false,
-    "strictTemplates": false,
-    "types": [ "node" ]
+    "strictTemplates": true,
+    "types": [
+      "node"
+    ]
   }
 }

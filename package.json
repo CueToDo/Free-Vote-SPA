@@ -1,17 +1,19 @@
 {
   "name": "free-vote",
-  "version": "12.0.1",
+  "version": "12.2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --watch",
     "pwa": "http-server -p 8080 -c-1 dist/free-vote",
     "build": "ng build --configuration production",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint . --ext .ts",
     "e2e": "ng e2e",
     "build:ssr": "ng build --configuration production && ng run free-vote:server:production",
     "serve:ssr": "node dist/free-vote/server/main.js",
     "ssr": "npm run build:ssr && npm run serve:ssr",
+    "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
     "prerender-dynamic": "ng run free-vote:prerender --routes-file dynamic-routes.txt",
     "prerender": "ng run free-vote:prerender",
     "dev:ssr": "ng run free-vote:serve-ssr --port 7027",
@@ -43,7 +45,6 @@
     "ngx-device-detector": "^2.0.5",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
-    "typescript": "^4.2.4",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -57,14 +58,17 @@
     "@angular/compiler-cli": "^12.0.5",
     "@nguniversal/builders": "^12.0.2",
     "@types/express": "^4.17.0",
-    "@types/jasmine": "^3.6.3",
+    "@types/jasmine": "^3.7.7",
     "@types/lodash-es": "^4.17.4",
-    "@types/node": "^12.20.0",
+    "@types/node": "^12.20.15",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.27.0",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
     "codelyzer": "^6.0.0",
     "eslint": "^7.30.0",
     "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsdoc": "^35.3.2",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-prettier": "^3.4.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
@@ -76,7 +80,7 @@
     "prettier": "^2.3.2",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
-    "tslint": "~6.1.0"
+    "typescript": "~4.2.0"
   },
   "browser": {
     "fs": false

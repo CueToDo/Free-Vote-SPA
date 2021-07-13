@@ -1,6 +1,6 @@
 {
   "trailingComma": "none",
-  "tabWidth": 4,
+  "tabWidth": 2,
   "semi": true,
   "singleQuote": true,
   "@angular-eslint/directive-selector": [
@@ -45,5 +45,6 @@
   "no-array-constructor": "error",
   "no-var": "error",
   "prefer-const": "error",
-  "no-const-assign": "error"
+  "no-const-assign": "error",
+  "arrowParens": "avoid"
 }
