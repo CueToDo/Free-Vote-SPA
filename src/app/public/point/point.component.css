@@ -1,112 +1,110 @@
 .point {
-    margin-top: 30px;
-    border-bottom: solid 3px #BBB;
+  margin-top: 30px;
+  border-bottom: solid 3px #bbb;
 }
 
-
-
 .pointSource {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .pointSource.ltmd {
-    margin: 0 10px 10px 10px;
+  margin: 0 10px 10px 10px;
 }
 
 .selected {
-    /* hacky override */
-    background-color: #e7e7e7;
+  /* hacky override */
+  background-color: #e7e7e7;
 }
 
 /* "passive" link input Angular https://stackoverflow.com/questions/35639174/passive-link-in-angular-2-a-href-equivalent*/
 
 .spinner {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .linkFromMeta {
-    border: solid 1px black;
-    border-radius: 12px;
-    overflow: hidden;
-    color: black;
-    background-color: #f0f4ff;
-    max-height: 200px;
+  border: solid 1px black;
+  border-radius: 12px;
+  overflow: hidden;
+  color: black;
+  background-color: #f0f4ff;
+  max-height: 200px;
 }
 
 .linkFromMeta:hover,
 .preview {
-    color: #3700b3;
+  color: #3700b3;
 }
 
 .linkFromMeta img {
-    width: 100%;
+  width: 100%;
 }
 
 .linkTitle {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 16px;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 16px;
 }
 
 .linkMetaData {
-    padding: 10px;
+  padding: 10px;
 }
 
 /* https://stackoverflow.com/questions/21647920/responsive-iframe-with-max-width-and-height */
 
 .youTube {
-    position: relative;
-    padding-bottom: 56.25%;
-    padding-top: 30px;
-    height: 0;
-    overflow: hidden;
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
 }
 
 .youTube iframe,
 .youTube object,
 .youTube embed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.youTube+.youTube {
-    margin-top: 20px;
+.youTube + .youTube {
+  margin-top: 20px;
 }
 
 .textXSmall {
-    font-size: small;
+  font-size: small;
 }
 
 .textSmall {
-    font-size: medium;
+  font-size: medium;
 }
 
 .textMedium {
-    font-size: large;
+  font-size: large;
 }
 
 .textLarge {
-    font-size: x-large;
+  font-size: x-large;
 }
 
 .draft {
-    font-weight: bold;
-    color: #3700b3;
+  font-weight: bold;
+  color: #3700b3;
 }
 
 button img {
-    width: 28px;
-    margin-right: 10px;
+  width: 28px;
+  margin-right: 10px;
 }
 
 .hr {
-    border: solid 1px lightgray;
-    margin: 0;
+  border: solid 1px lightgray;
+  margin: 0;
 }
 
 .hrTitle {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }

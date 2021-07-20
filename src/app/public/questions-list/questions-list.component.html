@@ -10,7 +10,7 @@
         <div *ngIf="alreadyFetchingFromDB && questionCount > 0" fxLayoutAlign="center center">
             <span>reselecting questions</span>
             <span class="spinner-grow text-primary ml-3" role="status">
-                <span class="sr-only">Loading...</span>
+                <span class="visually-hidden">Loading...</span>
             </span>
         </div>
 
@@ -22,7 +22,7 @@
         </div>
 
         <!-- Count -->
-        <div class="questionCount">
+        <div class="questionCount" fxLayoutAlign="end center">
 
             <span *ngIf="!alreadyFetchingFromDB && !filter.single">
                 {{ questions.length }} question{{ appData.plural(questions.length) }} displayed of {{ questionCount
@@ -34,13 +34,13 @@
                 <a [routerLink]="filter.slashTag">show all</a>
             </span>
 
-            <span *ngIf="alreadyFetchingFromDB">
+            <span *ngIf="alreadyFetchingFromDB" class="amr-3">
                 ... fetching next batch of questions
             </span>
 
             <!-- Bottom spinner -->
-            <span class="spinner-grow text-primary ml-3" role="status" *ngIf="alreadyFetchingFromDB">
-                <span class="sr-only">Loading...</span>
+            <span class="spinner-grow text-primary" role="status" *ngIf="alreadyFetchingFromDB">
+                <span class="visually-hidden">Loading...</span>
             </span>
 
         </div>

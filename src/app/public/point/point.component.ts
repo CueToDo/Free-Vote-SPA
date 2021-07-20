@@ -392,4 +392,15 @@ export class PointComponent implements OnInit {
       '_blank'
     );
   }
+
+  ShareByEmail() {
+    window.open(
+      `mailto:?subject=${this.point.pointTitle}&body=Hi,%0D%0A%0D%0ATake a look at this from the ${this.localData.website} website - what do you think?%0D%0A%0D%0A${this.linkShare}`,
+      '_blank'
+    );
+  }
+
+  message(message: string) {
+    alert(message);
+  }
 }

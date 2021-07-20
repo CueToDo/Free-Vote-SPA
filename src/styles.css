@@ -361,3 +361,24 @@ a.clicker:hover {
   font-size: .7rem;
   color: gray;
 }
+
+/* Alternate to Bootstrap when bootstrap styles just won't apply */
+.amr-1 {
+  margin-right: 5px;
+}
+
+.amr-2 {
+  margin-right: 10px;
+}
+
+.amr-3 {
+  margin-right: 15px;
+}
+
+.amr-4 {
+  margin-right: 20px;
+}
+
+.amr-5 {
+  margin-right: 25px;
+}

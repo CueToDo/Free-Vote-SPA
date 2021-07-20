@@ -12,13 +12,26 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <!-- https://stackoverflow.com/questions/39455813/twitter-embedded-for-angular-2 -->
-  <!-- og/twitter meta data added dynamically where we have it --> 
+  <!-- og/twitter meta data added dynamically where we have it -->
 
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#1976d2">
 </head>
 
 <body>
+
+  <!--https://developers.facebook.com/docs/plugins/share-button/-->
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v11.0&appId=802708376543547&autoLogAppEvents=1"
+    nonce="9adwn7Xv"></script>
+
+  <!-- <div class="fb-share-button" data-href="https://free.vote/democracy" data-layout="button" data-size="small">
+    <a target="_blank"
+      href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffree.vote%2Fdemocracy&amp;src=sdkpreparse"
+      class="fb-xfbml-parse-ignore">Share</a>
+  </div> -->
+
   <app-root>Loading...</app-root>
 
   <noscript>Please enable JavaScript to continue using this application.</noscript>

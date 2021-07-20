@@ -1,10 +1,10 @@
-
 <form (ngSubmit)="onSubmit()" #formPorQ="ngForm">
 
     <!-- Title -->
     <div class="mx-3 mt-3">
         <mat-form-field class="porQTitle">
-            <input matInput [placeholder]="'Your ' + appData.PorQType(porQEdit.porQTypeID)" [(ngModel)]="porQEdit.title" type="text" name="porQTitle">
+            <input matInput [placeholder]="'Your ' + appData.PorQType(porQEdit.porQTypeID)" [(ngModel)]="porQEdit.title"
+                type="text" name="porQTitle">
         </mat-form-field>
     </div>
 
@@ -34,7 +34,7 @@
         </button>
 
         <span class="spinner-grow text-primary ml-3" role="status" *ngIf="saving">
-            <span class="sr-only">Loading...</span>
+            <span class="visually-hidden">Loading...</span>
         </span>
 
         <div class="fv-error mt-2 ml-2" *ngIf="!!error">

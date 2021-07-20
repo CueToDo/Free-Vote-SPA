@@ -45,7 +45,7 @@
 
   <div *ngIf="updatingPreview">
     <span class="spinner-grow text-primary ml-3 spinner" role="status">
-      <span class="sr-only">Loading...</span>
+      <span class="visually-hidden">Loading...</span>
     </span>
     updating link preview
   </div>
@@ -57,7 +57,7 @@
     <a *ngIf="point.linkAddress" [href]="point.linkAddress" target="_blank">
       <!-- Link Preview -->
       <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center">
-        <div fxFlex="30" class="linkImage"> 
+        <div fxFlex="30" class="linkImage">
           <img [src]="point.linkImage" alt="">
         </div>
         <div fxFlex="70" class="linkMetaData">
@@ -72,7 +72,9 @@
     </a>
     <!-- No link -->
     <span *ngIf="!point.linkAddress">{{ point.linkText }}</span>
-    <span *ngIf="!point.showLinkBeforeVote && point.pointFeedback.supportLevelID === PointSupportLevels.None && justUpdated" class="preview">Preview for owner as just updated</span>
+    <span
+      *ngIf="!point.showLinkBeforeVote && point.pointFeedback.supportLevelID === PointSupportLevels.None && justUpdated"
+      class="preview">Preview for owner as just updated</span>
   </div>
 
   <div class="fv-error" *ngIf="!!error">
@@ -84,13 +86,13 @@
   <div class="toolbar" fxLayout="row wrap" fxLayoutAlign="left center">
 
     <div *ngIf="possibleAnswer">
-      <button mat-menu-item (click)="AddToAnswers(point.pointID)" matTooltip="Add to answers">
+      <button mat-button (click)="AddToAnswers(point.pointID)" matTooltip="Add to answers">
         <mat-icon>add_circle</mat-icon>
       </button>
     </div>
 
     <div *ngIf="isMyAnswer">
-      <button mat-menu-item (click)="RemoveFromAnswers(point.pointID)" matTooltip="Remove from answers">
+      <button mat-button (click)="RemoveFromAnswers(point.pointID)" matTooltip="Remove from answers">
         <mat-icon>remove_circle</mat-icon>
       </button>
     </div>
@@ -127,7 +129,7 @@
 
         <!-- Point Type Indicator -->
 
-        <button mat-icon-button [matMenuTriggerFor]="pointTypeVote" type='button'>
+        <button mat-button [matMenuTriggerFor]="pointTypeVote" type='button'>
           <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Opinion" matTooltip="Opinion">record_voice_over
           </mat-icon>
           <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Fact" matTooltip="Fact">school</mat-icon>
@@ -266,7 +268,7 @@
 
       <div *ngIf="localData.LoggedInToAuth0 && point.isPointOwner">
 
-        <button mat-icon-button [matMenuTriggerFor]="pointOwnerCommands">
+        <button mat-button [matMenuTriggerFor]="pointOwnerCommands">
           <mat-icon *ngIf="!point.draft" matTooltip="edit">edit</mat-icon>
           <mat-icon *ngIf="point.draft" matTooltip="draft point - not public">visibility_off</mat-icon>
         </button>
@@ -293,7 +295,7 @@
 
         <!-- type='button' https://stackoverflow.com/questions/12319758/clicking-a-button-within-a-form-causes-page-refresh -->
         <!-- https://stackblitz.com/angular/rllvqdkjedar -->
-        <button mat-icon-button [matMenuTriggerFor]="pointCommands" type='button'>
+        <button mat-button [matMenuTriggerFor]="pointCommands" type='button'>
 
           <mat-icon *ngIf="!point.pointFeedback.feedbackIsUpdatable" matTooltip="anon feedback locked">lock</mat-icon>
 
@@ -358,7 +360,7 @@
 
           <hr class="hr" />
 
-          <button mat-menu-item (click)="favourite()" matTooltip="flag point as a favourite">
+          <button (click)="favourite()" matTooltip="flag point as a favourite">
             <mat-icon>{{ favoriteIcon() }}</mat-icon>
             favourite
           </button>
@@ -368,39 +370,41 @@
             important
           </button>
 
-          <hr class="hr" />
-
-          <button mat-menu-item [matMenuTriggerFor]="shareCommands">
-            <mat-icon>share</mat-icon>
-            share
-          </button>
-
         </mat-menu>
 
-        <!-- Share Sub Menu -->
+      </div>
+
+      <!-- Share Sub Menu -->
+
+      <div>
+
+        <button mat-button [matMenuTriggerFor]="shareCommands">
+          <mat-icon matTooltip="social media share">share</mat-icon>
+        </button>
 
         <mat-menu #shareCommands>
-
-          <button mat-menu-item [cdkCopyToClipboard]="linkShare">
-            <mat-icon>playlist_add</mat-icon>
-            copy link
-          </button>
-
-          <button mat-menu-item>
-            <mat-icon>email</mat-icon>
-            email
-          </button>
 
           <button mat-menu-item>
             <mat-icon>people</mat-icon>
             facebook
           </button>
 
+
+          <button mat-menu-item (click)="ShareByEmail()">
+            <mat-icon>email</mat-icon>
+            email
+          </button>
+
+          <button mat-menu-item [cdkCopyToClipboard]="linkShare" (click)="message('Link copied to clipboard')">
+            <mat-icon>playlist_add</mat-icon>
+            copy link
+          </button>
+
         </mat-menu>
 
-      </div>
+      </div> <!-- End Share Menu -->
 
-    </div>
+    </div> <!-- End Toolbar Remainder -->
 
   </div> <!-- End Toolbar -->
 
