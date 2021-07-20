@@ -4,7 +4,7 @@ import {
   PointSortTypes,
   DraftStatusFilter,
   PointFlags,
-  PointFeedbackFilter,
+  PointFeedbackFilter
 } from './enums';
 
 export class FilterCriteria {
