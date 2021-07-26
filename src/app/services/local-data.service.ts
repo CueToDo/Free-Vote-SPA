@@ -180,7 +180,7 @@ export class LocalDataService {
       // window not available on server
       this.website = window.location.origin.replace('https://', '');
       this.website = this.website.replace('http://', '');
-      this.websiteUrl = window.location.origin;
+      this.websiteUrl = `${window.location.origin}/`;
 
       // API: Always use live unless there is a local manual override
       const localAPI: boolean = this.GetItem('localAPI') === 'true';
