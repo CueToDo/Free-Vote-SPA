@@ -174,8 +174,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     pagePath: string,
     previewImage: string
   ): void {
-    const websiteUrl = this.localData.websiteUrl;
-    const url = websiteUrl + this.appData.removeBookEnds(pagePath, '/');
+    const websiteUrlWTS = this.localData.websiteUrlWTS;
+    const url = `${websiteUrlWTS}/${this.appData.removeBookEnds(
+      pagePath,
+      '/'
+    )}`;
 
     // https://css-tricks.com/essential-meta-tags-social-media/
     // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
@@ -252,13 +255,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.metaService.addTags([
         {
           property: 'og:image',
-          content: websiteUrl + 'assets/vulcan-384.png'
+          content: websiteUrlWTS + '/assets/vulcan-384.png'
         },
-        { property: 'og:image:width', content: websiteUrl + '384' },
-        { property: 'og:image:height', content: websiteUrl + '384' },
+        { property: 'og:image:width', content: '384' },
+        { property: 'og:image:height', content: '384' },
         {
           name: 'twitter:image',
-          content: websiteUrl + 'assets/vulcan-384.png'
+          content: websiteUrlWTS + '/assets/vulcan-384.png'
         }
       ]);
     }

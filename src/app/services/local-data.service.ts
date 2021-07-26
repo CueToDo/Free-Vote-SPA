@@ -15,7 +15,7 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 export class LocalDataService {
   public website = '';
   public strapline = '';
-  public websiteUrl = '';
+  public websiteUrlWTS = ''; // WTS: without trailing slash
   public apiUrl = '';
 
   // Subscribe to these in components rather than reference static values in localData
@@ -177,10 +177,9 @@ export class LocalDataService {
     this.apiUrl = 'https://api.free.vote/';
 
     if (isPlatformBrowser(this.platformId)) {
-      // window not available on server
       this.website = window.location.origin.replace('https://', '');
       this.website = this.website.replace('http://', '');
-      this.websiteUrl = `${window.location.origin}/`;
+      this.websiteUrlWTS = window.location.origin;
 
       // API: Always use live unless there is a local manual override
       const localAPI: boolean = this.GetItem('localAPI') === 'true';
@@ -188,10 +187,10 @@ export class LocalDataService {
       if (localAPI) {
         this.apiUrl = 'http://localhost:54357/';
       }
-      console.log('WEBSITE', this.website, 'URL', this.websiteUrl);
     } else {
+      // window not available on server
       this.website = this.request.hostname;
-      this.websiteUrl = `https://${this.website}/`;
+      this.websiteUrlWTS = `https://${this.website}`;
     }
   }
 
