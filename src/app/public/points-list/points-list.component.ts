@@ -21,9 +21,7 @@ import {
 import {
   PointSelectionTypes,
   PointTypesEnum,
-  PointSortTypes,
-  DraftStatusFilter,
-  PointFeedbackFilter
+  PointSortTypes
 } from 'src/app/models/enums';
 
 // Services
@@ -230,21 +228,20 @@ export class PointsListComponent {
 
     this.pointsService.GetSpecificPoint(slashTag, pointTitle).subscribe({
       next: psr => {
-        console.log(`IS BROWSER: ${isPlatformBrowser(this.platformId)}`);
-
         this.DisplayPoints(psr);
 
         // SSR Initial page render
         if (!this.appData.initialPageRendered) {
           const point = psr.points[0];
 
+          const pointLink = point.pointLink ?? point.pointID;
+
           const preview = {
             title: point.pointTitle,
             preview: point.preview,
-            previewImage: point.previewImage
+            previewImage: point.previewImage,
+            pagePath: `slash-tag${this.filter.slashTag}/${pointLink}`
           } as PagePreviewMetaData;
-
-          console.log('WE HAVE A POINT', preview);
 
           this.appData.PagePreview$.next(preview);
         }

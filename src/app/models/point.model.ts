@@ -135,5 +135,6 @@ export class PagePreviewMetaData {
   title = '';
   preview = '';
   previewImage = '';
+  pagePath = '';
   url = '';
 }

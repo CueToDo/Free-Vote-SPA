@@ -3,7 +3,6 @@ import {
   Component,
   OnInit,
   AfterViewInit,
-  OnDestroy,
   Inject,
   PLATFORM_ID
 } from '@angular/core';
@@ -24,7 +23,7 @@ import { AuthService } from './services/auth.service';
 import { LocalDataService } from './services/local-data.service';
 import { AppDataService } from './services/app-data.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { filter, debounceTime } from 'rxjs/operators';
+import { filter, debounceTime, map } from 'rxjs/operators';
 import { PagePreviewMetaData } from './models/point.model';
 
 @Component({
@@ -108,10 +107,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     // The app component is the main route change detector.
     // It can then dispense this throughout the app via coredata service
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(_ => {
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        ),
+        map(event => event.url)
+      )
+      .subscribe(url => {
         // broadcast showing tags
-        this.RouteOrParamsUpdated(this.router.url);
+        this.RouteOrParamsUpdated(url);
       });
 
     // app.compnent responds to child component changes
@@ -285,9 +289,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       metaData.title,
       metaData.preview,
       'Free Vote, Free, Vote, anonymous, voting, platform' /* keywords */,
-      '',
+      metaData.pagePath,
       metaData.previewImage
-    ); /* pagePath, imagePath */
+    );
 
     this.appData.initialPageRendered = true;
   }
@@ -301,15 +305,14 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.pageTitle = '';
       this.setDocTitle(this.localData.website);
 
-      console.log('>>>>>>>>> Set Meta on Route Change <<<<<<<<<<');
       // Setting meta data on route change useful to Google and social media previews
       // Runs after app component init in SSR for FCP (First Contentful Paint)
       this.setMetaData(
         `${this.localData.website} Route Change Title` /* title */,
         'Free Vote anonymous voting platform' /* preview */,
         'Free Vote, Free, Vote, anonymous, voting, platform' /* keywords */,
-        this.localData.website,
-        `${this.localData.website}/assets/Vulcan.png`
+        url, // page path
+        `${this.localData.website}/assets/Vulcan.png` // previewImage
       ); /* pagePath, imagePath */
 
       // Setting meta data on SSR app.component init will be of use to
@@ -322,6 +325,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       // ExpressionChangedAfterItHasBeenCheckedError
       this.showVulcan = true;
     } else {
+      // Anything other than home page
+      // PagePreview$.next In pointslist on select specific point
       this.home = false;
 
       if (url.indexOf('?') > 0) {
