@@ -5,7 +5,7 @@ import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
 import { PagePreviewMetaData } from 'src/app/models/point.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-point-share',
@@ -31,6 +31,7 @@ export class PointShareComponent implements OnInit {
   error = '';
 
   constructor(
+    private router: Router,
     private activeRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: object,
     private pointsService: PointsService,
@@ -53,8 +54,6 @@ export class PointShareComponent implements OnInit {
 
     this.pointsService.GetSpecificPoint(slashTag, pointTitle).subscribe({
       next: psr => {
-        console.log(`IS BROWSER: ${isPlatformBrowser(this.platformId)}`);
-
         this.DisplayPoint(psr);
 
         // SSR Initial page render
@@ -62,12 +61,11 @@ export class PointShareComponent implements OnInit {
           const point = psr.points[0];
 
           const preview = {
+            pagePath: this.router.url,
             title: point.pointTitle,
             preview: point.preview,
             previewImage: point.previewImage
           } as PagePreviewMetaData;
-
-          console.log('WE HAVE A POINT', preview);
 
           this.appData.PagePreview$.next(preview);
         }

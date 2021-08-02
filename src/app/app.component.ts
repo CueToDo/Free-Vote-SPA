@@ -55,6 +55,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   public imgVulcan = '../assets/Vulcan.png';
   public altVulcan = 'Vulcan';
   public under500 = false;
+  public urlHistory: string[] = [];
 
   constructor(
     private router: Router,
@@ -98,7 +99,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // SSR First Page Meta Data for Social Media
     this.appData.PagePreview$.subscribe({
-      next: preview => this.setInitialMetaData(preview)
+      next: metaData => this.setInitialMetaData(metaData)
     });
 
     // Route and Route Parameters: Setup and subscribe to changes
@@ -180,6 +181,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     previewImage: string
   ): void {
     const websiteUrlWTS = this.localData.websiteUrlWTS;
+
     const url = `${websiteUrlWTS}/${this.appData.removeBookEnds(
       pagePath,
       '/'
@@ -279,13 +281,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public setInitialMetaData(metaData: PagePreviewMetaData): void {
-    console.log(
-      'SET INITIAL META DATA',
-      metaData.title,
-      metaData.preview,
-      metaData.previewImage
-    );
-
     this.setMetaData(
       metaData.title,
       metaData.preview,
@@ -298,7 +293,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public RouteOrParamsUpdated(url: string): void {
+    // called in ngOnInit and in subscriptions to router events and route parameter change via subject RouteParamChange
+
     this.appData.Route = url;
+    this.urlHistory.push(url); // ToDo remove
+    console.log('URL History', this.urlHistory);
 
     if (url === '/' || url === '' || url.indexOf('/callback') === 0) {
       // Home page
@@ -309,11 +308,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       // Setting meta data on route change useful to Google and social media previews
       // Runs after app component init in SSR for FCP (First Contentful Paint)
       this.setMetaData(
-        `${this.localData.website} Route Change Title` /* title */,
+        `${this.localData.websiteUrlWTS} Route Change Title` /* title */,
         'Free Vote anonymous voting platform' /* preview */,
         'Free Vote, Free, Vote, anonymous, voting, platform' /* keywords */,
         url, // page path
-        `${this.localData.website}/assets/Vulcan.png` // previewImage
+        `${this.localData.websiteUrlWTS}/assets/Vulcan.png` // previewImage
       ); /* pagePath, imagePath */
 
       // Setting meta data on SSR app.component init will be of use to
@@ -327,7 +326,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.showVulcan = true;
     } else {
       // Anything other than home page
-      // PagePreview$.next In pointslist on select specific point
+
       this.home = false;
 
       if (url.indexOf('?') > 0) {

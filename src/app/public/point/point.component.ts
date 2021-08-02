@@ -86,10 +86,7 @@ export class PointComponent implements OnInit {
     this.extractMediaEmbeds();
 
     this.linkShare =
-      this.localData.websiteUrlWTS +
-      this.localData.PreviousSlashTagSelected +
-      '/' +
-      this.SelectSingleTitle;
+      this.localData.PreviousSlashTagSelected + '/' + this.SelectSingleTitle;
   }
 
   AssignTags(): void {
