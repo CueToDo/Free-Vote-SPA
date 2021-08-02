@@ -1,0 +1,72 @@
+<div fxFill fxLayout="column">
+
+    <div class="tabContainer mt-3">
+
+        <div class="tabContent scroller">
+
+            <div class="content mb-5">
+
+                <div class="center my-3">
+
+                    <div class="fb-share-button mx-2" [attr.data-href]="linkShare" data-layout="button"
+                        data-size="large"><a target="_blank" [attr.href]="facebookShare"
+                            class="fb-xfbml-parse-ignore">Share</a></div>
+
+                    <button mat-button (click)="ShareByEmail()" class="mx-2">
+                        <mat-icon>email</mat-icon>
+                        email
+                    </button>
+
+                    <button mat-button [cdkCopyToClipboard]="linkShare" (click)="message('Link copied to clipboard')"
+                        class="mx-2">
+                        <mat-icon>playlist_add</mat-icon>
+                        copy link
+                    </button>
+
+                    <button mat-button [routerLink]="linkToAll">
+                        <mat-icon>list</mat-icon>
+                        view all
+                    </button>
+                </div>
+
+                <!-- Point Display -->
+                <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
+
+                    <h1>{{ point.pointTitle }}</h1>
+
+                    <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
+
+                    <div [innerHTML]="pointHTMLwithoutEmbed | SafeHtml"></div>
+
+                </div>
+
+                <!-- YouTube video -->
+
+                <ng-container *ngIf="youTubeIDs.length > 0">
+                    <div *ngFor="let youTubeID of youTubeIDs" class="youTube">
+                        <iframe [src]="'https://www.youtube.com/embed/' + youTubeID | SafeURL" allowfullscreen></iframe>
+                    </div>
+                </ng-container>
+
+                <!-- Vimeo video -->
+
+                <ng-container *ngIf="vimeoIDs.length > 0">
+                    <div *ngFor="let vimeoID of vimeoIDs" class="youTube">
+                        <iframe [src]="'https://player.vimeo.com/video/' + vimeoID | SafeURL" frameborder="0"
+                            allowfullscreen></iframe>
+                    </div>
+                </ng-container>
+
+                <!-- SoundCloud -->
+
+                <ng-container class="youTube" *ngIf="soundCloudTrackIDs.length > 0">
+                    <div *ngFor="let soundCloudTrackID of soundCloudTrackIDs">
+                        <iframe
+                            [src]="'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/' + soundCloudTrackID +  '&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true' | SafeURL"></iframe>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+    </div>
+</div>

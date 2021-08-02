@@ -1,14 +1,5 @@
 // Angular
-import {
-  Component,
-  OnInit,
-  Input,
-  EventEmitter,
-  Output,
-  Inject,
-  PLATFORM_ID
-} from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 // Models, enums
 import { ID } from 'src/app/models/common';
@@ -21,9 +12,7 @@ import {
 import {
   PointSelectionTypes,
   PointTypesEnum,
-  PointSortTypes,
-  DraftStatusFilter,
-  PointFeedbackFilter
+  PointSortTypes
 } from 'src/app/models/enums';
 
 // Services
@@ -79,8 +68,7 @@ export class PointsListComponent {
   constructor(
     public appData: AppDataService,
     public localData: LocalDataService,
-    private pointsService: PointsService,
-    @Inject(PLATFORM_ID) private platformId: object
+    private pointsService: PointsService
   ) {}
 
   OnTopicSearch(): string {
@@ -223,37 +211,6 @@ export class PointsListComponent {
           break;
       }
     }
-  }
-
-  public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
-    this.alreadyFetchingPointsFromDB = true;
-
-    this.pointsService.GetSpecificPoint(slashTag, pointTitle).subscribe({
-      next: psr => {
-        console.log(`IS BROWSER: ${isPlatformBrowser(this.platformId)}`);
-
-        this.DisplayPoints(psr);
-
-        // SSR Initial page render
-        if (!this.appData.initialPageRendered) {
-          const point = psr.points[0];
-
-          const preview = {
-            title: point.pointTitle,
-            preview: point.preview,
-            previewImage: point.previewImage
-          } as PagePreviewMetaData;
-
-          console.log('WE HAVE A POINT', preview);
-
-          this.appData.PagePreview$.next(preview);
-        }
-      },
-      error: err => {
-        this.error = err.error.detail;
-        this.alreadyFetchingPointsFromDB = false;
-      }
-    });
   }
 
   newSortType(pointSortType: PointSortTypes): void {

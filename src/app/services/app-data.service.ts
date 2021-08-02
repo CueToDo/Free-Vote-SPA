@@ -281,15 +281,18 @@ export class AppDataService {
     // But not converted to lower case
     // filter - an empty string evaluates to boolean false. It works with all falsy values like 0, false, null, undefined
     let output = '';
+
     if (input) {
       input
         .split(' ')
         .filter(item => item)
         .join('-'); // remove double spaces, replace spaces with dash
+
       output = output
         .split('-')
         .filter(item => item)
         .join('-'); // remove double-dashes, no dash start or end
+
       output = encodeURIComponent(output);
     }
     return output;

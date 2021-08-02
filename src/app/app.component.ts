@@ -3,7 +3,6 @@ import {
   Component,
   OnInit,
   AfterViewInit,
-  OnDestroy,
   Inject,
   PLATFORM_ID
 } from '@angular/core';
@@ -26,6 +25,7 @@ import { AppDataService } from './services/app-data.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { filter, debounceTime } from 'rxjs/operators';
 import { PagePreviewMetaData } from './models/point.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -266,7 +266,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // facebook app_id
     this.metaService.removeTag(`property='fb:app_id'`);
     this.metaService.addTags([
-      { property: 'fb:app_id', content: '802708376543547' }
+      { property: 'fb:app_id', content: environment.facebookAppId }
     ]);
   }
 

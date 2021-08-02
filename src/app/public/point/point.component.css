@@ -50,30 +50,6 @@
   padding: 10px;
 }
 
-/* https://stackoverflow.com/questions/21647920/responsive-iframe-with-max-width-and-height */
-
-.youTube {
-  position: relative;
-  padding-bottom: 56.25%;
-  padding-top: 30px;
-  height: 0;
-  overflow: hidden;
-}
-
-.youTube iframe,
-.youTube object,
-.youTube embed {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.youTube + .youTube {
-  margin-top: 20px;
-}
-
 .textXSmall {
   font-size: small;
 }

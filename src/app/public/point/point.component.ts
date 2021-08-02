@@ -1,5 +1,12 @@
 import { AppDataService } from 'src/app/services/app-data.service';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  Inject
+} from '@angular/core';
 
 // Models & enums
 import { Point, PointFeedback } from '../../models/point.model';
@@ -36,6 +43,7 @@ export class PointComponent implements OnInit {
   vimeoIDs: string[] = [];
   soundCloudTrackIDs: string[] = [];
   pointHTMLwithoutEmbed = '';
+  linkShare = '';
 
   editing = false;
   justUpdated = false;
@@ -54,8 +62,6 @@ export class PointComponent implements OnInit {
 
   error = '';
 
-  public linkShare = '';
-
   // https://stackoverflow.com/questions/37277527/how-to-use-enum-in-angular-2-templates
   // https://stackoverflow.com/questions/35923744/pass-enums-in-angular2-view-templates
   public PointTypesEnum = PointTypesEnum;
@@ -67,20 +73,6 @@ export class PointComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Angular Workshop filter is not a function
-
-    // this.tags = this.tags.filter(x => x.SlashTag !== '/hash');
-
-    // this.tags = this.point.Tags;
-
-    // this.tags = this.point.Tags.filter((tag: Tag) => tag.SlashTag !== this.router.url);
-    // this.tags = this.point.Tags.filter((tag, index, arr) => tag.SlashTag !== this.router.url);
-
-    // function notThisRoute (element: Tag, index, array) { return element.SlashTag !== this.router.url; }
-    // this.tags = this.point.Tags.filter(notThisRoute);
-
-    // this.tags = this.point.Tags.filter(x => true);
-
     // No subscriptions
 
     this.AssignTags();
@@ -95,8 +87,7 @@ export class PointComponent implements OnInit {
 
     this.linkShare =
       this.localData.websiteUrl +
-      'slash-tag' +
-      this.localData.PreviousSlashTagSelected +
+      this.localData.PreviousTopicSelected +
       '/' +
       this.SelectSingleTitle;
   }
@@ -391,16 +382,5 @@ export class PointComponent implements OnInit {
       'https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals',
       '_blank'
     );
-  }
-
-  ShareByEmail() {
-    window.open(
-      `mailto:?subject=${this.point.pointTitle}&body=Hi,%0D%0A%0D%0ATake a look at this from the ${this.localData.website} website - what do you think?%0D%0A%0D%0A${this.linkShare}`,
-      '_blank'
-    );
-  }
-
-  message(message: string) {
-    alert(message);
   }
 }

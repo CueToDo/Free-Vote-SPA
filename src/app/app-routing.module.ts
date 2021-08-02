@@ -15,6 +15,7 @@ import { QuestionAnswersComponent } from './public/question-answers/question-ans
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from './services/login-route-guard.service';
+import { PointShareComponent } from './public/point-share/point-share.component';
 
 const appRoutes: Routes = [
   // Refresh in browser fails - when route is specified
@@ -72,14 +73,15 @@ const appRoutes: Routes = [
   { path: 'slash-tags/trending', component: TagsPointsComponent }, // TAGS
   { path: 'slash-tags/recent', component: TagsPointsComponent }, // TAGS personal - recent selection - works on anon?
   { path: 'new-point', component: TagsPointsComponent },
-  { path: 'slash-tag/:tag/:title', component: TagsPointsComponent },
   { path: ':tag/by/:alias', component: TagsPointsComponent },
   {
     path: ':tag/question/:questionSlug',
     component: QuestionAnswersComponent
   },
-  { path: ':tag/:pointId', component: TagsPointsComponent },
   { path: ':tag', component: TagsPointsComponent }, // POINTS: still like the SlashTag
+  { path: ':tag/points', component: TagsPointsComponent }, // POINTS: still like the SlashTag
+  { path: ':tag/:title', component: PointShareComponent },
+
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
   { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )
 ];

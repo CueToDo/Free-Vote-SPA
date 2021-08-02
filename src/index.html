@@ -16,21 +16,34 @@
 
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#1976d2">
+
 </head>
 
 <body>
 
   <!--https://developers.facebook.com/docs/plugins/share-button/-->
+  <!-- https://stackoverflow.com/questions/29095897/multiple-facebook-twitter-share-buttons-in-one-page-with-custom-image-and-title -->
   <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous"
-    src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v11.0&appId=802708376543547&autoLogAppEvents=1"
-    nonce="9adwn7Xv"></script>
 
-  <!-- <div class="fb-share-button" data-href="https://free.vote/democracy" data-layout="button" data-size="small">
-    <a target="_blank"
-      href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffree.vote%2Fdemocracy&amp;src=sdkpreparse"
-      class="fb-xfbml-parse-ignore">Share</a>
-  </div> -->
+  <script>
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    // window.fbAsyncInit = function () { // this gets triggered when FB object gets initialized
+    //   setTimeout(
+    //     function () {
+    //       console.log("FB Object initiated");
+    //       FB.XFBML.parse(); // now we can safely call parse method
+    //     }, 3000
+    //   )
+    // };
+
+  </script>
 
   <app-root>Loading...</app-root>
 

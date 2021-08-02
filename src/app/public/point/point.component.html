@@ -378,29 +378,9 @@
 
       <div>
 
-        <button mat-button [matMenuTriggerFor]="shareCommands">
+        <a mat-button [href]="linkShare">
           <mat-icon matTooltip="social media share">share</mat-icon>
-        </button>
-
-        <mat-menu #shareCommands>
-
-          <button mat-menu-item>
-            <mat-icon>people</mat-icon>
-            facebook
-          </button>
-
-
-          <button mat-menu-item (click)="ShareByEmail()">
-            <mat-icon>email</mat-icon>
-            email
-          </button>
-
-          <button mat-menu-item [cdkCopyToClipboard]="linkShare" (click)="message('Link copied to clipboard')">
-            <mat-icon>playlist_add</mat-icon>
-            copy link
-          </button>
-
-        </mat-menu>
+        </a>
 
       </div> <!-- End Share Menu -->
 

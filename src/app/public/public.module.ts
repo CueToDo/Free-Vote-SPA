@@ -40,6 +40,7 @@ import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionComponent } from './question/question.component';
 import { QuestionAnswersComponent } from './question-answers/question-answers.component';
 import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
+import { PointShareComponent } from './point-share/point-share.component';
 
 @NgModule({
   imports: [
@@ -75,7 +76,8 @@ import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
     QuestionEditComponent,
     QuestionComponent,
     QuestionAnswersComponent,
-    CkeUniversalComponent
+    CkeUniversalComponent,
+    PointShareComponent
   ],
   exports: [
     PointComponent,

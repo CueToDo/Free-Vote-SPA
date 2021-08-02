@@ -78,7 +78,14 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.filter.byAlias = this.localData.ActiveAliasForFilter;
-    this.filter.questions = true; // Default first selection
+
+    const routeparts = this.appData.Route.split('/');
+
+    if (routeparts && routeparts.length === 3 && routeparts[2] === 'points') {
+      this.filter.questions = false;
+    } else {
+      this.filter.questions = true; // Default first selection
+    }
 
     this.appData
       .PointTypes()
@@ -138,11 +145,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
         alias = true;
       }
 
-      if (titleParam) {
-        this.filter.single = true;
-        this.filter.questions = false; // show single point, not questions
-        this.pointsList?.SelectSpecificPoint(tagParam, titleParam);
-      } else if (tag || alias) {
+      if (tag || alias) {
         console.log('selecting');
         this.filter.single = false;
         this.Select();

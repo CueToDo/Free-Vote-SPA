@@ -4,7 +4,7 @@ import {
   BrowserTransferStateModule,
   Title
 } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -40,6 +40,34 @@ import { OrganisationsModule } from './organisations/organisations.module';
 
 // App Components
 import { AppComponent } from './app.component';
+
+// https://jasonwatmore.com/post/2020/09/22/angular-facebook-how-to-use-the-facebook-sdk-in-an-angular-app
+export function initializeApp() {
+  // return () =>
+  //   new Promise(_ => {
+  //     // wait for facebook sdk to initialize before starting the angular app
+  //     window['fbAsyncInit'] = function () {
+  //       // FB.init({
+  //       //   appId: environment.facebookAppId,
+  //       //   cookie: true,
+  //       //   xfbml: true,
+  //       //   version: 'v11.0'
+  //       // });
+  //     };
+  //     // load facebook sdk script
+  //     (function (d, s, id) {
+  //       var js: HTMLScriptElement,
+  //         fjs = d.getElementsByTagName(s)[0];
+  //       if (d.getElementById(id)) {
+  //         return;
+  //       }
+  //       js = d.createElement(s) as HTMLScriptElement;
+  //       js.id = id;
+  //       js.src = 'https://connect.facebook.net/en_US/sdk.js';
+  //       fjs.parentNode?.insertBefore(js, fjs);
+  //     })(document, 'script', 'facebook-jssdk');
+  //   });
+}
 
 // Angular #StopTheSteal
 // https://indepth.dev/posts/1015/beware-angular-can-steal-your-time
@@ -78,6 +106,11 @@ import { AppComponent } from './app.component';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => initializeApp,
       multi: true
     },
     Title
