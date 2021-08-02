@@ -30,7 +30,6 @@ export class GroupEditComponent implements OnInit {
   @Input() group = new Group();
   @Output() groupChange = new EventEmitter(); // Still need to emit
 
-  // ToDo Following renamed
   @Output() editCompleted = new EventEmitter();
   @Output() editCancelled = new EventEmitter();
 

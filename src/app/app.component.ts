@@ -55,7 +55,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   public imgVulcan = '../assets/Vulcan.png';
   public altVulcan = 'Vulcan';
   public under500 = false;
-  public urlHistory: string[] = [];
 
   constructor(
     private router: Router,
@@ -296,8 +295,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     // called in ngOnInit and in subscriptions to router events and route parameter change via subject RouteParamChange
 
     this.appData.Route = url;
-    this.urlHistory.push(url); // ToDo remove
-    console.log('URL History', this.urlHistory);
 
     if (url === '/' || url === '' || url.indexOf('/callback') === 0) {
       // Home page

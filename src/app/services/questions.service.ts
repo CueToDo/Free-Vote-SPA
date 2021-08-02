@@ -81,14 +81,6 @@ export class QuestionsService {
     } else {
       const apiUrl = 'points/getPage';
 
-      // ToDo Removed 03/01/2021 ids not used
-      // https://stackoverflow.com/questions/16553561/passing-list-of-keyvaluepair-or-idictionary-to-web-api-controller-from-javascrip
-      // construct an object from an array
-      // const ids = {}; // a const where you can add new properties with values
-
-      // pointIDs.forEach(item =>
-      //   ids[item.rowNumber] = item.id);
-
       return this.httpClientService
         .post(apiUrl, pointIDs)
         .pipe(map(returnData => returnData as QuestionSelectionResult));

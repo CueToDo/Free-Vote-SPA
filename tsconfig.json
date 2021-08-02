@@ -28,7 +28,8 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
     "types": [
-      "node"
+      "node",
+      "facebook-js-sdk" // facebook
     ]
   }
 }

@@ -1,5 +1,10 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID
+} from '@angular/core';
 import { Point, PointSelectionResult } from 'src/app/models/point.model';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -12,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './point-share.component.html',
   styleUrls: ['./point-share.component.css']
 })
-export class PointShareComponent implements OnInit {
+export class PointShareComponent implements OnInit, AfterViewInit {
   point = new Point();
 
   // bind to point slashtags (not topic)
@@ -47,6 +52,10 @@ export class PointShareComponent implements OnInit {
     console.log(slashTag, pointTitle);
 
     this.SelectSpecificPoint(slashTag, pointTitle);
+  }
+
+  ngAfterViewInit(): void {
+    FB.XFBML.parse(); // now we can safely call parse method
   }
 
   public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
@@ -98,12 +107,6 @@ export class PointShareComponent implements OnInit {
     this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
       this.linkShare
     )}&amp;src=sdkpreparse`;
-
-    // ToDo Remove
-    // this.linkShare = 'https://free.vote/slash-tag/democracy/the-hill-we-climb';
-    // this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-    //   this.linkShare.replace('localhost:7027', 'free.vote')
-    // )}&amp;src=sdkpreparse`;
 
     this.extractMediaEmbeds();
 
