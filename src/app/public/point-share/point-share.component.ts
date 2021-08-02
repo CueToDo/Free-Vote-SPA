@@ -89,11 +89,11 @@ export class PointShareComponent implements OnInit {
     this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
 
     this.linkShare =
-      this.localData.websiteUrl.replace(
+      this.localData.websiteUrlWTS.replace(
         'http://localhost:7027',
         'https://free.vote'
       ) +
-      this.localData.PreviousTopicSelected +
+      this.localData.PreviousSlashTagSelected +
       '/' +
       this.SelectSingleTitle;
 

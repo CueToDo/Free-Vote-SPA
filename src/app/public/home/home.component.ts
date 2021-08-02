@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
 
   isMobile = false;
 
-  privacyUrl = this.localData.websiteUrl + 'policy.html';
+  privacyUrl = this.localData.websiteUrlWTS + '/policy.html';
 
   constructor(
     private router: Router,

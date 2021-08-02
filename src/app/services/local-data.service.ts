@@ -1,6 +1,8 @@
 // Angular
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
+import { Request } from 'express';
 
 // rxjs
 import { Subject } from 'rxjs';
@@ -8,11 +10,12 @@ import { Subject } from 'rxjs';
 // Models
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
 
+// Mainly intended for client side, but has server side only code
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
   public website = '';
   public strapline = '';
-  public websiteUrl = '';
+  public websiteUrlWTS = ''; // WTS: without trailing slash
   public apiUrl = '';
 
   // Subscribe to these in components rather than reference static values in localData
@@ -133,14 +136,15 @@ export class LocalDataService {
 
   constructor(
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
-    @Inject(PLATFORM_ID) private platformId: object
+    @Inject(PLATFORM_ID) private platformId: object,
+    @Optional() @Inject(REQUEST) protected request: Request
   ) {
     // Lifecycle hooks, like OnInit() work with Directives and Components.
     // They do not work with other types, like a service.
 
     this.SetServiceURL();
 
-    this.LoadValues();
+    this.LoadClientValues();
   }
 
   SetItem(name: string, value: string): void {
@@ -168,37 +172,45 @@ export class LocalDataService {
 
   public SetServiceURL(): void {
     // Defaults
-    this.website = 'free.vote';
-    this.websiteUrl = 'https://free.vote/';
+
+    // Server or Client
     this.apiUrl = 'https://api.free.vote/';
 
     if (isPlatformBrowser(this.platformId)) {
-      // window not available on server
-      this.websiteUrl = window.location.origin + '/';
+      this.website = window.location.origin.replace('https://', '');
+      this.website = this.website.replace('http://', '');
+      this.websiteUrlWTS = window.location.origin;
 
       // API: Always use live unless there is a local manual override
       const localAPI: boolean = this.GetItem('localAPI') === 'true';
+
       if (localAPI) {
         this.apiUrl = 'http://localhost:54357/';
       }
+    } else {
+      // window not available on server
+      this.website = this.request.hostname;
+      this.websiteUrlWTS = `https://${this.website}`;
     }
   }
 
-  public LoadValues(): void {
-    this.jwt = this.GetItem('jwt');
+  public LoadClientValues(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.jwt = this.GetItem('jwt');
 
-    // client side values - user may update and post to API
-    this.freeVoteProfile.alias = this.GetItem('alias');
-    this.freeVoteProfile.country = this.GetItem('country');
-    this.freeVoteProfile.city = this.GetItem('city');
-    this.freeVoteProfile.countryId = this.GetItem('countryId');
-    this.freeVoteProfile.cityId = this.GetItem('cityId');
-    this.freeVoteProfile.profilePictureOptionID = this.GetItem(
-      'profilePictureOptionID'
-    );
-    this.freeVoteProfile.profilePicture = this.GetItem('profilePicture');
+      // client side values - user may update and post to API
+      this.freeVoteProfile.alias = this.GetItem('alias');
+      this.freeVoteProfile.country = this.GetItem('country');
+      this.freeVoteProfile.city = this.GetItem('city');
+      this.freeVoteProfile.countryId = this.GetItem('countryId');
+      this.freeVoteProfile.cityId = this.GetItem('cityId');
+      this.freeVoteProfile.profilePictureOptionID = this.GetItem(
+        'profilePictureOptionID'
+      );
+      this.freeVoteProfile.profilePicture = this.GetItem('profilePicture');
 
-    this.ActiveAliasForFilter = this.PreviousAliasSelected; // may be ''
+      this.ActiveAliasForFilter = this.PreviousAliasSelected; // may be ''
+    }
   }
 
   public SaveValues(): void {
