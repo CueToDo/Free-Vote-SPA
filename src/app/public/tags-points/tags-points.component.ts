@@ -110,6 +110,10 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
         case 'trending':
           this.tabIndex = tabs.trendingTags;
           break;
+        case 'points':
+          this.qp = 'point';
+          this.tabIndex = tabs.points;
+          break;
         default:
           this.tabIndex = tabs.points;
       }
