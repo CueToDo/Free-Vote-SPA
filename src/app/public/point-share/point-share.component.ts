@@ -1,23 +1,18 @@
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID
-} from '@angular/core';
+import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { Point, PointSelectionResult } from 'src/app/models/point.model';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
 import { PagePreviewMetaData } from 'src/app/models/point.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-point-share',
   templateUrl: './point-share.component.html',
   styleUrls: ['./point-share.component.css']
 })
-export class PointShareComponent implements OnInit, AfterViewInit {
+export class PointShareComponent implements OnInit {
   point = new Point();
 
   // bind to point slashtags (not topic)
@@ -27,9 +22,10 @@ export class PointShareComponent implements OnInit, AfterViewInit {
   soundCloudTrackIDs: string[] = [];
   pointHTMLwithoutEmbed = '';
 
-  public linkShare = '';
-  public facebookShare = '';
-  public linkToAll = '';
+  linkShare = '';
+  facebookShare = '';
+  twitterShare = '';
+  linkToAll = '';
 
   alreadyFetchingPointFromDB = false;
 
@@ -38,10 +34,11 @@ export class PointShareComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private activeRoute: ActivatedRoute,
-    @Inject(PLATFORM_ID) private platformId: object,
     private pointsService: PointsService,
     public localData: LocalDataService, // public - used in template)
-    public appData: AppDataService
+    public appData: AppDataService,
+    @Inject(DOCUMENT) private htmlDocument: HTMLDocument,
+    private renderer2: Renderer2
   ) {}
 
   ngOnInit(): void {
@@ -49,13 +46,7 @@ export class PointShareComponent implements OnInit, AfterViewInit {
     const slashTag = routeParams.tag;
     const pointTitle = routeParams.title;
 
-    console.log(slashTag, pointTitle);
-
     this.SelectSpecificPoint(slashTag, pointTitle);
-  }
-
-  ngAfterViewInit(): void {
-    FB.XFBML.parse(); // now we can safely call parse method
   }
 
   public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
@@ -104,13 +95,20 @@ export class PointShareComponent implements OnInit, AfterViewInit {
       '/' +
       this.SelectSingleTitle;
 
-    this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      this.linkShare
-    )}&amp;src=sdkpreparse`;
+    const linkShareEncoded = encodeURIComponent(this.linkShare);
+    const titleEncoded = encodeURIComponent(this.point.pointTitle);
+
+    this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
+
+    this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
 
     this.extractMediaEmbeds();
 
     this.alreadyFetchingPointFromDB = false;
+
+    FB.XFBML.parse(); // now we can safely call parse method
+
+    this.loadTwitterScript();
   }
 
   // PointTitle or PointID to be able to select single point
@@ -188,5 +186,13 @@ export class PointShareComponent implements OnInit, AfterViewInit {
 
   message(message: string) {
     alert(message);
+  }
+
+  loadTwitterScript(): void {
+    // Append script to document body
+    const script = this.renderer2.createElement('script');
+    script.type = 'application/javascript';
+    script.src = 'https://platform.twitter.com/widgets.js';
+    this.renderer2.appendChild(this.htmlDocument.body, script);
   }
 }
