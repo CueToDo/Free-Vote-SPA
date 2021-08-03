@@ -6,6 +6,7 @@ import {
   Inject,
   PLATFORM_ID
 } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
 import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -98,7 +99,14 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // SSR First Page Meta Data for Social Media
     this.appData.SSRInitialMetaData$.subscribe({
-      next: metaData => this.setInitialMetaData(metaData)
+      next: (metaData: PagePreviewMetaData) =>
+        this.setMetaData(
+          metaData.title,
+          metaData.preview,
+          '' /* additional keywords */,
+          metaData.pagePath,
+          metaData.previewImage
+        )
     });
 
     // Route and Route Parameters: Setup and subscribe to changes
@@ -175,10 +183,15 @@ export class AppComponent implements OnInit, AfterViewInit {
   setMetaData(
     title: string,
     preview: string,
-    csvKeywords: string,
+    csvAdditionalKeywords: string,
     pagePath: string,
     previewImage: string
   ): void {
+    // Facebook share detecting re-route to homepage somehow
+    // Set meta data once only on server
+    if (isPlatformServer(this.platformId) && this.appData.initialMetaDataSet) {
+      return;
+    }
     const websiteUrlWTS = this.localData.websiteUrlWTS;
 
     const url = `${websiteUrlWTS}/${this.appData.removeBookEnds(
@@ -195,7 +208,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.metaService.addTags([
       {
         name: 'keywords',
-        content: `Free Vote, voting, democracy, ${csvKeywords}`
+        content: `Free Vote, Free, Vote, anonymous, voting,  platform, democracy, ${csvAdditionalKeywords}`
       }
     ]);
 
@@ -277,18 +290,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.metaService.addTags([
       { property: 'fb:app_id', content: environment.facebookAppId }
     ]);
-  }
 
-  public setInitialMetaData(metaData: PagePreviewMetaData): void {
-    this.setMetaData(
-      metaData.title,
-      metaData.preview,
-      'Free Vote, Free, Vote, anonymous, voting, platform' /* keywords */,
-      metaData.pagePath,
-      metaData.previewImage
-    );
-
-    this.appData.initialPageRendered = true;
+    this.appData.initialMetaDataSet = true;
   }
 
   public RouteOrParamsUpdated(url: string): void {
@@ -309,13 +312,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         'Free Vote anonymous voting platform' /* preview */,
         'Free Vote, Free, Vote, anonymous, voting, platform' /* keywords */,
         url, // page path
-        `${this.localData.websiteUrlWTS}/assets/Vulcan.png` // previewImage
-      ); /* pagePath, imagePath */
+        `${this.localData.websiteUrlWTS}/assets/Vulcan-384.png` // previewImage
+      );
 
       // Setting meta data on SSR app.component init will be of use to
       // social media sites as well as Google
-      // , 'free vote voter profile', 'assets/Vulcan.png', 'free, vote, voter, profile'
-      //   , `points on ${topic}`, 'assets/Slash Tag Cloud.PNG', `${topic}, slash, tag`
 
       // Set ShowVulcan to true on route change to home page
       // If home page emits InputSlashTagOnMobile in ngOnInit, get error

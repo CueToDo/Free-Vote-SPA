@@ -54,12 +54,14 @@ export class PointShareComponent implements OnInit {
 
     this.pointsService.GetSpecificPoint(slashTag, pointTitle).subscribe({
       next: psr => {
-        this.DisplayPoint(psr);
+        const point = psr.points[0];
+        this.point = point;
+
+        this.extractMediaEmbeds();
+        this.DisplayShareLinks();
 
         // SSR Initial page render
-        if (!this.appData.initialPageRendered) {
-          const point = psr.points[0];
-
+        if (!this.appData.initialMetaDataSet) {
           const preview = {
             pagePath: this.router.url,
             title: point.pointTitle,
@@ -67,25 +69,21 @@ export class PointShareComponent implements OnInit {
             previewImage: point.previewImage
           } as PagePreviewMetaData;
 
+          // Only do this once - could it happen more than once?
           this.appData.SSRInitialMetaData$.next(preview);
         }
+
+        // Finally link back to all points for tag
+        this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
       },
       error: err => {
         this.error = err.error.detail;
-        this.alreadyFetchingPointFromDB = false;
-      }
+      },
+      complete: () => (this.alreadyFetchingPointFromDB = false)
     });
   }
 
-  DisplayPoint(psr: PointSelectionResult): void {
-    this.alreadyFetchingPointFromDB = false;
-
-    this.point = psr.points[0];
-
-    console.log(this.point);
-
-    this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
-
+  DisplayShareLinks(): void {
     this.linkShare =
       this.localData.websiteUrlWTS.replace(
         'http://localhost:7027',
@@ -100,10 +98,6 @@ export class PointShareComponent implements OnInit {
 
     this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
     this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
-
-    this.extractMediaEmbeds();
-
-    this.alreadyFetchingPointFromDB = false;
 
     FB.XFBML.parse(); // now we can safely call parse method
 
