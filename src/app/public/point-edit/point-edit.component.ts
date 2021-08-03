@@ -17,9 +17,6 @@ import { concatMap } from 'rxjs/operators';
 // Lodash https://github.com/lodash/lodash/issues/3192
 import { cloneDeep } from 'lodash-es';
 
-// CKEditor
-// import * as CKECustom from 'src/ckeditor.js';
-
 // Models
 import { Point } from 'src/app/models/point.model';
 import { PointEdit } from 'src/app/models/point.model';

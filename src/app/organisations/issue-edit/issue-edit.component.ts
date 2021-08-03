@@ -4,9 +4,6 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 // Lodash https://github.com/lodash/lodash/issues/3192
 import { cloneDeep } from 'lodash-es';
 
-// CKEditor
-// import * as CKECustom from 'src/ckeditor.js';
-
 // Models
 import { Issue } from 'src/app/models/issue.model';
 

@@ -78,7 +78,7 @@ export class CkeUniversalComponent implements OnInit {
 
     // script.src = 'https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js';
     // Use my custom build
-    script.src = 'https://free.vote/ckeditor.js';
+    script.src = 'https://free.vote/assets/ckeditor.js';
 
     script.text = `
     ${(script.onload = async () => {
