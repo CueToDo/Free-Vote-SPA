@@ -97,7 +97,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     // SSR First Page Meta Data for Social Media
-    this.appData.PagePreview$.subscribe({
+    this.appData.SSRInitialMetaData$.subscribe({
       next: metaData => this.setInitialMetaData(metaData)
     });
 
@@ -250,7 +250,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.metaService.removeTag(`property='og:image:height'`);
     this.metaService.removeTag(`name='twitter:image'`);
 
-    if (previewImage) {
+    if (!!previewImage) {
       // Requires Angular Universal Server Side Rendering
       // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
       this.metaService.addTags([

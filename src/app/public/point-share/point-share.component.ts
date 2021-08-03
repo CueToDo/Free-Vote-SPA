@@ -67,7 +67,7 @@ export class PointShareComponent implements OnInit {
             previewImage: point.previewImage
           } as PagePreviewMetaData;
 
-          this.appData.PagePreview$.next(preview);
+          this.appData.SSRInitialMetaData$.next(preview);
         }
       },
       error: err => {
@@ -99,7 +99,6 @@ export class PointShareComponent implements OnInit {
     const titleEncoded = encodeURIComponent(this.point.pointTitle);
 
     this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
-
     this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
 
     this.extractMediaEmbeds();
