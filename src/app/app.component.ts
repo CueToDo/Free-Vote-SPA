@@ -57,6 +57,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   public altVulcan = 'Vulcan';
   public under500 = false;
 
+  pass = 0;
+
   constructor(
     private router: Router,
     public auth: AuthService,
@@ -99,18 +101,22 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // SSR First Page Meta Data for Social Media
     this.appData.SSRInitialMetaData$.subscribe({
-      next: (metaData: PagePreviewMetaData) =>
+      next: (metaData: PagePreviewMetaData) => {
+        this.appData.serverMetaDataSet = false; // override any previously set meta data
+
         this.setMetaData(
           metaData.title,
           metaData.preview,
           '' /* additional keywords */,
           metaData.pagePath,
           metaData.previewImage
-        )
+        );
+      }
     });
 
     // Route and Route Parameters: Setup and subscribe to changes
-    this.RouteOrParamsUpdated(this.router.url);
+    // ToDo May need to reinstate following for pages other than point share
+    // this.RouteOrParamsUpdated(this.router.url);
 
     // Angular Workshop https://stackoverflow.com/questions/33520043/how-to-detect-a-route-change-in-angular
     // The app component is the main route change detector.
@@ -127,7 +133,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.RouteOrParamsUpdated(url);
       });
 
-    // app.compnent responds to child component changes
+    // app.component responds to child component changes
     // ie route parameters changes that it can't detect itself
     this.appData.RouteParamChange$.subscribe((url: string) => {
       this.RouteOrParamsUpdated(url);
@@ -187,11 +193,24 @@ export class AppComponent implements OnInit, AfterViewInit {
     pagePath: string,
     previewImage: string
   ): void {
+    console.log('SETTING META DATA', title);
+
+    this.pass++;
+    this.metaService.addTags([
+      {
+        property: `pass ${this.pass}`,
+        content: `server ${isPlatformServer(this.platformId)} ${pagePath}`
+      }
+    ]);
+
     // Facebook share detecting re-route to homepage somehow
     // Set meta data once only on server
-    if (isPlatformServer(this.platformId) && this.appData.initialMetaDataSet) {
+    // Does facebook client scraper run browser js
+    if (isPlatformServer(this.platformId) && this.appData.serverMetaDataSet) {
       return;
     }
+    this.appData.serverMetaDataSet = true;
+
     const websiteUrlWTS = this.localData.websiteUrlWTS;
 
     const url = `${websiteUrlWTS}/${this.appData.removeBookEnds(
@@ -290,8 +309,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.metaService.addTags([
       { property: 'fb:app_id', content: environment.facebookAppId }
     ]);
-
-    this.appData.initialMetaDataSet = true;
   }
 
   public RouteOrParamsUpdated(url: string): void {
@@ -308,10 +325,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       // Setting meta data on route change useful to Google and social media previews
       // Runs after app component init in SSR for FCP (First Contentful Paint)
       this.setMetaData(
-        `${this.localData.websiteUrlWTS} Route Change Title` /* title */,
+        `${this.localData.website}` /* title */,
         'Free Vote anonymous voting platform' /* preview */,
-        'Free Vote, Free, Vote, anonymous, voting, platform' /* keywords */,
-        url, // page path
+        '' /* additional keywords */,
+        '' /* page path (home) */,
         `${this.localData.websiteUrlWTS}/assets/Vulcan-384.png` // previewImage
       );
 
@@ -349,7 +366,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       } else {
         const topic = this.localData.SlashTagToTopic(this.pageTitle);
         this.setDocTitle(topic);
-        console.log('Set Doc Title on route change: none of the above');
+        console.log('Set Doc Title on route change:', topic);
       }
 
       // https://angular.io/api/common/Location#!#replaceState-anchor

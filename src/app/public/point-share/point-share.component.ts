@@ -61,17 +61,15 @@ export class PointShareComponent implements OnInit {
         this.DisplayShareLinks();
 
         // SSR Initial page render
-        if (!this.appData.initialMetaDataSet) {
-          const preview = {
-            pagePath: this.router.url,
-            title: point.pointTitle,
-            preview: point.preview,
-            previewImage: point.previewImage
-          } as PagePreviewMetaData;
+        const preview = {
+          pagePath: this.router.url,
+          title: point.pointTitle,
+          preview: point.preview,
+          previewImage: point.previewImage
+        } as PagePreviewMetaData;
 
-          // Only do this once - could it happen more than once?
-          this.appData.SSRInitialMetaData$.next(preview);
-        }
+        // Only do this once - could it happen more than once?
+        this.appData.SSRInitialMetaData$.next(preview);
 
         // Finally link back to all points for tag
         this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
