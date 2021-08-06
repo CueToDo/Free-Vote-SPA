@@ -43,7 +43,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
 
-  home = false;
   pageTitle = '';
   pageTitleToolTip = '';
 
@@ -114,7 +113,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // Route and Route Parameters: Setup and subscribe to changes
     // ToDo May need to reinstate following for pages other than point share
-    this.RouteOrParamsUpdated(this.router.url);
+    // First initialisation of app.component can't have router.url
+    // this.RouteOrParamsUpdated(this.router.url);
 
     // Angular Workshop https://stackoverflow.com/questions/33520043/how-to-detect-a-route-change-in-angular
     // The app component is the main route change detector.
@@ -197,7 +197,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.metaService.addTags([
       {
         property: `pass ${this.pass}`,
-        content: `server ${isPlatformServer(this.platformId)} ${pagePath}`
+        content: `server ${isPlatformServer(
+          this.platformId
+        )} PagePath: ${pagePath}`
       }
     ]);
 
@@ -310,7 +312,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     if (url === '/' || url === '' || url.indexOf('/callback') === 0) {
       // Home page
-      this.home = true;
       this.pageTitle = '';
       this.setDocTitle(this.localData.website);
 
@@ -333,8 +334,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.showVulcan = true;
     } else {
       // Anything other than home page
-
-      this.home = false;
 
       if (url.indexOf('?') > 0) {
         url = url.split('?')[0]; // #176 discard query string for facebook shares
@@ -369,9 +368,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.location.replaceState(url);
       }
 
-      // Only show Vulcan on home page
-      // this will be updated on begin or end input on home page
-      this.showVulcan = this.home;
+      this.showVulcan = false;
     }
   }
 
