@@ -45,8 +45,6 @@ export class AppDataService {
   // tslint:disable-next-line: deprecation
   public promptEvent: BeforeInstallPromptEvent | undefined;
 
-  public serverMetaDataSet = false;
-
   // Any subscriptions to the following must be unsubscribed (except in app.component)
   public SSRInitialMetaData$ = new Subject<PagePreviewMetaData>(); // SSR Universal PagePreview
   public RouteParamChange$ = new Subject<string>(); // next url with route parameters

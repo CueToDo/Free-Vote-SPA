@@ -102,8 +102,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     // SSR First Page Meta Data for Social Media
     this.appData.SSRInitialMetaData$.subscribe({
       next: (metaData: PagePreviewMetaData) => {
-        this.appData.serverMetaDataSet = false; // override any previously set meta data
-
         this.setMetaData(
           metaData.title,
           metaData.preview,
@@ -116,7 +114,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // Route and Route Parameters: Setup and subscribe to changes
     // ToDo May need to reinstate following for pages other than point share
-    // this.RouteOrParamsUpdated(this.router.url);
+    this.RouteOrParamsUpdated(this.router.url);
 
     // Angular Workshop https://stackoverflow.com/questions/33520043/how-to-detect-a-route-change-in-angular
     // The app component is the main route change detector.
@@ -203,13 +201,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     ]);
 
-    // Facebook share detecting re-route to homepage somehow
-    // Set meta data once only on server
-    // Does facebook client scraper run browser js
-    if (isPlatformServer(this.platformId) && this.appData.serverMetaDataSet) {
-      return;
-    }
-    this.appData.serverMetaDataSet = true;
+    // Reckon facebook scraper must have been temporarily fucked
 
     const websiteUrlWTS = this.localData.websiteUrlWTS;
 
