@@ -1,11 +1,17 @@
-import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
-import { Point, PointSelectionResult } from 'src/app/models/point.model';
+import {
+  Component,
+  Inject,
+  OnInit,
+  Renderer2,
+  PLATFORM_ID
+} from '@angular/core';
+import { Point } from 'src/app/models/point.model';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
 import { PagePreviewMetaData } from 'src/app/models/point.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-point-share',
@@ -97,9 +103,11 @@ export class PointShareComponent implements OnInit {
     this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
     this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
 
-    FB.XFBML.parse(); // now we can safely call parse method
-
-    this.loadTwitterScript();
+    // Client side scripts
+    if (isPlatformBrowser(PLATFORM_ID)) {
+      FB.XFBML.parse(); // now we can safely call parse method
+      this.loadTwitterScript();
+    }
   }
 
   // PointTitle or PointID to be able to select single point

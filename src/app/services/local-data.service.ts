@@ -250,7 +250,6 @@ export class LocalDataService {
         // Set
         this.JWT = values.jwt;
         this.GettingFreeVoteJwt = false;
-        console.log('Your new jwt sir:', values.jwt);
       }
 
       if (values.roles) {
