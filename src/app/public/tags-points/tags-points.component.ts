@@ -266,9 +266,9 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
   }
 
   // Tell the App Component that the route has changed
-  TabChangeComplete(hasChanged: boolean, switchedTo: string): void {
+  TabChangeComplete(hasChanged: boolean, newRoute: string): void {
     if (hasChanged && !this.externalTrigger) {
-      this.appData.RouteParamChange$.next(switchedTo);
+      this.appData.RouteParamChange$.next(newRoute);
     }
   }
 

@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit, OnDestroy {
-  PageName$: Subscription | undefined;
+  TabSelected$: Subscription | undefined;
   LoggedIn$: Subscription | undefined;
   tagsPointsActive$: Subscription | undefined;
   showBurger$: Subscription | undefined;
@@ -50,7 +50,7 @@ export class NavComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.PageName$ = this.appDataService.PageName$.subscribe({
+    this.TabSelected$ = this.appDataService.TabSelected$.subscribe({
       next: pageName => (this.tabSelected = pageName)
     });
 
@@ -62,7 +62,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.PageName$?.unsubscribe();
+    this.TabSelected$?.unsubscribe();
     this.LoggedIn$?.unsubscribe();
     this.tagsPointsActive$?.unsubscribe();
     this.showBurger$?.unsubscribe();

@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
 
-  pageTitle = '';
+  routeDisplay = '';
   pageTitleToolTip = '';
 
   localAPI = '';
@@ -98,24 +98,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       next: _ => this.appData.InitialisePreviousSlashTagSelected()
     });
 
-    // SSR First Page Meta Data for Social Media
-    this.appData.SSRInitialMetaData$.subscribe({
-      next: (metaData: PagePreviewMetaData) => {
-        this.setMetaData(
-          metaData.title,
-          metaData.preview,
-          '' /* additional keywords */,
-          metaData.pagePath,
-          metaData.previewImage
-        );
-      }
-    });
+    // Route and Route Parameters: Setup and subscribe to changes (SSR and CSR)
+    // https://ultimatecourses.com/blog/dynamic-page-titles-angular-2-router-events
+    // 1) ngOnInit initialisation for all pages (incl PointShare)
+    this.RouteOrParamsUpdated(this.router.url);
 
-    // Route and Route Parameters: Setup and subscribe to changes
-    // ToDo May need to reinstate following for pages other than point share
-    // First initialisation of app.component can't have router.url
-    // this.RouteOrParamsUpdated(this.router.url);
-
+    // 2) Subscribe to router.events
     // Angular Workshop https://stackoverflow.com/questions/33520043/how-to-detect-a-route-change-in-angular
     // The app component is the main route change detector.
     // It can then dispense this throughout the app via coredata service
@@ -131,10 +119,24 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.RouteOrParamsUpdated(url);
       });
 
-    // app.component responds to child component changes
-    // ie route parameters changes that it can't detect itself
-    this.appData.RouteParamChange$.subscribe((url: string) => {
-      this.RouteOrParamsUpdated(url);
+    // 3) Subscribe to parameter changes raised by child components
+    // Parameter change is not a router event (handled by same child component)
+    this.appData.RouteParamChange$.subscribe((route: string) => {
+      this.RouteOrParamsUpdated(route);
+    });
+
+    // 4) Special case for point share with dynamic PagePreviewMetaData
+    // SSR Meta Data
+    this.appData.SSRInitialMetaData$.subscribe({
+      next: (metaData: PagePreviewMetaData) => {
+        this.setMetaData(
+          metaData.title,
+          metaData.preview,
+          '' /* additional keywords */,
+          metaData.pagePath,
+          metaData.previewImage
+        );
+      }
     });
 
     // Viewport Width: Setup and subscribe to changes on browser only - not for Universla SSR
@@ -191,8 +193,24 @@ export class AppComponent implements OnInit, AfterViewInit {
     pagePath: string,
     previewImage: string
   ): void {
+    // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
+    // https://css-tricks.com/essential-meta-tags-social-media/
+
+    // Requires Angular Universal Server Side Rendering for Social media use
+    // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
+
+    // Don't overwrite existing meta with home meta
+    if (
+      title === this.localData.website &&
+      !!this.metaService.getTag(`property='og:title'`)
+    ) {
+      console.log('Meta prevent home page overwrite');
+      return;
+    }
+
     console.log('SETTING META DATA', title);
 
+    // ToDo remove debugging info
     this.pass++;
     this.metaService.addTags([
       {
@@ -203,29 +221,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     ]);
 
-    // Reckon facebook scraper must have been temporarily fucked
-
-    const websiteUrlWTS = this.localData.websiteUrlWTS;
-
-    const url = `${websiteUrlWTS}/${this.appData.removeBookEnds(
-      pagePath,
-      '/'
-    )}`;
-
-    // https://css-tricks.com/essential-meta-tags-social-media/
-    // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
-    this.metaService.removeTag(`name='keywords'`);
-
-    // Requires Angular Universal Server Side Rendering
-    // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
-    this.metaService.addTags([
-      {
-        name: 'keywords',
-        content: `Free Vote, Free, Vote, anonymous, voting,  platform, democracy, ${csvAdditionalKeywords}`
-      }
-    ]);
-
-    // Remove and title meta
+    // 1) Title: remove and conditionally add
     this.metaService.removeTag(`property='og:title'`);
     this.metaService.removeTag(`name='twitter:title'`);
 
@@ -236,49 +232,59 @@ export class AppComponent implements OnInit, AfterViewInit {
       ]);
     }
 
-    // Remove and add url meta
+    // 2) Description preview
+    this.metaService.updateTag({ name: 'description', content: preview });
+    this.metaService.updateTag({
+      property: 'og:description',
+      content: preview
+    });
+    this.metaService.updateTag({
+      name: 'twitter:description',
+      content: preview
+    });
+
+    // 3) Keywords
+    this.metaService.updateTag({
+      name: 'keywords',
+      content: `${this.appData.keywords}, ${csvAdditionalKeywords}`
+    });
+
+    // 4) og:url remove and conditionally add
     this.metaService.removeTag(`property='og:url'`);
+
+    const websiteUrlWTS = this.localData.websiteUrlWTS;
+
+    const url = `${websiteUrlWTS}/${this.appData.removeBookEnds(
+      pagePath,
+      '/'
+    )}`;
 
     if (url) {
       this.metaService.addTags([{ property: 'og:url', content: url }]);
     }
 
-    // card type: “summary”, “summary_large_image”, “app”, or “player”.
-    this.metaService.removeTag(`property='og:type'`);
-    this.metaService.removeTag(`name='twitter:card'`);
+    // 5) og:type
+    this.metaService.updateTag({ property: 'og:type', content: 'article' });
 
-    this.metaService.addTags([{ property: 'og:type', content: 'article' }]);
+    // 6) twitter:card
+    // card type: “summary”, “summary_large_image”, “app”, or “player”.
+    this.metaService.removeTag(`name='twitter:card'`);
 
     if (preview && previewImage) {
       this.metaService.addTags([
         { name: 'twitter:card', content: 'summary_large_image' }
       ]);
     } else if (preview) {
-      this.metaService.addTags([{ name: 'twitter:card', content: 'summary' }]);
+      this.metaService.addTag({ name: 'twitter:card', content: 'summary' });
     }
 
-    // Remove and add preview meta
-    this.metaService.removeTag(`name='description'`);
-    this.metaService.removeTag(`property='og:description'`);
-    this.metaService.removeTag(`name='twitter:description'`);
-
-    if (preview) {
-      this.metaService.addTags([
-        { name: 'description', content: preview },
-        { property: 'og:description', content: preview },
-        { name: 'twitter:description', content: preview }
-      ]);
-    }
-
-    // Remove and add previewImage meta
+    // 7) PreviewImage remove and conditionally add
     this.metaService.removeTag(`property='og:image'`);
     this.metaService.removeTag(`property='og:image:width'`);
     this.metaService.removeTag(`property='og:image:height'`);
     this.metaService.removeTag(`name='twitter:image'`);
 
     if (!!previewImage) {
-      // Requires Angular Universal Server Side Rendering
-      // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
       this.metaService.addTags([
         { property: 'og:image', content: previewImage },
         { name: 'twitter:image', content: previewImage }
@@ -298,35 +304,30 @@ export class AppComponent implements OnInit, AfterViewInit {
       ]);
     }
 
-    // facebook app_id
-    this.metaService.removeTag(`property='fb:app_id'`);
-    this.metaService.addTags([
-      { property: 'fb:app_id', content: environment.facebookAppId }
-    ]);
+    // 8) Facebook app_id
+    this.metaService.updateTag({
+      property: 'fb:app_id',
+      content: environment.facebookAppId
+    });
   }
 
-  public RouteOrParamsUpdated(url: string): void {
-    // called in ngOnInit and in subscriptions to router events and route parameter change via subject RouteParamChange
+  public RouteOrParamsUpdated(route: string): void {
+    // Change Page Title and meta data, show Vulcan
 
-    this.appData.Route = url;
+    // called in ngOnInit and in subscriptions to router events
+    // and route parameter change via subject RouteParamChange
 
-    if (url === '/' || url === '' || url.indexOf('/callback') === 0) {
+    var metaTitle = '';
+
+    this.appData.Route = route;
+
+    if (route === '/' || route === '' || route.indexOf('/callback') === 0) {
       // Home page
-      this.pageTitle = '';
-      this.setDocTitle(this.localData.website);
+      metaTitle = this.localData.website;
+      this.setDocTitle(metaTitle);
+      this.routeDisplay = '';
 
-      // Setting meta data on route change useful to Google and social media previews
-      // Runs after app component init in SSR for FCP (First Contentful Paint)
-      this.setMetaData(
-        `${this.localData.website}` /* title */,
-        'Free Vote anonymous voting platform' /* preview */,
-        '' /* additional keywords */,
-        '' /* page path (home) */,
-        `${this.localData.websiteUrlWTS}/assets/Vulcan-384.png` // previewImage
-      );
-
-      // Setting meta data on SSR app.component init will be of use to
-      // social media sites as well as Google
+      this.pageTitleToolTip = metaTitle;
 
       // Set ShowVulcan to true on route change to home page
       // If home page emits InputSlashTagOnMobile in ngOnInit, get error
@@ -335,41 +336,50 @@ export class AppComponent implements OnInit, AfterViewInit {
     } else {
       // Anything other than home page
 
-      if (url.indexOf('?') > 0) {
-        url = url.split('?')[0]; // #176 discard query string for facebook shares
+      if (route.indexOf('?') > 0) {
+        route = route.split('?')[0]; // #176 discard query string for facebook shares
       }
-
-      this.pageTitle = url;
+      metaTitle = route;
+      this.routeDisplay = route;
 
       this.pageTitleToolTip =
-        url === this.localData.PreviousSlashTagSelected
+        route === this.localData.PreviousSlashTagSelected
           ? 'SlashTag/' + this.localData.PreviousTopicSelected
-          : url.substr(1);
+          : route.substr(1);
 
-      if (url.indexOf('slash-tags') > -1) {
-        this.appData.PageName$.next('slashTags');
+      if (route.indexOf('slash-tags') > -1) {
+        this.appData.TabSelected$.next('slashTags');
         this.setDocTitle('Slash Tags');
-        console.log('slash tags');
-      } else if (url.indexOf('/my/details') > -1) {
-        this.appData.PageName$.next('profile');
+      } else if (route.indexOf('/my/details') > -1) {
+        this.appData.TabSelected$.next('profile');
         this.setDocTitle('Voter Profile');
-        console.log('my details');
       } else {
-        const topic = this.localData.SlashTagToTopic(this.pageTitle);
+        // ToDo - more cases to be handled
+        const topic = this.localData.SlashTagToTopic(this.routeDisplay);
         this.setDocTitle(topic);
-        console.log('Set Doc Title on route change:', topic);
       }
 
+      // Change url in browser's address bar
       // https://angular.io/api/common/Location#!#replaceState-anchor
-      // change url in browser's address bar
-
       // When app is reloaded on callback, do not replaceState
-      if (url) {
-        this.location.replaceState(url);
+      if (route) {
+        this.location.replaceState(route);
       }
 
       this.showVulcan = false;
     }
+
+    // Setting meta data on SSR app.component init
+    // will be of use to social media sites as well as Google
+
+    // Runs after app component init in SSR for FCP (First Contentful Paint)
+    this.setMetaData(
+      metaTitle /* title */,
+      'Free Vote anonymous voting platform' /* preview */,
+      '' /* additional keywords */,
+      this.routeDisplay /* page path (home) */,
+      `${this.localData.websiteUrlWTS}/assets/Vulcan-384.png` // previewImage
+    );
   }
 
   SetVPW(): void {

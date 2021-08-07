@@ -74,10 +74,7 @@ const appRoutes: Routes = [
   { path: 'slash-tags/recent', component: TagsPointsComponent }, // TAGS personal - recent selection - works on anon?
   { path: 'new-point', component: TagsPointsComponent },
   { path: ':tag/by/:alias', component: TagsPointsComponent },
-  {
-    path: ':tag/question/:questionSlug',
-    component: QuestionAnswersComponent
-  },
+  { path: ':tag/question/:questionSlug', component: QuestionAnswersComponent },
   { path: ':tag', component: TagsPointsComponent }, // POINTS: still like the SlashTag
   { path: ':tag/points', component: TagsPointsComponent }, // POINTS: still like the SlashTag
   { path: ':tag/:title', component: PointShareComponent },

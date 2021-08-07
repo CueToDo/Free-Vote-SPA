@@ -15,7 +15,7 @@
 
     <!-- Big URL confirmation -->
     <h1 [title]="pageTitleToolTip" class="title" [ngClass]="{titleOffset:showBurger, under500:under500}">
-      {{ localData.websiteUrlWTS }}{{ pageTitle }}
+      {{ localData.websiteUrlWTS }}{{ routeDisplay }}
     </h1>
 
   </div>
@@ -59,7 +59,7 @@
           {{ localAPI }}
         </span>
         <span class="align-middle copyright" (click)="toggleLocalAPI()">
-          {{ localData.website }} 2021 v12.5.5
+          {{ localData.website }} 2021 v12.5.6
         </span>
       </div>
 

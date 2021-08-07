@@ -68,7 +68,7 @@ export class PointShareComponent implements OnInit {
           previewImage: point.previewImage
         } as PagePreviewMetaData;
 
-        // Only do this once - could it happen more than once?
+        // Notify app.component to set meta data for SEO & Social scraping
         this.appData.SSRInitialMetaData$.next(preview);
 
         // Finally link back to all points for tag

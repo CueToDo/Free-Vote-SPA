@@ -161,7 +161,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pointSelection$ = this.appData.ReSelectPoints$.subscribe(
       (pointSortType: PointSortTypes) => {
         this.filter.slashTag = this.localData.PreviousSlashTagSelected; // Set by the Point-Edit Component
-        this.SetAppComponentTitle();
+        this.SetAppComponentRoute();
         if (pointSortType !== PointSortTypes.NoChange) {
           if (pointSortType === PointSortTypes.DateDescend) {
             this.filter.sortType = PointSortTypes.DateCreated;
@@ -256,7 +256,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
 
-        this.SetAppComponentTitle();
+        this.SetAppComponentRoute();
       }
     );
   }
@@ -266,7 +266,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.filter.applyAliasFilter = false;
     }
     this.filter.applyDraftFilter = this.filter.myPoints;
-    this.SetAppComponentTitle();
+    this.SetAppComponentRoute();
     this.Select();
   }
 
@@ -297,7 +297,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.Select();
     }
 
-    this.SetAppComponentTitle();
+    this.SetAppComponentRoute();
   }
 
   SelectPointsByVoter(): void {
@@ -305,7 +305,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   FilterOnTag(): void {
-    this.SetAppComponentTitle();
+    this.SetAppComponentRoute();
     this.Select();
   }
 
@@ -383,20 +383,20 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.filter.HasSavedFilter();
   }
 
-  SetAppComponentTitle(): void {
+  SetAppComponentRoute(): void {
     // Don't call from SelectPoints() (which may be called from a subscription triggered externally)
-    let title = '';
+    let route = '';
 
     const slashTagSlash = this.filter.anyTag ? '/' : this.filter.slashTag + '/';
 
     if (this.filter.myPoints) {
-      title = `${slashTagSlash}by/${this.localData.freeVoteProfile.alias}`;
+      route = `${slashTagSlash}by/${this.localData.freeVoteProfile.alias}`;
     } else if (this.filter.applyAliasFilter && !!this.filter.byAlias) {
-      title = `${slashTagSlash}by/${this.filter.byAlias}`;
+      route = `${slashTagSlash}by/${this.filter.byAlias}`;
     } else {
-      title = `${this.filter.slashTag}`;
+      route = `${this.filter.slashTag}`;
     }
-    this.appData.RouteParamChange$.next(title);
+    this.appData.RouteParamChange$.next(route);
   }
 
   Select(): void {
