@@ -101,6 +101,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Route and Route Parameters: Setup and subscribe to changes (SSR and CSR)
     // https://ultimatecourses.com/blog/dynamic-page-titles-angular-2-router-events
     // 1) ngOnInit initialisation for all pages (incl PointShare)
+    console.log('ngOnInit RouteOrParamsUpdated called');
     this.RouteOrParamsUpdated(this.router.url);
 
     // 2) Subscribe to router.events
@@ -116,12 +117,14 @@ export class AppComponent implements OnInit, AfterViewInit {
       )
       .subscribe(url => {
         // broadcast showing tags
+        console.log('router event RouteOrParamsUpdated called');
         this.RouteOrParamsUpdated(url);
       });
 
     // 3) Subscribe to parameter changes raised by child components
     // Parameter change is not a router event (handled by same child component)
     this.appData.RouteParamChange$.subscribe((route: string) => {
+      console.log('route parameter change RouteOrParamsUpdated called');
       this.RouteOrParamsUpdated(route);
     });
 
@@ -208,18 +211,23 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    console.log('SETTING META DATA', title);
+    console.log(
+      'SETTING META DATA - Title:',
+      title,
+      'Preview:',
+      preview,
+      'Image:',
+      previewImage
+    );
 
     // ToDo remove debugging info
     this.pass++;
-    this.metaService.addTags([
-      {
-        property: `pass ${this.pass}`,
-        content: `server ${isPlatformServer(
-          this.platformId
-        )} PagePath: ${pagePath}`
-      }
-    ]);
+    this.metaService.addTag({
+      property: `pass ${this.pass}`,
+      content: `server ${isPlatformServer(
+        this.platformId
+      )} PagePath: ${pagePath} Title: ${title} Preview: ${preview}`
+    });
 
     // 1) Title: remove and conditionally add
     this.metaService.removeTag(`property='og:title'`);

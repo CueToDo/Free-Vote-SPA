@@ -47,7 +47,6 @@ export class LocalDataService {
     return this.GetItem('loggedInToAuth0') === 'true';
   }
   public set LoggedInToAuth0(loggedIn: boolean) {
-    console.log('Now logged in:', loggedIn);
     // Save
     this.SetItem('loggingInToAuth0', String(false));
     this.SetItem('loggedInToAuth0', String(loggedIn));
