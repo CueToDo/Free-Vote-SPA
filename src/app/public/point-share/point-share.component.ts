@@ -44,6 +44,7 @@ export class PointShareComponent implements OnInit {
     public localData: LocalDataService, // public - used in template)
     public appData: AppDataService,
     @Inject(DOCUMENT) private htmlDocument: HTMLDocument,
+    @Inject(PLATFORM_ID) private platformId: object,
     private renderer2: Renderer2
   ) {}
 
@@ -104,7 +105,7 @@ export class PointShareComponent implements OnInit {
     this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
 
     // Client side scripts
-    if (isPlatformBrowser(PLATFORM_ID)) {
+    if (isPlatformBrowser(this.platformId)) {
       FB.XFBML.parse(); // now we can safely call parse method
       this.loadTwitterScript();
     }
