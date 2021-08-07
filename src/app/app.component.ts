@@ -378,7 +378,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       'Free Vote anonymous voting platform' /* preview */,
       '' /* additional keywords */,
       this.routeDisplay /* page path (home) */,
-      `${this.localData.websiteUrlWTS}/assets/Vulcan-384.png` // previewImage
+      `${this.localData.websiteUrlWTS}/assets/vulcan-384.png` // previewImage
     );
   }
 
