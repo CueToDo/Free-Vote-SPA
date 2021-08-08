@@ -15,7 +15,7 @@
   <app-cke-universal name="point" [(textToEdit)]="pointClone.pointHTML" (blur)="onCKEBlur()"></app-cke-universal>
 
   <!-- Link, YouTube and SoundCloud -->
-  <div class="mx-3 pt-3">
+  <div class="px-3 pt-3 mediaLinks" *ngIf="hasLink || hasMedia || imageFileForUpload || uploadingImage">
 
     <div fxLayout="column" fxLayoutAlign="space-around">
 

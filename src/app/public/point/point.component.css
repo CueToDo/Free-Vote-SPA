@@ -11,6 +11,10 @@
   margin: 0 10px 10px 10px;
 }
 
+.pointSource a {
+  text-decoration: none;
+}
+
 .selected {
   /* hacky override */
   background-color: #e7e7e7;
@@ -28,7 +32,6 @@
   overflow: hidden;
   color: black;
   background-color: #f0f4ff;
-  max-height: 200px;
 }
 
 .linkFromMeta:hover,
@@ -37,6 +40,7 @@
 }
 
 .linkFromMeta img {
+  min-height: 120px;
   width: 100%;
 }
 
@@ -47,7 +51,10 @@
 }
 
 .linkMetaData {
-  padding: 10px;
+  max-height: 150px;
+  margin: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .textXSmall {

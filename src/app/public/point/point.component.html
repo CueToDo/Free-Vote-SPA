@@ -54,9 +54,9 @@
     *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink || justUpdated || point.isNewSource"
     class="pointSource" [ngClass.lt-md]="'ltmd'">
     <!-- Link -->
-    <a *ngIf="point.linkAddress" [href]="point.linkAddress" target="_blank">
+    <a *ngIf="!!point.linkAddress" [href]="point.linkAddress" target="_blank">
       <!-- Link Preview -->
-      <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center">
+      <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center center">
         <div fxFlex="30" class="linkImage">
           <img [src]="point.linkImage" alt="">
         </div>

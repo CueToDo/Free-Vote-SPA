@@ -365,11 +365,11 @@ export class PointComponent implements OnInit {
           .subscribe(metaData => {
             if (this.point) {
               this.point.linkTitle = metaData.title;
-              this.point.linkDescription = metaData.preview;
-              this.point.linkImage = metaData.previewImage;
+              this.point.linkDescription = metaData.description;
+              this.point.linkImage = metaData.image;
             }
+            this.updatingPreview = false;
           });
-        this.updatingPreview = false;
       }
     }
   }

@@ -71,8 +71,8 @@ export class PointShareComponent implements OnInit {
         const preview = {
           pagePath: this.router.url,
           title: point.pointTitle,
-          preview: point.preview,
-          previewImage: point.previewImage
+          description: point.preview,
+          image: point.previewImage
         } as PagePreviewMetaData;
 
         // Notify app.component to set meta data for SEO & Social scraping

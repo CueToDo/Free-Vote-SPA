@@ -134,10 +134,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       next: (metaData: PagePreviewMetaData) => {
         this.setMetaData(
           metaData.title,
-          metaData.preview,
+          metaData.description,
           '' /* additional keywords */,
           metaData.pagePath,
-          metaData.previewImage
+          metaData.image
         );
       }
     });

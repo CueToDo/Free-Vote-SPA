@@ -133,8 +133,8 @@ export class Point {
 
 export class PagePreviewMetaData {
   title = '';
-  preview = '';
-  previewImage = '';
+  description = '';
+  image = '';
   pagePath = '';
   url = '';
 }
