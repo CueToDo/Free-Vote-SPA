@@ -128,6 +128,54 @@ div.toolbar mat-form-field {
   transition: left 0.25s ease-out, opacity 0.25s ease-out, height 0.25s ease-out;
 }
 
+.point {
+  margin-top: 30px;
+  border-bottom: solid 3px #bbb;
+}
+
+.pointSource {
+  margin-bottom: 10px;
+}
+
+.pointSource.ltmd {
+  margin: 0 10px 10px 10px;
+}
+
+.pointSource a {
+  text-decoration: none;
+}
+
+.linkFromMeta {
+  border: solid 1px black;
+  border-radius: 12px;
+  overflow: hidden;
+  color: black;
+  background-color: #f0f4ff;
+}
+
+.linkFromMeta:hover,
+.preview {
+  color: #3700b3;
+}
+
+.linkFromMeta img {
+  min-height: 120px;
+  width: 100%;
+}
+
+.linkTitle {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.linkMetaData {
+  max-height: 150px;
+  margin: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* https://stackoverflow.com/questions/21647920/responsive-iframe-with-max-width-and-height */
 
 .youTube {

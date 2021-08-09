@@ -77,6 +77,29 @@
                     </div>
                 </ng-container>
 
+                <div class="pointSource" [ngClass.lt-md]="'ltmd'">
+                    <!-- Link -->
+                    <a *ngIf="!!point.linkAddress" [href]="point.linkAddress" target="_blank">
+                        <!-- Link Preview -->
+                        <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row"
+                            fxLayoutAlign="center center">
+                            <div fxFlex="30" class="linkImage">
+                                <img [src]="point.linkImage" alt="">
+                            </div>
+                            <div fxFlex="70" class="linkMetaData">
+                                <div class="linkTitle">{{ point.linkTitle }}</div>
+                                {{ point.linkDescription }}
+                            </div>
+                        </div>
+                        <!-- No Link Preview -->
+                        <div *ngIf="!point.showLinkPreview">
+                            {{ point.linkText }}
+                        </div>
+                    </a>
+                    <!-- No link -->
+                    <span *ngIf="!point.linkAddress">{{ point.linkText }}</span>
+                </div>
+
             </div>
         </div>
 

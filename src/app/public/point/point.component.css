@@ -1,20 +1,3 @@
-.point {
-  margin-top: 30px;
-  border-bottom: solid 3px #bbb;
-}
-
-.pointSource {
-  margin-bottom: 10px;
-}
-
-.pointSource.ltmd {
-  margin: 0 10px 10px 10px;
-}
-
-.pointSource a {
-  text-decoration: none;
-}
-
 .selected {
   /* hacky override */
   background-color: #e7e7e7;
@@ -24,37 +7,6 @@
 
 .spinner {
   vertical-align: middle;
-}
-
-.linkFromMeta {
-  border: solid 1px black;
-  border-radius: 12px;
-  overflow: hidden;
-  color: black;
-  background-color: #f0f4ff;
-}
-
-.linkFromMeta:hover,
-.preview {
-  color: #3700b3;
-}
-
-.linkFromMeta img {
-  min-height: 120px;
-  width: 100%;
-}
-
-.linkTitle {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-.linkMetaData {
-  max-height: 150px;
-  margin: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .textXSmall {
