@@ -14,7 +14,6 @@ import {
   StateKey,
   TransferState
 } from '@angular/platform-browser';
-import { isPlatformBrowser } from '@angular/common';
 
 // rxjs
 import { Observable, of, throwError } from 'rxjs';

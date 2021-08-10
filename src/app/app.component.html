@@ -13,11 +13,19 @@
       </div>
     </div>
 
+    <div fxFlex></div>
+
     <!-- Big URL confirmation -->
     <h1 [title]="pageTitleToolTip" class="title" [ngClass]="{titleOffset:showBurger, under500:under500}">
       {{ localData.websiteUrlWTS }}{{ routeDisplay }}
     </h1>
 
+    <div fxFlex></div>
+
+    <button mat-button *ngIf="appData.SpaVersionUpdateRequired" (click)="SpaVersionUpdate()">
+      <mat-icon>autorenew</mat-icon>
+      update
+    </button>
   </div>
 
   <!-- Main Menu on large screens -->
@@ -59,7 +67,7 @@
           {{ localAPI }}
         </span>
         <span class="align-middle copyright" (click)="toggleLocalAPI()">
-          {{ localData.website }} 2021 v12.5.12
+          {{ localData.website }} 2021 v{{ appData.SpaVersion }}
         </span>
       </div>
 

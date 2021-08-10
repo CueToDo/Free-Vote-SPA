@@ -73,6 +73,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.appData.GetLatestSPAVersion();
+
     // https://stackoverflow.com/questions/39845082/angular-2-change-favicon-icon-as-per-configuration/45753615
     let favicon = 'favicon.ico';
     switch (this.localData.website) {
@@ -118,6 +120,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       .subscribe(url => {
         // broadcast showing tags
         console.log('router event RouteOrParamsUpdated called');
+        this.appData.SpaVersionUpdateCheck(); // Every route change
         this.RouteOrParamsUpdated(url);
       });
 
@@ -388,6 +391,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.routeDisplay /* page path (home) */,
       `${this.localData.websiteUrlWTS}/assets/vulcan-384.png` // previewImage
     );
+  }
+
+  SpaVersionUpdate() {
+    // Refresh SPA from server
+    // https://stackoverflow.com/questions/55127650/location-reloadtrue-is-deprecated
+    window.location.href = window.location.href;
+    this.appData.SpaVersion = this.appData.SpaVersionNew;
   }
 
   SetVPW(): void {
