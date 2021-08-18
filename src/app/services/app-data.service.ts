@@ -69,7 +69,7 @@ export class AppDataService {
   public ShowBurger$ = new BehaviorSubject<boolean>(false);
 
   // SPA Versioning
-  public SpaVersion = '12.6.0';
+  public SpaVersion = '12.6.1';
   public SpaVersionNew = '';
   public SpaVersionChecked = Date.now() - 3660000; // 61 minutes ago
   public get SpaVersionUpdateRequired(): boolean {
