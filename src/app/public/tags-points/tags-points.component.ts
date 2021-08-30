@@ -294,6 +294,10 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     this.applyingFilter = false;
   }
 
+  switchToPoints(): void {
+    this.qp = 'point';
+  }
+
   // init, subscription, ChangeTab, applyFilter
   displayFilter(filter: boolean): void {
     this.showingFilter = filter;

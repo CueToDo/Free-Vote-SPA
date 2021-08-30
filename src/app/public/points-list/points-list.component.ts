@@ -31,6 +31,7 @@ export class PointsListComponent {
 
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
+  @Output() PointCount = new EventEmitter<number>();
 
   public pointCount = 0;
   public IDs: ID[] = [];
@@ -240,6 +241,8 @@ export class PointsListComponent {
 
   DisplayPoints(psr: PointSelectionResult): void {
     this.alreadyFetchingPointsFromDB = false;
+
+    this.PointCount.emit(psr.pointCount);
 
     if (psr.pointCount > 0) {
       // If we don't have dateFrom and fromDate is returned, OR

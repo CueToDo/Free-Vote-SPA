@@ -1,5 +1,5 @@
 // Angular
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 // Models, enums
 import { PointSortTypes } from 'src/app/models/enums';
@@ -21,6 +21,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
 })
 export class QuestionsListComponent {
   @Input() public filter!: FilterCriteria;
+  @Output() QuestionCount = new EventEmitter<number>();
 
   public questions: Question[] = [];
   public IDs: ID[] = [];
@@ -107,6 +108,7 @@ export class QuestionsListComponent {
 
   DisplayQuestions(qsr: QuestionSelectionResult): void {
     this.alreadyFetchingFromDB = false;
+    this.QuestionCount.emit(qsr.questionCount);
 
     // Batch
     this.questionCount = qsr.questionCount;

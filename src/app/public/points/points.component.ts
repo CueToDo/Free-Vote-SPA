@@ -43,6 +43,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 })
 export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() applyFilter = new EventEmitter<boolean>();
+  @Output() switchToPoints = new EventEmitter();
   @Output() pointSortTypeChanged = new EventEmitter<PointSortTypes>();
 
   // Subscriptions
@@ -51,6 +52,8 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   private pointSortAscending$: Subscription | undefined;
   private pointFilter$: Subscription | undefined;
   private widthSubject$: Subscription | undefined;
+
+  private selectComplete = false;
 
   // Point selection filters
   showFilters = false;
@@ -146,7 +149,6 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       if (tag || alias) {
-        console.log('selecting');
         this.filter.single = false;
         this.Select();
       }
@@ -397,6 +399,8 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
       route = `${this.filter.slashTag}`;
     }
     this.appData.RouteParamChange$.next(route);
+
+    this.selectComplete = false; // Used to auto switch to points if no questions (but not on manual selection of questions)
   }
 
   Select(): void {
@@ -405,6 +409,19 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.pointsList?.SelectPoints();
     }
+  }
+
+  PointCount(count: number): void {
+    this.selectComplete = true;
+  }
+
+  QuestionCount(count: number): void {
+    if (!this.selectComplete && count == 0) {
+      this.filter.questions = false;
+      this.switchToPoints.emit();
+      this.Select();
+    }
+    this.selectComplete = true;
   }
 
   SelectSpecific(): void {}
