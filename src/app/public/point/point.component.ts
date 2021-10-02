@@ -362,13 +362,23 @@ export class PointComponent implements OnInit {
         this.updatingPreview = true;
         this.pointsService
           .PointSourceMetaDataUpdate(this.point.pointID, this.point.linkAddress)
-          .subscribe(metaData => {
-            if (this.point) {
-              this.point.linkTitle = metaData.title;
-              this.point.linkDescription = metaData.description;
-              this.point.linkImage = metaData.image;
+          .subscribe({
+            next: metaData => {
+              if (this.point) {
+                this.point.linkTitle = metaData.title;
+                this.point.linkDescription = metaData.description;
+                this.point.linkImage = metaData.image;
+                this.updatingPreview = false;
+              }
+            },
+            error: err => {
+              this.error = err.error.detail;
+              console.log('ERROR', err.error.detail);
+              this.point.linkTitle = '';
+              this.point.linkDescription = '';
+              this.point.linkImage = '';
+              this.updatingPreview = false;
             }
-            this.updatingPreview = false;
           });
       }
     }

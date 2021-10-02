@@ -49,7 +49,7 @@
     <a class="clicker" (click)="tabIndex=0;" [class.selected]="tabIndex===0">search</a>
     <a class="clicker" (click)="tabIndex=1;" [class.selected]="tabIndex===1">about</a>
     <a class="clicker" (click)="tabIndex=2;" [class.selected]="tabIndex===2">privacy policy</a>
-    <a href="https://charter2019.uk" target="_blank">charter2019.uk</a>
+    <!-- <a href="https://charter2019.uk" target="_blank">charter2019.uk</a> -->
   </div>
 
   <div class="tabContainer my-3">
@@ -65,19 +65,19 @@
 
           <div class="form-group" fxLayout="row" fxLayoutAlign="center stretch">
 
-              <input fxFlex type="text" [(ngModel)]="slashTag" (keyup)="slashTagChanged()" (keyup.enter)="showTagPoints()"
-                (focus)="beginInput()" (blur)="endInput()" class="form-control" id="slashTagInput" #tvSlashTag
-                placeholder="/slash tag">
-            
-              <button mat-stroked-button (click)="showTagPoints()">
-                <mat-icon>search</mat-icon>
-                search
-              </button>
-            
-              <button mat-stroked-button aria-label="Clear" (click)="restartSearch()">
-                <mat-icon>close</mat-icon>
-                clear
-              </button>
+            <input fxFlex type="text" [(ngModel)]="slashTag" (keyup)="slashTagChanged()" (keyup.enter)="showTagPoints()"
+              (focus)="beginInput()" (blur)="endInput()" class="form-control" id="slashTagInput" #tvSlashTag
+              placeholder="/slash tag">
+
+            <button mat-stroked-button (click)="showTagPoints()">
+              <mat-icon>search</mat-icon>
+              search
+            </button>
+
+            <button mat-stroked-button aria-label="Clear" (click)="restartSearch()">
+              <mat-icon>close</mat-icon>
+              clear
+            </button>
 
           </div>
 
