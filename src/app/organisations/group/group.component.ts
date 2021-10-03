@@ -157,7 +157,7 @@ export class GroupComponent implements OnInit, AfterViewInit {
             next: _ => {
               // this.subGroupDeleted.emit();
               this.router.navigateByUrl(
-                '/groups/' + this.appData.kebabUri(this.organisationName)
+                '/organisations/' + this.appData.kebabUri(this.organisationName)
               );
             },
             error: serverError => (this.error = serverError.error.detail)

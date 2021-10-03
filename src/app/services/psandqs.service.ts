@@ -45,7 +45,7 @@ export class PsandQsService {
   // 2) Subsequent batch (very similar to above, can these be consolidated?)
   // 3) Page of points for all selection methods
   PsAndQsSelectIssue(
-    subGroupID: number,
+    groupID: number,
     issueID: number,
     porQTypeID: PorQTypes,
     proposalStatusID: ProposalStatuses,
@@ -56,7 +56,7 @@ export class PsandQsService {
     const sort = 1;
 
     // No Filters + infinite scroll on DateOrder desc
-    const apiUrl = `issues/PsAndQsSelectIssue/${subGroupID}/${issueID}/${porQTypeID}/${proposalStatusID}/${myPorQsOnly}/${sort}/${batchSize}/${pageSize}`;
+    const apiUrl = `issues/PsAndQsSelectIssue/${groupID}/${issueID}/${porQTypeID}/${proposalStatusID}/${myPorQsOnly}/${sort}/${batchSize}/${pageSize}`;
 
     return this.httpClientService
       .get(apiUrl)

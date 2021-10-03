@@ -92,8 +92,8 @@
 
                 <!-- Group Edit -->
                 <div [ngClass]="{'show':groupEdit, 'hide':!groupEdit}">
-                    <app-group-edit *ngIf="groupEdit" (editCancelled)="editCancelled()" (editCompleted)="editCompleted()"
-                        [(group)]="group">
+                    <app-group-edit *ngIf="groupEdit" (editCancelled)="editCancelled()"
+                        (editCompleted)="editCompleted()" [(group)]="group">
                     </app-group-edit>
                 </div>
 
@@ -113,7 +113,7 @@
                 <!-- List Issues -->
                 <ng-container *ngIf="!newIssue && !showPsAndQs">
                     <div *ngFor="let issue of issues" class="mb-2">
-                        <app-issue [issue]="issue" (Deleted)="issueDeleted()" [groupName]="groupName"
+                        <app-issue [issue]="issue" (Deleted)="issueDeleted()" [organisationName]="organisationName"
                             [groupName]="groupName" [inFocus]="false">
                         </app-issue>
                     </div>

@@ -69,7 +69,7 @@ export class AppDataService {
   public ShowBurger$ = new BehaviorSubject<boolean>(false);
 
   // SPA Versioning
-  public SpaVersion = '12.7.1';
+  public SpaVersion = '12.8.0';
   public SpaVersionNew = '';
   public SpaVersionChecked = Date.now() - 3660000; // 61 minutes ago
   public get SpaVersionUpdateRequired(): boolean {
@@ -292,7 +292,7 @@ export class AppDataService {
     let output = '';
 
     if (input) {
-      input
+      output = input
         .split(' ')
         .filter(item => item)
         .join('-'); // remove double spaces, replace spaces with dash
@@ -304,6 +304,7 @@ export class AppDataService {
 
       output = encodeURIComponent(output);
     }
+
     return output;
   }
 

@@ -40,18 +40,20 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public IssueStatuses = IssueStatuses;
 
-  get groupNameKB(): string {
+  get organisationNameKB(): string {
     return this.appData.kebabUri(this.organisationName);
   }
 
-  get subGroupNameKB(): string {
+  get groupNameKB(): string {
     return this.appData.kebabUri(this.groupName);
   }
 
   get issueTitleKB(): string {
     if (!this.issue || !this.issue.title) {
+      console.log('No issue title');
       return '';
     }
+    console.log('this.issue.title', this.issue.title);
     return this.appData.kebabUri(this.issue.title);
   }
 
@@ -61,8 +63,8 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.issue || !this.issue.statusID) {
       return '.'; // Error: . = same page - empty string = home
     } else if (this.issue.statusID > 2 && !this.inFocus) {
-      // for subGroup component
-      return `/groups/${this.groupNameKB}/${this.subGroupNameKB}/${this.issueTitleKB}`;
+      // for Group component
+      return `/organisations/${this.organisationNameKB}/${this.groupNameKB}/${this.issueTitleKB}`;
     } else {
       // for details component
       return '.'; // . = same page - empty string = home
