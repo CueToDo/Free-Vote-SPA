@@ -69,7 +69,7 @@ export class AppDataService {
   public ShowBurger$ = new BehaviorSubject<boolean>(false);
 
   // SPA Versioning
-  public SpaVersion = '12.8.0';
+  public SpaVersion = '12.9.0';
   public SpaVersionNew = '';
   public SpaVersionChecked = Date.now() - 3660000; // 61 minutes ago
   public get SpaVersionUpdateRequired(): boolean {
@@ -97,9 +97,9 @@ export class AppDataService {
 
   // Not looked up in database - static types
   public porQTypes = [
-    { key: 'Proposal', value: 1 },
+    { key: 'Action', value: 1 },
     { key: 'Question', value: 2 },
-    { key: 'Perspective', value: 3 }
+    { key: 'View', value: 3 }
   ] as Kvp[];
 
   // Lookup - could add more

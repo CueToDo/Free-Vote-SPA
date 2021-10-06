@@ -1,15 +1,15 @@
 <div fxFill fxLayout="column">
 
-    <!-- Group Details -->
-    <div class="groupTrail my-3">
+    <!-- Organisation Details -->
+    <div class="organisationTrail my-3">
         <div class="content">
-            <a [routerLink]="'/organisations/membership'">List all groups</a> >
-            <a [routerLink]="['/organisations', appData.kebabUri(groupName)]">{{ groupName }}</a> >
-            <a [routerLink]="['/organisations', appData.kebabUri(groupName), appData.kebabUri(subGroupName)]">{{
-                subGroupName
+            <a [routerLink]="'/organisations/membership'">List all organisations</a> >
+            <a [routerLink]="['/organisations', appData.kebabUri(organisationName)]">{{ organisationName }}</a> >
+            <a [routerLink]="['/organisations', appData.kebabUri(organisationName), appData.kebabUri(groupName)]">{{
+                groupName
                 }}</a> >
             <a
-                [routerLink]="['/organisations', appData.kebabUri(groupName), appData.kebabUri(subGroupName), appData.kebabUri(issueTitle)]">{{
+                [routerLink]="['/organisations', appData.kebabUri(organisationName), appData.kebabUri(groupName), appData.kebabUri(issueTitle)]">{{
                 issueTitle }}</a>
             > {{ porQType }}
         </div>

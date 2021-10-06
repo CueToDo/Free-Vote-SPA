@@ -23,8 +23,8 @@ import { PointsService } from 'src/app/services/points.service';
   styleUrls: ['./porq-details.component.css']
 })
 export class PorqDetailsComponent implements OnInit {
+  organisationName = '';
   groupName = '';
-  subGroupName = '';
   issueTitle = '';
 
   porQID = 0;
@@ -61,8 +61,10 @@ export class PorqDetailsComponent implements OnInit {
     const routeParams = this.activeRoute.snapshot.params;
 
     this.porQID = routeParams.porqId;
+    this.organisationName = this.appData.unKebabUri(
+      routeParams.organisationName
+    );
     this.groupName = this.appData.unKebabUri(routeParams.groupName);
-    this.subGroupName = this.appData.unKebabUri(routeParams.subGroupName);
     this.issueTitle = this.appData.unKebabUri(routeParams.issue);
 
     this.psAndQsService.PorQSelectSpecific(this.porQID).subscribe({

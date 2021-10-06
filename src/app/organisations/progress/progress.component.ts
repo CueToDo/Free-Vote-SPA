@@ -28,7 +28,7 @@ export class ProgressComponent {
 
   setIssueStatus(issueStatusID: IssueStatuses): void {
     // Check if in middle of entering new issue
-    if (this.confirmCancelNew()) {
+    if (this.proceed()) {
       this.issueStatusID = issueStatusID;
       this.IssueStatusSelected.emit(issueStatusID);
       this.proposalStatusID = ProposalStatuses.VotingYetToStart;
@@ -36,7 +36,7 @@ export class ProgressComponent {
     } else {
       this.NewIssue = true;
       console.log(
-        '(Issue) Stay on new issue',
+        'setIssueStatus: Stay on new discussion',
         this.issueStatusID,
         this.proposalStatusID,
         Date.now()
@@ -46,8 +46,7 @@ export class ProgressComponent {
 
   setProposalStatus(proposalStatusID: ProposalStatuses): void {
     // Check if in middle of entering new issue
-    if (this.confirmCancelNew()) {
-      console.log('setProposalStatus CANCEL NEW');
+    if (this.proceed()) {
       this.proposalStatusID = proposalStatusID;
       this.issueStatusID = IssueStatuses.None; // deselect all ??
       this.ProposalStatusSelected.emit(proposalStatusID);
@@ -55,7 +54,7 @@ export class ProgressComponent {
     } else {
       this.NewIssue = true;
       console.log(
-        '(Proposal) Stay on new issie',
+        'setProposalStatus: Stay on new discussion',
         this.issueStatusID,
         this.proposalStatusID,
         Date.now()
@@ -74,13 +73,13 @@ export class ProgressComponent {
     console.log('progress newIssue');
   }
 
-  confirmCancelNew(): boolean {
-    let proceed = !this.NewIssue;
+  proceed(): boolean {
+    let ok = !this.NewIssue;
 
-    if (!proceed) {
-      proceed = confirm('Lose any updates to new issue?');
+    if (!ok) {
+      ok = confirm('Lose any updates to proposed new discussion?');
     }
 
-    return proceed;
+    return ok;
   }
 }

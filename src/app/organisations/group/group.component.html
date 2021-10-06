@@ -12,6 +12,7 @@
                     <div>
                         <a [routerLink]="'/organisations/membership'">List all organisations</a> > <a
                             [routerLink]="['/organisations', organisationNameKebab]">{{ organisationName }}</a>
+                        > Group Selected
                     </div>
 
                     <div fxLayout="row wrap" fxLayoutAlign="start center" class="mt-3">
@@ -69,16 +70,16 @@
                         <span>
                             Next issue selection:<strong>{{ group.nextIssueSelectionDate | date:'dd MMM yyyy' }}
                                 {{ group.nextIssueSelectionTime }}</strong>
-                            <span *ngIf="group.groupOwner" class="ml-1">
-                                <a routerLink="." (click)="selectIssueNow()">select now</a>
-                            </span>
-                            <span [ngClass]="{'success':!startingDiscussion, 'waiting':startingDiscussion}"
-                                class="primary">
-                                <span *ngIf="!startingDiscussion">
-                                    {{ startedMessage }}
-                                </span>
+                        </span>
+                        <span *ngIf="group.groupOwner">
+                            <a routerLink="." (click)="selectIssueNow()" class="ms-1">select now</a>
+                        </span>
+                        <span [ngClass]="{'success':!startingDiscussion, 'waiting':startingDiscussion}" class="primary">
+                            <span *ngIf="!startingDiscussion">
+                                {{ startedMessage }}
                             </span>
                         </span>
+
 
                     </div>
 
@@ -116,6 +117,13 @@
                         <app-issue [issue]="issue" (Deleted)="issueDeleted()" [organisationName]="organisationName"
                             [groupName]="groupName" [inFocus]="false">
                         </app-issue>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="showPsAndQs">
+                    <div *ngFor="let porQ of psOrQs">
+                        <app-porq [porQ]="porQ">
+                        </app-porq>
                     </div>
                 </ng-container>
 

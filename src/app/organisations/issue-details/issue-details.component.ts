@@ -60,6 +60,7 @@ export class IssueDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Get organisation, group name and issue title from route parameters
     const routeParams = this.activeRoute.snapshot.params;
     this.organisationName = this.appData.unKebabUri(
       routeParams.organisationName
@@ -67,6 +68,7 @@ export class IssueDetailsComponent implements OnInit {
     this.groupName = this.appData.unKebabUri(routeParams.groupName);
     this.issueTitle = this.appData.unKebabUri(routeParams.issue);
 
+    // Get the issue details which has all the PorQ counts
     this.issuesService
       .GetIssue(this.organisationName, this.groupName, this.issueTitle)
       .pipe(
@@ -78,8 +80,8 @@ export class IssueDetailsComponent implements OnInit {
           return this.psandQsService.PsAndQsSelectIssue(
             this.issue.groupID,
             this.issue.issueID,
-            this.porQTypeID,
-            proposalStatusID,
+            this.porQTypeID, // Default is Questions
+            proposalStatusID, // Does not apply to questions
             false
           );
         })
@@ -128,9 +130,30 @@ export class IssueDetailsComponent implements OnInit {
     }
 
     this.porQTypeID = porQTypeID;
-    if (porQTypeID === PorQTypes.Question) {
-      this.proposalStatusID = ProposalStatuses.Question;
+    switch (porQTypeID) {
+      case PorQTypes.Question:
+        this.proposalStatusID = ProposalStatuses.Question;
+        break;
+      case PorQTypes.Perspective:
+        if (this.issue.perspectivesInDiscussion > 0) {
+          this.proposalStatusID = ProposalStatuses.VotingInProgress;
+        } else if (this.issue.perspectivesAccepted > 0) {
+          this.proposalStatusID = ProposalStatuses.ProposalAccepted;
+        } else if (this.issue.perspectivesRejected > 0) {
+          this.proposalStatusID = ProposalStatuses.ProposalNotAccepted;
+        }
+        break;
+      case PorQTypes.Proposal:
+        if (this.issue.proposalsInDiscussion > 0) {
+          this.proposalStatusID = ProposalStatuses.VotingInProgress;
+        } else if (this.issue.proposalsAccepted > 0) {
+          this.proposalStatusID = ProposalStatuses.ProposalAccepted;
+        } else if (this.issue.proposalsRejected > 0) {
+          this.proposalStatusID = ProposalStatuses.ProposalNotAccepted;
+        }
+        break;
     }
+
     this.getPsOrQs();
   }
 
@@ -166,28 +189,28 @@ export class IssueDetailsComponent implements OnInit {
   getCounts(): void {
     if (!this.issue) {
       this.error = 'No issue selected';
-    } else {
-      this.error = '';
-
-      this.issuesService.IssuePorQCounts(this.issue.issueID).subscribe({
-        next: (ipq: IssuePorQCounts) => {
-          if (this.issue) {
-            this.issue.questions = ipq.questions;
-            this.issue.perspectives = ipq.perspectives;
-            this.issue.proposals = ipq.proposals;
-
-            this.issue.perspectivesInDiscussion = ipq.perspectivesInDiscussion;
-            this.issue.perspectivesAccepted = ipq.perspectivesAccepted;
-            this.issue.perspectivesRejected = ipq.perspectivesRejected;
-
-            this.issue.proposalsInDiscussion = ipq.proposalsInDiscussion;
-            this.issue.proposalsAccepted = ipq.proposalsAccepted;
-            this.issue.proposalsRejected = ipq.proposalsRejected;
-          }
-        },
-        error: serverError => (this.error = serverError.error.detail)
-      });
+      return;
     }
+
+    this.error = '';
+    this.issuesService.IssuePorQCounts(this.issue.issueID).subscribe({
+      next: (ipq: IssuePorQCounts) => {
+        if (this.issue) {
+          this.issue.questions = ipq.questions;
+          this.issue.perspectives = ipq.perspectives;
+          this.issue.proposals = ipq.proposals;
+
+          this.issue.perspectivesInDiscussion = ipq.perspectivesInDiscussion;
+          this.issue.perspectivesAccepted = ipq.perspectivesAccepted;
+          this.issue.perspectivesRejected = ipq.perspectivesRejected;
+
+          this.issue.proposalsInDiscussion = ipq.proposalsInDiscussion;
+          this.issue.proposalsAccepted = ipq.proposalsAccepted;
+          this.issue.proposalsRejected = ipq.proposalsRejected;
+        }
+      },
+      error: serverError => (this.error = serverError.error.detail)
+    });
   }
 
   PorQDeleted(): void {

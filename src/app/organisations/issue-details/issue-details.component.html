@@ -1,13 +1,13 @@
 <div fxFill fxLayout="column">
 
     <!-- Group Details -->
-    <div class="groupTrail">
+    <div class="organisationTrail">
         <div class="content mt-3">
-            <a [routerLink]="'/organisations/membership'">List all groups</a> > <a
+            <a [routerLink]="'/organisations/membership'">List all organisations</a> > <a
                 [routerLink]="['/organisations', appData.kebabUri(organisationName)]">{{ organisationName }}</a> > <a
                 [routerLink]="['/organisations', appData.kebabUri(organisationName), appData.kebabUri(groupName)]">{{
                 groupName }}</a>
-            > Issue
+            > Selected Discussion Topic
         </div>
     </div>
 
@@ -76,7 +76,7 @@
                                 'perspectiveActive' : porQTypeID === PorQTypes.Perspective,
                                 'perspective': porQTypeID !== PorQTypes.Perspective}" fxLayoutAlign="center center">
                                 <mat-icon class="mr-1">comment</mat-icon>
-                                {{ issue.perspectives }} Perspective{{ appData.plural(issue.perspectives) }}
+                                {{ issue.perspectives }} View{{ appData.plural(issue.perspectives) }}
                             </div>
 
                             <div fxFlex (click)="setProposalStatus(ProposalStatuses.ProposalAccepted)" class="stage"
@@ -99,7 +99,7 @@
                                 'proposalActive' : porQTypeID===PorQTypes.Proposal,
                                 'proposal': porQTypeID!==PorQTypes.Proposal}" fxLayoutAlign="center center">
                                 <mat-icon class="mr-1">campaign</mat-icon>
-                                {{ issue.proposals }} Proposal{{ appData.plural(issue.proposals) }}
+                                {{ issue.proposals }} Action{{ appData.plural(issue.proposals) }}
                             </div>
 
                             <div fxFlex (click)="setProposalStatus(ProposalStatuses.ProposalNotAccepted)" class="stage"

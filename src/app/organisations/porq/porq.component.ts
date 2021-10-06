@@ -33,7 +33,7 @@ export class PorqComponent {
   error = '';
 
   public get detailsLink(): string {
-    return `/groups/Compass-Manchester/Build-Back-Better/Making-Things-Happen-In-Manchester/${this.porQ?.porQID}`;
+    return `/organisations/Compass-Manchester/Build-Back-Better/Making-Things-Happen-In-Manchester/${this.porQ?.porQID}`;
   }
 
   constructor(
