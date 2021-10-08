@@ -7,7 +7,7 @@
     <div fxFlex="33" fxLayout="column">
 
         <div fxFlex="25" class="HeadInactive">
-            Queue
+            Pending
         </div>
 
         <div fxFlex="25" (click)="setIssueStatus(IssueStatuses.Prioritisation)" class="stage" [ngClass]="{
@@ -19,8 +19,7 @@
         <div fxFlex="25" (click)="setIssueStatus(IssueStatuses.PrioritisationYetToStart)" class="stage" [ngClass]="{
             'IssuesActive' : issueStatusID===IssueStatuses.PrioritisationYetToStart,
             'Issues':issueStatusID!==IssueStatuses.PrioritisationYetToStart}">
-            Future discussions: {{Group.issuesNotInPrioritisation}}
-        </div>
+            Future discussions: {{Group.issuesNotInPrioritisation}} </div>
 
         <div fxFlex="25" class="stage Issues" (click)="newIssue()" [ngClass]="{
             'IssuesActive' : NewIssue,
@@ -60,7 +59,7 @@
     <div fxFlex="34" fxLayout="column">
 
         <div fxFlex="25" class="HeadInactive">
-            Results
+            Completed
         </div>
 
         <div fxFlex="25" (click)="setIssueStatus(IssueStatuses.Closed)" class="stage" [ngClass]="{

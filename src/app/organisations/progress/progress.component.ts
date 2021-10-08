@@ -12,8 +12,6 @@ import { IssueStatuses, ProposalStatuses } from '../../models/enums';
 })
 export class ProgressComponent {
   @Input() Group = new Group();
-  @Input() issueStatusID = IssueStatuses.None;
-  @Input() proposalStatusID = ProposalStatuses.None;
 
   @Output() IssueStatusSelected = new EventEmitter();
   @Output() ProposalStatusSelected = new EventEmitter();
@@ -21,10 +19,14 @@ export class ProgressComponent {
   @Input() NewIssue = false;
   @Output() NewIssueRequest = new EventEmitter();
 
-  constructor() {}
-
   public IssueStatuses = IssueStatuses;
   public ProposalStatuses = ProposalStatuses;
+
+  // public values set in group component
+  public issueStatusID = IssueStatuses.None;
+  public proposalStatusID = ProposalStatuses.None;
+
+  constructor() {}
 
   setIssueStatus(issueStatusID: IssueStatuses): void {
     // Check if in middle of entering new issue

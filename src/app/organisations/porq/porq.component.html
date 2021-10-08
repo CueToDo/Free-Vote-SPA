@@ -1,5 +1,4 @@
-<div class="porQ py-2 mb-3" *ngIf="!deleted && !editing" [routerLink]="detailsLink"
-    [ngClass]="{
+<div class="porQ py-2 mb-3" *ngIf="!deleted && !editing" [routerLink]="detailsLink" [ngClass]="{
         'Questions': !inFocus && porQ.porQTypeID === PorQTypes.Question,
         'Perspectives': !inFocus && porQ.porQTypeID === PorQTypes.Perspective,
         'Proposals': !inFocus && porQ.porQTypeID === PorQTypes.Proposal,
@@ -12,19 +11,23 @@
 
         <div fxLayout="row" fxLayoutAlign="start start">
 
-            <h3>{{ porQ.title }}</h3>
+            <div fxFlex="1 1">
+                <h3>{{ porQ.title }}</h3>
+            </div>
 
-            <div fxFlex></div>
+            <div fxFlex="1 1 10px"></div>
 
-            <button mat-stroked-button *ngIf="porQ.porQOwner" (click)="delete()">
-                <mat-icon>cancel</mat-icon>
-                delete
-            </button>
+            <div fxFlex="1 0 200px">
+                <button mat-stroked-button *ngIf="porQ.porQOwner" (click)="delete()">
+                    <mat-icon>cancel</mat-icon>
+                    delete
+                </button>
 
-            <button mat-stroked-button *ngIf="porQ.porQOwner" (click)="edit()">
-                <mat-icon>edit</mat-icon>
-                edit
-            </button>
+                <button mat-stroked-button *ngIf="porQ.porQOwner" (click)="edit()">
+                    <mat-icon>edit</mat-icon>
+                    edit
+                </button>
+            </div>
 
         </div>
 
@@ -32,7 +35,8 @@
         </div>
 
         <div class="smaller tar">
-            <strong>{{ porQ.points }}</strong> points, <strong>{{ porQ.feedback }}</strong> feedback, <strong>{{ porQ.voteCount }}</strong> votes.
+            <strong>{{ porQ.points }}</strong> points, <strong>{{ porQ.feedback }}</strong> feedback, <strong>{{
+                porQ.voteCount }}</strong> votes.
         </div>
 
         <div class="smaller tar" *ngIf="porQ.porQTypeID!==PorQTypes.Question">

@@ -2,8 +2,6 @@
 import {
   Component,
   OnInit,
-  AfterViewInit,
-  OnDestroy,
   Output,
   EventEmitter,
   ViewChild
@@ -35,7 +33,7 @@ import { ProgressComponent } from '../progress/progress.component';
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.css']
 })
-export class GroupComponent implements OnInit, AfterViewInit {
+export class GroupComponent implements OnInit {
   // Not currently used - may do if resurrect GroupsComponent
   @Output() groupUpdated = new EventEmitter();
   @Output() groupDeleted = new EventEmitter();
@@ -58,8 +56,8 @@ export class GroupComponent implements OnInit, AfterViewInit {
   public issues: Issue[] = [];
   public IssueStatuses = IssueStatuses;
 
-  issueStatusID = IssueStatuses.None;
-  proposalStatusID = ProposalStatuses.None;
+  private issueStatusID = IssueStatuses.None;
+  private proposalStatusID = ProposalStatuses.None;
 
   public newIssue = false;
   public newIssueEdit = new Issue();
@@ -97,17 +95,14 @@ export class GroupComponent implements OnInit, AfterViewInit {
     this.groupsService.GroupByName(organisationName, groupName).subscribe({
       next: group => {
         this.group = group as Group;
-        // this.SelectSubGroup();
+        this.setIssueStatusID();
+        this.getIssues(this.issueStatusID);
       },
       error: serverError => (this.error = serverError.error.detail)
     });
   }
 
-  ngAfterViewInit(): void {
-    this.reInitialise();
-  }
-
-  reInitialise(): void {
+  setIssueStatusID(): void {
     // ToDo Draft Issues, Proposals
     if (!this.group) {
       this.error = 'Group not selected';
@@ -121,18 +116,12 @@ export class GroupComponent implements OnInit, AfterViewInit {
         this.issueStatusID = IssueStatuses.Prioritisation;
       } else if (this.group.issuesClosed > 0) {
         this.issueStatusID = IssueStatuses.Closed;
-        // } else if (this.subGroupDisplay.proposalsRejected > 0) {
-        //   issueStatusID = IssueStages.ProposalRejected;
-        // } else {
-        //   issueStatusID = IssueStages.Draft;
+        // ToDO Draft Issues Proposals ???
       } else {
         this.issueStatusID = IssueStatuses.PrioritisationYetToStart;
       }
-
-      this.proposalStatusID = ProposalStatuses.None;
-
       this.initialiseIssueProgressDisplay();
-      this.getIssues(this.issueStatusID);
+      this.proposalStatusID = ProposalStatuses.None;
     }
   }
 
@@ -302,7 +291,7 @@ export class GroupComponent implements OnInit, AfterViewInit {
 
   newIssueCancelled(): void {
     this.newIssue = false;
-    this.reInitialise();
+    this.setIssueStatusID();
   }
 
   issueDeleted(): void {
