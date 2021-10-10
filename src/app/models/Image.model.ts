@@ -3,6 +3,7 @@ export class Image {
   imageFileName = '';
 }
 
+// Server provided URL?
 export class ProfilePicture {
   pictureUrl = '';
 }

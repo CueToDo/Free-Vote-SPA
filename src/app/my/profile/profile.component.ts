@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 
 // rxjs
@@ -7,7 +7,10 @@ import { tap, map, filter } from 'rxjs/operators';
 
 // Models
 import { Kvp } from '../../models/kvp.model';
-import { FreeVoteProfile } from 'src/app/models/FreeVoteProfile';
+import {
+  FreeVoteProfile,
+  ProfilePictureOption
+} from 'src/app/models/FreeVoteProfile';
 
 // Services
 import { AppDataService } from './../../services/app-data.service';
@@ -216,14 +219,16 @@ export class ProfileComponent {
   profilePictureOptionUpdate(): void {
     this.Saving();
 
-    this.appDataService
-      .profilePictureOptionUpdate(
-        this.localData.freeVoteProfile.profilePictureOptionID
-      )
-      .subscribe({
-        next: () => this.Saved(),
-        error: serverError => this.ShowError(serverError)
-      });
+    const profilePicture = {
+      profilePictureOptionID:
+        this.localData.freeVoteProfile.profilePictureOptionID,
+      socialMediaProfilePicture: this.localData.auth0Profile.picture // sent whether used or not
+    } as ProfilePictureOption;
+
+    this.appDataService.profilePictureOptionUpdate(profilePicture).subscribe({
+      next: () => this.Saved(),
+      error: serverError => this.ShowError(serverError)
+    });
   }
 
   newCountry(): void {

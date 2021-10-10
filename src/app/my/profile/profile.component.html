@@ -50,11 +50,11 @@
 
             <img
               *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
-              [src]="localData.auth0Profile.picture" alt="profile picture">
+              [src]="localData.auth0Profile.picture" alt="profile picture" class="rounded-circle img-fluid">
 
             <img
               *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2' && localData.freeVoteProfile.profilePicture"
-              [src]="localData.freeVoteProfile.profilePicture" alt="profile picture">
+              [src]="localData.freeVoteProfile.profilePicture" alt="profile picture" class="rounded-circle img-fluid">
 
           </div>
 
@@ -66,13 +66,13 @@
 
         <div fxFlex="40">
           <span class="align-middle">
-            email Address
+            Test Social Media Attributes
           </span>
         </div>
 
         <div fxFlex="60">
           <span class="align-middle">
-            {{ localData.auth0Profile.email }}
+            {{ localData.auth0Profile.user_location }}
           </span>
         </div>
 

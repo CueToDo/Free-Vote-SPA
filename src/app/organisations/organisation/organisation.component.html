@@ -19,6 +19,12 @@
                 <p>{{ OrganisationDisplay?.description }}</p>
 
                 <p>
+                    members <span class="data">{{ OrganisationDisplay?.members }}</span>,
+                    discussions <span class="data">{{ OrganisationDisplay?.issues }}</span>
+                    <span class="primary" [ngClass]="{'success': !!membershipMessage}">{{ membershipMessage }}</span>
+                </p>
+
+                <p>
                     Group Type: <strong>{{ OrganisationDisplay?.geographicalExtent }}</strong>
                     <span
                         *ngIf="OrganisationDisplay?.geographicalExtentID===GeographicalExtentID.PrivateOrganisation.toString() && OrganisationDisplay?.invitationOnly">(invitation
@@ -48,12 +54,6 @@
                         <a [routerLink]="issuesLink(group)">{{ group }}</a>
                         <ng-container *ngIf="i !== OrganisationDisplay?.groups?.length ?? 0 - 1">, </ng-container>
                     </span>
-                </p>
-
-                <p>
-                    members <span class="data">{{ OrganisationDisplay?.members }}</span>,
-                    issues <span class="data">{{ OrganisationDisplay?.issues }}</span>
-                    <span class="primary" [ngClass]="{'success': !!membershipMessage}">{{ membershipMessage }}</span>
                 </p>
 
                 <p *ngIf="!!OrganisationDisplay?.organisationWebsite">Website: <a

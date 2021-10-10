@@ -12,3 +12,9 @@ export class FreeVoteProfile {
   public profilePicture = '';
   public profilePictureOptionID = ''; // for html binding use string
 }
+
+// For profile picture option update
+export class ProfilePictureOption {
+  public profilePictureOptionID = '';
+  public socialMediaProfilePicture = '';
+}

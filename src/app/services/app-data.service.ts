@@ -12,7 +12,10 @@ import { filter, map, mergeMap, tap } from 'rxjs/operators';
 import { ID } from '../models/common';
 import { PointSortTypes, GeographicalExtentID } from '../models/enums';
 import { Kvp } from '../models/kvp.model';
-import { FreeVoteProfile } from '../models/FreeVoteProfile';
+import {
+  FreeVoteProfile,
+  ProfilePictureOption
+} from '../models/FreeVoteProfile';
 import { PagePreviewMetaData } from '../models/point.model';
 
 // Services
@@ -69,7 +72,7 @@ export class AppDataService {
   public ShowBurger$ = new BehaviorSubject<boolean>(false);
 
   // SPA Versioning
-  public SpaVersion = '12.9.3';
+  public SpaVersion = '12.10.0';
   public SpaVersionNew = '';
   public SpaVersionChecked = Date.now() - 3660000; // 61 minutes ago
   public get SpaVersionUpdateRequired(): boolean {
@@ -366,10 +369,13 @@ export class AppDataService {
   }
 
   profilePictureOptionUpdate(
-    profilePictureOptionID: string
+    profilePicture: ProfilePictureOption
   ): Observable<string> {
-    const url = `profile/profilePictureOption/${profilePictureOptionID}`;
-    return this.httpService.get(url);
+    console.log('OPTION UPDATE', profilePicture);
+    return this.httpService.post(
+      'profile/profilePictureOption',
+      profilePicture
+    );
   }
 
   // App start only - get previous Alias and Topic Selected from Local Storage or database
