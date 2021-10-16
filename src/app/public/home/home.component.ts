@@ -7,7 +7,7 @@ import {
   PLATFORM_ID,
   Inject
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // Auth0
 import { AuthService } from 'src/app/services/auth.service';
@@ -45,10 +45,11 @@ export class HomeComponent implements OnInit {
 
   isMobile = false;
 
-  privacyUrl = this.localData.websiteUrlWTS + '/policy.html';
+  tabSelected = '';
 
   constructor(
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private deviceService: DeviceDetectorService,
     public localData: LocalDataService,
     public appData: AppDataService,
@@ -61,6 +62,21 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     // Don't emit InputSlashTagOnMobile$ here as it triggers error in app.component
     // ExpressionChangedAfterItHasBeenCheckedError
+
+    this.tabSelected = this.activatedRoute.snapshot.url[0].path;
+
+    switch (this.tabSelected) {
+      case 'about':
+        this.tabIndex = 1;
+        break;
+      case 'privacy-policy':
+        this.tabIndex = 2;
+        break;
+      default:
+        this.tabIndex = 0;
+        break;
+    }
+
     this.restartSearch();
   }
 

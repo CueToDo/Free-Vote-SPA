@@ -30,6 +30,8 @@ const appRoutes: Routes = [
 
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'privacy-policy', component: HomeComponent },
+  { path: 'about', component: HomeComponent },
   { path: 'card', component: CardComponent },
 
   { path: 'callback', component: CallbackComponent },

@@ -84,7 +84,8 @@ import { PointShareComponent } from './point-share/point-share.component';
     PointsComponent,
     PointEditComponent,
     NavComponent,
-    ListComponent
+    ListComponent,
+    CkeUniversalComponent
   ]
 })
 export class PublicModule {}

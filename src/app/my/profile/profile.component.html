@@ -60,31 +60,29 @@
 
         </div>
 
-        <div fxFlex="100">
-          <hr />
-        </div>
-
         <div fxFlex="40">
           <span class="align-middle">
-            Test Social Media Attributes
+            name
           </span>
         </div>
 
         <div fxFlex="60">
           <span class="align-middle">
-            {{ localData.auth0Profile.user_location }}
+            {{ localData.auth0Profile.given_name }}
+            {{ localData.auth0Profile.family_name }}
           </span>
         </div>
 
-
-        <div fxFlex="100">
-          <hr />
+        <div fxFlex="40">
+          TEST:
         </div>
-
+        <div fxFlex="60">
+          {{ localData.freeVoteProfile.location }}
+        </div>
 
         <div fxFlex="40">
           <span class="align-middle">
-            name or alias
+            alias
           </span>
         </div>
 
@@ -98,7 +96,13 @@
           </mat-form-field>
         </div>
 
+        <div *ngIf="!editing">
+          {{ localData.freeVoteProfile.profile }}
+        </div>
 
+        <div *ngIf="editing">
+          <app-cke-universal name="profile" [(textToEdit)]="localData.freeVoteProfile.profile"></app-cke-universal>
+        </div>
 
         <div fxFlex="40">
           <span class="align-middle">
@@ -127,8 +131,6 @@
 
         </div>
 
-
-
         <div fxFlex="40" *ngIf="!editNewCountry">
           <span class="align-middle">
             home city
@@ -152,8 +154,15 @@
 
         </div>
 
+        <div fxFlex="40" *ngIf="!editing">
+          <span class="align-middle">
+            groups
+          </span>
+        </div>
 
-
+        <div fxFlex="60" *ngIf="!editing">
+          List groups
+        </div>
 
         <div fxFlex="40" *ngIf="!editing"></div>
         <div fxFlex="60" *ngIf="!editing">

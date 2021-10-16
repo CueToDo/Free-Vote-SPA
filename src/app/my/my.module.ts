@@ -11,6 +11,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ProfileComponent } from './profile/profile.component';
 import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-the-week-vote.component';
 
+// FreeVote
+import { PublicModule } from '../public/public.module';
+
 const routes: Routes = [{ path: '', component: ProfileComponent }];
 
 @NgModule({
@@ -19,7 +22,8 @@ const routes: Routes = [{ path: '', component: ProfileComponent }];
     FormsModule,
     RouterModule.forChild(routes),
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    PublicModule
   ],
   declarations: [ProfileComponent, PointOfTheWeekVoteComponent]
 })
