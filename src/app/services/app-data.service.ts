@@ -72,7 +72,7 @@ export class AppDataService {
   public ShowBurger$ = new BehaviorSubject<boolean>(false);
 
   // SPA Versioning
-  public SpaVersion = '12.10.2';
+  public SpaVersion = '12.10.3';
   public SpaVersionNew = '';
   public SpaVersionChecked = Date.now() - 3660000; // 61 minutes ago
   public get SpaVersionUpdateRequired(): boolean {
@@ -335,10 +335,6 @@ export class AppDataService {
     return date1.getTime() < date2.getTime();
   }
 
-  SpaVersionLatest(): Observable<string> {
-    return this.httpService.get('lookups/SPAVersion');
-  }
-
   public get SpaVersionCheckDue(): boolean {
     // Check every hour
     return Date.now() - this.SpaVersionChecked > 60 * 60 * 1000;
@@ -352,7 +348,7 @@ export class AppDataService {
   }
 
   GetLatestSPAVersion(): void {
-    this.SpaVersionLatest().subscribe({
+    this.httpService.get('lookups/SPAVersion').subscribe({
       next: (version: any) => {
         this.SpaVersionNew = version.value;
         this.SpaVersionChecked = Date.now();

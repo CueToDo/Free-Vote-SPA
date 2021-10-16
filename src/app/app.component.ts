@@ -320,6 +320,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       property: 'fb:app_id',
       content: environment.facebookAppId
     });
+
+    // Finally - set version to force cache clear on version update (???)
+    this.metaService.updateTag({
+      property: 'version',
+      content: this.appData.SpaVersion
+    });
   }
 
   public RouteOrParamsUpdated(route: string): void {
