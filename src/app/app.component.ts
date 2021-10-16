@@ -396,7 +396,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   SpaVersionUpdate() {
     // Refresh SPA from server
     // https://stackoverflow.com/questions/55127650/location-reloadtrue-is-deprecated
-    window.location.href = window.location.href;
+    location.reload();
     this.appData.SpaVersion = this.appData.SpaVersionNew;
   }
 
