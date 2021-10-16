@@ -7,8 +7,49 @@
       <div fxLayout="row wrap" class="profile">
 
         <div fxFlex="100">
+          <h1>
+            {{ localData.freeVoteProfile.givenName }}
+            {{ localData.freeVoteProfile.familyName }}
+          </h1>
+        </div>
+
+        <div fxFlex="100">
+          {{ localData.freeVoteProfile.location }}
+        </div>
+
+        <div fxFlex="100">
 
           <div fxLayout="column" fxLayoutAlign="start center">
+
+            <img
+              *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
+              [src]="localData.auth0Profile.picture" alt="profile picture" class="rounded-circle img-fluid">
+
+            <img
+              *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2' && localData.freeVoteProfile.profilePicture"
+              [src]="localData.freeVoteProfile.profilePicture" alt="profile picture" class="rounded-circle img-fluid">
+
+            <div fxLayout="row wrap" fxLayoutAlign="center center" class="buttons">
+              <input type="file" (change)="profilePictureSelected($event)" style="display: none" #pictureSelect>
+              <button mat-stroked-button *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2'"
+                (click)="deleteProfilePictue()">
+                <mat-icon>cancel</mat-icon>
+                delete uploaded picture
+              </button>
+              <button mat-stroked-button type="button" (click)="pictureSelect.click()"
+                *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2'">
+                <mat-icon>add_photo_alternate</mat-icon>
+                upload new picture
+              </button>
+              <div *ngIf="uploading" class="uploading">
+                <span class="spinner-grow text-primary ml-3" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </span>
+                <span>
+                  {{ uploadPercentDone }}%
+                </span>
+              </div>
+            </div>
 
             <mat-radio-group [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
               (ngModelChange)="profilePictureOptionUpdate()">
@@ -27,57 +68,12 @@
               </div>
             </mat-radio-group>
 
-            <div fxLayout="row wrap" fxLayoutAlign="center center" class="buttons">
-              <input type="file" (change)="profilePictureSelected($event)" style="display: none" #pictureSelect>
-              <button mat-stroked-button *ngIf="localData.freeVoteProfile.profilePicture"
-                (click)="deleteProfilePictue()">
-                <mat-icon>cancel</mat-icon>
-                delete uploaded picture
-              </button>
-              <button mat-stroked-button type="button" (click)="pictureSelect.click()">
-                <mat-icon>add_photo_alternate</mat-icon>
-                new profile picture
-              </button>
-              <div *ngIf="uploading" class="uploading">
-                <span class="spinner-grow text-primary ml-3" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </span>
-                <span>
-                  {{ uploadPercentDone }}%
-                </span>
-              </div>
-            </div>
-
-            <img
-              *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
-              [src]="localData.auth0Profile.picture" alt="profile picture" class="rounded-circle img-fluid">
-
-            <img
-              *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2' && localData.freeVoteProfile.profilePicture"
-              [src]="localData.freeVoteProfile.profilePicture" alt="profile picture" class="rounded-circle img-fluid">
-
           </div>
 
         </div>
 
-        <div fxFlex="40">
-          <span class="align-middle">
-            name
-          </span>
-        </div>
-
-        <div fxFlex="60">
-          <span class="align-middle">
-            {{ localData.auth0Profile.given_name }}
-            {{ localData.auth0Profile.family_name }}
-          </span>
-        </div>
-
-        <div fxFlex="40">
-          TEST:
-        </div>
-        <div fxFlex="60">
-          {{ localData.freeVoteProfile.location }}
+        <div fxFlex="100">
+          <hr>
         </div>
 
         <div fxFlex="40">
@@ -94,14 +90,6 @@
             <input matInput placeholder="your alias or ID" [(ngModel)]="localData.freeVoteProfile.alias" name="by"
               required #tvAlias="ngModel" type="text">
           </mat-form-field>
-        </div>
-
-        <div *ngIf="!editing">
-          {{ localData.freeVoteProfile.profile }}
-        </div>
-
-        <div *ngIf="editing">
-          <app-cke-universal name="profile" [(textToEdit)]="localData.freeVoteProfile.profile"></app-cke-universal>
         </div>
 
         <div fxFlex="40">
@@ -139,7 +127,9 @@
 
         <div fxFlex="60" *ngIf="!editNewCountry">
 
-          <span *ngIf="!editing" class="align-middle">{{ localData.freeVoteProfile.city }}</span>
+          <span *ngIf="!editing" class="align-middle">
+            {{ localData.freeVoteProfile.city }}
+          </span>
 
           <mat-form-field *ngIf="editing && !editNewCity">
             <mat-select name="selectCity" [(ngModel)]="localData.freeVoteProfile.cityId" placeholder="your home city">
@@ -162,6 +152,14 @@
 
         <div fxFlex="60" *ngIf="!editing">
           List groups
+        </div>
+
+        <div *ngIf="!editing">
+          {{ localData.freeVoteProfile.profile }}
+        </div>
+
+        <div *ngIf="editing">
+          <app-cke-universal name="profile" [(textToEdit)]="localData.freeVoteProfile.profile"></app-cke-universal>
         </div>
 
         <div fxFlex="40" *ngIf="!editing"></div>

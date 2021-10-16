@@ -198,11 +198,16 @@ export class LocalDataService {
       this.jwt = this.GetItem('jwt');
 
       // client side values - user may update and post to API
+      this.freeVoteProfile.givenName = this.GetItem('givenName');
+      this.freeVoteProfile.familyName = this.GetItem('familyName');
       this.freeVoteProfile.alias = this.GetItem('alias');
+
+      this.freeVoteProfile.location = this.GetItem('location');
       this.freeVoteProfile.country = this.GetItem('country');
       this.freeVoteProfile.city = this.GetItem('city');
       this.freeVoteProfile.countryId = this.GetItem('countryId');
       this.freeVoteProfile.cityId = this.GetItem('cityId');
+
       this.freeVoteProfile.profilePictureOptionID = this.GetItem(
         'profilePictureOptionID'
       );
@@ -216,8 +221,18 @@ export class LocalDataService {
     this.SetItem('jwt', this.JWT);
 
     if (this.freeVoteProfile) {
+      if (this.freeVoteProfile.givenName) {
+        this.SetItem('givenName', this.freeVoteProfile.givenName);
+      }
+      if (this.freeVoteProfile.familyName) {
+        this.SetItem('familyName', this.freeVoteProfile.familyName);
+      }
       if (this.freeVoteProfile.alias) {
         this.SetItem('alias', this.freeVoteProfile.alias);
+      }
+
+      if (this.freeVoteProfile.location) {
+        this.SetItem('location', this.freeVoteProfile.location);
       }
       if (this.freeVoteProfile.country) {
         this.SetItem('country', this.freeVoteProfile.country);
@@ -231,6 +246,7 @@ export class LocalDataService {
       if (this.freeVoteProfile.cityId) {
         this.SetItem('cityId', this.freeVoteProfile.cityId.toString());
       }
+
       if (this.freeVoteProfile.profilePictureOptionID) {
         this.SetItem(
           'profilePictureOptionID',
@@ -256,8 +272,18 @@ export class LocalDataService {
         this.roles = values.roles.toString().split(',');
       }
 
+      if (values.givenName) {
+        this.freeVoteProfile.givenName = values.givenName;
+      }
+      if (values.familyName) {
+        this.freeVoteProfile.familyName = values.familyName;
+      }
       if (values.alias) {
         this.freeVoteProfile.alias = values.alias;
+      }
+
+      if (values.location) {
+        this.freeVoteProfile.location = values.location;
       }
       if (values.country) {
         this.freeVoteProfile.country = values.country;
@@ -271,6 +297,7 @@ export class LocalDataService {
       if (values.cityId) {
         this.freeVoteProfile.cityId = values.cityId;
       }
+
       if (values.profilePictureOptionID) {
         this.freeVoteProfile.profilePictureOptionID =
           values.profilePictureOptionID.toString();
