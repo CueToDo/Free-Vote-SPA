@@ -57,7 +57,7 @@ export class CkeUniversalComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    @Inject(DOCUMENT) private htmlDocument: HTMLDocument,
+    @Inject(DOCUMENT) private document: Document,
     private renderer2: Renderer2
   ) {}
 
@@ -96,6 +96,6 @@ export class CkeUniversalComponent implements OnInit {
     })}
     `;
 
-    this.renderer2.appendChild(this.htmlDocument.body, script);
+    this.renderer2.appendChild(this.document.body, script);
   }
 }
