@@ -8,11 +8,8 @@
   </div>
 
   <!-- The Editor -->
-  <!-- <ckeditor [editor]="ckeditor" [(ngModel)]="pointClone.pointHTML" name="point"
-    debounce="250" required #tvPoint="ngModel" (blur)="onCKEBlur()">
-  </ckeditor> -->
-  <!-- [config]="appData.ckeConfig" -->
-  <app-cke-universal name="point" [(textToEdit)]="pointClone.pointHTML" (blur)="onCKEBlur()"></app-cke-universal>
+  <app-cke-universal name="point" [(textToEdit)]="pointClone.pointHTML" (blur)="onCKEBlur()" #CKEfudge>
+  </app-cke-universal>
 
   <!-- Link, YouTube and SoundCloud -->
   <div class="px-3 pt-3 mediaLinks" *ngIf="hasLink || hasMedia || imageFileForUpload || uploadingImage">

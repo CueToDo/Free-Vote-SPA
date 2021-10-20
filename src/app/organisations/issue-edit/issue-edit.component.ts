@@ -25,7 +25,6 @@ export class IssueEditComponent implements OnInit {
   @Input() issue = new Issue();
   @Output() issueChange = new EventEmitter();
 
-  // public ckeditor = CKECustom;
   public issueClone = new Issue();
 
   @Output() CancelEdit = new EventEmitter();

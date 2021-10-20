@@ -314,18 +314,6 @@ a:hover {
   vertical-align: middle;
 }
 
-/* Validation, Errors */
-
-/* [attribute selector] */
-/* .ng-valid[required]:not(ckeditor), .ng-valid.required  {
-      border-left: 5px solid #42A948;  green 
-    }
-    */
-
-/* .ng-invalid.ng-touched:not(form):not(ckeditor)  { */
-/* border-left: 5px solid #a94442; red */
-/* }  */
-
 .ck-editor__editable {
   min-height: 200px;
 }

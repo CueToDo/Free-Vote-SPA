@@ -12,9 +12,6 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 // Auth0
 import { CallbackComponent } from './callback/callback.component';
 
-// CKEditor
-// import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-
 // FreeVote Modules
 import { CustomModule } from '../custommodule/custom.module';
 
@@ -50,7 +47,6 @@ import { PointShareComponent } from './point-share/point-share.component';
     MaterialModule,
     ClipboardModule,
     FlexLayoutModule,
-    // CKEditorModule,
     CustomModule
   ],
   declarations: [

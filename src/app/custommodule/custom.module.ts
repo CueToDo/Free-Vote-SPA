@@ -5,10 +5,6 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from '../material.module';
 
-// CKEditor
-// "@ckeditor/ckeditor5-angular": "^2.0.1", package.json
-// import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-
 // Pipes
 import { TagDisplayPipe } from './pipes/tag-display.pipe';
 import { NbspPipe } from './pipes/nbsp.pipe';
@@ -22,13 +18,7 @@ import { ElementScrollDirective } from './directives/elementscroll.directive';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    // CKEditorModule,
-    MaterialModule
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, MaterialModule],
   declarations: [
     DatepickerComponent,
     NbspPipe,

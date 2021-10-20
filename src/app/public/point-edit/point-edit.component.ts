@@ -44,7 +44,8 @@ export class PointEditComponent implements OnInit {
 
   @Input() isPorQPoint = false;
 
-  // public ckeditor = CKECustom;
+  @ViewChild('CKEfudge', { static: true }) ckeFudge: any;
+
   public pointClone = new PointEdit(); // manual control of 2 way binding (need to handle cancel edit)
 
   // Above banana in a box 2 way data binding works, but for some reason,
@@ -370,9 +371,11 @@ export class PointEditComponent implements OnInit {
     // Clear old Values when edit complete
     this.pointClone = new Point();
     this.pointClone.pointID = -1;
-    this.pointClone.pointHTML = '';
     this.pointClone.pointTypeID = PointTypesEnum.Opinion;
     this.showLinkBeforeVoteDisabled = false;
+
+    this.pointClone.pointHTML = ''; // doesn't get through to ckEditor on property binding
+    this.ckeFudge.clearData();
 
     if (!!slashTag) {
       this.pointClone.slashTags = [slashTag];

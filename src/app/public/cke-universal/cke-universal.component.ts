@@ -22,6 +22,8 @@ export class CkeUniversalComponent implements OnInit {
   @Input() textToEdit = '';
   @Output() textToEditChange = new EventEmitter();
 
+  ckEditor: any; // set in loadCkEditor
+
   public ckeConfig = {
     toolbar: {
       items: [
@@ -69,8 +71,16 @@ export class CkeUniversalComponent implements OnInit {
     }
   }
 
+  clearData() {
+    // editor must be retaining old data somehow and property binding breaks down
+    this.textToEdit = '';
+    this.ckEditor.setData('');
+  }
+
   loadCkEditor(): void {
     // Append script to document body
+    // Stick with this as official implementation requires editing of node_modules
+    // as error in visibility of getter/setters AND npm audit issues
 
     const script = this.renderer2.createElement('script');
 
@@ -84,14 +94,14 @@ export class CkeUniversalComponent implements OnInit {
     ${(script.onload = async () => {
       const CKEditor = (window as any).ClassicEditor;
 
-      const editor = await CKEditor.create(
+      this.ckEditor = await CKEditor.create(
         document.querySelector('#editor'),
         this.ckeConfig
       );
 
-      editor.model.document.on('change', () => {
-        this.textToEdit = JSON.stringify(editor.getData());
-        this.textToEditChange.emit(editor.getData());
+      this.ckEditor.model.document.on('change', () => {
+        // this.textToEdit = JSON.stringify(editor.getData()); // necessary?
+        this.textToEditChange.emit(this.ckEditor.getData());
       });
     })}
     `;

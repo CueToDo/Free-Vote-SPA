@@ -23,8 +23,6 @@ export class PorqEditComponent implements OnInit {
 
   @Input() public porQ = new PorQEdit();
 
-  // public ckeditor = CKECustom;
-
   public porQEdit = new PorQEdit();
   public PorQTypes = PorQTypes;
 
