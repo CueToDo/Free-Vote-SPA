@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
-import { MaterialModule } from '../material.module';
+import { MaterialModule } from '../material/material.module';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // Auth0

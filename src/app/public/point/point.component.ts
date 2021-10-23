@@ -1,12 +1,5 @@
 import { AppDataService } from 'src/app/services/app-data.service';
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  Inject
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // Models & enums
 import { Point, PointFeedback } from '../../models/point.model';

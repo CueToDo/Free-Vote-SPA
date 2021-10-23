@@ -72,7 +72,7 @@ export class AppDataService {
   public ShowBurger$ = new BehaviorSubject<boolean>(false);
 
   // SPA Versioning
-  public SpaVersion = '12.10.7';
+  public SpaVersion = '12.11.0';
   public SpaVersionNew = '';
   public SpaVersionChecked = Date.now() - 3660000; // 61 minutes ago
   public get SpaVersionUpdateRequired(): boolean {
@@ -362,6 +362,10 @@ export class AppDataService {
   // arguably should be in http.service
   SaveProfile(profile: FreeVoteProfile): Observable<boolean> {
     return this.httpService.post('profile/profilesave', profile);
+  }
+
+  DELETE_ME() {
+    return this.httpService.get('profile/voterdelete');
   }
 
   profilePictureOptionUpdate(

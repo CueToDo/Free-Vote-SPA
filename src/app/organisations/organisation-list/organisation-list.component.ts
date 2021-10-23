@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 // Model
 import { Organisation } from 'src/app/models/organisation.model';

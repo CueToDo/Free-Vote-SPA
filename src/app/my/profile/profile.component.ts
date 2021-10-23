@@ -2,6 +2,9 @@
 import { Component } from '@angular/core';
 import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 
+// Material
+import { MatDialog } from '@angular/material/dialog';
+
 // rxjs
 import { tap, map, filter } from 'rxjs/operators';
 
@@ -13,10 +16,14 @@ import {
 } from 'src/app/models/FreeVoteProfile';
 
 // Services
-import { AppDataService } from './../../services/app-data.service';
-import { LocalDataService } from './../../services/local-data.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { AppDataService } from 'src/app/services/app-data.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 import { HttpService } from 'src/app/services/http.service';
 import { ProfilePicture } from 'src/app/models/Image.model';
+
+// Components
+import { DeleteAccountComponent } from 'src/app/my/delete-account/delete-account.component';
 
 @Component({
   templateUrl: './profile.component.html',
@@ -40,10 +47,14 @@ export class ProfileComponent {
   error = false;
   updateMessage = '';
 
+  dialogRef: any;
+
   constructor(
+    private authService: AuthService,
     private appDataService: AppDataService,
     public localData: LocalDataService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    public dialog: MatDialog
   ) {}
 
   edit(): void {
@@ -110,6 +121,29 @@ export class ProfileComponent {
           error: err => this.ShowError(err)
         });
     }
+  }
+
+  deleteAccount(): void {
+    this.ShowError('Warning');
+
+    this.dialogRef = this.dialog.open(DeleteAccountComponent, {
+      width: '320px',
+      data: {
+        name: `${this.localData.freeVoteProfile.givenName} ${this.localData.freeVoteProfile.familyName}`
+      }
+    });
+
+    this.dialogRef.afterClosed().subscribe((result: string) => {
+      if (result == 'delete') {
+        this.appDataService.DELETE_ME().subscribe({
+          next: () => {
+            this.updateMessage = 'Thank you and goodbye';
+            this.authService.logout();
+          },
+          error: err => this.ShowError(err)
+        });
+      }
+    });
   }
 
   cancel(): void {
@@ -320,9 +354,9 @@ export class ProfileComponent {
   }
 
   ShowError(err: any): void {
-    if (err.error.detail) {
+    if (err?.error?.detail) {
       this.updateMessage = err.error.detail;
-    } else if (err.error) {
+    } else if (err?.error) {
       this.updateMessage = err.error;
     } else if (err) {
       this.updateMessage = err;

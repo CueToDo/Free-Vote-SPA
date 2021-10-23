@@ -13,7 +13,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 // Material
-import { MaterialModule } from './material.module';
+import { MaterialModule } from './material/material.module';
 
 // ngx-bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';

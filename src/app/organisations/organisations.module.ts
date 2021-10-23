@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
-import { MaterialModule } from 'src/app/material.module';
+import { MaterialModule } from '../material/material.module';
 
 // Modules
 import { PublicModule } from 'src/app/public/public.module';

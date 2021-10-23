@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
-// Material
-import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+// Material
+import { MaterialModule } from '../material/material.module';
+
+// Components
 import { ProfileComponent } from './profile/profile.component';
+import { DeleteAccountComponent } from '../my/delete-account/delete-account.component';
 import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-the-week-vote.component';
 
 // FreeVote
@@ -25,6 +27,10 @@ const routes: Routes = [{ path: '', component: ProfileComponent }];
     FlexLayoutModule,
     PublicModule
   ],
-  declarations: [ProfileComponent, PointOfTheWeekVoteComponent]
+  declarations: [
+    ProfileComponent,
+    DeleteAccountComponent,
+    PointOfTheWeekVoteComponent
+  ]
 })
 export class MyModule {}

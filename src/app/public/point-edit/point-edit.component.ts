@@ -375,7 +375,7 @@ export class PointEditComponent implements OnInit {
     this.showLinkBeforeVoteDisabled = false;
 
     this.pointClone.pointHTML = ''; // doesn't get through to ckEditor on property binding
-    this.ckeFudge.clearData();
+    this.ckeFudge.clearData(); // Must explicitly clear previous data
 
     if (!!slashTag) {
       this.pointClone.slashTags = [slashTag];
