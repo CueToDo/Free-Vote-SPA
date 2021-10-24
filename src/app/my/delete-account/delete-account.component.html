@@ -3,6 +3,9 @@
 <div mat-dialog-content>
     <p>{{ data.name }}</p>
     <p>To immediately and permanently delete your account, type "delete"</p>
+    <p>You may re-join at any time creating a new profile using credentials held by 3rd our party authentication
+        provider - Auth0. Your old profile however, is not recoverable.
+    </p>
     <mat-form-field appearance="fill">
         <mat-label>Type "delete"</mat-label>
         <input matInput [(ngModel)]="data.response" />

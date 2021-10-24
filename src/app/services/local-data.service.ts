@@ -103,6 +103,46 @@ export class LocalDataService {
     this.GotFreeVoteJwt$.next(false);
   }
 
+  private localLogging = '';
+
+  public get LocalLogging(): boolean {
+    if (this.localLogging.length === 0) {
+      this.localLogging = this.GetItem('localLogging');
+      console.log('Got localLogging from localStorage');
+    }
+    return this.localLogging === 'true';
+  }
+
+  public set LocalLogging(log: boolean) {
+    console.log('Setting localLogging', log ? 'true' : 'false');
+    this.localLogging = log ? 'true' : 'false';
+    if (!log) {
+      this.ClearLog();
+    }
+  }
+
+  private localLog = '';
+  public get LocalLog(): string {
+    if (this.localLog.length === 0) {
+      this.localLog = this.GetItem('localLog');
+    }
+    return this.localLog;
+  }
+
+  public Log(log: string) {
+    if (this.LocalLogging) {
+      console.log('Logging', log);
+      // Add new log
+      this.localLog += `${log}<br>`;
+    } else {
+      console.log('Local Logging is OFF');
+    }
+  }
+
+  public ClearLog() {
+    this.localLog = '';
+  }
+
   public get roles(): string[] {
     const roleString = this.GetItem('roles');
     if (!!roleString) {
@@ -196,6 +236,8 @@ export class LocalDataService {
   public LoadClientValues(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.jwt = this.GetItem('jwt');
+      this.localLogging = this.GetItem('localLogging');
+      this.localLog = this.GetItem('localLog');
 
       // client side values - user may update and post to API
       this.freeVoteProfile.givenName = this.GetItem('givenName');
@@ -219,6 +261,8 @@ export class LocalDataService {
 
   public SaveValues(): void {
     this.SetItem('jwt', this.JWT);
+    this.SetItem('localLogging', this.localLogging);
+    this.SetItem('localLog', this.localLog);
 
     if (this.freeVoteProfile) {
       if (this.freeVoteProfile.givenName) {
@@ -385,14 +429,25 @@ export class LocalDataService {
     this.freeVoteProfile.profilePictureOptionID = '';
     this.freeVoteProfile.profilePicture = '';
 
-    // Preserve use of localAPI after sign out/sign in
+    // Preserve use of local variables after sign out/sign in
     const localAPI = this.GetItem('localAPI');
 
     // clear all local storage
     localStorage.clear();
 
+    // Re-Save Values we wish to preserve after LocalStorage Clear
     this.SetItem('localAPI', localAPI);
     this.SetItem('previousTopicSelected', 'SignedOut'); // Used in AppDataService InitialisePreviousAliasAndTopic
+
+    this.SetItem('localLogging', this.localLogging); // Must set logging on before adding to log
+    this.SetItem('localLog', this.localLog);
+
+    console.log(
+      'Restored logging values. Logging:',
+      this.LocalLogging,
+      'Log:',
+      this.LocalLog
+    );
   }
 
   onDestroy(): void {

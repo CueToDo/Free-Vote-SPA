@@ -451,6 +451,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.localData.SetServiceURL();
   }
 
+  vulcan() {
+    this.localData.LocalLogging = true;
+    this.localData.Log('Logged out via vulcan');
+    console.log('vulcan logging updated');
+    this.auth.logout();
+  }
   // ngOnDestroy(): void {
   // No need to create subscriptions to unsubscribe in app.component
   // }

@@ -35,6 +35,7 @@ export class CallbackComponent implements OnInit, OnDestroy {
 
     this.callback$ = this.auth.handleAuthCallback().subscribe({
       next: targetRoute => {
+        this.localData.Log('AuthCallBack subscription to getAPiJwt complete');
         console.log('targetRoute', targetRoute);
         this.router.navigate([targetRoute]);
         console.log('navigated');
@@ -47,6 +48,7 @@ export class CallbackComponent implements OnInit, OnDestroy {
         } else if (serverError) {
           this.error = serverError;
         }
+        this.localData.Log(`Calback component error: ${this.error}`);
       },
       complete: () => (this.handlingCallback = false) // even if error
     });

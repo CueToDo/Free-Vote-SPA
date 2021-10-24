@@ -49,6 +49,7 @@
     <a class="clicker" (click)="tabIndex=0;" [class.selected]="tabIndex===0">search</a>
     <a class="clicker" (click)="tabIndex=1;" [class.selected]="tabIndex===1">about</a>
     <a class="clicker" (click)="tabIndex=2;" [class.selected]="tabIndex===2">privacy policy</a>
+    <a class="clicker" (click)="tabIndex=3;" [class.selected]="tabIndex===3" *ngIf="localData.LocalLogging">Logs</a>
     <!-- <a href="https://charter2019.uk" target="_blank">charter2019.uk</a> -->
   </div>
 
@@ -62,7 +63,6 @@
         <div class="content" fxFlex fxLayout="column" fxLayoutAlign="center">
 
           <!-- SlashTag Search -->
-
           <div class="form-group" fxLayout="row" fxLayoutAlign="center stretch">
 
             <input fxFlex type="text" [(ngModel)]="slashTag" (keyup)="slashTagChanged()" (keyup.enter)="showTagPoints()"
@@ -165,6 +165,7 @@
 
         <div [ngClass]="{
           'centerStage': tabIndex===2, 
+          'stageLeft': tabIndex>2, 
           'stageRight': tabIndex<2}" fxFill>
           <div class="content" fxFlex fxLayout="column" fxLayoutAlign="center">
 
@@ -193,6 +194,18 @@
 
       </div>
 
+      <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===1}">
+
+        <div [ngClass]="{
+          'centerStage': tabIndex===3,  
+          'stageRight': tabIndex<3}" fxFill>
+
+          <div class="content" fxFlex fxLayout="column" fxLayoutAlign="center">
+            <h1>Log</h1>
+            <div [innerHtml]="localData.LocalLog"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>

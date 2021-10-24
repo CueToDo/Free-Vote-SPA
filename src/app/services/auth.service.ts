@@ -186,6 +186,7 @@ export class AuthService {
           this.localData.ClearExistingJwt();
 
           console.log('Get new jwt for user:', user);
+          this.localData.Log('Get new jwt for user');
           return this.httpService.getApiJwt();
         }),
         concatMap(_ => of(targetRoute))

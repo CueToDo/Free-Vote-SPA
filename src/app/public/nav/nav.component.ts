@@ -61,6 +61,11 @@ export class NavComponent implements OnInit, OnDestroy {
     });
   }
 
+  logout() {
+    this.localData.LocalLogging = false;
+    this.authService.logout();
+  }
+
   ngOnDestroy(): void {
     this.TabSelected$?.unsubscribe();
     this.LoggedIn$?.unsubscribe();
