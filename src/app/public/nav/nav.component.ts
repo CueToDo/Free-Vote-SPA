@@ -54,6 +54,8 @@ export class NavComponent implements OnInit, OnDestroy {
       next: pageName => (this.tabSelected = pageName)
     });
 
+    this.localData.Log('NavComponent ngOnInit');
+
     this.LoggedIn$ = this.localData.LoggedInToAuth0$.subscribe({
       // subscribe to a changing value and allow component to handle change detection internally (?)
       next: loggedIn => {
