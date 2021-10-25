@@ -39,7 +39,6 @@ export class CallbackComponent implements OnInit, OnDestroy {
         this.localData.Log('AuthCallBack subscription to getAPiJwt complete');
         this.localData.Log(this.localData.freeVoteProfile.alias);
         this.localData.Log(targetRoute);
-
         console.log('targetRoute', targetRoute);
         this.router.navigate([targetRoute]);
         console.log('navigated');

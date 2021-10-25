@@ -14,7 +14,6 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavComponent implements OnInit, OnDestroy {
   TabSelected$: Subscription | undefined;
-  LoggedIn$: Subscription | undefined;
   tagsPointsActive$: Subscription | undefined;
   showBurger$: Subscription | undefined;
 
@@ -55,18 +54,6 @@ export class NavComponent implements OnInit, OnDestroy {
     });
 
     this.localData.Log('NavComponent ngOnInit');
-
-    this.LoggedIn$ = this.localData.LoggedInToAuth0$.subscribe({
-      // subscribe to a changing value and allow component to handle change detection internally (?)
-      next: loggedIn => {
-        this.loggedInToAuth0 = loggedIn;
-        this.localData.Log(`NavComponent logged in:${loggedIn}`);
-      },
-      error: err => {
-        this.error = err;
-        this.localData.Log(`NavComponent error:${err}`);
-      }
-    });
   }
 
   logout() {
@@ -76,7 +63,6 @@ export class NavComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.TabSelected$?.unsubscribe();
-    this.LoggedIn$?.unsubscribe();
     this.tagsPointsActive$?.unsubscribe();
     this.showBurger$?.unsubscribe();
   }

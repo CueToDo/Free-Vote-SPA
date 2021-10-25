@@ -9,7 +9,7 @@
 </button>
 
 <!-- https://github.com/angular/angular/issues/22588 -->
-<button mat-button [routerLink]="loggedInToAuth0 ? '/slash-tags/trending' : '/slash-tags/trending'"
+<button mat-button [routerLink]="(localData.LoggedInToAuth0$ | async) ? '/slash-tags/trending' : '/slash-tags/trending'"
     [class.selected]="tabSelected==='slashTags'" [class.burgerButton]="showBurger" (click)="tabSelected='slashTags'"
     matTooltip="slash tags">
     <mat-icon>bookmark_border</mat-icon>
@@ -18,31 +18,33 @@
 
 <button mat-button routerLink="/organisations/membership" routerLinkActive="active"
     [class.selected]="tabSelected==='organisations'" [class.burgerButton]="showBurger"
-    (click)="tabSelected='organisations'" matTooltip="groups" *ngIf="loggedInToAuth0">
+    (click)="tabSelected='organisations'" matTooltip="groups" *ngIf="localData.LoggedInToAuth0$ | async">
     <mat-icon>people</mat-icon>
     groups
 </button>
 
-<button mat-button routerLink="/voters" routerLinkActive="active" *ngIf="loggedInToAuth0"
+<button mat-button routerLink="/voters" routerLinkActive="active" *ngIf="localData.LoggedInToAuth0$ | async"
     [class.selected]="tabSelected==='voters'" [class.burgerButton]="showBurger" (click)="tabSelected='voters'"
     matTooltip="voters">
     <mat-icon>edit</mat-icon>
     voters
 </button>
 
-<button mat-button routerLink="/my/profile" routerLinkActive="active" *ngIf="loggedInToAuth0"
+<button mat-button routerLink="/my/profile" routerLinkActive="active" *ngIf="localData.LoggedInToAuth0$ | async"
     [class.selected]="tabSelected==='profile'" [class.burgerButton]="showBurger" (click)="tabSelected='profile'"
     matTooltip="profile">
     <mat-icon>person</mat-icon>
     profile
 </button>
 
-<button mat-button (click)="authService.login()" *ngIf="!loggedInToAuth0" matTooltip="sign in">
+<button mat-button (click)="authService.login()" *ngIf="(localData.LoggedInToAuth0$ | async) === false"
+    matTooltip="sign in">
     <mat-icon>person</mat-icon>
     sign in
 </button>
 
-<button mat-button (click)="logout()" *ngIf="loggedInToAuth0" [class.burgerButton]="showBurger" matTooltip="sign out">
+<button mat-button (click)="logout()" *ngIf="localData.LoggedInToAuth0$ | async" [class.burgerButton]="showBurger"
+    matTooltip="sign out">
     <mat-icon>person_outline</mat-icon>
     sign out
 </button>
