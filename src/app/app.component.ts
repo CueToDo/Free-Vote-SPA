@@ -454,6 +454,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   vulcan() {
     this.localData.LocalLogging = true;
+    this.appData.GetLatestSPAVersion();
     this.localData.Log('Logged out via vulcan');
     console.log('vulcan logging updated');
     this.auth.logout();

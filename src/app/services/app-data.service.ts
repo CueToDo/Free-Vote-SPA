@@ -343,6 +343,7 @@ export class AppDataService {
       next: (version: any) => {
         this.localData.SpaVersionNew = version.value;
         this.localData.SpaVersionChecked = Date.now();
+        this.localData.Log(`SpaVersionNew:${version.value}`);
       },
       error: error => {
         console.log('VERSION ERROR:', error);
