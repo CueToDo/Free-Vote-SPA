@@ -56,8 +56,14 @@ export class NavComponent implements OnInit, OnDestroy {
 
     this.LoggedIn$ = this.localData.LoggedInToAuth0$.subscribe({
       // subscribe to a changing value and allow component to handle change detection internally (?)
-      next: loggedIn => (this.loggedInToAuth0 = loggedIn),
-      error: err => (this.error = err)
+      next: loggedIn => {
+        this.loggedInToAuth0 = loggedIn;
+        this.localData.Log(`NavComponent logged in:${loggedIn}`);
+      },
+      error: err => {
+        this.error = err;
+        this.localData.Log(`NavComponent error:${err}`);
+      }
     });
   }
 
