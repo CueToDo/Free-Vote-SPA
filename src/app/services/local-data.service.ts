@@ -5,7 +5,7 @@ import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Request } from 'express';
 
 // rxjs
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 // Models
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
@@ -14,7 +14,7 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
   // SPA Versioning
-  public SpaVersion = '12.12.6'; // constant on reload
+  public SpaVersion = '12.12.7'; // constant on reload
 
   // Must save in localData for use after reload
   // was previously fetched from API
@@ -42,9 +42,13 @@ export class LocalDataService {
   public apiUrl = '';
 
   // Subscribe to these in components rather than reference static values in localData
-  public LoggingInToAuth0$ = new Subject<boolean>();
-  public LoggedInToAuth0$ = new Subject<boolean>();
-  public GotFreeVoteJwt$ = new Subject<boolean>();
+  public LoggingInToAuth0$ = new BehaviorSubject<boolean>(
+    this.LoggingInToAuth0
+  );
+
+  public LoggedInToAuth0$ = new BehaviorSubject<boolean>(this.LoggedInToAuth0);
+
+  public GotFreeVoteJwt$ = new BehaviorSubject<boolean>(false);
 
   public auth0Profile: any; // Auth0 Profile Data saved to app on login
 

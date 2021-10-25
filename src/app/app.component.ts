@@ -402,7 +402,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   SpaVersionUpdate() {
     // Refresh SPA from server
     // https://stackoverflow.com/questions/55127650/location-reloadtrue-is-deprecated
-    location.reload();
+    window.location.reload();
     // Saved SpaVersion value in localData not affected
     // new client value retrieved on app reload - should now match
   }
