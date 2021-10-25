@@ -13,6 +13,29 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 // Mainly intended for client side, but has server side only code
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
+  // SPA Versioning
+  public SpaVersion = '12.12.1'; // constant on reload
+
+  // Must save in localData for use after reload
+  // was previously fetched from API
+  public get SpaVersionNew(): string {
+    return this.GetItem('spaVersionNew');
+  }
+
+  public set SpaVersionNew(spaVersionNew: string) {
+    this.SetItem('spaVersionNew', spaVersionNew);
+  }
+
+  public SpaVersionChecked = Date.now() - 3660000; // 61 minutes ago
+  public get SpaVersionUpdateRequired(): boolean {
+    return this.SpaVersion !== this.SpaVersionNew;
+  }
+
+  public get SpaVersionCheckDue(): boolean {
+    // Check every hour
+    return Date.now() - this.SpaVersionChecked > 60 * 60 * 1000;
+  }
+
   public website = '';
   public strapline = '';
   public websiteUrlWTS = ''; // WTS: without trailing slash
@@ -431,12 +454,14 @@ export class LocalDataService {
 
     // Preserve use of local variables after sign out/sign in
     const localAPI = this.GetItem('localAPI');
+    const spaVersionNew = this.GetItem('SpaVersionNew');
 
     // clear all local storage
     localStorage.clear();
 
     // Re-Save Values we wish to preserve after LocalStorage Clear
     this.SetItem('localAPI', localAPI);
+    this.SetItem('spaVersionNew', spaVersionNew);
     this.SetItem('previousTopicSelected', 'SignedOut'); // Used in AppDataService InitialisePreviousAliasAndTopic
 
     this.SetItem('localLogging', this.localLogging); // Must set logging on before adding to log

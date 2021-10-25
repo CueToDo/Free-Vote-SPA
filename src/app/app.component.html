@@ -22,7 +22,7 @@
 
     <div fxFlex></div>
 
-    <button mat-button *ngIf="appData.SpaVersionUpdateRequired" (click)="SpaVersionUpdate()">
+    <button mat-button *ngIf="localData.SpaVersionUpdateRequired" (click)="SpaVersionUpdate()">
       <mat-icon>autorenew</mat-icon>
       update
     </button>
@@ -67,7 +67,7 @@
           {{ localAPI }}
         </span>
         <span class="align-middle copyright" (click)="toggleLocalAPI()">
-          {{ localData.website }} 2021 v{{ appData.SpaVersion }}
+          {{ localData.website }} 2021 v{{ localData.SpaVersion }}
         </span>
       </div>
 

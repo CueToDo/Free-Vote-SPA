@@ -71,14 +71,6 @@ export class AppDataService {
   public InputSlashTagOnMobile$ = new BehaviorSubject<boolean>(false);
   public ShowBurger$ = new BehaviorSubject<boolean>(false);
 
-  // SPA Versioning
-  public SpaVersion = '12.12.0';
-  public SpaVersionNew = '';
-  public SpaVersionChecked = Date.now() - 3660000; // 61 minutes ago
-  public get SpaVersionUpdateRequired(): boolean {
-    return this.SpaVersion !== this.SpaVersionNew;
-  }
-
   // Let the service handle the communication and the response data
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).
   // Could use Promise for sign-in component, but other components such as menu need to know sign-in status
@@ -335,14 +327,13 @@ export class AppDataService {
     return date1.getTime() < date2.getTime();
   }
 
-  public get SpaVersionCheckDue(): boolean {
-    // Check every hour
-    return Date.now() - this.SpaVersionChecked > 60 * 60 * 1000;
-  }
-
   public SpaVersionUpdateCheck(): void {
-    // Get latest version from API if check is due and we don't already know an update is required
-    if (this.SpaVersionCheckDue && !this.SpaVersionUpdateRequired) {
+    // Get latest version from API if check is due
+    // and we don't already know an update is required
+    if (
+      this.localData.SpaVersionCheckDue &&
+      !this.localData.SpaVersionUpdateRequired
+    ) {
       this.GetLatestSPAVersion();
     }
   }
@@ -350,8 +341,8 @@ export class AppDataService {
   GetLatestSPAVersion(): void {
     this.httpService.get('lookups/SPAVersion').subscribe({
       next: (version: any) => {
-        this.SpaVersionNew = version.value;
-        this.SpaVersionChecked = Date.now();
+        this.localData.SpaVersionNew = version.value;
+        this.localData.SpaVersionChecked = Date.now();
       },
       error: error => {
         console.log('VERSION ERROR:', error);

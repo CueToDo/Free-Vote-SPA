@@ -324,7 +324,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Finally - set version to force cache clear on version update (???)
     this.metaService.updateTag({
       property: 'version',
-      content: this.appData.SpaVersion
+      content: this.localData.SpaVersion
     });
   }
 
@@ -403,7 +403,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Refresh SPA from server
     // https://stackoverflow.com/questions/55127650/location-reloadtrue-is-deprecated
     location.reload();
-    this.appData.SpaVersion = this.appData.SpaVersionNew;
+    // Saved SpaVersion value in localData not affected
+    // new client value retrieved on app reload - should now match
   }
 
   SetVPW(): void {
