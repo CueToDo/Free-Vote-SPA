@@ -17,7 +17,6 @@ export class NavComponent implements OnInit, OnDestroy {
   tagsPointsActive$: Subscription | undefined;
   showBurger$: Subscription | undefined;
 
-  public loggedInToAuth0 = false;
   public tabSelected = '';
   public showBurger = false;
   public error = '';

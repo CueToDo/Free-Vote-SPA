@@ -14,7 +14,7 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
   // SPA Versioning
-  public SpaVersion = '12.12.5'; // constant on reload
+  public SpaVersion = '12.12.6'; // constant on reload
 
   // Must save in localData for use after reload
   // was previously fetched from API
@@ -74,6 +74,7 @@ export class LocalDataService {
     this.SetItem('loggingInToAuth0', String(false));
     this.SetItem('loggedInToAuth0', String(loggedIn));
     // Communicate
+    this.Log(`Communicating logged in to Auth0: ${loggedIn}`);
     this.LoggingInToAuth0$.next(false);
     this.LoggedInToAuth0$.next(loggedIn);
   }
