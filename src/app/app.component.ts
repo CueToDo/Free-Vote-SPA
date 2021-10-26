@@ -28,6 +28,11 @@ import { filter, debounceTime, map } from 'rxjs/operators';
 import { PagePreviewMetaData } from './models/point.model';
 import { environment } from 'src/environments/environment';
 
+export enum NetworkStatus {
+  ONLINE = 'online',
+  OFFLINE = 'offline'
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -47,14 +52,15 @@ export class AppComponent implements OnInit, AfterViewInit {
   pageTitleToolTip = '';
 
   localAPI = '';
+  offline = false;
 
   widthBand = 4; // 0 400, 1 550, 2 700, 3 800, 4 900
+  showBurger = false;
 
-  public showBurger = false;
-  public showVulcan = true;
-  public imgVulcan = '../assets/Vulcan.png';
-  public altVulcan = 'Vulcan';
-  public under500 = false;
+  showVulcan = true;
+  imgVulcan = '../assets/Vulcan.png';
+  altVulcan = 'Vulcan';
+  under500 = false;
 
   pass = 0;
 
@@ -74,6 +80,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.appData.GetLatestSPAVersion();
+    this.subscribeNetworkStatus();
 
     // https://stackoverflow.com/questions/39845082/angular-2-change-favicon-icon-as-per-configuration/45753615
     let favicon = 'favicon.ico';
@@ -185,6 +192,22 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (this.localData.GetItem('localAPI') === 'true') {
       this.localAPI = 'Local API';
     }
+  }
+
+  // https://www.inoaspect.com.au/creating-a-progressive-web-app-pwa-service-to-include-all-features-angular/
+  subscribeNetworkStatus() {
+    window.addEventListener(
+      NetworkStatus.ONLINE,
+      this.onNetworkStatusChange.bind(this)
+    );
+    window.addEventListener(
+      NetworkStatus.OFFLINE,
+      this.onNetworkStatusChange.bind(this)
+    );
+  }
+
+  onNetworkStatusChange() {
+    this.offline = !navigator.onLine;
   }
 
   setDocTitle(title: string): void {
