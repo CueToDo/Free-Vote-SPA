@@ -212,7 +212,7 @@ export class PointComponent implements OnInit {
     this.RemovePointFromAnswers.emit(pointID);
   }
 
-  favoriteIcon(): string {
+  get favoriteIcon(): string {
     if (!this.point) {
       this.error = 'Missing: point';
       return '';
@@ -221,6 +221,7 @@ export class PointComponent implements OnInit {
     }
   }
 
+  // ToDo Again (Maybe)
   WoW(): void {
     console.log('BEGIN WoW');
 
@@ -315,6 +316,22 @@ export class PointComponent implements OnInit {
         .subscribe(_ => {
           if (this.point) {
             this.point.isFavourite = !deleteFavourite;
+          }
+        });
+    }
+  }
+
+  important(): void {
+    if (!this.point) {
+      this.error = 'Missing: point';
+    } else {
+      const deleteImportant = this.point.isImportant;
+
+      this.pointsService
+        .PointFlag(deleteImportant, this.point.pointID, PointFlags.Important)
+        .subscribe(_ => {
+          if (this.point) {
+            this.point.isImportant = !deleteImportant;
           }
         });
     }

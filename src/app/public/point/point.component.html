@@ -313,8 +313,8 @@
           <img src="./assets/Block.png"
             *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===-9" matTooltip="Block">
 
-          <mat-icon *ngIf="point.pointFeedback.isFavourite" matTooltip="Is favourite">favorite_border</mat-icon>
-          <mat-icon *ngIf="point.pointFeedback.woWVote" matTooltip="Voted up">priority_high</mat-icon>
+          <mat-icon *ngIf="point.isFavourite" matTooltip="Is favourite">favorite</mat-icon>
+          <mat-icon *ngIf="point.isImportant" matTooltip="Voted up">priority_high</mat-icon>
 
         </button>
 
@@ -360,12 +360,12 @@
 
           <hr class="hr" />
 
-          <button (click)="favourite()" matTooltip="flag point as a favourite">
-            <mat-icon>{{ favoriteIcon() }}</mat-icon>
+          <button mat-menu-item (click)="favourite()" matTooltip="flag point as a favourite">
+            <mat-icon>{{ favoriteIcon }}</mat-icon>
             favourite
           </button>
 
-          <button mat-menu-item (click)="WoW()" *ngIf="point.pointFeedback.feedbackIsUpdatable">
+          <button mat-menu-item (click)="important()" matTooltip="flag point as important">
             <mat-icon>priority_high</mat-icon>
             important
           </button>

@@ -112,6 +112,7 @@ export class Point {
   pointFeedback = new PointFeedback();
 
   isFavourite = false;
+  isImportant = false;
 
   attached = false;
   adoptable = false;
