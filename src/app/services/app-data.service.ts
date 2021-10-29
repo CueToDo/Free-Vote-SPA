@@ -69,7 +69,6 @@ export class AppDataService {
   // For responsive viewing
   public DisplayWidth$ = new BehaviorSubject<number>(5); // Viewport width monitoring
   public InputSlashTagOnMobile$ = new BehaviorSubject<boolean>(false);
-  public ShowBurger$ = new BehaviorSubject<boolean>(false);
 
   // Let the service handle the communication and the response data
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).

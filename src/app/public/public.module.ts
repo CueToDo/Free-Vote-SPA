@@ -25,7 +25,9 @@ import { TopicEditComponent } from './topic-edit/topic-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
 import { PointsComponent } from './points/points.component';
 import { ByComponent } from './by/by.component';
-import { NavComponent } from './nav/nav.component';
+import { NavItemsComponent } from './nav-items/nav-items.component';
+import { NavMainComponent } from './nav-main/nav-main.component';
+import { NavBurgerComponent } from './nav-burger/nav-burger.component';
 import { TagsComponent } from './tags/tags.component';
 import { TagsPointsComponent } from './tags-points/tags-points.component';
 import { VotersMenuComponent } from './voters-menu/voters-menu.component';
@@ -62,7 +64,9 @@ import { PointShareComponent } from './point-share/point-share.component';
     PointOfTheWeekComponent,
     PointsComponent,
     ByComponent,
-    NavComponent,
+    NavItemsComponent,
+    NavMainComponent,
+    NavBurgerComponent,
     TagsComponent,
     TagsPointsComponent,
     ListComponent,
@@ -79,7 +83,9 @@ import { PointShareComponent } from './point-share/point-share.component';
     PointComponent,
     PointsComponent,
     PointEditComponent,
-    NavComponent,
+    NavItemsComponent,
+    NavMainComponent,
+    NavBurgerComponent,
     ListComponent,
     CkeUniversalComponent
   ]

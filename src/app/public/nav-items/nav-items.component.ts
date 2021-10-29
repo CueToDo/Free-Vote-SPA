@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { Subscription } from 'rxjs/internal/Subscription';
 
@@ -8,18 +8,19 @@ import { AppDataService } from 'src/app/services/app-data.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  selector: 'app-nav-items',
+  templateUrl: './nav-items.component.html',
+  styleUrls: ['./nav-items.component.css']
 })
-export class NavComponent implements OnInit, OnDestroy {
+export class NavItemsComponent implements OnInit, OnDestroy {
   TabSelected$: Subscription | undefined;
   tagsPointsActive$: Subscription | undefined;
-  showBurger$: Subscription | undefined;
 
-  public tabSelected = '';
-  public showBurger = false;
-  public error = '';
+  tabSelected = '';
+
+  error = '';
+
+  @Input() MenuType: string = 'main';
 
   constructor(
     public localData: LocalDataService,
@@ -42,12 +43,6 @@ export class NavComponent implements OnInit, OnDestroy {
       } // simply return boolean value to template
     );
 
-    this.showBurger$ = this.appDataService.ShowBurger$.subscribe(
-      (showBurger: boolean) => {
-        this.showBurger = showBurger;
-      }
-    );
-
     this.TabSelected$ = this.appDataService.TabSelected$.subscribe({
       next: pageName => (this.tabSelected = pageName)
     });
@@ -63,6 +58,5 @@ export class NavComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.TabSelected$?.unsubscribe();
     this.tagsPointsActive$?.unsubscribe();
-    this.showBurger$?.unsubscribe();
   }
 }

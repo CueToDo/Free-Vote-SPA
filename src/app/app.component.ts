@@ -1,10 +1,13 @@
+import { NavBurgerComponent } from './public/nav-burger/nav-burger.component';
+import { NavItemsComponent } from './public/nav-items/nav-items.component';
 // Angular
 import {
   Component,
   OnInit,
   AfterViewInit,
   Inject,
-  PLATFORM_ID
+  PLATFORM_ID,
+  ViewChild
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
@@ -48,6 +51,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
 
+  @ViewChild('burgerMenu') burgerMenu: NavBurgerComponent | undefined;
+
   routeDisplay = '';
   pageTitleToolTip = '';
 
@@ -56,6 +61,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   widthBand = 4; // 0 400, 1 550, 2 700, 3 800, 4 900
   showBurger = false;
+  showBurgerMenu = false;
 
   showVulcan = true;
   imgVulcan = '../assets/Vulcan.png';
@@ -129,6 +135,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         console.log('router event RouteOrParamsUpdated called');
         this.appData.SpaVersionUpdateCheck(); // Every route change
         this.RouteOrParamsUpdated(url);
+        this.closeBurgerMenu();
       });
 
     // 3) Subscribe to parameter changes raised by child components
@@ -169,10 +176,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // https://alligator.io/angular/breakpoints-angular-cdk/
     this.breakpointObserver
-      .observe(['(max-width: 600px)'])
+      .observe(['(max-width: 650px)'])
       .subscribe((state: BreakpointState) => {
         this.showBurger = state.matches;
-        this.appData.ShowBurger$.next(this.showBurger);
       });
 
     this.breakpointObserver
@@ -461,6 +467,16 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.appData.DisplayWidth$.next(band);
       }
     }
+  }
+
+  toggleBurgerMenu() {
+    this.showBurgerMenu = !this.showBurgerMenu;
+    this.burgerMenu?.ShowMenu(this.showBurgerMenu);
+  }
+
+  closeBurgerMenu() {
+    this.showBurgerMenu = false;
+    this.burgerMenu?.ShowMenu(false);
   }
 
   toggleLocalAPI(): void {

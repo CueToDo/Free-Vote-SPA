@@ -63,7 +63,9 @@ export class HomeComponent implements OnInit {
     // Don't emit InputSlashTagOnMobile$ here as it triggers error in app.component
     // ExpressionChangedAfterItHasBeenCheckedError
 
-    this.tabSelected = this.activatedRoute.snapshot.url[0].path;
+    this.tabIndex = 0;
+
+    this.tabSelected = this.activatedRoute?.snapshot?.url[0]?.path;
 
     switch (this.tabSelected) {
       case 'about':
@@ -71,9 +73,6 @@ export class HomeComponent implements OnInit {
         break;
       case 'privacy-policy':
         this.tabIndex = 2;
-        break;
-      default:
-        this.tabIndex = 0;
         break;
     }
 

@@ -1,0 +1,5 @@
+#burgerMenuContainer {
+  z-index: 200;
+  overflow: hidden;
+  position: absolute;
+}

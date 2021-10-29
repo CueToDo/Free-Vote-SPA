@@ -3,14 +3,12 @@
   <div class="primary" fxLayoutAlign="center center">
 
     <!-- Burger menu for small screens -->
-    <div class="btn-group burger" dropdown *ngIf="showBurger">
-      <button id="button-animated" dropdownToggle type="button" class="btn dropdown-toggle"
-        aria-controls="dropdown-animated">
+    <div *ngIf="showBurger">
+
+      <button type="button" class="burgerButton" (click)="toggleBurgerMenu()">
         <mat-icon aria-label="drop down menu">menu</mat-icon>
       </button>
-      <div id="dropdown-animated" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-animated">
-        <app-nav></app-nav>
-      </div>
+
     </div>
 
     <div fxFlex></div>
@@ -32,13 +30,15 @@
     </div>
   </div>
 
+  <app-nav-burger #burgerMenu></app-nav-burger>
+
   <!-- Main Menu on large screens -->
   <nav fxLayoutAlign="center" *ngIf="!showBurger">
-    <app-nav></app-nav>
+    <app-nav-main></app-nav-main>
   </nav>
 
   <!-- Use of main element is messing with flexLayout -->
-  <div fxFlex>
+  <div fxFlex (click)="closeBurgerMenu()">
     <router-outlet></router-outlet>
   </div>
 

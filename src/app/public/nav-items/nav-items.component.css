@@ -1,0 +1,25 @@
+div.main button.selected {
+  background-color: #9066ee;
+  border: solid 1px #6033aa;
+}
+
+div.burger {
+  border: solid 1px gray;
+  background-color: #f7f7ff;
+  border-radius: 5px;
+  width: 160px; /* Stacks buttons vertically */
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+div.burger button {
+  width: 100% !important;
+  min-width: unset !important;
+  text-align: left;
+  color: black;
+}
+
+div.burger button.selected {
+  background-color: #e6e6fa;
+  border: solid 1px #6033aa;
+}
