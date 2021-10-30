@@ -6,7 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
-import { MaterialModule } from '../material/material.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
 // Components
 import { ProfileComponent } from './profile/profile.component';
@@ -23,8 +27,14 @@ const routes: Routes = [{ path: '', component: ProfileComponent }];
     CommonModule,
     FormsModule,
     RouterModule.forChild(routes),
-    MaterialModule,
     FlexLayoutModule,
+    // Material
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatRadioModule,
+    MatSelectModule,
+    // FreeVote
     PublicModule
   ],
   declarations: [

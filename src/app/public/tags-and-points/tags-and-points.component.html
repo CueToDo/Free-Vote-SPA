@@ -20,8 +20,8 @@
           <mat-icon>notifications</mat-icon>
         </button>
 
-        <button mat-button (click)="ChangeTab(2)" [class.selected]="tabIndex===2" *ngIf="!!topicSelected"
-          matTooltip="{{ topicSelected }}">
+        <button mat-button (click)="ChangeTab(2)" [class.selected]="tabIndex===2"
+          *ngIf="!!topicSelected && topicSelected !== 'SignedOut'" matTooltip="{{ topicSelected }}">
           <span class="slash-tag">/</span>
           <span>slash-tag</span>
         </button>

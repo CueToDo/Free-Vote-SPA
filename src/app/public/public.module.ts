@@ -4,10 +4,19 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // Material
-import { MaterialModule } from '../material/material.module';
-import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 // Auth0
 import { CallbackComponent } from './callback/callback.component';
@@ -46,9 +55,20 @@ import { PointShareComponent } from './point-share/point-share.component';
     CommonModule,
     RouterModule,
     FormsModule,
-    MaterialModule,
     ClipboardModule,
     FlexLayoutModule,
+    MatCheckboxModule,
+    // Material
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatTabsModule,
+    MatTooltipModule,
+    // FreeVote
     CustomModule
   ],
   declarations: [

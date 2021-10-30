@@ -6,7 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
-import { MaterialModule } from '../material/material.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Modules
 import { PublicModule } from 'src/app/public/public.module';
@@ -59,7 +66,16 @@ const routes: Routes = [
     FormsModule,
     RouterModule.forChild(routes),
     FlexLayoutModule,
-    MaterialModule,
+    // Material
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatTooltipModule,
+    // FreeVote
     PublicModule,
     CustomModule
   ],

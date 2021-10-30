@@ -5,7 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // Material
-import { MaterialModule } from '../material/material.module';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 // Pipes
 import { TagDisplayPipe } from './pipes/tag-display.pipe';
@@ -20,7 +23,15 @@ import { ElementScrollDirective } from './directives/elementscroll.directive';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, RouterModule, MaterialModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
   declarations: [
     DatepickerComponent,
     NbspPipe,

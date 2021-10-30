@@ -13,10 +13,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 // Material
-import { MaterialModule } from './material/material.module';
-
-// ngx-bootstrap
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 // Other
 import { environment } from '../environments/environment';
@@ -60,11 +58,10 @@ import { AppComponent } from './app.component';
     }),
 
     // Material
-    MaterialModule,
+    MatButtonModule,
+    MatIconModule,
 
-    // Bootstrap DropDowns
-    BsDropdownModule.forRoot(),
-
+    // FreeVote
     CustomModule,
     PublicModule,
     OrganisationsModule
