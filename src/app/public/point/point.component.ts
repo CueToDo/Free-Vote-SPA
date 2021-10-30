@@ -368,7 +368,7 @@ export class PointComponent implements OnInit {
       // but could be called from point update where isNew is false and showLinkPreview is true
       if (this.point.linkAddress && this.point.showLinkPreview) {
         // Get Link metadata for preview
-        // Also handled in new point in tags-points component
+        // Also handled in new point in tags-and-points component
         this.updatingPreview = true;
         this.pointsService
           .PointSourceMetaDataUpdate(this.point.pointID, this.point.linkAddress)

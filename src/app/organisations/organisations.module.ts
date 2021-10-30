@@ -13,7 +13,7 @@ import { PublicModule } from 'src/app/public/public.module';
 import { CustomModule } from 'src/app/custommodule/custom.module';
 
 // Components not declared here
-import { TagsPointsComponent } from '../public/tags-points/tags-points.component';
+import { TagsAndPointsComponent } from '../public/tags-and-points/tags-and-points.component';
 
 // This module Components
 import { ProgressComponent } from './progress/progress.component';
@@ -50,7 +50,7 @@ const routes: Routes = [
     component: PorqDetailsComponent
   },
   // This can't work
-  { path: ':group/:tag', component: TagsPointsComponent }
+  { path: ':group/:tag', component: TagsAndPointsComponent }
 ];
 
 @NgModule({

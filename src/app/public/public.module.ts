@@ -29,7 +29,7 @@ import { NavItemsComponent } from './nav-items/nav-items.component';
 import { NavMainComponent } from './nav-main/nav-main.component';
 import { NavBurgerComponent } from './nav-burger/nav-burger.component';
 import { TagsComponent } from './tags/tags.component';
-import { TagsPointsComponent } from './tags-points/tags-points.component';
+import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
 import { VotersMenuComponent } from './voters-menu/voters-menu.component';
 import { ListComponent } from './list/list.component';
 import { ScrollerComponent } from './scroller/scroller.component';
@@ -68,7 +68,7 @@ import { PointShareComponent } from './point-share/point-share.component';
     NavMainComponent,
     NavBurgerComponent,
     TagsComponent,
-    TagsPointsComponent,
+    TagsAndPointsComponent,
     ListComponent,
     ScrollerComponent,
     PointsListComponent,

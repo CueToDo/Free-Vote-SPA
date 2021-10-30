@@ -9,7 +9,7 @@ import { CardComponent } from './public/card/card.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
 import { ScrollerComponent } from './public/scroller/scroller.component';
 import { VotersMenuComponent } from './public/voters-menu/voters-menu.component';
-import { TagsPointsComponent } from './public/tags-points/tags-points.component';
+import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points.component';
 import { QuestionAnswersComponent } from './public/question-answers/question-answers.component';
 
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
@@ -46,7 +46,7 @@ const appRoutes: Routes = [
     component: VotersMenuComponent,
     canActivate: [LoginRouteGuardService]
   },
-  { path: 'by/:alias', component: TagsPointsComponent },
+  { path: 'by/:alias', component: TagsAndPointsComponent },
   {
     path: 'point-of-the-week',
     component: PointOfTheWeekComponent,
@@ -68,17 +68,17 @@ const appRoutes: Routes = [
     canActivate: [LoginRouteGuardService]
   },
 
-  // slashtags is the "internal" link to TagsPointsComponent from which all TABS are accessible
-  { path: 'slash-tags', component: TagsPointsComponent }, // TAGS: TagsPointsComponent can handle tags, people or points
+  // slashtags is the "internal" link to TagsAmdPointsComponent from which all TABS are accessible
+  { path: 'slash-tags', component: TagsAndPointsComponent }, // TAGS: TagsPointsComponent can handle tags, people or points
 
   // following are "external" links - need to be tested from url, not tab links
-  { path: 'slash-tags/trending', component: TagsPointsComponent }, // TAGS
-  { path: 'slash-tags/recent', component: TagsPointsComponent }, // TAGS personal - recent selection - works on anon?
-  { path: 'new-point', component: TagsPointsComponent },
-  { path: ':tag/by/:alias', component: TagsPointsComponent },
+  { path: 'slash-tags/trending', component: TagsAndPointsComponent }, // TAGS
+  { path: 'slash-tags/recent', component: TagsAndPointsComponent }, // TAGS personal - recent selection - works on anon?
+  { path: 'new-point', component: TagsAndPointsComponent },
+  { path: ':tag/by/:alias', component: TagsAndPointsComponent },
   { path: ':tag/question/:questionSlug', component: QuestionAnswersComponent },
-  { path: ':tag', component: TagsPointsComponent }, // POINTS: still like the SlashTag
-  { path: ':tag/points', component: TagsPointsComponent }, // POINTS: still like the SlashTag
+  { path: ':tag', component: TagsAndPointsComponent }, // POINTS: still like the SlashTag
+  { path: ':tag/points', component: TagsAndPointsComponent }, // POINTS: still like the SlashTag
   { path: ':tag/:title', component: PointShareComponent },
 
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64

@@ -154,8 +154,8 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       if (tag && !alias) {
-        this.applyFilter.emit(false); // Pass to parent tags-points component
-        // tags-points component could also suscribe to paramMap,
+        this.applyFilter.emit(false); // Pass to parent tags-and-points component
+        // tags-and-points component could also suscribe to paramMap,
         // but only need child or parent to do this, not both
       }
     });
@@ -328,7 +328,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.Select();
   }
 
-  // Filter by Type from Tags-Points (Select Questions)
+  // Filter by Type from Tags-And-Points (Select Questions)
   public FilterQuestions(filterQuestions: boolean): void {
     this.filter.questions = filterQuestions;
 

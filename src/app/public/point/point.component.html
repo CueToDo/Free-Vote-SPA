@@ -57,10 +57,10 @@
     <a *ngIf="!!point.linkAddress" [href]="point.linkAddress" target="_blank">
       <!-- Link Preview -->
       <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center center">
-        <div fxFlex="30" class="linkImage" *ngIf="!!point.linkImage">
+        <div fxFlex.gt-xs="40" fxFlex.lt-sm="50" *ngIf="!!point.linkImage" fxLayoutAlign="center">
           <img [src]="point.linkImage" alt="">
         </div>
-        <div fxFlex="point.linkImage?70:100" class="linkMetaData">
+        <div fxFlex.gt-xs="point.linkImage?60:100" fxFlex.lt-md="point.linkImage?50:100" class="linkMetaData">
           <div class="linkTitle">{{ point.linkTitle }}</div>
           {{ point.linkDescription }}
         </div>

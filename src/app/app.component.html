@@ -15,7 +15,10 @@
 
     <!-- Big URL confirmation -->
     <h1 [title]="pageTitleToolTip" class="title" [ngClass]="{titleOffset:showBurger, under500:under500}">
-      {{ localData.websiteUrlWTS }}{{ routeDisplay }}
+      <span *ngIf="routeDisplay===''">
+        {{ localData.website }}
+      </span>
+      {{ routeDisplay }}
     </h1>
 
     <div fxFlex></div>

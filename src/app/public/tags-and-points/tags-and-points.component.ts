@@ -29,10 +29,10 @@ enum tabs {
 }
 
 @Component({
-  templateUrl: './tags-points.component.html',
-  styleUrls: ['./tags-points.component.css']
+  templateUrl: './tags-and-points.component.html',
+  styleUrls: ['./tags-and-points.component.css']
 })
-export class TagsPointsComponent implements OnInit, OnDestroy {
+export class TagsAndPointsComponent implements OnInit, OnDestroy {
   // Subscriptions
   showPointsTab$: Subscription | undefined;
   reSelectPoints$: Subscription | undefined;
@@ -305,11 +305,11 @@ export class TagsPointsComponent implements OnInit, OnDestroy {
     if (this.showingFilter) {
       this.filterIcon = 'manage_search';
       this.filterText = 'searching';
-      this.filterToolTip = 'filtering point selection';
+      this.filterToolTip = 'hide search criteria';
     } else {
       this.filterIcon = 'search';
       this.filterText = 'search';
-      this.filterToolTip = 'not filtering point selection';
+      this.filterToolTip = 'show search criteria';
     }
 
     if (!this.externalTrigger) {

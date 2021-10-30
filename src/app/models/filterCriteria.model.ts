@@ -31,7 +31,7 @@ export class FilterCriteria {
   text = '';
 
   // Point Type
-  questions = false; // from Tags-Points component
+  questions = false; // from Tags-And-Points component
   applyTypeFilter = false;
   previouslyFilteringByType = false;
   pointTypeID = PointTypesEnum.Opinion;

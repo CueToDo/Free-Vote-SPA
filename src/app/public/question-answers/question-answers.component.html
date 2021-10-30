@@ -7,6 +7,12 @@
             <div class="content">
 
                 <div class="mt-4">
+
+                    <button mat-button [routerLink]="tagSelected">
+                        view all questions
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+
                     <span *ngIf="localData.LoggedInToAuth0">
 
                         <button mat-button (click)="viewAllAnswers()" [class.selected]="mode==='answers'">
@@ -30,11 +36,6 @@
                         </button>
 
                     </span>
-
-                    <button mat-button [routerLink]="tagSelected">
-                        view all questions
-                        <mat-icon>arrow_back</mat-icon>
-                    </button>
 
                 </div>
 
