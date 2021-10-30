@@ -83,10 +83,11 @@
                         <!-- Link Preview -->
                         <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row"
                             fxLayoutAlign="center center">
-                            <div fxFlex.gt-xs="40" fxFlex.lt-sm="50">
+                            <div fxFlex.gt-xs="30" fxFlex.lt-sm="50">
                                 <img [src]="point.linkImage" alt="">
                             </div>
-                            <div fxFlex.gt-xs="point.linkImage?60:100" fxFlex.lt-md="point.linkImage?50:100" class="linkMetaData">
+                            <div fxFlex.gt-xs="point.linkImage?70:100" fxFlex.lt-md="point.linkImage?50:100"
+                                class="linkMetaText">
                                 <div class="linkTitle">{{ point.linkTitle }}</div>
                                 {{ point.linkDescription }}
                             </div>

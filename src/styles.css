@@ -147,6 +147,7 @@ div.toolbar mat-form-field {
 }
 
 .linkFromMeta {
+  max-height: 132px;
   border: solid 1px black;
   border-radius: 12px;
   overflow: hidden;
@@ -159,31 +160,44 @@ div.toolbar mat-form-field {
   color: #3700b3;
 }
 
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit */
 .linkFromMeta img {
-  width: 100%;
+  display: block;
+  object-fit: cover;
+  max-width: 100%;
 }
 
+.linkMetaText {
+  margin: 10px;
+}
+
+/* Clamp on title and description - 1 and 3 lines respectively for ellipsis */
+/* https://hackingui.com/a-pure-css-solution-for-multiline-text-truncation/ */
 .linkTitle {
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 16px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
-.linkMetaData {
-  max-height: 150px;
-  margin: 10px;
+.linkDescription {
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 @media only screen and (max-width: 600px) {
-  .linkMetaData.linkTitle {
+  .linkMetaText.linkTitle {
     font-size: 0.8em;
     font-weight: bolder;
     margin-bottom: 8px;
   }
 
-  .linkMetaData {
+  .linkMetaText {
     font-size: 0.75em;
   }
 }
