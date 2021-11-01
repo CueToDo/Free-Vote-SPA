@@ -1,3 +1,4 @@
+import { LocalDataService } from 'src/app/services/local-data.service';
 // Angular
 import { Injectable } from '@angular/core';
 
@@ -52,7 +53,7 @@ export class PointsService {
 
   constructor(
     private httpClientService: HttpService,
-    private appDataService: AppDataService
+    private appData: AppDataService
   ) {
     // this.GetWoWWeekInfoVote();
   }
@@ -116,8 +117,8 @@ export class PointsService {
     pointSortOrder: PointSortTypes,
     sortAscending: boolean
   ): Observable<PointSelectionResult> {
-    const fromDate = this.appDataService.UDF(from);
-    const toDate = this.appDataService.UDF(to);
+    const fromDate = this.appData.UDF(from);
+    const toDate = this.appData.UDF(to);
 
     // myPoints is not an optional flag added by the user
     const apiUrl = 'points/getFirstBatchFiltered';
@@ -219,9 +220,8 @@ export class PointsService {
     PSR.toDate = sourceData.toDate;
 
     // construct an Array of objects from an object
-    PSR.pointIDs = this.appDataService.CastObjectToIDs(sourceData.pointIDs);
+    PSR.pointIDs = this.appData.CastObjectToIDs(sourceData.pointIDs);
     PSR.points = sourceData.points;
-    PSR.tagID = sourceData.tagID;
 
     return PSR;
   }

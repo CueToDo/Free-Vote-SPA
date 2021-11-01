@@ -12,6 +12,7 @@ export class TopicEditComponent {
   illegalTags = [
     '/callback',
     '/new-point',
+    '/new-question',
     '/home',
     '/voters',
     '/point-of-the-week',

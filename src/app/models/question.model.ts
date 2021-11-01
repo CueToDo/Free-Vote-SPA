@@ -5,7 +5,7 @@ export class QuestionEdit {
   questionID = 0;
   question = '';
   draft = false;
-  slashTag = '';
+  slashTags: string[] = [];
 }
 
 export class Question {

@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit()" #formPoint="ngForm">
+<form (ngSubmit)="onSubmit()" #formQuestion="ngForm">
 
   <!-- Title -->
   <div class="mx-3 mt-3">
@@ -6,6 +6,11 @@
       <textarea matInput placeholder="question" [(ngModel)]="questionEdit.question" name="questionEdit"
         #tvQuestion="ngModel" (blur)="onQuestionBlur()"></textarea>
     </mat-form-field>
+  </div>
+
+  <!-- Slash Tags -->
+  <div class="m-3">
+    <app-topic-edit [(Topics)]="questionEdit.slashTags"></app-topic-edit>
   </div>
 
   <!-- ToolBar -->

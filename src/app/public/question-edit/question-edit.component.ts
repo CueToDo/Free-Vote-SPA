@@ -46,7 +46,7 @@ export class QuestionEditComponent implements OnInit {
     // Clear old Values when edit complete
     this.questionEdit = new QuestionEdit();
     this.ClearQuestion();
-    this.questionEdit.slashTag = slashTag;
+    this.questionEdit.slashTags = [slashTag];
     console.log('New Question;', slashTag);
   }
 
@@ -86,7 +86,7 @@ export class QuestionEditComponent implements OnInit {
         // where Points ReSelection Takes place:
         if (isNew) {
           this.appData.SetSlashTag(
-            this.questionEdit.slashTag,
+            this.questionEdit.slashTags[0],
             PointSortTypes.DateDescend
           );
         }

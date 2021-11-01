@@ -260,7 +260,10 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
           this.newPointComponent.NewPoint(this.slashTagSelected);
         }
 
-        this.TabChangeComplete(tabChanged, '/new-point');
+        this.TabChangeComplete(
+          tabChanged,
+          `/${this.topicSelected}/new-${this.qp}`
+        );
         break;
     }
   }

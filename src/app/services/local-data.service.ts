@@ -14,7 +14,7 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
   // SPA Versioning
-  public SpaVersion = '12.14.3'; // constant on reload
+  public SpaVersion = '12.15.0'; // constant on reload
 
   // Must save in localData for use after reload
   // was previously fetched from API
@@ -379,14 +379,13 @@ export class LocalDataService {
       }
 
       // (Don't save Last Alias Selected to database)
-      // Last SlashTag selected by Voter
+
       if (values.lastTag) {
         this.PreviousTopicSelected = this.SlashTagToTopic(values.lastTag);
       }
     }
   }
 
-  // Saved Topic/SlashTag
   public get PreviousTopicSelected(): string {
     return this.GetItem('previousTopicSelected');
   }

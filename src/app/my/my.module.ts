@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,6 +30,7 @@ const routes: Routes = [{ path: '', component: ProfileComponent }];
     RouterModule.forChild(routes),
     FlexLayoutModule,
     // Material
+    MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
