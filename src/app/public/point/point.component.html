@@ -309,16 +309,18 @@
           <img src="./assets/Modified.png" *ngIf="point.pointFeedback.pointModified"
             matTooltip="Point has been updated. Please confirm your feedback.">
           <img src="./assets/Agree.png"
-            *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===1" matTooltip="Agree">
+            *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===1"
+            matTooltip="Down-vote this point">
           <img src="./assets/Disagree.png"
             *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===-8" matTooltip="Neutral">
           <img src="./assets/Oppose.png"
-            *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===-1" matTooltip="Oppose">
+            *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===-1"
+            matTooltip="Up-vote this point">
           <img src="./assets/Block.png"
             *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===-9" matTooltip="Block">
 
           <mat-icon *ngIf="point.isFavourite" matTooltip="Is favourite">favorite</mat-icon>
-          <mat-icon *ngIf="point.isImportant" matTooltip="Voted up">priority_high</mat-icon>
+          <mat-icon *ngIf="point.isImportant" matTooltip="Is Important">priority_high</mat-icon>
 
         </button>
 
@@ -328,7 +330,7 @@
 
           <button mat-menu-item (click)="Support()" *ngIf="point.pointFeedback.feedbackIsUpdatable"
             [ngClass]="{selected:point.pointFeedback.supportLevelID===1}">
-            <img src="./assets/Agree.png" alt="Agree"> agree
+            <img src="./assets/Agree.png" alt="Agree"> up-vote
           </button>
 
           <button mat-menu-item (click)="Neutral()" *ngIf="point.pointFeedback.feedbackIsUpdatable"
@@ -338,7 +340,7 @@
 
           <button mat-menu-item (click)="Oppose()" *ngIf="point.pointFeedback.feedbackIsUpdatable"
             [ngClass]="{selected:point.pointFeedback.supportLevelID===-1}">
-            <img src="./assets/Oppose.png" alt="Oppose"> oppose
+            <img src="./assets/Oppose.png" alt="Oppose"> down-vote
           </button>
 
           <button mat-menu-item (click)="Report()" *ngIf="point.pointFeedback.feedbackIsUpdatable"

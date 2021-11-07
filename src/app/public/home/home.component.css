@@ -1,62 +1,77 @@
-@media(max-width:375px) {
-    button {
-        font-size: .8em;
-    }
+@media (max-width: 375px) {
+  button {
+    font-size: 0.8em;
+  }
 }
 
 .content {
-    margin: auto;
-    padding: 30px 0px;
+  margin: auto;
+  padding: 30px 0px;
 }
 
-#slashTagInput {
-    height: 50px !important;
-    font-size: 32px !important;
-    max-width: 400px;
+.Search input,
+.Search button {
+  height: 50px !important;
+  font-size: 1.2em !important;
 }
 
-button {
-    margin-left: 12px;
+.Search input {
+  padding: 10px;
+}
+
+.gtxsSearch input {
+  max-width: 340px;
+}
+
+.xsSearch Input {
+  width: 100%;
+}
+
+.gtxsSearch button {
+  margin-left: 10px;
+}
+
+.xsSearch button {
+  margin-top: 10px;
 }
 
 .home {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 img {
-    max-width: 100%
+  max-width: 100%;
 }
 
 .policy {
-    font-size: small;
+  font-size: small;
 }
 
 .policy a {
-    margin-right: 5px;
-    padding: 3px 10px;
-    border-radius: 10px;
+  margin-right: 5px;
+  padding: 3px 10px;
+  border-radius: 10px;
 }
 
 img {
-    display: block;
-    margin: auto;
-    width: 80%;
-    max-width: 800px;
+  display: block;
+  margin: auto;
+  width: 80%;
+  max-width: 800px;
 }
 
 .hide {
-    max-height: 0;
-    opacity: 0;
+  max-height: 0;
+  opacity: 0;
 }
 
 .show {
-    max-height: 100vh;
-    opacity: 1;
+  max-height: 100vh;
+  opacity: 1;
 }
 
 .show,
 .hide {
-    overflow: hidden;
-    transition: max-height .3s ease-out,
-        opacity .3s ease-out;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
 }

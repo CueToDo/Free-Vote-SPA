@@ -162,6 +162,8 @@ export class PointComponent implements OnInit {
   }
 
   PointFeedback(pointSupportLevel: PointSupportLevels): void {
+    this.error = '';
+
     if (!this.point) {
       this.error = 'Missing: point';
     } else {

@@ -60,14 +60,16 @@
       <div [ngClass]="{
         'centerStage': tabIndex===0, 
         'stageLeft': tabIndex>0}" fxFill>
-        <div class="content" fxFlex fxLayout="column" fxLayoutAlign="center">
+
+        <div class="content" fxFlex>
 
           <!-- SlashTag Search -->
-          <div class="form-group" fxLayout="row" fxLayoutAlign="center stretch">
+          <div fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="center stretch" fxLayout.xs="column"
+            fxLayoutAlign.xs="space-around stretch" class="form-group" class="Search" [ngClass.xs]="'xsSearch'"
+            [ngClass.gt-xs]="'gtxsSearch'">
 
-            <input fxFlex type="text" [(ngModel)]="slashTag" (keyup)="slashTagChanged()" (keyup.enter)="showTagPoints()"
-              (focus)="beginInput()" (blur)="endInput()" class="form-control" id="slashTagInput" #tvSlashTag
-              placeholder="/slash tag">
+            <input type="text" [(ngModel)]="slashTag" (keyup)="slashTagChanged()" (keyup.enter)="showTagPoints()"
+              (focus)="beginInput()" (blur)="endInput()" class="form-control" #tvSlashTag placeholder="/slash tag">
 
             <button mat-stroked-button (click)="showTagPoints()">
               <mat-icon>search</mat-icon>
