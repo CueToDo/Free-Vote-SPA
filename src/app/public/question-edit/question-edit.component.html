@@ -8,6 +8,11 @@
     </mat-form-field>
   </div>
 
+  <!-- Details: The Editor -->
+  <app-cke-universal name="questionDetails" [(textToEdit)]="questionEdit.details" #CKEfudge>
+    <!-- ToDo: Fudge see point edit -->
+  </app-cke-universal>
+
   <!-- Slash Tags -->
   <div class="m-3">
     <app-topic-edit [(Topics)]="questionEdit.slashTags"></app-topic-edit>

@@ -54,6 +54,10 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     return this.localData.questionSelected;
   }
 
+  public get QuestionDetails(): string {
+    return this.localData.questionDetails;
+  }
+
   viewAllAnswers(): void {
     this.error = '';
     this.mode = 'answers';

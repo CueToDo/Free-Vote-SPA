@@ -120,6 +120,7 @@ export class QuestionComponent {
   SelectQuestion(): void {
     if (this.question) {
       this.localData.questionSelected = this.question.question;
+      this.localData.questionDetails = this.question.details;
     }
   }
 

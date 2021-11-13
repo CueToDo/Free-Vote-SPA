@@ -265,8 +265,9 @@ export class PointEditComponent implements OnInit {
       ) {
         this.error = 'Points must have at least one slash tag';
       } else if (
-        !(!!this.pointClone.pointTitle && !!this.pointClone.linkAddress) &&
+        // Title is always optional
         !(
+          !!this.pointClone.linkAddress ||
           !!this.pointClone.pointHTML ||
           !!this.pointClone.youTubeID ||
           !!this.pointClone.soundCloudTrackID ||

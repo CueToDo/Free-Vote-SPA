@@ -53,6 +53,7 @@ export class QuestionEditComponent implements OnInit {
   ClearQuestion(): void {
     this.questionEdit.questionID = -1;
     this.questionEdit.question = '';
+    this.questionEdit.details = '';
     this.questionEdit.draft = false;
 
     this.error = '';
@@ -71,6 +72,7 @@ export class QuestionEditComponent implements OnInit {
       next: questionID => {
         this.question.questionID = questionID;
         this.question.question = this.questionEdit.question;
+        this.question.details = this.questionEdit.details;
         this.question.draft = this.questionEdit.draft;
         // SlashTag can't be upated
       },

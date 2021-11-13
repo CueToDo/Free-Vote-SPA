@@ -124,7 +124,7 @@ export class AuthService {
     }
   }
 
-  login(redirectPath: string = '/slash-tags/trending'): void {
+  login(redirectPath: string = '/recent'): void {
     if (this.auth0Client$) {
       // Clear session and start afresh
       this.localData.SignedOut(); // Clears local storage and communicates state change

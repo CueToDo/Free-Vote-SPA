@@ -97,12 +97,12 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
     const routeparts = this.appData.Route.split('/');
 
-    if (routeparts && routeparts.length === 3) {
-      // {0}/slash-tags/trending - length = 3
+    if (routeparts && routeparts.length === 2) {
+      // {0}/trending - length = 2
 
       this.topicSelected = this.localData.PreviousTopicSelected;
 
-      switch (routeparts[2]) {
+      switch (routeparts[1]) {
         // may have separate tab for following
         case 'recent':
           this.tabIndex = tabs.recentTags;
@@ -221,7 +221,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
     switch (tabIndex) {
       case tabs.trendingTags:
-        this.TabChangeComplete(tabChanged, '/slash-tags/trending');
+        this.TabChangeComplete(tabChanged, '/trending');
         break;
 
       case tabs.recentTags:
@@ -229,7 +229,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
           this.tagsRecent.fetchTags(); // always update on switching to tagsRecent tab
           this.refreshRecent = false;
         }
-        this.TabChangeComplete(tabChanged, '/slash-tags/recent');
+        this.TabChangeComplete(tabChanged, '/recent');
         break;
 
       case tabs.points:

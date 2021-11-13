@@ -68,12 +68,9 @@ const appRoutes: Routes = [
     canActivate: [LoginRouteGuardService]
   },
 
-  // slashtags is the "internal" link to TagsAmdPointsComponent from which all TABS are accessible
-  { path: 'slash-tags', component: TagsAndPointsComponent }, // TAGS: TagsPointsComponent can handle tags, people or points
-
   // following are "external" links - need to be tested from url, not tab links
-  { path: 'slash-tags/trending', component: TagsAndPointsComponent }, // TAGS
-  { path: 'slash-tags/recent', component: TagsAndPointsComponent }, // TAGS personal - recent selection - works on anon?
+  { path: 'trending', component: TagsAndPointsComponent }, // TAGS
+  { path: 'recent', component: TagsAndPointsComponent }, // TAGS personal - recent selection - works on anon?
   { path: ':tag/new-point', component: TagsAndPointsComponent },
   { path: ':tag/new-question', component: TagsAndPointsComponent },
   { path: ':tag/by/:alias', component: TagsAndPointsComponent },

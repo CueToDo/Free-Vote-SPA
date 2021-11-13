@@ -4,15 +4,18 @@ import { PointSupportLevels } from './enums';
 export class QuestionEdit {
   questionID = 0;
   question = '';
+  details = '';
   draft = false;
   slashTags: string[] = [];
 }
 
 export class Question {
   question = '';
+  details = '';
   slug = '';
   points = 0;
   draft = false;
+  slashTags: string[] = [];
   questionID = 0;
   rowNumber = 0;
 

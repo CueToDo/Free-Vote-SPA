@@ -74,15 +74,15 @@ export class QuestionsService {
   }
 
   // returns a batch of points based on a list of IDs peviously returned to the client
-  GetPage(pointIDs: ID[]): Observable<QuestionSelectionResult> {
-    if (!pointIDs || pointIDs.length === 0) {
-      console.log('No points to select');
+  GetPage(questionIDs: ID[]): Observable<QuestionSelectionResult> {
+    if (!questionIDs || questionIDs.length === 0) {
+      console.log('No questions to select');
       return of(new QuestionSelectionResult());
     } else {
       const apiUrl = 'points/getPage';
 
       return this.httpClientService
-        .post(apiUrl, pointIDs)
+        .post(apiUrl, questionIDs)
         .pipe(map(returnData => returnData as QuestionSelectionResult));
     }
   }
@@ -106,6 +106,7 @@ export class QuestionsService {
     const postData = {
       questionID: questionEdit.questionID,
       question: questionEdit.question,
+      details: questionEdit.details,
       draft: questionEdit.draft,
       slashTags: questionEdit.slashTags
     } as QuestionEdit;

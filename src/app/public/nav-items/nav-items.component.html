@@ -11,8 +11,7 @@
     </button>
 
     <!-- https://github.com/angular/angular/issues/22588 -->
-    <button mat-button
-        [routerLink]="(localData.LoggedInToAuth0$ | async) ? '/slash-tags/trending' : '/slash-tags/trending'"
+    <button mat-button [routerLink]="(localData.LoggedInToAuth0$ | async) ? '/trending' : '/trending'"
         [class.selected]="tabSelected==='slashTags'" (click)="tabSelected='slashTags'" matTooltip="slash tags">
         <mat-icon>bookmark_border</mat-icon>
         slash tags

@@ -14,7 +14,7 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
   // SPA Versioning
-  public SpaVersion = '12.16.0'; // constant on reload
+  public SpaVersion = '12.17.0'; // constant on reload
 
   // Must save in localData for use after reload
   // was previously fetched from API
@@ -56,6 +56,7 @@ export class LocalDataService {
   public updatingProfile = false; // on all backend interactions we get jwt and assignservervalues - don't reassign before backend update
 
   public questionSelected = '';
+  public questionDetails = '';
 
   // Auth0 and FreeVote Profile - Following static values not to be used in component initialisation where a change subscription is needed
   public get LoggingInToAuth0(): boolean {
