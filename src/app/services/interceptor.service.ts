@@ -72,7 +72,7 @@ export class InterceptorService implements HttpInterceptor {
       } else if (this.localData.LoggedInToAuth0) {
         return this.auth.getTokenSilently$().pipe(
           mergeMap(token => {
-            this.localData.SetItem('Access-Token', token);
+            this.localData.SetItem('Access-Token', token.toString());
 
             const tokenReq = request.clone({
               setHeaders: {

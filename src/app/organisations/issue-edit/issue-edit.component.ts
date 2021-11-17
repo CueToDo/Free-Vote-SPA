@@ -74,6 +74,6 @@ export class IssueEditComponent implements OnInit {
   }
 
   Cancel(): void {
-    this.CancelEdit.next();
+    this.CancelEdit.next(null);
   }
 }

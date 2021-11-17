@@ -6,7 +6,10 @@ import { from, of, Observable, combineLatest, throwError, Subject } from 'rxjs';
 import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
 
 // auth0
-import createAuth0Client, { RedirectLoginResult } from '@auth0/auth0-spa-js';
+import createAuth0Client, {
+  GetTokenSilentlyVerboseResponse,
+  RedirectLoginResult
+} from '@auth0/auth0-spa-js';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
 
 // https://mariusschulz.com/blog/importing-json-modules-in-typescript
@@ -83,7 +86,9 @@ export class AuthService {
 
   // When calling, options can be passed if desired
   // https://auth0.github.io/auth0-spa-js/classes/auth0client.html#gettokensilently
-  getTokenSilently$(options?: any): Observable<string> {
+  getTokenSilently$(
+    options?: any
+  ): Observable<GetTokenSilentlyVerboseResponse> {
     if (this.auth0Client$) {
       return this.auth0Client$.pipe(
         concatMap((client: Auth0Client) =>
@@ -91,7 +96,7 @@ export class AuthService {
         )
       );
     } else {
-      return of('');
+      return of();
     }
   }
 

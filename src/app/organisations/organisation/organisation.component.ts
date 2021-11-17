@@ -82,7 +82,8 @@ export class OrganisationComponent implements OnInit {
   }
 
   getGroup(): void {
-    let organisationName = this.activatedRoute.snapshot.params.organisationName;
+    let organisationName =
+      this.activatedRoute.snapshot.params['organisationName'];
     organisationName = this.appData.unKebabUri(organisationName);
 
     this.groupsService.Organisation(organisationName, true).subscribe({

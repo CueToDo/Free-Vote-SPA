@@ -167,7 +167,7 @@ export class QuestionsListComponent {
   NewQuestionsDisplayed(): void {
     this.alreadyFetchingFromDB = false;
     this.allQuestionsDisplayed = this.questions.length >= this.questionCount;
-    this.appData.PointsSelected$.next();
+    this.appData.PointsSelected$.next(null);
   }
 
   onQuestionDeleted(id: number): void {

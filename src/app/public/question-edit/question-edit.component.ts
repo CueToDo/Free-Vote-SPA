@@ -99,6 +99,6 @@ export class QuestionEditComponent implements OnInit {
   Cancel(): void {
     this.ClearQuestion();
     // this.cancelled = true;
-    this.CancelEdit.next();
+    this.CancelEdit.next(null);
   }
 }

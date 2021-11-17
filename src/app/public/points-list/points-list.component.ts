@@ -331,7 +331,7 @@ export class PointsListComponent {
   NewPointsDisplayed(): void {
     this.alreadyFetchingPointsFromDB = false;
     this.allPointsDisplayed = this.points.length >= this.pointCount;
-    this.appData.PointsSelected$.next();
+    this.appData.PointsSelected$.next(null);
   }
 
   onPointDeleted(id: number): void {

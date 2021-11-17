@@ -82,9 +82,9 @@ export class GroupComponent implements OnInit {
   ngOnInit(): void {
     const routeParams = this.activeRoute.snapshot.params;
     this.organisationName = this.appData.unKebabUri(
-      routeParams.organisationName
+      routeParams['organisationName']
     );
-    this.groupName = this.appData.unKebabUri(routeParams.groupName);
+    this.groupName = this.appData.unKebabUri(routeParams['groupName']);
 
     this.getGroup(this.organisationName, this.groupName);
   }

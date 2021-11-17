@@ -397,14 +397,14 @@ export class PointEditComponent implements OnInit {
           next: () => {
             this.pointClone = new Point();
             this.cancelled = true;
-            this.CancelEdit.next();
+            this.CancelEdit.next(null);
           },
           error: serverError => (this.error = serverError.error.detail)
         });
     } else {
       this.pointClone = new Point();
       this.cancelled = true;
-      this.CancelEdit.next();
+      this.CancelEdit.next(null);
     }
   }
 

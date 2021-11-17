@@ -63,10 +63,10 @@ export class IssueDetailsComponent implements OnInit {
     // Get organisation, group name and issue title from route parameters
     const routeParams = this.activeRoute.snapshot.params;
     this.organisationName = this.appData.unKebabUri(
-      routeParams.organisationName
+      routeParams['organisationName']
     );
-    this.groupName = this.appData.unKebabUri(routeParams.groupName);
-    this.issueTitle = this.appData.unKebabUri(routeParams.issue);
+    this.groupName = this.appData.unKebabUri(routeParams['groupName']);
+    this.issueTitle = this.appData.unKebabUri(routeParams['issue']);
 
     // Get the issue details which has all the PorQ counts
     this.issuesService

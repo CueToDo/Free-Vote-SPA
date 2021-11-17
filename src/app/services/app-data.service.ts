@@ -427,7 +427,7 @@ export class AppDataService {
     // We're not changing the route- just the tab selected
     // all routes handled by TagsPointsComponent
     this.PointsFiltered$.next(false); // Tell PointsComponent to hide filters - don't SelectPoints here
-    this.PointsFilterRemove$.next(); // Tell TagsPointsComponent - PointsFiltered$ is raised by TagsPointsComponent
+    this.PointsFilterRemove$.next(null); // Tell TagsPointsComponent - PointsFiltered$ is raised by TagsPointsComponent
     this.ReSelectPoints$.next(pointSortType); // Tell Points Component to reselect points for new slash tag
     this.RouteParamChange$.next(slashTag); // Keep separate (this is for the App Component)
   }

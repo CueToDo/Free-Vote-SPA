@@ -1,4 +1,4 @@
-import 'zone.js/node';
+import 'zone.js/dist/zone-node';
 
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
@@ -11,16 +11,7 @@ import { existsSync } from 'fs';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-
-  // const distFolder = join(process.cwd(), 'dist/free-vote/browser');
-  let distFolder = join(process.cwd(), 'browser');
-
-  if (!existsSync(distFolder)) {
-    distFolder = join(process.cwd(), 'dist/free-vote/browser');
-  }
-
-  console.log('DIST FOLDER', distFolder);
-
+  const distFolder = join(process.cwd(), 'dist/free-vote/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
     : 'index';
@@ -58,7 +49,7 @@ export function app(): express.Express {
 }
 
 function run(): void {
-  const port = process.env.PORT || 7027;
+  const port = process.env['PORT'] || 7027;
 
   // Start up the Node server
   const server = app();

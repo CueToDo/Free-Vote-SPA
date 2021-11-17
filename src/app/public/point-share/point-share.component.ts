@@ -50,8 +50,8 @@ export class PointShareComponent implements OnInit {
 
   ngOnInit(): void {
     const routeParams = this.activeRoute.snapshot.params;
-    const slashTag = routeParams.tag;
-    const pointTitle = routeParams.title;
+    const slashTag = routeParams['tag'];
+    const pointTitle = routeParams['title'];
 
     this.SelectSpecificPoint(slashTag, pointTitle);
   }

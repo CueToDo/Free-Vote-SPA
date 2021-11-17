@@ -36,8 +36,8 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.filter.pointSelectionType = PointSelectionTypes.QuestionPoints;
-    this.filter.slashTag = this.activeRoute.snapshot.params.tag;
-    this.filter.questionSlug = this.activeRoute.snapshot.params.questionSlug; // Display points attached to question
+    this.filter.slashTag = this.activeRoute.snapshot.params['tag'];
+    this.filter.questionSlug = this.activeRoute.snapshot.params['questionSlug']; // Display points attached to question
     this.filter.sortType = PointSortTypes.Random;
     this.filter.sortAscending = true;
   }
