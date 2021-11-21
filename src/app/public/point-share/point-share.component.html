@@ -8,6 +8,11 @@
 
                 <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 mb-4">
 
+                    <button mat-button [routerLink]="linkToAll">
+                        <mat-icon>list</mat-icon>
+                        view all
+                    </button>
+
                     <div class="fb-share-button mx-2" [attr.data-href]="linkShare" data-layout="button"
                         data-size="large"><a target="_blank" [attr.href]="facebookShare"
                             class="fb-xfbml-parse-ignore">Share</a></div>
@@ -23,11 +28,6 @@
                     <button mat-button [cdkCopyToClipboard]="linkShare" (click)="message('Link copied to clipboard')">
                         <mat-icon>playlist_add</mat-icon>
                         copy link
-                    </button>
-
-                    <button mat-button [routerLink]="linkToAll">
-                        <mat-icon>list</mat-icon>
-                        view all
                     </button>
 
                     <span class="spinner-grow text-primary" role="status" *ngIf="alreadyFetchingPointFromDB">
@@ -89,7 +89,9 @@
                             <div fxFlex.gt-xs="point.linkImage?70:100" fxFlex.lt-md="point.linkImage?50:100"
                                 class="linkMetaText">
                                 <div class="linkTitle">{{ point.linkTitle }}</div>
-                                {{ point.linkDescription }}
+                                <div class="linkDescription">
+                                    {{ point.linkDescription }}
+                                </div>
                             </div>
                         </div>
                         <!-- No Link Preview -->
