@@ -340,9 +340,9 @@ export class AppDataService {
   GetLatestSPAVersion(): void {
     this.httpService.get('lookups/SPAVersion').subscribe({
       next: (version: any) => {
-        this.localData.SpaVersionNew = version.value;
+        this.localData.SpaVersionLatest = version.value;
         this.localData.SpaVersionChecked = Date.now();
-        this.localData.Log(`SpaVersionNew:${version.value}`);
+        this.localData.Log(`SpaVersionLatest:${version.value}`);
       },
       error: error => {
         console.log('VERSION ERROR:', error);

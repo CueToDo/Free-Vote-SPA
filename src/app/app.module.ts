@@ -53,6 +53,8 @@ import { AppComponent } from './app.component';
     AppRoutingModule,
 
     // FacebookModule.forRoot(),
+
+    // PWA ServcieWorkerModule
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
