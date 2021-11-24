@@ -87,7 +87,8 @@ export class PointsService {
   GetFirstBatchForTag(
     slashTag: string,
     pointSortOrder: PointSortTypes,
-    sortAscending: boolean
+    sortAscending: boolean,
+    updateTopicCount: boolean
   ): Observable<PointSelectionResult> {
     // No Filters + infinite scroll on DateOrder desc
     const apiUrl =
@@ -95,7 +96,7 @@ export class PointsService {
         '/',
         ''
       )}/${pointSortOrder}` +
-      `/${sortAscending}/${this.batchSize}/${this.pageSize}`;
+      `/${sortAscending}/${this.batchSize}/${this.pageSize}/${updateTopicCount}`;
 
     return this.httpClientService
       .get(apiUrl)

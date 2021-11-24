@@ -64,7 +64,7 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     this.attachedToQuestion = true;
     this.filter.myPoints = false;
     this.filter.unAttachedToQuestion = false;
-    this.pointsList.SelectPoints();
+    this.pointsList.SelectPoints(false);
   }
 
   viewMyPoints(): void {
@@ -73,7 +73,7 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     this.attachedToQuestion = true;
     this.filter.myPoints = true;
     this.filter.unAttachedToQuestion = false;
-    this.pointsList.SelectPoints();
+    this.pointsList.SelectPoints(false);
   }
 
   addAnswer(): void {
@@ -82,7 +82,7 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     this.mode = 'addAnswer';
     this.attachedToQuestion = false;
     this.filter.unAttachedToQuestion = true;
-    this.pointsList.SelectPoints();
+    this.pointsList.SelectPoints(false);
   }
 
   newAnswer(): void {

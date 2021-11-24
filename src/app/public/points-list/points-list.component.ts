@@ -92,10 +92,10 @@ export class PointsListComponent {
 
     // Communicate Change to App Component
 
-    this.SelectPoints();
+    this.SelectPoints(false);
   }
 
-  SelectPoints(): void {
+  SelectPoints(updateTopicViewCount: boolean): void {
     this.possibleAnswers = false;
 
     if (!this.alreadyFetchingPointsFromDB) {
@@ -198,7 +198,8 @@ export class PointsListComponent {
                 .GetFirstBatchForTag(
                   this.filter.slashTag,
                   this.filter.sortType,
-                  this.filter.sortAscending
+                  this.filter.sortAscending,
+                  updateTopicViewCount
                 )
                 .subscribe({
                   next: psr => this.DisplayPoints(psr),

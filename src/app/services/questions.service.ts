@@ -29,10 +29,12 @@ export class QuestionsService {
   ) {
     // this.GetWoWWeekInfoVote();
   }
+
   GetFirstBatchForTag(
     slashTag: string,
     pointSortOrder: PointSortTypes,
-    sortAscending: boolean
+    sortAscending: boolean,
+    updateTopicViewCount: boolean
   ): Observable<QuestionSelectionResult> {
     // No Filters + infinite scroll on DateOrder desc
     const apiUrl =
@@ -40,7 +42,7 @@ export class QuestionsService {
         '/',
         ''
       )}/${pointSortOrder}` +
-      `/${sortAscending}/${this.batchSize}/${this.pageSize}`;
+      `/${sortAscending}/${this.batchSize}/${this.pageSize}/${updateTopicViewCount}`;
 
     return this.httpClientService
       .get(apiUrl)

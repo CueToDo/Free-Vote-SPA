@@ -61,6 +61,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   public filter = new FilterCriteria();
 
   public favouritesText = 'favourites';
+  private updateTopicViewCount = false;
 
   pointTypes: Kvp[] = [];
 
@@ -150,6 +151,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (tag || alias) {
         this.filter.single = false;
+        this.updateTopicViewCount = true; // We have a new tag
         this.Select();
       }
 
@@ -172,6 +174,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
             this.filter.sortType = pointSortType;
           }
         }
+        this.updateTopicViewCount = true; // We have a new tag
         this.Select();
       }
     );
@@ -405,10 +408,11 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   Select(): void {
     if (this.filter.questions) {
-      this.questionsList?.SelectQuestions();
+      this.questionsList?.SelectQuestions(this.updateTopicViewCount);
     } else {
-      this.pointsList?.SelectPoints();
+      this.pointsList?.SelectPoints(this.updateTopicViewCount);
     }
+    this.updateTopicViewCount = false;
   }
 
   PointCount(count: number): void {

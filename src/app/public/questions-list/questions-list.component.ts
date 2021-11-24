@@ -60,7 +60,7 @@ export class QuestionsListComponent {
     public appData: AppDataService
   ) {}
 
-  SelectQuestions(): void {
+  SelectQuestions(updateTopicViewCount: boolean): void {
     if (!this.alreadyFetchingFromDB) {
       this.alreadyFetchingFromDB = true;
       this.questionCount = 0;
@@ -72,7 +72,8 @@ export class QuestionsListComponent {
         .GetFirstBatchForTag(
           this.filter.slashTag,
           this.filter.sortType,
-          this.filter.sortAscending
+          this.filter.sortAscending,
+          updateTopicViewCount
         )
         .subscribe({
           next: psr => this.DisplayQuestions(psr),
