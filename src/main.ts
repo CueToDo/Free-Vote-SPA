@@ -14,8 +14,13 @@ if (environment.production) {
   enableProdMode();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  platformBrowserDynamic(providers)
-    .bootstrapModule(AppModule)
-    .catch((err: any) => console.log(err));
-});
+// For whatever reason, Angular sometimes does not register the service worker properly.
+// https://stackoverflow.com/questions/50968902/angular-service-worker-swupdate-available-not-triggered
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .then(() => {
+    if ('serviceWorker' in navigator && environment.production) {
+      navigator.serviceWorker.register('ngsw-worker.js');
+    }
+  })
+  .catch(err => console.log(err));

@@ -1,5 +1,3 @@
-import { NavBurgerComponent } from './public/nav-burger/nav-burger.component';
-import { NavItemsComponent } from './public/nav-items/nav-items.component';
 // Angular
 import {
   Component,
@@ -30,6 +28,10 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { filter, debounceTime, map } from 'rxjs/operators';
 import { PagePreviewMetaData } from './models/point.model';
 import { environment } from 'src/environments/environment';
+import { UpdateService } from './services/update.service';
+
+// FreeVote Components
+import { NavBurgerComponent } from './public/nav-burger/nav-burger.component';
 
 export enum NetworkStatus {
   ONLINE = 'online',
@@ -79,10 +81,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
-    @Inject(DOCUMENT) private htmlDocument: HTMLDocument,
+    private sw: UpdateService,
+    @Inject(DOCUMENT) private document: Document,
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
     @Inject(PLATFORM_ID) private platformId: object
-  ) {}
+  ) {
+    // check the service worker for updates
+    this.sw.checkForUpdates();
+  }
 
   ngOnInit(): void {
     this.appData.GetLatestSPAVersion();
@@ -98,7 +104,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         break;
     }
 
-    this.htmlDocument
+    this.document
       .getElementById('appFavicon')
       ?.setAttribute('href', `/assets/${favicon}?d=${Date.now()}`);
 
@@ -431,8 +437,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   SpaVersionUpdate() {
     // Refresh SPA from server
     // https://stackoverflow.com/questions/55127650/location-reloadtrue-is-deprecated
-    window.location.reload();
-    window.location.reload(); // Max Schwartzmuller - Service Worker and App ????
+    document.location.reload();
+    document.location.reload(); // Max Schwartzmuller - Service Worker and App ????
     // Saved SpaVersion value in localData not affected
     // new client value retrieved on app reload - should now match
   }
