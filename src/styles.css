@@ -243,6 +243,12 @@ https://css-tricks.com/centering-css-complete-guide/ */
   text-align: right;
 }
 
+img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .center {
   text-align: center;
 }
