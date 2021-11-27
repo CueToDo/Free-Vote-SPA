@@ -1,10 +1,10 @@
 {
   "name": "free-vote",
-  "version": "13.0.3",
+  "version": "13.0.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --watch",
-    "pwa": "http-server -p 7027 -c-1 dist/free-vote",
+    "pwa": "http-server -p 7027 -c-1 dist/free-vote/browser",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

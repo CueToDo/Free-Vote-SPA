@@ -11,7 +11,15 @@
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
-          "/*.js"
+          "/*.js",
+          "/assets/Staff Survey.png",
+          "/assets/Lady Justice.jpg",
+          "/assets/Secret Ballots.jpg",
+          "/assets/threats.png",
+          "/assets/threads.jpeg"
+        ],
+        "urls": [
+          "https://fonts.googleapis.com/icon?family=Material+Icons"
         ]
       }
     },
@@ -24,6 +32,21 @@
           "/assets/**",
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "tags",
+      "urls": [
+        "https://api.free.vote/tags/cloud/trending",
+        "https://api.free.vote/tags/cloud/recent"
+      ],
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "1d",
+        "timeout": "10s",
+        "strategy": "freshness"
       }
     }
   ]
