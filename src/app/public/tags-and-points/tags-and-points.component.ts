@@ -106,9 +106,11 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         // may have separate tab for following
         case 'recent':
           this.tabIndex = tabs.recentTags;
+          this.appData.defaultSort = PointSortTypes.DateUpdated;
           break;
         case 'trending':
           this.tabIndex = tabs.trendingTags;
+          this.appData.defaultSort = PointSortTypes.TrendingActivity;
           break;
         case 'points':
           this.qp = 'point';
@@ -221,6 +223,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
     switch (tabIndex) {
       case tabs.trendingTags:
+        this.appData.defaultSort = PointSortTypes.TrendingActivity;
         this.TabChangeComplete(tabChanged, '/trending');
         break;
 
@@ -229,6 +232,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
           this.tagsRecent.fetchTags(); // always update on switching to tagsRecent tab
           this.refreshRecent = false;
         }
+        this.appData.defaultSort = PointSortTypes.DateUpdated;
         this.TabChangeComplete(tabChanged, '/recent');
         break;
 
@@ -347,7 +351,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   SetSortTypeIcon(pointSortType: PointSortTypes): void {
     if (pointSortType !== PointSortTypes.NoChange) {
       if (pointSortType === PointSortTypes.DateDescend) {
-        pointSortType = PointSortTypes.DateCreated;
+        pointSortType = PointSortTypes.DateUpdated;
       }
 
       this.pointSortType = pointSortType;

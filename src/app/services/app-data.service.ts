@@ -30,6 +30,8 @@ export class AppDataService {
   // http://jasonwatmore.com/post/2016/12/01/angular-2-communicating-between-components-with-observable-subject
   public Route = '';
 
+  public defaultSort = PointSortTypes.TrendingActivity;
+
   // Can I make a function available in every controller in angular?
   // https://stackoverflow.com/questions/15025979/can-i-make-a-function-available-in-every-controller-in-angular
   // 0 to 11
@@ -73,21 +75,6 @@ export class AppDataService {
   // Let the service handle the communication and the response data
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).
   // Could use Promise for sign-in component, but other components such as menu need to know sign-in status
-
-  // public ckeConfig = {
-  //   toolbar: {
-  //     items: ['Bold', 'Italic', 'Underline',
-  //       '|', 'bulletedList', 'numberedList',
-  //       '|', 'indent', 'outdent',
-  //       '|', 'heading', 'fontSize',
-  //       '|', 'fontColor', 'fontBackgroundColor',
-  //       '|', 'link', 'image', 'insertTable', 'horizontalLine',
-  //       '|', 'undo', 'redo'],
-  //     shouldNotGroupWhenFull: true
-  //   },
-  //   // htmlEncodeOutput: false
-  //   allowedContent: true
-  // };
 
   // Not looked up in database - static types
   public porQTypes = [

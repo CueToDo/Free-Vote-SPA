@@ -168,7 +168,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.SetAppComponentRoute();
         if (pointSortType !== PointSortTypes.NoChange) {
           if (pointSortType === PointSortTypes.DateDescend) {
-            this.filter.sortType = PointSortTypes.DateCreated;
+            this.filter.sortType = PointSortTypes.DateUpdated;
             this.filter.sortAscending = false; // Ensure new point at top
           } else {
             this.filter.sortType = pointSortType;
@@ -347,8 +347,8 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   // https://github.com/angular/components/issues/13156
   FilterOnDates(checkbox: MatCheckbox): void {
     if (checkbox.checked) {
-      if (this.filter.sortType !== PointSortTypes.DateCreated) {
-        this.filter.sortType = PointSortTypes.DateCreated;
+      if (this.filter.sortType !== PointSortTypes.DateUpdated) {
+        this.filter.sortType = PointSortTypes.DateUpdated;
         this.pointSortTypeChanged.next(this.filter.sortType);
       }
     }

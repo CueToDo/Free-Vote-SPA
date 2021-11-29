@@ -14,7 +14,7 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
   // SPA Versioning
-  public SpaVersion = '13.0.6'; // constant on reload - not saved to localData
+  public SpaVersion = '13.0.7'; // constant on reload - not saved to localData
 
   // Must save in localData for use after reload
   // was previously fetched from API

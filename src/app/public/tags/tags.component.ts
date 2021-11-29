@@ -104,7 +104,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   setSlashTag(slashTag: string): void {
     // Get appDataService to broadcast (method shared by PointEditComponent)
-    this.appDataService.SetSlashTag(slashTag, PointSortTypes.NoChange);
+    this.appDataService.SetSlashTag(slashTag, this.appDataService.defaultSort);
 
     this.NewSlashTagSelected.emit(slashTag);
   }

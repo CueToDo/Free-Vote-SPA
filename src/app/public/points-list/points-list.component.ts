@@ -4,11 +4,7 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 // Models, enums
 import { ID } from 'src/app/models/common';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-import {
-  PagePreviewMetaData,
-  Point,
-  PointSelectionResult
-} from 'src/app/models/point.model';
+import { Point, PointSelectionResult } from 'src/app/models/point.model';
 import {
   PointSelectionTypes,
   PointTypesEnum,
@@ -57,7 +53,7 @@ export class PointsListComponent {
     }
     if (this.points.length > lastRow) {
       lastRow = this.points.length;
-    } // Defensive if point count from databsae is wrong
+    } // Defensive if point count from database is wrong
     return lastRow;
   }
 
@@ -222,7 +218,7 @@ export class PointsListComponent {
       // ReversalOnly means we can allow the database to update rownumbers on previously selected points
       if (this.filter) {
         const reversalOnly = this.filter.sortType === pointSortType;
-        this.filter.sortType = pointSortType;
+        this.filter.sortType = pointSortType; // No need to check need to change
 
         this.alreadyFetchingPointsFromDB = true;
 

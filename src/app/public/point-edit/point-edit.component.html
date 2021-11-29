@@ -64,7 +64,7 @@
         <mat-form-field fxFlex>
           <input matInput placeholder="image to be uploaded" [(ngModel)]="imageName" readonly name="imagePath">
         </mat-form-field>
-        <button mat-stroked-button class="ml-3" type="button" (click)="uploadImage()">
+        <button mat-stroked-button class="ms-3" type="button" (click)="uploadImage()">
           <mat-icon>publish</mat-icon>
           upload
         </button>
@@ -144,7 +144,7 @@
       cancel
     </button>
 
-    <span class="spinner-grow text-primary ml-3" role="status" *ngIf="saving">
+    <span class="spinner-grow text-primary ms-3" role="status" *ngIf="saving">
       <span class="visually-hidden">Loading...</span>
     </span>
 
