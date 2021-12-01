@@ -93,8 +93,9 @@ export class Point {
   // Manually added link info
   linkText = '';
   linkAddress = '';
-  showLinkBeforeVote = false;
-  showLinkPreview = false;
+  showLinkBeforeVote = true;
+  showLinkPreview = true;
+
   // Additional link info from site meta data
   linkTitle = '';
   linkDescription = '';

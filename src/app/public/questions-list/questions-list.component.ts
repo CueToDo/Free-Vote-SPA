@@ -96,13 +96,19 @@ export class QuestionsListComponent {
 
       this.questionsService
         .NewQuestionSelectionOrder(pointSortType, reversalOnly)
-        .subscribe(response => {
-          this.alreadyFetchingFromDB = false;
+        .subscribe({
+          next: response => {
+            this.alreadyFetchingFromDB = false;
 
-          // pointCount is not updated for re-ordering
-          this.IDs = response.questionIDs;
-          this.questions = response.questions;
-          this.NewQuestionsDisplayed();
+            // pointCount is not updated for re-ordering
+            this.IDs = response.questionIDs;
+            this.questions = response.questions;
+            this.NewQuestionsDisplayed();
+          },
+          error: serverError => {
+            this.error = serverError.error.detail;
+            this.alreadyFetchingFromDB = false;
+          }
         });
     }
   }
@@ -137,9 +143,15 @@ export class QuestionsListComponent {
         this.alreadyFetchingFromDB = true;
         this.allQuestionsDisplayed = false;
 
-        this.questionsService.GetPage(pids).subscribe(response => {
-          this.questions = this.questions.concat(response.questions);
-          this.NewQuestionsDisplayed();
+        this.questionsService.GetPage(pids).subscribe({
+          next: response => {
+            this.questions = this.questions.concat(response.questions);
+            this.NewQuestionsDisplayed();
+          },
+          error: serverError => {
+            this.error = serverError.error.detail;
+            this.alreadyFetchingFromDB = false;
+          }
         });
       } else if (
         this.lastBatchRow < this.questionCount &&
@@ -154,11 +166,18 @@ export class QuestionsListComponent {
 
         this.questionsService
           .GetNextBatch(this.filter.sortType, this.lastBatchRow + 1)
-          .subscribe(response => {
-            // New Batch
-            this.IDs = response.questionIDs;
-            this.questions = this.questions.concat(response.questions);
-            this.NewQuestionsDisplayed();
+          .subscribe({
+            next: response => {
+              // New Batch
+              this.IDs = response.questionIDs;
+              this.questions = this.questions.concat(response.questions);
+              this.NewQuestionsDisplayed();
+            },
+            error: serverError => {
+              this.error = serverError.error.detail;
+              this.alreadyFetchingFromDB = false;
+              this.allQuestionsDisplayed = true;
+            }
           });
         // }
       }

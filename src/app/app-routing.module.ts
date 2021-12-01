@@ -71,13 +71,14 @@ const appRoutes: Routes = [
   // following are "external" links - need to be tested from url, not tab links
   { path: 'trending', component: TagsAndPointsComponent }, // TAGS
   { path: 'recent', component: TagsAndPointsComponent }, // TAGS personal - recent selection - works on anon?
+  { path: ':tag', component: TagsAndPointsComponent }, // POINTS: still like the SlashTag
+  { path: ':tag/points', component: TagsAndPointsComponent },
+  { path: ':tag/questions', component: TagsAndPointsComponent },
   { path: ':tag/new-point', component: TagsAndPointsComponent },
   { path: ':tag/new-question', component: TagsAndPointsComponent },
-  { path: ':tag/by/:alias', component: TagsAndPointsComponent },
-  { path: ':tag/question/:questionSlug', component: QuestionAnswersComponent },
-  { path: ':tag', component: TagsAndPointsComponent }, // POINTS: still like the SlashTag
-  { path: ':tag/points', component: TagsAndPointsComponent }, // POINTS: still like the SlashTag
   { path: ':tag/:title', component: PointShareComponent },
+  { path: ':tag/question/:questionSlug', component: QuestionAnswersComponent },
+  { path: ':tag/by/:alias', component: TagsAndPointsComponent },
 
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
   { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )
@@ -86,8 +87,8 @@ const appRoutes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(appRoutes, {
-    initialNavigation: 'enabledBlocking'
-})
+      initialNavigation: 'enabledBlocking'
+    })
   ],
   exports: [RouterModule]
 })

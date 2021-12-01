@@ -112,10 +112,6 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
           this.tabIndex = tabs.trendingTags;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
           break;
-        case 'points':
-          this.qp = 'point';
-          this.tabIndex = tabs.points;
-          break;
         default:
           this.tabIndex = tabs.points;
       }
@@ -123,7 +119,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
       // Route is Topic By Alias
       // {0}/{slashTag}/by/{Alias} - length = 4
       this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
-      this.tabIndex = 2;
+      this.tabIndex = tabs.points;
       this.displayFilter(true);
     }
 
@@ -141,10 +137,12 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     // ==========   Subscriptions   ==========
 
     // Just switch to Points Tab if ByOn hasn't changed
-    this.showPointsTab$ = this.appData.ShowPointsTab$.subscribe(() => {
-      this.externalTrigger = true;
-      this.ChangeTab(tabs.points);
-      this.externalTrigger = false;
+    this.showPointsTab$ = this.appData.ShowPointsTab$.subscribe({
+      next: () => {
+        this.externalTrigger = true;
+        this.ChangeTab(tabs.points);
+        this.externalTrigger = false;
+      }
     });
 
     this.reSelectPoints$ = this.appData.ReSelectPoints$.subscribe(
@@ -263,11 +261,6 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         } else {
           this.newPointComponent.NewPoint(this.slashTagSelected);
         }
-
-        this.TabChangeComplete(
-          tabChanged,
-          `/${this.topicSelected}/new-${this.qp}`
-        );
         break;
     }
   }

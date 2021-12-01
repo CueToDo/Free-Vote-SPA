@@ -10,20 +10,25 @@ export class TopicEditComponent {
   addOnBlur = true;
   newTopic = '';
   illegalTags = [
-    '/callback',
-    '/new-point',
-    '/new-question',
-    '/home',
-    '/voters',
-    '/point-of-the-week',
-    '/trending',
-    '/recent',
-    '/tag',
+    '/about',
     '/by',
-    '/my',
+    '/callback',
+    '/card',
     '/group',
     '/groups',
-    '/issues'
+    '/home',
+    '/issues',
+    '/my',
+    '/organisations',
+    '/new-point',
+    '/new-question',
+    '/point-of-the-week',
+    '/privacy-policy',
+    '/recent',
+    '/scroller',
+    '/tag',
+    '/trending',
+    '/voters'
   ];
   error = '';
 

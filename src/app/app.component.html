@@ -23,11 +23,6 @@
 
     <div fxFlex></div>
 
-    <button mat-button *ngIf="!offline && localData.SpaVersionUpdateRequired" (click)="SpaVersionUpdate()">
-      <mat-icon>autorenew</mat-icon>
-      update
-    </button>
-
     <div *ngIf="offline" class="amr-3">
       OFFLINE
     </div>

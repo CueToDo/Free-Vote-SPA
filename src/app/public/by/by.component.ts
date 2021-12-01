@@ -33,6 +33,8 @@ export class ByComponent implements OnInit, OnDestroy {
   waitingVoters = true;
   waitingTopics = false;
 
+  error = '';
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private localData: LocalDataService,
@@ -44,9 +46,15 @@ export class ByComponent implements OnInit, OnDestroy {
     // Get Aliases
     this.aliases$ = this.tagsService
       .ByAliases('1 jan 2000', '31 dec 2050')
-      .subscribe(response => {
-        this.byAliases = response;
-        this.waitingVoters = false;
+      .subscribe({
+        next: response => {
+          this.byAliases = response;
+          this.waitingVoters = false;
+        },
+        error: serverError => {
+          this.error = serverError.error.detail;
+          this.waitingVoters = false;
+        }
       });
 
     // The ActivatedRoute dies with the routed component and so
@@ -86,9 +94,12 @@ export class ByComponent implements OnInit, OnDestroy {
 
       this.tagsService
         .TopicsByAlias(byAlias, '1 Jan 2000', '31 Dec 2030')
-        .subscribe(response => {
-          this.onTopics = response;
-          this.waitingTopics = false;
+        .subscribe({
+          next: response => {
+            this.onTopics = response;
+            this.waitingTopics = false;
+          },
+          error: serverError => (this.error = serverError.error.detail)
         });
     }
   }
