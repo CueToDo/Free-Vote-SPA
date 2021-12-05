@@ -24,8 +24,9 @@ import { QuestionEditComponent } from 'src/app/public/question-edit/question-edi
 enum tabs {
   trendingTags = 0,
   recentTags = 1,
-  points = 2,
-  newPoint = 3
+  tagSearch = 2,
+  points = 3,
+  newPoint = 4
 }
 
 @Component({
@@ -45,6 +46,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
   // Public variables for use in template
   public tabIndex = tabs.recentTags;
+  public previousTabIndex = tabs.recentTags;
 
   public topicSelected = '';
   public get slashTagSelected(): string {
@@ -104,16 +106,24 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
       switch (routeparts[1]) {
         // may have separate tab for following
-        case 'recent':
-          this.tabIndex = tabs.recentTags;
-          this.appData.defaultSort = PointSortTypes.DateUpdated;
-          break;
         case 'trending':
           this.tabIndex = tabs.trendingTags;
+          this.previousTabIndex = tabs.trendingTags;
+          this.appData.defaultSort = PointSortTypes.TrendingActivity;
+          break;
+        case 'recent':
+          this.tabIndex = tabs.recentTags;
+          this.previousTabIndex = tabs.recentTags;
+          this.appData.defaultSort = PointSortTypes.DateUpdated;
+          break;
+        case 'search':
+          this.tabIndex = tabs.tagSearch;
+          this.previousTabIndex = tabs.tagSearch;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
           break;
         default:
           this.tabIndex = tabs.points;
+        // Don't save previousTabIndex
       }
     } else {
       // Route is Topic By Alias
@@ -221,20 +231,30 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
     switch (tabIndex) {
       case tabs.trendingTags:
+        this.previousTabIndex = tabIndex;
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         this.TabChangeComplete(tabChanged, '/trending');
         break;
 
       case tabs.recentTags:
+        this.previousTabIndex = tabIndex;
+        // (always) update on switching to tagsRecent tab
         if (this.refreshRecent) {
-          this.tagsRecent.fetchTags(); // always update on switching to tagsRecent tab
+          this.tagsRecent.fetchTags();
           this.refreshRecent = false;
         }
         this.appData.defaultSort = PointSortTypes.DateUpdated;
         this.TabChangeComplete(tabChanged, '/recent');
         break;
 
+      case tabs.tagSearch:
+        this.previousTabIndex = tabIndex;
+        this.appData.defaultSort = PointSortTypes.TrendingActivity;
+        this.TabChangeComplete(tabChanged, '/search');
+        break;
+
       case tabs.points:
+        // Don't save previous
         // ActiveAliasForFilter update by the "By" Component (sibling),
         // AND child Tags and Points Components
         const alias = this.localData.ActiveAliasForFilter;

@@ -24,6 +24,11 @@
             </app-point>
         </div>
 
+        <!-- Prompt New Point -->
+        <div *ngIf="pointCount===0" class="alert alert-warning">
+            Click "New Point" to create the first point for this tag
+        </div>
+
         <!-- Count -->
         <div class="pointCount" fxLayoutAlign="end center">
 

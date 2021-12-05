@@ -49,6 +49,7 @@ import { QuestionComponent } from './question/question.component';
 import { QuestionAnswersComponent } from './question-answers/question-answers.component';
 import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
 import { PointShareComponent } from './point-share/point-share.component';
+import { TagSearchComponent } from './tag-search/tag-search.component';
 
 @NgModule({
   imports: [
@@ -97,7 +98,8 @@ import { PointShareComponent } from './point-share/point-share.component';
     QuestionComponent,
     QuestionAnswersComponent,
     CkeUniversalComponent,
-    PointShareComponent
+    PointShareComponent,
+    TagSearchComponent
   ],
   exports: [
     PointComponent,

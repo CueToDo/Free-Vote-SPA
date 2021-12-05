@@ -3,16 +3,15 @@ import { OnDestroy } from '@angular/core';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // RxJs
-import { Subscription, fromEvent } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 // Models
 import { Tag } from '../../models/tag.model';
-import { TagCloudTypes, PointSortTypes } from './../../models/enums';
+import { TagCloudTypes } from './../../models/enums';
 
 // Services
 import { AppDataService } from '../../services/app-data.service';
 import { TagsService } from '../../services/tags.service';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tags', // is used as both a regular component and a router-outlet

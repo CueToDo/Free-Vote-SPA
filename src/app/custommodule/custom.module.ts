@@ -26,26 +26,26 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    RouterModule
   ],
   declarations: [
     DatepickerComponent,
-    NbspPipe,
-    SafeURLPipe,
     ElementScrollDirective,
-    TagDisplayPipe,
-    SafeHtmlPipe
+    NbspPipe,
+    SafeHtmlPipe,
+    SafeURLPipe,
+    TagDisplayPipe
   ],
   exports: [
     DatepickerComponent,
-    NbspPipe,
-    SafeURLPipe,
-    SafeHtmlPipe,
     ElementScrollDirective,
+    NbspPipe,
+    SafeHtmlPipe,
+    SafeURLPipe,
     TagDisplayPipe
   ],
   providers: []

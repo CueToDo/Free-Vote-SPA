@@ -221,8 +221,10 @@ export class PointsService {
     PSR.toDate = sourceData.toDate;
 
     // construct an Array of objects from an object
-    PSR.pointIDs = this.appData.CastObjectToIDs(sourceData.pointIDs);
-    PSR.points = sourceData.points;
+    if (PSR.pointCount > 0) {
+      PSR.pointIDs = this.appData.CastObjectToIDs(sourceData.pointIDs);
+      PSR.points = sourceData.points;
+    }
 
     return PSR;
   }

@@ -71,11 +71,8 @@ const appRoutes: Routes = [
   // following are "external" links - need to be tested from url, not tab links
   { path: 'trending', component: TagsAndPointsComponent }, // TAGS
   { path: 'recent', component: TagsAndPointsComponent }, // TAGS personal - recent selection - works on anon?
+  { path: 'search', component: TagsAndPointsComponent }, // Tag Search
   { path: ':tag', component: TagsAndPointsComponent }, // POINTS: still like the SlashTag
-  { path: ':tag/points', component: TagsAndPointsComponent },
-  { path: ':tag/questions', component: TagsAndPointsComponent },
-  { path: ':tag/new-point', component: TagsAndPointsComponent },
-  { path: ':tag/new-question', component: TagsAndPointsComponent },
   { path: ':tag/:title', component: PointShareComponent },
   { path: ':tag/question/:questionSlug', component: QuestionAnswersComponent },
   { path: ':tag/by/:alias', component: TagsAndPointsComponent },

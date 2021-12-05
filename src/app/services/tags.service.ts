@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 // rxjs
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 // Models
 import { TagCloudTypes } from '../models/enums';
@@ -19,6 +19,18 @@ export class TagsService {
 
   // OnInit() works with Directives and Components.
   // It does not work with other types, like a service
+
+  TagSearch(tagsearch: string): Observable<Tag[]> {
+    // get rid of slash and dash
+    tagsearch = tagsearch.split('/').join('');
+    tagsearch = tagsearch.split('-').join('');
+
+    let WebAPIUrl = `tags/search/${tagsearch}`;
+
+    return this.httpClientService
+      .get(WebAPIUrl)
+      .pipe(map(data => data as Tag[]));
+  }
 
   TagCloud(type: TagCloudTypes): Observable<Tag[]> {
     let WebAPIUrl = '';

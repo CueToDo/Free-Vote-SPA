@@ -6,7 +6,7 @@
 
     <div ngClass.gt-xs="py-1">
 
-      <div *ngIf="tabIndex < 2" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
+      <div *ngIf="tabIndex < 3" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
         <button mat-button (click)="ChangeTab(0)" [class.selected]="tabIndex===0" matTooltip="trending">
@@ -20,7 +20,12 @@
           <mat-icon>notifications</mat-icon>
         </button>
 
-        <button mat-button (click)="ChangeTab(2)" [class.selected]="tabIndex===2"
+        <button mat-button (click)="ChangeTab(2)" [class.selected]="tabIndex===2" matTooltip="trending">
+          search
+          <mat-icon>search</mat-icon>
+        </button>
+
+        <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3"
           *ngIf="!!topicSelected && topicSelected !== 'SignedOut'" matTooltip="{{ topicSelected }}">
           <span class="slash-tag">/</span>
           <span>slash-tag</span>
@@ -28,10 +33,10 @@
 
       </div>
 
-      <div *ngIf="tabIndex > 1" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
+      <div *ngIf="tabIndex > 2" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
-        <button mat-button (click)="ChangeTab(1)" [class.selected]="tabIndex===0" matTooltip="trending">
+        <button mat-button (click)="ChangeTab(previousTabIndex)" matTooltip="trending">
           <span class="slash-tag">/</span>
           slash-tags
         </button>
@@ -41,7 +46,7 @@
           <mat-radio-button value="point" matTooltip="show pointss">Points</mat-radio-button>
         </mat-radio-group>
 
-        <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3" *ngIf="localData.LoggedInToAuth0"
+        <button mat-button (click)="ChangeTab(4)" [class.selected]="tabIndex===4" *ngIf="localData.LoggedInToAuth0"
           [matTooltip]="'submit new ' + qp" id="newQP">
           <span>new {{ qp }}</span>
           <mat-icon>library_add</mat-icon>
@@ -126,7 +131,7 @@
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===0}">
       <div [ngClass]="{
         'centerStage': tabIndex===0, 
-        'stageLeft': tabIndex>0 }" fxFill>
+        'stageLeft': tabIndex>0}" fxFill>
         <div fxLayoutAlign="center">
           <div class="content">
             <app-tags [TagCloudType]="TagCloudTypes.Trending" (NewSlashTagSelected)="NewSlashTagSelected($event)">
@@ -139,10 +144,11 @@
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===1}">
       <div [ngClass]="{
         'centerStage': tabIndex===1, 
-        'stageLeft': tabIndex>1, 
+        'stageLeft': tabIndex>1,
         'stageRight': tabIndex<1}" fxFill>
         <div fxLayoutAlign="center">
           <div class="content">
+
             <app-tags [TagCloudType]="TagCloudTypes.Recent" #tagsRecent (haveTags)="haveRecentTags($event)"
               (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tags>
           </div>
@@ -150,21 +156,36 @@
       </div>
     </div>
 
-    <div class="tabContent" [ngClass]="{'topZ':tabIndex===2}">
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===2}">
       <div [ngClass]="{
         'centerStage': tabIndex===2, 
-        'stageLeft': tabIndex>2,
+        'stageLeft': tabIndex>2, 
         'stageRight': tabIndex<2}" fxFill>
+        <div fxLayoutAlign="center">
+          <div class="content">
+            <!-- SlashTag Search -->
+            <app-tag-search (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tag-search>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabContent" [ngClass]="{'topZ':tabIndex===3}">
+      <div [ngClass]="{
+        'centerStage': tabIndex===3, 
+        'stageLeft': tabIndex>3,
+        'stageRight': tabIndex<3}" fxFill>
         <app-points (applyFilter)="applyFilter($event)" (switchToPoints)="switchToPoints()"
           (pointSortTypeChanged)="pointSortTypeChanged($event)">
         </app-points>
       </div>
     </div>
 
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===3}">
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===4}">
       <div [ngClass]="{
-        'centerStage': tabIndex===3, 
-        'stageRight': tabIndex<3 }" fxFill>
+        'centerStage': tabIndex===4, 
+        'stageRight': tabIndex<4 }" fxFill>
         <div fxLayoutAlign="center">
           <div class="content mt-5 mb-3">
             <app-point-edit *ngIf="!questions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()" #newPoint>

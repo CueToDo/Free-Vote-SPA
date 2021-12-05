@@ -1,0 +1,39 @@
+<!-- Tags matching hard sound criteria -->
+<div class="topicsCloud">
+
+    <!-- SlashTag Search -->
+    <div fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="center stretch" fxLayout.xs="column"
+        fxLayoutAlign.xs="space-around stretch" class="Search mt-5" [ngClass.xs]="'xsSearch'"
+        [ngClass.gt-xs]="'gtxsSearch'">
+
+        <div>
+            <input type="text" [(ngModel)]="slashTag" (ngModelChange)="slashTagCleanUp($event)" (keyup.enter)="newTag()"
+                class="form-control" #tvSlashTag placeholder="/slash tag">
+        </div>
+
+        <button mat-stroked-button (click)="newTag()">
+            <mat-icon>add</mat-icon>
+            create
+        </button>
+
+        <button mat-stroked-button aria-label="Clear" (click)="restartSearch()">
+            <mat-icon>close</mat-icon>
+            clear
+        </button>
+        <span class="spinner-grow text-primary ms-3" role="status" *ngIf="searching">
+            <span class="visually-hidden">Loading...</span>
+        </span>
+    </div>
+
+    <ng-container *ngFor="let tag of tags">
+        <a [innerHTML]="tag.tagDisplay | TagDisplay"
+            [ngStyle]="{'font-size':FontSize(tag.tagWeight),'padding-right':'10px'}"
+            (click)="setSlashTag(tag.slashTag)"></a>
+        <span class="no-wrap-hack"> |</span>
+    </ng-container>
+
+    <div class="fv-error" *ngIf="!!error">
+        {{ error }}
+    </div>
+
+</div>

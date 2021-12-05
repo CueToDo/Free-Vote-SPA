@@ -26,6 +26,7 @@ export class TopicEditComponent {
     '/privacy-policy',
     '/recent',
     '/scroller',
+    '/search',
     '/tag',
     '/trending',
     '/voters'

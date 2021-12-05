@@ -63,25 +63,7 @@
 
         <div class="content" fxFlex>
 
-          <!-- SlashTag Search -->
-          <div fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="center stretch" fxLayout.xs="column"
-            fxLayoutAlign.xs="space-around stretch" class="form-group" class="Search" [ngClass.xs]="'xsSearch'"
-            [ngClass.gt-xs]="'gtxsSearch'">
-
-            <input type="text" [(ngModel)]="slashTag" (keyup)="slashTagChanged()" (keyup.enter)="showTagPoints()"
-              (focus)="beginInput()" (blur)="endInput()" class="form-control" #tvSlashTag placeholder="/slash tag">
-
-            <button mat-stroked-button (click)="showTagPoints()">
-              <mat-icon>search</mat-icon>
-              search
-            </button>
-
-            <button mat-stroked-button aria-label="Clear" (click)="restartSearch()">
-              <mat-icon>close</mat-icon>
-              clear
-            </button>
-
-          </div>
+          Home works!
 
         </div>
 

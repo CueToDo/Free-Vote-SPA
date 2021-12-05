@@ -171,6 +171,38 @@ export class AppDataService {
     return result;
   }
 
+  isConsonant(ch: string): boolean {
+    if (!ch) {
+      return false;
+    }
+
+    // To handle lower case
+    ch = ch[0].toUpperCase();
+
+    return (
+      ch.charCodeAt(0) >= 65 &&
+      ch.charCodeAt(0) <= 90 &&
+      !(ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U')
+    );
+  }
+
+  uniqueConsonants(word: string): number {
+    if (!word) {
+      return 0;
+    }
+
+    let consonants: string[] = [];
+    let c = '';
+
+    for (let i = 0; i < word.length; i++) {
+      c = word[i];
+      if (this.isConsonant(c) && consonants.indexOf(c) < 0) {
+        consonants.push(c);
+      }
+    }
+    return consonants.length;
+  }
+
   // Name cannot include reserved characters
   isUrlNameUnSafe(input: string): boolean {
     return (

@@ -1,0 +1,34 @@
+div.Search {
+  margin-bottom: 30px;
+}
+
+.Search input,
+.Search button {
+  height: 50px !important;
+  font-size: 1.2em !important;
+}
+
+.Search input {
+  padding: 10px;
+}
+
+.gtxsSearch input {
+  max-width: 340px;
+}
+
+.xsSearch Input {
+  width: 100%;
+}
+
+.gtxsSearch button {
+  margin-left: 10px;
+}
+
+.xsSearch button {
+  margin-top: 10px;
+}
+
+/* WTF: Could not get anchor tags to wrap */
+.no-wrap-hack {
+  color: transparent;
+}
