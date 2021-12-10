@@ -9,7 +9,7 @@ import { Point } from 'src/app/models/point.model';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
-import { PagePreviewMetaData } from 'src/app/models/point.model';
+import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 

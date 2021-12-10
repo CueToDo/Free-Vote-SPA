@@ -18,6 +18,40 @@
 
                 <p>{{ OrganisationDisplay?.description }}</p>
 
+                <div *ngIf="updatingPreview">
+                    <span class="spinner-grow text-primary ms-3 spinner" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>
+                    updating website preview
+                </div>
+
+                <!-- Link -->
+                <p *ngIf="!!OrganisationDisplay?.organisationWebsite">
+                    <a [href]="OrganisationDisplay?.organisationWebsite" target="_blank">
+                        <!-- Link Preview -->
+                        <div *ngIf="!!OrganisationDisplay?.metaTitle" class="linkFromMeta" fxLayout="row"
+                            fxLayoutAlign="center center">
+                            <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!OrganisationDisplay?.metaImage"
+                                fxLayoutAlign="center">
+                                <img [src]="OrganisationDisplay?.metaImage" alt="">
+                            </div>
+                            <div fxFlex.gt-xs="!!OrganisationDisplay?.metaImage?70:100"
+                                fxFlex.lt-sm="!!OrganisationDisplay?.metaImage?50:100" class="linkMetaText">
+                                <div class="linkTitle">
+                                    {{ OrganisationDisplay?.metaTitle }}
+                                </div>
+                                <div class="linkDescription">
+                                    {{ OrganisationDisplay?.metaDescription }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- No Link Preview -->
+                        <div *ngIf="!OrganisationDisplay?.metaTitle">
+                            {{ OrganisationDisplay?.organisationName }}
+                        </div>
+                    </a>
+                </p>
+
                 <p>
                     members <span class="data">{{ OrganisationDisplay?.members }}</span>,
                     discussions <span class="data">{{ OrganisationDisplay?.issues }}</span>
@@ -56,10 +90,6 @@
                     </span>
                 </p>
 
-                <p *ngIf="!!OrganisationDisplay?.organisationWebsite">Website: <a
-                        [href]="OrganisationDisplay?.organisationWebsite" target="_blank">{{
-                        OrganisationDisplay?.organisationWebsite?.replace('http://','')?.replace('https://','') }}</a>
-                </p>
             </div>
 
             <!-- Group Edit -->

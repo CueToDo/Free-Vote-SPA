@@ -31,6 +31,7 @@ export class OrganisationComponent implements OnInit {
 
   newGroupTemplate = new Group();
   creatingNewGroup = false;
+  updatingPreview = false;
 
   error = '';
 
@@ -74,7 +75,7 @@ export class OrganisationComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private appData: AppDataService,
-    private groupsService: OrganisationsService
+    private organisationService: OrganisationsService
   ) {}
 
   ngOnInit(): void {
@@ -86,7 +87,7 @@ export class OrganisationComponent implements OnInit {
       this.activatedRoute.snapshot.params['organisationName'];
     organisationName = this.appData.unKebabUri(organisationName);
 
-    this.groupsService.Organisation(organisationName, true).subscribe({
+    this.organisationService.Organisation(organisationName, true).subscribe({
       next: (organisation: Organisation) => {
         this.OrganisationDisplay = organisation;
       },
@@ -103,7 +104,7 @@ export class OrganisationComponent implements OnInit {
     if (!this.OrganisationDisplay) {
       this.error = 'No organisation to display';
     } else {
-      this.groupsService
+      this.organisationService
         .Join(this.OrganisationDisplay.organisationID)
         .subscribe({
           next: members => {
@@ -125,7 +126,7 @@ export class OrganisationComponent implements OnInit {
       this.error = '';
       this.membershipMessage = '';
 
-      this.groupsService
+      this.organisationService
         .Leave(this.OrganisationDisplay.organisationID)
         .subscribe({
           next: members => {
@@ -146,7 +147,7 @@ export class OrganisationComponent implements OnInit {
     } else {
       this.error = '';
 
-      this.groupsService
+      this.organisationService
         .Activate(this.OrganisationDisplay.organisationID, true)
         .subscribe({
           next: _ => {
@@ -165,7 +166,7 @@ export class OrganisationComponent implements OnInit {
     } else {
       this.error = '';
 
-      this.groupsService
+      this.organisationService
         .Activate(this.OrganisationDisplay.organisationID, false)
         .subscribe({
           next: _ => {
@@ -192,10 +193,10 @@ export class OrganisationComponent implements OnInit {
         confirm(`Are you sure you wish to permanently delete this group?
 This cannot be undone.`)
       ) {
-        this.groupsService
+        this.organisationService
           .Delete(this.OrganisationDisplay.organisationID)
           .subscribe({
-            next: _ => this.router.navigate(['/groups', 'membership']), // this.Refresh.emit(),
+            next: _ => this.router.navigate(['/organisations', 'membership']), // this.Refresh.emit(),
             error: serverError => (this.error = serverError.error.detail)
           });
       }
@@ -210,6 +211,40 @@ This cannot be undone.`)
   Complete(group: Organisation): void {
     this.OrganisationDisplay = group;
     this.groupEdit = false;
+    this.FetchMetaData();
+  }
+
+  FetchMetaData(): void {
+    // If it's a newSource, it will be showLinkPreview
+    // but could be called from point update where isNew is false and showLinkPreview is true
+    if (this.OrganisationDisplay.organisationWebsite) {
+      // Get Link metadata for preview
+      // Also handled in new point in tags-and-points component
+      this.updatingPreview = true;
+      this.organisationService
+        .OrganisationWebsiteMetaDataUpdate(
+          this.OrganisationDisplay.organisationID,
+          this.OrganisationDisplay.organisationWebsite
+        )
+        .subscribe({
+          next: metaData => {
+            if (this.OrganisationDisplay) {
+              this.OrganisationDisplay.metaTitle = metaData.title;
+              this.OrganisationDisplay.metaDescription = metaData.description;
+              this.OrganisationDisplay.metaImage = metaData.image;
+              this.updatingPreview = false;
+            }
+          },
+          error: err => {
+            this.error = err.error.detail;
+            console.log('ERROR', err.error.detail);
+            this.OrganisationDisplay.metaTitle = '';
+            this.OrganisationDisplay.metaDescription = '';
+            this.OrganisationDisplay.metaImage = '';
+            this.updatingPreview = false;
+          }
+        });
+    }
   }
 
   newGroup(): void {

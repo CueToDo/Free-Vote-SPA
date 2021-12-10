@@ -26,7 +26,7 @@ import { LocalDataService } from './services/local-data.service';
 import { AppDataService } from './services/app-data.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { filter, debounceTime, map } from 'rxjs/operators';
-import { PagePreviewMetaData } from './models/point.model';
+import { PagePreviewMetaData } from './models/pagePreviewMetaData.model';
 import { environment } from 'src/environments/environment';
 import { UpdateService } from './services/update.service';
 

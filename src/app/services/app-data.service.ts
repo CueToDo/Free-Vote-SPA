@@ -16,7 +16,7 @@ import {
   FreeVoteProfile,
   ProfilePictureOption
 } from '../models/FreeVoteProfile';
-import { PagePreviewMetaData } from '../models/point.model';
+import { PagePreviewMetaData } from '../models/pagePreviewMetaData.model';
 
 // Services
 import { HttpService } from './http.service';
@@ -100,9 +100,11 @@ export class AppDataService {
 
   // Database returns a List of Lookup values - a mumerical database ID and a string display Value
   GeographicalExtents(): Observable<Kvp[]> {
-    if (this.extents) {
+    if (!!this.extents && this.extents.length > 0) {
+      console.log('RETURNING', this.extents);
       return of(this.extents);
     } else {
+      console.log('GETTING');
       return this.httpService.get('lookups/geographicalExtents').pipe(
         map(value => value as Kvp[]),
         tap(extents => (this.extents = extents))

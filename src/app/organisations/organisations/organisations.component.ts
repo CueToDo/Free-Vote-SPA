@@ -72,16 +72,16 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
     switch (tabIndex) {
       case 0:
         this.organisationMembership?.Refresh();
-        this.appDataService.RouteParamChange$.next('/groups/membership');
+        this.appDataService.RouteParamChange$.next('/organisations/membership');
         break;
       case 1:
         this.groupsAvailable?.Refresh();
-        this.appDataService.RouteParamChange$.next('/groups/available');
+        this.appDataService.RouteParamChange$.next('/organisations/available');
         break;
       case 2:
         this.StartNewGroup();
         this.newGroupComponent?.ClearError();
-        this.appDataService.RouteParamChange$.next('/groups/new');
+        this.appDataService.RouteParamChange$.next('/organisations/new');
         break;
     }
   }
@@ -91,7 +91,7 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
   }
 
   CompleteNew(group: Organisation): void {
-    this.router.navigate(['/groups', group.organisationName]);
+    this.router.navigate(['/organisations', group.organisationName]);
   }
 
   StartNewGroup(): void {

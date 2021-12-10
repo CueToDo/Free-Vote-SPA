@@ -14,7 +14,7 @@
       <mat-icon>emoji_people</mat-icon>
     </button>
 
-    <button mat-button (click)="ChangeTab(2)" [class.selected]="tabIndex===2" matTooltip="create new group">
+    <button mat-button (click)="ChangeTab(2)" [class.selected]="tabIndex===2" matTooltip="create new organisation">
       <span>create new</span>
       <mat-icon>people_outline</mat-icon>
     </button>
@@ -59,7 +59,8 @@
         'stageRight': tabIndex<2}" fxFill>
         <div fxLayoutAlign="center">
           <div class="content">
-            <app-organisation-edit (Cancel)="CancelNew()" (Complete)="CompleteNew($event)" [organisation]="NewOrganisation" #NewGroupComponent></app-organisation-edit>
+            <app-organisation-edit (Cancel)="CancelNew()" (Complete)="CompleteNew($event)"
+              [organisation]="NewOrganisation" #NewGroupComponent></app-organisation-edit>
           </div>
         </div>
       </div>

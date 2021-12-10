@@ -12,9 +12,9 @@ import { PointTypesEnum, DraftStatusFilter } from 'src/app/models/enums';
 import {
   PointSelectionResult,
   Point,
-  PointEdit,
-  PagePreviewMetaData
+  PointEdit
 } from 'src/app/models/point.model';
+import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 import {
   PointFeedback,
   PointFeedbackFormData,
@@ -259,7 +259,7 @@ export class PointsService {
     pointID: number,
     link: string
   ): Observable<PagePreviewMetaData> {
-    const postData = { pointID, link };
+    const postData = { ID: pointID, websiteUrl: link };
 
     return this.httpClientService
       .post('points/pointSourceMetaDataUpdate', postData)

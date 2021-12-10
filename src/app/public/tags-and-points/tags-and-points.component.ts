@@ -99,38 +99,49 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
     const routeparts = this.appData.Route.split('/');
 
-    if (routeparts && routeparts.length === 2) {
-      // {0}/trending - length = 2
+    if (routeparts) {
+      if (routeparts.length === 2) {
+        // {0}/trending - length = 2
 
-      this.topicSelected = this.localData.PreviousTopicSelected;
+        this.topicSelected = this.localData.PreviousTopicSelected;
 
-      switch (routeparts[1]) {
-        // may have separate tab for following
-        case 'trending':
-          this.tabIndex = tabs.trendingTags;
-          this.previousTabIndex = tabs.trendingTags;
-          this.appData.defaultSort = PointSortTypes.TrendingActivity;
-          break;
-        case 'recent':
-          this.tabIndex = tabs.recentTags;
-          this.previousTabIndex = tabs.recentTags;
-          this.appData.defaultSort = PointSortTypes.DateUpdated;
-          break;
-        case 'search':
-          this.tabIndex = tabs.tagSearch;
-          this.previousTabIndex = tabs.tagSearch;
-          this.appData.defaultSort = PointSortTypes.TrendingActivity;
-          break;
-        default:
-          this.tabIndex = tabs.points;
-        // Don't save previousTabIndex
+        switch (routeparts[1]) {
+          // may have separate tab for following
+          case 'trending':
+            this.tabIndex = tabs.trendingTags;
+            this.previousTabIndex = tabs.trendingTags;
+            this.appData.defaultSort = PointSortTypes.TrendingActivity;
+            break;
+          case 'recent':
+            this.tabIndex = tabs.recentTags;
+            this.previousTabIndex = tabs.recentTags;
+            this.appData.defaultSort = PointSortTypes.DateUpdated;
+            break;
+          case 'search':
+            this.tabIndex = tabs.tagSearch;
+            this.previousTabIndex = tabs.tagSearch;
+            this.appData.defaultSort = PointSortTypes.TrendingActivity;
+            break;
+          default:
+            this.tabIndex = tabs.points;
+          // Don't save previousTabIndex
+        }
+      } else if (routeparts.length === 3) {
+        // {0}/{slashTag}/points
+        this.tabIndex = tabs.points;
+        this.qp = 'point';
+      } else if (routeparts.length === 4) {
+        // Route is Topic By Alias
+        // {0}/{slashTag}/by/{Alias}
+        this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
+        this.tabIndex = tabs.points;
+        this.displayFilter(true);
       }
     } else {
-      // Route is Topic By Alias
-      // {0}/{slashTag}/by/{Alias} - length = 4
-      this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
-      this.tabIndex = tabs.points;
-      this.displayFilter(true);
+      // Default to trending - shouldn't be eneeded
+      this.tabIndex = tabs.trendingTags;
+      this.previousTabIndex = tabs.trendingTags;
+      this.appData.defaultSort = PointSortTypes.TrendingActivity;
     }
 
     if (!this.topicSelected || this.topicSelected === 'null') {

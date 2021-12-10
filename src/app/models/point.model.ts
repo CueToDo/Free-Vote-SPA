@@ -130,11 +130,3 @@ export class Point {
   isInClosedSurvey = false;
   isQuestionAnswer = false;
 }
-
-export class PagePreviewMetaData {
-  title = '';
-  description = '';
-  image = '';
-  pagePath = '';
-  url = '';
-}

@@ -82,7 +82,10 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.extents$ = this.appData.GeographicalExtents().subscribe({
-      next: extents => (this.extents = extents),
+      next: extents => {
+        console.log('EXTENTS', extents);
+        this.extents = extents;
+      },
       error: serverError => (this.error = serverError.error.detail)
     });
   }

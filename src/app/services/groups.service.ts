@@ -8,6 +8,7 @@ import { map, tap } from 'rxjs/operators';
 // Model
 import { Organisation } from '../models/organisation.model';
 import { Group, GroupUpdate } from '../models/group.model';
+import { PagePreviewMetaData } from '../models/pagePreviewMetaData.model';
 
 // Base Services
 import { HttpService } from './http.service';
@@ -108,6 +109,17 @@ export class OrganisationsService {
 
   Update(group: Organisation): Observable<Organisation> {
     return this.httpClientService.post('organisation/update', group);
+  }
+
+  OrganisationWebsiteMetaDataUpdate(
+    organisationID: number,
+    organisationWebsiteUrl: string
+  ): Observable<PagePreviewMetaData> {
+    const postData = { ID: organisationID, websiteUrl: organisationWebsiteUrl };
+
+    return this.httpClientService
+      .post('organisation/organisationMetaDataUpdate', postData)
+      .pipe(map(result => result as PagePreviewMetaData));
   }
 
   Delete(groupID: number): Observable<boolean> {
