@@ -18,30 +18,16 @@
 <h1>Select an organisation</h1>
 
 <div *ngFor="let organisation of organisations" class="groupDiv">
-  <!-- Link -->
-  <p *ngIf="!!organisation?.organisationWebsite">
+  <!-- router link to organisation -->
+  <div class="pagePreview" [ngClass.lt-md]="'ltmd'">
     <a [routerLink]="['/organisations', appData.kebabUri(organisation.organisationName)]">
-      <!-- Link Preview -->
-      <div *ngIf="!!organisation?.metaTitle" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center center">
-        <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!organisation?.metaImage" fxLayoutAlign="center">
-          <img [src]="organisation?.metaImage" alt="">
-        </div>
-        <div fxFlex.gt-xs="!!organisation?.metaImage?70:100" fxFlex.lt-sm="!!organisation?.metaImage?50:100"
-          class="linkMetaText">
-          <div class="linkTitle">
-            {{ organisation?.metaTitle }}
-          </div>
-          <div class="linkDescription">
-            {{ organisation?.metaDescription }}
-          </div>
-        </div>
-      </div>
-      <!-- No Link Preview -->
-      <div *ngIf="!organisation?.metaTitle">
-        {{ organisation?.organisationName }}
-      </div>
+      <app-website-preview [ShowPreview]="true" [LinkAddress]="'#'" [Title]="organisation.organisationName"
+        [Description]="organisation.description" [Image]="organisation.image" [PreviewUpdated]="false"
+        [NoPreviewText]="''">
+      </app-website-preview>
     </a>
-  </p>
+  </div>
+
 </div>
 
 <div *ngIf="waiting" fxLayoutAlign="center">

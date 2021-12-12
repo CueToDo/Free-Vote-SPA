@@ -139,20 +139,21 @@ div.toolbar mat-form-field {
   border-bottom: solid 3px #bbb;
 }
 
-.pointSource {
+.pagePreview {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-.pointSource.ltmd {
+.pagePreview.ltmd {
   margin: 0 10px 10px 10px;
 }
 
-.pointSource a {
+.pagePreview a {
   text-decoration: none;
 }
 
-.linkFromMeta {
+.linkFromMeta,
+.noLinkPreview {
   max-height: 132px;
   border: solid 1px black;
   border-radius: 12px;

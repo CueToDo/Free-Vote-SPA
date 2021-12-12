@@ -1,0 +1,50 @@
+<!-- With Actual Link -->
+<a *ngIf="!!LinkAddress" [href]="LinkAddress" target="_blank">
+
+    <!-- Link Preview -->
+    <div *ngIf="ShowPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!Image" fxLayoutAlign="center">
+            <img [src]="Image" alt="">
+        </div>
+        <div fxFlex.gt-xs="LinkImage?70:100" fxFlex.lt-sm="Image?50:100" class="linkMetaText">
+            <div class="linkTitle">
+                {{ Title }}
+            </div>
+            <div class="linkDescription">
+                {{ Description }}
+            </div>
+        </div>
+    </div>
+
+    <!-- No Link Preview -->
+    <div *ngIf="!ShowPreview">
+        {{ NoPreviewText }}
+    </div>
+</a>
+
+<!-- No link -->
+<div *ngIf="!LinkAddress">
+    <!-- Show preview image title description -->
+    <div *ngIf="ShowPreview" class="noLinkPreview" fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!Image" fxLayoutAlign="center">
+            <img [src]="Image" alt="">
+        </div>
+        <div fxFlex.gt-xs="LinkImage?70:100" fxFlex.lt-sm="Image?50:100" class="linkMetaText">
+            <div class="linkTitle">
+                {{ Title }}
+            </div>
+            <div class="linkDescription">
+                {{ Description }}
+            </div>
+        </div>
+    </div>
+
+    <!-- No preview image title description -->
+    <div *ngIf="!ShowPreview">
+        {{ NoPreviewText }}
+    </div>
+</div>
+
+
+<!-- Preview Update -->
+<span *ngIf="PreviewUpdated" class="preview">Preview for owner as just updated</span>

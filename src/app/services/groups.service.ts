@@ -111,14 +111,14 @@ export class OrganisationsService {
     return this.httpClientService.post('organisation/update', group);
   }
 
-  OrganisationWebsiteMetaDataUpdate(
+  OrganisationWebsiteMetaDataFetch(
     organisationID: number,
     organisationWebsiteUrl: string
   ): Observable<PagePreviewMetaData> {
     const postData = { ID: organisationID, websiteUrl: organisationWebsiteUrl };
 
     return this.httpClientService
-      .post('organisation/organisationMetaDataUpdate', postData)
+      .post('organisation/organisationMetaDataFetch', postData)
       .pipe(map(result => result as PagePreviewMetaData));
   }
 

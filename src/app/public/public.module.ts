@@ -50,6 +50,7 @@ import { QuestionAnswersComponent } from './question-answers/question-answers.co
 import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
 import { PointShareComponent } from './point-share/point-share.component';
 import { TagSearchComponent } from './tag-search/tag-search.component';
+import { WebsitePreviewComponent } from './website-preview/website-preview.component';
 
 @NgModule({
   imports: [
@@ -99,7 +100,8 @@ import { TagSearchComponent } from './tag-search/tag-search.component';
     QuestionAnswersComponent,
     CkeUniversalComponent,
     PointShareComponent,
-    TagSearchComponent
+    TagSearchComponent,
+    WebsitePreviewComponent
   ],
   exports: [
     PointComponent,
@@ -109,7 +111,8 @@ import { TagSearchComponent } from './tag-search/tag-search.component';
     NavMainComponent,
     NavBurgerComponent,
     ListComponent,
-    CkeUniversalComponent
+    CkeUniversalComponent,
+    WebsitePreviewComponent
   ]
 })
 export class PublicModule {}

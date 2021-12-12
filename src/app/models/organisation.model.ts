@@ -2,14 +2,11 @@ import { GeographicalExtentID } from './enums';
 
 export class Organisation {
   organisationID = 0;
-  organisationName = '';
-
-  description = '';
 
   organisationWebsite = '';
-  metaTitle = '';
-  metaDescription = '';
-  metaImage = '';
+  organisationName = '';
+  description = '';
+  image = '';
 
   groups: string[] = [];
   active = false;

@@ -50,36 +50,17 @@
     updating link preview
   </div>
 
+  <!-- Website link preview -->
   <div
     *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink || justUpdated || point.isNewSource"
-    class="pointSource" [ngClass.lt-md]="'ltmd'">
-    <!-- Link -->
-    <a *ngIf="!!point.linkAddress" [href]="point.linkAddress" target="_blank">
-      <!-- Link Preview -->
-      <div *ngIf="point.showLinkPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center center">
-        <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!point.linkImage" fxLayoutAlign="center">
-          <img [src]="point.linkImage" alt="">
-        </div>
-        <div fxFlex.gt-xs="point.linkImage?70:100" fxFlex.lt-sm="point.linkImage?50:100" class="linkMetaText">
-          <div class="linkTitle">
-            {{ point.linkTitle }}
-          </div>
-          <div class="linkDescription">
-            {{ point.linkDescription }}
-          </div>
-        </div>
-      </div>
-      <!-- No Link Preview -->
-      <div *ngIf="!point.showLinkPreview">
-        {{ point.linkText }}
-      </div>
-    </a>
-    <!-- No link -->
-    <span *ngIf="!point.linkAddress">{{ point.linkText }}</span>
-    <span
-      *ngIf="!point.showLinkBeforeVote && point.pointFeedback.supportLevelID === PointSupportLevels.None && justUpdated"
-      class="preview">Preview for owner as just updated</span>
+    class="pagePreview" [ngClass.lt-md]="'ltmd'">
+    <app-website-preview [ShowPreview]="point.showLinkPreview" [LinkAddress]="point.linkAddress"
+      [Title]="point.linkTitle" [Description]="point.linkDescription" [Image]="point.linkImage"
+      [PreviewUpdated]="!point.showLinkBeforeVote && point.pointFeedback.supportLevelID === PointSupportLevels.None && justUpdated"
+      [NoPreviewText]="point.linkText">
+    </app-website-preview>
   </div>
+
 
   <div class="fv-error" *ngIf="!!error">
     {{ error }}

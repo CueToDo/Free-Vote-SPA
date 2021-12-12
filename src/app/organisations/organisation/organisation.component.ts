@@ -31,7 +31,6 @@ export class OrganisationComponent implements OnInit {
 
   newGroupTemplate = new Group();
   creatingNewGroup = false;
-  updatingPreview = false;
 
   error = '';
 
@@ -211,40 +210,6 @@ This cannot be undone.`)
   Complete(group: Organisation): void {
     this.OrganisationDisplay = group;
     this.groupEdit = false;
-    this.FetchMetaData();
-  }
-
-  FetchMetaData(): void {
-    // If it's a newSource, it will be showLinkPreview
-    // but could be called from point update where isNew is false and showLinkPreview is true
-    if (this.OrganisationDisplay.organisationWebsite) {
-      // Get Link metadata for preview
-      // Also handled in new point in tags-and-points component
-      this.updatingPreview = true;
-      this.organisationService
-        .OrganisationWebsiteMetaDataUpdate(
-          this.OrganisationDisplay.organisationID,
-          this.OrganisationDisplay.organisationWebsite
-        )
-        .subscribe({
-          next: metaData => {
-            if (this.OrganisationDisplay) {
-              this.OrganisationDisplay.metaTitle = metaData.title;
-              this.OrganisationDisplay.metaDescription = metaData.description;
-              this.OrganisationDisplay.metaImage = metaData.image;
-              this.updatingPreview = false;
-            }
-          },
-          error: err => {
-            this.error = err.error.detail;
-            console.log('ERROR', err.error.detail);
-            this.OrganisationDisplay.metaTitle = '';
-            this.OrganisationDisplay.metaDescription = '';
-            this.OrganisationDisplay.metaImage = '';
-            this.updatingPreview = false;
-          }
-        });
-    }
   }
 
   newGroup(): void {

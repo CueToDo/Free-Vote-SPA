@@ -44,6 +44,9 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
     | undefined;
   @ViewChild('geoExtent', { static: true }) elGeoExtent: MatSelect | undefined;
 
+  updatingPreview = false;
+  disableWebsiteRefresh = true;
+
   private groups$: Subscription | undefined;
   private extents$: Subscription | undefined;
 
@@ -77,7 +80,7 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private appData: AppDataService,
-    private groupsService: OrganisationsService
+    private organisationsService: OrganisationsService
   ) {}
 
   ngOnInit(): void {
@@ -88,6 +91,7 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
       },
       error: serverError => (this.error = serverError.error.detail)
     });
+    this.checkWebsite();
   }
 
   public ClearError(): void {
@@ -115,13 +119,19 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
       this.organisation.geographicalExtent = geoExtent;
     }
   }
+  checkWebsite(): void {
+    this.disableWebsiteRefresh =
+      (!this.organisation.organisationWebsite.startsWith('http://') &&
+        !this.organisation.organisationWebsite.startsWith('https://')) ||
+      !this.organisation.organisationWebsite.includes('.');
+  }
 
   Update(): void {
     if (this.organisation) {
       if (this.appData.isUrlNameUnSafe(this.organisation.organisationName)) {
         if (
           confirm(
-            'Sub Group name contains invalid characters. Remove them now?'
+            'Organiation name contains invalid characters. Remove them now?'
           )
         ) {
           this.organisation.organisationName = this.appData.urlSafeName(
@@ -135,19 +145,49 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
       this.error = '';
       const newGroup = this.organisation.organisationID < 1;
 
-      this.groups$ = this.groupsService.Update(this.organisation).subscribe({
-        next: group => {
-          this.Complete.emit(group);
-          if (newGroup) {
-            this.organisation = new Organisation();
-            this.organisation.geographicalExtentID =
-              GeographicalExtentID.National.toString();
+      this.groups$ = this.organisationsService
+        .Update(this.organisation)
+        .subscribe({
+          next: group => {
+            this.Complete.emit(group);
+            if (newGroup) {
+              this.organisation = new Organisation();
+              this.organisation.geographicalExtentID =
+                GeographicalExtentID.National.toString();
+            }
+          },
+          error: serverError => {
+            this.error = serverError.error.detail;
           }
-        },
-        error: serverError => {
-          this.error = serverError.error.detail;
-        }
-      });
+        });
+    }
+  }
+
+  FetchMetaData(): void {
+    // If it's a newSource, it will be showLinkPreview
+    // but could be called from point update where isNew is false and showLinkPreview is true
+    if (this.organisation.organisationWebsite) {
+      // Get Link metadata for preview
+      // Also handled in new point in tags-and-points component
+      this.updatingPreview = true;
+      this.organisationsService
+        .OrganisationWebsiteMetaDataFetch(
+          this.organisation.organisationID,
+          this.organisation.organisationWebsite
+        )
+        .subscribe({
+          next: metaData => {
+            this.organisation.organisationName = metaData.title;
+            this.organisation.description = metaData.description;
+            this.organisation.image = metaData.image;
+            this.updatingPreview = false;
+          },
+          error: err => {
+            this.error = err.error.detail;
+            console.log('ERROR', err.error.detail);
+            this.updatingPreview = false;
+          }
+        });
     }
   }
 
