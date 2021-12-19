@@ -13,7 +13,6 @@ import {
   Output
 } from '@angular/core';
 
-import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
 // rxjs
@@ -56,7 +55,6 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
   widthBand = 4;
 
   constructor(
-    private router: Router,
     private ngZone: NgZone,
     public appData: AppDataService,
     public localData: LocalDataService,

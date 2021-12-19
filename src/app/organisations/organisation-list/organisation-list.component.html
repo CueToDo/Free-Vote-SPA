@@ -1,17 +1,13 @@
 <div fxLayoutAlign="center center" fxLayoutGap="20px" class="mb-4">
 
   <mat-form-field>
-    <input matInput placeholder="search for organisation" [(ngModel)]="organisationFilter" (keyup.enter)="Refresh()">
+    <input matInput placeholder="search for organisation" [(ngModel)]="organisationFilter" (keyup.enter)="Refresh()"
+      #trvOrgSearch>
     <button mat-button *ngIf="organisationFilter" matSuffix mat-icon-button aria-label="clear"
       (click)="organisationFilter='';Refresh()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
-
-  <button mat-stroked-button matTooltip="refresh group membership list" (click)="Refresh()">
-    <span>search</span>
-    <mat-icon>search</mat-icon>
-  </button>
 
 </div>
 

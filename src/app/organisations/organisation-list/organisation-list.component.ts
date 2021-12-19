@@ -1,5 +1,13 @@
 // Angular
-import { Component, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 
 // Model
 import { Organisation } from 'src/app/models/organisation.model';
@@ -7,13 +15,19 @@ import { Organisation } from 'src/app/models/organisation.model';
 // Services
 import { AppDataService } from '../../services/app-data.service';
 import { OrganisationsService } from 'src/app/services/groups.service';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  fromEvent,
+  Subscription
+} from 'rxjs';
 
 @Component({
   selector: 'app-organisation-list',
   templateUrl: './organisation-list.component.html',
   styleUrls: ['./organisation-list.component.css']
 })
-export class OrganisationListComponent {
+export class OrganisationListComponent implements AfterViewInit, OnDestroy {
   @Input() CurrentMembership = false;
 
   public organisations: Organisation[] = [];
@@ -23,9 +37,17 @@ export class OrganisationListComponent {
   public message = '';
   public error = '';
 
+  // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
+  @ViewChild('trvOrgSearch', { static: false }) trvOrgSearch:
+    | ElementRef
+    | undefined;
+
+  orgSearch$: Subscription | undefined;
+
   constructor(
     public appData: AppDataService,
-    private groupsService: OrganisationsService
+    private groupsService: OrganisationsService,
+    private ngZone: NgZone
   ) {}
 
   @Input() Refresh(): void {
@@ -51,7 +73,11 @@ export class OrganisationListComponent {
             }
           },
           error: serverError => (this.error = serverError.error.detail),
-          complete: () => (this.waiting = false)
+          complete: () => {
+            // Change was triggered outside angular (input debounce)
+            // Force view refresh with ngZone.run
+            this.ngZone.run(_ => (this.waiting = false));
+          }
         });
     } else {
       this.groupsService
@@ -70,8 +96,35 @@ export class OrganisationListComponent {
             }
           },
           error: serverError => (this.error = serverError.error.detail),
-          complete: () => (this.waiting = false)
+          complete: () => {
+            // Force view refresh with ngZone.run
+            this.ngZone.run(_ => (this.waiting = false));
+          }
         });
     }
+  }
+
+  ngAfterViewInit() {
+    // Debounce the keyup outside of angular zone
+    // 2-way databinding already cleans up the slashtag
+    // This is just for delayed search
+    this.ngZone.runOutsideAngular(() => {
+      this.orgSearch$ = fromEvent<KeyboardEvent>(
+        this.trvOrgSearch?.nativeElement,
+        'keyup'
+      )
+        .pipe(debounceTime(600), distinctUntilChanged())
+        .subscribe({
+          next: _ => {
+            // Fuzzy search on userInput
+            this.Refresh(); // "As-is"
+            console.log('refreshing');
+          }
+        });
+    });
+  }
+
+  ngOnDestroy() {
+    this.orgSearch$?.unsubscribe();
   }
 }
