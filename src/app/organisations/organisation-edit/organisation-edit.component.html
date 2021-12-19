@@ -15,7 +15,8 @@
             <div class="ms-3">
                 <button mat-stroked-button (click)="FetchMetaData()" matTooltip="refresh website data"
                     [disabled]="disableWebsiteRefresh">
-                    <span>refresh</span>
+                    <span *ngIf="!isNew">refresh</span>
+                    <span *ngIf="isNew">fetch</span>
                     <mat-icon>refresh</mat-icon>
                 </button>
             </div>
@@ -37,6 +38,15 @@
                 #groupDescription (keyup.enter)="descriptionComplete()">
             <button mat-button *ngIf="organisation?.description" matSuffix mat-icon-button aria-label="clear"
                 (click)="organisation.description='';">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="organisation image" [(ngModel)]="organisation.image" #groupDescription
+                (keyup.enter)="descriptionComplete()">
+            <button mat-button *ngIf="organisation?.image" matSuffix mat-icon-button aria-label="clear"
+                (click)="organisation.image='';">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>

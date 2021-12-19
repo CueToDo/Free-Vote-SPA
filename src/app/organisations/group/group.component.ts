@@ -137,7 +137,7 @@ export class GroupComponent implements OnInit {
       this.error = '';
       if (
         confirm(
-          `Are you sure you wish to delete the subgroup "${this.group.groupName}"?`
+          `Are you sure you wish to delete the discussion group "${this.group.groupName}"?`
         )
       ) {
         this.groupsService

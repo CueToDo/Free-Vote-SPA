@@ -46,6 +46,7 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
 
   updatingPreview = false;
   disableWebsiteRefresh = true;
+  isNew = false;
 
   private groups$: Subscription | undefined;
   private extents$: Subscription | undefined;
@@ -92,11 +93,13 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
       error: serverError => (this.error = serverError.error.detail)
     });
     this.checkWebsite();
+    this.isNew = this.organisation.organisationID < 1;
   }
 
   public ClearError(): void {
     this.error = '';
-    this.elGroupName?.nativeElement.focus();
+    if (this.isNew) this.elGroupWebsite?.nativeElement.focus();
+    else this.elGroupName?.nativeElement.focus();
   }
 
   nameComplete(): void {
@@ -148,8 +151,8 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
       this.groups$ = this.organisationsService
         .Update(this.organisation)
         .subscribe({
-          next: group => {
-            this.Complete.emit(group);
+          next: organisation => {
+            this.Complete.emit(organisation);
             if (newGroup) {
               this.organisation = new Organisation();
               this.organisation.geographicalExtentID =
