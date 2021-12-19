@@ -59,7 +59,7 @@ export class OrganisationsService {
     };
 
     return this.httpClientService.post('organisations/search', postData).pipe(
-      // add group to saved groups
+      // add organisation to saved organisations
       tap(returnData => {
         if (!this.organisationsSelected) {
           this.organisationsSelected = [returnData as Organisation];

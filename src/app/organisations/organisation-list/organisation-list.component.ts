@@ -9,6 +9,9 @@ import {
   ViewChild
 } from '@angular/core';
 
+// GLobals
+import * as globals from 'src/app/globals';
+
 // Model
 import { Organisation } from 'src/app/models/organisation.model';
 
@@ -115,10 +118,11 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
       )
         .pipe(debounceTime(600), distinctUntilChanged())
         .subscribe({
-          next: _ => {
-            // Fuzzy search on userInput
-            this.Refresh(); // "As-is"
-            console.log('refreshing');
+          next: key => {
+            if (!globals.KeyRestrictions.includes(key.key)) {
+              // Fuzzy search on userInput
+              this.Refresh(); // "As-is"
+            }
           }
         });
     });

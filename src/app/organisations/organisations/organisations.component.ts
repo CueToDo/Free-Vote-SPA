@@ -71,11 +71,9 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
 
     switch (tabIndex) {
       case 0:
-        this.organisationMembership?.Refresh();
         this.appDataService.RouteParamChange$.next('/organisations/membership');
         break;
       case 1:
-        this.groupsAvailable?.Refresh();
         this.appDataService.RouteParamChange$.next('/organisations/available');
         break;
       case 2:
