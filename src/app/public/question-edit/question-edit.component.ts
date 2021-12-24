@@ -69,8 +69,9 @@ export class QuestionEditComponent implements OnInit {
     const isNew = this.questionEdit.questionID < 1;
 
     this.questionService.QuestionUpdate(this.questionEdit).subscribe({
-      next: questionID => {
-        this.question.questionID = questionID;
+      next: IDnSlug => {
+        this.question.questionID = IDnSlug.value;
+        this.question.slug = IDnSlug.key;
         this.question.question = this.questionEdit.question;
         this.question.details = this.questionEdit.details;
         this.question.draft = this.questionEdit.draft;

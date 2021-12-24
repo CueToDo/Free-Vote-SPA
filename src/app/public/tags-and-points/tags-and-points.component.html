@@ -160,14 +160,15 @@
       <div [ngClass]="{
         'centerStage': tabIndex===2, 
         'stageLeft': tabIndex>2, 
-        'stageRight': tabIndex<2}" fxFill>
+        'stageRight': tabIndex<2}" fxFill fxLayout="column">
+        <div fxFlex="3"></div>
         <div fxLayoutAlign="center">
-          <div class="content">
+          <div class="content" fxFill fxLayout="column" fxLayoutAlign="center center">
             <!-- SlashTag Search -->
             <app-tag-search (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tag-search>
-
           </div>
         </div>
+        <div fxFlex="3"></div>
       </div>
     </div>
 

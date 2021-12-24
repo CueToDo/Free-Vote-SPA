@@ -46,7 +46,7 @@
 <div fxFill fxLayout="column">
 
   <div class="policy mt-4" fxLayoutAlign="center">
-    <a class="clicker" (click)="tabIndex=0;" [class.selected]="tabIndex===0">search</a>
+    <a class="clicker" (click)="tabIndex=0;" [class.selected]="tabIndex===0">start here</a>
     <a class="clicker" (click)="tabIndex=1;" [class.selected]="tabIndex===1">about</a>
     <a class="clicker" (click)="tabIndex=2;" [class.selected]="tabIndex===2">privacy policy</a>
     <a class="clicker" (click)="tabIndex=3;" [class.selected]="tabIndex===3" *ngIf="localData.LocalLogging">Logs</a>
@@ -61,11 +61,41 @@
         'centerStage': tabIndex===0, 
         'stageLeft': tabIndex>0}" fxFill>
 
-        <div class="content" fxFlex>
+        <div class="content" fxFlex fxLayout="column" fxLayoutAlign="center center">
 
-          Home works!
+          <div>
+            <h1><a routerLink="trending" class="slashTag">/trending</a></h1>
+            <p>The topics that are getting all the attention right now</p>
+
+            <h1><a routerLink="search" class="slashTag">{{ '/{slash-tag}' }}</a></h1>
+            <p>A topic for discussion</p>
+
+          </div>
+          <div *ngIf="false">
+            What's the best way to start a conversation?
+
+            Signal to noise - fewer notifications
+
+            Engage on issues
+
+            Less distraction, more focus on issues
+
+            Stop the concentration of power in too few hands
+
+            It's not about the immediate, it's about the important
+
+            Gamification - an easy "in"
+
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/zJvJ50caIHM"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+
 
         </div>
+
+
 
       </div>
 

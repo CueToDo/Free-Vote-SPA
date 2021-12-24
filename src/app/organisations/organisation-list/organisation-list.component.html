@@ -17,7 +17,8 @@
   <!-- router link to organisation -->
   <div class="pagePreview" [ngClass.lt-md]="'ltmd'">
     <a [routerLink]="['/organisations', appData.kebabUri(organisation.organisationName)]">
-      <app-website-preview [ShowPreview]="true" [LinkAddress]="'#'" [Title]="organisation.organisationName"
+      <app-website-preview [ShowPreview]="true" [LinkAddress]="'#'"
+        [Title]="organisation.organisationName + (organisation.active? '' : ' (Inactive)')"
         [Description]="organisation.description" [Image]="organisation.image" [PreviewUpdated]="false"
         [NoPreviewText]="''">
       </app-website-preview>

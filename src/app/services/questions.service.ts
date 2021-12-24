@@ -17,6 +17,7 @@ import { ID } from '../models/common';
 // Services
 import { HttpService } from './http.service';
 import { AppDataService } from './app-data.service';
+import { Kvp } from '../models/kvp.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionsService {
@@ -102,7 +103,7 @@ export class QuestionsService {
       .pipe(map(returnData => this.CastToQuestionSelectionResult(returnData)));
   }
 
-  QuestionUpdate(questionEdit: QuestionEdit): Observable<number> {
+  QuestionUpdate(questionEdit: QuestionEdit): Observable<Kvp> {
     const apiUrl = 'questions/questionUpdate';
 
     const postData = {

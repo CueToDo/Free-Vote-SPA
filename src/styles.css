@@ -356,7 +356,7 @@ a:hover {
 .topicsCloud a,
 a.slashTag,
 a.clicker {
-  color: #3f51b5;
+  color: #3600cc;
   text-decoration: none;
   cursor: pointer;
 }
@@ -365,7 +365,7 @@ a.clicker {
 a.slashTag:hover,
 a.clicker:hover {
   text-decoration: underline;
-  color: #3f51b5 !important;
+  color: #3600cc !important;
   /* Bootstrap override */
 }
 
