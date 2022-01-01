@@ -1,5 +1,14 @@
+// Angular
 import { AppDataService } from 'src/app/services/app-data.service';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 
 // Models & enums
 import { Point, PointFeedback } from '../../models/point.model';
@@ -41,6 +50,10 @@ export class PointComponent implements OnInit {
   editing = false;
   justUpdated = false;
   updatingPreview = false;
+
+  // Truncated Text
+  showFullText = false;
+  @ViewChild('elPointHtml') elPointHtml: ElementRef | undefined;
 
   public PointSupportLevels = PointSupportLevels;
 
@@ -401,5 +414,18 @@ export class PointComponent implements OnInit {
       'https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals',
       '_blank'
     );
+  }
+
+  elementTruncated(): boolean {
+    return (
+      this.elPointHtml?.nativeElement.scrollHeight >
+        this.elPointHtml?.nativeElement.clientHeight ||
+      this.elPointHtml?.nativeElement.scrollWidth >
+        this.elPointHtml?.nativeElement.clientWidth
+    );
+  }
+
+  showMore(more: boolean): void {
+    this.showFullText = more;
   }
 }

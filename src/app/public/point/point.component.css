@@ -9,6 +9,13 @@
   vertical-align: middle;
 }
 
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 10;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
 .textXSmall {
   font-size: small;
 }
@@ -42,4 +49,8 @@ button img {
 
 .hrTitle {
   margin-bottom: 10px;
+}
+
+.moreorless a:hover {
+  cursor: pointer;
 }

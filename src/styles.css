@@ -425,6 +425,11 @@ a.clicker:hover {
   cursor: pointer;
 }
 
+.Question {
+  background-color: #fffcf2;
+  padding: 5px;
+}
+
 .Issues:hover,
 .Questions:hover {
   background-color: #fff4d0;

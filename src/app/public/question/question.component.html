@@ -1,10 +1,11 @@
-<div *ngIf="!editing" class="Question">
+<div *ngIf="!editing">
 
-    <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
 
+    <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'" class="Question pt-3 px-3"
+        [routerLink]="QuestionLink()" (click)="SelectQuestion()">
         <h1>{{ question.question }}</h1>
-
     </div>
+
 
     <div class="fv-error" *ngIf="!!error">
         {{ error }}
@@ -12,7 +13,7 @@
 
     <!-- Toolbar -->
 
-    <div class="toolbar" fxLayout="row wrap" fxLayoutAlign="left center">
+    <div class="toolbar mb-4" fxLayout="row wrap" fxLayoutAlign="left center">
 
         <div *ngIf="question.draft" fxFlex class="draft">
             Draft Only

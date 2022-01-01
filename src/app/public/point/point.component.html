@@ -7,7 +7,12 @@
 
     <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
 
-    <div [innerHTML]="pointHTMLwithoutEmbed | SafeHtml"></div>
+    <div #elPointHtml [innerHTML]="pointHTMLwithoutEmbed | SafeHtml" [ngClass]="{'line-clamp': !showFullText}"></div>
+
+    <div class="moreorless">
+      <a *ngIf="elementTruncated()" (click)="showMore(true)">show more</a>
+      <a *ngIf="showFullText" (click)="showMore(false)">show less</a>
+    </div>
 
   </div>
 
