@@ -48,7 +48,7 @@ export class PointComponent implements OnInit {
   linkShare = '';
 
   editing = false;
-  justUpdated = false;
+  websitePreviewUpdated = false;
   updatingPreview = false;
 
   // Truncated Text
@@ -367,8 +367,6 @@ export class PointComponent implements OnInit {
         this.point.pointFeedback.pointModified = true;
       }
 
-      this.justUpdated = true;
-
       this.FetchMetaData();
 
       this.editing = false;
@@ -394,6 +392,7 @@ export class PointComponent implements OnInit {
                 this.point.linkDescription = metaData.description;
                 this.point.linkImage = metaData.image;
                 this.updatingPreview = false;
+                this.websitePreviewUpdated = true;
               }
             },
             error: err => {

@@ -356,7 +356,7 @@ a:hover {
 .topicsCloud a,
 a.slashTag,
 a.clicker {
-  color: #3600cc;
+  color: #3600cc !important;
   text-decoration: none;
   cursor: pointer;
 }

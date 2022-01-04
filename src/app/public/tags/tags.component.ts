@@ -82,7 +82,7 @@ export class TagsComponent implements OnInit, OnDestroy {
   }
 
   FontSize(Weight: number): string {
-    // Restict Weight and font-size for smaller screens
+    // Restrict Weight and font-size for smaller screens
 
     if (this.widthBand < 1 && Weight > 0) {
       Weight = 0;

@@ -57,11 +57,11 @@
 
   <!-- Website link preview -->
   <div
-    *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink || justUpdated || point.isNewSource"
+    *ngIf="point.pointFeedback.feedbackGiven || point.showLinkBeforeVote || showLink || websitePreviewUpdated || point.isNewSource"
     class="pagePreview" [ngClass.lt-md]="'ltmd'">
     <app-website-preview [ShowPreview]="point.showLinkPreview" [LinkAddress]="point.linkAddress"
       [Title]="point.linkTitle" [Description]="point.linkDescription" [Image]="point.linkImage"
-      [PreviewUpdated]="!point.showLinkBeforeVote && point.pointFeedback.supportLevelID === PointSupportLevels.None && justUpdated"
+      [PreviewUpdated]="!point.showLinkBeforeVote && point.pointFeedback.supportLevelID === PointSupportLevels.None && websitePreviewUpdated"
       [NoPreviewText]="point.linkText">
     </app-website-preview>
   </div>

@@ -3,4 +3,5 @@ export class Tag {
   slashTag = '';
   tagWeight = 0;
   embedded = false;
+  unseenPoints = 0;
 }
