@@ -145,6 +145,8 @@
 
         </div>
 
+
+
         <div fxFlex="40" *ngIf="!editing">
           <span class="align-middle">
             groups
@@ -152,11 +154,24 @@
         </div>
 
         <div fxFlex="60" *ngIf="!editing">
-          List groups
+          <span class="align-middle">
+            List groups
+          </span>
         </div>
 
         <div *ngIf="!editing">
           {{ localData.freeVoteProfile.profile }}
+        </div>
+
+        <div fxFlex="40">
+          <span class="align-middle">
+            Break-out groups
+          </span>
+        </div>
+        <div fxFlex="60">
+          <span class="align-middle">
+            Preferred Room Size
+          </span>
         </div>
 
         <div *ngIf="editing">

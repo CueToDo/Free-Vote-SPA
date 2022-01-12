@@ -1,3 +1,6 @@
+import { CharacterTheme } from './../../models/break-out-group.model';
+import { BreakOutGroupsService } from './../../services/break-out-groups.service';
+// Angular
 import {
   Component,
   Inject,
@@ -5,13 +8,19 @@ import {
   Renderer2,
   PLATFORM_ID
 } from '@angular/core';
-import { Point } from 'src/app/models/point.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+
+// Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
+
+// Models
+import { Point } from 'src/app/models/point.model';
 import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { BreakoutGroup } from 'src/app/models/break-out-group.model';
+import { Kvp } from 'src/app/models/kvp.model';
 
 @Component({
   selector: 'app-point-share',
@@ -20,6 +29,8 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 })
 export class PointShareComponent implements OnInit {
   point = new Point();
+
+  slashTag = '';
 
   // bind to point slashtags (not topic)
   slashTags: string[] = []; // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
@@ -35,12 +46,25 @@ export class PointShareComponent implements OnInit {
 
   alreadyFetchingPointFromDB = false;
 
+  // Break-out groups
+  public breakoutGroups: BreakoutGroup[] = [];
+  public breakoutGroupsMessage = '';
+  public viewingCurrent = true;
+  public joinAnother = false;
+  public startingNew = false;
+  public rooms: Kvp[] = [];
+  public roomSelected = new Kvp();
+  public characterThemes: CharacterTheme[] = [];
+  public characterThemeSelected: CharacterTheme = new CharacterTheme();
+
   error = '';
+  bogError = '';
 
   constructor(
     private router: Router,
     private activeRoute: ActivatedRoute,
     private pointsService: PointsService,
+    private breakoutGroupsService: BreakOutGroupsService,
     public localData: LocalDataService, // public - used in template)
     public appData: AppDataService,
     @Inject(DOCUMENT) private htmlDocument: HTMLDocument,
@@ -50,16 +74,17 @@ export class PointShareComponent implements OnInit {
 
   ngOnInit(): void {
     const routeParams = this.activeRoute.snapshot.params;
-    const slashTag = routeParams['tag'];
+    this.slashTag = routeParams['tag'];
     const pointTitle = routeParams['title'];
 
-    this.SelectSpecificPoint(slashTag, pointTitle);
+    this.SelectSpecificPoint(pointTitle);
+    this.breakoutGroupsJoined(true);
   }
 
-  public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
+  public SelectSpecificPoint(pointTitle: string): void {
     this.alreadyFetchingPointFromDB = true;
 
-    this.pointsService.GetSpecificPoint(slashTag, pointTitle).subscribe({
+    this.pointsService.GetSpecificPoint(this.slashTag, pointTitle).subscribe({
       next: psr => {
         const point = psr.points[0];
         this.point = point;
@@ -194,5 +219,129 @@ export class PointShareComponent implements OnInit {
     script.type = 'application/javascript';
     script.src = 'https://platform.twitter.com/widgets.js';
     this.renderer2.appendChild(this.htmlDocument.body, script);
+  }
+
+  breakoutGroupsJoined(refresh: boolean): void {
+    this.breakoutGroups = [];
+    this.breakoutGroupsService
+      .GroupMembership(this.slashTag, refresh)
+      .subscribe({
+        next: bogs => {
+          if (bogs.length === 0) {
+            this.breakoutGroupsMessage = 'No break-out groups joined';
+          } else {
+            this.breakoutGroups = bogs;
+          }
+        },
+        error: serverError => (this.bogError = serverError.error.detail)
+      });
+  }
+
+  breakoutGroupsAvailable(refresh: boolean): void {
+    this.breakoutGroups = [];
+    this.breakoutGroupsService
+      .GroupsAvailable(this.slashTag, refresh)
+      .subscribe({
+        next: bogs => {
+          if (bogs.length === 0) {
+            this.breakoutGroupsMessage =
+              'No break-out groups available to join. Consider starting a new group';
+          } else {
+            this.breakoutGroups = bogs;
+          }
+        },
+        error: serverError => (this.bogError = serverError.error.detail)
+      });
+  }
+
+  viewMyGroups(): void {
+    this.breakoutGroupsMessage = '';
+    this.bogError = '';
+    this.viewingCurrent = true;
+    this.joinAnother = false;
+    this.startingNew = false;
+    this.breakoutGroupsJoined(false);
+  }
+
+  viewAvailable(): void {
+    this.breakoutGroupsMessage = '';
+    this.bogError = '';
+    this.viewingCurrent = false;
+    this.joinAnother = true;
+    this.startingNew = false;
+    this.breakoutGroupsAvailable(false);
+  }
+
+  startNew(): void {
+    this.breakoutGroupsMessage = '';
+    this.bogError = '';
+    this.viewingCurrent = false;
+    this.joinAnother = false;
+    this.startingNew = true;
+
+    this.roomSelected = new Kvp();
+    this.characterThemeSelected = {
+      breakoutGroupThemeID: -1,
+      themeName: '',
+      characters: 0
+    };
+
+    this.breakoutGroupsService.BreakoutRooms(this.slashTag).subscribe({
+      next: rooms => {
+        this.rooms = rooms;
+        console.log(rooms);
+      },
+      error: serverError => (this.bogError = serverError.error.detail)
+    });
+
+    this.breakoutGroupsService
+      .CharacterThemes()
+      .subscribe({ next: themes => (this.characterThemes = themes) });
+  }
+
+  groupStart() {
+    this.breakoutGroupsMessage = '';
+    this.bogError = '';
+    if (!this.roomSelected.value || this.roomSelected.value < 1) {
+      this.bogError = 'please select a room';
+    } else if (
+      !this.characterThemeSelected ||
+      this.characterThemeSelected.breakoutGroupThemeID < 1
+    ) {
+      this.bogError = 'please select a character theme';
+    } else {
+      this.breakoutGroupsService
+        .GroupStart(
+          this.slashTag,
+          this.roomSelected.value,
+          this.characterThemeSelected.breakoutGroupThemeID
+        )
+        .subscribe({
+          next: _ => {
+            this.breakoutGroupsJoined(true);
+            this.viewMyGroups();
+          },
+          error: serverError => (this.bogError = serverError.error.detail)
+        });
+    }
+  }
+
+  groupJoin(groupID: number) {
+    var group = this.breakoutGroups.filter(
+      group => group.breakoutGroupID === groupID
+    );
+    if (!!group && group.length > 0) {
+      if (!group[0].member) {
+        this.breakoutGroupsService.GroupJoin(groupID).subscribe({
+          next: _ => this.refresh(),
+          error: serverError => (this.bogError = serverError.error.detail)
+        });
+      }
+    }
+  }
+
+  refresh() {
+    this.breakoutGroupsJoined(true);
+    this.viewMyGroups();
   }
 }

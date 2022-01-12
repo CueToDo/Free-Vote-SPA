@@ -130,6 +130,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         // {0}/{slashTag}/points
         this.tabIndex = tabs.points;
         this.qp = 'point';
+        this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
       } else if (routeparts.length === 4) {
         // Route is Topic By Alias
         // {0}/{slashTag}/by/{Alias}

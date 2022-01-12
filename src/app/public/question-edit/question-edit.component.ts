@@ -47,7 +47,6 @@ export class QuestionEditComponent implements OnInit {
     this.questionEdit = new QuestionEdit();
     this.ClearQuestion();
     this.questionEdit.slashTags = [slashTag];
-    console.log('New Question;', slashTag);
   }
 
   ClearQuestion(): void {
