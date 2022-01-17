@@ -25,8 +25,8 @@
           <mat-icon>search</mat-icon>
         </button>
 
-        <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3"
-          *ngIf="!!topicSelected && topicSelected !== 'SignedOut'" matTooltip="{{ topicSelected }}">
+        <button mat-button (click)="ChangeTab(4)" *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
+          matTooltip="{{ topicSelected }}">
           <span class="slash-tag">/</span>
           <span>slash-tag</span>
         </button>
@@ -41,12 +41,25 @@
           slash-tags
         </button>
 
-        <mat-radio-group aria-label="select questions or points" [(ngModel)]="qp" (change)="changeQP()">
-          <mat-radio-button value="question" matTooltip="show questions">Questions</mat-radio-button>
-          <mat-radio-button value="point" matTooltip="show pointss">Points</mat-radio-button>
-        </mat-radio-group>
+        <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3" *ngIf="localData.LoggedInToAuth0"
+          [matTooltip]="'break-out groups'">
+          groups
+          <mat-icon>groups</mat-icon>
+        </button>
 
-        <button mat-button (click)="ChangeTab(4)" [class.selected]="tabIndex===4" *ngIf="localData.LoggedInToAuth0"
+        <button mat-button (click)="qp='question';ChangeTab(4)" [class.selected]="tabIndex===4 && qp==='question'"
+          *ngIf="localData.LoggedInToAuth0" matTooltip="show questions">
+          questions
+          <mat-icon>help</mat-icon>
+        </button>
+
+        <button mat-button (click)="qp='point';ChangeTab(4)" [class.selected]="tabIndex===4 && qp==='point'"
+          *ngIf="localData.LoggedInToAuth0" matTooltip="show points">
+          points
+          <mat-icon>comment</mat-icon>
+        </button>
+
+        <button mat-button (click)="ChangeTab(5)" [class.selected]="tabIndex===5" *ngIf="localData.LoggedInToAuth0"
           [matTooltip]="'submit new ' + qp" id="newQP">
           <span>new {{ qp }}</span>
           <mat-icon>library_add</mat-icon>
@@ -148,7 +161,6 @@
         'stageRight': tabIndex<1}" fxFill>
         <div fxLayoutAlign="center">
           <div class="content">
-
             <app-tags [TagCloudType]="TagCloudTypes.Recent" #tagsRecent (haveTags)="haveRecentTags($event)"
               (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tags>
           </div>
@@ -172,26 +184,30 @@
       </div>
     </div>
 
-    <div class="tabContent" [ngClass]="{'topZ':tabIndex===3}">
+    <!-- app points used to display questions -->
+    <div class="tabContent" [ngClass]="{'topZ':tabIndex===4}">
       <div [ngClass]="{
-        'centerStage': tabIndex===3, 
-        'stageLeft': tabIndex>3,
-        'stageRight': tabIndex<3}" fxFill>
+                        'centerStage': tabIndex===4, 
+                        'stageLeft': tabIndex>4,
+                        'stageRight': tabIndex<4}" fxFill>
         <app-points (applyFilter)="applyFilter($event)" (switchToPoints)="switchToPoints()"
           (pointSortTypeChanged)="pointSortTypeChanged($event)">
         </app-points>
       </div>
     </div>
 
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===4}">
+
+    <!-- new question or point -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===5}">
       <div [ngClass]="{
-        'centerStage': tabIndex===4, 
-        'stageRight': tabIndex<4 }" fxFill>
+        'centerStage': tabIndex===5, 
+        'stageRight': tabIndex<5 }" fxFill>
         <div fxLayoutAlign="center">
           <div class="content mt-5 mb-3">
-            <app-point-edit *ngIf="!questions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()" #newPoint>
+            <app-point-edit *ngIf="!showQuestions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()"
+              #newPoint>
             </app-point-edit>
-            <app-question-edit *ngIf="questions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()"
+            <app-question-edit *ngIf="showQuestions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()"
               #newQuestion></app-question-edit>
           </div>
         </div>

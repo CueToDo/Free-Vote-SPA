@@ -1,0 +1,59 @@
+<div class="ugc mt-5 mb-3">
+    <h1>break-out groups</h1>
+    <button mat-button (click)="viewMyGroups()" [class.selected]="viewingCurrent">
+        <mat-icon>groups</mat-icon>
+        groups joined
+    </button>
+    <button mat-button (click)="viewAvailable()" [class.selected]="joinAnother">
+        <mat-icon>visibility</mat-icon>
+        join another
+    </button>
+    <button mat-button (click)="startNew()" [class.selected]="startingNew">
+        <mat-icon>person</mat-icon>
+        start new
+    </button>
+    <button mat-button (click)="refresh()">
+        <mat-icon>person</mat-icon>
+        refresh
+    </button>
+</div>
+
+<div *ngIf="viewingCurrent || joinAnother">
+    <p *ngFor="let bog of breakoutGroups" (click)="groupJoin(bog.breakoutGroupID)">{{ bog.breakoutRoom
+        }} ({{ bog.characterTheme }})
+    </p>
+</div>
+
+<div *ngIf="startingNew">
+
+    <mat-form-field class="mff">
+        <mat-label>choose a room</mat-label>
+        <mat-select [(ngModel)]="roomSelected.value" class="newGroupDropDown">
+            <mat-option *ngFor="let room of rooms" [value]="room.value">{{ room.key }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="mff theme">
+        <mat-label>choose a character theme</mat-label>
+        <mat-select [(ngModel)]="characterThemeSelected.breakoutGroupThemeID">
+            <mat-option *ngFor="let characterTheme of characterThemes" [value]="characterTheme.breakoutGroupThemeID">{{
+                characterTheme.themeName }} ({{
+                characterTheme.characters }})
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-button (click)="groupStart()">
+        <mat-icon>person</mat-icon>
+        create group
+    </button>
+</div>
+
+<div *ngIf="!!breakoutGroupsMessage" class="alert alert-warning">
+    {{ breakoutGroupsMessage }}
+</div>
+
+<div *ngIf="!!bogError" class="alert alert-danger">
+    {{ bogError }}
+</div>

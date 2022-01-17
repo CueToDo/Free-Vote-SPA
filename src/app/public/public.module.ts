@@ -23,6 +23,7 @@ import { CallbackComponent } from './callback/callback.component';
 
 // FreeVote Modules
 import { CustomModule } from '../custommodule/custom.module';
+import { BreakOutGroupsModule } from '../breakoutgroups/break-out-groups.module';
 
 // FreeVote Components
 import { HomeComponent } from './home/home.component';
@@ -54,12 +55,13 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
 
 @NgModule({
   imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
+    BreakOutGroupsModule,
     ClipboardModule,
+    CommonModule,
     FlexLayoutModule,
+    FormsModule,
     MatCheckboxModule,
+    RouterModule,
     // Material
     MatButtonModule,
     MatIconModule,

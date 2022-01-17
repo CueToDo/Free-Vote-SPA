@@ -1,3 +1,4 @@
+import { Question } from 'src/app/models/question.model';
 // Angular
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -25,8 +26,9 @@ enum tabs {
   trendingTags = 0,
   recentTags = 1,
   tagSearch = 2,
-  points = 3,
-  newPoint = 4
+  groups = 3,
+  pointsAndQuestions = 4,
+  newPoint = 5
 }
 
 @Component({
@@ -59,7 +61,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
   qp = 'question'; // bound to radio button value
 
-  public get questions(): boolean {
+  public get showQuestions(): boolean {
     return this.qp === 'question';
   }
 
@@ -122,24 +124,28 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
             this.previousTabIndex = tabs.tagSearch;
             this.appData.defaultSort = PointSortTypes.TrendingActivity;
             break;
+          case 'groups':
+            this.tabIndex = tabs.groups;
+            this.previousTabIndex = tabs.groups;
+            break;
           default:
-            this.tabIndex = tabs.points;
+            this.tabIndex = tabs.pointsAndQuestions;
           // Don't save previousTabIndex
         }
       } else if (routeparts.length === 3) {
         // {0}/{slashTag}/points
-        this.tabIndex = tabs.points;
+        this.tabIndex = tabs.pointsAndQuestions;
         this.qp = 'point';
         this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
       } else if (routeparts.length === 4) {
         // Route is Topic By Alias
         // {0}/{slashTag}/by/{Alias}
         this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
-        this.tabIndex = tabs.points;
+        this.tabIndex = tabs.pointsAndQuestions;
         this.displayFilter(true);
       }
     } else {
-      // Default to trending - shouldn't be eneeded
+      // Default to trending - shouldn't be needed
       this.tabIndex = tabs.trendingTags;
       this.previousTabIndex = tabs.trendingTags;
       this.appData.defaultSort = PointSortTypes.TrendingActivity;
@@ -162,7 +168,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     this.showPointsTab$ = this.appData.ShowPointsTab$.subscribe({
       next: () => {
         this.externalTrigger = true;
-        this.ChangeTab(tabs.points);
+        this.ChangeTab(tabs.pointsAndQuestions);
         this.externalTrigger = false;
       }
     });
@@ -178,7 +184,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         }
 
         this.SetSortTypeIcon(pointSortType);
-        this.ChangeTab(tabs.points);
+        this.ChangeTab(tabs.pointsAndQuestions);
 
         this.externalTrigger = false;
       }
@@ -265,7 +271,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         this.TabChangeComplete(tabChanged, '/search');
         break;
 
-      case tabs.points:
+      case tabs.pointsAndQuestions:
         // Don't save previous
         // ActiveAliasForFilter update by the "By" Component (sibling),
         // AND child Tags and Points Components
@@ -286,6 +292,9 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         } else if (!this.externalTrigger) {
           this.TabChangeComplete(tabChanged, this.slashTagSelected); // Tell the app component
         }
+
+        this.appPoints.FilterQuestions(this.showQuestions);
+
         break;
       case tabs.newPoint:
         if (this.qp === 'question') {
@@ -304,25 +313,12 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeQP(): void {
-    const filterQuestions = this.qp === 'question';
-
-    // Switch to points display if on trending or recent
-    switch (this.tabIndex) {
-      case tabs.trendingTags:
-      case tabs.recentTags:
-        this.ChangeTab(tabs.points);
-    }
-
-    this.appPoints.FilterQuestions(filterQuestions);
-  }
-
   // From the template filter button and directly from child Points Component
   applyFilter(filter: boolean): void {
     this.displayFilter(filter); /// may be recalled in ChangeTab
 
     this.applyingFilter = true;
-    this.ChangeTab(tabs.points);
+    this.ChangeTab(tabs.pointsAndQuestions);
     this.applyingFilter = false;
   }
 
@@ -363,7 +359,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         this.appData.ReSelectPoints$.next(PointSortTypes.NoChange); // ToDo Communicate directly with child
       }
     }
-    this.tabIndex = tabs.points;
+    this.tabIndex = tabs.pointsAndQuestions;
   }
 
   // From child Points Component
@@ -431,7 +427,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         this.appData.PointSortType$.next(pointSortType); // New random order or sort type
       }
 
-      this.tabIndex = tabs.points;
+      this.tabIndex = tabs.pointsAndQuestions;
       this.ChangeTab(this.tabIndex);
 
       if (pointSortType === PointSortTypes.Random) {
@@ -456,7 +452,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   }
 
   onCancelNew(): void {
-    this.tabIndex = tabs.points;
+    this.tabIndex = tabs.pointsAndQuestions;
   }
 
   onCompleteNew(): void {

@@ -13,6 +13,7 @@ import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
   selector: 'app-questions-list',
@@ -57,7 +58,8 @@ export class QuestionsListComponent {
 
   constructor(
     private questionsService: QuestionsService,
-    public appData: AppDataService
+    public appData: AppDataService,
+    public localData: LocalDataService
   ) {}
 
   SelectQuestions(updateTopicViewCount: boolean): void {
@@ -67,6 +69,9 @@ export class QuestionsListComponent {
       this.questions = [];
       this.error = '';
 
+      if (this.filter) {
+        this.filter.slashTag = this.localData.PreviousSlashTagSelected;
+      }
       // Infinite Scroll: Get questions in batches
       this.questionsService
         .GetFirstBatchForTag(
