@@ -21,6 +21,7 @@ import { PointsComponent } from 'src/app/public/points/points.component';
 import { TagsComponent } from 'src/app/public/tags/tags.component';
 import { PointEditComponent } from 'src/app/public//point-edit/point-edit.component';
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
+import { GroupSelectionComponent } from 'src/app/breakoutgroups/group-selection/group-selection.component';
 
 enum tabs {
   trendingTags = 0,
@@ -84,6 +85,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   @ViewChild('tagsRecent') tagsRecent!: TagsComponent;
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('newQuestion') newQuestionComponent!: QuestionEditComponent;
+  @ViewChild('bogSelection') breakoutGroups!: GroupSelectionComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -269,6 +271,10 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         this.previousTabIndex = tabIndex;
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         this.TabChangeComplete(tabChanged, '/search');
+        break;
+
+      case tabs.groups:
+        this.breakoutGroups.breakoutGroupsJoined(true);
         break;
 
       case tabs.pointsAndQuestions:

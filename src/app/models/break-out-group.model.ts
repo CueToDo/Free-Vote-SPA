@@ -7,6 +7,7 @@ export class BreakoutGroup {
   characters = 0;
   spacesAvailable = 0;
   member = false;
+  characterName = '';
 }
 
 export class CharacterTheme {

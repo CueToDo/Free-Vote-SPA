@@ -1,6 +1,5 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
 
 // Models
 import {
@@ -11,13 +10,14 @@ import { Kvp } from 'src/app/models/kvp.model';
 
 // Services
 import { BreakOutGroupsService } from 'src/app/services/break-out-groups.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
   selector: 'app-group-selection',
   templateUrl: './group-selection.component.html',
   styleUrls: ['./group-selection.component.css']
 })
-export class GroupSelectionComponent implements OnInit {
+export class GroupSelectionComponent {
   // Break-out groups
   public breakoutGroups: BreakoutGroup[] = [];
   public breakoutGroupsMessage = '';
@@ -29,24 +29,20 @@ export class GroupSelectionComponent implements OnInit {
   public characterThemes: CharacterTheme[] = [];
   public characterThemeSelected: CharacterTheme = new CharacterTheme();
 
-  slashTag = '';
+  @Input() public tagDisplay = '';
+
   bogError = '';
 
   constructor(
-    private activeRoute: ActivatedRoute,
+    public localData: LocalDataService,
     private breakoutGroupsService: BreakOutGroupsService
   ) {}
 
-  ngOnInit(): void {
-    const routeParams = this.activeRoute.snapshot.params;
-    this.slashTag = routeParams['tag'];
-    this.breakoutGroupsJoined(true);
-  }
-
-  breakoutGroupsJoined(refresh: boolean): void {
+  public breakoutGroupsJoined(refresh: boolean): void {
+    console.log('list joined', refresh, this.tagDisplay);
     this.breakoutGroups = [];
     this.breakoutGroupsService
-      .GroupMembership(this.slashTag, refresh)
+      .GroupMembership(this.tagDisplay, refresh)
       .subscribe({
         next: bogs => {
           if (bogs.length === 0) {
@@ -62,7 +58,7 @@ export class GroupSelectionComponent implements OnInit {
   breakoutGroupsAvailable(refresh: boolean): void {
     this.breakoutGroups = [];
     this.breakoutGroupsService
-      .GroupsAvailable(this.slashTag, refresh)
+      .GroupsAvailable(this.tagDisplay, refresh)
       .subscribe({
         next: bogs => {
           if (bogs.length === 0) {
@@ -108,7 +104,7 @@ export class GroupSelectionComponent implements OnInit {
       characters: 0
     };
 
-    this.breakoutGroupsService.BreakoutRooms(this.slashTag).subscribe({
+    this.breakoutGroupsService.BreakoutRooms(this.tagDisplay).subscribe({
       next: rooms => {
         this.rooms = rooms;
         console.log(rooms);
@@ -134,7 +130,7 @@ export class GroupSelectionComponent implements OnInit {
     } else {
       this.breakoutGroupsService
         .GroupStart(
-          this.slashTag,
+          this.tagDisplay,
           this.roomSelected.value,
           this.characterThemeSelected.breakoutGroupThemeID
         )

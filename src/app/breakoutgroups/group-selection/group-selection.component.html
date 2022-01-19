@@ -1,5 +1,5 @@
 <div class="ugc mt-5 mb-3">
-    <h1>break-out groups</h1>
+    <h1>{{ tagDisplay }} break-out groups</h1>
     <button mat-button (click)="viewMyGroups()" [class.selected]="viewingCurrent">
         <mat-icon>groups</mat-icon>
         groups joined
@@ -20,7 +20,7 @@
 
 <div *ngIf="viewingCurrent || joinAnother">
     <p *ngFor="let bog of breakoutGroups" (click)="groupJoin(bog.breakoutGroupID)">{{ bog.breakoutRoom
-        }} ({{ bog.characterTheme }})
+        }} ({{ bog.characterTheme }}) {{ bog.characterName }}
     </p>
 </div>
 

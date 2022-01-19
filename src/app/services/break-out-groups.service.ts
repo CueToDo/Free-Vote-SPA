@@ -50,7 +50,6 @@ export class BreakOutGroupsService {
   // https://stackoverflow.com/questions/1584370/how-to-merge-two-arrays-in-javascript-and-de-duplicate-items
   ArrayUnique(array: BreakoutGroup[]): BreakoutGroup[] {
     var a = array.concat();
-    console.log('ArrayUnique', a);
 
     for (var i = 0; i < a.length; ++i) {
       for (var j = i + 1; j < a.length; ++j) {
