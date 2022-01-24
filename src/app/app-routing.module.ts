@@ -11,11 +11,12 @@ import { ScrollerComponent } from './public/scroller/scroller.component';
 import { VotersMenuComponent } from './public/voters-menu/voters-menu.component';
 import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points.component';
 import { QuestionAnswersComponent } from './public/question-answers/question-answers.component';
+import { PointShareComponent } from './public/point-share/point-share.component';
+import { GroupDiscussionComponent } from './breakoutgroups/group-discussion/group-discussion.component';
 
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from './services/login-route-guard.service';
-import { PointShareComponent } from './public/point-share/point-share.component';
 
 const appRoutes: Routes = [
   // Refresh in browser fails - when route is specified

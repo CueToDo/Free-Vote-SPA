@@ -5,3 +5,8 @@
 .mff.theme {
   width: 230px;
 }
+
+button + button,
+mat-form-field + button {
+  margin-left: 10px;
+}

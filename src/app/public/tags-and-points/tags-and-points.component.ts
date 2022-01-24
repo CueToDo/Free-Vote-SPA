@@ -1,3 +1,4 @@
+import { BreakoutGroup } from 'src/app/models/break-out-group.model';
 import { Question } from 'src/app/models/question.model';
 // Angular
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
@@ -22,14 +23,16 @@ import { TagsComponent } from 'src/app/public/tags/tags.component';
 import { PointEditComponent } from 'src/app/public//point-edit/point-edit.component';
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
 import { GroupSelectionComponent } from 'src/app/breakoutgroups/group-selection/group-selection.component';
+import { GroupDiscussionComponent } from 'src/app/breakoutgroups/group-discussion/group-discussion.component';
 
 enum tabs {
   trendingTags = 0,
   recentTags = 1,
   tagSearch = 2,
   groups = 3,
-  pointsAndQuestions = 4,
-  newPoint = 5
+  groupDiscussion = 4,
+  pointsAndQuestions = 5,
+  newPoint = 6
 }
 
 @Component({
@@ -79,13 +82,26 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   public sortToolTip = '';
   public sortOrderIcon = '';
 
+  bogSelected: BreakoutGroup = {
+    tagDisplay: '',
+    breakoutGroupID: 0,
+    breakoutRoomID: 0,
+    breakoutRoom: '',
+    characterTheme: '',
+    characters: 0,
+    spacesAvailable: 0,
+    member: false,
+    characterName: ''
+  };
+
   // use TRV in parent template https://stackblitz.com/edit/angular-vjbf4s?file=src%2Fapp%2Fcart-table-modal.component.ts
   // use child component type in parent component https://stackoverflow.com/questions/31013461/call-a-method-of-the-child-component
   @ViewChild(PointsComponent, { static: false }) appPoints!: PointsComponent;
   @ViewChild('tagsRecent') tagsRecent!: TagsComponent;
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('newQuestion') newQuestionComponent!: QuestionEditComponent;
-  @ViewChild('bogSelection') breakoutGroups!: GroupSelectionComponent;
+  @ViewChild('bogSelection') bogSelection!: GroupSelectionComponent;
+  @ViewChild('bogDiscussion') bogDiscussion!: GroupDiscussionComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -274,7 +290,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         break;
 
       case tabs.groups:
-        this.breakoutGroups.breakoutGroupsJoined(true);
+        this.bogSelection.breakoutGroupsJoined(true);
         break;
 
       case tabs.pointsAndQuestions:
@@ -471,6 +487,16 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     this.externalTrigger = true;
     this.SetSortDescending(true);
     this.externalTrigger = false;
+  }
+
+  BogSelected(bog: BreakoutGroup): void {
+    this.bogSelected = bog;
+    this.ChangeTab(tabs.groupDiscussion);
+  }
+
+  SelectAnotherBoG(): void {
+    this.bogSelection.viewMyGroups();
+    this.ChangeTab(tabs.groups);
   }
 
   ngOnDestroy(): void {

@@ -41,25 +41,25 @@
           slash-tags
         </button>
 
-        <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3" *ngIf="localData.LoggedInToAuth0"
-          [matTooltip]="'break-out groups'">
+        <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3 || tabIndex===4"
+          *ngIf="localData.LoggedInToAuth0" [matTooltip]="'break-out groups'">
           groups
           <mat-icon>groups</mat-icon>
         </button>
 
-        <button mat-button (click)="qp='question';ChangeTab(4)" [class.selected]="tabIndex===4 && qp==='question'"
+        <button mat-button (click)="qp='question';ChangeTab(5)" [class.selected]="tabIndex===5 && qp==='question'"
           *ngIf="localData.LoggedInToAuth0" matTooltip="show questions">
           questions
           <mat-icon>help</mat-icon>
         </button>
 
-        <button mat-button (click)="qp='point';ChangeTab(4)" [class.selected]="tabIndex===4 && qp==='point'"
+        <button mat-button (click)="qp='point';ChangeTab(5)" [class.selected]="tabIndex===5 && qp==='point'"
           *ngIf="localData.LoggedInToAuth0" matTooltip="show points">
           points
           <mat-icon>comment</mat-icon>
         </button>
 
-        <button mat-button (click)="ChangeTab(5)" [class.selected]="tabIndex===5" *ngIf="localData.LoggedInToAuth0"
+        <button mat-button (click)="ChangeTab(6)" [class.selected]="tabIndex===6" *ngIf="localData.LoggedInToAuth0"
           [matTooltip]="'submit new ' + qp" id="newQP">
           <span>new {{ qp }}</span>
           <mat-icon>library_add</mat-icon>
@@ -184,20 +184,31 @@
       </div>
     </div>
 
-    <div class="tabContent" [ngClass]="{'topZ':tabIndex===3}">
-      <div [ngClass]="{'centerStage': tabIndex===3, 'stageLeft': tabIndex>3,'stageRight': tabIndex<3}" fxFill>
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===3}">
+      <div [ngClass]="{'centerStage': tabIndex===3, 'stageLeft': tabIndex>3,'stageRight': tabIndex<3}">
         <div class="content">
-          <app-group-selection [tagDisplay]="topicSelected" #bogSelection></app-group-selection>
+          <app-group-selection [tagDisplay]="topicSelected" #bogSelection (BogSelected)="BogSelected($event)">
+          </app-group-selection>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===4}">
+      <div [ngClass]="{'centerStage': tabIndex===4, 'stageLeft': tabIndex>4,'stageRight': tabIndex<4}">
+        <div class="content">
+          <app-group-discussion [tagDisplay]="topicSelected" [bogSelected]="bogSelected"
+            (SelectAnother)="SelectAnotherBoG()" #bogDiscussion>
+          </app-group-discussion>
         </div>
       </div>
     </div>
 
     <!-- app points used to display questions -->
-    <div class="tabContent" [ngClass]="{'topZ':tabIndex===4}">
+    <div class="tabContent" [ngClass]="{'topZ':tabIndex===5}">
       <div [ngClass]="{
-                        'centerStage': tabIndex===4, 
-                        'stageLeft': tabIndex>4,
-                        'stageRight': tabIndex<4}" fxFill>
+                        'centerStage': tabIndex===5, 
+                        'stageLeft': tabIndex>5,
+                        'stageRight': tabIndex<5}" fxFill>
         <app-points (applyFilter)="applyFilter($event)" (switchToPoints)="switchToPoints()"
           (pointSortTypeChanged)="pointSortTypeChanged($event)">
         </app-points>
@@ -206,10 +217,10 @@
 
 
     <!-- new question or point -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===5}">
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===6}">
       <div [ngClass]="{
-        'centerStage': tabIndex===5, 
-        'stageRight': tabIndex<5 }" fxFill>
+        'centerStage': tabIndex===6, 
+        'stageRight': tabIndex<6 }" fxFill>
         <div fxLayoutAlign="center">
           <div class="content mt-5 mb-3">
             <app-point-edit *ngIf="!showQuestions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()"

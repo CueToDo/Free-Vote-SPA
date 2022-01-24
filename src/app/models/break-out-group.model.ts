@@ -11,7 +11,16 @@ export class BreakoutGroup {
 }
 
 export class CharacterTheme {
-  breakoutGroupThemeID = 0;
-  themeName = '';
+  characterThemeID = 0;
+  characterTheme = '';
   characters = 0;
+  isThemeOwner = false;
+  allCharactersAdded = true;
+  publicTheme = true;
+}
+
+export class Character {
+  characterID = 0;
+  characterName = '';
+  inUse = false;
 }

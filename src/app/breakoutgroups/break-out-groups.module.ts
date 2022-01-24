@@ -2,26 +2,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 // Material
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-
-// Components
-import { GroupSelectionComponent } from './group-selection/group-selection.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 
+// Components
+import { GroupSelectionComponent } from './group-selection/group-selection.component';
+import { GroupDiscussionComponent } from './group-discussion/group-discussion.component';
+
 @NgModule({
-  declarations: [GroupSelectionComponent],
+  declarations: [GroupSelectionComponent, GroupDiscussionComponent],
   imports: [
     CommonModule,
     FormsModule,
     MatButtonModule,
     MatIconModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    RouterModule
   ],
-  exports: [GroupSelectionComponent]
+  exports: [GroupSelectionComponent, GroupDiscussionComponent]
 })
 export class BreakOutGroupsModule {}

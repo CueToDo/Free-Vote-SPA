@@ -320,6 +320,15 @@ a:hover {
   font-size: x-large;
 }
 
+.ugc h2 {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.ugc.xs h2 {
+  font-size: large;
+}
+
 .ugc img {
   max-width: 100%;
   height: auto;

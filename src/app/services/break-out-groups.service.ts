@@ -7,6 +7,7 @@ import { map, Observable, of, tap } from 'rxjs';
 // Models
 import {
   BreakoutGroup,
+  Character,
   CharacterTheme
 } from 'src/app/models/break-out-group.model';
 import { Kvp } from 'src/app/models/kvp.model';
@@ -14,19 +15,12 @@ import { Kvp } from 'src/app/models/kvp.model';
 // Services
 import { HttpService } from 'src/app/services/http.service';
 import { AppDataService } from 'src/app/services/app-data.service';
-import { F } from '@angular/cdk/keycodes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BreakOutGroupsService {
-  constructor(
-    private httpClientService: HttpService,
-    private appData: AppDataService
-  ) {}
-
-  characterThemes: CharacterTheme[] = [];
-  breakoutGroupCache: BreakoutGroup[] = [];
+  constructor(private httpClientService: HttpService) {}
 
   BreakoutRooms(tagDIsplay: string): Observable<Kvp[]> {
     return this.httpClientService
@@ -34,16 +28,54 @@ export class BreakOutGroupsService {
       .pipe(map(returnData => returnData as Kvp[]));
   }
 
-  CharacterThemes(): Observable<CharacterTheme[]> {
-    if (!!this.characterThemes && this.characterThemes.length > 0) {
-      return of(this.characterThemes);
-    }
+  RoomCreate(roomName: string): Observable<number> {
+    return this.httpClientService.get(`breakoutGroups/roomCreate/${roomName}`);
+  }
 
-    return this.httpClientService.get('breakoutGroups/characterThemes').pipe(
-      tap(
-        returnData => (this.characterThemes = returnData as CharacterTheme[])
-      ),
-      map(returnData => returnData as CharacterTheme[])
+  RoomInUse(roomID: number): Observable<boolean> {
+    return this.httpClientService.get(`breakoutGroups/roomInUse/${roomID}`);
+  }
+
+  RoomDelete(roomID: number): Observable<boolean> {
+    return this.httpClientService.get(`breakoutGroups/roomDelete/${roomID}`);
+  }
+
+  CharacterThemes(): Observable<CharacterTheme[]> {
+    return this.httpClientService
+      .get('breakoutGroups/characterThemes')
+      .pipe(map(returnData => returnData as CharacterTheme[]));
+  }
+
+  CharacterThemeCreate(characterThemeName: string): Observable<number> {
+    return this.httpClientService.get(
+      `breakoutGroups/characterThemeCreate/${characterThemeName}`
+    );
+  }
+
+  CharacterThemeInUse(themeID: number): Observable<boolean> {
+    return this.httpClientService.get(`breakoutGroups/themeInUse/${themeID}`);
+  }
+
+  CharacterThemeDelete(themeID: number): Observable<boolean> {
+    return this.httpClientService.get(`breakoutGroups/themeDelete/${themeID}`);
+  }
+
+  ThemeCharacters(themeID: number): Observable<Character[]> {
+    return this.httpClientService
+      .get(`breakoutGroups/themeCharacters/${themeID}`)
+      .pipe(map(characters => characters as Character[]));
+  }
+
+  CharacterCreate(themeID: number, characterName: string): Observable<number> {
+    console.log('CharacterCreate', characterName);
+    return this.httpClientService.get(
+      `breakoutGroups/characterCreate/${themeID}/${characterName}`
+    );
+  }
+
+  CharacterDelete(themeID: number, characterID: number): Observable<boolean> {
+    return this.httpClientService.get(
+      `breakoutGroups/characterDelete/${themeID}/${characterID}`
     );
   }
 
@@ -61,40 +93,11 @@ export class BreakOutGroupsService {
     return a;
   }
 
-  // Add newGroups to breakoutGroups - remove any duplicates
-  AddGroups(newGroups: BreakoutGroup[]): void {
-    console.log('newGroups', newGroups);
-    this.breakoutGroupCache = this.ArrayUnique(
-      this.breakoutGroupCache.concat(newGroups)
-    );
-    console.log('cache', this.breakoutGroupCache);
-  }
-
-  BreakoutGroupsForTag(
-    tagDisplay: string,
-    refresh: boolean
-  ): Observable<BreakoutGroup[]> {
-    let breakoutGroupsFiltered: BreakoutGroup[];
-
-    // Check cache first if not refreshing
-    if (!refresh && !!this.breakoutGroupCache) {
-      breakoutGroupsFiltered = this.breakoutGroupCache.filter(
-        breakoutGroup => breakoutGroup.tagDisplay === tagDisplay
-      );
-
-      if (!!breakoutGroupsFiltered && breakoutGroupsFiltered.length >= 1) {
-        return of(breakoutGroupsFiltered); // No need to search
-      }
-    }
-
-    this.breakoutGroupCache = [];
-
-    // Fetch from API, add to cache and return BOGs for Tag
+  BreakoutGroupsForTag(tagDisplay: string): Observable<BreakoutGroup[]> {
     return this.httpClientService
       .get(`breakoutGroups/breakoutGroupsForTag/${tagDisplay}`)
       .pipe(
         // save copy for break-out group membership in different points
-        tap(BoGsForTag => this.AddGroups(BoGsForTag as BreakoutGroup[])),
         map(BoGsForTag => BoGsForTag as BreakoutGroup[])
       );
   }
@@ -104,7 +107,7 @@ export class BreakOutGroupsService {
     tagDisplay: string,
     refresh: boolean
   ): Observable<BreakoutGroup[]> {
-    return this.BreakoutGroupsForTag(tagDisplay, refresh).pipe(
+    return this.BreakoutGroupsForTag(tagDisplay).pipe(
       tap(BoGsForTag => console.log(refresh, 'GroupMembership', BoGsForTag)),
       map(BoGsForTag =>
         BoGsForTag.filter(function (bog) {
@@ -115,12 +118,8 @@ export class BreakOutGroupsService {
   }
 
   // no need to refresh if refreshed for Membership
-  GroupsAvailable(
-    tagDisplay: string,
-    refresh: boolean
-  ): Observable<BreakoutGroup[]> {
-    return this.BreakoutGroupsForTag(tagDisplay, refresh).pipe(
-      tap(BoGsForTag => console.log(refresh, 'GroupsAvailable', BoGsForTag)),
+  GroupsAvailable(tagDisplay: string): Observable<BreakoutGroup[]> {
+    return this.BreakoutGroupsForTag(tagDisplay).pipe(
       map(BoGsForTag =>
         BoGsForTag.filter(function (bog) {
           return !bog.member && bog.spacesAvailable > 0;
@@ -133,7 +132,7 @@ export class BreakOutGroupsService {
     tagDisplay: string,
     breakoutRoomID: number,
     characterThemeID: number
-  ): Observable<boolean> {
+  ): Observable<BreakoutGroup> {
     return this.httpClientService.get(
       `breakoutGroups/start/${tagDisplay}/${breakoutRoomID}/${characterThemeID}`
     );
@@ -141,5 +140,9 @@ export class BreakOutGroupsService {
 
   GroupJoin(groupID: number): Observable<boolean> {
     return this.httpClientService.get(`breakoutGroups/join/${groupID}`);
+  }
+
+  GroupDelete(groupID: number): Observable<boolean> {
+    return this.httpClientService.get(`breakoutGroups/delete/${groupID}`);
   }
 }
