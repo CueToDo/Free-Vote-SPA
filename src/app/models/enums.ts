@@ -65,6 +65,11 @@ export enum PointTypesEnum {
   CommentOrEditorial = 29
 }
 
+export enum SelectPQ {
+  Points = 1,
+  Questions = 2
+}
+
 export enum TagCloudTypes {
   Trending,
   Recent

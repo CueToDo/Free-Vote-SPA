@@ -4,7 +4,8 @@ import {
   PointSortTypes,
   DraftStatusFilter,
   PointFlags,
-  PointFeedbackFilter
+  PointFeedbackFilter,
+  SelectPQ
 } from './enums';
 
 export class FilterCriteria {
@@ -31,7 +32,7 @@ export class FilterCriteria {
   text = '';
 
   // Point Type
-  questions = false; // from Tags-And-Points component
+  selectPQ = SelectPQ.Points; // from Tags-And-Points component
   applyTypeFilter = false;
   previouslyFilteringByType = false;
   pointTypeID = PointTypesEnum.Opinion;

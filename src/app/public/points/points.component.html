@@ -143,11 +143,12 @@
 
 
   <!-- Don't use *ngIf - can't read property of undefined. Use hidden instead. -->
-  <app-points-list [filter]="filter" (PointCount)="PointCount($event)" #PointsList [hidden]="filter.questions">
+  <app-points-list [filter]="filter" (PointCount)="PointCount($event)" #PointsList
+    [hidden]="filter.selectPQ!=SelectPQ.Points">
   </app-points-list>
 
   <app-questions-list [filter]="filter" (QuestionCount)="QuestionCount($event)" #QuestionsList
-    [hidden]="!filter.questions">
+    [hidden]="filter.selectPQ!=SelectPQ.Questions">
   </app-questions-list>
 
 

@@ -1,7 +1,11 @@
 // Angular
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PointSelectionTypes, PointSortTypes } from 'src/app/models/enums';
+import {
+  PointSelectionTypes,
+  PointSortTypes,
+  SelectPQ
+} from 'src/app/models/enums';
 
 // Models
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
@@ -27,6 +31,8 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
   public filter = new FilterCriteria();
   public attachedToQuestion = false;
   public error = '';
+
+  public SelectPQ = SelectPQ;
 
   constructor(
     public localData: LocalDataService,

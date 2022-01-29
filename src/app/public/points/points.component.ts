@@ -20,7 +20,8 @@ import {
   PointFlags,
   PointSortTypes,
   PointFeedbackFilter,
-  DraftStatusFilter
+  DraftStatusFilter,
+  SelectPQ
 } from 'src/app/models/enums';
 
 // FreeVote Services
@@ -68,6 +69,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   // enums in template
   public DraftStatusFilter = DraftStatusFilter;
   public PointFeedbackFilter = PointFeedbackFilter;
+  public SelectPQ = SelectPQ;
 
   // https://stackoverflow.com/questions/34947154/angular-2-viewchild-annotation-returns-undefined
   // just use hidden insead of ngIf
@@ -86,9 +88,9 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     const routeparts = this.appData.Route.split('/');
 
     if (routeparts && routeparts.length === 3 && routeparts[2] === 'points') {
-      this.filter.questions = false;
+      this.filter.selectPQ = SelectPQ.Points;
     } else {
-      this.filter.questions = true; // Default first selection
+      this.filter.selectPQ = SelectPQ.Questions; // Default first selection
     }
 
     this.appData
@@ -181,7 +183,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.pointSortType$ = this.appData.PointSortType$.subscribe(
       (pointSortType: PointSortTypes) => {
-        if (this.filter.questions) {
+        if (this.filter.selectPQ === SelectPQ.Questions) {
           this.questionsList?.newSortType(pointSortType);
         } else {
           this.pointsList?.newSortType(pointSortType);
@@ -332,8 +334,8 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Filter by Type from Tags-And-Points (Select Questions)
-  public FilterQuestions(filterQuestions: boolean): void {
-    this.filter.questions = filterQuestions;
+  public FilterPointsOrQuestions(selectPQ: SelectPQ): void {
+    this.filter.selectPQ = selectPQ;
 
     this.Select();
   }
@@ -406,8 +408,12 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selectComplete = false; // Used to auto switch to points if no questions (but not on manual selection of questions)
   }
 
+  public UpdateTopicViewCount() {
+    this.updateTopicViewCount = true;
+  }
+
   Select(): void {
-    if (this.filter.questions) {
+    if (this.filter.selectPQ === SelectPQ.Questions) {
       this.questionsList?.SelectQuestions(this.updateTopicViewCount);
     } else {
       this.pointsList?.SelectPoints(this.updateTopicViewCount);
@@ -421,7 +427,7 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   QuestionCount(count: number): void {
     if (!this.selectComplete && count == 0) {
-      this.filter.questions = false;
+      this.filter.selectPQ = SelectPQ.Points;
       this.switchToPoints.emit();
       this.Select();
     }

@@ -1,5 +1,3 @@
-import { BreakoutGroup } from 'src/app/models/break-out-group.model';
-import { Question } from 'src/app/models/question.model';
 // Angular
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +9,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 // Model/Enums
+import { SelectPQ } from 'src/app/models/enums';
 import { TagCloudTypes, PointSortTypes } from 'src/app/models/enums';
+import { BreakoutGroup } from 'src/app/models/break-out-group.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -67,6 +67,11 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
   public get showQuestions(): boolean {
     return this.qp === 'question';
+  }
+
+  get selectPQ(): SelectPQ {
+    if (this.showQuestions) return SelectPQ.Questions;
+    return SelectPQ.Points;
   }
 
   showingFilter = false;
@@ -252,6 +257,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
   NewSlashTagSelected(slashTag: string): void {
     this.topicSelected = this.localData.SlashTagToTopic(slashTag);
+    this.appPoints?.UpdateTopicViewCount();
   }
 
   haveRecentTags(haveTags: boolean): void {
@@ -315,7 +321,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
           this.TabChangeComplete(tabChanged, this.slashTagSelected); // Tell the app component
         }
 
-        this.appPoints.FilterQuestions(this.showQuestions);
+        this.appPoints.FilterPointsOrQuestions(this.selectPQ);
 
         break;
       case tabs.newPoint:
