@@ -43,6 +43,7 @@ export class PointEditComponent implements OnInit {
   @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
 
   @Input() isPorQPoint = false;
+  @Input() isAnswer = false;
 
   @ViewChild('CKEfudge', { static: true }) ckeFudge: any;
 
@@ -260,6 +261,7 @@ export class PointEditComponent implements OnInit {
       this.error = '';
 
       if (
+        !this.isAnswer &&
         !this.isPorQPoint &&
         (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0)
       ) {
@@ -314,6 +316,7 @@ export class PointEditComponent implements OnInit {
               } else {
                 return this.pointsService.PointUpdate(
                   this.pointClone,
+                  this.isAnswer,
                   this.isPorQPoint
                 );
               }

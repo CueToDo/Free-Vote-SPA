@@ -224,7 +224,13 @@ export class PointComponent implements OnInit {
   }
 
   RemoveFromAnswers(pointID: number): void {
-    this.RemovePointFromAnswers.emit(pointID);
+    let confirmRemove = true;
+    if (!this.point.slashTags || this.point.slashTags.length === 0) {
+      confirmRemove = confirm(
+        'As this answer is not tagged, removing this answer from the question is the same as delete. \n\nAre you sure you wish to delete this answer?'
+      );
+    }
+    if (confirmRemove) this.RemovePointFromAnswers.emit(pointID);
   }
 
   get favoriteIcon(): string {

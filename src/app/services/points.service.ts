@@ -229,7 +229,11 @@ export class PointsService {
     return PSR;
   }
 
-  PointUpdate(point: PointEdit, isPorQPoint: boolean): Observable<Point> {
+  PointUpdate(
+    point: PointEdit,
+    isAnswer: boolean,
+    isPorQPoint: boolean
+  ): Observable<Point> {
     // Input parameter is Point not PointEdit
     // construct a new PointEdit (all that's needed)
 
@@ -239,6 +243,7 @@ export class PointsService {
       pointHTML: point.pointHTML,
       csvImageIDs: point.csvImageIDs,
       pointTypeID: point.pointTypeID,
+      isAnswer,
       isPorQPoint, // not a point property
       linkText: point.linkText,
       linkAddress: point.linkAddress,

@@ -8,7 +8,8 @@ import { Point, PointSelectionResult } from 'src/app/models/point.model';
 import {
   PointSelectionTypes,
   PointTypesEnum,
-  PointSortTypes
+  PointSortTypes,
+  SelectPQ
 } from 'src/app/models/enums';
 
 // Services
@@ -33,6 +34,12 @@ export class PointsListComponent {
   public IDs: ID[] = [];
   public points: Point[] = [];
   public possibleAnswers = false;
+  public get firstResponse() {
+    if (this.pointCount > 0) return '';
+    if (this.filter.selectPQ === SelectPQ.Points)
+      return 'Click "new point" to create the first point for this tag.';
+    return 'Click "new answer" to create the first response to this question.';
+  }
 
   public error = '';
   public alreadyFetchingPointsFromDB = false;

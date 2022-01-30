@@ -51,16 +51,15 @@
                 </div>
 
                 <div class="mt-5" *ngIf="mode==='newAnswer'">
-                    <app-point-edit (CancelEdit)="cancelEdit()"
-                        (CompleteEdit)="AddRemovePointFromAnswers(true, $event)">
+                    <app-point-edit (CancelEdit)="cancelEdit()" (CompleteEdit)="AddRemovePointFromAnswers(true, $event)"
+                        [isAnswer]="true">
                     </app-point-edit>
                 </div>
 
             </div>
 
             <app-points-list [hidden]="mode==='newAnswer'" [filter]="filter" #PointsList
-                [hidden]="filter.selectPQ!==SelectPQ.Points" [attachedToQuestion]="attachedToQuestion"
-                (AddPointToAnswers)="AddRemovePointFromAnswers(true, $event)"
+                [attachedToQuestion]="attachedToQuestion" (AddPointToAnswers)="AddRemovePointFromAnswers(true, $event)"
                 (RemovePointFromAnswers)="AddRemovePointFromAnswers(false, $event)">
             </app-points-list>
 

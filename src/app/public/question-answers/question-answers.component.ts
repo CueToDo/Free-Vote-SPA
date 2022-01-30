@@ -1,14 +1,14 @@
 // Angular
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+// Models, Enums
+import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 import {
   PointSelectionTypes,
   PointSortTypes,
   SelectPQ
 } from 'src/app/models/enums';
-
-// Models
-import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -46,6 +46,7 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     this.filter.questionSlug = this.activeRoute.snapshot.params['questionSlug']; // Display points attached to question
     this.filter.sortType = PointSortTypes.Random;
     this.filter.sortAscending = true;
+    this.filter.selectPQ = SelectPQ.Questions;
   }
 
   ngAfterViewInit(): void {
