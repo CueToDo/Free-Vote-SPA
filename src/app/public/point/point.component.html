@@ -384,5 +384,5 @@
 
 <!-- Removing the banana from the box [(point)] is not necessary - https://medium.com/@preethi.s/angular-custom-two-way-data-binding-3e618309d6c7 -->
 <app-point-edit *ngIf="editing" [isPorQPoint]="isPorQPoint" (CancelEdit)="onCancelEdit()"
-  (CompleteEdit)="onCompleteEdit()" [(point)]="point">
+  (CompleteEdit)="onCompleteEdit()" [(point)]="point" [isMyAnswer]="isMyAnswer">
 </app-point-edit>

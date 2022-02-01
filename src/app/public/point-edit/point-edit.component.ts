@@ -40,10 +40,11 @@ import { tap, map, filter } from 'rxjs/operators';
 export class PointEditComponent implements OnInit {
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent
   @Input() point = new Point();
+  @Input() questionID = 0;
   @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
 
   @Input() isPorQPoint = false;
-  @Input() isAnswer = false;
+  @Input() isMyAnswer = false;
 
   @ViewChild('CKEfudge', { static: true }) ckeFudge: any;
 
@@ -261,7 +262,7 @@ export class PointEditComponent implements OnInit {
       this.error = '';
 
       if (
-        !this.isAnswer &&
+        !this.isMyAnswer &&
         !this.isPorQPoint &&
         (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0)
       ) {
@@ -283,6 +284,10 @@ export class PointEditComponent implements OnInit {
         this.saving = true;
 
         const isNew = !this.pointClone.pointID || this.pointClone.pointID < 1;
+
+        // Point may be an answer
+        if (this.pointClone.questionID < 1 && this.questionID > 0)
+          this.pointClone.questionID = this.questionID;
 
         // Has voter removed SlashTagSelected?
         let returnToSlashTag = this.localData.PreviousSlashTagSelected;
@@ -316,7 +321,7 @@ export class PointEditComponent implements OnInit {
               } else {
                 return this.pointsService.PointUpdate(
                   this.pointClone,
-                  this.isAnswer,
+                  this.isMyAnswer,
                   this.isPorQPoint
                 );
               }
@@ -375,6 +380,7 @@ export class PointEditComponent implements OnInit {
     // Clear old Values when edit complete
     this.pointClone = new Point();
     this.pointClone.pointID = -1;
+    this.pointClone.questionID = 0;
     this.pointClone.pointTypeID = PointTypesEnum.Opinion;
     this.showLinkBeforeVoteDisabled = false;
 

@@ -199,10 +199,28 @@ export class QuestionsListComponent {
     // this.SelectPoints(); No need to reselect.
     // Already deleted from server, now remove from the array
     // https://love2dev.com/blog/javascript-remove-from-array/
+
+    // get deleted question (array)
+    const deleted = this.questions.filter(q => q.questionID === id);
+
+    if (!!deleted && deleted.length > 0) {
+      // Get deleted question row number
+      const questionRowNo = deleted[0].rowNumber;
+
+      // decrement rownumber for all questions above that
+      for (var i = 0, len = this.questions.length; i < len; i++) {
+        if (this.questions[i].rowNumber > questionRowNo)
+          this.questions[i].rowNumber--;
+      }
+    }
+
+    // Filter out the deleted question
     this.questions = this.questions.filter(value => {
       return value.questionID !== id;
     });
-    this.questionCount--; // decrement before calling NewPointsDisplayed which updates allPointsDisplayed
+
+    // Decrement count before calling NewPointsDisplayed which updates allPointsDisplayed
+    this.questionCount--;
     this.NewQuestionsDisplayed();
   }
 }

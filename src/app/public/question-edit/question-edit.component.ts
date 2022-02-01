@@ -1,5 +1,12 @@
 // Angular
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  Input,
+  ViewChild
+} from '@angular/core';
 
 // Other
 import { cloneDeep } from 'lodash-es';
@@ -23,6 +30,8 @@ export class QuestionEditComponent implements OnInit {
 
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
+
+  @ViewChild('CKEfudge', { static: true }) ckeFudge: any;
 
   userTouched = false;
   saving = false;
@@ -52,7 +61,8 @@ export class QuestionEditComponent implements OnInit {
   ClearQuestion(): void {
     this.questionEdit.questionID = -1;
     this.questionEdit.question = '';
-    this.questionEdit.details = '';
+    this.questionEdit.details = ''; // doesn't get through to ckEditor on property binding
+    this.ckeFudge.clearData(); // Must explicitly clear previous data
     this.questionEdit.draft = false;
 
     this.error = '';

@@ -29,11 +29,14 @@ export class PointsListComponent {
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
   @Output() PointCount = new EventEmitter<number>();
+  @Output() QuestionID = new EventEmitter<number>();
 
   public pointCount = 0;
   public IDs: ID[] = [];
   public points: Point[] = [];
   public possibleAnswers = false;
+
+  // Prompt to be first to create point for tag or answer to question
   public get firstResponse() {
     if (this.pointCount > 0) return '';
     if (this.filter.selectPQ === SelectPQ.Points)
@@ -245,6 +248,10 @@ export class PointsListComponent {
 
   DisplayPoints(psr: PointSelectionResult): void {
     this.alreadyFetchingPointsFromDB = false;
+
+    // API return questionID having been supplied with QuestionSlug
+    if (this.filter.selectPQ === SelectPQ.Questions)
+      this.QuestionID.emit(psr.questionID);
 
     this.PointCount.emit(psr.pointCount);
 

@@ -4,6 +4,7 @@ import { PointSupportLevels, PointTypesEnum } from './enums';
 export class PointEdit {
   // However the user inputs them, pass them to the server to decode
   pointID = 0;
+  questionID = 0;
   pointTitle = ''; // pointLink constructed in API
   pointHTML = '';
   csvImageIDs = '';
@@ -27,6 +28,7 @@ export class PointSelectionResult {
   // My server and client code agreed these should be capitalised,
   // but after updating to VS Angular project, framework intervenes and insists lower case
   pointCount = 0;
+  questionID = 0;
 
   pointIDs: ID[] = [];
   fromDate = '';
@@ -70,6 +72,7 @@ export class WoWWeekInfoVoteNotNeeded {
 
 export class Point {
   pointID = 0;
+  questionID = 0;
   voterIDPoint = 0;
   isPointOwner = false;
 

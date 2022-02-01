@@ -30,6 +30,7 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
 
   public filter = new FilterCriteria();
   public attachedToQuestion = false;
+  public questionID: number = 0;
   public error = '';
 
   public SelectPQ = SelectPQ;
@@ -117,5 +118,10 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
         next: _ => this.viewMyPoints(),
         error: err => (this.error = err.error.detail)
       });
+  }
+
+  // Determined in points-list component, required by point-edit for new answer
+  QuestionID(questionID: number): void {
+    this.questionID = questionID;
   }
 }

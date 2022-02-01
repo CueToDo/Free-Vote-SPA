@@ -217,6 +217,7 @@ export class PointsService {
     const PSR = new PointSelectionResult();
 
     PSR.pointCount = sourceData.pointCount;
+    PSR.questionID = sourceData.questionID;
     PSR.fromDate = sourceData.fromDate;
     PSR.toDate = sourceData.toDate;
 
@@ -239,6 +240,7 @@ export class PointsService {
 
     const postData = {
       pointID: point.pointID,
+      questionID: point.questionID,
       pointTitle: point.pointTitle, // pointLink constructed in API
       pointHTML: point.pointHTML,
       csvImageIDs: point.csvImageIDs,
