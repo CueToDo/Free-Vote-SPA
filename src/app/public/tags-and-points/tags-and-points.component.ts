@@ -62,6 +62,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   public TagCloudTypes = TagCloudTypes;
   public haveRecentSlashTags = false;
   refreshRecent = false;
+  newPointRefresh = false;
 
   qp = 'question'; // bound to radio button value
 
@@ -321,7 +322,10 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
           this.TabChangeComplete(tabChanged, this.slashTagSelected); // Tell the app component
         }
 
-        this.appPoints.FilterPointsOrQuestions(this.selectPQ);
+        if (!this.newPointRefresh)
+          this.appPoints.FilterPointsOrQuestions(this.selectPQ);
+
+        this.newPointRefresh = false;
 
         break;
       case tabs.newPoint:
@@ -491,7 +495,11 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     // this.setSortIcon(this.pointSortType);
 
     this.externalTrigger = true;
+    this.pointSortType = PointSortTypes.DateDescend; // Ensure new point at top
     this.SetSortDescending(true);
+    this.appPoints.ReselectForNewPoint(); // No this is the selection
+    this.newPointRefresh = true;
+    this.ChangeTab(tabs.pointsAndQuestions); // Causes reselection, but already selecting detected
     this.externalTrigger = false;
   }
 

@@ -170,13 +170,15 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.SetAppComponentRoute();
         if (pointSortType !== PointSortTypes.NoChange) {
           if (pointSortType === PointSortTypes.DateDescend) {
+            // Ensure new point at top
             this.filter.sortType = PointSortTypes.DateUpdated;
-            this.filter.sortAscending = false; // Ensure new point at top
+            this.filter.sortAscending = false;
           } else {
             this.filter.sortType = pointSortType;
           }
         }
-        this.updateTopicViewCount = true; // We have a new tag
+        // We have a new point or tag
+        this.updateTopicViewCount = true; // ToDo S/B new tag only
         this.Select();
       }
     );
@@ -419,6 +421,14 @@ export class PointsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.pointsList?.SelectPoints(this.updateTopicViewCount);
     }
     this.updateTopicViewCount = false;
+  }
+
+  public ReselectForNewPoint(): void {
+    this.filter.selectPQ = SelectPQ.Points;
+    this.updateTopicViewCount = false;
+    this.filter.sortType = PointSortTypes.DateUpdated;
+    this.filter.sortAscending = false;
+    this.Select();
   }
 
   PointCount(count: number): void {

@@ -356,11 +356,13 @@ export class PointEditComponent implements OnInit {
 
               // Communicate change to sibling PointsComponent
               // where Points ReSelection Takes place:
-              if (isNew || tagChange) {
+
+              if (tagChange && !isNew) {
                 this.appData.SetSlashTag(
                   returnToSlashTag,
                   PointSortTypes.DateDescend
                 );
+                this.appData.ReSelectPoints$.next(PointSortTypes.DateDescend);
               }
             },
             error: serverError => {

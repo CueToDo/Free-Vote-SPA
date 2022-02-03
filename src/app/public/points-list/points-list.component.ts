@@ -349,10 +349,31 @@ export class PointsListComponent {
     // this.SelectPoints(); No need to reselect.
     // Already deleted from server, now remove from the array
     // https://love2dev.com/blog/javascript-remove-from-array/
-    this.points = this.points.filter(value => {
-      return value.pointID !== id;
-    });
+
+    // Update the row number displayed before removing from array
+    // get deleted point (array)
+    const deleted = this.points.filter(p => p.pointID === id);
+
+    if (!!deleted && deleted.length > 0) {
+      // Get deleted question row number
+      const pointRowNo = deleted[0].rowNumber;
+
+      // decrement rownumber for all questions above that
+      for (var i = 0, len = this.points.length; i < len; i++) {
+        if (this.points[i].rowNumber > pointRowNo) this.points[i].rowNumber--;
+      }
+
+      for (var i = 0, len = this.IDs.length; i < len; i++) {
+        if (this.IDs[i].rowNumber > pointRowNo) this.IDs[i].rowNumber--;
+      }
+    }
+
+    // ToDo Need to remove id from IDs as well before getting next batch
+    this.points = this.points.filter(value => value.pointID !== id);
+    this.IDs = this.IDs.filter(value => value.id != id);
+
     this.pointCount--; // decrement before calling NewPointsDisplayed which updates allPointsDisplayed
+
     this.NewPointsDisplayed();
   }
 

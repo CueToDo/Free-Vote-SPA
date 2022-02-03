@@ -223,11 +223,15 @@
         'stageRight': tabIndex<6 }" fxFill>
         <div fxLayoutAlign="center">
           <div class="content mt-5 mb-3">
+
             <app-point-edit *ngIf="!showQuestions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()"
               #newPoint>
             </app-point-edit>
+
             <app-question-edit *ngIf="showQuestions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()"
-              #newQuestion></app-question-edit>
+              #newQuestion>
+            </app-question-edit>
+
           </div>
         </div>
       </div>

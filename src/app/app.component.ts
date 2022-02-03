@@ -147,7 +147,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     // 3) Subscribe to parameter changes raised by child components
     // Parameter change is not a router event (handled by same child component)
     this.appData.RouteParamChange$.subscribe((route: string) => {
-      console.log('route parameter change RouteOrParamsUpdated called');
       this.RouteOrParamsUpdated(route);
     });
 
@@ -244,19 +243,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (
       title === this.localData.website &&
       !!this.metaService.getTag(`property='og:title'`)
-    ) {
-      console.log('Meta prevent home page overwrite');
+    )
       return;
-    }
-
-    console.log(
-      'SETTING META DATA - Title:',
-      title,
-      'Preview:',
-      preview,
-      'Image:',
-      previewImage
-    );
 
     // ToDo remove debugging info
     this.pass++;
