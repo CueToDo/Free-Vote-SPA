@@ -326,6 +326,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
           this.appPoints.FilterPointsOrQuestions(this.selectPQ);
 
         this.newPointRefresh = false;
+        this.refreshRecent = true; // Refresh Recent Tags when switch back from Point Selection
 
         break;
       case tabs.newPoint:

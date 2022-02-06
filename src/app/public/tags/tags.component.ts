@@ -54,12 +54,6 @@ export class TagsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.fetchTags();
 
-    if (this.tagCloudType === TagCloudTypes.Recent) {
-      this.pointsSelected$ = this.appDataService.PointsSelected$.subscribe(() =>
-        this.fetchTags()
-      );
-    }
-
     // appComponent monitors width and broadcasts via appDataService
     this.width$ = this.appDataService.DisplayWidth$.subscribe(
       (widthBand: number) => {
