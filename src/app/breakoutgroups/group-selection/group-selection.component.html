@@ -40,9 +40,9 @@
 
         <h1>Starting a new break-out group</h1>
 
-        <div *ngIf="!creatingNewRoom" class="mt-3">
+        <div *ngIf="!creatingNewRoom" class="mt-3 ugc">
 
-            <h2>1. Choose or create a new room</h2>
+            <h2>1. Choose a room</h2>
             <div class="ms-3">
                 <mat-form-field class="mff">
                     <mat-label>choose a room</mat-label>
@@ -64,9 +64,32 @@
             </div>
         </div>
 
-        <div *ngIf="!creatingNewCharacterTheme" class="mt-3">
+        <div *ngIf="creatingNewRoom" class="mt-3 ugc">
+            <h2>1. Create new room</h2>
+            <div class="ms-3">
+                <mat-form-field>
+                    <input matInput placeholder="new room name" type="text" [(ngModel)]="newRoomName">
+                </mat-form-field>
+                <button mat-stroked-button (click)="saveNewRoom()">
+                    <mat-icon>save</mat-icon>
+                    save
+                </button>
+                <button mat-stroked-button (click)="cancelNewRoom()">
+                    <mat-icon>cancel</mat-icon>
+                    cancel
+                </button>
+            </div>
+        </div>
 
-            <h2>2. Choose or create a new character theme</h2>
+        <a id="roomError">
+            <div *ngIf="!!roomError" class="alert alert-danger mt-3">
+                {{ roomError }}
+            </div>
+        </a>
+
+        <div *ngIf="!creatingNewCharacterTheme" class="mt-3 ugc">
+
+            <h2>2. Choose a character theme</h2>
 
             <div class="ms-3">
                 <mat-form-field class="mff theme">
@@ -93,25 +116,8 @@
             </div>
         </div>
 
-        <div *ngIf="creatingNewRoom" class="ugc">
-            <h2>New room</h2>
-            <div class="ms-3">
-                <mat-form-field>
-                    <input matInput placeholder="new room name" type="text" [(ngModel)]="newRoomName">
-                </mat-form-field>
-                <button mat-stroked-button (click)="saveNewRoom()">
-                    <mat-icon>save</mat-icon>
-                    save
-                </button>
-                <button mat-stroked-button (click)="cancelNewRoom()">
-                    <mat-icon>cancel</mat-icon>
-                    cancel
-                </button>
-            </div>
-        </div>
-
-        <div *ngIf="creatingNewCharacterTheme" class="ugc">
-            <h2>New character theme</h2>
+        <div *ngIf="creatingNewCharacterTheme" class="mt-3 ugc">
+            <h2>2. Create a new character theme</h2>
             <div class="ms-3">
                 <mat-form-field>
                     <input matInput placeholder="new theme name" type="text" [(ngModel)]="newCharacterThemeName">
@@ -126,6 +132,12 @@
                 </button>
             </div>
         </div>
+
+        <a id="themeError">
+            <div *ngIf="!!themeError" class="alert alert-danger mt-3">
+                {{ themeError }}
+            </div>
+        </a>
 
         <div *ngIf="!creatingNewCharacterTheme && characterThemeSelected.characterThemeID>0" class="mt-3">
             <h2>3. Manage characters in the theme</h2>
@@ -183,12 +195,9 @@
 
     </div>
 
-    <div *ngIf="!!breakoutGroupsMessage" class="alert alert-warning">
-        {{ breakoutGroupsMessage }}
-    </div>
-
-    <div *ngIf="!!bogError" class="alert alert-danger mt-3">
+    <div *ngIf="!!bogError" class="alert alert-warning">
         {{ bogError }}
     </div>
+
 
 </div>

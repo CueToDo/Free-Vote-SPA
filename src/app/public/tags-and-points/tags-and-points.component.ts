@@ -1,5 +1,12 @@
+import { TagSearchComponent } from './../tag-search/tag-search.component';
 // Angular
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ComponentFactoryResolver
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // Material
@@ -104,6 +111,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   // use child component type in parent component https://stackoverflow.com/questions/31013461/call-a-method-of-the-child-component
   @ViewChild(PointsComponent, { static: false }) appPoints!: PointsComponent;
   @ViewChild('tagsRecent') tagsRecent!: TagsComponent;
+  @ViewChild('tagSearch') tagSearch!: TagSearchComponent;
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('newQuestion') newQuestionComponent!: QuestionEditComponent;
   @ViewChild('bogSelection') bogSelection!: GroupSelectionComponent;
@@ -294,6 +302,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         this.previousTabIndex = tabIndex;
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         this.TabChangeComplete(tabChanged, '/search');
+        this.tagSearch?.restartSearch();
         break;
 
       case tabs.groups:

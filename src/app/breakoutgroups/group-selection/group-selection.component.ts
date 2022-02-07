@@ -54,6 +54,8 @@ export class GroupSelectionComponent {
     return this.localData.TopicToSlashTag(roomName);
   }
 
+  roomError = '';
+  themeError = '';
   bogError = '';
 
   constructor(
@@ -62,7 +64,7 @@ export class GroupSelectionComponent {
   ) {}
 
   public breakoutGroupsJoined(refresh: boolean): void {
-    this.bogError = '';
+    this.roomError = '';
     this.breakoutGroups = [];
     this.breakoutGroupsService
       .GroupMembership(this.tagDisplay, refresh)
@@ -74,12 +76,12 @@ export class GroupSelectionComponent {
             this.breakoutGroups = bogs;
           }
         },
-        error: serverError => (this.bogError = serverError.error.detail)
+        error: serverError => (this.roomError = serverError.error.detail)
       });
   }
 
   breakoutGroupsAvailable(): void {
-    this.bogError = '';
+    this.roomError = '';
     this.breakoutGroups = [];
     this.breakoutGroupsService.GroupsAvailable(this.tagDisplay).subscribe({
       next: bogs => {
@@ -90,13 +92,13 @@ export class GroupSelectionComponent {
           this.breakoutGroups = bogs;
         }
       },
-      error: serverError => (this.bogError = serverError.error.detail)
+      error: serverError => (this.roomError = serverError.error.detail)
     });
   }
 
   viewMyGroups(): void {
     this.breakoutGroupsMessage = '';
-    this.bogError = '';
+    this.roomError = '';
     this.viewingCurrent = true;
     this.joinAnother = false;
     this.startingNew = false;
@@ -105,7 +107,7 @@ export class GroupSelectionComponent {
 
   viewAvailable(): void {
     this.breakoutGroupsMessage = '';
-    this.bogError = '';
+    this.roomError = '';
     this.viewingCurrent = false;
     this.joinAnother = true;
     this.startingNew = false;
@@ -114,7 +116,7 @@ export class GroupSelectionComponent {
 
   startNew(): void {
     this.breakoutGroupsMessage = '';
-    this.bogError = '';
+    this.roomError = '';
     this.viewingCurrent = false;
     this.joinAnother = false;
     this.startingNew = true;
@@ -130,11 +132,8 @@ export class GroupSelectionComponent {
     };
 
     this.breakoutGroupsService.BreakoutRooms(this.tagDisplay).subscribe({
-      next: rooms => {
-        this.rooms = rooms;
-        console.log(rooms);
-      },
-      error: serverError => (this.bogError = serverError.error.detail)
+      next: rooms => (this.rooms = rooms),
+      error: serverError => (this.roomError = serverError.error.detail)
     });
 
     this.breakoutGroupsService
@@ -144,14 +143,16 @@ export class GroupSelectionComponent {
 
   groupStart() {
     this.breakoutGroupsMessage = '';
-    this.bogError = '';
+    this.roomError = '';
     if (!this.roomSelected.value || this.roomSelected.value < 1) {
-      this.bogError = 'please select a room';
+      this.roomError = 'please select a room';
+      window.location.hash = '';
+      window.location.hash = 'bogError';
     } else if (
       !this.characterThemeSelected ||
       this.characterThemeSelected.characterThemeID < 1
     ) {
-      this.bogError = 'please select a character theme';
+      this.themeError = 'please select a character theme';
     } else {
       this.breakoutGroupsService
         .GroupStart(
@@ -172,7 +173,7 @@ export class GroupSelectionComponent {
   }
 
   groupJoin(groupID: number) {
-    this.bogError = '';
+    this.roomError = '';
     var group = this.breakoutGroups.filter(
       group => group.breakoutGroupID === groupID
     );
@@ -180,7 +181,7 @@ export class GroupSelectionComponent {
       if (!group[0].member) {
         this.breakoutGroupsService.GroupJoin(groupID).subscribe({
           next: _ => this.bogSelected(group[0].breakoutRoom),
-          error: serverError => (this.bogError = serverError.error.detail)
+          error: serverError => (this.roomError = serverError.error.detail)
         });
       }
     }
@@ -197,15 +198,15 @@ export class GroupSelectionComponent {
   }
 
   checkRoomInUse(): void {
-    this.bogError = '';
+    this.roomError = '';
     this.breakoutGroupsService.RoomInUse(this.roomSelected.value).subscribe({
       next: inUse => (this.roomInUse = inUse),
-      error: serverError => (this.bogError = serverError.error.detail)
+      error: serverError => (this.roomError = serverError.error.detail)
     });
   }
 
   deleteRoom() {
-    this.bogError = '';
+    this.roomError = '';
     this.breakoutGroupsService.RoomDelete(this.roomSelected.value).subscribe({
       next: _ => {
         this.rooms = this.rooms.filter(
@@ -215,7 +216,7 @@ export class GroupSelectionComponent {
           this.roomSelected = this.rooms[0];
         this.checkRoomInUse();
       },
-      error: serverError => (this.bogError = serverError.error.detail)
+      error: serverError => (this.roomError = serverError.error.detail)
     });
   }
 
@@ -225,9 +226,9 @@ export class GroupSelectionComponent {
 
   saveNewRoom(): void {
     if (!this.newRoomName) {
-      this.bogError = 'Room name must be provided';
+      this.roomError = 'Room name must be provided';
     } else {
-      this.bogError = '';
+      this.roomError = '';
       this.breakoutGroupsService.RoomCreate(this.newRoomName).subscribe({
         next: num => {
           this.roomSelected = { key: this.newRoomName, value: num };
@@ -236,31 +237,30 @@ export class GroupSelectionComponent {
           this.newRoomName = '';
         },
         error: serverError => {
-          this.bogError = serverError.error.detail;
+          this.roomError = serverError.error.detail;
         }
       });
     }
   }
 
   cancelNewRoom() {
-    this.bogError = '';
+    this.roomError = '';
     this.newRoomName = '';
     this.creatingNewRoom = false;
   }
 
   checkThemeInUse(): void {
-    console.log('Check Theme In Use');
-    this.bogError = '';
+    this.themeError = '';
     this.breakoutGroupsService
       .CharacterThemeInUse(this.characterThemeSelected.characterThemeID)
       .subscribe({
         next: inUse => (this.characterThemeInUse = inUse),
-        error: serverError => (this.bogError = serverError.error.detail)
+        error: serverError => (this.themeError = serverError.error.detail)
       });
   }
 
   deleteCharacterTheme() {
-    this.bogError = '';
+    this.themeError = '';
     this.breakoutGroupsService
       .CharacterThemeDelete(this.characterThemeSelected.characterThemeID)
       .subscribe({
@@ -274,7 +274,7 @@ export class GroupSelectionComponent {
             this.characterThemeSelected = this.characterThemes[0];
           this.checkThemeInUse();
         },
-        error: serverError => (this.bogError = serverError.error.detail)
+        error: serverError => (this.themeError = serverError.error.detail)
       });
   }
 
@@ -284,9 +284,9 @@ export class GroupSelectionComponent {
 
   saveNewCharacterTheme(): void {
     if (!this.newCharacterThemeName) {
-      this.bogError = 'Character theme name be provided';
+      this.themeError = 'Character theme name be provided';
     } else {
-      this.bogError = '';
+      this.themeError = '';
       this.breakoutGroupsService
         .CharacterThemeCreate(this.newCharacterThemeName)
         .subscribe({
@@ -305,30 +305,30 @@ export class GroupSelectionComponent {
             this.newCharacterThemeName = '';
           },
           error: serverError => {
-            this.bogError = serverError.error.detail;
+            this.themeError = serverError.error.detail;
           }
         });
     }
   }
 
   cancelNewCharacterTheme(): void {
-    this.bogError = '';
+    this.themeError = '';
     this.newCharacterThemeName = '';
     this.creatingNewCharacterTheme = false;
   }
 
   getThemeCharacters(): void {
-    this.bogError = '';
+    this.themeError = '';
     this.breakoutGroupsService
       .ThemeCharacters(this.characterThemeSelected.characterThemeID)
       .subscribe({
         next: characters => (this.themeCharacters = characters),
-        error: serverError => (this.bogError = serverError.error.detail)
+        error: serverError => (this.themeError = serverError.error.detail)
       });
   }
 
   deleteCharacter(characterID: number) {
-    this.bogError = '';
+    this.themeError = '';
     this.breakoutGroupsService
       .CharacterDelete(
         this.characterThemeSelected.characterThemeID,
@@ -342,7 +342,7 @@ export class GroupSelectionComponent {
           );
           this.recountCharacters();
         },
-        error: serverError => (this.bogError = serverError.error.detail)
+        error: serverError => (this.themeError = serverError.error.detail)
       });
   }
 
@@ -351,11 +351,10 @@ export class GroupSelectionComponent {
   }
 
   saveNewCharacter(): void {
-    console.log('newCharacterName', this.newCharacterName);
     if (!this.newCharacterName) {
-      this.bogError = 'Character name be provided';
+      this.themeError = 'Character name be provided';
     } else {
-      this.bogError = '';
+      this.themeError = '';
       this.breakoutGroupsService
         .CharacterCreate(
           this.characterThemeSelected.characterThemeID,
@@ -363,7 +362,6 @@ export class GroupSelectionComponent {
         )
         .subscribe({
           next: num => {
-            console.log('newID', num);
             this.themeCharacters.push({
               characterName: this.newCharacterName,
               characterID: num,
@@ -375,7 +373,7 @@ export class GroupSelectionComponent {
             this.recountCharacters();
           },
           error: serverError => {
-            this.bogError = serverError.error.detail;
+            this.themeError = serverError.error.detail;
           }
         });
     }
@@ -390,7 +388,7 @@ export class GroupSelectionComponent {
   }
 
   cancelNewCharacter(): void {
-    this.bogError = '';
+    this.themeError = '';
     this.newCharacterName = '';
     this.creatingNewCharacter = false;
   }

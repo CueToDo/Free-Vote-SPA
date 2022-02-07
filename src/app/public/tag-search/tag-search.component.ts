@@ -70,9 +70,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {
-    this.restartSearch();
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
     // Debounce the keyup outside of angular zone
@@ -97,7 +95,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     this.isMobile = this.deviceService.isMobile();
   }
 
-  restartSearch(): void {
+  public restartSearch(): void {
     // Client side only
     if (isPlatformBrowser(this.platformId)) {
       this.slashTag = '/';
@@ -107,7 +105,6 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
         // Set focus on input
         const el = this.tvSlashTag?.nativeElement;
         el?.focus();
-
         // Place cursor at end
         if (typeof el.selectionStart === 'number') {
           el.selectionStart = el.selectionEnd = el.value.length;
@@ -185,7 +182,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
   setSlashTag(slashTag: string): void {
     // Get appDataService to broadcast (method shared by PointEditComponent)
     this.appData.SetSlashTag(slashTag, this.appData.defaultSort);
-
+    this.restartSearch();
     this.NewSlashTagSelected.emit(slashTag);
   }
 
