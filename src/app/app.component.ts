@@ -91,7 +91,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.appData.GetLatestSPAVersion();
     this.subscribeNetworkStatus();
 
     // https://stackoverflow.com/questions/39845082/angular-2-change-favicon-icon-as-per-configuration/45753615
@@ -138,8 +137,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       )
       .subscribe(url => {
         // broadcast showing tags
-        console.log('router event RouteOrParamsUpdated called');
-        this.appData.SpaVersionUpdateCheck(); // Every route change
         this.RouteOrParamsUpdated(url);
         this.closeBurgerMenu();
       });
@@ -343,12 +340,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       property: 'fb:app_id',
       content: environment.facebookAppId
     });
-
-    // Finally - set version to force cache clear on version update (???)
-    this.metaService.updateTag({
-      property: 'version',
-      content: this.localData.SpaVersion
-    });
   }
 
   public RouteOrParamsUpdated(route: string): void {
@@ -422,15 +413,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     );
   }
 
-  SpaVersionUpdate() {
-    // Refresh SPA from server
-    // https://stackoverflow.com/questions/55127650/location-reloadtrue-is-deprecated
-    document.location.reload();
-    document.location.reload(); // Max Schwartzmuller - Service Worker and App ????
-    // Saved SpaVersion value in localData not affected
-    // new client value retrieved on app reload - should now match
-  }
-
   SetVPW(): void {
     if (isPlatformBrowser(this.platformId)) {
       // No window object on SSR - no need to set ViewwPort width
@@ -488,7 +470,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   vulcan() {
     this.localData.LocalLogging = true;
-    this.appData.GetLatestSPAVersion();
     this.localData.Log('Logged out via vulcan');
     console.log('vulcan logging updated');
     this.auth.logout();

@@ -33,7 +33,7 @@ import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 import { TopicEditComponent } from './topic-edit/topic-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
-import { PointsComponent } from './points/points.component';
+import { PointsFilterComponent } from './points-filter/points-filter.component';
 import { ByComponent } from './by/by.component';
 import { NavItemsComponent } from './nav-items/nav-items.component';
 import { NavMainComponent } from './nav-main/nav-main.component';
@@ -42,7 +42,6 @@ import { TagsComponent } from './tags/tags.component';
 import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
 import { VotersMenuComponent } from './voters-menu/voters-menu.component';
 import { ListComponent } from './list/list.component';
-import { ScrollerComponent } from './scroller/scroller.component';
 import { PointsListComponent } from './points-list/points-list.component';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
@@ -86,7 +85,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     PointEditComponent,
     TopicEditComponent,
     PointOfTheWeekComponent,
-    PointsComponent,
+    PointsFilterComponent,
     ByComponent,
     NavItemsComponent,
     NavMainComponent,
@@ -94,7 +93,6 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     TagsComponent,
     TagsAndPointsComponent,
     ListComponent,
-    ScrollerComponent,
     PointsListComponent,
     QuestionsListComponent,
     QuestionEditComponent,
@@ -107,7 +105,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
   ],
   exports: [
     PointComponent,
-    PointsComponent,
+    PointsFilterComponent,
     PointEditComponent,
     NavItemsComponent,
     NavMainComponent,

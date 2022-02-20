@@ -1,5 +1,6 @@
 // Angular
 import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 // Models, enums
 import { Question } from 'src/app/models/question.model';
@@ -20,6 +21,7 @@ export class QuestionComponent {
   @Input() questionCount = 0;
 
   @Output() QuestionDeleted = new EventEmitter();
+  @Output() QuestionSelected = new EventEmitter();
 
   editing = false;
 
@@ -28,7 +30,8 @@ export class QuestionComponent {
   constructor(
     public localData: LocalDataService, // public - used in template
     public appData: AppDataService,
-    private questionsService: QuestionsService
+    private questionsService: QuestionsService,
+    private router: Router
   ) {}
 
   edit(): void {
@@ -122,6 +125,16 @@ export class QuestionComponent {
       this.localData.questionSelected = this.question.question;
       this.localData.questionDetails = this.question.details;
     }
+
+    // Navigate to won't change active component ...
+    this.router.navigate([
+      this.localData.PreviousSlashTagSelected,
+      'question',
+      this.question?.slug
+    ]);
+
+    // ... but need to change tab, so communicate up
+    this.QuestionSelected.emit();
   }
 
   anon(): void {

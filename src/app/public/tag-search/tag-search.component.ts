@@ -34,12 +34,12 @@ import { Tag } from 'src/app/models/tag.model';
   styleUrls: ['./tag-search.component.css']
 })
 export class TagSearchComponent implements OnInit, AfterViewInit {
+  @Output() NewSlashTagSelected = new EventEmitter<string>();
+
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
   @ViewChild('tvSlashTag', { static: false }) tvSlashTag:
     | ElementRef
     | undefined;
-
-  @Output() NewSlashTagSelected = new EventEmitter<string>();
 
   slashTag = '';
   tagSearch$: Subscription | undefined;
@@ -181,8 +181,10 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
   // from click on tag in search results
   setSlashTag(slashTag: string): void {
     // Get appDataService to broadcast (method shared by PointEditComponent)
-    this.appData.SetSlashTag(slashTag, this.appData.defaultSort);
+    this.appData.SetSlashTag(slashTag);
+
     this.restartSearch();
+
     this.NewSlashTagSelected.emit(slashTag);
   }
 

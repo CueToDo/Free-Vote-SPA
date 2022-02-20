@@ -1,4 +1,4 @@
-<div fxFill appElementScrollEnd (scrollEnd)="fetchMorePoints()" class="scroller">
+<div fxFill class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
 
     <div class="content">
 
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Prompt New Point or Answer to Question -->
-        <div *ngIf="pointCount===0" class="alert alert-warning">
+        <div *ngIf="!alreadyFetchingPointsFromDB && pointCount===0" class="alert alert-warning">
             {{firstResponse}}
         </div>
 

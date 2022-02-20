@@ -7,12 +7,9 @@ import { CallbackComponent } from './public/callback/callback.component';
 import { HomeComponent } from './public/home/home.component';
 import { CardComponent } from './public/card/card.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
-import { ScrollerComponent } from './public/scroller/scroller.component';
 import { VotersMenuComponent } from './public/voters-menu/voters-menu.component';
 import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points.component';
-import { QuestionAnswersComponent } from './public/question-answers/question-answers.component';
 import { PointShareComponent } from './public/point-share/point-share.component';
-import { GroupDiscussionComponent } from './breakoutgroups/group-discussion/group-discussion.component';
 
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
@@ -27,8 +24,6 @@ const appRoutes: Routes = [
   // Map the .webmanifest file extension to its appropriate MIME type.
 
   // route order must avoid ambiguities between route and parameters (alias, tag, tab)
-  { path: 'scroller', component: ScrollerComponent }, // a test component
-
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'privacy-policy', component: HomeComponent },
@@ -75,8 +70,9 @@ const appRoutes: Routes = [
   { path: 'search', component: TagsAndPointsComponent }, // Tag Search
   { path: ':tag', component: TagsAndPointsComponent }, // POINTS: still like the SlashTag
   { path: ':tag/points', component: TagsAndPointsComponent }, // Return from point share
+  { path: ':tag/questions', component: TagsAndPointsComponent }, // Return from question answers
   { path: ':tag/:title', component: PointShareComponent },
-  { path: ':tag/question/:questionSlug', component: QuestionAnswersComponent },
+  { path: ':tag/question/:questionSlug', component: TagsAndPointsComponent },
   { path: ':tag/by/:alias', component: TagsAndPointsComponent },
 
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64

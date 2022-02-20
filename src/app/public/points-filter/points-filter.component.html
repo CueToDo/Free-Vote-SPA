@@ -1,7 +1,5 @@
 <div fxFill fxLayout="column" fxLayoutAlign="start center">
 
-  <!-- Begin tab selection and filters -->
-
   <div class="content">
     <!-- Show Filtering Options, controlled from Tag-Points component -->
     <div [ngClass]="{'show':showFilters, 'hide':!showFilters}">
@@ -36,7 +34,7 @@
     <div [ngClass]="{'show':filter.applyDraftFilter, 'hide':!filter.applyDraftFilter}">
       <div fxLayout="row wrap" fxLayoutAlign.xs="space-around" fxLayoutAlign.gt-xs="center" fxLayoutGap.xs="5px grid"
         fxLayoutGap.gt-xs="30px">
-        <mat-radio-group [(ngModel)]="filter.draftStatus" (ngModelChange)="Select()">
+        <mat-radio-group [(ngModel)]="filter.draftStatus" (ngModelChange)="FilterUpdated()">
           <mat-radio-button name="draftStatus" labelPosition="before" [value]="DraftStatusFilter.Published">published
           </mat-radio-button>
           <mat-radio-button name="draftStatus" labelPosition="before" [value]="DraftStatusFilter.Draft">draft only
@@ -53,7 +51,7 @@
 
         <mat-form-field class="myMatInput">
           <input matInput name="aliasTextFilter" [(ngModel)]="filter.byAlias" placeholder="enter voter alias"
-            (keyup.enter)="Select()">
+            (keyup.enter)="FilterUpdated()">
           <button mat-button *ngIf="filter.byAlias" matSuffix mat-icon-button aria-label="Clear"
             (click)="filter.byAlias=''" type="button">
             <mat-icon>close</mat-icon>
@@ -74,7 +72,7 @@
         <!-- text input -->
         <mat-form-field class="myMatInput">
           <input matInput name="pointTextFilter" [(ngModel)]="filter.text" placeholder="enter point filter text"
-            (keyup.enter)="Select()">
+            (keyup.enter)="FilterUpdated()">
           <button mat-button *ngIf="filter.text" matSuffix mat-icon-button aria-label="Clear" (click)="filter.text=''"
             type="button">
             <mat-icon>close</mat-icon>
@@ -82,7 +80,7 @@
         </mat-form-field>
 
         <!-- text search button -->
-        <button mat-stroked-button (click)="Select()">
+        <button mat-stroked-button (click)="FilterUpdated()">
           <mat-icon>search</mat-icon>
           search
         </button>
@@ -110,9 +108,10 @@
 
       <div fxLayout="row wrap" fxLayoutAlign.xs="space-around" fxLayoutAlign.gt-xs="center" fxLayoutGap.xs="5px grid"
         fxLayoutGap.gt-xs="30px">
-        <app-datepicker [(Date)]="filter.dateFrom" [UserPrompt]="'from date'" (DateChange)="Select()">
+        <app-datepicker [(Date)]="filter.dateFrom" [UserPrompt]="'from date'" (DateChange)="FilterUpdated()">
         </app-datepicker>
-        <app-datepicker [(Date)]="filter.dateTo" [UserPrompt]="'to date'" (DateChange)="Select()"></app-datepicker>
+        <app-datepicker [(Date)]="filter.dateTo" [UserPrompt]="'to date'" (DateChange)="FilterUpdated()">
+        </app-datepicker>
       </div>
 
     </div>
@@ -121,7 +120,7 @@
     <div [ngClass]="{'show':filter.applyFeedbackFilter, 'hide':!filter.applyFeedbackFilter}">
       <div fxLayout="row wrap" fxLayoutAlign.xs="space-around" fxLayoutAlign.gt-xs="center" fxLayoutGap.xs="5px grid"
         fxLayoutGap.gt-xs="30px">
-        <mat-radio-group [(ngModel)]="filter.feedbackFilter" (ngModelChange)="Select()">
+        <mat-radio-group [(ngModel)]="filter.feedbackFilter" (ngModelChange)="FilterUpdated()">
           <mat-radio-button name="feedback" labelPosition="before" [value]="PointFeedbackFilter.Yes">with feedback
             only
           </mat-radio-button>
@@ -135,25 +134,6 @@
       </div>
     </div>
 
-    <hr />
-
   </div>
-
-  <!-- End tab selection and filters -->
-
-
-  <!-- Don't use *ngIf - can't read property of undefined. Use hidden instead. -->
-  <app-points-list [filter]="filter" (PointCount)="PointCount($event)" #PointsList
-    [hidden]="filter.selectPQ!=SelectPQ.Points">
-  </app-points-list>
-
-  <app-questions-list [filter]="filter" (QuestionCount)="QuestionCount($event)" #QuestionsList
-    [hidden]="filter.selectPQ!=SelectPQ.Questions">
-  </app-questions-list>
-
-
-
-  <div fxFlex></div>
-
 
 </div>

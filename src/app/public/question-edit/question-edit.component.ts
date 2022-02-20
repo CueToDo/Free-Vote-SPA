@@ -97,10 +97,7 @@ export class QuestionEditComponent implements OnInit {
         // Communicate change to sibling PointsComponent
         // where Points ReSelection Takes place:
         if (isNew) {
-          this.appData.SetSlashTag(
-            this.questionEdit.slashTags[0],
-            PointSortTypes.DateDescend
-          );
+          this.appData.SetSlashTag(this.questionEdit.slashTags[0]);
         }
       }
     });

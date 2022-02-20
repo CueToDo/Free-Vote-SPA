@@ -2,30 +2,34 @@
 
   <!-- Begin tab selection and point sort order -->
 
-  <div class="content">
+  <div class="content" [ngClass]="{'show':tabIndex!==4, 'hide':tabIndex===4}">
 
     <div ngClass.gt-xs="py-1">
 
       <div *ngIf="tabIndex < 3" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
+        <!-- Trending Tags -->
         <button mat-button (click)="ChangeTab(0)" [class.selected]="tabIndex===0" matTooltip="trending">
           trending
           <mat-icon>trending_up</mat-icon>
         </button>
 
+        <!-- Recently selected tags -->
         <button mat-button (click)="ChangeTab(1)" [class.selected]="tabIndex===1" matTooltip="recent"
-          *ngIf="haveRecentSlashTags">
+          *ngIf="localData.LoggedInToAuth0 || haveRecentSlashTags">
           recent
           <mat-icon>notifications</mat-icon>
         </button>
 
+        <!-- Tag Search -->
         <button mat-button (click)="ChangeTab(2)" [class.selected]="tabIndex===2" matTooltip="trending">
           search
           <mat-icon>search</mat-icon>
         </button>
 
-        <button mat-button (click)="ChangeTab(4)" *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
+        <!-- Show previously selected tag results -->
+        <button mat-button (click)="BackToSelectedTag()" *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
           matTooltip="{{ topicSelected }}">
           <span class="slash-tag">/</span>
           <span>slash-tag</span>
@@ -36,42 +40,49 @@
       <div *ngIf="tabIndex > 2" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
+        <!-- Show tag clouds and tag search -->
         <button mat-button (click)="ChangeTab(previousTabIndex)" matTooltip="trending">
           <span class="slash-tag">/</span>
           slash-tags
         </button>
 
-        <button mat-button (click)="ChangeTab(3)" [class.selected]="tabIndex===3 || tabIndex===4"
-          *ngIf="localData.LoggedInToAuth0" [matTooltip]="'break-out groups'">
-          groups
-          <mat-icon>groups</mat-icon>
-        </button>
-
-        <button mat-button (click)="qp='question';ChangeTab(5)" [class.selected]="tabIndex===5 && qp==='question'"
+        <!-- Questions -->
+        <button mat-button (click)="ShowQuestions()" [class.selected]="tabIndex===3 || tabIndex===4"
           *ngIf="localData.LoggedInToAuth0" matTooltip="show questions">
           questions
           <mat-icon>help</mat-icon>
         </button>
 
-        <button mat-button (click)="qp='point';ChangeTab(5)" [class.selected]="tabIndex===5 && qp==='point'"
+        <!-- Break-out groups -->
+        <button mat-button (click)="ChangeTab(5)" [class.selected]="tabIndex===5" *ngIf="localData.LoggedInToAuth0"
+          [matTooltip]="'break-out groups'">
+          groups
+          <mat-icon>groups</mat-icon>
+        </button>
+
+        <!-- Tag Points -->
+        <button mat-button (click)="qp='point';ChangeTab(7)" [class.selected]="tabIndex===7"
           *ngIf="localData.LoggedInToAuth0" matTooltip="show points">
           points
           <mat-icon>comment</mat-icon>
         </button>
 
-        <button mat-button (click)="ChangeTab(6)" [class.selected]="tabIndex===6" *ngIf="localData.LoggedInToAuth0"
+        <!-- New question answer or tag point  -->
+        <button mat-button (click)="ChangeTab(8)" [class.selected]="tabIndex===8" *ngIf="localData.LoggedInToAuth0"
           [matTooltip]="'submit new ' + qp" id="newQP">
           <span>new {{ qp }}</span>
           <mat-icon>library_add</mat-icon>
         </button>
 
-        <!-- Search Menu -->
-        <button mat-button (click)="applyFilter(!showingFilter)" *ngIf="topicSelected" [matTooltip]="filterToolTip">
+        <!-- Show Point Filter Options -->
+        <button mat-button (click)="ShowFilterCriteria(!showFilters)" *ngIf="topicSelected"
+          [matTooltip]="filterToolTip">
           <span>{{ filterText }}</span>
           <mat-icon>{{ filterIcon }}</mat-icon>
         </button>
 
-        <!-- Sort Menu -->
+        <!-- Begin Sort Menu -->
+
         <button mat-button [matMenuTriggerFor]="sortOrderMenu" *ngIf="topicSelected" [matTooltip]="sortToolTip">
           <span>sort</span>
           <mat-icon>{{ sortOrderIcon }}</mat-icon>
@@ -128,64 +139,94 @@
 
         </mat-menu>
 
+        <!-- End Sort Menu -->
+
       </div>
 
     </div>
 
+    <hr>
+
   </div>
 
   <!-- End tab selection and point sort order -->
+
+  <!-- Points filter for tagPoints list or questionAnswers -->
+  <app-points-filter (applyFilter)="applyFilter($event)" (pointSortTypeChanged)="pointSortTypeChanged($event)"
+    [showFilters]="showFilters" #pointsFilter>
+  </app-points-filter>
+  <!-- End points filter -->
 
 
   <!-- Begin Tab Content -->
 
   <div fxFlex fxLayout="column" fxLayoutAlign="start center" class="tabContainer">
 
+    <!-- 0 Tag Cloud Trending -->
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===0}">
       <div [ngClass]="{
         'centerStage': tabIndex===0, 
         'stageLeft': tabIndex>0}" fxFill>
-        <div fxLayoutAlign="center">
-          <div class="content">
-            <app-tags [TagCloudType]="TagCloudTypes.Trending" (NewSlashTagSelected)="NewSlashTagSelected($event)">
-            </app-tags>
-          </div>
+        <div class="content">
+          <app-tags [tagCloudType]="TagCloudTypes.Trending" (NewSlashTagSelected)="NewSlashTagSelected($event)">
+          </app-tags>
         </div>
       </div>
     </div>
 
+    <!-- 1 Tag Cloud Recent -->
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===1}">
       <div [ngClass]="{
         'centerStage': tabIndex===1, 
         'stageLeft': tabIndex>1,
         'stageRight': tabIndex<1}" fxFill>
-        <div fxLayoutAlign="center">
-          <div class="content">
-            <app-tags [TagCloudType]="TagCloudTypes.Recent" #tagsRecent (haveTags)="haveRecentTags($event)"
-              (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tags>
-          </div>
+        <div class="content">
+          <app-tags [tagCloudType]="TagCloudTypes.Recent" #tagsRecent
+            (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tags>
         </div>
       </div>
     </div>
 
+    <!-- 2 SlashTag Search -->
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===2}">
       <div [ngClass]="{
         'centerStage': tabIndex===2, 
         'stageLeft': tabIndex>2, 
-        'stageRight': tabIndex<2}" fxFill fxLayout="column">
-        <div fxFlex="3"></div>
-        <div fxLayoutAlign="center">
-          <div class="content">
-            <!-- SlashTag Search -->
-            <app-tag-search (NewSlashTagSelected)="NewSlashTagSelected($event)" #tagSearch></app-tag-search>
-          </div>
+        'stageRight': tabIndex<2}" fxFill fxLayout="column" fxLayoutAlign="center">
+        <div class="content">
+          <app-tag-search (NewSlashTagSelected)="NewSlashTagSelected($event)" #tagSearch></app-tag-search>
         </div>
-        <div fxFlex="3"></div>
       </div>
     </div>
 
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===3}">
-      <div [ngClass]="{'centerStage': tabIndex===3, 'stageLeft': tabIndex>3,'stageRight': tabIndex<3}">
+    <!-- 3 Question List -->
+    <div class="tabContent" [ngClass]="{'topZ':tabIndex===3}">
+      <div [ngClass]="{
+          'centerStage': tabIndex===3, 
+          'stageLeft': tabIndex>3,
+          'stageRight': tabIndex<3}" fxFill>
+        <!-- "Fetch more" component must apply scroller and content classes internally -->
+        <app-questions-list [SlashTag]="filter.slashTag" #appQuestionsList (QuestionCount)="QuestionCount($event)"
+          (QuestionSelected)="QuestionSelected()">
+        </app-questions-list>
+      </div>
+    </div>
+
+    <!-- 4 app points for question answers -->
+    <div class="tabContent" [ngClass]="{'topZ':tabIndex===4}">
+      <div [ngClass]="{
+          'centerStage': tabIndex===4, 
+          'stageLeft': tabIndex>4,
+          'stageRight': tabIndex<4}" fxFill>
+        <!-- "Fetch more" component must apply scroller and content classes internally -->
+        <app-question-answers [filter]="filter" (ViewAllQuestions)="ViewAllQuestions()" #appQuestionAnswers>
+        </app-question-answers>
+      </div>
+    </div>
+
+    <!-- 5 Break-out Group Selection -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===5}">
+      <div [ngClass]="{'centerStage': tabIndex===5, 'stageLeft': tabIndex>5,'stageRight': tabIndex<5}">
         <div class="content">
           <app-group-selection [tagDisplay]="topicSelected" #bogSelection (BogSelected)="BogSelected($event)">
           </app-group-selection>
@@ -193,8 +234,9 @@
       </div>
     </div>
 
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===4}">
-      <div [ngClass]="{'centerStage': tabIndex===4, 'stageLeft': tabIndex>4,'stageRight': tabIndex<4}">
+    <!-- 6 Break-out Group Discussion -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===6}">
+      <div [ngClass]="{'centerStage': tabIndex===6, 'stageLeft': tabIndex>6,'stageRight': tabIndex<6}">
         <div class="content">
           <app-group-discussion [tagDisplay]="topicSelected" [bogSelected]="bogSelected"
             (SelectAnother)="SelectAnotherBoG()" #bogDiscussion>
@@ -203,34 +245,33 @@
       </div>
     </div>
 
-    <!-- app points used to display questions -->
-    <div class="tabContent" [ngClass]="{'topZ':tabIndex===5}">
+    <!-- 7 app points for tag points. Scroller class NOT applied to tabContent -->
+    <div class="tabContent" [ngClass]="{'topZ':tabIndex===7}">
       <div [ngClass]="{
-                        'centerStage': tabIndex===5, 
-                        'stageLeft': tabIndex>5,
-                        'stageRight': tabIndex<5}" fxFill>
-        <app-points (applyFilter)="applyFilter($event)" (switchToPoints)="switchToPoints()"
-          (pointSortTypeChanged)="pointSortTypeChanged($event)">
-        </app-points>
+          'centerStage': tabIndex===7, 
+          'stageLeft': tabIndex>7,
+          'stageRight': tabIndex<7}" fxFill>
+        <!-- "Fetch more" component must apply scroller and content classes internally -->
+        <app-points-list [filter]="filter" #appPointsList>
+        </app-points-list>
       </div>
     </div>
 
-
-    <!-- new question or point -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===6}">
+    <!-- 8 new question or point -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===8}">
       <div [ngClass]="{
-        'centerStage': tabIndex===6, 
-        'stageRight': tabIndex<6 }" fxFill>
+        'centerStage': tabIndex===8, 
+        'stageRight': tabIndex<8 }" fxFill>
         <div fxLayoutAlign="center">
           <div class="content mt-5 mb-3">
 
-            <app-point-edit *ngIf="!showQuestions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()"
-              #newPoint>
-            </app-point-edit>
-
-            <app-question-edit *ngIf="showQuestions" (CancelEdit)="onCancelNew()" (CompleteEdit)="onCompleteNew()"
+            <app-question-edit *ngIf="showQuestions" (CancelEdit)="CancelNewQuestion()" (CompleteEdit)="NewQuestion()"
               #newQuestion>
             </app-question-edit>
+
+            <app-point-edit *ngIf="!showQuestions" (CancelEdit)="CancelNewPoint()" (CompleteEdit)="NewPoint()"
+              (ReselectPoints)="ReselectForNewPoint()" #newPoint>
+            </app-point-edit>
 
           </div>
         </div>

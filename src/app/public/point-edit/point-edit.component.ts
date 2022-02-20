@@ -56,6 +56,7 @@ export class PointEditComponent implements OnInit {
 
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
+  @Output() ReselectPoints = new EventEmitter<PointSortTypes>();
 
   @ViewChild('imageSelect', { static: true }) imageSelect:
     | ElementRef
@@ -358,11 +359,8 @@ export class PointEditComponent implements OnInit {
               // where Points ReSelection Takes place:
 
               if (tagChange && !isNew) {
-                this.appData.SetSlashTag(
-                  returnToSlashTag,
-                  PointSortTypes.DateDescend
-                );
-                this.appData.ReSelectPoints$.next(PointSortTypes.DateDescend);
+                this.appData.SetSlashTag(returnToSlashTag);
+                this.ReselectPoints.emit(PointSortTypes.DateDescend);
               }
             },
             error: serverError => {

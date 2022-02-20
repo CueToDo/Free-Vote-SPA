@@ -1,4 +1,4 @@
-<div appElementScrollEnd (scrollEnd)="fetchMoreQuestions()" class="scroller">
+<div fxFill class="scroller" appElementScrollEnd (scrollEnd)="fetchMoreQuestions()">
 
     <div class="content">
 
@@ -17,21 +17,22 @@
         <!-- Questions List -->
         <div *ngFor="let question of questions">
             <app-question [question]="question" [questionCount]="questionCount"
-                (QuestionDeleted)="onQuestionDeleted($event)">
+                (QuestionDeleted)="onQuestionDeleted($event)" (QuestionSelected)="questionSelected()">
             </app-question>
+        </div>
+
+        <!-- Prompt New Question -->
+        <div *ngIf="!alreadyFetchingFromDB && questionCount===0" class="alert alert-warning">
+            Click "new question" to create the first question for this slash tag
         </div>
 
         <!-- Count -->
         <div class="questionCount" fxLayoutAlign="end center">
 
-            <span *ngIf="!alreadyFetchingFromDB && !filter.single">
+            <span *ngIf="!alreadyFetchingFromDB">
                 {{ questions.length }} question{{ appData.plural(questions.length) }} displayed of {{ questionCount
                 }}<span *ngIf="!allQuestionsDisplayed"> <a *ngIf="questions.length < questionCount" routerLink="."
                         (click)="fetchMoreQuestions()">more</a></span>
-            </span>
-
-            <span *ngIf="filter.single">
-                <a [routerLink]="filter.slashTag">show all</a>
             </span>
 
             <span *ngIf="alreadyFetchingFromDB" class="amr-3">

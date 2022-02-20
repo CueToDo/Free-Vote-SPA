@@ -70,6 +70,7 @@ export class InterceptorService implements HttpInterceptor {
         });
         return of(response);
       } else if (this.localData.LoggedInToAuth0) {
+        // Refresh token (EVERY time?), add to header
         return this.auth.getTokenSilently$().pipe(
           mergeMap(token => {
             this.localData.SetItem('Access-Token', token.toString());

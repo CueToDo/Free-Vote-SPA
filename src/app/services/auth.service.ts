@@ -55,7 +55,7 @@ export class AuthService {
         ) as Observable<Auth0Client>
       ).pipe(
         shareReplay(1), // Every subscription receives the same shared value
-        catchError(err => throwError(err))
+        catchError(err => throwError(() => err))
       );
 
       this.isAuthenticated$ = this.auth0Client$.pipe(

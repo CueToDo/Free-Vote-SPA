@@ -58,15 +58,10 @@ export class AppDataService {
   public RouteParamChange$ = new Subject<string>(); // next url with route parameters
   public TabSelected$ = new Subject<string>();
   public TagsPointsActive$ = new Subject<boolean>(); // Point Selection
-  public ShowPointsTab$ = new Subject();
-  public ReSelectPoints$ = new Subject<PointSortTypes>();
-  public PointsSelected$ = new Subject();
 
   // Change of Point SortOrder or Filter demands a reselect without change of selection parameters
   public PointSortType$ = new Subject<PointSortTypes>();
   public PointSortAscending$ = new Subject<boolean>();
-  public PointsFiltered$ = new Subject<boolean>();
-  public PointsFilterRemove$ = new Subject();
 
   // For responsive viewing
   public DisplayWidth$ = new BehaviorSubject<number>(5); // Viewport width monitoring
@@ -347,35 +342,12 @@ export class AppDataService {
     return date1.getTime() < date2.getTime();
   }
 
-  public SpaVersionUpdateCheck(): void {
-    // Get latest version from API if check is due
-    // and we don't already know an update is required
-    if (
-      this.localData.SpaVersionCheckDue &&
-      !this.localData.SpaVersionUpdateRequired
-    ) {
-      this.GetLatestSPAVersion();
-    }
-  }
-
-  GetLatestSPAVersion(): void {
-    this.httpService.get('lookups/SPAVersion').subscribe({
-      next: (version: any) => {
-        this.localData.SpaVersionLatest = version.value;
-        this.localData.SpaVersionChecked = Date.now();
-        this.localData.Log(`SpaVersionLatest:${version.value}`);
-      },
-      error: error => {
-        console.log('VERSION ERROR:', error);
-      }
-    });
-  }
-
   // arguably should be in http.service
   SaveProfile(profile: FreeVoteProfile): Observable<boolean> {
     return this.httpService.post('profile/profilesave', profile);
   }
 
+  // Voter Delete
   DELETE_ME() {
     return this.httpService.get('profile/voterdelete');
   }
@@ -427,30 +399,14 @@ export class AppDataService {
     }
   }
 
-  //   // Following not necessary on INITIALISE??
+  // // Following not necessary on INITIALISE??
   // // BehaviourSubjects already initialised with empty topic
   // this.SetByOnTopic(this.previousAliasSelected, this.PreviousTopicSelected);
 
-  // // Following not necessary on INITIALISE??
-  // this.RouteParamChange$.next(this.PreviousSlashTagSelected);
-
-  // else {
-  //   // Following not necessary on INITIALISE??
-  //   // BehaviourSubjects already initialised with empty topic
-  //   this.SetByOnTopic(this.previousAliasSelected, this.PreviousTopicSelected);
-  //   this.RouteParamChange$.next(this.PreviousSlashTagSelected);
-  // }
-
-  SetSlashTag(slashTag: string, pointSortType: PointSortTypes): void {
+  // New SlashTag selected in tags component, tag search and new point
+  SetSlashTag(slashTag: string): void {
     this.localData.PreviousSlashTagSelected = slashTag;
     this.localData.ActiveAliasForFilter = '';
-
-    // We're not changing the route- just the tab selected
-    // all routes handled by TagsPointsComponent
-    this.PointsFiltered$.next(false); // Tell PointsComponent to hide filters - don't SelectPoints here
-    this.PointsFilterRemove$.next(null); // Tell TagsPointsComponent - PointsFiltered$ is raised by TagsPointsComponent
-    this.ReSelectPoints$.next(pointSortType); // Tell Points Component to reselect points for new slash tag
-    this.RouteParamChange$.next(slashTag); // Keep separate (this is for the App Component)
   }
 
   GetCountries(): Observable<Kvp[]> {

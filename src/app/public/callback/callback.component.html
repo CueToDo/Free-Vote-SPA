@@ -7,7 +7,7 @@
     </span>
   </div>
 
-  <div class="text-danger mx-3" *ngIf="!handlingCallback">
+  <div class="alert alert-danger mx-3" *ngIf="!handlingCallback">
     <p>Error: {{ error }}</p>
     <p>loggingInToAuth0: {{ localData.LoggingInToAuth0 }}</p>
     <p>loggedInToAuth0: {{ localData.LoggedInToAuth0 }}</p>

@@ -7,18 +7,18 @@ export enum ContentType {
 export enum PointSelectionTypes {
   // Not used in database
 
-  SlashTag = 0, // Standard slection
+  TagPoints = 0, // Standard slection
   Filtered = 1, // Custom selection
   QuestionPoints = 2,
-  Point = 3, // Individual Point
+  Point = 3 // Individual Point
 
   // WoW
-  POTW = 4,
-  POTWVote = 5,
-  WoWAdmin = 6,
+  // POTW = 4,
+  // POTWVote = 5,
+  // WoWAdmin = 6,
 
-  TagSurvey = 7,
-  CDMPProposal = 8
+  // TagSurvey = 7,
+  // CDMPProposal = 8
 }
 
 export enum PointSortTypes {
@@ -63,11 +63,6 @@ export enum PointTypesEnum {
   Petition = 27,
   Question = 28,
   CommentOrEditorial = 29
-}
-
-export enum SelectPQ {
-  Points = 1,
-  Questions = 2
 }
 
 export enum TagCloudTypes {

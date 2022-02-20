@@ -1,12 +1,13 @@
 .pointCount {
-    margin: 20px 10px 200px 0px;
-    text-align: right;
+  /* Big bottom margin allows time to view count before auto fetch more */
+  margin: 20px 10px 60px 0px;
+  text-align: right;
 }
 
 .pointCount span {
-    align-items: center;
+  align-items: center;
 }
 
 .pointCount span a {
-    margin-left: 10px;
+  margin-left: 10px;
 }

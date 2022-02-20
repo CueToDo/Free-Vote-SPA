@@ -1,14 +1,11 @@
+import { EventEmitter } from '@angular/core';
 // Angular
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // Models, Enums
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-import {
-  PointSelectionTypes,
-  PointSortTypes,
-  SelectPQ
-} from 'src/app/models/enums';
+import { PointSelectionTypes, PointSortTypes } from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -22,18 +19,18 @@ import { PointsListComponent } from '../points-list/points-list.component';
   templateUrl: './question-answers.component.html',
   styleUrls: ['./question-answers.component.css']
 })
-export class QuestionAnswersComponent implements OnInit, AfterViewInit {
+export class QuestionAnswersComponent {
+  @Input() public filter = new FilterCriteria();
+  @Output() ViewAllQuestions = new EventEmitter<boolean>();
+
   @ViewChild('PointsList') pointsList!: PointsListComponent;
 
   public mode = 'answers'; // myPoints, newAnswer
   private savedMode = '';
 
-  public filter = new FilterCriteria();
   public attachedToQuestion = false;
   public questionID: number = 0;
   public error = '';
-
-  public SelectPQ = SelectPQ;
 
   constructor(
     public localData: LocalDataService,
@@ -46,16 +43,11 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     this.filter.slashTag = this.activeRoute.snapshot.params['tag'];
     this.filter.questionSlug = this.activeRoute.snapshot.params['questionSlug']; // Display points attached to question
     this.filter.sortType = PointSortTypes.Random;
-    this.filter.sortAscending = true;
-    this.filter.selectPQ = SelectPQ.Questions;
+    this.filter.sortAscending = true; // Irrelevant for random
   }
 
-  ngAfterViewInit(): void {
-    this.viewAllAnswers();
-  }
-
-  get tagSelected(): string {
-    return this.localData.PreviousSlashTagSelected; // Used in routerLink
+  Back(): void {
+    this.ViewAllQuestions.emit(true);
   }
 
   public get QuestionSelected(): string {
@@ -66,13 +58,20 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     return this.localData.questionDetails;
   }
 
-  viewAllAnswers(): void {
+  public viewAllAnswers(): void {
     this.error = '';
     this.mode = 'answers';
     this.attachedToQuestion = true;
     this.filter.myPoints = false;
-    this.filter.unAttachedToQuestion = false;
-    this.pointsList.SelectPoints(false);
+    this.filter.sharesTagButNotAttached = false;
+    this.filter.updateTopicViewCount = false;
+    this.pointsList.SelectPoints();
+  }
+
+  public ReselectForNewAnswer(): void {
+    this.filter.sortType = PointSortTypes.DateUpdated;
+    this.filter.sortAscending = false;
+    this.viewAllAnswers();
   }
 
   viewMyPoints(): void {
@@ -80,8 +79,9 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     this.mode = 'myPoints';
     this.attachedToQuestion = true;
     this.filter.myPoints = true;
-    this.filter.unAttachedToQuestion = false;
-    this.pointsList.SelectPoints(false);
+    this.filter.sharesTagButNotAttached = false;
+    this.filter.updateTopicViewCount = false;
+    this.pointsList.SelectPoints();
   }
 
   addAnswer(): void {
@@ -89,8 +89,9 @@ export class QuestionAnswersComponent implements OnInit, AfterViewInit {
     this.savedMode = this.mode;
     this.mode = 'addAnswer';
     this.attachedToQuestion = false;
-    this.filter.unAttachedToQuestion = true;
-    this.pointsList.SelectPoints(false);
+    this.filter.sharesTagButNotAttached = true;
+    this.filter.updateTopicViewCount = false;
+    this.pointsList.SelectPoints();
   }
 
   newAnswer(): void {

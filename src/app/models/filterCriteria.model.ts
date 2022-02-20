@@ -4,12 +4,14 @@ import {
   PointSortTypes,
   DraftStatusFilter,
   PointFlags,
-  PointFeedbackFilter,
-  SelectPQ
+  PointFeedbackFilter
 } from './enums';
 
 export class FilterCriteria {
-  pointSelectionType = PointSelectionTypes.SlashTag;
+  applyFilter = true;
+  updateTopicViewCount = false;
+
+  pointSelectionType = PointSelectionTypes.TagPoints;
 
   single = false;
 
@@ -32,7 +34,6 @@ export class FilterCriteria {
   text = '';
 
   // Point Type
-  selectPQ = SelectPQ.Points; // from Tags-And-Points component
   applyTypeFilter = false;
   previouslyFilteringByType = false;
   pointTypeID = PointTypesEnum.Opinion;
@@ -57,7 +58,7 @@ export class FilterCriteria {
   previouslyFilteringMyPoints = false;
 
   // QuestionPoints
-  unAttachedToQuestion = false;
+  sharesTagButNotAttached = false;
 
   // Draft Status Filter
   applyDraftFilter = false;

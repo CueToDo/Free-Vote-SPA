@@ -14,35 +14,28 @@ import { AppDataService } from '../../services/app-data.service';
 import { TagsService } from '../../services/tags.service';
 
 @Component({
-  selector: 'app-tags', // is used as both a regular component and a router-outlet
+  selector: 'app-tags',
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.css'],
-  providers: [], //  Need HttpClientService as well as TagsService. NO: do not decorate components with service providers.
   preserveWhitespaces: true
-  // animations: [SlideInOutAnimation]
 })
 export class TagsComponent implements OnInit, OnDestroy {
-  tagCloudType = TagCloudTypes.Trending;
-  tags: Tag[] = [];
+  @Input() tagCloudType = TagCloudTypes.Trending;
 
   @Output() haveTags = new EventEmitter<boolean>();
   @Output() NewSlashTagSelected = new EventEmitter<string>();
+
+  tags: Tag[] = [];
 
   waiting = true;
   hideTags = false;
   toggleText = 'hide tags';
 
-  pointsSelected$?: Subscription;
   tags$?: Subscription;
 
   // Viewport width monitoring
   width$?: Subscription;
   widthBand = 4;
-
-  @Input()
-  set TagCloudType(value: TagCloudTypes) {
-    this.tagCloudType = value;
-  }
 
   error = '';
 
@@ -97,15 +90,13 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   setSlashTag(slashTag: string): void {
     // Get appDataService to broadcast (method shared by PointEditComponent)
-    this.appDataService.SetSlashTag(slashTag, this.appDataService.defaultSort);
+    this.appDataService.SetSlashTag(slashTag);
 
+    // Direct communication to parent - is this needed if parent subscribes to above
     this.NewSlashTagSelected.emit(slashTag);
   }
 
   ngOnDestroy(): void {
-    if (this.pointsSelected$) {
-      this.pointsSelected$.unsubscribe();
-    } // Not set for Trending
     this.tags$?.unsubscribe();
     this.width$?.unsubscribe();
   }

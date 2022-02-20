@@ -1,5 +1,12 @@
 // Angular
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  OnDestroy,
+  AfterViewInit
+} from '@angular/core';
 
 // Models, enums
 import { ID } from 'src/app/models/common';
@@ -8,28 +15,34 @@ import { Point, PointSelectionResult } from 'src/app/models/point.model';
 import {
   PointSelectionTypes,
   PointTypesEnum,
-  PointSortTypes,
-  SelectPQ
+  PointSortTypes
 } from 'src/app/models/enums';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-points-list',
   templateUrl: './points-list.component.html',
   styleUrls: ['./points-list.component.css']
 })
-export class PointsListComponent {
+export class PointsListComponent implements OnDestroy, AfterViewInit {
   @Input() public filter = new FilterCriteria();
+  @Input() public forQuestion = false;
   @Input() public attachedToQuestion = false;
 
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
   @Output() PointCount = new EventEmitter<number>();
   @Output() QuestionID = new EventEmitter<number>();
+
+  // Subscriptions
+  private pointSelection$: Subscription | undefined;
+  private pointSortType$: Subscription | undefined;
+  private pointSortAscending$: Subscription | undefined;
 
   public pointCount = 0;
   public IDs: ID[] = [];
@@ -39,9 +52,9 @@ export class PointsListComponent {
   // Prompt to be first to create point for tag or answer to question
   public get firstResponse() {
     if (this.pointCount > 0) return '';
-    if (this.filter.selectPQ === SelectPQ.Points)
-      return 'Click "new point" to create the first point for this tag.';
-    return 'Click "new answer" to create the first response to this question.';
+    if (this.forQuestion)
+      return 'Click "new answer" to create the first response to this question.';
+    return 'Click "new point" to create the first point for this tag.';
   }
 
   public error = '';
@@ -78,6 +91,37 @@ export class PointsListComponent {
     private pointsService: PointsService
   ) {}
 
+  ngAfterViewInit(): void {
+    this.pointSortAscending$ = this.appData.PointSortAscending$.subscribe(
+      (ascending: boolean) => {
+        this.filter.sortAscending = ascending;
+        this.SelectPoints();
+      }
+    );
+    this.pointSortType$ = this.appData.PointSortType$.subscribe(
+      (pointSortType: PointSortTypes) => {
+        this.newSortType(pointSortType);
+      }
+    );
+  }
+
+  ReselectPoints(pointSortType: PointSortTypes) {
+    this.filter.slashTag = this.localData.PreviousSlashTagSelected; // Set by the Point-Edit Component
+
+    if (pointSortType !== PointSortTypes.NoChange) {
+      if (pointSortType === PointSortTypes.DateDescend) {
+        // Ensure new point at top
+        this.filter.sortType = PointSortTypes.DateUpdated;
+        this.filter.sortAscending = false;
+      } else {
+        this.filter.sortType = pointSortType;
+      }
+    }
+    // We have a new point or tag
+    this.filter.updateTopicViewCount = true; // ToDo S/B new tag only
+    this.SelectPoints();
+  }
+
   OnTopicSearch(): string {
     let onTopic = '';
     if (!this.filter?.anyTag) {
@@ -89,19 +133,14 @@ export class PointsListComponent {
     return onTopic;
   }
 
-  SelectPointsByVoter(): void {
-    this.localData.ActiveAliasForFilter = this.filter?.byAlias || '';
-
-    if (this.filter?.slashTag) {
-      this.localData.PreviousSlashTagSelected = this.filter.slashTag;
-    }
-
-    // Communicate Change to App Component
-
-    this.SelectPoints(false);
+  public ReselectForNewPoint(): void {
+    this.filter.updateTopicViewCount = false;
+    this.filter.sortType = PointSortTypes.DateUpdated;
+    this.filter.sortAscending = false;
+    this.SelectPoints();
   }
 
-  SelectPoints(updateTopicViewCount: boolean): void {
+  SelectPoints(): void {
     this.possibleAnswers = false;
 
     if (!this.alreadyFetchingPointsFromDB) {
@@ -173,25 +212,26 @@ export class PointsListComponent {
           break;
 
         case PointSelectionTypes.QuestionPoints:
-          this.possibleAnswers = this.filter.unAttachedToQuestion;
+          this.possibleAnswers = this.filter.sharesTagButNotAttached;
 
-          this.pointsService
-            .GetFirstBatchQuestionPoints(
-              this.filter.slashTag,
-              this.filter.questionSlug,
-              this.filter.myPoints,
-              this.filter.unAttachedToQuestion,
-              this.filter.sortType,
-              this.filter.sortAscending
-            )
-            .subscribe({
-              next: psr => this.DisplayPoints(psr),
-              error: err => {
-                console.log(err);
-                this.error = err.error.detail;
-                this.alreadyFetchingPointsFromDB = false;
-              }
-            });
+          if (this.filter.questionSlug)
+            this.pointsService
+              .GetFirstBatchQuestionPoints(
+                this.filter.slashTag,
+                this.filter.questionSlug,
+                this.filter.myPoints,
+                this.filter.sharesTagButNotAttached,
+                this.filter.sortType,
+                this.filter.sortAscending
+              )
+              .subscribe({
+                next: psr => this.DisplayPoints(psr),
+                error: err => {
+                  console.log(err);
+                  this.error = err.error.detail;
+                  this.alreadyFetchingPointsFromDB = false;
+                }
+              });
 
           break;
 
@@ -205,7 +245,7 @@ export class PointsListComponent {
                   this.filter.slashTag,
                   this.filter.sortType,
                   this.filter.sortAscending,
-                  updateTopicViewCount
+                  this.filter.updateTopicViewCount
                 )
                 .subscribe({
                   next: psr => this.DisplayPoints(psr),
@@ -249,9 +289,8 @@ export class PointsListComponent {
   DisplayPoints(psr: PointSelectionResult): void {
     this.alreadyFetchingPointsFromDB = false;
 
-    // API return questionID having been supplied with QuestionSlug
-    if (this.filter.selectPQ === SelectPQ.Questions)
-      this.QuestionID.emit(psr.questionID);
+    // API returns questionID having been supplied with QuestionSlug
+    if (this.forQuestion) this.QuestionID.emit(psr.questionID);
 
     this.PointCount.emit(psr.pointCount);
 
@@ -318,7 +357,7 @@ export class PointsListComponent {
         this.lastBatchRow < this.pointCount &&
         this.lastPageRow < this.pointCount
       ) {
-        // More defensive coding if DB givesd incorrect page count
+        // More defensive coding if DB gives incorrect page count
 
         // Get another BATCH of points
 
@@ -342,7 +381,6 @@ export class PointsListComponent {
   NewPointsDisplayed(): void {
     this.alreadyFetchingPointsFromDB = false;
     this.allPointsDisplayed = this.points.length >= this.pointCount;
-    this.appData.PointsSelected$.next(null);
   }
 
   onPointDeleted(id: number): void {
@@ -368,8 +406,10 @@ export class PointsListComponent {
       }
     }
 
-    // ToDo Need to remove id from IDs as well before getting next batch
+    // Filter out the deleted point
     this.points = this.points.filter(value => value.pointID !== id);
+
+    // Remove id from IDs before getting next batch
     this.IDs = this.IDs.filter(value => value.id != id);
 
     this.pointCount--; // decrement before calling NewPointsDisplayed which updates allPointsDisplayed
@@ -383,5 +423,11 @@ export class PointsListComponent {
 
   RemoveFromAnswers(pointID: number): void {
     this.RemovePointFromAnswers.emit(pointID);
+  }
+
+  ngOnDestroy(): void {
+    this.pointSelection$?.unsubscribe();
+    this.pointSortType$?.unsubscribe();
+    this.pointSortAscending$?.unsubscribe();
   }
 }

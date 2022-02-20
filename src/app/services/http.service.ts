@@ -60,7 +60,7 @@ export class HttpService {
           map(_ => {
             // we don't return the jwt, we return a boolean
             if (!this.localData.GotFreeVoteJwt) {
-              throwError('No JWT'); // must be handled by the subscriber
+              throwError(() => new Error('No JWT')); // must be handled by the subscriber
             }
             this.jwtFetched$.next(true); // Any subsequently queued requests are now unlocked
             this.jwtFetched$.complete();

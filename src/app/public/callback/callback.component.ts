@@ -32,28 +32,27 @@ export class CallbackComponent implements OnInit, OnDestroy {
     // app.component subscribes to this and calls this.location.replaceState
     // This prevents completion of Auth0 login
 
-    console.log('callback component: initialising');
-
     this.callback$ = this.auth.handleAuthCallback().subscribe({
       next: targetRoute => {
+        this.handlingCallback = false;
         this.localData.Log('AuthCallBack subscription to getAPiJwt complete');
         this.localData.Log(this.localData.freeVoteProfile.alias);
         this.localData.Log(targetRoute);
-        console.log('targetRoute', targetRoute);
         this.router.navigate([targetRoute]);
-        console.log('navigated');
       },
       error: serverError => {
+        this.handlingCallback = false;
         if (serverError.error.detail) {
           this.error = serverError.error.detail;
+        } else if (serverError.error.message) {
+          this.error = serverError.error.message;
         } else if (serverError.error) {
           this.error = serverError.error;
         } else if (serverError) {
           this.error = serverError;
         }
         this.localData.Log(`Calback component error: ${this.error}`);
-      },
-      complete: () => (this.handlingCallback = false) // even if error
+      }
     });
   }
 

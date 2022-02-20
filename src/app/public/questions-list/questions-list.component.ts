@@ -8,7 +8,6 @@ import {
   Question,
   QuestionSelectionResult
 } from 'src/app/models/question.model';
-import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -21,8 +20,15 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   styleUrls: ['./questions-list.component.css']
 })
 export class QuestionsListComponent {
-  @Input() public filter!: FilterCriteria;
+  // Questions are filtered by SlashTag only
+  @Input() SlashTag = '';
+
+  // SortType and direction
+  @Input() SortType = PointSortTypes.DateUpdated;
+  @Input() SortAscending = false;
+
   @Output() QuestionCount = new EventEmitter<number>();
+  @Output() QuestionSelected = new EventEmitter();
 
   public questions: Question[] = [];
   public IDs: ID[] = [];
@@ -42,12 +48,15 @@ export class QuestionsListComponent {
 
   private get lastPageRow(): number {
     let lastRow = 0;
+
     if (this.questions && this.questions.length > 0) {
       lastRow = this.questions[this.questions.length - 1].rowNumber;
     }
+
     if (this.questions.length > lastRow) {
       lastRow = this.questions.length;
     } // Defensive if point count from databsae is wrong
+
     return lastRow;
   }
 
@@ -69,15 +78,14 @@ export class QuestionsListComponent {
       this.questions = [];
       this.error = '';
 
-      if (this.filter) {
-        this.filter.slashTag = this.localData.PreviousSlashTagSelected;
-      }
+      this.SlashTag = this.localData.PreviousSlashTagSelected;
+
       // Infinite Scroll: Get questions in batches
       this.questionsService
         .GetFirstBatchForTag(
-          this.filter.slashTag,
-          this.filter.sortType,
-          this.filter.sortAscending,
+          this.SlashTag,
+          this.SortType,
+          this.SortAscending,
           updateTopicViewCount
         )
         .subscribe({
@@ -95,8 +103,8 @@ export class QuestionsListComponent {
       // Don't go to server to re-sort if only 1 point selected
 
       // ReversalOnly means we can allow the database to update rownumbers on previously selected points
-      const reversalOnly = this.filter.sortType === pointSortType;
-      this.filter.sortType = pointSortType;
+      const reversalOnly = this.SortType === pointSortType;
+      this.SortType = pointSortType;
       this.alreadyFetchingFromDB = true;
 
       this.questionsService
@@ -162,7 +170,7 @@ export class QuestionsListComponent {
         this.lastBatchRow < this.questionCount &&
         this.lastPageRow < this.questionCount
       ) {
-        // More defensive coding if DB givesd incorrect page count
+        // More defensive coding if DB gives incorrect page count
 
         // Get another BATCH of points
 
@@ -170,7 +178,7 @@ export class QuestionsListComponent {
         this.allQuestionsDisplayed = false;
 
         this.questionsService
-          .GetNextBatch(this.filter.sortType, this.lastBatchRow + 1)
+          .GetNextBatch(this.SortType, this.lastBatchRow + 1)
           .subscribe({
             next: response => {
               // New Batch
@@ -189,10 +197,13 @@ export class QuestionsListComponent {
     }
   }
 
+  ReselectForNewQuestion() {
+    this.SelectQuestions(false);
+  }
+
   NewQuestionsDisplayed(): void {
     this.alreadyFetchingFromDB = false;
     this.allQuestionsDisplayed = this.questions.length >= this.questionCount;
-    this.appData.PointsSelected$.next(null);
   }
 
   onQuestionDeleted(id: number): void {
@@ -207,20 +218,30 @@ export class QuestionsListComponent {
       // Get deleted question row number
       const questionRowNo = deleted[0].rowNumber;
 
-      // decrement rownumber for all questions above that
+      // decrement rownumber in questions for all questions above that
       for (var i = 0, len = this.questions.length; i < len; i++) {
         if (this.questions[i].rowNumber > questionRowNo)
           this.questions[i].rowNumber--;
       }
+
+      // decrement rownumber in IDs for all questions above that
+      for (var i = 0, len = this.IDs.length; i < len; i++) {
+        if (this.IDs[i].rowNumber > questionRowNo) this.IDs[i].rowNumber--;
+      }
     }
 
     // Filter out the deleted question
-    this.questions = this.questions.filter(value => {
-      return value.questionID !== id;
-    });
+    this.questions = this.questions.filter(value => value.questionID !== id);
+
+    // Remove id from IDs before getting next batch
+    this.IDs = this.IDs.filter(value => value.id != id);
 
     // Decrement count before calling NewPointsDisplayed which updates allPointsDisplayed
     this.questionCount--;
     this.NewQuestionsDisplayed();
+  }
+
+  questionSelected(): void {
+    this.QuestionSelected.emit();
   }
 }
