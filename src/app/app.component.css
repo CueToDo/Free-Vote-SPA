@@ -4,10 +4,12 @@
 }
 
 /* https://colorhunt.co/palette/161649 */
-.primary {
+#titleBar {
   color: white;
   background-color: #6900ff;
   height: 60px;
+  width: 100%;
+  position: relative;
 }
 
 nav {
@@ -18,12 +20,17 @@ nav {
   padding-bottom: 10px;
 }
 
-.primary h1 {
+#titleBar h1 {
   margin: 0;
 }
 
-.primary button {
+#titleBar button {
   margin-left: 10px;
+}
+
+.burger {
+  position: absolute;
+  left: 0;
 }
 
 .burgerButton {
@@ -32,14 +39,16 @@ nav {
   border: none;
 }
 
-.title {
-  margin-left: 30px !important;
-  margin-right: 30px !important;
+#title {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  text-align: center;
 }
 
-.titleOffset {
-  margin-left: 60px !important;
-  font-size: 1.1em;
+#offline {
+  position: absolute;
+  right: 0;
 }
 
 .under500 {

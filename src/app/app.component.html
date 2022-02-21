@@ -1,29 +1,25 @@
 <div fxFill fxLayout="column" class="app">
 
-  <div class="primary" fxLayoutAlign="center center">
+  <div id="titleBar">
 
     <!-- Burger menu for small screens -->
-    <div *ngIf="showBurger">
-
+    <div *ngIf="showBurger" class="burger VC">
       <button type="button" class="burgerButton" (click)="toggleBurgerMenu()">
         <mat-icon aria-label="drop down menu">menu</mat-icon>
       </button>
-
     </div>
 
-    <div fxFlex></div>
-
     <!-- Big URL confirmation -->
-    <h1 [title]="pageTitleToolTip" class="title" [ngClass]="{titleOffset:showBurger, under500:under500}">
-      <span *ngIf="routeDisplay===''">
-        {{ localData.website }}
-      </span>
-      {{ routeDisplay }}
-    </h1>
+    <div id="title" class="VC">
+      <h1 [title]="pageTitleToolTip" [ngClass]="{under500:under500}">
+        <span *ngIf="routeDisplay===''">
+          {{ localData.website }}
+        </span>
+        {{ routeDisplay }}
+      </h1>
+    </div>
 
-    <div fxFlex></div>
-
-    <div *ngIf="offline" class="amr-3">
+    <div *ngIf="offline" class="amr-3 VC" id="offline">
       OFFLINE
     </div>
   </div>
@@ -34,6 +30,7 @@
   <nav fxLayoutAlign="center" *ngIf="!showBurger">
     <app-nav-main></app-nav-main>
   </nav>
+
 
   <!-- Use of main element is messing with flexLayout -->
   <div fxFlex (click)="closeBurgerMenu()">
@@ -69,7 +66,7 @@
           {{ localAPI }}
         </span>
         <span class="align-middle copyright" (click)="toggleLocalAPI()">
-          {{ localData.website }} 2022 v13.8.0
+          {{ localData.website }} 2022 v13.8.1
         </span>
       </div>
 
