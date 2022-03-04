@@ -134,7 +134,7 @@ export class QuestionComponent {
     ]);
 
     // ... but need to change tab, so communicate up
-    this.QuestionSelected.emit();
+    this.QuestionSelected.emit(this.question.questionID);
   }
 
   anon(): void {

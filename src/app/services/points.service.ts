@@ -60,7 +60,7 @@ export class PointsService {
 
   GetFirstBatchQuestionPoints(
     slashTag: string,
-    questionSlug: string,
+    questionID: number,
     myPointsOnly: boolean,
     unAttached: boolean,
     pointSortOrder: PointSortTypes,
@@ -70,7 +70,7 @@ export class PointsService {
       `points/getFirstBatchQuestionPoints/${slashTag.replace(
         '/',
         ''
-      )}/${questionSlug}/${myPointsOnly ? 'Y' : 'N'}` +
+      )}/${questionID}/${myPointsOnly ? 'Y' : 'N'}` +
       `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortAscending}/${
         this.batchSize
       }/${this.pageSize}`;
@@ -217,7 +217,6 @@ export class PointsService {
     const PSR = new PointSelectionResult();
 
     PSR.pointCount = sourceData.pointCount;
-    PSR.questionID = sourceData.questionID;
     PSR.fromDate = sourceData.fromDate;
     PSR.toDate = sourceData.toDate;
 

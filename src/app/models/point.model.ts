@@ -28,7 +28,6 @@ export class PointSelectionResult {
   // My server and client code agreed these should be capitalised,
   // but after updating to VS Angular project, framework intervenes and insists lower case
   pointCount = 0;
-  questionID = 0;
 
   pointIDs: ID[] = [];
   fromDate = '';

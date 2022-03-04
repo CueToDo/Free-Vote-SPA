@@ -21,7 +21,7 @@ export class FilterCriteria {
   previouslyFilteringAnyTag = false;
 
   // Answers to Questions
-  questionSlug = '';
+  questionID = 0;
 
   // Alias Filter
   applyAliasFilter = false;

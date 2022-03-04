@@ -31,13 +31,11 @@ import { Subscription } from 'rxjs';
 })
 export class PointsListComponent implements OnDestroy, AfterViewInit {
   @Input() public filter = new FilterCriteria();
-  @Input() public forQuestion = false;
   @Input() public attachedToQuestion = false;
 
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
   @Output() PointCount = new EventEmitter<number>();
-  @Output() QuestionID = new EventEmitter<number>();
 
   // Subscriptions
   private pointSelection$: Subscription | undefined;
@@ -52,7 +50,7 @@ export class PointsListComponent implements OnDestroy, AfterViewInit {
   // Prompt to be first to create point for tag or answer to question
   public get firstResponse() {
     if (this.pointCount > 0) return '';
-    if (this.forQuestion)
+    if (this.attachedToQuestion)
       return 'Click "new answer" to create the first response to this question.';
     return 'Click "new point" to create the first point for this tag.';
   }
@@ -214,11 +212,11 @@ export class PointsListComponent implements OnDestroy, AfterViewInit {
         case PointSelectionTypes.QuestionPoints:
           this.possibleAnswers = this.filter.sharesTagButNotAttached;
 
-          if (this.filter.questionSlug)
+          if (this.filter.questionID)
             this.pointsService
               .GetFirstBatchQuestionPoints(
                 this.filter.slashTag,
-                this.filter.questionSlug,
+                this.filter.questionID,
                 this.filter.myPoints,
                 this.filter.sharesTagButNotAttached,
                 this.filter.sortType,
@@ -288,9 +286,6 @@ export class PointsListComponent implements OnDestroy, AfterViewInit {
 
   DisplayPoints(psr: PointSelectionResult): void {
     this.alreadyFetchingPointsFromDB = false;
-
-    // API returns questionID having been supplied with QuestionSlug
-    if (this.forQuestion) this.QuestionID.emit(psr.questionID);
 
     this.PointCount.emit(psr.pointCount);
 

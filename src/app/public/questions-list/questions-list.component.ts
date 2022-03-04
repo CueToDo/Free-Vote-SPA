@@ -241,7 +241,7 @@ export class QuestionsListComponent {
     this.NewQuestionsDisplayed();
   }
 
-  questionSelected(): void {
-    this.QuestionSelected.emit();
+  questionSelected(questionID: number): void {
+    this.QuestionSelected.emit(questionID);
   }
 }

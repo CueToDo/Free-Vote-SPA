@@ -13,6 +13,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
 
 // Components
 import { PointsListComponent } from '../points-list/points-list.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-question-answers',
@@ -25,11 +26,13 @@ export class QuestionAnswersComponent {
 
   @ViewChild('PointsList') pointsList!: PointsListComponent;
 
+  private questionPointAddRemove$: Subscription | undefined;
+
   public mode = 'answers'; // myPoints, newAnswer
   private savedMode = '';
 
   public attachedToQuestion = false;
-  public questionID: number = 0;
+
   public error = '';
 
   constructor(
@@ -41,7 +44,6 @@ export class QuestionAnswersComponent {
   ngOnInit(): void {
     this.filter.pointSelectionType = PointSelectionTypes.QuestionPoints;
     this.filter.slashTag = this.activeRoute.snapshot.params['tag'];
-    this.filter.questionSlug = this.activeRoute.snapshot.params['questionSlug']; // Display points attached to question
     this.filter.sortType = PointSortTypes.Random;
     this.filter.sortAscending = true; // Irrelevant for random
   }
@@ -56,6 +58,11 @@ export class QuestionAnswersComponent {
 
   public get QuestionDetails(): string {
     return this.localData.questionDetails;
+  }
+
+  public initialSelection(questionID: number) {
+    this.filter.questionID = questionID;
+    this.viewAllAnswers();
   }
 
   public viewAllAnswers(): void {
@@ -108,21 +115,15 @@ export class QuestionAnswersComponent {
   AddRemovePointFromAnswers(add: boolean, pointID: number): void {
     this.error = '';
 
-    this.questionsService
-      .QuestionPointAddRemove(
-        this.filter.slashTag,
-        add,
-        this.filter.questionSlug,
-        pointID
-      )
+    this.questionPointAddRemove$ = this.questionsService
+      .QuestionPointAddRemove(add, this.filter.questionID, pointID)
       .subscribe({
         next: _ => this.viewMyPoints(),
         error: err => (this.error = err.error.detail)
       });
   }
 
-  // Determined in points-list component, required by point-edit for new answer
-  QuestionID(questionID: number): void {
-    this.questionID = questionID;
+  ngOnDestroy() {
+    this.questionPointAddRemove$?.unsubscribe();
   }
 }

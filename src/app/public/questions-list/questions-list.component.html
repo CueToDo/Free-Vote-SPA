@@ -17,7 +17,8 @@
         <!-- Questions List -->
         <div *ngFor="let question of questions">
             <app-question [question]="question" [questionCount]="questionCount"
-                (QuestionDeleted)="onQuestionDeleted($event)" (QuestionSelected)="questionSelected()">
+                (QuestionDeleted)="onQuestionDeleted($event)"
+                (QuestionSelected)="questionSelected(question.questionID)">
             </app-question>
         </div>
 

@@ -446,7 +446,6 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   }
 
   QuestionCount(count: number): void {
-    console.log('QuestionCount', count, this.allowSwitchToPoints);
     this.questionCount = count;
     if (count == 0 && this.allowSwitchToPoints) {
       this.ChangeTab(tabs.tagPoints);
@@ -459,8 +458,8 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     else this.ChangeTab(tabs.questions);
   }
 
-  QuestionSelected(): void {
-    console.log('QuestionSelected');
+  QuestionSelected(questionID: number): void {
+    this.questionAnswersComponent.initialSelection(questionID);
     this.ChangeTab(tabs.questionAnswers);
   }
 
