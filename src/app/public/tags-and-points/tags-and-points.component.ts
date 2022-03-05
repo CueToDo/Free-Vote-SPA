@@ -375,8 +375,10 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         this.filter.pointSelectionType = PointSelectionTypes.QuestionPoints;
 
         // Select questions for tag?
-        if (!this.questionsSelected)
-          this.questionsListComponent.SelectQuestions(false);
+        if (!this.questionsSelected) {
+          this.refreshRecent = true; // Refresh Recent Tags when switch back from Point Selection
+          this.questionsListComponent.SelectQuestions(true);
+        }
 
         this.questionsSelected = true;
 
@@ -391,6 +393,13 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
       case tabs.groups: // 5
         this.bogSelectionComponent.breakoutGroupsJoined(true);
         newRoute = this.slashTagSelected + '/break-out-groups';
+        break;
+
+      case tabs.groupDiscussion:
+        newRoute =
+          this.slashTagSelected +
+          '/break-out-groups/' +
+          this.appData.kebabUri(this.bogSelected.breakoutRoom);
         break;
 
       case tabs.tagPoints: // 7
