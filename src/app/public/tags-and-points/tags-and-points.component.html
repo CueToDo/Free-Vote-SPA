@@ -213,13 +213,14 @@
     </div>
 
     <!-- 4 app points for question answers -->
-    <div class="tabContent" [ngClass]="{'topZ':tabIndex===4}">
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===4}">
       <div [ngClass]="{
           'centerStage': tabIndex===4, 
           'stageLeft': tabIndex>4,
           'stageRight': tabIndex<4}" fxFill>
         <!-- "Fetch more" component must apply scroller and content classes internally -->
-        <app-question-answers [filter]="filter" (ViewAllQuestions)="ViewAllQuestions()" #appQuestionAnswers>
+        <app-question-answers [filter]="filter" (ViewAllQuestions)="ViewAllQuestions()" #appQuestionAnswers
+          (AnswerAdded)="AnswerAdded($event)">
         </app-question-answers>
       </div>
     </div>

@@ -23,6 +23,7 @@ import { Subscription } from 'rxjs';
 export class QuestionAnswersComponent {
   @Input() public filter = new FilterCriteria();
   @Output() ViewAllQuestions = new EventEmitter<boolean>();
+  @Output() AnswerAdded = new EventEmitter<number>();
 
   @ViewChild('PointsList') pointsList!: PointsListComponent;
 
@@ -60,8 +61,7 @@ export class QuestionAnswersComponent {
     return this.localData.questionDetails;
   }
 
-  public initialSelection(questionID: number) {
-    this.filter.questionID = questionID;
+  public initialSelection() {
     this.viewAllAnswers();
   }
 
@@ -107,9 +107,15 @@ export class QuestionAnswersComponent {
     this.mode = 'newAnswer';
   }
 
-  cancelEdit(): void {
+  cancelNewAnswer(): void {
     this.error = '';
     this.mode = this.savedMode;
+  }
+
+  newAnswerSaved() {
+    this.error = '';
+    this.mode = this.savedMode;
+    this.pointsList.SelectPoints();
   }
 
   AddRemovePointFromAnswers(add: boolean, pointID: number): void {

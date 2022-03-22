@@ -255,6 +255,7 @@ export class LocalDataService {
       this.freeVoteProfile.city = this.GetItem('city');
       this.freeVoteProfile.countryId = this.GetItem('countryId');
       this.freeVoteProfile.cityId = this.GetItem('cityId');
+      this.freeVoteProfile.constituencyID = this.GetItem('constituencyID');
 
       this.freeVoteProfile.profilePictureOptionID = this.GetItem(
         'profilePictureOptionID'
@@ -290,11 +291,20 @@ export class LocalDataService {
       if (this.freeVoteProfile.city) {
         this.SetItem('city', this.freeVoteProfile.city);
       }
+      if (this.freeVoteProfile.constituency) {
+        this.SetItem('constituency', this.freeVoteProfile.constituency);
+      }
       if (this.freeVoteProfile.countryId) {
         this.SetItem('countryId', this.freeVoteProfile.countryId.toString());
       }
       if (this.freeVoteProfile.cityId) {
         this.SetItem('cityId', this.freeVoteProfile.cityId.toString());
+      }
+      if (this.freeVoteProfile.constituencyID) {
+        this.SetItem(
+          'constituencyID',
+          this.freeVoteProfile.constituencyID.toString()
+        );
       }
 
       if (this.freeVoteProfile.profilePictureOptionID) {
@@ -341,11 +351,18 @@ export class LocalDataService {
       if (values.city) {
         this.freeVoteProfile.city = values.city;
       }
+      if (values.constituency) {
+        this.freeVoteProfile.constituency = values.constituency;
+      }
+
       if (values.countryId) {
         this.freeVoteProfile.countryId = values.countryId;
       }
       if (values.cityId) {
         this.freeVoteProfile.cityId = values.cityId;
+      }
+      if (values.constituencyID) {
+        this.freeVoteProfile.constituencyID = values.constituencyID;
       }
 
       if (values.profilePictureOptionID) {
@@ -431,6 +448,7 @@ export class LocalDataService {
     this.freeVoteProfile.city = '';
     this.freeVoteProfile.countryId = '0';
     this.freeVoteProfile.cityId = '0';
+    this.freeVoteProfile.constituencyID = '0';
     this.freeVoteProfile.profilePictureOptionID = '';
     this.freeVoteProfile.profilePicture = '';
 

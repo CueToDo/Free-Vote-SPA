@@ -468,13 +468,19 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   }
 
   QuestionSelected(questionID: number): void {
-    this.questionAnswersComponent.initialSelection(questionID);
+    this.filter.questionID = questionID;
+    this.filter.slashTag = this.localData.PreviousSlashTagSelected;
+    this.questionAnswersComponent.initialSelection();
     this.ChangeTab(tabs.questionAnswers);
   }
 
   ViewAllQuestions(): void {
     // From QuestionAnswers
     this.ChangeTab(tabs.questions);
+  }
+
+  AnswerAdded(questionID: number) {
+    this.questionsListComponent.AnswerAdded(questionID);
   }
 
   // init, subscription, ChangeTab, applyFilter

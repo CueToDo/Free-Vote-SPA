@@ -1,12 +1,26 @@
 // Angular
-import { Component } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  NgZone,
+  OnDestroy,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 
 // Material
 import { MatDialog } from '@angular/material/dialog';
 
 // rxjs
-import { tap, map, filter } from 'rxjs/operators';
+import { fromEvent, Subscription } from 'rxjs';
+import {
+  tap,
+  map,
+  filter,
+  debounceTime,
+  distinctUntilChanged
+} from 'rxjs/operators';
 
 // Models
 import { Kvp } from '../../models/kvp.model';
@@ -29,9 +43,24 @@ import { DeleteAccountComponent } from 'src/app/my/delete-account/delete-account
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnDestroy {
+  constituencySearch$: Subscription | undefined;
+
+  // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
+  // Use static false when element has *ngIf
+  // use hidden on any conditionally inserted parent NOT ngIf
+  // hookup runOutsideAngular in ngAfterViewInit
+  @ViewChild('tvConstituency', { static: false }) tvConstituency:
+    | ElementRef
+    | undefined;
+
+  constituencySearch = '';
+  fetchingConstituencies = false;
+
   countries: Kvp[] = [];
   cities: Kvp[] = [];
+  constituencies: Kvp[] = [];
+  constituenciesFetched = false;
 
   // Save old values when begin edit
   oldProfile = new FreeVoteProfile();
@@ -44,8 +73,8 @@ export class ProfileComponent {
   uploading = false;
   saving = false;
   success = false;
-  error = false;
-  updateMessage = '';
+  public error = false;
+  public updateMessage = '';
 
   dialogRef: any;
 
@@ -54,14 +83,34 @@ export class ProfileComponent {
     private appDataService: AppDataService,
     public localData: LocalDataService,
     private httpService: HttpService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private ngZone: NgZone
   ) {}
+
+  ngAfterViewInit() {
+    // Debounce the keyup outside of angular zone
+    // 2-way databinding already cleans up the slashtag
+    // This is just for delayed search
+
+    this.ngZone.runOutsideAngular(() => {
+      this.constituencySearch$ = fromEvent<KeyboardEvent>(
+        this.tvConstituency?.nativeElement,
+        'keyup'
+      )
+        .pipe(debounceTime(1200), distinctUntilChanged())
+        .subscribe({
+          next: _ => {
+            // Fuzzy search on userInput
+            this.ConstituencySearch(this.constituencySearch); // "As-is"
+          }
+        });
+    });
+  }
 
   edit(): void {
     this.error = false;
     this.success = false;
     this.editing = true;
-    this.updateMessage = '';
 
     this.oldProfile = Object.assign({}, this.localData.freeVoteProfile);
 
@@ -97,6 +146,12 @@ export class ProfileComponent {
                 this.appDataService.GetKVPKey(
                   this.cities,
                   parseInt(this.localData.freeVoteProfile.cityId, 10)
+                );
+
+              this.localData.freeVoteProfile.constituency =
+                this.appDataService.GetKVPKey(
+                  this.constituencies,
+                  parseInt(this.localData.freeVoteProfile.constituencyID, 10)
                 );
 
               this.localData.SaveValues();
@@ -283,17 +338,61 @@ export class ProfileComponent {
   }
 
   GetCountries(): void {
-    this.appDataService.GetCountries().subscribe(value => {
-      this.countries = value;
-      this.GetCities(this.localData.freeVoteProfile.countryId, false);
+    this.appDataService.GetCountries().subscribe({
+      next: value => {
+        this.countries = value;
+        this.GetCities(this.localData.freeVoteProfile.countryId, false);
+      }
     });
   }
 
   GetCities(countryId: string, newCountry: boolean): void {
-    this.appDataService.GetCities(countryId).subscribe(value => {
-      this.cities = value;
-      if (newCountry) {
-        this.localData.freeVoteProfile.cityId = value[0].value.toString();
+    this.appDataService.GetCities(countryId).subscribe({
+      next: value => {
+        this.cities = value;
+        if (newCountry) {
+          this.localData.freeVoteProfile.cityId = value[0].value.toString();
+        }
+      }
+    });
+  }
+
+  onConstituencySelect(constituencyID: string) {
+    this.localData.freeVoteProfile.constituencyID = constituencyID;
+  }
+
+  ConstituencySearch(like: string): void {
+    if (!like) return;
+
+    this.ngZone.run(_ => {
+      this.fetchingConstituencies = true;
+      this.constituenciesFetched = false;
+    });
+
+    this.appDataService.ConstituencySearch(like).subscribe({
+      next: value => {
+        this.ngZone.run(_ => {
+          this.constituencies = value; // new filtered list
+          this.constituenciesFetched = true;
+
+          // Does the new list contain the old value?
+          if (
+            this.constituencies.filter(
+              x =>
+                x.value.toString() ===
+                this.localData.freeVoteProfile.constituencyID
+            ).length !== 1
+          ) {
+            this.localData.freeVoteProfile.constituencyID =
+              this.constituencies[0].value.toString();
+          }
+        });
+      },
+      error: err => {
+        this.ShowError(err);
+      },
+      complete: () => {
+        this.ngZone.run(_ => (this.fetchingConstituencies = false));
       }
     });
   }
@@ -362,5 +461,9 @@ export class ProfileComponent {
       this.updateMessage = err;
     }
     this.error = true;
+  }
+
+  ngOnDestroy() {
+    this.constituencySearch$?.unsubscribe();
   }
 }

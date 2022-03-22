@@ -2,7 +2,7 @@
 
 
     <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'" class="Question pt-3 px-3"
-        [routerLink]="QuestionLink()" (click)="SelectQuestion()">
+        (click)="SelectQuestion()">
         <h1>{{ question.question }}</h1>
     </div>
 
@@ -24,7 +24,7 @@
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
 
             <div>
-                <a [routerLink]="QuestionLink()" (click)="SelectQuestion()">{{ question.points }} answer{{
+                <a (click)="SelectQuestion()">{{ question.points }} answer{{
                     appData.plural(question.points) }}</a>
             </div>
 

@@ -59,10 +59,10 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     CommonModule,
     FlexLayoutModule,
     FormsModule,
-    MatCheckboxModule,
     RouterModule,
     // Material
     MatButtonModule,
+    MatCheckboxModule,
     MatIconModule,
     MatInputModule,
     MatMenuModule,

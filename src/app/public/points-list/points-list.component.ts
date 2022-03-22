@@ -5,7 +5,7 @@ import {
   EventEmitter,
   Output,
   OnDestroy,
-  AfterViewInit
+  OnInit
 } from '@angular/core';
 
 // Models, enums
@@ -29,7 +29,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './points-list.component.html',
   styleUrls: ['./points-list.component.css']
 })
-export class PointsListComponent implements OnDestroy, AfterViewInit {
+export class PointsListComponent implements OnDestroy, OnInit {
   @Input() public filter = new FilterCriteria();
   @Input() public attachedToQuestion = false;
 
@@ -89,7 +89,7 @@ export class PointsListComponent implements OnDestroy, AfterViewInit {
     private pointsService: PointsService
   ) {}
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.pointSortAscending$ = this.appData.PointSortAscending$.subscribe(
       (ascending: boolean) => {
         this.filter.sortAscending = ascending;
@@ -212,7 +212,7 @@ export class PointsListComponent implements OnDestroy, AfterViewInit {
         case PointSelectionTypes.QuestionPoints:
           this.possibleAnswers = this.filter.sharesTagButNotAttached;
 
-          if (this.filter.questionID)
+          if (this.filter.questionID) {
             this.pointsService
               .GetFirstBatchQuestionPoints(
                 this.filter.slashTag,
@@ -230,7 +230,7 @@ export class PointsListComponent implements OnDestroy, AfterViewInit {
                   this.alreadyFetchingPointsFromDB = false;
                 }
               });
-
+          }
           break;
 
         default:

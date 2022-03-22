@@ -8,9 +8,11 @@ export class FreeVoteProfile {
   public location = '';
   public country = '';
   public city = '';
+  public constituency = '';
 
   public countryId = ''; // for html binding use string
   public cityId = '';
+  public constituencyID = '';
 
   public profilePicture = '';
   public profilePictureOptionID = ''; // for html binding use string

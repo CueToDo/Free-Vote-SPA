@@ -93,6 +93,8 @@
           </mat-form-field>
         </div>
 
+
+        <!-- Country -->
         <div fxFlex="40">
           <span class="align-middle">
             home country
@@ -120,6 +122,7 @@
 
         </div>
 
+        <!-- City -->
         <div fxFlex="40" *ngIf="!editNewCountry">
           <span class="align-middle">
             home city
@@ -145,7 +148,57 @@
 
         </div>
 
+        <!-- Constituency -->
 
+        <div fxFlex="40" *ngIf="!editing">
+          <span class="align-middle">
+            constituency
+          </span>
+        </div>
+
+        <div fxFlex="60" *ngIf="!editing">
+
+          <span class="align-middle" *ngIf="!editing">
+            {{ localData.freeVoteProfile.constituency }}
+          </span>
+
+        </div>
+
+        <div fxFlex="40" *ngIf="editing">
+          <span class="align-middle">
+            constituency search
+          </span>
+          <span class="spinner-grow text-primary ms-3" role="status" *ngIf="fetchingConstituencies">
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </div>
+        <div fxFlex="60" [hidden]="!editing">
+          <mat-form-field>
+            <input matInput type="text" #tvConstituency placeholder="parliamentary constituency"
+              [(ngModel)]="constituencySearch" *ngIf="editing">
+          </mat-form-field>
+        </div>
+
+        <div fxFlex="40" *ngIf="editing">
+          <span class="align-middle">
+            constituency select
+          </span>
+          <span [ngClass]="{'waiting':fetchingConstituencies, 'success':constituenciesFetched}">
+            <span *ngIf="constituenciesFetched && !fetchingConstituencies">updated</span>
+          </span>
+        </div>
+        <div fxFlex="60" *ngIf="editing">
+          <mat-form-field>
+            <mat-select (ngModelChange)="onConstituencySelect($event)" name="selectConstituency"
+              [(ngModel)]="localData.freeVoteProfile.constituencyID" placeholder="your parliamentary constituency">
+              <mat-option *ngFor="let constituency of constituencies" [value]="constituency.value.toString()">{{
+                constituency.key }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Groups -->
 
         <div fxFlex="40" *ngIf="!editing">
           <span class="align-middle">
@@ -228,8 +281,8 @@
 
         </div>
 
-        <div fxFlex="100" [ngClass]="{'text-danger':error, 'success':success}">
-          <div fxLayoutAlign="center" *ngIf="updateMessage" class="mt-2 primary">
+        <div fxFlex="100" [ngClass]="{'alert':error, 'alert-danger':error, 'success':success}">
+          <div fxLayoutAlign="center" *ngIf="!!updateMessage" class="mt-2 primary">
             {{ updateMessage }}
           </div>
         </div>

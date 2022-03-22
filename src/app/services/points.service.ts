@@ -66,6 +66,7 @@ export class PointsService {
     pointSortOrder: PointSortTypes,
     sortAscending: boolean
   ): Observable<PointSelectionResult> {
+
     const apiUrl =
       `points/getFirstBatchQuestionPoints/${slashTag.replace(
         '/',
@@ -75,9 +76,9 @@ export class PointsService {
         this.batchSize
       }/${this.pageSize}`;
 
-    return this.httpClientService
-      .get(apiUrl)
-      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+    return this.httpClientService.get(apiUrl).pipe(
+      map(returnData => this.CastToPointSelectionResult(returnData))
+    );
   }
 
   // The standard selections for a Tag:

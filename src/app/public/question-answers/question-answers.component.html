@@ -49,7 +49,8 @@
             </div>
 
             <div class="mt-5" *ngIf="mode==='newAnswer'">
-                <app-point-edit (CancelEdit)="cancelEdit()" [isMyAnswer]="true" [questionID]="filter.questionID">
+                <app-point-edit (CancelEdit)="cancelNewAnswer()" (CompleteEdit)="newAnswerSaved()" [isMyAnswer]="true"
+                    [questionID]="filter.questionID">
                 </app-point-edit>
             </div>
         </div>

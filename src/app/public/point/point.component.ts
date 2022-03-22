@@ -302,6 +302,7 @@ export class PointComponent implements OnInit {
   }
 
   edit(): void {
+    this.error = '';
     this.editing = true;
   }
 

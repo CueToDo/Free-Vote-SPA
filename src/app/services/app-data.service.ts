@@ -421,6 +421,12 @@ export class AppDataService {
       .pipe(map(value => value as Kvp[]));
   }
 
+  ConstituencySearch(like: string): Observable<Kvp[]> {
+    return this.httpService
+      .get(`lookups/constituencysearch/${like}/N`)
+      .pipe(map(value => value as Kvp[]));
+  }
+
   CountrySave(country: string): Observable<number> {
     return this.httpService
       .get(`lookups/countrySave/${country}`)
@@ -561,8 +567,9 @@ export class AppDataService {
   ShowSource(pointTypeID: PointTypesEnum): boolean {
     switch (pointTypeID) {
       // It doesn't matter WHO said it - should not sway vote
-      case PointTypesEnum.Quote:
       case PointTypesEnum.Fact:
+      case PointTypesEnum.Quote:
+      case PointTypesEnum.CommentOrEditorial:
       case PointTypesEnum.RecommendedReading:
       case PointTypesEnum.RecommendedListening:
       case PointTypesEnum.RecommendedViewing:

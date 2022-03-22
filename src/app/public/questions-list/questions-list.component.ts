@@ -28,7 +28,7 @@ export class QuestionsListComponent {
   @Input() SortAscending = false;
 
   @Output() QuestionCount = new EventEmitter<number>();
-  @Output() QuestionSelected = new EventEmitter();
+  @Output() QuestionSelected = new EventEmitter<number>();
 
   public questions: Question[] = [];
   public IDs: ID[] = [];
@@ -243,5 +243,14 @@ export class QuestionsListComponent {
 
   questionSelected(questionID: number): void {
     this.QuestionSelected.emit(questionID);
+  }
+
+  public AnswerAdded(questionID: number) {
+    const selectedQuestion = this.questions.filter(
+      q => q.questionID == questionID
+    ) as Question[];
+    if (!!selectedQuestion && selectedQuestion.length == 1) {
+      selectedQuestion[0].questionID = questionID;
+    }
   }
 }

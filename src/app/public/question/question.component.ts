@@ -126,13 +126,6 @@ export class QuestionComponent {
       this.localData.questionDetails = this.question.details;
     }
 
-    // Navigate to won't change active component ...
-    this.router.navigate([
-      this.localData.PreviousSlashTagSelected,
-      'question',
-      this.question?.slug
-    ]);
-
     // ... but need to change tab, so communicate up
     this.QuestionSelected.emit(this.question.questionID);
   }
