@@ -410,6 +410,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
     this.pointCount--; // decrement before calling NewPointsDisplayed which updates allPointsDisplayed
 
     this.NewPointsDisplayed();
+    this.RemovePointFromAnswers.emit(id);
   }
 
   AddToAnswers(pointID: number): void {

@@ -24,6 +24,7 @@ export class QuestionAnswersComponent {
   @Input() public filter = new FilterCriteria();
   @Output() ViewAllQuestions = new EventEmitter<boolean>();
   @Output() AnswerAdded = new EventEmitter<number>();
+  @Output() AnswerRemoved = new EventEmitter<number>();
 
   @ViewChild('PointsList') pointsList!: PointsListComponent;
 
@@ -99,6 +100,7 @@ export class QuestionAnswersComponent {
     this.filter.sharesTagButNotAttached = true;
     this.filter.updateTopicViewCount = false;
     this.pointsList.SelectPoints();
+    this.AnswerAdded.emit(this.filter.questionID);
   }
 
   newAnswer(): void {
@@ -116,6 +118,7 @@ export class QuestionAnswersComponent {
     this.error = '';
     this.mode = this.savedMode;
     this.pointsList.SelectPoints();
+    this.AnswerAdded.emit(this.filter.questionID);
   }
 
   AddRemovePointFromAnswers(add: boolean, pointID: number): void {
@@ -124,7 +127,11 @@ export class QuestionAnswersComponent {
     this.questionPointAddRemove$ = this.questionsService
       .QuestionPointAddRemove(add, this.filter.questionID, pointID)
       .subscribe({
-        next: _ => this.viewMyPoints(),
+        next: _ => {
+          this.viewMyPoints();
+          if (add) this.AnswerAdded.emit(this.filter.questionID);
+          else this.AnswerRemoved.emit(this.filter.questionID);
+        },
         error: err => (this.error = err.error.detail)
       });
   }

@@ -483,6 +483,10 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     this.questionsListComponent.AnswerAdded(questionID);
   }
 
+  AnswerRemoved(questionID: number) {
+    this.questionsListComponent.AnswerRemoved(questionID);
+  }
+
   // init, subscription, ChangeTab, applyFilter
   ShowFilterCriteria(show: boolean): void {
     this.showFilters = show;

@@ -246,11 +246,23 @@ export class QuestionsListComponent {
   }
 
   public AnswerAdded(questionID: number) {
+    this.addRemoveAnswer(questionID, true);
+  }
+
+  public AnswerRemoved(questionID: number) {
+    this.addRemoveAnswer(questionID, false);
+  }
+
+  addRemoveAnswer(questionID: number, add: boolean) {
     const selectedQuestion = this.questions.filter(
       q => q.questionID == questionID
     ) as Question[];
     if (!!selectedQuestion && selectedQuestion.length == 1) {
-      selectedQuestion[0].questionID = questionID;
+      if (add) selectedQuestion[0].points++;
+      else {
+        selectedQuestion[0].points--;
+        if (selectedQuestion[0].points < 0) selectedQuestion[0].points = 0;
+      }
     }
   }
 }

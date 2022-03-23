@@ -220,7 +220,7 @@
           'stageRight': tabIndex<4}" fxFill>
         <!-- "Fetch more" component must apply scroller and content classes internally -->
         <app-question-answers [filter]="filter" (ViewAllQuestions)="ViewAllQuestions()" #appQuestionAnswers
-          (AnswerAdded)="AnswerAdded($event)">
+          (AnswerAdded)="AnswerAdded($event)" (AnswerRemoved)="AnswerRemoved($event)">
         </app-question-answers>
       </div>
     </div>
