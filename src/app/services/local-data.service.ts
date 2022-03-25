@@ -357,13 +357,13 @@ export class LocalDataService {
       }
 
       if (values.countryId) {
-        this.freeVoteProfile.countryId = values.countryId;
+        this.freeVoteProfile.countryId = values.countryId.toString();
       }
       if (values.cityId) {
-        this.freeVoteProfile.cityId = values.cityId;
+        this.freeVoteProfile.cityId = values.cityId.toString();
       }
       if (values.constituencyID) {
-        this.freeVoteProfile.constituencyID = values.constituencyID;
+        this.freeVoteProfile.constituencyID = values.constituencyID.toString();
       }
 
       if (values.profilePictureOptionID) {
