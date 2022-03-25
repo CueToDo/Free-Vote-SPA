@@ -8,8 +8,8 @@ div {
   /* https://material-ui.com/style/color/ */
 }
 
-@media(max-width:940px) {
-  .topicsCloud {
+@media (max-width: 940px) {
+  .linkCloud {
     margin-left: 10px;
     margin-right: 10px;
   }

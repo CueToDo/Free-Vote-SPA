@@ -251,11 +251,12 @@ export class LocalDataService {
       this.freeVoteProfile.alias = this.GetItem('alias');
 
       this.freeVoteProfile.location = this.GetItem('location');
-      this.freeVoteProfile.country = this.GetItem('country');
-      this.freeVoteProfile.city = this.GetItem('city');
       this.freeVoteProfile.countryId = this.GetItem('countryId');
+      this.freeVoteProfile.country = this.GetItem('country');
       this.freeVoteProfile.cityId = this.GetItem('cityId');
+      this.freeVoteProfile.city = this.GetItem('city');
       this.freeVoteProfile.constituencyID = this.GetItem('constituencyID');
+      this.freeVoteProfile.constituency = this.GetItem('constituency');
 
       this.freeVoteProfile.profilePictureOptionID = this.GetItem(
         'profilePictureOptionID'
@@ -446,6 +447,7 @@ export class LocalDataService {
     this.freeVoteProfile.alias = '';
     this.freeVoteProfile.country = '';
     this.freeVoteProfile.city = '';
+    this.freeVoteProfile.constituency = '';
     this.freeVoteProfile.countryId = '0';
     this.freeVoteProfile.cityId = '0';
     this.freeVoteProfile.constituencyID = '0';

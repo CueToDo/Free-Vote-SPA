@@ -27,8 +27,3 @@ div.Search {
 .xsSearch button {
   margin-top: 10px;
 }
-
-/* WTF: Could not get anchor tags to wrap */
-.no-wrap-hack {
-  color: transparent;
-}

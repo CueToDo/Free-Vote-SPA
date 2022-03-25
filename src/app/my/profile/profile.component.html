@@ -21,24 +21,6 @@
 
           <div fxLayout="column" fxLayoutAlign="start center">
 
-            <mat-radio-group [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
-              (ngModelChange)="profilePictureOptionUpdate()">
-
-              <div fxLayoutAlign="center">profile picture to use:</div>
-              <div fxLayout="row wrap" fxLayoutAlign="left">
-                <mat-radio-button name="PPOID" value="1" labelPosition="before">
-                  social media
-                </mat-radio-button>
-                <mat-radio-button name="PPOID" value="2" labelPosition="before"
-                  *ngIf="localData.freeVoteProfile.profilePicture">
-                  uploaded picture
-                </mat-radio-button>
-                <mat-radio-button name="PPOID" value="3" labelPosition="before">
-                  none
-                </mat-radio-button>
-              </div>
-            </mat-radio-group>
-
             <img
               *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
               [src]="localData.auth0Profile.picture" alt="profile picture" class="rounded-circle img-fluid">
@@ -77,6 +59,28 @@
           <hr>
         </div>
 
+
+        <div fxFlex="40" *ngIf="editing">profile picture to use</div>
+        <div fxFlex="60" *ngIf="editing">
+          <mat-radio-group [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
+            (ngModelChange)="profilePictureOptionUpdate()">
+            <div fxLayout="row wrap" fxLayoutAlign="left">
+              <mat-radio-button name="PPOID" value="1" labelPosition="before">
+                social media
+              </mat-radio-button>
+              <mat-radio-button name="PPOID" value="2" labelPosition="before"
+                *ngIf="localData.freeVoteProfile.profilePicture">
+                upload
+              </mat-radio-button>
+              <mat-radio-button name="PPOID" value="3" labelPosition="before">
+                none
+              </mat-radio-button>
+            </div>
+          </mat-radio-group>
+        </div>
+
+        <div fxFlex="100" style="margin-top:16px;"></div>
+
         <div fxFlex="40">
           <span class="align-middle">
             alias
@@ -87,7 +91,7 @@
           <span class="align-middle" *ngIf="!editing">
             {{ localData.freeVoteProfile.alias }}
           </span>
-          <mat-form-field *ngIf="editing">
+          <mat-form-field *ngIf="editing" class="mff">
             <input matInput placeholder="your alias or ID" [(ngModel)]="localData.freeVoteProfile.alias" name="by"
               required #tvAlias="ngModel" type="text">
           </mat-form-field>
@@ -107,7 +111,7 @@
             {{ localData.freeVoteProfile.country }}
           </span>
 
-          <mat-form-field *ngIf="editing && !editNewCountry">
+          <mat-form-field *ngIf="editing && !editNewCountry" class="mff">
             <mat-select (ngModelChange)="onCountrySelect($event)" name="selectCountry"
               [(ngModel)]="localData.freeVoteProfile.countryId" placeholder="your home country">
               <mat-option *ngFor="let country of countries" [value]="country.value.toString()">{{ country.key }}
@@ -115,7 +119,7 @@
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field *ngIf="editNewCountry">
+          <mat-form-field *ngIf="editNewCountry" class="mff">
             <input matInput placeholder="your home country" [(ngModel)]="localData.freeVoteProfile.country"
               name="country" required #tvCountry="ngModel" type="text">
           </mat-form-field>
@@ -135,13 +139,13 @@
             {{ localData.freeVoteProfile.city }}
           </span>
 
-          <mat-form-field *ngIf="editing && !editNewCity">
+          <mat-form-field *ngIf="editing && !editNewCity" class="mff">
             <mat-select name="selectCity" [(ngModel)]="localData.freeVoteProfile.cityId" placeholder="your home city">
               <mat-option *ngFor="let city of cities" [value]="city.value.toString()">{{ city.key }}</mat-option>
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field *ngIf="editNewCity">
+          <mat-form-field *ngIf="editNewCity" class="mff">
             <input matInput placeholder="your home city" [(ngModel)]="localData.freeVoteProfile.city" name="city"
               required #tvCity="ngModel" type="text">
           </mat-form-field>
@@ -164,38 +168,38 @@
 
         </div>
 
-        <div fxFlex="40" *ngIf="editing">
+        <div fxFlex="40" [hidden]="!editing">
           <span class="align-middle">
-            constituency search
+            constituency
           </span>
           <span class="spinner-grow text-primary ms-3" role="status" *ngIf="fetchingConstituencies">
             <span class="visually-hidden">Loading...</span>
           </span>
         </div>
         <div fxFlex="60" [hidden]="!editing">
-          <mat-form-field>
+          <mat-form-field class="mff">
             <input matInput type="text" #tvConstituency placeholder="parliamentary constituency"
-              [(ngModel)]="constituencySearch" *ngIf="editing">
+              [(ngModel)]="constituencySearch">
+            <button *ngIf="constituencySearch" matSuffix mat-icon-button aria-label="Clear"
+              (click)="clearConstituency()">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
         </div>
 
-        <div fxFlex="40" *ngIf="editing">
+        <div fxFlex="40" *ngIf="editing && constituencyCount>0">
           <span class="align-middle">
             constituency select
           </span>
-          <span [ngClass]="{'waiting':fetchingConstituencies, 'success':constituenciesFetched}">
+          <span class="linkCloud" [ngClass]="{'waiting':fetchingConstituencies, 'success':constituenciesFetched}">
             <span *ngIf="constituenciesFetched && !fetchingConstituencies">updated</span>
           </span>
         </div>
-        <div fxFlex="60" *ngIf="editing">
-          <mat-form-field>
-            <mat-select (ngModelChange)="onConstituencySelect($event)" name="selectConstituency"
-              [(ngModel)]="localData.freeVoteProfile.constituencyID" placeholder="your parliamentary constituency">
-              <mat-option *ngFor="let constituency of constituencies" [value]="constituency.value.toString()">{{
-                constituency.key }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <div fxFlex="60" *ngIf="editing && constituencyCount>0" class="constituencyList">
+          <ng-container *ngFor="let constituency of constituencies">
+            <a (click)="onConstituencySelect(constituency)" [innerHtml]="constituency.key | TagDisplay" class="clicker">
+            </a>
+          </ng-container>
         </div>
 
         <!-- Groups -->

@@ -20,6 +20,7 @@ import { DeleteAccountComponent } from '../my/delete-account/delete-account.comp
 import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-the-week-vote.component';
 
 // FreeVote
+import { CustomModule } from '../custommodule/custom.module';
 import { PublicModule } from '../public/public.module';
 
 const routes: Routes = [{ path: '', component: ProfileComponent }];
@@ -39,6 +40,7 @@ const routes: Routes = [{ path: '', component: ProfileComponent }];
     MatRadioModule,
     MatSelectModule,
     // FreeVote
+    CustomModule,
     PublicModule
   ],
   declarations: [

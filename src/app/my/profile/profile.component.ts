@@ -4,8 +4,7 @@ import {
   ElementRef,
   NgZone,
   OnDestroy,
-  ViewChild,
-  ViewChildren
+  ViewChild
 } from '@angular/core';
 import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 
@@ -41,7 +40,8 @@ import { DeleteAccountComponent } from 'src/app/my/delete-account/delete-account
 
 @Component({
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  preserveWhitespaces: true
 })
 export class ProfileComponent implements OnDestroy {
   constituencySearch$: Subscription | undefined;
@@ -54,13 +54,15 @@ export class ProfileComponent implements OnDestroy {
     | ElementRef
     | undefined;
 
-  constituencySearch = '';
   fetchingConstituencies = false;
 
   countries: Kvp[] = [];
   cities: Kvp[] = [];
   constituencies: Kvp[] = [];
+  constituencyCount = 0;
   constituenciesFetched = false;
+  constituencySearch = '';
+  constituencySearchOld = '';
 
   // Save old values when begin edit
   oldProfile = new FreeVoteProfile();
@@ -97,7 +99,7 @@ export class ProfileComponent implements OnDestroy {
         this.tvConstituency?.nativeElement,
         'keyup'
       )
-        .pipe(debounceTime(1200), distinctUntilChanged())
+        .pipe(debounceTime(300), distinctUntilChanged())
         .subscribe({
           next: _ => {
             // Fuzzy search on userInput
@@ -115,6 +117,7 @@ export class ProfileComponent implements OnDestroy {
     this.oldProfile = Object.assign({}, this.localData.freeVoteProfile);
 
     this.GetCountries();
+    this.constituencySearch = this.localData.freeVoteProfile.constituency;
   }
 
   save(): void {
@@ -162,7 +165,7 @@ export class ProfileComponent implements OnDestroy {
                 this.localData.freeVoteProfile
               );
 
-              this.Saved();
+              this.Saved(true);
             } else {
               this.updateMessage = 'error';
               this.error = true;
@@ -170,7 +173,6 @@ export class ProfileComponent implements OnDestroy {
                 {},
                 this.oldProfile
               );
-              console.log(this.localData.freeVoteProfile);
             }
           },
           error: err => this.ShowError(err)
@@ -221,7 +223,7 @@ export class ProfileComponent implements OnDestroy {
       next: () => {
         this.localData.freeVoteProfile.profilePicture = '';
         this.localData.freeVoteProfile.profilePictureOptionID = '1';
-        this.Saved();
+        this.Saved(false);
       },
       error: serverError => this.ShowError(serverError.error.detail)
     });
@@ -297,7 +299,7 @@ export class ProfileComponent implements OnDestroy {
               this.localData.freeVoteProfile.profilePicture = file;
               this.localData.freeVoteProfile.profilePictureOptionID = '2';
               this.localData.SaveValues();
-              this.Saved();
+              this.Saved(false);
             }
           },
           error: serverError => this.ShowError(serverError.error.detail)
@@ -315,7 +317,7 @@ export class ProfileComponent implements OnDestroy {
     } as ProfilePictureOption;
 
     this.appDataService.profilePictureOptionUpdate(profilePicture).subscribe({
-      next: () => this.Saved(),
+      next: () => this.Saved(false),
       error: serverError => this.ShowError(serverError)
     });
   }
@@ -357,16 +359,37 @@ export class ProfileComponent implements OnDestroy {
     });
   }
 
-  onConstituencySelect(constituencyID: string) {
-    this.localData.freeVoteProfile.constituencyID = constituencyID;
+  clearConstituency() {
+    if (
+      this.constituencySearch === this.localData.freeVoteProfile.constituency
+    ) {
+      this.constituencySearch = this.constituencySearchOld;
+    } else {
+      this.constituencySearch = '';
+      this.constituencies = [];
+      this.constituencyCount = 0;
+    }
+  }
+
+  onConstituencySelect(constituency: Kvp) {
+    this.localData.freeVoteProfile.constituencyID =
+      constituency.value.toString();
+    this.localData.freeVoteProfile.constituency = constituency.key;
+    this.constituencySearch = constituency.key; // Save the selected value as the search term
+    this.constituencyCount = 0;
   }
 
   ConstituencySearch(like: string): void {
-    if (!like) return;
+    if (!like || like.length < 3) {
+      this.constituencies = [];
+      this.constituencyCount = 0;
+      return;
+    }
 
     this.ngZone.run(_ => {
       this.fetchingConstituencies = true;
       this.constituenciesFetched = false;
+      this.constituencySearchOld = like;
     });
 
     this.appDataService.ConstituencySearch(like).subscribe({
@@ -375,16 +398,18 @@ export class ProfileComponent implements OnDestroy {
           this.constituencies = value; // new filtered list
           this.constituenciesFetched = true;
 
-          // Does the new list contain the old value?
-          if (
-            this.constituencies.filter(
-              x =>
-                x.value.toString() ===
-                this.localData.freeVoteProfile.constituencyID
-            ).length !== 1
-          ) {
+          this.constituencyCount = value.length;
+
+          if (this.constituencyCount === 1) {
+            this.constituencySearch = this.constituencies[0].key;
+
             this.localData.freeVoteProfile.constituencyID =
               this.constituencies[0].value.toString();
+
+            this.localData.freeVoteProfile.constituency =
+              this.constituencySearch;
+
+            this.constituencyCount = 0;
           }
         });
       },
@@ -407,7 +432,7 @@ export class ProfileComponent implements OnDestroy {
           this.localData.freeVoteProfile.countryId = countryID.toString();
           this.GetCountries();
           this.editNewCountry = false;
-          this.Saved();
+          this.Saved(true);
         },
         error: err => this.ShowError(err)
       });
@@ -426,7 +451,7 @@ export class ProfileComponent implements OnDestroy {
           this.localData.freeVoteProfile.cityId = cityID.toString();
           this.GetCities(this.localData.freeVoteProfile.countryId, false);
           this.editNewCity = false;
-          this.Saved();
+          this.Saved(true);
         },
         error: err => this.ShowError(err)
       });
@@ -440,14 +465,14 @@ export class ProfileComponent implements OnDestroy {
     this.error = false;
   }
 
-  Saved(): void {
+  Saved(complete: boolean): void {
     // End the edit
     this.localData.updatingProfile = false;
     this.updateMessage = 'saved';
     this.uploading = false;
     this.saving = false;
     this.success = true;
-    this.editing = false;
+    this.editing = !complete;
     this.editNewCountry = false;
     this.editNewCity = false;
   }

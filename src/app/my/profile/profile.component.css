@@ -38,3 +38,11 @@ img {
   max-height: 200px;
   max-width: 400px;
 }
+
+.constituencyList a:first-of-type {
+  margin-left: 10px;
+}
+
+.mff {
+  width: 100%;
+}

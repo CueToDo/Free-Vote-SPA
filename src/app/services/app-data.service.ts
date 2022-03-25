@@ -355,7 +355,6 @@ export class AppDataService {
   profilePictureOptionUpdate(
     profilePicture: ProfilePictureOption
   ): Observable<string> {
-    console.log('OPTION UPDATE', profilePicture);
     return this.httpService.post(
       'profile/profilePictureOption',
       profilePicture

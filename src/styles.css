@@ -136,7 +136,7 @@ div.toolbar mat-form-field {
   transition: left 0.25s ease-out, opacity 0.25s ease-out, height 0.25s ease-out;
 }
 
-.topicsCloud {
+.linkCloud {
   text-align: center;
   margin-left: 10px;
   margin-right: 10px;
@@ -370,7 +370,7 @@ a:hover {
 }
 
 /*passive link input Angular https://stackoverflow.com/questions/35639174/passive-link-in-angular-2-a-href-equivalent*/
-.topicsCloud a,
+.linkCloud a,
 a.slashTag,
 a.clicker {
   color: #3600cc !important;
@@ -378,10 +378,10 @@ a.clicker {
   cursor: pointer;
 }
 
-.topicsCloud a:hover,
+.linkCloud a:hover,
 a.slashTag:hover,
 a.clicker:hover {
-  text-decoration: underline;
+  text-decoration: none;
   color: #3600cc !important;
   /* Bootstrap override */
 }

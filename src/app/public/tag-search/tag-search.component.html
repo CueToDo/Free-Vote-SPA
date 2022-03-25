@@ -1,5 +1,5 @@
 <!-- Tags matching hard sound criteria -->
-<div class="topicsCloud">
+<div class="linkCloud">
 
     <!-- SlashTag Search -->
     <div fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="center stretch" fxLayout.xs="column"
@@ -29,7 +29,6 @@
         <a [innerHTML]="tag.tagDisplay | TagDisplay"
             [ngStyle]="{'font-size':FontSize(tag.tagWeight),'padding-right':'10px'}"
             (click)="setSlashTag(tag.slashTag)"></a>
-        <span class="no-wrap-hack"> |</span>
     </ng-container>
 
     <div class="fv-error" *ngIf="!!error">
