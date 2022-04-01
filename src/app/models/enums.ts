@@ -76,10 +76,12 @@ export enum PointFlags {
   Important = 2
 }
 
-export enum DraftStatusFilter {
-  Any = 0,
-  Published = 1,
-  Draft = 2
+export enum MyPointFilter {
+  AllVoters = 0,
+  MyPublished = 1,
+  MyDrafts = 2,
+  AllMine = 3,
+  Specific = 4
 }
 
 export enum PointFeedbackFilter {

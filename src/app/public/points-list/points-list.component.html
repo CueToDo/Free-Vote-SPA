@@ -20,7 +20,8 @@
         <div *ngFor="let point of points">
             <app-point [point]="point" [pointCount]="pointCount" (PointDeleted)="onPointDeleted($event)"
                 [possibleAnswer]="possibleAnswers" [isMyAnswer]="attachedToQuestion && point.isPointOwner"
-                (AddPointToAnswers)="AddToAnswers($event)" (RemovePointFromAnswers)="RemoveFromAnswers($event)">
+                (AddPointToAnswers)="AddToAnswers($event)" (RemovePointFromAnswers)="RemoveFromAnswers($event)"
+                [searchTerm]="filter.text">
             </app-point>
         </div>
 

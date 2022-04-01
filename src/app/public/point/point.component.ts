@@ -34,6 +34,7 @@ export class PointComponent implements OnInit {
   @Input() isPorQPoint = false;
   @Input() possibleAnswer = false;
   @Input() isMyAnswer = false;
+  @Input() searchTerm = '';
 
   @Output() PointDeleted = new EventEmitter();
   @Output() AddPointToAnswers = new EventEmitter();
@@ -171,6 +172,18 @@ export class PointComponent implements OnInit {
       }
 
       this.pointHTMLwithoutEmbed = split.join(''); // pointHTML stripped of <figure> elements added by ckEditor for media embed
+
+      if (!!this.searchTerm) {
+        var regEx = new RegExp(this.searchTerm, 'ig');
+        const replace = `<span class="highlight">${this.searchTerm}</span>`;
+
+        this.point.pointTitle = this.point.pointTitle.replace(regEx, replace);
+
+        this.pointHTMLwithoutEmbed = this.pointHTMLwithoutEmbed.replace(
+          regEx,
+          replace
+        );
+      }
     }
   }
 

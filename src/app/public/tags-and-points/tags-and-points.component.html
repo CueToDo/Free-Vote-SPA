@@ -152,8 +152,8 @@
   <!-- End tab selection and point sort order -->
 
   <!-- Points filter for tagPoints list or questionAnswers -->
-  <app-points-filter (applyFilter)="applyFilter($event)" (pointSortTypeChanged)="pointSortTypeChanged($event)"
-    [showFilters]="showFilters" #pointsFilter>
+  <app-points-filter [filter]="filter" (filterChange)="applyFilter()"
+    (pointSortTypeChanged)="pointSortTypeChanged($event)" [showFilters]="showFilters" #pointsFilter>
   </app-points-filter>
   <!-- End points filter -->
 

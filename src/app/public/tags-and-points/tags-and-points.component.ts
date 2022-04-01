@@ -446,11 +446,11 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   }
 
   // From child PointsFilter Component
-  applyFilter(filter: FilterCriteria): void {
-    this.ShowFilterCriteria(filter.applyFilter); /// may be recalled in ChangeTab
-
+  applyFilter(): void {
+    console.log('Select now');
     this.applyingFilter = true;
-    this.ChangeTab(tabs.tagPoints);
+    this.pointsSelected = false;
+    this.pointsListComponent.SelectPoints();
     this.applyingFilter = false;
   }
 
@@ -490,7 +490,6 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   // init, subscription, ChangeTab, applyFilter
   ShowFilterCriteria(show: boolean): void {
     this.showFilters = show;
-    this.filter.applyFilter = show;
 
     if (this.showFilters) {
       this.filterIcon = 'manage_search';
@@ -499,7 +498,20 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     } else {
       this.filterIcon = 'search';
       this.filterText = 'search';
-      this.filterToolTip = 'show search criteria';
+      this.filterToolTip = 'show point search criteria';
+    }
+
+    this.filter.pointSelectionType = PointSelectionTypes.Filtered;
+
+    if (!show) {
+      switch (this.tabIndex) {
+        case tabs.questionAnswers:
+          this.filter.pointSelectionType = PointSelectionTypes.QuestionPoints;
+          break;
+        case tabs.tagPoints:
+          this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
+          break;
+      }
     }
 
     if (!this.externalTrigger) {
@@ -508,9 +520,9 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
       if (!this.pointsFilterComponent) {
         filterChange = true; // wot no filter component? Might just not be displayed
       } else if (show) {
-        filterChange = this.pointsFilterComponent.HasSavedFilter(); // Will a filter be applied?
+        // filterChange = this.pointsFilterComponent.HasSavedFilter(); // Will a filter be applied?
       } else {
-        filterChange = this.pointsFilterComponent.HasFilter(); // Will a filter be removed?
+        // filterChange = this.pointsFilterComponent.HasFilter(); // Will a filter be removed?
       }
 
       if (filterChange) {

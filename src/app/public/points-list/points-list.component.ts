@@ -15,7 +15,8 @@ import { Point, PointSelectionResult } from 'src/app/models/point.model';
 import {
   PointSelectionTypes,
   PointTypesEnum,
-  PointSortTypes
+  PointSortTypes,
+  MyPointFilter
 } from 'src/app/models/enums';
 
 // Services
@@ -138,7 +139,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
     this.SelectPoints();
   }
 
-  SelectPoints(): void {
+  public SelectPoints(): void {
     this.possibleAnswers = false;
 
     if (!this.alreadyFetchingPointsFromDB) {
@@ -149,20 +150,9 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
       switch (this.filter?.pointSelectionType) {
         case PointSelectionTypes.Filtered:
-          let aliasFilter = '';
-          if (this.filter.applyAliasFilter) {
-            aliasFilter = this.filter.byAlias;
-          }
-
-          let textFilter = '';
-          if (this.filter.applyTextFilter) {
-            textFilter = this.filter.text;
-          }
-
-          let pointTypeID = PointTypesEnum.NotSelected;
-          if (this.filter.applyTypeFilter) {
-            pointTypeID = this.filter.pointTypeID;
-          }
+          let aliasFilter = this.filter.byAlias;
+          let textFilter = this.filter.text;
+          let pointTypeID = this.filter.pointTypeID;
 
           let dateFrom = new Date('1 Jan 2000');
           let dateTo = new Date();
@@ -187,10 +177,9 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
           this.pointsService
             .GetFirstBatchFiltered(
-              this.filter.myPoints,
               aliasFilter,
               this.OnTopicSearch(),
-              this.filter.draftStatus,
+              this.filter.myPointFilter,
               this.filter.feedbackFilter,
               this.filter.pointFlag,
               textFilter,
@@ -217,7 +206,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
               .GetFirstBatchQuestionPoints(
                 this.filter.slashTag,
                 this.filter.questionID,
-                this.filter.myPoints,
+                this.filter.myPointFilter,
                 this.filter.sharesTagButNotAttached,
                 this.filter.sortType,
                 this.filter.sortAscending

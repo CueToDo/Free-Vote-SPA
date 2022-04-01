@@ -4,123 +4,67 @@
     <!-- Show Filtering Options, controlled from Tag-Points component -->
     <div [ngClass]="{'show':showFilters, 'hide':!showFilters}">
       <div class="mt-3">
-        <div class="filters" fxLayout="row wrap" fxLayoutAlign="center center">
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.myPoints" (change)="MyFilter()">my points
+        <div class="filters" fxLayout="row wrap" fxLayoutAlign="start center">
+
+          <!-- Text search -->
+          <mat-form-field class="searchInput">
+            <input matInput name="pointTextFilter" [(ngModel)]="filter.text" placeholder="enter point search text">
+            <button mat-button *ngIf="filter.text" matSuffix mat-icon-button aria-label="Clear" (click)="filter.text=''"
+              type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <!-- Any Tag -->
+          <mat-checkbox labelPosition="before" [(ngModel)]="filter.anyTag">any tag
           </mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyAliasFilter" (change)="VoterFilter()">voter
+
+          <!-- Advanced Search Options -->
+          <mat-checkbox labelPosition="before" [(ngModel)]="advanced" hidden>advanced search
           </mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.favourites" #checkbox="matCheckbox"
-            (change)="FilterFavs(checkbox)">
-            {{ favouritesText }}</mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.anyTag" (change)="FilterOnTag()">any tag
-          </mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyTextFilter" (change)="FilterOnText()">text
-          </mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyTypeFilter" (change)="FilterOnType()">type
-          </mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyDateFilter" #checkbox="matCheckbox"
-            (change)="FilterOnDates(checkbox)">
-            dates
-          </mat-checkbox>
-          <mat-checkbox labelPosition="before" [(ngModel)]="filter.applyFeedbackFilter" (change)="FilterOnFeedback()">
-            feedback
-          </mat-checkbox>
+
+          <button mat-stroked-button (click)="SelectPoints()">
+            <mat-icon>search</mat-icon>
+            search
+          </button>
 
         </div>
+
       </div>
     </div>
 
-    <!-- Draft Status Filter -->
-    <div [ngClass]="{'show':filter.applyDraftFilter, 'hide':!filter.applyDraftFilter}">
-      <div fxLayout="row wrap" fxLayoutAlign.xs="space-around" fxLayoutAlign.gt-xs="center" fxLayoutGap.xs="5px grid"
-        fxLayoutGap.gt-xs="30px">
-        <mat-radio-group [(ngModel)]="filter.draftStatus" (ngModelChange)="FilterUpdated()">
-          <mat-radio-button name="draftStatus" labelPosition="before" [value]="DraftStatusFilter.Published">published
+
+
+    <div *ngIf="advanced">
+
+      <!-- My Points or All Voters -->
+      <div>
+        <mat-radio-group [(ngModel)]="filter.myPointFilter">
+          <mat-radio-button name="draftStatus" labelPosition="before" [value]="MyPointFilter.AllMine">all my points
           </mat-radio-button>
-          <mat-radio-button name="draftStatus" labelPosition="before" [value]="DraftStatusFilter.Draft">draft only
+          <mat-radio-button name="draftStatus" labelPosition="before" [value]="MyPointFilter.MyPublished">my public
+            points
           </mat-radio-button>
-          <mat-radio-button name="draftStatus" labelPosition="before" [value]="DraftStatusFilter.Any">any
+          <mat-radio-button name="draftStatus" labelPosition="before" [value]="MyPointFilter.MyDrafts">my drafts
+          </mat-radio-button>
+          <mat-radio-button name="draftStatus" labelPosition="before" [value]="MyPointFilter.AllVoters">all voters
+          </mat-radio-button>
+          <mat-radio-button name="draftStatus" labelPosition="before" [value]="MyPointFilter.Specific">specific
           </mat-radio-button>
         </mat-radio-group>
-      </div>
-    </div>
-
-    <!-- Voter Filter, animated by css controlled by checkbox  -->
-    <div [ngClass]="{'show':filter.applyAliasFilter, 'hide':!filter.applyAliasFilter}">
-      <div fxLayout="row wrap" fxLayoutAlign="center center">
-
-        <mat-form-field class="myMatInput">
-          <input matInput name="aliasTextFilter" [(ngModel)]="filter.byAlias" placeholder="enter voter alias"
-            (keyup.enter)="FilterUpdated()">
+        <mat-form-field class="searchInput">
+          <input matInput name="aliasTextFilter" [(ngModel)]="filter.byAlias" placeholder="enter voter alias">
           <button mat-button *ngIf="filter.byAlias" matSuffix mat-icon-button aria-label="Clear"
             (click)="filter.byAlias=''" type="button">
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
-
-        <button mat-stroked-button (click)="SelectPointsByVoter()">
-          <mat-icon>search</mat-icon>
-          search
-        </button>
-      </div>
-    </div>
-
-    <!-- Text search criteria, animated by css controlled by checkbox  -->
-    <div [ngClass]="{'show':filter.applyTextFilter, 'hide':!filter.applyTextFilter}">
-      <div fxLayout="row wrap" fxLayoutAlign="center center">
-
-        <!-- text input -->
-        <mat-form-field class="myMatInput">
-          <input matInput name="pointTextFilter" [(ngModel)]="filter.text" placeholder="enter point filter text"
-            (keyup.enter)="FilterUpdated()">
-          <button mat-button *ngIf="filter.text" matSuffix mat-icon-button aria-label="Clear" (click)="filter.text=''"
-            type="button">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-
-        <!-- text search button -->
-        <button mat-stroked-button (click)="FilterUpdated()">
-          <mat-icon>search</mat-icon>
-          search
-        </button>
-      </div>
-    </div>
-
-    <!-- Type Filter, animated by css controlled by checkbox -->
-    <div [ngClass]="{'show':filter.applyTypeFilter, 'hide':!filter.applyTypeFilter}">
-
-      <div fxLayout="row wrap" fxLayoutAlign.xs="space-around" fxLayoutAlign.gt-xs="center" fxLayoutGap.xs="5px grid"
-        fxLayoutGap.gt-xs="30px">
-        <mat-form-field floatLabel="always">
-          <mat-select (selectionChange)="PointTypeFilterChange()" name="pt" [(ngModel)]="filter.pointTypeID"
-            placeholder="filter selection on point type">
-            <mat-option *ngFor="let pointType of pointTypes" [value]="pointType.value">{{ pointType.key }}</mat-option>
-          </mat-select>
-        </mat-form-field>
       </div>
 
-    </div>
+      <!-- Filter on Feedback -->
+      <div>
 
-
-    <!-- Date Filter, animated by css controlled by checkbox -->
-    <div [ngClass]="{'show':filter.applyDateFilter, 'hide':!filter.applyDateFilter}">
-
-      <div fxLayout="row wrap" fxLayoutAlign.xs="space-around" fxLayoutAlign.gt-xs="center" fxLayoutGap.xs="5px grid"
-        fxLayoutGap.gt-xs="30px">
-        <app-datepicker [(Date)]="filter.dateFrom" [UserPrompt]="'from date'" (DateChange)="FilterUpdated()">
-        </app-datepicker>
-        <app-datepicker [(Date)]="filter.dateTo" [UserPrompt]="'to date'" (DateChange)="FilterUpdated()">
-        </app-datepicker>
-      </div>
-
-    </div>
-
-    <!-- Feedback Filter, animated by css controlled by checkbox -->
-    <div [ngClass]="{'show':filter.applyFeedbackFilter, 'hide':!filter.applyFeedbackFilter}">
-      <div fxLayout="row wrap" fxLayoutAlign.xs="space-around" fxLayoutAlign.gt-xs="center" fxLayoutGap.xs="5px grid"
-        fxLayoutGap.gt-xs="30px">
-        <mat-radio-group [(ngModel)]="filter.feedbackFilter" (ngModelChange)="FilterUpdated()">
+        <mat-radio-group [(ngModel)]="filter.feedbackFilter">
           <mat-radio-button name="feedback" labelPosition="before" [value]="PointFeedbackFilter.Yes">with feedback
             only
           </mat-radio-button>
@@ -131,8 +75,46 @@
             confirmation
           </mat-radio-button>
         </mat-radio-group>
+
       </div>
+
+      <!-- Favourites -->
+      <div class="aml-3 mt-3">
+        <mat-checkbox labelPosition="before" [(ngModel)]="filter.favourites" #checkbox="matCheckbox"
+          (change)="FilterFavs(checkbox)">
+          my {{ favouritesText }}</mat-checkbox>
+
+        <mat-form-field floatLabel="always">
+          <mat-select name="pt" [(ngModel)]="filter.pointTypeID" placeholder="filter selection on point type">
+            <mat-option *ngFor="let pointType of pointTypes" [value]="pointType.value">{{ pointType.key }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+
+      <!-- Date Filter, animated by css controlled by checkbox -->
+      <!-- <div [ngClass]="{'show':filter.applyDateFilter, 'hide':!filter.applyDateFilter}"> -->
+      <div class="aml-3">
+        <div fxLayout="row wrap" fxLayoutAlign.xs="space-around" fxLayoutAlign.gt-xs="start center"
+          fxLayoutGap.xs="5px grid" fxLayoutGap.gt-xs="30px">
+
+          <mat-checkbox labelPosition="before" #checkbox="matCheckbox" (change)="FilterOnDates(checkbox)">
+            date range
+          </mat-checkbox>
+
+          <app-datepicker [(Date)]="filter.dateFrom" [UserPrompt]="'from date'">
+          </app-datepicker>
+          <app-datepicker [(Date)]="filter.dateTo" [UserPrompt]="'to date'">
+          </app-datepicker>
+        </div>
+
+      </div>
+
     </div>
+
+
 
   </div>
 

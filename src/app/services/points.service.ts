@@ -8,7 +8,7 @@ import { map, tap } from 'rxjs/operators';
 
 // Models, Enums
 import { ID } from 'src/app/models/common';
-import { PointTypesEnum, DraftStatusFilter } from 'src/app/models/enums';
+import { PointTypesEnum, MyPointFilter } from 'src/app/models/enums';
 import {
   PointSelectionResult,
   Point,
@@ -61,24 +61,23 @@ export class PointsService {
   GetFirstBatchQuestionPoints(
     slashTag: string,
     questionID: number,
-    myPointsOnly: boolean,
+    myPointFilter: MyPointFilter,
     unAttached: boolean,
     pointSortOrder: PointSortTypes,
     sortAscending: boolean
   ): Observable<PointSelectionResult> {
-
     const apiUrl =
       `points/getFirstBatchQuestionPoints/${slashTag.replace(
         '/',
         ''
-      )}/${questionID}/${myPointsOnly ? 'Y' : 'N'}` +
+      )}/${questionID}/${myPointFilter.toString()}` +
       `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortAscending}/${
         this.batchSize
       }/${this.pageSize}`;
 
-    return this.httpClientService.get(apiUrl).pipe(
-      map(returnData => this.CastToPointSelectionResult(returnData))
-    );
+    return this.httpClientService
+      .get(apiUrl)
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
   }
 
   // The standard selections for a Tag:
@@ -106,10 +105,9 @@ export class PointsService {
 
   // ToDo this is what needs to change for new selection methods
   GetFirstBatchFiltered(
-    myPoints: boolean,
     byAlias: string,
     onTopic: string,
-    draftStatusFilter: DraftStatusFilter,
+    myPointsFilter: MyPointFilter,
     feedbackFilter: PointFeedbackFilter,
     pointFlag: PointFlags,
     pointTextFilter: string,
@@ -126,10 +124,9 @@ export class PointsService {
     const apiUrl = 'points/getFirstBatchFiltered';
 
     const postData = {
-      myPoints,
       byAlias,
       onTopic,
-      draftStatusFilter,
+      myPointsFilter,
       feedbackFilter,
       pointFlag,
       pointTextFilter,

@@ -3,7 +3,7 @@
   <!-- Point Display -->
   <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
 
-    <h1>{{ point.pointTitle }}</h1>
+    <h1 [innerHtml]="point.pointTitle"></h1>
 
     <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
 

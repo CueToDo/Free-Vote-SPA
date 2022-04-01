@@ -5,7 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 
 // Models, Enums
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-import { PointSelectionTypes, PointSortTypes } from 'src/app/models/enums';
+import {
+  MyPointFilter,
+  PointSelectionTypes,
+  PointSortTypes
+} from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -70,7 +74,7 @@ export class QuestionAnswersComponent {
     this.error = '';
     this.mode = 'answers';
     this.attachedToQuestion = true;
-    this.filter.myPoints = false;
+    this.filter.myPointFilter = MyPointFilter.AllVoters;
     this.filter.sharesTagButNotAttached = false;
     this.filter.updateTopicViewCount = false;
     this.pointsList.SelectPoints();
@@ -86,7 +90,7 @@ export class QuestionAnswersComponent {
     this.error = '';
     this.mode = 'myPoints';
     this.attachedToQuestion = true;
-    this.filter.myPoints = true;
+    this.filter.myPointFilter = MyPointFilter.AllMine;
     this.filter.sharesTagButNotAttached = false;
     this.filter.updateTopicViewCount = false;
     this.pointsList.SelectPoints();

@@ -80,10 +80,6 @@ export class ProfileComponent implements OnDestroy {
 
   dialogRef: any;
 
-  public get typeofcountryid(): string {
-    return typeof this.localData.freeVoteProfile.countryId;
-  }
-
   constructor(
     private authService: AuthService,
     private appDataService: AppDataService,

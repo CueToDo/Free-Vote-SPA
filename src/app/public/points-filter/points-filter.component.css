@@ -48,7 +48,7 @@ mat-form-field + button {
 }
 
 .show {
-  max-height: 120px;
+  max-height: 200px;
   /* When datepicker filters wrap on mobile */
   overflow: hidden;
   opacity: 1;
@@ -63,6 +63,8 @@ mat-form-field + button {
   max-width: 100px;
 }
 
-.myMatInput {
-  width: 160px;
+.searchInput {
+  width: 200px;
+  margin-left: 16px;
+  margin-right: 16px;
 }

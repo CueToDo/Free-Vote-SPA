@@ -54,3 +54,7 @@ button img {
 .moreorless a:hover {
   cursor: pointer;
 }
+
+::ng-deep .highlight {
+  background-color: yellow;
+}

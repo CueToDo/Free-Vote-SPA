@@ -20,7 +20,7 @@ import {
   PointFlags,
   PointSortTypes,
   PointFeedbackFilter,
-  DraftStatusFilter
+  MyPointFilter
 } from 'src/app/models/enums';
 
 // FreeVote Services
@@ -40,12 +40,14 @@ import { MatCheckbox } from '@angular/material/checkbox';
   // for space between buttons - https://github.com/angular/material2/issues/11397
 })
 export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Output() applyFilter = new EventEmitter<FilterCriteria>();
-  @Output() pointSortTypeChanged = new EventEmitter<PointSortTypes>();
-
   // Point selection filters
   @Input() showFilters = false;
-  public filter = new FilterCriteria();
+
+  // 2-way bind filter criteria
+  @Input() public filter = new FilterCriteria();
+  @Output() public filterChange = new EventEmitter<FilterCriteria>();
+
+  @Output() pointSortTypeChanged = new EventEmitter<PointSortTypes>();
 
   // Subscriptions
   private widthSubject$: Subscription | undefined;
@@ -54,8 +56,10 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   pointTypes: Kvp[] = [];
 
+  advanced = false;
+
   // enums in template
-  public DraftStatusFilter = DraftStatusFilter;
+  public MyPointFilter = MyPointFilter;
   public PointFeedbackFilter = PointFeedbackFilter;
 
   // https://stackoverflow.com/questions/34947154/angular-2-viewchild-annotation-returns-undefined
@@ -71,6 +75,7 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.filter.byAlias = this.localData.ActiveAliasForFilter;
+    this.filter.pointSelectionType = PointSelectionTypes.Filtered;
 
     this.appData
       .PointTypes()
@@ -116,23 +121,18 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (tagParam) {
         this.filter.anyTag = false;
-        this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
         this.filter.slashTag = tagParam;
         tag = true;
       }
 
       if (aliasParam) {
-        this.filter.pointSelectionType = PointSelectionTypes.Filtered;
         this.filter.byAlias = aliasParam;
         if (!this.filter.slashTag) {
           this.filter.anyTag = true;
         }
         this.showFilters = true;
-        this.filter.applyAliasFilter = true;
         alias = true;
       }
-
-      if (tag && !alias) this.filter.applyFilter = false;
 
       if (tag || alias) {
         this.filter.single = false;
@@ -151,143 +151,49 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   // Communicated from TagsPoints - filter criteria
   // Communicated from Tags Component - hide filters
   ClearPointFilters() {
-    let showFilters = false;
-    this.showFilters = showFilters;
+    this.showFilters = false;
 
-    if (showFilters) {
-      this.filter.pointSelectionType = PointSelectionTypes.Filtered;
-      this.filter.pointTypeID = this.filter.previousPointTypeID;
+    this.filter.myPointFilter = MyPointFilter.AllVoters;
+    this.filter.pointTypeID = PointTypesEnum.NotSelected;
 
-      // Reapply previous filters
-      this.filter.myPoints = this.filter.previouslyFilteringMyPoints;
-      this.filter.applyDraftFilter = this.filter.previouslyFilteringDraft;
-      this.filter.applyAliasFilter =
-        this.filter.previouslyFilteringByAlias &&
-        !this.filter.myPoints &&
-        !!this.filter.byAlias;
-      this.filter.applyFavouritesFilter =
-        this.filter.previouslyFilteringFavourites;
-      this.filter.anyTag = this.filter.previouslyFilteringAnyTag;
-      this.filter.applyTextFilter = this.filter.previouslyFilteringByText;
-      this.filter.applyTypeFilter = this.filter.previouslyFilteringByType;
-      this.filter.applyDateFilter = this.filter.previouslyFilteringByDate;
-      this.filter.applyFeedbackFilter =
-        this.filter.previouslyFilteringByFeedback;
-
-      // If there aren't any active filters, then Filtered Select is same as Tag Select
-      // Only reselect points if we now have active filters
-      if (this.filter.HasFilter()) {
-        this.FilterUpdated();
-      }
-    } else {
-      this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
-      this.filter.pointTypeID = PointTypesEnum.NotSelected;
-
-      // Remove Filters if no longer showing
-      this.filter.previouslyFilteringMyPoints = this.filter.myPoints;
-      this.filter.previouslyFilteringDraft = this.filter.applyDraftFilter;
-      this.filter.previouslyFilteringByAlias = this.filter.applyAliasFilter;
-      this.filter.previouslyFilteringFavourites =
-        this.filter.applyFavouritesFilter;
-      this.filter.previouslyFilteringAnyTag = this.filter.anyTag;
-      this.filter.previouslyFilteringByText = this.filter.applyTextFilter;
-      this.filter.previouslyFilteringByType = this.filter.applyTypeFilter;
-      this.filter.previouslyFilteringByDate = this.filter.applyDateFilter;
-      this.filter.previouslyFilteringByFeedback =
-        this.filter.applyFeedbackFilter;
-
-      this.filter.myPoints = false;
-      this.filter.applyDraftFilter = false;
-      this.filter.applyAliasFilter = false;
-      this.filter.applyFavouritesFilter = false;
-      this.filter.anyTag = false;
-      this.filter.applyTextFilter = false;
-      this.filter.applyTypeFilter = false;
-      this.filter.applyDateFilter = false;
-      this.filter.applyFeedbackFilter = false;
-
-      // If weren't any active filters, then Tag Select is same as Filtered Select
-      // Only reselect points if there were previous active filters
-      if (this.filter.HasSavedFilter()) {
-        this.FilterUpdated();
-      }
-    }
+    this.filter.anyTag = false;
   }
 
-  FilterUpdated(): void {
-    this.applyFilter.emit(this.filter);
-  }
-
-  MyFilter(): void {
-    if (this.filter.myPoints) {
-      this.filter.applyAliasFilter = false;
-    }
-    this.filter.applyDraftFilter = this.filter.myPoints;
-    // this.SetAppComponentRoute();
-    this.FilterUpdated();
-  }
+  // MyFilter(): void {
+  //   if (this.filter.myPoints) {
+  //     this.showAliasFilter = false;
+  //   }
+  // }
 
   VoterFilter(): void {
-    let changeAlias = false;
-
+    // ensure compare empty with empty not nulls
     if (!this.filter.byAlias) {
       this.filter.byAlias = '';
-    } // ensure compare empty with empty not nulls
+    }
     if (!this.localData.PreviousAliasSelected) {
       this.localData.PreviousAliasSelected = '';
     }
 
-    if (this.filter.applyAliasFilter) {
-      this.filter.myPoints = false;
+    if (true) {
+      // RestoreAliasFilter
+      this.filter.myPointFilter = MyPointFilter.AllVoters;
       this.localData.RestoreAliasFilter();
-      changeAlias =
-        this.filter.byAlias !== this.localData.PreviousAliasSelected;
       this.filter.byAlias = this.localData.PreviousAliasSelected; // Will always have a value whereas Active may be empty
     } else {
-      // Not filtering on Alias
-      changeAlias = !!this.filter.byAlias; // we were filtering, now we're not
+      // ClearAliasFilter
       this.filter.byAlias = '';
       this.localData.ClearAliasFilter();
     }
-
-    if (changeAlias) {
-      this.FilterUpdated();
-    }
-
-    // this.SetAppComponentRoute();
   }
 
-  SelectPointsByVoter(): void {
+  SelectPoints(): void {
+    // Nah
     this.localData.ActiveAliasForFilter = this.filter?.byAlias || '';
 
-    if (this.filter?.slashTag) {
-      this.localData.PreviousSlashTagSelected = this.filter.slashTag;
-    }
-
-    // Communicate Change to App Component
+    // Same Topic - move elsewhere
     this.filter.updateTopicViewCount = false;
-    this.FilterUpdated();
-  }
 
-  FilterOnTag(): void {
-    this.FilterUpdated();
-  }
-
-  FilterOnText(): void {
-    // Whether we're now filtering on text or not, only reselect points if there is a filter
-    if (!!this.filter.text) {
-      this.FilterUpdated();
-    }
-  }
-
-  // Check whether we're filtering on type
-  FilterOnType(): void {
-    if (this.filter.applyTypeFilter) {
-      this.filter.pointTypeID = this.filter.previousPointTypeID;
-    } else {
-      this.filter.pointTypeID = PointTypesEnum.NotSelected;
-    }
-    this.FilterUpdated();
+    this.filterChange.emit();
   }
 
   // Filter by Type from Tags-And-Points (Select Questions)
@@ -297,30 +203,15 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   //   this.Select();
   // }
 
-  PointTypeFilterChange(): void {
-    this.filter.previousPointTypeID = this.filter.pointTypeID;
-    this.FilterUpdated();
-  }
-
   // Allow mat-checkbox click event to read checked value
   // https://github.com/angular/components/issues/13156
   FilterOnDates(checkbox: MatCheckbox): void {
     if (checkbox.checked) {
       if (this.filter.sortType !== PointSortTypes.DateUpdated) {
         this.filter.sortType = PointSortTypes.DateUpdated;
-        this.pointSortTypeChanged.next(this.filter.sortType);
+        this.pointSortTypeChanged.emit(this.filter.sortType);
       }
     }
-    this.FilterUpdated(); // Always Descending initially
-  }
-
-  FilterOnFeedback(): void {
-    if (this.filter.applyFeedbackFilter) {
-      this.filter.feedbackFilter = PointFeedbackFilter.No;
-    } else {
-      this.filter.feedbackFilter = PointFeedbackFilter.Any;
-    }
-    this.FilterUpdated();
   }
 
   // From Template
@@ -335,35 +226,7 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.filter.pointFlag = PointFlags.Any;
     }
-
-    this.FilterUpdated();
   }
-
-  public HasFilter(): boolean {
-    return this.filter.HasFilter();
-  }
-
-  public HasSavedFilter(): boolean {
-    return this.filter.HasSavedFilter();
-  }
-
-  // SetAppComponentRoute(): void {
-  //   // Don't call from SelectPoints() (which may be called from a subscription triggered externally)
-  //   let route = '';
-
-  //   const slashTagSlash = this.filter.anyTag ? '/' : this.filter.slashTag + '/';
-
-  //   if (this.filter.myPoints) {
-  //     route = `${slashTagSlash}by/${this.localData.freeVoteProfile.alias}`;
-  //   } else if (this.filter.applyAliasFilter && !!this.filter.byAlias) {
-  //     route = `${slashTagSlash}by/${this.filter.byAlias}`;
-  //   } else {
-  //     route = `${this.filter.slashTag}`;
-  //     console.log('Filter SetAppComponentRoute<', route, '>');
-  //   }
-  //   console.log('Setting route in filter<', route, '>');
-  //   this.appData.RouteParamChange$.next(route);
-  // }
 
   ngOnDestroy(): void {
     this.widthSubject$?.unsubscribe();

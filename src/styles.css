@@ -474,6 +474,26 @@ a.clicker:hover {
 }
 
 /* Alternate to Bootstrap when bootstrap styles just won't apply */
+.aml-1 {
+  margin-left: 5px;
+}
+
+.aml-2 {
+  margin-left: 10px;
+}
+
+.aml-3 {
+  margin-left: 15px;
+}
+
+.aml-4 {
+  margin-left: 20px;
+}
+
+.aml-5 {
+  margin-left: 25px;
+}
+
 .amr-1 {
   margin-right: 5px;
 }
