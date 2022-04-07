@@ -12,7 +12,7 @@ import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 
 // rxjs
 import { Observable, of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { tap, map, filter, concatMap } from 'rxjs/operators';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
 import { cloneDeep } from 'lodash-es';
@@ -27,9 +27,10 @@ import { Image } from 'src/app/models/Image.model';
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { AppDataService } from 'src/app/services/app-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
 import { HttpService } from 'src/app/services/http.service';
-import { tap, map, filter } from 'rxjs/operators';
+import { TagsService } from 'src/app/services/tags.service';
 
 @Component({
   selector: 'app-point-edit',
@@ -90,8 +91,10 @@ export class PointEditComponent implements OnInit {
   constructor(
     private localData: LocalDataService,
     public appData: AppDataService,
+    private lookupsService: LookupsService,
     private pointsService: PointsService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private tagsService: TagsService
   ) {
     // Must provide default values to bind before ngOnOnit
     // Host can override with Input value
@@ -110,7 +113,7 @@ export class PointEditComponent implements OnInit {
       this.pointClone = cloneDeep(this.point) as PointEdit;
     }
 
-    this.appData
+    this.lookupsService
       .PointTypes()
       .subscribe(pointTypes => (this.pointTypes = pointTypes));
 
@@ -359,7 +362,7 @@ export class PointEditComponent implements OnInit {
               // where Points ReSelection Takes place:
 
               if (tagChange && !isNew) {
-                this.appData.SetSlashTag(returnToSlashTag);
+                this.tagsService.SetSlashTag(returnToSlashTag);
                 this.ReselectPoints.emit(PointSortTypes.DateDescend);
               }
             },
@@ -419,7 +422,7 @@ export class PointEditComponent implements OnInit {
 
   autoShowLinkEdit(pointTypeID: PointTypesEnum): void {
     // Automatically show link input for certain point types
-    if (this.appData.ShowSource(pointTypeID)) {
+    if (this.lookupsService.ShowSource(pointTypeID)) {
       this.showLinkEdit();
     } else {
       if (this.pointClone?.linkText || this.pointClone?.linkAddress) {
@@ -434,7 +437,8 @@ export class PointEditComponent implements OnInit {
     this.autoShowLinkEdit(pointTypeID);
 
     // Automatically update default "show" if voter changes point type
-    this.showLinkBeforeVoteDisabled = !this.appData.ShowSource(pointTypeID);
+    this.showLinkBeforeVoteDisabled =
+      !this.lookupsService.ShowSource(pointTypeID);
 
     if (this.pointClone) {
       this.pointClone.showLinkBeforeVote = false;

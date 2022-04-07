@@ -1,5 +1,4 @@
 // Angular
-import { AppDataService } from 'src/app/services/app-data.service';
 import {
   Component,
   OnInit,
@@ -11,16 +10,17 @@ import {
 } from '@angular/core';
 
 // Models & enums
-import { Point, PointFeedback } from '../../models/point.model';
+import { Point, PointFeedback } from 'src/app/models/point.model';
 import {
   PointSupportLevels,
   PointFlags,
   PointTypesEnum
-} from '../../models/enums';
+} from 'src/app/models/enums';
 
 // Services
-import { PointsService } from '../../services/points.service';
-import { LocalDataService } from '../../services/local-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
+import { PointsService } from 'src/app/services/points.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
   selector: 'app-point',
@@ -63,7 +63,7 @@ export class PointComponent implements OnInit {
       this.error = 'Missing: point';
       return false;
     } else {
-      return this.appData.ShowSource(this.point.pointTypeID);
+      return this.lookupsService.ShowSource(this.point.pointTypeID);
     }
   }
 
@@ -75,7 +75,7 @@ export class PointComponent implements OnInit {
 
   constructor(
     public localData: LocalDataService, // public - used in template
-    private appData: AppDataService,
+    private lookupsService: LookupsService,
     private pointsService: PointsService
   ) {}
 

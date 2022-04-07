@@ -24,6 +24,8 @@ import { AuthService } from './services/auth.service';
 // FreeVote Models, Services
 import { LocalDataService } from './services/local-data.service';
 import { AppDataService } from './services/app-data.service';
+import { LookupsService } from './services/lookups.service';
+import { TagsService } from 'src/app/services/tags.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { filter, debounceTime, map } from 'rxjs/operators';
 import { PagePreviewMetaData } from './models/pagePreviewMetaData.model';
@@ -77,6 +79,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     public auth: AuthService,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
+    private lookupsService: LookupsService,
+    private tagsService: TagsService,
     private breakpointObserver: BreakpointObserver,
     private location: Location,
     private titleService: Title,
@@ -110,12 +114,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     // On initial load, check authentication state with authorization server
     // Set up local auth streams if user is already authenticated
     this.auth.localAuthSetup();
-    this.appData.InitialiseStrapline();
+    this.lookupsService.InitialiseStrapline();
 
     // The app component is initialised when we come back from Auth0 login
     // Wait until we have a pukka free.vote jwt before doing the following
     this.localData.GotFreeVoteJwt$.subscribe({
-      next: _ => this.appData.InitialisePreviousSlashTagSelected()
+      next: _ => this.tagsService.InitialisePreviousSlashTagSelected()
     });
 
     // Route and Route Parameters: Setup and subscribe to changes (SSR and CSR)

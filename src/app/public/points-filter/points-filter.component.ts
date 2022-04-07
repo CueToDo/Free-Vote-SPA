@@ -22,11 +22,12 @@ import {
   PointFeedbackFilter,
   MyPointFilter
 } from 'src/app/models/enums';
+import { Kvp } from 'src/app/models/kvp.model';
 
 // FreeVote Services
-import { LocalDataService } from '../../services/local-data.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 import { AppDataService } from 'src/app/services/app-data.service';
-import { Kvp } from 'src/app/models/kvp.model';
+import { LookupsService } from 'src/app/services/lookups.service';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 
 // Components
@@ -70,14 +71,15 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     public localData: LocalDataService,
-    public appData: AppDataService
+    public appData: AppDataService,
+    private lookupsService: LookupsService
   ) {}
 
   ngOnInit(): void {
     this.filter.byAlias = this.localData.ActiveAliasForFilter;
     this.filter.pointSelectionType = PointSelectionTypes.Filtered;
 
-    this.appData
+    this.lookupsService
       .PointTypes()
       .subscribe(pointTypes => (this.pointTypes = pointTypes));
 

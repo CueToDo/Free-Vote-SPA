@@ -12,6 +12,7 @@ import { Group } from 'src/app/models/group.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
 import { OrganisationsService } from 'src/app/services/groups.service';
 
 @Component({
@@ -38,7 +39,7 @@ export class OrganisationComponent implements OnInit {
     if (!this.OrganisationDisplay) {
       return false;
     }
-    return this.appData.ShowCountries(
+    return this.lookupsService.ShowCountries(
       this.OrganisationDisplay.geographicalExtentID
     );
   }
@@ -47,7 +48,7 @@ export class OrganisationComponent implements OnInit {
     if (!this.OrganisationDisplay) {
       return false;
     }
-    return this.appData.ShowRegions(
+    return this.lookupsService.ShowRegions(
       this.OrganisationDisplay.geographicalExtentID
     );
   }
@@ -56,7 +57,7 @@ export class OrganisationComponent implements OnInit {
     if (!this.OrganisationDisplay) {
       return false;
     }
-    return this.appData.ShowCities(
+    return this.lookupsService.ShowCities(
       this.OrganisationDisplay.geographicalExtentID
     );
   }
@@ -74,6 +75,7 @@ export class OrganisationComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private appData: AppDataService,
+    private lookupsService: LookupsService,
     private organisationService: OrganisationsService
   ) {}
 

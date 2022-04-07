@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
 import { cloneDeep } from 'lodash-es';
@@ -9,7 +9,7 @@ import { PorQ, PorQEdit } from 'src/app/models/porq.model';
 import { PorQTypes } from 'src/app/models/enums';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
 import { PsandQsService } from 'src/app/services/psandqs.service';
 
 @Component({
@@ -38,7 +38,7 @@ export class PorqComponent {
 
   constructor(
     private psAndQs: PsandQsService,
-    private appData: AppDataService
+    private lookupsService: LookupsService
   ) {}
 
   edit(): void {
@@ -65,7 +65,7 @@ export class PorqComponent {
     } else {
       if (
         confirm(
-          `Are you sure you wish to delete this ${this.appData.PorQType(
+          `Are you sure you wish to delete this ${this.lookupsService.PorQType(
             this.porQ.porQTypeID
           )}?`
         )

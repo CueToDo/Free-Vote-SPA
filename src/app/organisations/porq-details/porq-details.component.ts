@@ -14,6 +14,7 @@ import { Point, PointSelectionResult } from 'src/app/models/point.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
 import { PsandQsService } from 'src/app/services/psandqs.service';
 import { PointsService } from 'src/app/services/points.service';
 
@@ -40,7 +41,7 @@ export class PorqDetailsComponent implements OnInit {
       this.error = 'Persective or question not initialised';
       return 'unknown';
     } else {
-      return this.appData.PorQType(this.porQ.porQTypeID);
+      return this.lookupsService.PorQType(this.porQ.porQTypeID);
     }
   }
 
@@ -51,6 +52,7 @@ export class PorqDetailsComponent implements OnInit {
   constructor(
     private activeRoute: ActivatedRoute,
     public appData: AppDataService,
+    private lookupsService: LookupsService,
     private psAndQsService: PsandQsService,
     private pointsService: PointsService
   ) {}

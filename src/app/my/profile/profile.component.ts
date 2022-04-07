@@ -27,13 +27,15 @@ import {
   FreeVoteProfile,
   ProfilePictureOption
 } from 'src/app/models/FreeVoteProfile';
+import { ProfilePicture } from 'src/app/models/Image.model';
 
 // Services
 import { AuthService } from 'src/app/services/auth.service';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { HttpService } from 'src/app/services/http.service';
-import { ProfilePicture } from 'src/app/models/Image.model';
+import { LookupsService } from 'src/app/services/lookups.service';
+import { ProfileService } from 'src/app/services/profile.service';
 
 // Components
 import { DeleteAccountComponent } from 'src/app/my/delete-account/delete-account.component';
@@ -85,6 +87,8 @@ export class ProfileComponent implements OnDestroy {
     private appDataService: AppDataService,
     public localData: LocalDataService,
     private httpService: HttpService,
+    private lookupsService: LookupsService,
+    private profileService: ProfileService,
     public dialog: MatDialog,
     private ngZone: NgZone
   ) {}
@@ -131,7 +135,7 @@ export class ProfileComponent implements OnDestroy {
     } else {
       this.Saving();
       // Save selected ID
-      this.appDataService
+      this.profileService
         .SaveProfile(this.localData.freeVoteProfile)
         .subscribe({
           next: result => {
@@ -192,7 +196,7 @@ export class ProfileComponent implements OnDestroy {
 
     this.dialogRef.afterClosed().subscribe((result: string) => {
       if (result == 'delete') {
-        this.appDataService.DELETE_ME().subscribe({
+        this.profileService.DELETE_ME().subscribe({
           next: () => {
             this.updateMessage = 'Thank you and goodbye';
             this.authService.logout();
@@ -316,7 +320,7 @@ export class ProfileComponent implements OnDestroy {
       socialMediaProfilePicture: this.localData.auth0Profile.picture // sent whether used or not
     } as ProfilePictureOption;
 
-    this.appDataService.profilePictureOptionUpdate(profilePicture).subscribe({
+    this.profileService.profilePictureOptionUpdate(profilePicture).subscribe({
       next: () => this.Saved(false),
       error: serverError => this.ShowError(serverError)
     });
@@ -340,7 +344,7 @@ export class ProfileComponent implements OnDestroy {
   }
 
   GetCountries(): void {
-    this.appDataService.GetCountries().subscribe({
+    this.lookupsService.GetCountries().subscribe({
       next: value => {
         this.countries = value;
         this.GetCities(this.localData.freeVoteProfile.countryId, false);
@@ -349,7 +353,7 @@ export class ProfileComponent implements OnDestroy {
   }
 
   GetCities(countryId: string, newCountry: boolean): void {
-    this.appDataService.GetCities(countryId).subscribe({
+    this.lookupsService.GetCities(countryId).subscribe({
       next: value => {
         this.cities = value;
         if (newCountry) {
@@ -392,7 +396,7 @@ export class ProfileComponent implements OnDestroy {
       this.constituencySearchOld = like;
     });
 
-    this.appDataService.ConstituencySearch(like).subscribe({
+    this.lookupsService.ConstituencySearch(like).subscribe({
       next: value => {
         this.ngZone.run(_ => {
           this.constituencies = value; // new filtered list
@@ -425,7 +429,7 @@ export class ProfileComponent implements OnDestroy {
   saveCountry(): void {
     this.Saving();
 
-    this.appDataService
+    this.lookupsService
       .CountrySave(this.localData.freeVoteProfile.country)
       .subscribe({
         next: countryID => {
@@ -441,7 +445,7 @@ export class ProfileComponent implements OnDestroy {
   saveCity(): void {
     this.Saving();
 
-    this.appDataService
+    this.lookupsService
       .CitySave(
         this.localData.freeVoteProfile.countryId,
         this.localData.freeVoteProfile.city

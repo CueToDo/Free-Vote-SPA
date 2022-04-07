@@ -1,4 +1,3 @@
-import { Point } from 'src/app/models/point.model';
 // Angular
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -21,6 +20,7 @@ import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { TagsService } from 'src/app/services/tags.service';
 
 // Components
 import { PointsFilterComponent } from 'src/app/public/points-filter/points-filter.component';
@@ -154,7 +154,8 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private appData: AppDataService,
-    public localData: LocalDataService
+    public localData: LocalDataService,
+    private tagsService: TagsService
   ) {}
 
   ngOnInit(): void {
@@ -173,7 +174,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
     // No tag selected? Go to API to get latest
     if (!this.topicSelected || this.topicSelected === 'null') {
-      this.tagLatestActivity$ = this.appData.TagLatestActivity().subscribe({
+      this.tagLatestActivity$ = this.tagsService.TagLatestActivity().subscribe({
         next: slashTag => {
           this.localData.PreviousSlashTagSelected = slashTag;
           this.topicSelected = this.localData.PreviousTopicSelected;
@@ -447,7 +448,6 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
 
   // From child PointsFilter Component
   applyFilter(): void {
-    console.log('Select now');
     this.applyingFilter = true;
     this.pointsSelected = false;
     this.pointsListComponent.SelectPoints();

@@ -21,6 +21,7 @@ import { Organisation } from 'src/app/models/organisation.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
 import { OrganisationsService } from 'src/app/services/groups.service';
 
 @Component({
@@ -60,32 +61,39 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
     if (!this.organisation) {
       return false;
     }
-    return this.appData.ShowCountries(this.organisation.geographicalExtentID);
+    return this.lookupsService.ShowCountries(
+      this.organisation.geographicalExtentID
+    );
   }
 
   get showRegions(): boolean {
     if (!this.organisation) {
       return false;
     }
-    return this.appData.ShowRegions(this.organisation.geographicalExtentID);
+    return this.lookupsService.ShowRegions(
+      this.organisation.geographicalExtentID
+    );
   }
 
   get showCities(): boolean {
     if (!this.organisation) {
       return false;
     }
-    return this.appData.ShowCities(this.organisation.geographicalExtentID);
+    return this.lookupsService.ShowCities(
+      this.organisation.geographicalExtentID
+    );
   }
 
   error = '';
 
   constructor(
     private appData: AppDataService,
+    private lookupsService: LookupsService,
     private organisationsService: OrganisationsService
   ) {}
 
   ngOnInit(): void {
-    this.extents$ = this.appData.GeographicalExtents().subscribe({
+    this.extents$ = this.lookupsService.GeographicalExtents().subscribe({
       next: extents => {
         console.log('EXTENTS', extents);
         this.extents = extents;

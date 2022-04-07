@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 // Angular
 import {
   AfterViewInit,
@@ -181,7 +180,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
   // from click on tag in search results
   setSlashTag(slashTag: string): void {
     // Get appDataService to broadcast (method shared by PointEditComponent)
-    this.appData.SetSlashTag(slashTag);
+    this.tagsService.SetSlashTag(slashTag);
 
     this.restartSearch();
 

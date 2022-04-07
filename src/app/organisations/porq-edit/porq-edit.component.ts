@@ -9,8 +9,8 @@ import { PorQEdit } from '../../models/porq.model';
 import { PorQTypes } from 'src/app/models/enums';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
-import { PsandQsService } from '../../services/psandqs.service';
+import { LookupsService } from 'src/app/services/lookups.service';
+import { PsandQsService } from 'src/app/services/psandqs.service';
 
 @Component({
   selector: 'app-porq-edit',
@@ -32,7 +32,7 @@ export class PorqEditComponent implements OnInit {
 
   constructor(
     private PsAndQs: PsandQsService,
-    public appData: AppDataService
+    public lookupsService: LookupsService
   ) {}
 
   ngOnInit(): void {

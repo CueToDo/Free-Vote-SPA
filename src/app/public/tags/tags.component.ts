@@ -90,7 +90,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   setSlashTag(slashTag: string): void {
     // Get appDataService to broadcast (method shared by PointEditComponent)
-    this.appDataService.SetSlashTag(slashTag);
+    this.tagsService.SetSlashTag(slashTag);
 
     // Direct communication to parent - is this needed if parent subscribes to above
     this.NewSlashTagSelected.emit(slashTag);

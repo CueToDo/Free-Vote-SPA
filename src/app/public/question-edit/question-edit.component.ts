@@ -13,10 +13,9 @@ import { cloneDeep } from 'lodash-es';
 
 // Models, enums
 import { Question, QuestionEdit } from 'src/app/models/question.model';
-import { PointSortTypes } from 'src/app/models/enums';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { TagsService } from 'src/app/services/tags.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 
 @Component({
@@ -39,7 +38,7 @@ export class QuestionEditComponent implements OnInit {
   error = '';
 
   constructor(
-    private appData: AppDataService,
+    private tagsService: TagsService,
     private questionService: QuestionsService
   ) {}
 
@@ -97,7 +96,7 @@ export class QuestionEditComponent implements OnInit {
         // Communicate change to sibling PointsComponent
         // where Points ReSelection Takes place:
         if (isNew) {
-          this.appData.SetSlashTag(this.questionEdit.slashTags[0]);
+          this.tagsService.SetSlashTag(this.questionEdit.slashTags[0]);
         }
       }
     });

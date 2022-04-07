@@ -1,26 +1,17 @@
 // Angular
-import { PorQTypes, PointTypesEnum } from './../models/enums';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
 // rxjs
-import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
-import { filter, map, mergeMap, tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 // Models
-import { ID } from '../models/common';
-import { PointSortTypes, GeographicalExtentID } from '../models/enums';
-import { Kvp } from '../models/kvp.model';
-import {
-  FreeVoteProfile,
-  ProfilePictureOption
-} from '../models/FreeVoteProfile';
-import { PagePreviewMetaData } from '../models/pagePreviewMetaData.model';
-
-// Services
-import { HttpService } from './http.service';
-import { LocalDataService } from './local-data.service';
+import { ID } from 'src/app/models/common';
+import { PointSortTypes } from 'src/app/models/enums';
+import { Kvp } from 'src/app/models/kvp.model';
+import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppDataService {
@@ -71,45 +62,7 @@ export class AppDataService {
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).
   // Could use Promise for sign-in component, but other components such as menu need to know sign-in status
 
-  // Not looked up in database - static types
-  public porQTypes = [
-    { key: 'Action', value: 1 },
-    { key: 'Question', value: 2 },
-    { key: 'View', value: 3 }
-  ] as Kvp[];
-
-  // Lookup - could add more
-  private pointTypes: Kvp[] = [];
-  private extents: Kvp[] = []; // GeographicalExtent of group
-
-  public PointTypes(): Observable<Kvp[]> {
-    if (!!this.pointTypes && this.pointTypes.length > 0) {
-      return of(this.pointTypes);
-    } else {
-      return this.httpService.get('lookups/point-types').pipe(
-        map(types => types as Kvp[]),
-        tap(types => (this.pointTypes = types))
-      );
-    }
-  }
-
-  // Database returns a List of Lookup values - a mumerical database ID and a string display Value
-  GeographicalExtents(): Observable<Kvp[]> {
-    if (!!this.extents && this.extents.length > 0) {
-      console.log('RETURNING', this.extents);
-      return of(this.extents);
-    } else {
-      console.log('GETTING');
-      return this.httpService.get('lookups/geographicalExtents').pipe(
-        map(value => value as Kvp[]),
-        tap(extents => (this.extents = extents))
-      );
-    }
-  }
-
   constructor(
-    private httpService: HttpService,
-    private localData: LocalDataService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object
   ) {
@@ -342,139 +295,6 @@ export class AppDataService {
     return date1.getTime() < date2.getTime();
   }
 
-  // arguably should be in http.service
-  SaveProfile(profile: FreeVoteProfile): Observable<boolean> {
-    return this.httpService.post('profile/profilesave', profile);
-  }
-
-  // Voter Delete
-  DELETE_ME() {
-    return this.httpService.get('profile/voterdelete');
-  }
-
-  profilePictureOptionUpdate(
-    profilePicture: ProfilePictureOption
-  ): Observable<string> {
-    return this.httpService.post(
-      'profile/profilePictureOption',
-      profilePicture
-    );
-  }
-
-  // App start only - get previous Alias and Topic Selected from Local Storage or database
-  // But NOT on return from sign out
-  InitialisePreviousSlashTagSelected(): void {
-    // LocalData LoadValues (called from its constructor) handles initial set up
-
-    if (!this.localData.PreviousSlashTagSelected) {
-      this.TagLatestActivity().subscribe({
-        next: previousSlashTagSelected => {
-          this.localData.PreviousSlashTagSelected = previousSlashTagSelected;
-        },
-        error: error =>
-          console.log('Server Error on getting trending topics', error)
-      });
-    } else if (this.localData.PreviousTopicSelected === 'SignedOut') {
-      this.localData.PreviousSlashTagSelected = '';
-    }
-  }
-
-  TagLatestActivity(): Observable<string> {
-    return this.httpService.get('tags/tagLatestActivity');
-  }
-
-  InitialiseStrapline(): void {
-    // this.localData.strapline = localStorage.getItem('strapline');
-    // strapline is not saved to localStorage, just to localData (in-memory)
-    // '' | null is the string 'null', not an empty string
-    // string value 'null' is truthy
-
-    if (!this.localData.strapline) {
-      this.httpService
-        .get(`lookups/website-strapline/${this.localData.website}`)
-        .subscribe(strapline => {
-          this.localData.strapline = strapline.value;
-        });
-    }
-  }
-
-  // // Following not necessary on INITIALISE??
-  // // BehaviourSubjects already initialised with empty topic
-  // this.SetByOnTopic(this.previousAliasSelected, this.PreviousTopicSelected);
-
-  // New SlashTag selected in tags component, tag search and new point
-  SetSlashTag(slashTag: string): void {
-    this.localData.PreviousSlashTagSelected = slashTag;
-    this.localData.ActiveAliasForFilter = '';
-  }
-
-  GetCountries(): Observable<Kvp[]> {
-    return this.httpService
-      .get('lookups/countries')
-      .pipe(map(value => value as Kvp[]));
-  }
-
-  GetCities(countryID: string): Observable<Kvp[]> {
-    return this.httpService
-      .get('lookups/cities/' + countryID)
-      .pipe(map(value => value as Kvp[]));
-  }
-
-  ConstituencySearch(like: string): Observable<Kvp[]> {
-    return this.httpService
-      .get(`lookups/constituencysearch/${like}/N`)
-      .pipe(map(value => value as Kvp[]));
-  }
-
-  CountrySave(country: string): Observable<number> {
-    return this.httpService
-      .get(`lookups/countrySave/${country}`)
-      .pipe(map(value => +value));
-  }
-
-  CitySave(countryID: string, city: string): Observable<number> {
-    return this.httpService
-      .get(`lookups/citySave/${countryID}/${city}`)
-      .pipe(map(value => +value));
-  }
-
-  ShowCountries(geographicalExtentID: string): boolean {
-    switch (geographicalExtentID) {
-      // Don't Show Countries if:
-      case GeographicalExtentID.GlobalOrganisation.toString():
-      case GeographicalExtentID.PrivateOrganisation.toString():
-        return false;
-      default:
-        return true;
-    }
-  }
-
-  ShowRegions(geographicalExtentID: string): boolean {
-    switch (geographicalExtentID) {
-      // Don't Show Regions if:
-      case GeographicalExtentID.GlobalOrganisation.toString():
-      case GeographicalExtentID.National.toString():
-      case GeographicalExtentID.City.toString():
-      case GeographicalExtentID.PrivateOrganisation.toString():
-        return false;
-      default:
-        return true;
-    }
-  }
-
-  ShowCities(geographicalExtentID: string): boolean {
-    switch (geographicalExtentID) {
-      // Don't Show Cities if:
-      case GeographicalExtentID.GlobalOrganisation.toString():
-      case GeographicalExtentID.National.toString():
-      case GeographicalExtentID.Regional.toString():
-      case GeographicalExtentID.PrivateOrganisation.toString():
-        return false;
-      default:
-        return true;
-    }
-  }
-
   GetMapValue(obj: any, key: string): string {
     if (obj.hasOwnProperty(key)) {
       return obj[key];
@@ -554,35 +374,6 @@ export class AppDataService {
     const nextMon = new Date();
     nextMon.setDate(nextMon.getDate() - nextMon.getDay() + 8);
     return nextMon;
-  }
-
-  PointType(pointTypeID: number): Observable<string> {
-    // Don't subscribe, just return map within pipe
-    return this.PointTypes().pipe(
-      map(response => response.filter(pt => pt.value === pointTypeID)[0].key)
-    );
-  }
-
-  ShowSource(pointTypeID: PointTypesEnum): boolean {
-    switch (pointTypeID) {
-      // It doesn't matter WHO said it - should not sway vote
-      case PointTypesEnum.Fact:
-      case PointTypesEnum.Quote:
-      case PointTypesEnum.CommentOrEditorial:
-      case PointTypesEnum.RecommendedReading:
-      case PointTypesEnum.RecommendedListening:
-      case PointTypesEnum.RecommendedViewing:
-      case PointTypesEnum.ReportOrSurvey:
-      case PointTypesEnum.Petition:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  PorQType(porQTypeID: PorQTypes): string {
-    return this.porQTypes.filter(pt => pt.value === (porQTypeID as number))[0]
-      .key;
   }
 
   // https://stackoverflow.com/questions/52419658/efficient-way-to-get-route-parameter-in-angular
