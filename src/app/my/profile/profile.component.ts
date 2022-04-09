@@ -66,6 +66,9 @@ export class ProfileComponent implements OnDestroy {
   constituencySearch = '';
   constituencySearchOld = '';
 
+  postcode = '';
+  lookupConstituency = false;
+
   // Save old values when begin edit
   oldProfile = new FreeVoteProfile();
   public uploadPercentDone = 0;
@@ -97,24 +100,24 @@ export class ProfileComponent implements OnDestroy {
     // Debounce the keyup outside of angular zone
     // 2-way databinding already cleans up the slashtag
     // This is just for delayed search
-
-    this.ngZone.runOutsideAngular(() => {
-      this.constituencySearch$ = fromEvent<KeyboardEvent>(
-        this.tvConstituency?.nativeElement,
-        'keyup'
-      )
-        .pipe(debounceTime(300), distinctUntilChanged())
-        .subscribe({
-          next: _ => {
-            // Fuzzy search on userInput
-            this.ConstituencySearch(this.constituencySearch); // "As-is"
-          }
-        });
-    });
+    // this.ngZone.runOutsideAngular(() => {
+    //   this.constituencySearch$ = fromEvent<KeyboardEvent>(
+    //     this.tvConstituency?.nativeElement,
+    //     'keyup'
+    //   )
+    //     .pipe(debounceTime(300), distinctUntilChanged())
+    //     .subscribe({
+    //       next: _ => {
+    //         // Fuzzy search on userInput
+    //         this.ConstituencySearch(this.constituencySearch); // "As-is"
+    //       }
+    //     });
+    // });
   }
 
   edit(): void {
     this.error = false;
+    this.updateMessage = '';
     this.success = false;
     this.editing = true;
 
@@ -155,11 +158,12 @@ export class ProfileComponent implements OnDestroy {
                   parseInt(this.localData.freeVoteProfile.cityId, 10)
                 );
 
-              this.localData.freeVoteProfile.constituency =
-                this.appDataService.GetKVPKey(
-                  this.constituencies,
-                  parseInt(this.localData.freeVoteProfile.constituencyID, 10)
-                );
+              // Use postcode lookup
+              // this.localData.freeVoteProfile.constituency =
+              //   this.appDataService.GetKVPKey(
+              //     this.constituencies,
+              //     parseInt(this.localData.freeVoteProfile.constituencyID, 10)
+              //   );
 
               this.localData.SaveValues();
 
@@ -218,6 +222,7 @@ export class ProfileComponent implements OnDestroy {
     this.editing = false;
     this.editNewCountry = false;
     this.editNewCity = false;
+    this.lookupConstituency = false;
   }
 
   deleteProfilePictue(): void {
@@ -383,6 +388,7 @@ export class ProfileComponent implements OnDestroy {
     this.constituencyCount = 0;
   }
 
+  // Search by name - no longer used
   ConstituencySearch(like: string): void {
     if (!like || like.length < 3) {
       this.constituencies = [];
@@ -424,6 +430,32 @@ export class ProfileComponent implements OnDestroy {
         this.ngZone.run(_ => (this.fetchingConstituencies = false));
       }
     });
+  }
+
+  lookupPostCode() {
+    this.error = false;
+    this.updateMessage = '';
+    if (!!this.postcode) {
+      this.lookupsService.PostCodeSearch(this.postcode).subscribe({
+        next: constituency => {
+          this.localData.freeVoteProfile.constituencyID =
+            constituency.constituencyID;
+          this.localData.freeVoteProfile.wardID = constituency.wardID;
+
+          this.localData.freeVoteProfile.constituency =
+            constituency.constituency;
+          this.localData.freeVoteProfile.council = constituency.council;
+          this.localData.freeVoteProfile.ward = constituency.ward;
+
+          this.lookupConstituency = false;
+        },
+        error: err => {
+          this.error = true;
+          this.updateMessage = err.error.detail;
+          console.log(this.updateMessage);
+        }
+      });
+    }
   }
 
   saveCountry(): void {

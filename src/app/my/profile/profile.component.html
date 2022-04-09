@@ -17,6 +17,7 @@
           {{ localData.freeVoteProfile.location }}
         </div>
 
+        <!-- Picture -->
         <div fxFlex="100">
 
           <div fxLayout="column" fxLayoutAlign="start center">
@@ -59,7 +60,7 @@
           <hr>
         </div>
 
-
+        <!-- Edit Profile Picture to use -->
         <div fxFlex="40" *ngIf="editing">profile picture to use</div>
         <div fxFlex="60" *ngIf="editing">
           <mat-radio-group [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
@@ -80,23 +81,6 @@
         </div>
 
         <div fxFlex="100" style="margin-top:16px;"></div>
-
-        <div fxFlex="40">
-          <span class="align-middle">
-            alias
-          </span>
-        </div>
-
-        <div fxFlex="60">
-          <span class="align-middle" *ngIf="!editing">
-            {{ localData.freeVoteProfile.alias }}
-          </span>
-          <mat-form-field *ngIf="editing" class="mff">
-            <input matInput placeholder="your alias or ID" [(ngModel)]="localData.freeVoteProfile.alias" name="by"
-              required #tvAlias="ngModel" type="text">
-          </mat-form-field>
-        </div>
-
 
         <!-- Country -->
         <div fxFlex="40">
@@ -152,89 +136,59 @@
 
         </div>
 
-        <!-- Constituency -->
+        <!-- Postcode -->
+        <div fxFlex="40" *ngIf="lookupConstituency">
+          <span class="align-middle">
+            post code
+          </span>
+        </div>
+        <div fxFlex="60" *ngIf="lookupConstituency">
+          <input type="text" [(ngModel)]="postcode">
+          <button mat-stroked-button (click)="lookupPostCode()">
+            <mat-icon>search</mat-icon>
+            lookup
+          </button>
+        </div>
 
-        <div fxFlex="40" *ngIf="!editing">
+        <!-- Constituency -->
+        <div fxFlex="40" *ngIf="!!localData.freeVoteProfile.constituency">
           <span class="align-middle">
             constituency
           </span>
         </div>
-
-        <div fxFlex="60" *ngIf="!editing">
-
-          <span class="align-middle" *ngIf="!editing">
+        <div fxFlex="60" *ngIf="true || !!localData.freeVoteProfile.constituency">
+          <span class="align-middle">
             {{ localData.freeVoteProfile.constituency }}
           </span>
-
         </div>
 
-        <div fxFlex="40" [hidden]="!editing">
+        <!-- Council -->
+        <div fxFlex="40" *ngIf="!!localData.freeVoteProfile.council">
           <span class="align-middle">
-            constituency
-          </span>
-          <span class="spinner-grow text-primary ms-3" role="status" *ngIf="fetchingConstituencies">
-            <span class="visually-hidden">Loading...</span>
+            council
           </span>
         </div>
-        <div fxFlex="60" [hidden]="!editing">
-          <mat-form-field class="mff">
-            <input matInput type="text" #tvConstituency placeholder="parliamentary constituency"
-              [(ngModel)]="constituencySearch">
-            <button *ngIf="constituencySearch" matSuffix mat-icon-button aria-label="Clear"
-              (click)="clearConstituency()">
-              <mat-icon>close</mat-icon>
-            </button>
-          </mat-form-field>
-        </div>
-
-        <div fxFlex="40" *ngIf="editing && constituencyCount>0">
+        <div fxFlex="60" *ngIf="!!localData.freeVoteProfile.council">
           <span class="align-middle">
-            constituency select
-          </span>
-          <span class="linkCloud" [ngClass]="{'waiting':fetchingConstituencies, 'success':constituenciesFetched}">
-            <span *ngIf="constituenciesFetched && !fetchingConstituencies">updated</span>
+            {{ localData.freeVoteProfile.council }}
           </span>
         </div>
-        <div fxFlex="60" *ngIf="editing && constituencyCount>0" class="constituencyList">
-          <ng-container *ngFor="let constituency of constituencies">
-            <a (click)="onConstituencySelect(constituency)" [innerHtml]="constituency.key | TagDisplay" class="clicker">
-            </a>
-          </ng-container>
-        </div>
 
-        <!-- Groups -->
-
-        <div fxFlex="40" *ngIf="!editing">
+        <!-- Council Ward -->
+        <div fxFlex="40" *ngIf="true || !!localData.freeVoteProfile.ward">
           <span class="align-middle">
-            groups
+            council ward
           </span>
         </div>
-
-        <div fxFlex="60" *ngIf="!editing">
+        <div fxFlex="60" *ngIf="true || !!localData.freeVoteProfile.ward">
           <span class="align-middle">
-            List groups
+            {{ localData.freeVoteProfile.ward }}
           </span>
         </div>
 
-        <div *ngIf="!editing">
-          {{ localData.freeVoteProfile.profile }}
-        </div>
+        <div fxFlex="100" style="margin-top:20px;"></div>
 
-        <div fxFlex="40">
-          <span class="align-middle">
-            Break-out groups
-          </span>
-        </div>
-        <div fxFlex="60">
-          <span class="align-middle">
-            Preferred Room Size
-          </span>
-        </div>
-
-        <div *ngIf="editing">
-          <app-cke-universal name="profile" [(textToEdit)]="localData.freeVoteProfile.profile"></app-cke-universal>
-        </div>
-
+        <!-- Start Edit Commands -->
         <div fxFlex="40" *ngIf="!editing"></div>
         <div fxFlex="60" *ngIf="!editing">
           <button mat-stroked-button (click)="edit()">
@@ -247,9 +201,10 @@
           </button>
         </div>
 
+        <!-- Complete Edit Commands -->
         <div fxFlex fxLayout="row wrap" fxLayoutAlign="center" *ngIf="editing">
 
-          <button mat-stroked-button (click)="newCountry()" *ngIf="editing && !editNewCountry && !editNewCity">
+          <button mat-stroked-button (click)="newCountry()" *ngIf="false && editing && !editNewCountry && !editNewCity">
             <mat-icon>add_circle_outline</mat-icon>
             new country
           </button>
@@ -257,6 +212,11 @@
           <button mat-stroked-button (click)="newCity()" *ngIf="editing && !editNewCountry && !editNewCity">
             <mat-icon>add_circle_outline</mat-icon>
             new city
+          </button>
+
+          <button mat-stroked-button (click)="lookupConstituency=true" *ngIf="!editNewCountry && !editNewCity">
+            <mat-icon>search</mat-icon>
+            lookup constituency
           </button>
 
           <button mat-stroked-button (click)="save()" *ngIf="!editNewCountry && !editNewCity">
@@ -289,6 +249,58 @@
           <div fxLayoutAlign="center" *ngIf="!!updateMessage" class="mt-2 primary">
             {{ updateMessage }}
           </div>
+        </div>
+
+        <div hidden="true">
+          <div fxFlex="40">
+            <span class="align-middle">
+              alias
+            </span>
+          </div>
+
+          <div fxFlex="60">
+            <span class="align-middle" *ngIf="!editing">
+              {{ localData.freeVoteProfile.alias }}
+            </span>
+            <mat-form-field *ngIf="editing" class="mff">
+              <input matInput placeholder="your alias or ID" [(ngModel)]="localData.freeVoteProfile.alias" name="by"
+                required #tvAlias="ngModel" type="text">
+            </mat-form-field>
+          </div>
+
+          <!-- Groups -->
+
+          <div fxFlex="40" *ngIf="!editing">
+            <span class="align-middle">
+              groups
+            </span>
+          </div>
+
+          <div fxFlex="60" *ngIf="!editing">
+            <span class="align-middle">
+              List groups
+            </span>
+          </div>
+
+          <div *ngIf="!editing">
+            {{ localData.freeVoteProfile.profile }}
+          </div>
+
+          <div fxFlex="40">
+            <span class="align-middle">
+              Break-out groups
+            </span>
+          </div>
+          <div fxFlex="60">
+            <span class="align-middle">
+              Preferred Room Size
+            </span>
+          </div>
+
+          <div *ngIf="editing">
+            <app-cke-universal name="profile" [(textToEdit)]="localData.freeVoteProfile.profile"></app-cke-universal>
+          </div>
+
         </div>
 
       </div>

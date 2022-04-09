@@ -5,15 +5,23 @@ export class FreeVoteProfile {
   public familyName = '';
   public alias = '';
 
+  // Location
   public location = '';
   public country = '';
   public city = '';
-  public constituency = '';
 
   public countryId = ''; // for html binding use string
   public cityId = '';
-  public constituencyID = '';
 
+  // Voting
+  public constituency = '';
+  public council = '';
+  public ward = '';
+
+  public constituencyID = '';
+  public wardID = ''; // From which councilID is known
+
+  // Personal
   public profilePicture = '';
   public profilePictureOptionID = ''; // for html binding use string
 
@@ -24,4 +32,12 @@ export class FreeVoteProfile {
 export class ProfilePictureOption {
   public profilePictureOptionID = '';
   public socialMediaProfilePicture = '';
+}
+
+export class Constituency {
+  constituencyID = '';
+  wardID = '';
+  constituency = '';
+  council = '';
+  ward = '';
 }

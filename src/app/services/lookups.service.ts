@@ -11,6 +11,7 @@ import {
   PointTypesEnum,
   PorQTypes
 } from 'src/app/models/enums';
+import { Constituency } from 'src/app/models/FreeVoteProfile';
 
 // Services
 import { LocalDataService } from './local-data.service';
@@ -117,6 +118,13 @@ export class LookupsService {
       .pipe(map(value => value as Kvp[]));
   }
 
+  PostCodeSearch(postcode: string): Observable<Constituency> {
+    return this.httpService
+      .get(`lookups/mapIt/${postcode}`)
+      .pipe(map(value => value as Constituency));
+  }
+
+  // No longer used - now use postcode lookup
   ConstituencySearch(like: string): Observable<Kvp[]> {
     return this.httpService
       .get(`lookups/constituencysearch/${like}/N`)

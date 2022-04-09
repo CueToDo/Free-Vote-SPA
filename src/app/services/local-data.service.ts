@@ -256,7 +256,10 @@ export class LocalDataService {
       this.freeVoteProfile.cityId = this.GetItem('cityId');
       this.freeVoteProfile.city = this.GetItem('city');
       this.freeVoteProfile.constituencyID = this.GetItem('constituencyID');
+      this.freeVoteProfile.wardID = this.GetItem('wardID'); // not councilID
       this.freeVoteProfile.constituency = this.GetItem('constituency');
+      this.freeVoteProfile.council = this.GetItem('council');
+      this.freeVoteProfile.ward = this.GetItem('ward');
 
       this.freeVoteProfile.profilePictureOptionID = this.GetItem(
         'profilePictureOptionID'
@@ -295,6 +298,12 @@ export class LocalDataService {
       if (this.freeVoteProfile.constituency) {
         this.SetItem('constituency', this.freeVoteProfile.constituency);
       }
+      if (this.freeVoteProfile.council) {
+        this.SetItem('council', this.freeVoteProfile.council);
+      }
+      if (this.freeVoteProfile.ward) {
+        this.SetItem('ward', this.freeVoteProfile.ward);
+      }
       if (this.freeVoteProfile.countryId) {
         this.SetItem('countryId', this.freeVoteProfile.countryId.toString());
       }
@@ -306,6 +315,10 @@ export class LocalDataService {
           'constituencyID',
           this.freeVoteProfile.constituencyID.toString()
         );
+      }
+      // not councilID
+      if (this.freeVoteProfile.wardID) {
+        this.SetItem('wardID', this.freeVoteProfile.wardID.toString());
       }
 
       if (this.freeVoteProfile.profilePictureOptionID) {
@@ -356,14 +369,28 @@ export class LocalDataService {
         this.freeVoteProfile.constituency = values.constituency;
       }
 
+      if (values.council) {
+        this.freeVoteProfile.council = values.council;
+      }
+
+      if (values.ward) {
+        this.freeVoteProfile.ward = values.ward;
+      }
+
       if (values.countryId) {
         this.freeVoteProfile.countryId = values.countryId.toString();
       }
       if (values.cityId) {
         this.freeVoteProfile.cityId = values.cityId.toString();
       }
+
       if (values.constituencyID) {
         this.freeVoteProfile.constituencyID = values.constituencyID.toString();
+      }
+
+      // No CouncilID
+      if (values.wardID) {
+        this.freeVoteProfile.wardID = values.wardID.toString();
       }
 
       if (values.profilePictureOptionID) {
@@ -448,9 +475,12 @@ export class LocalDataService {
     this.freeVoteProfile.country = '';
     this.freeVoteProfile.city = '';
     this.freeVoteProfile.constituency = '';
+    this.freeVoteProfile.council = '';
+    this.freeVoteProfile.ward = '';
     this.freeVoteProfile.countryId = '0';
     this.freeVoteProfile.cityId = '0';
     this.freeVoteProfile.constituencyID = '0';
+    this.freeVoteProfile.wardID = '0'; // Don't need councilID
     this.freeVoteProfile.profilePictureOptionID = '';
     this.freeVoteProfile.profilePicture = '';
 
