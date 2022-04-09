@@ -82,6 +82,20 @@
 
         <div fxFlex="100" style="margin-top:16px;"></div>
 
+        <!-- Postcode -->
+        <div fxFlex="40" *ngIf="editing">
+          <span class="align-middle">
+            post code
+          </span>
+        </div>
+        <div fxFlex="60" *ngIf="editing">
+          <input type="text" [(ngModel)]="postcode">
+          <button mat-stroked-button (click)="lookupPostCode()">
+            <mat-icon>search</mat-icon>
+            lookup
+          </button>
+        </div>
+
         <!-- Country -->
         <div fxFlex="40">
           <span class="align-middle">
@@ -91,11 +105,11 @@
 
         <div fxFlex="60">
 
-          <span class="align-middle" *ngIf="!editing">
+          <span class="align-middle" *ngIf="true || !editing">
             {{ localData.freeVoteProfile.country }}
           </span>
 
-          <mat-form-field *ngIf="editing && !editNewCountry" class="mff">
+          <!-- <mat-form-field *ngIf="editing && !editNewCountry" class="mff">
             <mat-select (ngModelChange)="onCountrySelect($event)" name="selectCountry"
               [(ngModel)]="localData.freeVoteProfile.countryId" placeholder="your home country">
               <mat-option *ngFor="let country of countries" [value]="country.value.toString()">{{ country.key }}
@@ -106,24 +120,24 @@
           <mat-form-field *ngIf="editNewCountry" class="mff">
             <input matInput placeholder="your home country" [(ngModel)]="localData.freeVoteProfile.country"
               name="country" required #tvCountry="ngModel" type="text">
-          </mat-form-field>
+          </mat-form-field> -->
 
         </div>
 
         <!-- City -->
-        <div fxFlex="40" *ngIf="!editNewCountry">
+        <div fxFlex="40" *ngIf="true || !editNewCountry">
           <span class="align-middle">
             home city
           </span>
         </div>
 
-        <div fxFlex="60" *ngIf="!editNewCountry">
+        <div fxFlex="60" *ngIf="true || !editNewCountry">
 
-          <span *ngIf="!editing" class="align-middle">
+          <span *ngIf="true || !editing" class="align-middle">
             {{ localData.freeVoteProfile.city }}
           </span>
 
-          <mat-form-field *ngIf="editing && !editNewCity" class="mff">
+          <!-- <mat-form-field *ngIf="editing && !editNewCity" class="mff">
             <mat-select name="selectCity" [(ngModel)]="localData.freeVoteProfile.cityId" placeholder="your home city">
               <mat-option *ngFor="let city of cities" [value]="city.value.toString()">{{ city.key }}</mat-option>
             </mat-select>
@@ -132,22 +146,8 @@
           <mat-form-field *ngIf="editNewCity" class="mff">
             <input matInput placeholder="your home city" [(ngModel)]="localData.freeVoteProfile.city" name="city"
               required #tvCity="ngModel" type="text">
-          </mat-form-field>
+          </mat-form-field> -->
 
-        </div>
-
-        <!-- Postcode -->
-        <div fxFlex="40" *ngIf="lookupConstituency">
-          <span class="align-middle">
-            post code
-          </span>
-        </div>
-        <div fxFlex="60" *ngIf="lookupConstituency">
-          <input type="text" [(ngModel)]="postcode">
-          <button mat-stroked-button (click)="lookupPostCode()">
-            <mat-icon>search</mat-icon>
-            lookup
-          </button>
         </div>
 
         <!-- Constituency -->
@@ -214,11 +214,6 @@
             new city
           </button>
 
-          <button mat-stroked-button (click)="lookupConstituency=true" *ngIf="!editNewCountry && !editNewCity">
-            <mat-icon>search</mat-icon>
-            lookup constituency
-          </button>
-
           <button mat-stroked-button (click)="save()" *ngIf="!editNewCountry && !editNewCity">
             <mat-icon>save</mat-icon>
             save
@@ -245,12 +240,14 @@
 
         </div>
 
+        <!-- Update message -->
         <div fxFlex="100" [ngClass]="{'alert':error, 'alert-danger':error, 'success':success}">
           <div fxLayoutAlign="center" *ngIf="!!updateMessage" class="mt-2 primary">
             {{ updateMessage }}
           </div>
         </div>
 
+        <!-- To do -->
         <div hidden="true">
           <div fxFlex="40">
             <span class="align-middle">

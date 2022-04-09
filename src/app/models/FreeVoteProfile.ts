@@ -34,9 +34,15 @@ export class ProfilePictureOption {
   public socialMediaProfilePicture = '';
 }
 
-export class Constituency {
+export class VotingArea {
+  countryID = '';
+  cityID = '';
   constituencyID = '';
+  councilID = '';
   wardID = '';
+
+  country = '';
+  city = '';
   constituency = '';
   council = '';
   ward = '';

@@ -67,7 +67,6 @@ export class ProfileComponent implements OnDestroy {
   constituencySearchOld = '';
 
   postcode = '';
-  lookupConstituency = false;
 
   // Save old values when begin edit
   oldProfile = new FreeVoteProfile();
@@ -222,7 +221,6 @@ export class ProfileComponent implements OnDestroy {
     this.editing = false;
     this.editNewCountry = false;
     this.editNewCity = false;
-    this.lookupConstituency = false;
   }
 
   deleteProfilePictue(): void {
@@ -437,17 +435,18 @@ export class ProfileComponent implements OnDestroy {
     this.updateMessage = '';
     if (!!this.postcode) {
       this.lookupsService.PostCodeSearch(this.postcode).subscribe({
-        next: constituency => {
+        next: votingArea => {
+          this.localData.freeVoteProfile.countryId = votingArea.countryID;
+          this.localData.freeVoteProfile.cityId = votingArea.cityID;
           this.localData.freeVoteProfile.constituencyID =
-            constituency.constituencyID;
-          this.localData.freeVoteProfile.wardID = constituency.wardID;
+            votingArea.constituencyID;
+          this.localData.freeVoteProfile.wardID = votingArea.wardID;
 
-          this.localData.freeVoteProfile.constituency =
-            constituency.constituency;
-          this.localData.freeVoteProfile.council = constituency.council;
-          this.localData.freeVoteProfile.ward = constituency.ward;
-
-          this.lookupConstituency = false;
+          this.localData.freeVoteProfile.country = votingArea.country;
+          this.localData.freeVoteProfile.city = votingArea.city;
+          this.localData.freeVoteProfile.constituency = votingArea.constituency;
+          this.localData.freeVoteProfile.council = votingArea.council;
+          this.localData.freeVoteProfile.ward = votingArea.ward;
         },
         error: err => {
           this.error = true;
