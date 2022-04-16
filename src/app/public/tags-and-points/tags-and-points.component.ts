@@ -1,5 +1,11 @@
 // Angular
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // Material
@@ -57,7 +63,9 @@ enum tabs {
   templateUrl: './tags-and-points.component.html',
   styleUrls: ['./tags-and-points.component.css']
 })
-export class TagsAndPointsComponent implements OnInit, OnDestroy {
+export class TagsAndPointsComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   // Subscriptions
   tagLatestActivity$: Subscription | undefined;
   pointsFilterRemove$: Subscription | undefined;
@@ -167,11 +175,6 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     // EXTERNAL ROUTECHANGE (not tab change): Need to subscribe to route change to get route params
     // https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
 
-    const routeparts = this.appData.Route.split('/');
-
-    // Process Initial Route
-    if (routeparts) this.InitialRoute(routeparts);
-
     // No tag selected? Go to API to get latest
     if (!this.topicSelected || this.topicSelected === 'null') {
       this.tagLatestActivity$ = this.tagsService.TagLatestActivity().subscribe({
@@ -219,9 +222,13 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     });
   }
 
-  InitialRoute(routeparts: string[]): void {
-    console.log('Initial Route');
+  ngAfterViewInit() {
+    // Process Initial Route
+    const routeparts = this.appData.Route.split('/');
+    if (routeparts) this.InitialRoute(routeparts);
+  }
 
+  InitialRoute(routeparts: string[]): void {
     if (routeparts.length === 2) {
       // {0}/trending - length=2
 
@@ -266,6 +273,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
         case 'points':
           this.tabIndex = tabs.tagPoints;
           this.qp = 'point';
+          this.ReselectPoints(PointSortTypes.TrendingActivity);
           break;
       }
     } else if (routeparts.length === 4) {
@@ -333,7 +341,9 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
     this.SetSortTypeIcon(pointSortType);
 
     this.allowSwitchToPoints = true;
-    this.ChangeTab(tabs.questions);
+
+    this.ChangeTab(tabs.tagPoints);
+    this.pointsListComponent.SelectPoints();
 
     this.externalTrigger = false;
   }
