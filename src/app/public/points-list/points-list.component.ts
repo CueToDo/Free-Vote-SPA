@@ -91,15 +91,18 @@ export class PointsListComponent implements OnDestroy, OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.pointSortAscending$ = this.appData.PointSortAscending$.subscribe(
-      (ascending: boolean) => {
-        this.filter.sortAscending = ascending;
-        this.SelectPoints();
-      }
-    );
+    // new sort type
     this.pointSortType$ = this.appData.PointSortType$.subscribe(
       (pointSortType: PointSortTypes) => {
         this.newSortType(pointSortType);
+      }
+    );
+
+    // new sort order
+    this.pointSortAscending$ = this.appData.PointSortAscending$.subscribe(
+      (ascending: boolean) => {
+        this.filter.sortAscending = ascending;
+        this.newSortType(this.filter.sortType);
       }
     );
   }
@@ -260,7 +263,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
         this.alreadyFetchingPointsFromDB = true;
 
         this.pointsService
-          .NewPointSelectionOrder(pointSortType, reversalOnly)
+          // pass pointCount for the cast to PSR
+          .NewPointSelectionOrder(pointSortType, reversalOnly, this.pointCount)
           .subscribe(response => {
             this.alreadyFetchingPointsFromDB = false;
 
@@ -350,7 +354,11 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
         if (this.filter) {
           this.pointsService
-            .GetNextBatch(this.filter.sortType, this.lastBatchRow + 1)
+            .GetNextBatch(
+              this.filter.sortType,
+              this.lastBatchRow + 1,
+              this.pointCount
+            )
             .subscribe(response => {
               // New Batch
               this.IDs = response.pointIDs;

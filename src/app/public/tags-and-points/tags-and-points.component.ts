@@ -588,7 +588,7 @@ export class TagsAndPointsComponent implements OnInit, OnDestroy {
   sortBy(pointSortType: PointSortTypes): void {
     if (
       this.pointSortType !== pointSortType ||
-      pointSortType === PointSortTypes.Random
+      pointSortType === PointSortTypes.Random // new random order
     ) {
       // New sort order or user clicked random again
 

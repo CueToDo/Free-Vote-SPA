@@ -77,7 +77,7 @@ export class PointsService {
 
     return this.httpClientService
       .get(apiUrl)
-      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData, 0)));
   }
 
   // The standard selections for a Tag:
@@ -100,7 +100,7 @@ export class PointsService {
 
     return this.httpClientService
       .get(apiUrl)
-      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData, 0)));
   }
 
   // ToDo this is what needs to change for new selection methods
@@ -141,7 +141,7 @@ export class PointsService {
 
     return this.httpClientService
       .post(apiUrl, postData)
-      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData, 0)));
   }
 
   GetSpecificPoint(
@@ -154,7 +154,7 @@ export class PointsService {
 
     return this.httpClientService
       .get(apiUrl)
-      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData, 0)));
   }
 
   PorQPoints(porQID: number): Observable<PointSelectionResult> {
@@ -162,12 +162,13 @@ export class PointsService {
 
     return this.httpClientService
       .get(apiUrl)
-      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData, 0)));
   }
 
   NewPointSelectionOrder(
     pointSortOrder: PointSortTypes,
-    reversalOnly: boolean
+    reversalOnly: boolean,
+    knownTotalPointCount: number
   ): Observable<PointSelectionResult> {
     const apiUrl = `points/pointsSelectedReOrder/${pointSortOrder}/${
       reversalOnly ? 'Y' : 'N'
@@ -175,18 +176,27 @@ export class PointsService {
 
     return this.httpClientService
       .get(apiUrl)
-      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+      .pipe(
+        map(returnData =>
+          this.CastToPointSelectionResult(returnData, knownTotalPointCount)
+        )
+      );
   }
 
   GetNextBatch(
     pointSortOrder: PointSortTypes,
-    fromRow: number
+    fromRow: number,
+    knowPointCountTotal: number
   ): Observable<PointSelectionResult> {
     const apiUrl = `points/getNextBatch/${pointSortOrder}/${fromRow}/${this.batchSize}/${this.pageSize}`;
 
     return this.httpClientService
       .get(apiUrl)
-      .pipe(map(returnData => this.CastToPointSelectionResult(returnData)));
+      .pipe(
+        map(returnData =>
+          this.CastToPointSelectionResult(returnData, knowPointCountTotal)
+        )
+      );
   }
 
   // returns a batch of points based on a list of IDs peviously returned to the client
@@ -211,10 +221,17 @@ export class PointsService {
     }
   }
 
-  CastToPointSelectionResult(sourceData: any): PointSelectionResult {
+  CastToPointSelectionResult(
+    sourceData: any,
+    knownTotalCount: number
+  ): PointSelectionResult {
     const PSR = new PointSelectionResult();
 
-    PSR.pointCount = sourceData.pointCount;
+    if (knownTotalCount > 0) {
+      PSR.pointCount = knownTotalCount;
+    } else {
+      PSR.pointCount = sourceData.pointCount;
+    }
     PSR.fromDate = sourceData.fromDate;
     PSR.toDate = sourceData.toDate;
 

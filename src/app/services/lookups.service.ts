@@ -81,6 +81,7 @@ export class LookupsService {
       case PointTypesEnum.RecommendedViewing:
       case PointTypesEnum.ReportOrSurvey:
       case PointTypesEnum.Petition:
+      case PointTypesEnum.Tweet:
         return true;
       default:
         return false;

@@ -173,9 +173,11 @@ export class PointComponent implements OnInit {
 
       this.pointHTMLwithoutEmbed = split.join(''); // pointHTML stripped of <figure> elements added by ckEditor for media embed
 
+      // Highlight search term
+      // https://stackoverflow.com/questions/7313395/case-insensitive-replace-all
       if (!!this.searchTerm) {
-        var regEx = new RegExp(this.searchTerm, 'ig');
-        const replace = `<span class="highlight">${this.searchTerm}</span>`;
+        var regEx = new RegExp(this.searchTerm, 'ig'); // search term is case insensitive and global - all occurrences replaced
+        const replace = `<span class="highlight">${this.searchTerm.toUpperCase()}</span>`;
 
         this.point.pointTitle = this.point.pointTitle.replace(regEx, replace);
 

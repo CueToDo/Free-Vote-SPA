@@ -145,17 +145,17 @@ export class ProfileComponent implements OnDestroy {
               this.updateMessage = 'saved';
 
               // Value/IDs updated now update local display text
-              this.localData.freeVoteProfile.country =
-                this.appDataService.GetKVPKey(
-                  this.countries,
-                  parseInt(this.localData.freeVoteProfile.countryId, 10)
-                );
+              // this.localData.freeVoteProfile.country =
+              //   this.appDataService.GetKVPKey(
+              //     this.countries,
+              //     parseInt(this.localData.freeVoteProfile.countryId, 10)
+              //   );
 
-              this.localData.freeVoteProfile.city =
-                this.appDataService.GetKVPKey(
-                  this.cities,
-                  parseInt(this.localData.freeVoteProfile.cityId, 10)
-                );
+              // this.localData.freeVoteProfile.city =
+              //   this.appDataService.GetKVPKey(
+              //     this.cities,
+              //     parseInt(this.localData.freeVoteProfile.cityId, 10)
+              //   );
 
               // Use postcode lookup
               // this.localData.freeVoteProfile.constituency =
