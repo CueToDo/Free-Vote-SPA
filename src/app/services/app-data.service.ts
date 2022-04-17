@@ -50,10 +50,6 @@ export class AppDataService {
   public TabSelected$ = new Subject<string>();
   public TagsPointsActive$ = new Subject<boolean>(); // Point Selection
 
-  // Change of Point SortOrder or Filter demands a reselect without change of selection parameters
-  public PointSortType$ = new Subject<PointSortTypes>();
-  public PointSortAscending$ = new Subject<boolean>();
-
   // For responsive viewing
   public DisplayWidth$ = new BehaviorSubject<number>(5); // Viewport width monitoring
   public InputSlashTagOnMobile$ = new BehaviorSubject<boolean>(false);

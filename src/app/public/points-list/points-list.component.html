@@ -8,7 +8,7 @@
 
         <!-- Top Spinner for reselect -->
         <div *ngIf="alreadyFetchingPointsFromDB && pointCount > 0">
-            <div>
+            <div fxLayout="row" fxLayoutAlign="end center">
                 <div class="amr-2">reselecting points</div>
                 <div class="spinner-grow text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>

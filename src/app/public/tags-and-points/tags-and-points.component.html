@@ -82,30 +82,29 @@
         </button>
 
         <!-- Begin Sort Menu -->
-
         <button mat-button [matMenuTriggerFor]="sortOrderMenu" *ngIf="topicSelected" [matTooltip]="sortToolTip">
           <span>sort</span>
-          <mat-icon>{{ sortOrderIcon }}</mat-icon>
+          <mat-icon>{{ sortTypeIcon }}</mat-icon>
         </button>
 
         <mat-menu #sortOrderMenu="matMenu">
 
           <button mat-menu-item (click)="sortBy(PointSortTypes.TrendingActivity)" [matTooltip]="'trending now'"
-            [class.selected]="pointSortType===PointSortTypes.TrendingActivity">
+            [class.selected]="filter.sortType===PointSortTypes.TrendingActivity">
             <mat-icon>trending_up</mat-icon>
             trending
           </button>
 
           <button mat-menu-item (click)="sortBy(PointSortTypes.AllTimePopularity)"
             [matTooltip]="'most popular first (all time)'"
-            [class.selected]="pointSortType===PointSortTypes.AllTimePopularity">
+            [class.selected]="filter.sortType===PointSortTypes.AllTimePopularity">
             <mat-icon>favorite_border</mat-icon>
             popularity
           </button>
 
           <button mat-menu-item (click)="sortBy(PointSortTypes.DateUpdated)"
             [matTooltip]="'date order - most recent first'"
-            [class.selected]="pointSortType===PointSortTypes.DateUpdated">
+            [class.selected]="filter.sortType===PointSortTypes.DateUpdated">
             <mat-icon>calendar_today</mat-icon>
             date
           </button>
@@ -113,19 +112,19 @@
           <hr />
 
           <button mat-menu-item [matTooltip]="'ascending order'" (click)="SetSortDescending(false)"
-            [class.selected]="sortAscending">
+            [class.selected]="filter.sortAscending">
             <mat-icon>arrow_upward</mat-icon>
             ascending
           </button>
 
           <button mat-menu-item [matTooltip]="'descending order'" (click)="SetSortDescending(true)"
-            [class.selected]="sortDescending">
+            [class.selected]="filter.sortDescending">
             <mat-icon>arrow_downward</mat-icon>
             descending
           </button>
 
           <button mat-menu-item (click)="sortBy(PointSortTypes.Random)" [matTooltip]="'random order'"
-            [class.selected]="pointSortType===PointSortTypes.Random">
+            [class.selected]="filter.sortType===PointSortTypes.Random">
             <mat-icon>gesture</mat-icon>
             random
           </button>

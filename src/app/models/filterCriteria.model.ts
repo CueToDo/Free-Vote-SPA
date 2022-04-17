@@ -50,7 +50,13 @@ export class FilterCriteria {
   // Whether Feedback Given
   feedbackFilter = PointFeedbackFilter.Any;
 
-  // Result Sort
+  // Sort Type
   sortType = PointSortTypes.TrendingActivity;
+
+  // Sort Order
   sortAscending = false;
+  get sortDescending(): boolean {
+    return !this.sortAscending;
+  }
+  savedSortDescending = !this.sortAscending;
 }

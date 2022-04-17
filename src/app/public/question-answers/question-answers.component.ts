@@ -47,12 +47,7 @@ export class QuestionAnswersComponent {
     private questionsService: QuestionsService
   ) {}
 
-  ngOnInit(): void {
-    this.filter.pointSelectionType = PointSelectionTypes.QuestionPoints;
-    this.filter.slashTag = this.activeRoute.snapshot.params['tag'];
-    this.filter.sortType = PointSortTypes.Random;
-    this.filter.sortAscending = true; // Irrelevant for random
-  }
+  ngOnInit(): void {}
 
   Back(): void {
     this.ViewAllQuestions.emit(true);

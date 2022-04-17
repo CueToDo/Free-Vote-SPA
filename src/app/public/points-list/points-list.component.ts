@@ -12,12 +12,7 @@ import {
 import { ID } from 'src/app/models/common';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 import { Point, PointSelectionResult } from 'src/app/models/point.model';
-import {
-  PointSelectionTypes,
-  PointTypesEnum,
-  PointSortTypes,
-  MyPointFilter
-} from 'src/app/models/enums';
+import { PointSelectionTypes, PointSortTypes } from 'src/app/models/enums';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -90,22 +85,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
     private pointsService: PointsService
   ) {}
 
-  ngOnInit(): void {
-    // new sort type
-    this.pointSortType$ = this.appData.PointSortType$.subscribe(
-      (pointSortType: PointSortTypes) => {
-        this.newSortType(pointSortType);
-      }
-    );
-
-    // new sort order
-    this.pointSortAscending$ = this.appData.PointSortAscending$.subscribe(
-      (ascending: boolean) => {
-        this.filter.sortAscending = ascending;
-        this.newSortType(this.filter.sortType);
-      }
-    );
-  }
+  ngOnInit(): void {}
 
   ReselectPoints(pointSortType: PointSortTypes) {
     this.filter.slashTag = this.localData.PreviousSlashTagSelected; // Set by the Point-Edit Component
@@ -227,6 +207,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
         default:
           // Infinite Scroll: Get points in batches
+
           if (this.filter) {
             this.filter.slashTag = this.localData.PreviousSlashTagSelected; // how does this relate to getting from route param?
             if (this.filter.slashTag) {
@@ -251,14 +232,21 @@ export class PointsListComponent implements OnDestroy, OnInit {
     }
   }
 
-  newSortType(pointSortType: PointSortTypes): void {
+  public NewSortOrder() {
+    // Sort Type hasn't changed - reversal only will be detected
+    this.NewSortType(this.filter.sortType);
+  }
+
+  public NewSortType(pointSortType: PointSortTypes): void {
     if (this.pointCount > 1) {
       // Don't go to server to re-sort if only 1 point selected
 
       // ReversalOnly means we can allow the database to update rownumbers on previously selected points
       if (this.filter) {
         const reversalOnly = this.filter.sortType === pointSortType;
-        this.filter.sortType = pointSortType; // No need to check need to change
+
+        // No need to check need to change
+        this.filter.sortType = pointSortType;
 
         this.alreadyFetchingPointsFromDB = true;
 
