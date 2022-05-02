@@ -114,17 +114,13 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!titleParam) {
         titleParam = '';
       }
-      if (!tagParam) {
-        tagParam = '';
-      }
-      if (!aliasParam) {
-        aliasParam = '';
-      }
 
       if (tagParam) {
         this.filter.anyTag = false;
         this.filter.slashTag = tagParam;
         tag = true;
+      } else {
+        tagParam = '';
       }
 
       if (aliasParam) {
@@ -132,6 +128,7 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!this.filter.slashTag) {
           this.filter.anyTag = true;
         }
+        aliasParam = '';
         this.showFilters = true;
         alias = true;
       }

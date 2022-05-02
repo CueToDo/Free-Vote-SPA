@@ -49,7 +49,7 @@ const appRoutes: Routes = [
     canActivate: [LoginRouteGuardService]
   },
 
-  // organisations, groups and profile
+  // organisations, groups
   {
     path: 'organisations',
     loadChildren: () =>
@@ -58,6 +58,7 @@ const appRoutes: Routes = [
       ),
     canActivate: [LoginRouteGuardService]
   },
+  // profile
   {
     path: 'my/:tab',
     loadChildren: () => import('./my/my.module').then(m => m.MyModule),

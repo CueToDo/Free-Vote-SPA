@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 // Models, enums
 import { ID } from 'src/app/models/common';
@@ -82,10 +83,19 @@ export class PointsListComponent implements OnDestroy, OnInit {
   constructor(
     public appData: AppDataService,
     public localData: LocalDataService,
-    private pointsService: PointsService
+    private pointsService: PointsService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.activatedRoute.paramMap.subscribe(params => {
+      const tag = params.get('tag');
+      if (tag && tag != this.filter.slashTag) {
+        this.localData.PreviousSlashTagSelected = tag;
+        this.ReselectPoints(this.filter.sortType);
+      }
+    });
+  }
 
   ReselectPoints(pointSortType: PointSortTypes) {
     this.filter.slashTag = this.localData.PreviousSlashTagSelected; // Set by the Point-Edit Component

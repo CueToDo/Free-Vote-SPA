@@ -24,6 +24,11 @@
         groups
     </button>
 
+    <button mat-button *ngIf="localData.LoggedInToAuth0$ | async">
+        <img src="/assets/bullhorn.png">
+        local
+    </button>
+
     <button mat-button routerLink="/voters" routerLinkActive="active" *ngIf="localData.LoggedInToAuth0$ | async"
         [class.selected]="tabSelected==='voters'" (click)="tabSelected='voters'" matTooltip="voters">
         <mat-icon>edit</mat-icon>
