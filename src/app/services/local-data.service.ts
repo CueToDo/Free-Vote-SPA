@@ -230,7 +230,7 @@ export class LocalDataService {
       const localAPI: boolean = this.GetItem('localAPI') === 'true';
 
       if (localAPI) {
-        this.apiUrl = 'http://localhost:54357/';
+        this.apiUrl = 'https://localhost:44389/';
       }
     } else {
       // window not available on server
