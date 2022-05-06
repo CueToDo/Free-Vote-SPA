@@ -26,7 +26,7 @@ import { IssuesService } from 'src/app/services/issues.service';
 import { PsandQsService } from 'src/app/services/psandqs.service';
 
 // Components
-import { ProgressComponent } from '../progress/progress.component';
+import { ProgressComponent } from 'src/app/issues/progress/progress.component';
 
 @Component({
   selector: 'app-group',

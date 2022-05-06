@@ -29,8 +29,9 @@ import { InterceptorService } from './services/interceptor.service';
 
 // Modules
 import { CustomModule } from './custommodule/custom.module';
-import { PublicModule } from './public/public.module';
+import { IssuesModule } from './issues/issues.module';
 import { OrganisationsModule } from './organisations/organisations.module';
+import { PublicModule } from './public/public.module';
 
 // Global Singleton Services imported from Services Module
 // https://angular.io/guide/singleton-services
@@ -66,7 +67,8 @@ import { AppComponent } from './app.component';
     // FreeVote
     CustomModule,
     PublicModule,
-    OrganisationsModule
+    OrganisationsModule,
+    IssuesModule
   ],
   declarations: [
     AppComponent

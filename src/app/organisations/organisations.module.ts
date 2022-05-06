@@ -12,27 +12,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
-// Modules
-import { PublicModule } from 'src/app/public/public.module';
+// FreeVote Modules
 import { CustomModule } from 'src/app/custommodule/custom.module';
+import { IssuesModule } from 'src/app/issues/issues.module';
+import { PublicModule } from 'src/app/public/public.module';
 
 // Components not declared here
-import { TagsAndPointsComponent } from '../public/tags-and-points/tags-and-points.component';
+import { TagsAndPointsComponent } from 'src/app/public/tags-and-points/tags-and-points.component';
+import { IssueDetailsComponent } from 'src/app/issues/issue-details/issue-details.component';
+import { PorqDetailsComponent } from 'src/app/issues/porq-details/porq-details.component';
 
-// This module Components
-import { ProgressComponent } from './progress/progress.component';
-
-import { PorqEditComponent } from './porq-edit/porq-edit.component';
-import { PorqComponent } from './porq/porq.component';
-import { PorqDetailsComponent } from './porq-details/porq-details.component';
-
-import { IssueEditComponent } from './issue-edit/issue-edit.component';
-import { IssueComponent } from './issue/issue.component';
-import { IssueDetailsComponent } from './issue-details/issue-details.component';
-
+// This module components
 import { GroupEditComponent } from './group-edit/group-edit.component';
 import { GroupComponent } from './group/group.component';
 import { GroupsComponent } from './groups/groups.component';
@@ -62,10 +53,12 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    // Angular
     CommonModule,
+    FlexLayoutModule,
     FormsModule,
     RouterModule.forChild(routes),
-    FlexLayoutModule,
+
     // Material
     MatButtonModule,
     MatFormFieldModule,
@@ -73,23 +66,13 @@ const routes: Routes = [
     MatInputModule,
     MatRadioModule,
     MatSelectModule,
-    MatSliderModule,
-    MatTooltipModule,
+
     // FreeVote
-    PublicModule,
-    CustomModule
+    CustomModule,
+    IssuesModule,
+    PublicModule
   ],
   declarations: [
-    ProgressComponent,
-
-    PorqEditComponent,
-    PorqComponent,
-    PorqDetailsComponent,
-
-    IssueEditComponent,
-    IssueComponent,
-    IssueDetailsComponent,
-
     GroupEditComponent,
     GroupComponent,
     GroupsComponent,

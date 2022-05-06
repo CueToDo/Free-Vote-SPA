@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 // Models, Enums
 import { Group } from 'src/app/models/group.model';
