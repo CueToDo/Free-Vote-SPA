@@ -160,7 +160,8 @@
         </div>
         <div fxFlex="60" *ngIf="true || !!localData.freeVoteProfile.constituency">
           <span class="align-middle">
-            {{ localData.freeVoteProfile.constituency }}
+            <a [routerLink]="constituencyLink">{{
+              localData.freeVoteProfile.constituency }}</a>
           </span>
         </div>
 

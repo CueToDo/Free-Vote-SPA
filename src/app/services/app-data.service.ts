@@ -47,7 +47,6 @@ export class AppDataService {
   // Any subscriptions to the following must be unsubscribed (except in app.component)
   public SSRInitialMetaData$ = new Subject<PagePreviewMetaData>(); // SSR Universal PagePreview
   public RouteParamChange$ = new Subject<string>(); // next url with route parameters
-  public TabSelected$ = new Subject<string>();
   public TagsPointsActive$ = new Subject<boolean>(); // Point Selection
 
   // For responsive viewing

@@ -5,21 +5,29 @@ export class FreeVoteProfile {
   public familyName = '';
   public alias = '';
 
-  // Location
+  // Geographical
+  public postcode = '';
   public location = '';
+  public countryId = ''; // for html binding use string
   public country = '';
+  public cityId = '';
   public city = '';
 
-  public countryId = ''; // for html binding use string
-  public cityId = '';
-
-  // Voting
-  public constituency = '';
-  public council = '';
-  public ward = '';
-
+  // National Politics
   public constituencyID = '';
+  public constituency = '';
+  public mapItConstituencyID = '';
+
+  public politician = '';
+  public politicianUrl = '';
+  public politicianImage = '';
+  public politicianTwfyMemberID = '';
+
+  // Local Politics
   public wardID = ''; // From which councilID is known
+  public ward = '';
+  public mapItWardID = '';
+  public council = '';
 
   // Personal
   public profilePicture = '';
@@ -35,15 +43,24 @@ export class ProfilePictureOption {
 }
 
 export class VotingArea {
+  postcode = '';
   countryID = '';
-  cityID = '';
-  constituencyID = '';
-  councilID = '';
-  wardID = '';
-
   country = '';
+  cityID = '';
   city = '';
+
+  constituencyID = '';
   constituency = '';
-  council = '';
+  mapItConstituencyID = '';
+
+  politician = '';
+  politicianImage = '';
+  politicianTwfyUrl = '';
+  politicianTwfyMemberID = '';
+
+  wardID = '';
   ward = '';
+  mapItWardID = '';
+  councilID = '';
+  council = '';
 }

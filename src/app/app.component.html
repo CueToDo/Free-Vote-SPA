@@ -28,9 +28,8 @@
 
   <!-- Main Menu on large screens -->
   <nav fxLayoutAlign="center" *ngIf="!showBurger">
-    <app-nav-main></app-nav-main>
+    <app-nav-main #navMain></app-nav-main>
   </nav>
-
 
   <!-- Use of main element is messing with flexLayout -->
   <div fxFlex (click)="closeBurgerMenu()">
@@ -66,7 +65,7 @@
           {{ localAPI }}
         </span>
         <span class="align-middle copyright" (click)="toggleLocalAPI()">
-          {{ localData.website }} 2022 v13.14.0
+          {{ localData.website }} 2022 v13.14.1
         </span>
       </div>
 

@@ -66,6 +66,13 @@ export class ProfileComponent implements OnDestroy {
   constituencySearch = '';
   constituencySearchOld = '';
 
+  // For Routerlink to local
+  public get constituencyLink(): string {
+    return `/local/${this.appData.kebabUri(
+      this.localData.freeVoteProfile.constituency
+    )}`;
+  }
+
   postcode = '';
 
   // Save old values when begin edit
@@ -86,8 +93,8 @@ export class ProfileComponent implements OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private appDataService: AppDataService,
     public localData: LocalDataService,
+    private appData: AppDataService,
     private httpService: HttpService,
     private lookupsService: LookupsService,
     private profileService: ProfileService,
@@ -436,17 +443,33 @@ export class ProfileComponent implements OnDestroy {
     if (!!this.postcode) {
       this.lookupsService.PostCodeSearch(this.postcode).subscribe({
         next: votingArea => {
+          // Geographical
+          this.localData.freeVoteProfile.postcode = votingArea.postcode;
           this.localData.freeVoteProfile.countryId = votingArea.countryID;
           this.localData.freeVoteProfile.cityId = votingArea.cityID;
-          this.localData.freeVoteProfile.constituencyID =
-            votingArea.constituencyID;
-          this.localData.freeVoteProfile.wardID = votingArea.wardID;
-
           this.localData.freeVoteProfile.country = votingArea.country;
           this.localData.freeVoteProfile.city = votingArea.city;
+
+          // National Politics
+          this.localData.freeVoteProfile.constituencyID =
+            votingArea.constituencyID;
           this.localData.freeVoteProfile.constituency = votingArea.constituency;
-          this.localData.freeVoteProfile.council = votingArea.council;
+          this.localData.freeVoteProfile.mapItConstituencyID =
+            votingArea.mapItConstituencyID;
+
+          this.localData.freeVoteProfile.politician = votingArea.politician;
+          this.localData.freeVoteProfile.politicianImage =
+            votingArea.politicianImage;
+          this.localData.freeVoteProfile.politicianUrl =
+            votingArea.politicianTwfyUrl;
+          this.localData.freeVoteProfile.politicianTwfyMemberID =
+            votingArea.politicianTwfyMemberID;
+
+          // Local Politics
+          this.localData.freeVoteProfile.wardID = votingArea.wardID;
           this.localData.freeVoteProfile.ward = votingArea.ward;
+          this.localData.freeVoteProfile.mapItWardID = votingArea.mapItWardID;
+          this.localData.freeVoteProfile.council = votingArea.council;
         },
         error: err => {
           this.error = true;

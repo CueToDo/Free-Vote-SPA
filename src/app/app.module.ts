@@ -28,6 +28,7 @@ import { InterceptorService } from './services/interceptor.service';
 // import { FBTestComponent } from './fbtest/fbtest.component';
 
 // Modules
+import { ConstituencyModule } from './constituency/constituency.module';
 import { CustomModule } from './custommodule/custom.module';
 import { IssuesModule } from './issues/issues.module';
 import { OrganisationsModule } from './organisations/organisations.module';
@@ -68,6 +69,7 @@ import { AppComponent } from './app.component';
     CustomModule,
     PublicModule,
     OrganisationsModule,
+    ConstituencyModule,
     IssuesModule
   ],
   declarations: [

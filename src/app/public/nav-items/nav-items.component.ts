@@ -13,10 +13,19 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./nav-items.component.css']
 })
 export class NavItemsComponent implements OnInit, OnDestroy {
-  TabSelected$: Subscription | undefined;
   tagsPointsActive$: Subscription | undefined;
 
   tabSelected = '';
+
+  public setSelectedMenuItem(item: string) {
+    this.tabSelected = item;
+  }
+
+  get constituencyKebab(): string {
+    return this.appDataService.kebabUri(
+      this.localData.freeVoteProfile.constituency
+    );
+  }
 
   error = '';
 
@@ -42,12 +51,6 @@ export class NavItemsComponent implements OnInit, OnDestroy {
         }
       } // simply return boolean value to template
     );
-
-    this.TabSelected$ = this.appDataService.TabSelected$.subscribe({
-      next: pageName => (this.tabSelected = pageName)
-    });
-
-    this.localData.Log('NavComponent ngOnInit');
   }
 
   logout() {
@@ -56,7 +59,6 @@ export class NavItemsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.TabSelected$?.unsubscribe();
     this.tagsPointsActive$?.unsubscribe();
   }
 }

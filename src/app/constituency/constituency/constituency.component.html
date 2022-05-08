@@ -1,0 +1,29 @@
+<div class="content">
+
+    <h1>{{ localData.freeVoteProfile.constituency }}</h1>
+
+    <div>
+        <a [href]="mpUrl" target="_blank">
+            <img [src]="mpImageUrl" alt="">
+        </a>
+    </div>
+    <div>
+        They Work For You: <a [href]="mpUrl" target="_blank">{{ mp }}</a>
+    </div>
+    <div>
+        Constituency Map <a [href]="constituencyUrl" target="_blank">{{ localData.freeVoteProfile.constituency }}</a>
+    </div>
+    <div>
+        Write to <a [href]="writeToThem" target="_blank">{{ mp }} MP</a>
+    </div>
+
+    <div hidden>
+        <div>constituencyUrl: {{ constituencyUrl }}</div>
+        <div>mp: {{ mp }}</div>
+        <div>mpImageUrl: {{ mpImageUrl }}</div>
+        <div>mpUrl: {{ mpUrl }}</div>
+        <div>writeToThem: {{ writeToThem }}</div>
+        <div>postcode: {{ postcode }}</div>
+    </div>
+
+</div>

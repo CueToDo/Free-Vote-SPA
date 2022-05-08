@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+// Angular
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+// FreeVote
+import { NavItemsComponent } from '../nav-items/nav-items.component';
 
 @Component({
   selector: 'app-nav-main',
@@ -6,10 +10,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav-main.component.css']
 })
 export class NavMainComponent implements OnInit {
-  nada = false;
+  @ViewChild('navItems') navItems: NavItemsComponent | undefined;
+
+  public setSelectedMenuItem(item: string) {
+    this.navItems?.setSelectedMenuItem(item);
+  }
+
   constructor() {}
 
-  ngOnInit(): void {
-    this.nada = false;
-  }
+  ngOnInit(): void {}
 }

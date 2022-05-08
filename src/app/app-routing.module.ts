@@ -49,6 +49,15 @@ const appRoutes: Routes = [
     canActivate: [LoginRouteGuardService]
   },
 
+  // constituency
+  {
+    path: 'local',
+    loadChildren: () =>
+      import('./constituency/constituency.module').then(
+        m => m.ConstituencyModule
+      ),
+    canActivate: [LoginRouteGuardService]
+  },
   // organisations, groups
   {
     path: 'organisations',

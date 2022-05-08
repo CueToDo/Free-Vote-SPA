@@ -19,21 +19,22 @@ import { fromEvent } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 
 // Auth0
-import { AuthService } from './services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 // FreeVote Models, Services
-import { LocalDataService } from './services/local-data.service';
-import { AppDataService } from './services/app-data.service';
-import { LookupsService } from './services/lookups.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
+import { AppDataService } from 'src/app/services/app-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
 import { TagsService } from 'src/app/services/tags.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { filter, debounceTime, map } from 'rxjs/operators';
-import { PagePreviewMetaData } from './models/pagePreviewMetaData.model';
+import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 import { environment } from 'src/environments/environment';
-import { UpdateService } from './services/update.service';
+import { UpdateService } from 'src/app/services/update.service';
 
 // FreeVote Components
-import { NavBurgerComponent } from './public/nav-burger/nav-burger.component';
+import { NavBurgerComponent } from 'src/app/public/nav-burger/nav-burger.component';
+import { NavMainComponent } from 'src/app/public/nav-main/nav-main.component';
 
 export enum NetworkStatus {
   ONLINE = 'online',
@@ -56,6 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
 
   @ViewChild('burgerMenu') burgerMenu: NavBurgerComponent | undefined;
+  @ViewChild('navMain') navMain: NavMainComponent | undefined;
 
   routeDisplay = '';
   pageTitleToolTip = '';
@@ -380,19 +382,14 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.pageTitleToolTip =
         route === this.localData.PreviousSlashTagSelected
           ? 'SlashTag/' + this.localData.PreviousTopicSelected
-          : route.substr(1);
+          : route.substring(1);
 
-      if (route.indexOf('slash-tags') > -1) {
-        this.appData.TabSelected$.next('slashTags');
-        this.setDocTitle('Slash Tags');
-      } else if (route.indexOf('/my/details') > -1) {
-        this.appData.TabSelected$.next('profile');
-        this.setDocTitle('Voter Profile');
-      } else {
-        // ToDo - more cases to be handled
-        const topic = this.localData.SlashTagToTopic(this.routeDisplay);
-        this.setDocTitle(topic);
+      if (route.indexOf('local') > -1) {
+        this.navMain?.setSelectedMenuItem('local');
       }
+
+      const topic = this.localData.SlashTagToTopic(this.routeDisplay);
+      this.setDocTitle(topic);
 
       // Change url in browser's address bar
       // https://angular.io/api/common/Location#!#replaceState-anchor

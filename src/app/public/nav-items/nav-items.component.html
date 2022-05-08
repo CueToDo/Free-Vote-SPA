@@ -11,7 +11,7 @@
     </button>
 
     <!-- https://github.com/angular/angular/issues/22588 -->
-    <button mat-button [routerLink]="(localData.LoggedInToAuth0$ | async) ? '/trending' : '/trending'"
+    <button mat-button [routerLink]="(localData.LoggedInToAuth0$ | async) ? '/recent' : '/trending'"
         [class.selected]="tabSelected==='slashTags'" (click)="tabSelected='slashTags'" matTooltip="slash tags">
         <mat-icon>bookmark_border</mat-icon>
         slash tags
@@ -24,7 +24,9 @@
         groups
     </button>
 
-    <button mat-button *ngIf="localData.LoggedInToAuth0$ | async">
+    <button mat-button *ngIf="localData.LoggedInToAuth0$ | async" routerLinkActive="active"
+        [class.selected]="tabSelected==='local'" (click)="tabSelected='local'"
+        [routerLink]="'local/' + constituencyKebab">
         <img src="/assets/bullhorn.png">
         local
     </button>
