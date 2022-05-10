@@ -191,7 +191,7 @@
       <div [ngClass]="{
         'centerStage': tabIndex===2, 
         'stageLeft': tabIndex>2, 
-        'stageRight': tabIndex<2}" fxFill fxLayout="column" fxLayoutAlign="center">
+        'stageRight': tabIndex<2}" fxFill>
         <div class="content">
           <app-tag-search (NewSlashTagSelected)="NewSlashTagSelected($event)" #tagSearch></app-tag-search>
         </div>

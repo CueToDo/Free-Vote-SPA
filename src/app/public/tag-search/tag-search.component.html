@@ -26,9 +26,11 @@
     </div>
 
     <ng-container *ngFor="let tag of tags">
-        <a [innerHTML]="tag.tagDisplay | TagDisplay"
-            [ngStyle]="{'font-size':FontSize(tag.tagWeight),'padding-right':'10px'}"
-            (click)="setSlashTag(tag.slashTag)"></a>
+        <div id="container">
+            <a [innerHTML]="tag.tagDisplay | TagDisplay"
+                [ngStyle]="{'font-size':FontSize(tag.tagWeight),'padding-right':'10px'}"
+                (click)="setSlashTag(tag.slashTag)"></a>
+        </div>
     </ng-container>
 
     <div class="fv-error" *ngIf="!!error">
