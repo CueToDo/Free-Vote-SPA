@@ -34,7 +34,7 @@ export class ConstituencyComponent implements OnInit {
     var referrer = encodeURIComponent(this.localData.websiteUrlWTS);
     // mapit MemberID does not match They Work For You ID
     // who=${this.twfyMemberID}&
-    return `https://www.writetothem.com/write?pc=${pc}&fyr_extref=${referrer}`;
+    return `https://www.writetothem.com/write?a=westminstermp&pc=${pc}&fyr_extref=${referrer}`;
   }
 
   get twfyMemberID(): string {
