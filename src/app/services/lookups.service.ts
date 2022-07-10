@@ -1,3 +1,4 @@
+import { Constituency } from './../models/constituency';
 // Angular
 import { Injectable } from '@angular/core';
 
@@ -123,6 +124,13 @@ export class LookupsService {
     return this.httpService
       .get(`lookups/mapIt/${postcode}`)
       .pipe(map(value => value as VotingArea));
+  }
+
+  Constituency(constituency: string): Observable<Constituency> {
+    return this.httpService.get(`lookups/constituency/${constituency}`).pipe(
+      tap(value => console.log(value)),
+      map(value => value as Constituency)
+    );
   }
 
   // No longer used - now use postcode lookup

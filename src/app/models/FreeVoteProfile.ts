@@ -14,19 +14,10 @@ export class FreeVoteProfile {
   public city = '';
 
   // National Politics
-  public constituencyID = '';
   public constituency = '';
-  public mapItConstituencyID = '';
-
-  public politician = '';
-  public politicianUrl = '';
-  public politicianImage = '';
-  public politicianTwfyMemberID = '';
 
   // Local Politics
-  public wardID = ''; // From which councilID is known
   public ward = '';
-  public mapItWardID = '';
   public council = '';
 
   // Personal

@@ -386,8 +386,6 @@ export class ProfileComponent implements OnDestroy {
   }
 
   onConstituencySelect(constituency: Kvp) {
-    this.localData.freeVoteProfile.constituencyID =
-      constituency.value.toString();
     this.localData.freeVoteProfile.constituency = constituency.key;
     this.constituencySearch = constituency.key; // Save the selected value as the search term
     this.constituencyCount = 0;
@@ -417,9 +415,6 @@ export class ProfileComponent implements OnDestroy {
 
           if (this.constituencyCount === 1) {
             this.constituencySearch = this.constituencies[0].key;
-
-            this.localData.freeVoteProfile.constituencyID =
-              this.constituencies[0].value.toString();
 
             this.localData.freeVoteProfile.constituency =
               this.constituencySearch;
@@ -451,24 +446,10 @@ export class ProfileComponent implements OnDestroy {
           this.localData.freeVoteProfile.city = votingArea.city;
 
           // National Politics
-          this.localData.freeVoteProfile.constituencyID =
-            votingArea.constituencyID;
           this.localData.freeVoteProfile.constituency = votingArea.constituency;
-          this.localData.freeVoteProfile.mapItConstituencyID =
-            votingArea.mapItConstituencyID;
-
-          this.localData.freeVoteProfile.politician = votingArea.politician;
-          this.localData.freeVoteProfile.politicianImage =
-            votingArea.politicianImage;
-          this.localData.freeVoteProfile.politicianUrl =
-            votingArea.politicianTwfyUrl;
-          this.localData.freeVoteProfile.politicianTwfyMemberID =
-            votingArea.politicianTwfyMemberID;
 
           // Local Politics
-          this.localData.freeVoteProfile.wardID = votingArea.wardID;
           this.localData.freeVoteProfile.ward = votingArea.ward;
-          this.localData.freeVoteProfile.mapItWardID = votingArea.mapItWardID;
           this.localData.freeVoteProfile.council = votingArea.council;
         },
         error: err => {

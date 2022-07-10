@@ -55,8 +55,7 @@ const appRoutes: Routes = [
     loadChildren: () =>
       import('./constituency/constituency.module').then(
         m => m.ConstituencyModule
-      ),
-    canActivate: [LoginRouteGuardService]
+      )
   },
   // organisations, groups
   {

@@ -1,6 +1,10 @@
 <div class="content">
 
-    <h1>{{ localData.freeVoteProfile.constituency }}</h1>
+    <h1>{{ constituencyDetails.constituency }}</h1>
+
+    <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+    </div>
 
     <div>
         <a [href]="mpUrl" target="_blank">
@@ -11,10 +15,13 @@
         They Work For You: <a [href]="mpUrl" target="_blank">{{ mp }}</a>
     </div>
     <div>
-        Constituency Map <a [href]="constituencyUrl" target="_blank">{{ localData.freeVoteProfile.constituency }}</a>
+        Constituency Map <a [href]="constituencyUrl" target="_blank">{{ constituencyDetails.constituency }}</a>
     </div>
     <div>
         Write to <a [href]="writeToThem" target="_blank">{{ mp }} MP</a>
+    </div>
+    <div *ngIf="!!mpWebsite">
+        Website <a [href]="mpWebsite" target="_blank">{{ mpWebsite }}</a>
     </div>
 
     <div hidden>

@@ -259,23 +259,10 @@ export class LocalDataService {
       this.freeVoteProfile.city = this.GetItem('city');
 
       // National Politics
-      this.freeVoteProfile.constituencyID = this.GetItem('constituencyID');
       this.freeVoteProfile.constituency = this.GetItem('constituency');
-      this.freeVoteProfile.mapItConstituencyID = this.GetItem(
-        'mapItConstituencyID'
-      );
-
-      this.freeVoteProfile.politician = this.GetItem('politician');
-      this.freeVoteProfile.politicianImage = this.GetItem('politicianImage');
-      this.freeVoteProfile.politicianUrl = this.GetItem('politicianUrl');
-      this.freeVoteProfile.politicianTwfyMemberID = this.GetItem(
-        'politicianTwfyMemberID'
-      );
 
       // Local Politics
-      this.freeVoteProfile.wardID = this.GetItem('wardID'); // not councilID
       this.freeVoteProfile.ward = this.GetItem('ward');
-      this.freeVoteProfile.mapItWardID = this.GetItem('mapItWardID');
       this.freeVoteProfile.council = this.GetItem('council');
 
       // Personal
@@ -325,47 +312,13 @@ export class LocalDataService {
       }
 
       // National Politics
-      if (this.freeVoteProfile.constituencyID) {
-        this.SetItem(
-          'constituencyID',
-          this.freeVoteProfile.constituencyID.toString()
-        );
-      }
       if (this.freeVoteProfile.constituency) {
         this.SetItem('constituency', this.freeVoteProfile.constituency);
       }
-      if (this.freeVoteProfile.mapItConstituencyID) {
-        this.SetItem(
-          'mapItConstituencyID',
-          this.freeVoteProfile.mapItConstituencyID
-        );
-      }
-      if (this.freeVoteProfile.politician) {
-        this.SetItem('politician', this.freeVoteProfile.politician);
-      }
-      if (this.freeVoteProfile.politicianImage) {
-        this.SetItem('politicianImage', this.freeVoteProfile.politicianImage);
-      }
-      if (this.freeVoteProfile.politicianUrl) {
-        this.SetItem('politicianUrl', this.freeVoteProfile.politicianUrl);
-      }
-      if (this.freeVoteProfile.politicianTwfyMemberID) {
-        this.SetItem(
-          'politicianTwfyMemberID',
-          this.freeVoteProfile.politicianTwfyMemberID
-        );
-      }
 
       // Local Politics
-      if (this.freeVoteProfile.wardID) {
-        // not councilID
-        this.SetItem('wardID', this.freeVoteProfile.wardID.toString());
-      }
       if (this.freeVoteProfile.ward) {
         this.SetItem('ward', this.freeVoteProfile.ward);
-      }
-      if (this.freeVoteProfile.mapItWardID) {
-        this.SetItem('mapItWardID', this.freeVoteProfile.mapItWardID);
       }
       if (this.freeVoteProfile.council) {
         this.SetItem('council', this.freeVoteProfile.council);
@@ -428,40 +381,13 @@ export class LocalDataService {
       }
 
       // National Politics
-      if (values.constituencyID) {
-        this.freeVoteProfile.constituencyID = values.constituencyID.toString();
-      }
       if (values.constituency) {
         this.freeVoteProfile.constituency = values.constituency;
       }
-      if (values.mapItConstituencyID) {
-        this.freeVoteProfile.mapItConstituencyID = values.mapItConstituencyID;
-      }
-
-      if (values.politician) {
-        this.freeVoteProfile.politician = values.politician;
-      }
-      if (values.politicianImage) {
-        this.freeVoteProfile.politicianImage = values.politicianImage;
-      }
-      if (values.politicianUrl) {
-        this.freeVoteProfile.politicianUrl = values.politicianUrl;
-      }
-      if (values.politicianTwfyMemberID) {
-        this.freeVoteProfile.politicianTwfyMemberID =
-          values.politicianTwfyMemberID;
-      }
 
       // Local Politics
-      if (values.wardID) {
-        // Not CouncilID
-        this.freeVoteProfile.wardID = values.wardID.toString();
-      }
       if (values.ward) {
         this.freeVoteProfile.ward = values.ward;
-      }
-      if (values.mapItWardID) {
-        this.freeVoteProfile.mapItWardID = values.mapItWardID;
       }
       if (values.council) {
         this.freeVoteProfile.council = values.council;
@@ -552,17 +478,9 @@ export class LocalDataService {
     this.freeVoteProfile.cityId = '0';
     this.freeVoteProfile.city = '';
 
-    this.freeVoteProfile.constituencyID = '0';
+    // National and Local Politics
     this.freeVoteProfile.constituency = '';
-    this.freeVoteProfile.mapItConstituencyID = '';
-
-    this.freeVoteProfile.politician = '';
-    this.freeVoteProfile.politicianImage = '';
-    this.freeVoteProfile.politicianUrl = '';
-
-    this.freeVoteProfile.wardID = '0'; // Don't need councilID
     this.freeVoteProfile.ward = '';
-    this.freeVoteProfile.mapItWardID = '';
     this.freeVoteProfile.council = '';
 
     this.freeVoteProfile.profilePictureOptionID = '';

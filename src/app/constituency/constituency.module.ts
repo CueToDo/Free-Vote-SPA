@@ -6,7 +6,9 @@ import { RouterModule, Routes } from '@angular/router';
 // FreeVote
 import { ConstituencyComponent } from './constituency/constituency.component';
 
-const routes: Routes = [{ path: ':local', component: ConstituencyComponent }];
+const routes: Routes = [
+  { path: ':constituency', component: ConstituencyComponent }
+];
 
 @NgModule({
   declarations: [ConstituencyComponent],
