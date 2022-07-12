@@ -58,7 +58,8 @@ import { AppComponent } from './app.component';
 
     // PWA ServcieWorkerModule
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production
+      enabled: environment.production,
+      registrationStrategy: 'registerImmediately'
     }),
 
     // Material
