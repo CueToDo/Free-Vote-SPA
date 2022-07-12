@@ -94,8 +94,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('ngsw update test 22.19');
-
     // Force https
     // https://stackoverflow.com/questions/48739768/host-angular-app-on-iis-redirect-to-root-and-force-https
     if (environment.production) {
@@ -152,6 +150,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.RouteOrParamsUpdated(url);
         this.closeBurgerMenu();
         this.sw.checkForUpdates();
+        console.log('ngsw update test 22.19');
       });
 
     // 3) Subscribe to parameter changes raised by child components
