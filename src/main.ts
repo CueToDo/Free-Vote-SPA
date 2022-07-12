@@ -16,7 +16,8 @@ if (environment.production) {
 
 // For whatever reason, Angular sometimes does not register the service worker properly.
 // https://stackoverflow.com/questions/50968902/angular-service-worker-swupdate-available-not-triggered
-platformBrowserDynamic()
+// https://free.vote/ngsw/state
+https: platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .then(() => {
     if ('serviceWorker' in navigator && environment.production) {

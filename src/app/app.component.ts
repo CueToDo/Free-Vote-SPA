@@ -149,8 +149,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         // broadcast showing tags
         this.RouteOrParamsUpdated(url);
         this.closeBurgerMenu();
-        this.sw.checkForUpdates();
-        console.log('ngsw update test 22.19');
       });
 
     // 3) Subscribe to parameter changes raised by child components
