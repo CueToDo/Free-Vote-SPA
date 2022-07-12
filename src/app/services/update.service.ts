@@ -20,6 +20,7 @@ export class UpdateService {
   }
 
   public checkForUpdates(): void {
+    console.log('Check For Updates');
     this.updates.versionUpdates.subscribe(_ => this.promptUser());
   }
 
