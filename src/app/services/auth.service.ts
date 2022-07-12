@@ -211,6 +211,7 @@ export class AuthService {
       client.logout({
         client_id: config.clientId,
         returnTo: window.location.origin // window reference: Manual logout - No SSR issue
+        // Above casues a reload and updates app if service worker hasn't done so
       });
     });
 
