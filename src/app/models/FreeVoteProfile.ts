@@ -15,10 +15,12 @@ export class FreeVoteProfile {
 
   // National Politics
   public constituency = '';
+  public constituencyID = ''; // Not saved to localData
 
   // Local Politics
   public ward = '';
   public council = '';
+  public wardID = ''; // Not saved to localData
 
   // Personal
   public profilePicture = '';

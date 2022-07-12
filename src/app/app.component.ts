@@ -30,7 +30,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { filter, debounceTime, map } from 'rxjs/operators';
 import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 import { environment } from 'src/environments/environment';
-// import { UpdateService } from 'src/app/services/update.service';
 
 // FreeVote Components
 import { NavBurgerComponent } from 'src/app/public/nav-burger/nav-burger.component';
@@ -87,14 +86,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
-    // private sw: UpdateService,
     @Inject(DOCUMENT) private document: Document,
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
     @Inject(PLATFORM_ID) private platformId: object
-  ) {
-    // check the service worker for updates
-    // this.sw.checkForUpdates();
-  }
+  ) {}
 
   ngOnInit(): void {
     // Force https

@@ -74,6 +74,8 @@ export class ProfileComponent implements OnDestroy {
   }
 
   postcode = '';
+  constituencyID = '';
+  wardID = '';
 
   // Save old values when begin edit
   oldProfile = new FreeVoteProfile();
@@ -143,33 +145,16 @@ export class ProfileComponent implements OnDestroy {
       this.editNewCity = false;
     } else {
       this.Saving();
-      // Save selected ID
+
+      this.localData.freeVoteProfile.constituencyID = this.constituencyID;
+      this.localData.freeVoteProfile.wardID = this.wardID;
+
       this.profileService
         .SaveProfile(this.localData.freeVoteProfile)
         .subscribe({
           next: result => {
             if (result) {
               this.updateMessage = 'saved';
-
-              // Value/IDs updated now update local display text
-              // this.localData.freeVoteProfile.country =
-              //   this.appDataService.GetKVPKey(
-              //     this.countries,
-              //     parseInt(this.localData.freeVoteProfile.countryId, 10)
-              //   );
-
-              // this.localData.freeVoteProfile.city =
-              //   this.appDataService.GetKVPKey(
-              //     this.cities,
-              //     parseInt(this.localData.freeVoteProfile.cityId, 10)
-              //   );
-
-              // Use postcode lookup
-              // this.localData.freeVoteProfile.constituency =
-              //   this.appDataService.GetKVPKey(
-              //     this.constituencies,
-              //     parseInt(this.localData.freeVoteProfile.constituencyID, 10)
-              //   );
 
               this.localData.SaveValues();
 
@@ -447,10 +432,12 @@ export class ProfileComponent implements OnDestroy {
 
           // National Politics
           this.localData.freeVoteProfile.constituency = votingArea.constituency;
+          this.constituencyID = votingArea.constituencyID;
 
           // Local Politics
           this.localData.freeVoteProfile.ward = votingArea.ward;
           this.localData.freeVoteProfile.council = votingArea.council;
+          this.wardID = votingArea.wardID;
         },
         error: err => {
           this.error = true;
