@@ -386,8 +386,8 @@ export class AppComponent implements OnInit, AfterViewInit {
           ? 'SlashTag/' + this.localData.PreviousTopicSelected
           : route.substring(1);
 
-      if (route.indexOf('local') > -1) {
-        this.navMain?.setSelectedMenuItem('local');
+      if (route.indexOf('MP') > -1) {
+        this.navMain?.setSelectedMenuItem('MP');
       }
 
       const topic = this.localData.SlashTagToTopic(this.routeDisplay);

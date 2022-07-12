@@ -25,10 +25,9 @@
     </button>
 
     <button mat-button *ngIf="localData.LoggedInToAuth0$ | async" routerLinkActive="active"
-        [class.selected]="tabSelected==='local'" (click)="tabSelected='local'"
-        [routerLink]="'local/' + constituencyKebab">
-        <img src="/assets/bullhorn.png">
-        local
+        [class.selected]="tabSelected==='MP'" (click)="tabSelected='MP'" [routerLink]="'MP/' + constituencyKebab">
+        <mat-icon>mp</mat-icon>
+        mp
     </button>
 
     <button mat-button routerLink="/voters" routerLinkActive="active" *ngIf="localData.LoggedInToAuth0$ | async"

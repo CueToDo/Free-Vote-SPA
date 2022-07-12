@@ -51,7 +51,7 @@ const appRoutes: Routes = [
 
   // constituency
   {
-    path: 'local',
+    path: 'MP',
     loadChildren: () =>
       import('./constituency/constituency.module').then(
         m => m.ConstituencyModule
