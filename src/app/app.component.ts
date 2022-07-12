@@ -94,7 +94,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('ngsw update test');
+    console.log('ngsw update test 22.19');
 
     // Force https
     // https://stackoverflow.com/questions/48739768/host-angular-app-on-iis-redirect-to-root-and-force-https
