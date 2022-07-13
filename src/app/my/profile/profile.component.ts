@@ -12,14 +12,8 @@ import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 
 // rxjs
-import { fromEvent, Subscription } from 'rxjs';
-import {
-  tap,
-  map,
-  filter,
-  debounceTime,
-  distinctUntilChanged
-} from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { tap, map, filter } from 'rxjs/operators';
 
 // Models
 import { Kvp } from '../../models/kvp.model';

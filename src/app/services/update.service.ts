@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { interval } from 'rxjs';
 
@@ -8,17 +8,26 @@ import { interval } from 'rxjs';
 export class UpdateService {
   // https://stackoverflow.com/questions/50968902/angular-service-worker-swupdate-available-not-triggered
 
-  constructor(public swUpdate: SwUpdate) {
+  constructor(public swUpdate: SwUpdate, private ngZone: NgZone) {
     console.log('Service Worker Updates Enabled:', swUpdate.isEnabled);
 
     if (swUpdate.isEnabled) {
-      // interval is milliseconds
-      interval(1000 * 60).subscribe(val => {
-        console.log('Check', val);
-        swUpdate
-          .checkForUpdate() // that's all, just periodic check. Subscription will pick up detected changes
-          .then(_ => console.log('SW Checking for updates'));
-      });
+      this.ngZone.runOutsideAngular(
+        // Run interval outside Angular
+        // Service worker is not registered sometimes only because
+        // you have setInterval and app is never stable from the beginning
+        // because it is triggering ngZOne change detection.
+        // To avoid this run all intervals outside angular.
+        // https://stackoverflow.com/questions/50968902/angular-service-worker-swupdate-available-not-triggered
+        // interval is milliseconds
+        () =>
+          interval(1000 * 60).subscribe(val => {
+            console.log('Check', val);
+            swUpdate
+              .checkForUpdate() // that's all, just periodic check. Subscription will pick up detected changes
+              .then(_ => console.log('SW Checking for updates'));
+          })
+      );
     }
   }
 
