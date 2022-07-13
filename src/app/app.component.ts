@@ -92,8 +92,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
     @Inject(PLATFORM_ID) private platformId: object
   ) {
-    // UpdateService just needs to be injected.
-    // Its constructor sets up the interval to check for updates
+    // Set up the subscription to version changes.
+    // Service constructor sets up periodic checks
+    this.sw.subscribeToUpdates();
   }
 
   ngOnInit(): void {
