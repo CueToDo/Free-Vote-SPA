@@ -91,7 +91,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     @Inject(DOCUMENT) private document: Document,
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
     @Inject(PLATFORM_ID) private platformId: object
-  ) {}
+  ) {
+    // UpdateService just needs to be injected.
+    // Its constructor sets up the interval to check for updates
+  }
 
   ngOnInit(): void {
     // Force https

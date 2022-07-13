@@ -13,19 +13,31 @@ export class UpdateService {
 
     if (updates.isEnabled) {
       // interval is milliseconds
-      interval(1000 * 60).subscribe(() =>
-        updates.checkForUpdate().then(() => console.log('checking for updates'))
+      interval(1000 * 10).subscribe(() =>
+        updates.checkForUpdate().then(() => console.log('CHECKED'))
       );
     }
   }
 
   public checkForUpdates(): void {
-    console.log('Check For Updates');
-    this.updates.versionUpdates.subscribe(_ => this.promptUser());
+    // https://angular.io/guide/service-worker-communications
+    console.log('Checking For Updates');
+
+    this.updates.versionUpdates.subscribe(evt => {
+      switch (evt.type) {
+        case 'VERSION_DETECTED':
+          break;
+        case 'VERSION_READY':
+          this.promptUser();
+          break;
+        case 'VERSION_INSTALLATION_FAILED':
+          break;
+      }
+    });
   }
 
   private promptUser(): void {
-    console.log('updating to new version');
+    console.log('Updating to new version');
     this.updates.activateUpdate().then(() => document.location.reload());
   }
 }
