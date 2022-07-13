@@ -21,7 +21,7 @@ export class UpdateService {
         // https://stackoverflow.com/questions/50968902/angular-service-worker-swupdate-available-not-triggered
         // interval is milliseconds
         () =>
-          interval(1000 * 10).subscribe(val => {
+          interval(1000 * 60).subscribe(val => {
             console.log('Check', val);
             swUpdate
               .checkForUpdate() // that's all, just periodic check. Subscription will pick up detected changes
