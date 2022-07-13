@@ -13,7 +13,7 @@ export class UpdateService {
 
     if (swUpdate.isEnabled) {
       // interval is milliseconds
-      interval(1000 * 5).subscribe(val => {
+      interval(1000 * 60).subscribe(val => {
         console.log('Check', val);
         swUpdate
           .checkForUpdate() // that's all, just periodic check. Subscription will pick up detected changes
