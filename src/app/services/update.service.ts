@@ -22,17 +22,10 @@ export class UpdateService {
 
   public checkForUpdates(): void {
     // https://angular.io/guide/service-worker-communications
-    console.log('Checking For Updates');
-
     this.updates.versionUpdates.subscribe(evt => {
-      switch (evt.type) {
-        case 'VERSION_DETECTED':
-          break;
-        case 'VERSION_READY':
-          this.promptUser();
-          break;
-        case 'VERSION_INSTALLATION_FAILED':
-          break;
+      console.log('Update:', evt.type);
+      if (evt.type == 'VERSION_READY') {
+        this.promptUser();
       }
     });
   }
