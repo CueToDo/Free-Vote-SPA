@@ -15,7 +15,7 @@ export class UpdateService {
       // interval is milliseconds
       interval(1000 * 5).subscribe(val => {
         console.log('Check', val);
-        updates.checkForUpdate();
+        this.checkForUpdates();
       });
     }
   }
