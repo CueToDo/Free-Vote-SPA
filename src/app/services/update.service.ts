@@ -9,13 +9,14 @@ export class UpdateService {
   // https://stackoverflow.com/questions/50968902/angular-service-worker-swupdate-available-not-triggered
 
   constructor(public updates: SwUpdate) {
-    console.log('Updates enabled 14.0.10', updates.isEnabled);
+    console.log('Service Worker Updates Enabled:', updates.isEnabled);
 
     if (updates.isEnabled) {
       // interval is milliseconds
-      interval(1000 * 10).subscribe(() =>
-        updates.checkForUpdate().then(() => console.log('CHECKED'))
-      );
+      interval(1000 * 5).subscribe(val => {
+        console.log('Check', val);
+        updates.checkForUpdate().then(() => console.log('CHECKED'));
+      });
     }
   }
 
