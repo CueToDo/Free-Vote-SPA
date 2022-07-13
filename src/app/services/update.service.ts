@@ -13,7 +13,7 @@ export class UpdateService {
 
     if (swUpdate.isEnabled) {
       this.ngZone.runOutsideAngular(
-        // Run interval outside Angular
+        // Run interval outside Angular. Thnak you Vytautus
         // Service worker is not registered sometimes only because
         // you have setInterval and app is never stable from the beginning
         // because it is triggering ngZOne change detection.
@@ -21,7 +21,7 @@ export class UpdateService {
         // https://stackoverflow.com/questions/50968902/angular-service-worker-swupdate-available-not-triggered
         // interval is milliseconds
         () =>
-          interval(1000 * 60).subscribe(val => {
+          interval(1000 * 10).subscribe(val => {
             console.log('Check', val);
             swUpdate
               .checkForUpdate() // that's all, just periodic check. Subscription will pick up detected changes
