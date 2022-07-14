@@ -81,7 +81,7 @@ div.toolbar mat-form-field {
 
 .content {
   width: 100%;
-  max-width: 940px;
+  max-width: 720px;
   margin: auto;
 }
 
@@ -176,10 +176,11 @@ div.toolbar mat-form-field {
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit */
+/* https://stackoverflow.com/questions/37127384/why-isnt-object-fit-working-in-flexbox */
 .linkFromMeta img {
-  display: block;
+  height: 100%;
+  width: 100%;
   object-fit: cover;
-  max-width: 100%;
 }
 
 .linkMetaText {
@@ -189,19 +190,19 @@ div.toolbar mat-form-field {
 /* Clamp on title and description - 1 and 3 lines respectively for ellipsis */
 /* https://hackingui.com/a-pure-css-solution-for-multiline-text-truncation/ */
 .linkTitle {
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
 .linkDescription {
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -306,35 +307,38 @@ a:hover {
 /* injected content without view encapsulation None */
 /* https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling */
 
+.ugc.xs h1,
+.ugc.sm h1 {
+  font-size: 1.1em;
+}
+
+.ugc h1 {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.ugc.xs h2,
+.ugc.sm h2 {
+  font-size: 1em;
+}
+
+.ugc h2 {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
 .ugc.xs,
 .ugc.sm {
   margin: 0 12px;
 }
 
-.ugc p {
-  font-size: larger;
-}
-
-.ugc.xs p {
+.ugc.xs p,
+.ugc.sm p {
   font-size: medium;
 }
 
-.ugc h1 {
-  font-size: 1.6em;
-  font-weight: bold;
-}
-
-.ugc.xs h1 {
-  font-size: x-large;
-}
-
-.ugc h2 {
-  font-size: 1.3em;
-  font-weight: bold;
-}
-
-.ugc.xs h2 {
-  font-size: large;
+.ugc p {
+  font-size: medium;
 }
 
 .ugc img {

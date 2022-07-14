@@ -2,8 +2,8 @@
 <a *ngIf="!!LinkAddress" [href]="LinkAddress" target="_blank">
 
     <!-- Link Preview -->
-    <div *ngIf="ShowPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center center">
-        <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!Image" fxLayoutAlign="center">
+    <div *ngIf="ShowPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center stretch">
+        <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!Image">
             <img [src]="Image" alt="">
         </div>
         <div fxFlex.gt-xs="LinkImage?70:100" fxFlex.lt-sm="Image?50:100" class="linkMetaText">

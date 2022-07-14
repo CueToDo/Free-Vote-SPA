@@ -17,19 +17,19 @@
 }
 
 .textXSmall {
-  font-size: small;
+  font-size: 0.7em;
 }
 
 .textSmall {
-  font-size: medium;
+  font-size: 0.8em;
 }
 
 .textMedium {
-  font-size: large;
+  font-size: 0.9em;
 }
 
 .textLarge {
-  font-size: x-large;
+  font-size: 1em;
 }
 
 .draft {
