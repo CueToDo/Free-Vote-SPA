@@ -413,6 +413,7 @@ export class LocalDataService {
   public get PreviousTopicSelected(): string {
     return this.GetItem('previousTopicSelected');
   }
+
   public set PreviousTopicSelected(topic: string) {
     let previousTopicSelected = '';
     if (topic.charAt(0) === '/') {

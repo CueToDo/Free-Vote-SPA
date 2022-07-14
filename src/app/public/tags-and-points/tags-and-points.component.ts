@@ -131,6 +131,10 @@ export class TagsAndPointsComponent
     characterName: ''
   };
 
+  get noTopic(): boolean {
+    return !this.topicSelected || this.topicSelected === 'null';
+  }
+
   // use TRV in parent template https://stackblitz.com/edit/angular-vjbf4s?file=src%2Fapp%2Fcart-table-modal.component.ts
   // use child component type in parent component https://stackoverflow.com/questions/31013461/call-a-method-of-the-child-component
 
@@ -177,7 +181,12 @@ export class TagsAndPointsComponent
     // https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
 
     // No tag selected? Go to API to get latest
-    if (!this.topicSelected || this.topicSelected === 'null') {
+
+    if (this.noTopic && this.localData.PreviousSlashTagSelected) {
+      this.topicSelected = this.localData.PreviousTopicSelected;
+    }
+
+    if (this.noTopic) {
       this.tagLatestActivity$ = this.tagsService.TagLatestActivity().subscribe({
         next: slashTag => {
           this.localData.PreviousSlashTagSelected = slashTag;
