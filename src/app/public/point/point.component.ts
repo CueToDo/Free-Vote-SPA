@@ -49,7 +49,6 @@ export class PointComponent implements OnInit {
   linkShare = '';
 
   editing = false;
-  websitePreviewUpdated = false;
   updatingPreview = false;
 
   // Truncated Text
@@ -399,9 +398,8 @@ export class PointComponent implements OnInit {
     if (!this.point) {
       this.error = 'Missing: point';
     } else {
-      // If it's a newSource, it will be showLinkPreview
-      // but could be called from point update where isNew is false and showLinkPreview is true
-      if (this.point.linkAddress && this.point.showLinkPreview) {
+      // Ensure isNewSource set correctly in point edit
+      if (this.point.linkAddress && this.point.isNewSource) {
         // Get Link metadata for preview
         // Also handled in new point in tags-and-points component
         this.updatingPreview = true;
@@ -414,7 +412,6 @@ export class PointComponent implements OnInit {
                 this.point.linkDescription = metaData.description;
                 this.point.linkImage = metaData.image;
                 this.updatingPreview = false;
-                this.websitePreviewUpdated = true;
               }
             },
             error: err => {

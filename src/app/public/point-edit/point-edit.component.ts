@@ -69,12 +69,10 @@ export class PointEditComponent implements OnInit {
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
   pointTypes: Kvp[] = [];
   hasMedia = false;
-  hasLink = false;
   linkTextSave = '';
   imageFileForUpload: File | undefined;
   imageName = '';
   quoteOrLinkTextPlaceholder = 'quote or link text';
-  showLinkBeforeVoteDisabled = false;
 
   userTouched = false;
   cancelled = false;
@@ -118,8 +116,6 @@ export class PointEditComponent implements OnInit {
       .subscribe(pointTypes => (this.pointTypes = pointTypes));
 
     if (this.pointClone) {
-      this.autoShowLinkEdit(this.pointClone.pointTypeID);
-
       this.hasMedia =
         this.pointClone.youTubeID || this.pointClone.soundCloudTrackID
           ? true
@@ -130,18 +126,6 @@ export class PointEditComponent implements OnInit {
   onCKEBlur(): void {
     this.userTouched = !this.cancelled;
     this.cancelled = false;
-  }
-
-  addMedia(): void {
-    this.hasMedia = true;
-  }
-
-  removeMedia(): void {
-    if (this.pointClone) {
-      this.pointClone.youTubeID = '';
-      this.pointClone.soundCloudTrackID = '';
-      this.hasMedia = false;
-    }
   }
 
   imageSelected(event: Event): void {
@@ -312,10 +296,13 @@ export class PointEditComponent implements OnInit {
               // There could be a situation where we've uploaded an image
               // and then attached another without uploading, but we're now saving
               if (this.pointClone) {
+                // Don't want undefined
                 if (!this.pointClone.csvImageIDs) {
                   this.pointClone.csvImageIDs = '';
-                } // Don't want undefined
-                this.pointClone.csvImageIDs += imageID + ',';
+                }
+                if (!!imageID) {
+                  this.pointClone.csvImageIDs += imageID + ',';
+                }
               }
             }),
             // but we'll always update point after any image upload
@@ -372,7 +359,6 @@ export class PointEditComponent implements OnInit {
             },
             complete: () => {
               this.uploadingImage = false;
-              this.hasMedia = false;
             }
           });
       }
@@ -385,7 +371,6 @@ export class PointEditComponent implements OnInit {
     this.pointClone.pointID = -1;
     this.pointClone.questionID = 0;
     this.pointClone.pointTypeID = PointTypesEnum.Opinion;
-    this.showLinkBeforeVoteDisabled = false;
 
     this.pointClone.pointHTML = ''; // doesn't get through to ckEditor on property binding
     this.ckeFudge.clearData(); // Must explicitly clear previous data
@@ -402,7 +387,7 @@ export class PointEditComponent implements OnInit {
 
   Cancel(): void {
     // Delete any uploaded images from server
-    if (this.pointClone?.csvImageIDs) {
+    if (!!this.pointClone?.csvImageIDs) {
       this.httpService
         .ImageUploadCancel(this.pointClone.csvImageIDs)
         .subscribe({
@@ -420,44 +405,41 @@ export class PointEditComponent implements OnInit {
     }
   }
 
-  autoShowLinkEdit(pointTypeID: PointTypesEnum): void {
-    // Automatically show link input for certain point types
-    if (this.lookupsService.ShowSource(pointTypeID)) {
-      this.showLinkEdit();
-    } else {
-      if (this.pointClone?.linkText || this.pointClone?.linkAddress) {
-        this.showLinkEdit();
-      } else {
-        this.hideLinkEdit();
-      }
-    }
-  }
+  // autoShowLinkEdit(pointTypeID: PointTypesEnum): void {
+  //   // Automatically show link input for certain point types
+  //   if (this.lookupsService.ShowSource(pointTypeID)) {
+  //     this.showLinkEdit();
+  //   } else {
+  //     if (this.pointClone?.linkText || this.pointClone?.linkAddress) {
+  //       this.showLinkEdit();
+  //     } else {
+  //       this.hideLinkEdit();
+  //     }
+  //   }
+  // }
 
   onPointTypeChange(pointTypeID: PointTypesEnum): void {
-    this.autoShowLinkEdit(pointTypeID);
-
+    // this.autoShowLinkEdit(pointTypeID);
     // Automatically update default "show" if voter changes point type
-    this.showLinkBeforeVoteDisabled =
-      !this.lookupsService.ShowSource(pointTypeID);
-
-    if (this.pointClone) {
-      this.pointClone.showLinkBeforeVote = false;
-      this.pointClone.showLinkPreview = !this.showLinkBeforeVoteDisabled;
-    }
+    // this.showLinkBeforeVoteDisabled =
+    //   !this.lookupsService.ShowSource(pointTypeID);
+    // if (this.pointClone) {
+    //   this.pointClone.showLinkPreview = !this.showLinkBeforeVoteDisabled;
+    // }
   }
 
-  showLinkEdit(): void {
-    this.hasLink = true;
-    this.showLinkBeforeVoteDisabled = false;
-  }
+  // showLinkEdit(): void {
+  //   this.hasLink = true;
+  //   this.showLinkBeforeVoteDisabled = false;
+  // }
 
-  hideLinkEdit(): void {
-    this.hasLink = false;
-    if (this.pointClone) {
-      this.pointClone.linkText = '';
-      this.pointClone.linkAddress = '';
-    }
-  }
+  // hideLinkEdit(): void {
+  //   this.hasLink = false;
+  //   if (this.pointClone) {
+  //     this.pointClone.linkText = '';
+  //     this.pointClone.linkAddress = '';
+  //   }
+  // }
 
   showLinkPreview(show: boolean): void {
     if (this.pointClone) {

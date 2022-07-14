@@ -11,53 +11,10 @@
   <app-cke-universal name="point" [(textToEdit)]="pointClone.pointHTML" (blur)="onCKEBlur()" #CKEfudge>
   </app-cke-universal>
 
-  <!-- Link, YouTube and SoundCloud -->
-  <div class="px-3 pt-3 mediaLinks" *ngIf="hasLink || hasMedia || imageFileForUpload || uploadingImage">
+  <!-- Image Upload -->
+  <div class="px-3 pt-3 mediaLinks" *ngIf="imageFileForUpload || uploadingImage">
 
     <div fxLayout="column" fxLayoutAlign="space-around">
-
-      <div *ngIf="hasLink">
-        <!-- hasLink or link required on point type -->
-
-        <!-- To Be Animated with css transition -->
-        <div fxLayoutAlign="row">
-
-          <mat-form-field fxFlex>
-            <input matInput placeholder="quote or link url" [(ngModel)]="pointClone.linkAddress" name="quoteURL">
-          </mat-form-field>
-
-        </div>
-
-        <div fxLayoutAlign="row">
-
-          <mat-checkbox [(ngModel)]="pointClone.showLinkBeforeVote" name="showLinkbeforeVote"
-            [disabled]="showLinkBeforeVoteDisabled">show before vote
-          </mat-checkbox>
-
-          <mat-checkbox [(ngModel)]="pointClone.showLinkPreview" name="showLinkPreview"
-            (ngModelChange)="showLinkPreview($event)" [disabled]="showLinkBeforeVoteDisabled">show preview
-          </mat-checkbox>
-
-          <mat-form-field fxFlex>
-            <input matInput [placeholder]="quoteOrLinkTextPlaceholder" [(ngModel)]="pointClone.linkText"
-              name="quoteSource" [disabled]="pointClone.showLinkPreview">
-          </mat-form-field>
-
-        </div>
-
-      </div>
-
-      <div *ngIf="hasMedia">
-        <!-- To Be Animated with css transition" -->
-        <mat-form-field fxFill>
-          <input matInput placeholder="YouTube video id (or simple Share url)" [(ngModel)]="pointClone.youTubeID"
-            name="youTubeID">
-        </mat-form-field>
-        <mat-form-field fxFill>
-          <input matInput placeholder="SoundCloud track id (or the FULL Embed code)"
-            [(ngModel)]="pointClone.soundCloudTrackID" name="soundCloudTrackID">
-        </mat-form-field>
-      </div>
 
       <div *ngIf="imageFileForUpload" fxLayoutAlign="space-between center">
         <!-- To Be Animated with css transition" -->
@@ -97,30 +54,6 @@
     <mat-checkbox [(ngModel)]="pointClone.draft" name="draftPoint" class="draft">
       draft
     </mat-checkbox>
-
-    <!-- To be animated with css transition -->
-    <button *ngIf="!hasLink" mat-stroked-button type="button" (click)="showLinkEdit()">
-      <mat-icon>link</mat-icon>
-      add link
-    </button>
-
-    <!-- To be animated with css transition -->
-    <button *ngIf="hasLink" mat-stroked-button type="button" (click)="hideLinkEdit()">
-      <mat-icon>link_off</mat-icon>
-      remove link
-    </button>
-
-    <!-- To be animated with css transition -->
-    <button *ngIf="!hasMedia" mat-stroked-button type="button" (click)="addMedia()">
-      <mat-icon>play_circle_filled</mat-icon>
-      add media
-    </button>
-
-    <!-- To be animated with css transition -->
-    <button *ngIf="hasMedia" mat-stroked-button type="button" (click)="removeMedia()">
-      <mat-icon>clear</mat-icon>
-      remove media
-    </button>
 
     <!-- https://www.youtube.com/watch?v=YkvqLNcJz3Y -->
     <input type="file" (change)="imageSelected($event)" style="display: none" #imageSelect>

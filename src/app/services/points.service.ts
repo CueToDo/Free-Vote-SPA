@@ -263,8 +263,6 @@ export class PointsService {
       isPorQPoint, // not a point property
       linkText: point.linkText,
       linkAddress: point.linkAddress,
-      showLinkBeforeVote: point.showLinkBeforeVote,
-      showLinkPreview: point.showLinkPreview,
       youTubeID: point.youTubeID,
       soundCloudTrackID: point.soundCloudTrackID,
       slashTags: point.slashTags,

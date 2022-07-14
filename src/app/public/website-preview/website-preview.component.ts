@@ -14,7 +14,6 @@ export class WebsitePreviewComponent implements OnInit {
   @Input() public Title = '';
   @Input() public Description = '';
   @Input() public Image = '';
-  @Input() public PreviewUpdated = false;
 
   // No Preview
   @Input() public NoPreviewText = '';

@@ -162,7 +162,6 @@ div.toolbar mat-form-field {
 
 .linkFromMeta,
 .noLinkPreview {
-  max-height: 132px;
   border: solid 1px black;
   border-radius: 12px;
   overflow: hidden;
@@ -178,6 +177,7 @@ div.toolbar mat-form-field {
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit */
 /* https://stackoverflow.com/questions/37127384/why-isnt-object-fit-working-in-flexbox */
 .linkFromMeta img {
+  max-height: 132px;
   height: 100%;
   width: 100%;
   object-fit: cover;

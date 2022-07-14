@@ -232,6 +232,7 @@ export class HttpService {
     // When an already-defined variable is given the same name within a new object,
     // object-shorthand syntax is preferred as being more compact.
     // Similarly, object-shorthand is also preferred for the definition of functions in object literals.
+
     const ImagesUploadCancel = { csvImageIDs };
     const url = 'points/imagesUploadCancel';
 

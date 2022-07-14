@@ -13,8 +13,6 @@ export class PointEdit {
   // Link meta data update is handled in the server API
   linkText = ''; // May not be a link, could just be a name
   linkAddress = ''; // link url to the source if any
-  showLinkBeforeVote = false;
-  showLinkPreview = false;
 
   youTubeID = '';
   soundCloudTrackID = '';
@@ -95,7 +93,6 @@ export class Point {
   // Manually added link info
   linkText = '';
   linkAddress = '';
-  showLinkBeforeVote = true;
   showLinkPreview = true;
 
   // Additional link info from site meta data
