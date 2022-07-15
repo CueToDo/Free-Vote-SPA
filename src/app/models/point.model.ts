@@ -74,7 +74,7 @@ export class Point {
   isPointOwner = false;
 
   pointTitle = '';
-  pointLink = '';
+  pointSlug = '';
   pointHTML = '';
   preview = '';
   previewImage = '';

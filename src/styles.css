@@ -307,6 +307,10 @@ a:hover {
 /* injected content without view encapsulation None */
 /* https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling */
 
+.hidden {
+  display: none;
+}
+
 .ugc.xs h1,
 .ugc.sm h1 {
   font-size: 1.1em;

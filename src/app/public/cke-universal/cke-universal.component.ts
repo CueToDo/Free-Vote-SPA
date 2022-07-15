@@ -45,8 +45,6 @@ export class CkeUniversalComponent implements OnInit {
         '|',
         'link',
         'image',
-        'insertTable',
-        'horizontalLine',
         '|',
         'undo',
         'redo'

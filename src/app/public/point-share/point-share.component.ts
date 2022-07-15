@@ -123,8 +123,8 @@ export class PointShareComponent implements OnInit {
       this.error = 'Missing: point';
       return '';
     } else {
-      if (!!this.point.pointLink) {
-        return this.point.pointLink;
+      if (!!this.point.pointSlug) {
+        return this.point.pointSlug;
       } else {
         return this.point.pointID.toString();
       }
