@@ -9,6 +9,10 @@ import {
   ElementRef
 } from '@angular/core';
 
+// rxjs
+import { interval } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+
 // Models & enums
 import { Point, PointFeedback } from 'src/app/models/point.model';
 import {
@@ -36,6 +40,7 @@ export class PointComponent implements OnInit {
   @Input() isMyAnswer = false;
   @Input() searchTerm = '';
 
+  @Output() CompleteEdit = new EventEmitter();
   @Output() PointDeleted = new EventEmitter();
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
@@ -76,7 +81,7 @@ export class PointComponent implements OnInit {
     public localData: LocalDataService, // public - used in template
     private lookupsService: LookupsService,
     private pointsService: PointsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // No subscriptions
@@ -231,7 +236,7 @@ export class PointComponent implements OnInit {
     }
   }
 
-  PointTypeVote(pointTypesEnum: PointTypesEnum): void {}
+  PointTypeVote(pointTypesEnum: PointTypesEnum): void { }
 
   AddToAnswers(pointID: number): void {
     this.AddPointToAnswers.emit(pointID);
@@ -390,7 +395,18 @@ export class PointComponent implements OnInit {
 
       this.FetchMetaData();
 
+      // Close editor and redisplay the point
       this.editing = false;
+
+
+      // Proved, we need a delay for change in editing take effect
+      let emitted = false;
+      interval(200)
+        .pipe(takeWhile(() => !emitted))
+        .subscribe(_ => {
+          this.CompleteEdit.emit(this.point.pointID);
+          emitted = true;
+        });
     }
   }
 
@@ -437,9 +453,9 @@ export class PointComponent implements OnInit {
   elementTruncated(): boolean {
     return (
       this.elPointHtml?.nativeElement.scrollHeight >
-        this.elPointHtml?.nativeElement.clientHeight ||
+      this.elPointHtml?.nativeElement.clientHeight ||
       this.elPointHtml?.nativeElement.scrollWidth >
-        this.elPointHtml?.nativeElement.clientWidth
+      this.elPointHtml?.nativeElement.clientWidth
     );
   }
 

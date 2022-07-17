@@ -1,20 +1,22 @@
 <div *ngIf="!editing" class="point">
 
   <!-- Point Display -->
-  <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
+  <a [id]="'id' + point.pointID">
+    <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
 
-    <h1 [innerHtml]="point.pointTitle"></h1>
+      <h1 [innerHtml]="point.pointTitle"></h1>
 
-    <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
+      <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
 
-    <div #elPointHtml [innerHTML]="pointHTMLwithoutEmbed | SafeHtml" [ngClass]="{'line-clamp': !showFullText}"></div>
+      <div #elPointHtml [innerHTML]="pointHTMLwithoutEmbed | SafeHtml" [ngClass]="{'line-clamp': !showFullText}"></div>
 
-    <div class="moreorless">
-      <a *ngIf="elementTruncated()" (click)="showMore(true)">show more</a>
-      <a *ngIf="showFullText" (click)="showMore(false)">show less</a>
+      <div class="moreorless">
+        <a *ngIf="elementTruncated()" (click)="showMore(true)">show more</a>
+        <a *ngIf="showFullText" (click)="showMore(false)">show less</a>
+      </div>
+
     </div>
-
-  </div>
+  </a>
 
   <!-- YouTube video -->
 

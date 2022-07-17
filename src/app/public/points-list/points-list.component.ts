@@ -52,9 +52,12 @@ export class PointsListComponent implements OnDestroy, OnInit {
     return 'Click "new point" to create the first point for this tag.';
   }
 
-  public error = '';
   public alreadyFetchingPointsFromDB = false;
   public allPointsDisplayed = false;
+
+  private fragment = '';
+
+  public error = '';
 
   private get lastBatchRow(): number {
     let lastRow = 0;
@@ -85,7 +88,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
     public localData: LocalDataService,
     private pointsService: PointsService,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -95,8 +98,29 @@ export class PointsListComponent implements OnDestroy, OnInit {
         this.ReselectPoints(this.filter.sortType);
       }
     });
+
+    this.activatedRoute.fragment.subscribe(fragment => { this.fragment = '' + fragment; });
   }
 
+  ngAfterViewInit(): void {
+    this.ScrollIntoView();
+  }
+
+  ScrollIntoView(): void {
+    try {
+      console.log('Scrolling into view', this.fragment);
+      var a = document.querySelector('#id' + this.fragment);
+      if (!!a) {
+        a.scrollIntoView();
+      } else {
+        console.log(a);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  // Reselect for new point - new point to be first in date descending order
   ReselectPoints(pointSortType: PointSortTypes) {
     this.filter.slashTag = this.localData.PreviousSlashTagSelected; // Set by the Point-Edit Component
 
@@ -114,6 +138,11 @@ export class PointsListComponent implements OnDestroy, OnInit {
     this.SelectPoints();
   }
 
+  public CompleteEdit(pointID: string): void {
+    this.fragment = pointID;
+    this.ScrollIntoView();
+  }
+
   OnTopicSearch(): string {
     let onTopic = '';
     if (!this.filter?.anyTag) {
@@ -125,6 +154,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
     return onTopic;
   }
 
+  // New point will be selected first in date descsend order
   public ReselectForNewPoint(): void {
     this.filter.updateTopicViewCount = false;
     this.filter.sortType = PointSortTypes.DateUpdated;
