@@ -67,14 +67,16 @@
       remove images
     </button>
 
-    <button mat-stroked-button>
-      <mat-icon>save</mat-icon>
-      save
-    </button>
+    <div fxFlex></div>
 
     <button mat-stroked-button type="button" (click)="Cancel()">
       <mat-icon>cancel</mat-icon>
       cancel
+    </button>
+
+    <button mat-stroked-button>
+      <mat-icon>save</mat-icon>
+      save
     </button>
 
     <span class="spinner-grow text-primary ms-3" role="status" *ngIf="saving">

@@ -1,12 +1,14 @@
 .topic {
-  font-weight: bold;
+  padding: 4px 8px;
+  font-size: 0.9em;
+  font-weight: normal;
   background-color: #ffd700;
-  border-radius: 16px;
+  border-radius: 14px;
   display: inline-block;
   white-space: nowrap; /* Keep icon on sme line as text on small screens */
 }
 
-.topic+.topic {
+.topic + .topic {
   margin-left: 10px;
 }
 
@@ -16,10 +18,12 @@ mat-icon {
 }
 
 input {
+  margin-top: 12px;
   border-left: none;
   border-right: none;
   border-top: none;
   border-bottom: solid 1px lightgray;
+  transition: border-bottom 1s;
 }
 
 input:focus {
@@ -27,6 +31,6 @@ input:focus {
   box-shadow: none;
   border-width: 0 0 2px 0;
   border-style: solid;
-  border-image: radial-gradient(#6900ff, #9155ff) 50;
-  transition: border-width 1s;
+  border-bottom: solid 1px #6900ff;
+  transition: border-bottom 1s;
 }
