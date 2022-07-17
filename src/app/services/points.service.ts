@@ -255,7 +255,7 @@ export class PointsService {
     const postData = {
       pointID: point.pointID,
       questionID: point.questionID,
-      pointTitle: point.pointTitle, // pointLink constructed in API
+      pointTitle: point.pointTitle, // pointSlug constructed in API
       pointHTML: point.pointHTML,
       csvImageIDs: point.csvImageIDs,
       pointTypeID: point.pointTypeID,

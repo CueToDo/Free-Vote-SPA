@@ -5,7 +5,7 @@ export class PointEdit {
   // However the user inputs them, pass them to the server to decode
   pointID = 0;
   questionID = 0;
-  pointTitle = ''; // pointLink constructed in API
+  pointTitle = ''; // PointSlug constructed in API
   pointHTML = '';
   csvImageIDs = '';
   pointTypeID = PointTypesEnum.NotSelected;

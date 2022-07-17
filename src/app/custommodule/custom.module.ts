@@ -10,11 +10,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-// Pipes
-import { TagDisplayPipe } from './pipes/tag-display.pipe';
+// Pipe
 import { NbspPipe } from './pipes/nbsp.pipe';
 import { SafeURLPipe } from './pipes/safe-url.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { TagDisplayPipe } from './pipes/tag-display.pipe';
 
 // Directives
 import { ElementScrollDirective } from './directives/elementscroll.directive';

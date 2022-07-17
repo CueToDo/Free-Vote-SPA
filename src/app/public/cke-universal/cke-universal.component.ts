@@ -1,3 +1,4 @@
+// Angular
 import {
   Component,
   OnInit,
@@ -5,10 +6,10 @@ import {
   Renderer2,
   PLATFORM_ID,
   Input,
+  Output,
   EventEmitter
 } from '@angular/core';
 import { isPlatformServer, isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { Output } from '@angular/core';
 
 @Component({
   selector: 'app-cke-universal',

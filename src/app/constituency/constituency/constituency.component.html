@@ -1,4 +1,4 @@
-<div class="content">
+<div class="mp">
 
     <h1>{{ constituencyDetails.constituency }}</h1>
 
@@ -6,23 +6,33 @@
         {{ error }}
     </div>
 
-    <div>
+    <div class="mpImage">
         <a [href]="mpUrl" target="_blank">
             <img [src]="mpImageUrl" alt="">
         </a>
     </div>
-    <div>
-        They Work For You: <a [href]="mpUrl" target="_blank">{{ mp }}</a>
-    </div>
-    <div>
-        Constituency Map <a [href]="constituencyUrl" target="_blank">{{ constituencyDetails.constituency }}</a>
-    </div>
-    <div>
-        Write to <a [href]="writeToThem" target="_blank">{{ mp }} MP</a>
-    </div>
-    <div *ngIf="!!mpWebsite">
-        Website <a [href]="mpWebsite" target="_blank">{{ mpWebsite }}</a>
-    </div>
+
+    <table>
+        <tr>
+            <td>They Work For You</td>
+            <td><a [href]="mpUrl" target="_blank">{{ mp }}</a></td>
+        </tr>
+
+        <tr>
+            <td>Write to</td>
+            <td><a [href]="writeToThem" target="_blank">{{ mp }} MP</a></td>
+        </tr>
+
+        <tr *ngIf="!!mpWebsite">
+            <td>Website</td>
+            <td><a [href]="mpWebsite" target="_blank">{{ mpWebsite }}</a></td>
+        </tr>
+        <tr>
+            <td>Constituency Map</td>
+            <td><a [href]="constituencyUrl" target="_blank">{{ constituencyDetails.constituency }}</a></td>
+        </tr>
+    </table>
+
 
     <div hidden>
         <div>constituencyUrl: {{ constituencyUrl }}</div>

@@ -8,8 +8,8 @@ import { PipeTransform, Pipe } from '@angular/core';
 // The CKEditor may also provide input sanitisation (tbc)
 @Pipe({ name: 'SafeHtml' })
 export class SafeHtmlPipe implements PipeTransform {
-  constructor(private sanitized: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer) {}
   transform(value: string): SafeHtml {
-    return this.sanitized.bypassSecurityTrustHtml(value);
+    return this.sanitizer.bypassSecurityTrustHtml(value);
   }
 }
