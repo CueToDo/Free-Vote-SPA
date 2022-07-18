@@ -5,39 +5,38 @@
     </span>
 
     <button mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-        [class.selected]="tabSelected===''" (click)="tabSelected=''" matTooltip="home">
+        [class.selected]="navSvc.localMenuItemSelected===''" (click)="navSvc.localMenuItemSelected=''"
+        matTooltip="home">
         <mat-icon>search</mat-icon>
         home
     </button>
 
     <!-- https://github.com/angular/angular/issues/22588 -->
     <button mat-button [routerLink]="(localData.LoggedInToAuth0$ | async) ? '/recent' : '/trending'"
-        [class.selected]="tabSelected==='slashTags'" (click)="tabSelected='slashTags'" matTooltip="slash tags">
+        [class.selected]="navSvc.localMenuItemSelected==='slashTags'" (click)="navSvc.localMenuItemSelected='slashTags'"
+        matTooltip="slash tags">
         <mat-icon>bookmark_border</mat-icon>
         slash tags
     </button>
 
     <button mat-button routerLink="/organisations/membership" routerLinkActive="active"
-        [class.selected]="tabSelected==='organisations'" (click)="tabSelected='organisations'" matTooltip="groups"
+        [class.selected]="navSvc.localMenuItemSelected==='organisations'"
+        (click)="navSvc.localMenuItemSelected='organisations'" matTooltip="groups"
         *ngIf="localData.LoggedInToAuth0$ | async">
         <mat-icon>people</mat-icon>
         groups
     </button>
 
     <button mat-button *ngIf="localData.LoggedInToAuth0$ | async" routerLinkActive="active"
-        [class.selected]="tabSelected==='MP'" (click)="tabSelected='MP'" [routerLink]="'MP/' + constituencyKebab">
+        [class.selected]="navSvc.localMenuSelected" (click)="navSvc.localMenuItemSelected='local'"
+        [routerLink]="'local/' + constituencyKebab">
         <mat-icon>mp</mat-icon>
-        mp
-    </button>
-
-    <button mat-button routerLink="/voters" routerLinkActive="active" *ngIf="localData.LoggedInToAuth0$ | async"
-        [class.selected]="tabSelected==='voters'" (click)="tabSelected='voters'" matTooltip="voters">
-        <mat-icon>edit</mat-icon>
-        voters
+        local
     </button>
 
     <button mat-button routerLink="/my/profile" routerLinkActive="active" *ngIf="localData.LoggedInToAuth0$ | async"
-        [class.selected]="tabSelected==='profile'" (click)="tabSelected='profile'" matTooltip="profile">
+        [class.selected]="navSvc.localMenuItemSelected==='profile'" (click)="navSvc.localMenuItemSelected='profile'"
+        matTooltip="profile">
         <mat-icon>person</mat-icon>
         profile
     </button>

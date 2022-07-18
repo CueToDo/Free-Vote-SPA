@@ -7,7 +7,6 @@ import { CallbackComponent } from './public/callback/callback.component';
 import { HomeComponent } from './public/home/home.component';
 import { CardComponent } from './public/card/card.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
-import { VotersMenuComponent } from './public/voters-menu/voters-menu.component';
 import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points.component';
 import { PointShareComponent } from './public/point-share/point-share.component';
 
@@ -32,16 +31,6 @@ const appRoutes: Routes = [
 
   { path: 'callback', component: CallbackComponent },
 
-  {
-    path: 'voters',
-    component: VotersMenuComponent,
-    canActivate: [LoginRouteGuardService]
-  },
-  {
-    path: 'voters/:alias',
-    component: VotersMenuComponent,
-    canActivate: [LoginRouteGuardService]
-  },
   { path: 'by/:alias', component: TagsAndPointsComponent },
   {
     path: 'point-of-the-week',
@@ -51,11 +40,8 @@ const appRoutes: Routes = [
 
   // constituency
   {
-    path: 'MP',
-    loadChildren: () =>
-      import('./constituency/constituency.module').then(
-        m => m.ConstituencyModule
-      )
+    path: 'local',
+    loadChildren: () => import('./local/local.module').then(m => m.LocalModule)
   },
   // organisations, groups
   {

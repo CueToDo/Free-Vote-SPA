@@ -9,15 +9,15 @@
 
     <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex">
 
-      <mat-tab label="following">
+      <mat-tab label="mp">
         <ng-template matTabContent>
-          <app-by></app-by>
+          <app-constituency></app-constituency>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="point of the week">
+      <mat-tab label="voters">
         <ng-template matTabContent>
-          <app-point [point]="point" (newOnTopic)="newTopic($event)"></app-point>
+          <app-by></app-by>
         </ng-template>
       </mat-tab>
 

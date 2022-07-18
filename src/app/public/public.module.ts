@@ -40,7 +40,6 @@ import { NavMainComponent } from './nav-main/nav-main.component';
 import { NavBurgerComponent } from './nav-burger/nav-burger.component';
 import { TagsComponent } from './tags/tags.component';
 import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
-import { VotersMenuComponent } from './voters-menu/voters-menu.component';
 import { ListComponent } from './list/list.component';
 import { PointsListComponent } from './points-list/points-list.component';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
@@ -75,43 +74,42 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     CustomModule
   ],
   declarations: [
-    // Auth0
-    CallbackComponent,
-    VotersMenuComponent,
-    HomeComponent,
-    CardComponent,
-    TakeActionComponent,
-    PointComponent,
-    PointEditComponent,
-    TopicEditComponent,
-    PointOfTheWeekComponent,
-    PointsFilterComponent,
     ByComponent,
+    CallbackComponent,
+    CardComponent,
+    CkeUniversalComponent,
+    HomeComponent,
+    ListComponent,
+    NavBurgerComponent,
     NavItemsComponent,
     NavMainComponent,
-    NavBurgerComponent,
-    TagsComponent,
-    TagsAndPointsComponent,
-    ListComponent,
+    PointComponent,
+    PointEditComponent,
+    PointsFilterComponent,
     PointsListComponent,
-    QuestionsListComponent,
-    QuestionEditComponent,
-    QuestionComponent,
-    QuestionAnswersComponent,
-    CkeUniversalComponent,
+    PointOfTheWeekComponent,
     PointShareComponent,
+    QuestionAnswersComponent,
+    QuestionComponent,
+    QuestionEditComponent,
+    QuestionsListComponent,
+    TagsAndPointsComponent,
+    TagsComponent,
     TagSearchComponent,
+    TakeActionComponent,
+    TopicEditComponent,
     WebsitePreviewComponent
   ],
   exports: [
-    PointComponent,
-    PointsFilterComponent,
-    PointEditComponent,
+    ByComponent,
+    CkeUniversalComponent,
+    ListComponent,
     NavItemsComponent,
     NavMainComponent,
     NavBurgerComponent,
-    ListComponent,
-    CkeUniversalComponent,
+    PointComponent,
+    PointsFilterComponent,
+    PointEditComponent,
     WebsitePreviewComponent
   ]
 })

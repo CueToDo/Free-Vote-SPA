@@ -11,10 +11,10 @@ import { AppDataService } from 'src/app/services/app-data.service';
 
 @Component({
   selector: 'app-points-menu',
-  templateUrl: './voters-menu.component.html'
-  // styleUrls: ['./voters-menu.component.css']
+  templateUrl: './local-menu.component.html',
+  styleUrls: ['./local-menu.component.css']
 })
-export class VotersMenuComponent {
+export class LocalMenuComponent {
   selectedIndex = 0;
   PointSelectionTypes = PointSelectionTypes;
   PointFlags = PointFlags;

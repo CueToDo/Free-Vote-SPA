@@ -10,12 +10,6 @@ import { NavItemsComponent } from '../nav-items/nav-items.component';
   styleUrls: ['./nav-main.component.css']
 })
 export class NavMainComponent implements OnInit {
-  @ViewChild('navItems') navItems: NavItemsComponent | undefined;
-
-  public setSelectedMenuItem(item: string) {
-    this.navItems?.setSelectedMenuItem(item);
-  }
-
   constructor() {}
 
   ngOnInit(): void {}

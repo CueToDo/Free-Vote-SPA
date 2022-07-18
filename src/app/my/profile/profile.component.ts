@@ -62,7 +62,7 @@ export class ProfileComponent implements OnDestroy {
 
   // For Routerlink to local
   public get constituencyLink(): string {
-    return `/MP/${this.appData.kebabUri(
+    return `/local/${this.appData.kebabUri(
       this.localData.freeVoteProfile.constituency
     )}`;
   }

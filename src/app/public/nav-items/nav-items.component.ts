@@ -1,11 +1,14 @@
+// Angular
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
+// rxjs
 import { Subscription } from 'rxjs/internal/Subscription';
 
-// FreeVote Models, Services
-import { LocalDataService } from 'src/app/services/local-data.service';
+// FreeVote Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-nav-items',
@@ -14,12 +17,6 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavItemsComponent implements OnInit, OnDestroy {
   tagsPointsActive$: Subscription | undefined;
-
-  tabSelected = '';
-
-  public setSelectedMenuItem(item: string) {
-    this.tabSelected = item;
-  }
 
   get constituencyKebab(): string {
     return this.appDataService.kebabUri(
@@ -32,9 +29,10 @@ export class NavItemsComponent implements OnInit, OnDestroy {
   @Input() MenuType: string = 'main';
 
   constructor(
-    public localData: LocalDataService,
     private appDataService: AppDataService,
-    public authService: AuthService
+    public authService: AuthService,
+    public localData: LocalDataService,
+    public navSvc: NavigationService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +45,7 @@ export class NavItemsComponent implements OnInit, OnDestroy {
     this.tagsPointsActive$ = this.appDataService.TagsPointsActive$.subscribe(
       tagsPointsActive => {
         if (tagsPointsActive) {
-          this.tabSelected = 'slashTags';
+          this.navSvc.localMenuItemSelected = 'slashTags';
         }
       } // simply return boolean value to template
     );

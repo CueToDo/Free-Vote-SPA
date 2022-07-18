@@ -14,6 +14,7 @@ import { Router, NavigationEnd } from '@angular/router';
 
 // rxjs
 import { fromEvent } from 'rxjs';
+import { filter, debounceTime, map } from 'rxjs/operators';
 
 // ngx-bootstrap
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
@@ -21,20 +22,24 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 // Auth0
 import { AuthService } from 'src/app/services/auth.service';
 
-// FreeVote Models, Services
-import { LocalDataService } from 'src/app/services/local-data.service';
-import { AppDataService } from 'src/app/services/app-data.service';
-import { LookupsService } from 'src/app/services/lookups.service';
-import { TagsService } from 'src/app/services/tags.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { filter, debounceTime, map } from 'rxjs/operators';
+// FreeVote Models
 import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
-import { environment } from 'src/environments/environment';
+
+// FreeVote Services
+import { AppDataService } from 'src/app/services/app-data.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { LocalDataService } from 'src/app/services/local-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
+import { NavigationService } from './services/navigation.service';
+import { TagsService } from 'src/app/services/tags.service';
 import { UpdateService } from 'src/app/services/update.service';
 
 // FreeVote Components
 import { NavBurgerComponent } from 'src/app/public/nav-burger/nav-burger.component';
 import { NavMainComponent } from 'src/app/public/nav-main/nav-main.component';
+
+// Other
+import { environment } from 'src/environments/environment';
 
 export enum NetworkStatus {
   ONLINE = 'online',
@@ -82,6 +87,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
     private lookupsService: LookupsService,
+    private navSvc: NavigationService,
     private tagsService: TagsService,
     private breakpointObserver: BreakpointObserver,
     private location: Location,
@@ -392,8 +398,16 @@ export class AppComponent implements OnInit, AfterViewInit {
           ? 'SlashTag/' + this.localData.PreviousTopicSelected
           : route.substring(1);
 
-      if (route.indexOf('MP') > -1) {
-        this.navMain?.setSelectedMenuItem('MP');
+      if (route.indexOf('local') > -1) {
+        // this.navMain?.setSelectedMenuItem('local');
+        this.navSvc.localMenuSelected = true;
+        if (route.indexOf('voters') > -1) {
+          this.navSvc.localMenuItemSelected = 'voters';
+        } else {
+          this.navSvc.localMenuItemSelected = 'mp';
+        }
+      } else {
+        this.navSvc.localMenuSelected = false;
       }
 
       const topic = this.localData.SlashTagToTopic(this.routeDisplay);
