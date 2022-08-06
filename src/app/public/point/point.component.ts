@@ -81,7 +81,7 @@ export class PointComponent implements OnInit {
     public localData: LocalDataService, // public - used in template
     private lookupsService: LookupsService,
     private pointsService: PointsService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // No subscriptions
@@ -236,7 +236,7 @@ export class PointComponent implements OnInit {
     }
   }
 
-  PointTypeVote(pointTypesEnum: PointTypesEnum): void { }
+  PointTypeVote(pointTypesEnum: PointTypesEnum): void {}
 
   AddToAnswers(pointID: number): void {
     this.AddPointToAnswers.emit(pointID);
@@ -350,14 +350,13 @@ export class PointComponent implements OnInit {
     if (!this.point) {
       this.error = 'Missing: point';
     } else {
+      // weird shit - why is this const necessary?
       const deleteFavourite = this.point.isFavourite;
 
       this.pointsService
         .PointFlag(deleteFavourite, this.point.pointID, PointFlags.Favourite)
         .subscribe(_ => {
-          if (this.point) {
-            this.point.isFavourite = !deleteFavourite;
-          }
+          this.point.isFavourite = !deleteFavourite;
         });
     }
   }
@@ -366,6 +365,7 @@ export class PointComponent implements OnInit {
     if (!this.point) {
       this.error = 'Missing: point';
     } else {
+      // weird shit - why is this const necessary?
       const deleteImportant = this.point.isImportant;
 
       this.pointsService
@@ -376,6 +376,12 @@ export class PointComponent implements OnInit {
           }
         });
     }
+  }
+
+  localInterest(): void {
+    this.pointsService
+      .PointLocalInterest(this.point.pointID, !this.point.localInterest)
+      .subscribe(_ => (this.point.localInterest = !this.point.localInterest));
   }
 
   onCancelEdit(): void {
@@ -397,7 +403,6 @@ export class PointComponent implements OnInit {
 
       // Close editor and redisplay the point
       this.editing = false;
-
 
       // Proved, we need a delay for change in editing take effect
       let emitted = false;
@@ -453,9 +458,9 @@ export class PointComponent implements OnInit {
   elementTruncated(): boolean {
     return (
       this.elPointHtml?.nativeElement.scrollHeight >
-      this.elPointHtml?.nativeElement.clientHeight ||
+        this.elPointHtml?.nativeElement.clientHeight ||
       this.elPointHtml?.nativeElement.scrollWidth >
-      this.elPointHtml?.nativeElement.clientWidth
+        this.elPointHtml?.nativeElement.clientWidth
     );
   }
 

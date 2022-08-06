@@ -248,32 +248,8 @@
         </mat-menu>
       </div>
 
-      <!-- Point Owner Commands -->
 
-      <div *ngIf="localData.LoggedInToAuth0 && point.isPointOwner">
-
-        <button mat-button [matMenuTriggerFor]="pointOwnerCommands">
-          <mat-icon *ngIf="!point.draft" matTooltip="edit">edit</mat-icon>
-          <mat-icon *ngIf="point.draft" matTooltip="draft point - not public">visibility_off</mat-icon>
-        </button>
-
-        <mat-menu #pointOwnerCommands="matMenu">
-
-          <button mat-menu-item (click)="edit()">
-            <mat-icon>edit</mat-icon>
-            edit
-          </button>
-
-          <button mat-menu-item (click)="delete()">
-            <mat-icon>delete_forever</mat-icon>
-            delete
-          </button>
-
-        </mat-menu>
-
-      </div>
-
-      <!-- Voter Point Feedback Menu -->
+      <!-- Point Owner and Feedback Menu -->
 
       <div *ngIf="localData.LoggedInToAuth0">
 
@@ -301,12 +277,30 @@
 
           <mat-icon *ngIf="point.isFavourite" matTooltip="Is favourite">favorite</mat-icon>
           <mat-icon *ngIf="point.isImportant" matTooltip="Is Important">priority_high</mat-icon>
+          <mat-icon *ngIf="point.localInterest" matTooltip="Local Interest">mp</mat-icon>
+          <mat-icon *ngIf="point.draft" matTooltip="draft point - not public">visibility_off</mat-icon>
 
         </button>
 
         <!-- Voter Point Feedback Options -->
 
         <mat-menu #pointCommands="matMenu">
+
+          <!-- Point Owner Commands -->
+
+          <button mat-menu-item (click)="edit()" *ngIf="point.isPointOwner">
+            <mat-icon>edit</mat-icon>
+            edit
+          </button>
+
+          <button mat-menu-item (click)="delete()" *ngIf="point.isPointOwner">
+            <mat-icon>delete_forever</mat-icon>
+            delete
+          </button>
+
+          <hr class="hr" *ngIf="point.isPointOwner" />
+
+          <!-- End Point Owner -->
 
           <button mat-menu-item (click)="Support()" *ngIf="point.pointFeedback.feedbackIsUpdatable"
             [ngClass]="{selected:point.pointFeedback.supportLevelID===1}">
@@ -334,41 +328,43 @@
 
           <hr class="hr" />
 
-          <button mat-menu-item *ngIf="point.pointFeedback.feedbackGiven" matTooltip="date feedback given">
-            <mat-icon>date_range</mat-icon>
-            <span [innerHTML]="point.pointFeedback.feedbackDate | nbsp"></span>
+          <button mat-menu-item (click)="favourite()" matTooltip="flag point as a favourite"
+            [ngClass]="{selected:point.isFavourite}">
+            <mat-icon>{{ favoriteIcon }}</mat-icon>
+            favourite
           </button>
+
+          <button mat-menu-item (click)="important()" matTooltip="flag point as important"
+            [ngClass]="{selected:point.isImportant}">
+            <mat-icon>priority_high</mat-icon>
+            important
+          </button>
+
+          <button mat-menu-item (click)="localInterest()" [ngClass]="{selected:point.localInterest}">
+            <mat-icon matTooltip="make point local interest">mp</mat-icon>
+            local interest
+          </button>
+
+          <button mat-menu-item [routerLink]="linkShare">
+            <mat-icon matTooltip="social media share">share</mat-icon>
+            share
+          </button>
+
+          <hr class="hr" />
 
           <button mat-menu-item (click)="anon()" *ngIf="point.pointFeedback.feedbackIsUpdatable">
             <mat-icon>lock</mat-icon>
             anonymous feedback
           </button>
 
-          <hr class="hr" />
-
-          <button mat-menu-item (click)="favourite()" matTooltip="flag point as a favourite">
-            <mat-icon>{{ favoriteIcon }}</mat-icon>
-            favourite
-          </button>
-
-          <button mat-menu-item (click)="important()" matTooltip="flag point as important">
-            <mat-icon>priority_high</mat-icon>
-            important
+          <button mat-menu-item *ngIf="point.pointFeedback.feedbackGiven" matTooltip="date feedback given">
+            <mat-icon>date_range</mat-icon>
+            <span [innerHTML]="point.pointFeedback.feedbackDate | nbsp"></span>
           </button>
 
         </mat-menu>
 
       </div>
-
-      <!-- Share Sub Menu -->
-
-      <div>
-
-        <a mat-button [routerLink]="linkShare">
-          <mat-icon matTooltip="social media share">share</mat-icon>
-        </a>
-
-      </div> <!-- End Share Menu -->
 
     </div> <!-- End Toolbar Remainder -->
 

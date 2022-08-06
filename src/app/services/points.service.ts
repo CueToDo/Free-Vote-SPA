@@ -337,6 +337,17 @@ export class PointsService {
       .pipe(map(result => result as boolean));
   }
 
+  PointLocalInterest(
+    pointID: number,
+    localInterest: boolean
+  ): Observable<boolean> {
+    let apiUrl = `points/ConstituencyPoint/${pointID}/${localInterest}`;
+
+    return this.httpClientService
+      .get(apiUrl)
+      .pipe(map(result => result as boolean));
+  }
+
   PointWoWVote(pointID: number, wow: boolean): Observable<PointFeedback> {
     // standard construction of post data
     const postData: PointWoWFormData = {

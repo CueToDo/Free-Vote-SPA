@@ -111,6 +111,7 @@ export class Point {
 
   isFavourite = false;
   isImportant = false;
+  localInterest = false;
 
   attached = false;
   adoptable = false;
