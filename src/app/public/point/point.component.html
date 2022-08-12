@@ -340,6 +340,11 @@
             important
           </button>
 
+          <button mat-menu-item (click)="addTags()">
+            <mat-icon matTooltip="add additional point tags">bookmark_border</mat-icon>
+            add new tag(s)
+          </button>
+
           <button mat-menu-item (click)="localInterest()" [ngClass]="{selected:point.localInterest}">
             <mat-icon matTooltip="make point local interest">mp</mat-icon>
             local interest

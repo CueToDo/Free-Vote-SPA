@@ -3,6 +3,7 @@ import { PointSupportLevels, PointTypesEnum } from './enums';
 
 export class PointEdit {
   // However the user inputs them, pass them to the server to decode
+  constituencyID = 0;
   pointID = 0;
   questionID = 0;
   pointTitle = ''; // PointSlug constructed in API
@@ -68,6 +69,7 @@ export class WoWWeekInfoVoteNotNeeded {
 // Don't even think of making public properties Pascal Case
 
 export class Point {
+  constituencyID = 0;
   pointID = 0;
   questionID = 0;
   voterIDPoint = 0;

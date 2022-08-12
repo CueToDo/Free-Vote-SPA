@@ -21,7 +21,7 @@ export class HttpService {
   constructor(
     private httpClient: HttpClient,
     private localData: LocalDataService
-  ) {}
+  ) { }
 
   // The API JWT is the FreeVote user profile
   getApiJwt(): Observable<boolean | undefined> {

@@ -71,8 +71,7 @@ export class PointsService {
         '/',
         ''
       )}/${questionID}/${myPointFilter.toString()}` +
-      `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortAscending}/${
-        this.batchSize
+      `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortAscending}/${this.batchSize
       }/${this.pageSize}`;
 
     return this.httpClientService
@@ -170,9 +169,8 @@ export class PointsService {
     reversalOnly: boolean,
     knownTotalPointCount: number
   ): Observable<PointSelectionResult> {
-    const apiUrl = `points/pointsSelectedReOrder/${pointSortOrder}/${
-      reversalOnly ? 'Y' : 'N'
-    }`;
+    const apiUrl = `points/pointsSelectedReOrder/${pointSortOrder}/${reversalOnly ? 'Y' : 'N'
+      }`;
 
     return this.httpClientService
       .get(apiUrl)
@@ -253,6 +251,7 @@ export class PointsService {
     // construct a new PointEdit (all that's needed)
 
     const postData = {
+      constituencyID: point.constituencyID,
       pointID: point.pointID,
       questionID: point.questionID,
       pointTitle: point.pointTitle, // pointSlug constructed in API
