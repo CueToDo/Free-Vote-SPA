@@ -10,6 +10,8 @@ import {
 export class FilterCriteria {
   updateTopicViewCount = false;
 
+  constituencyID = 0;
+
   // SelectionType
   single = false;
   pointSelectionType = PointSelectionTypes.TagPoints;

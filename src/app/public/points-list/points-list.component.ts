@@ -27,6 +27,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./points-list.component.css']
 })
 export class PointsListComponent implements OnDestroy, OnInit {
+  @Input() private constituencyID = 0;
   @Input() public filter = new FilterCriteria();
   @Input() public attachedToQuestion = false;
 
@@ -88,7 +89,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
     public localData: LocalDataService,
     private pointsService: PointsService,
     private activatedRoute: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -99,7 +100,9 @@ export class PointsListComponent implements OnDestroy, OnInit {
       }
     });
 
-    this.activatedRoute.fragment.subscribe(fragment => { this.fragment = '' + fragment; });
+    this.activatedRoute.fragment.subscribe(fragment => {
+      this.fragment = '' + fragment;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -253,6 +256,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
             if (this.filter.slashTag) {
               this.pointsService
                 .GetFirstBatchForTag(
+                  this.constituencyID,
                   this.filter.slashTag,
                   this.filter.sortType,
                   this.filter.sortAscending,
@@ -292,7 +296,12 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
         this.pointsService
           // pass pointCount for the cast to PSR
-          .NewPointSelectionOrder(pointSortType, reversalOnly, this.pointCount)
+          .NewPointSelectionOrder(
+            this.constituencyID,
+            pointSortType,
+            reversalOnly,
+            this.pointCount
+          )
           .subscribe(response => {
             this.alreadyFetchingPointsFromDB = false;
 
@@ -365,10 +374,12 @@ export class PointsListComponent implements OnDestroy, OnInit {
         this.alreadyFetchingPointsFromDB = true;
         this.allPointsDisplayed = false;
 
-        this.pointsService.GetPage(pids).subscribe(response => {
-          this.points = this.points.concat(response.points);
-          this.NewPointsDisplayed();
-        });
+        this.pointsService
+          .GetPage(this.constituencyID, pids)
+          .subscribe(response => {
+            this.points = this.points.concat(response.points);
+            this.NewPointsDisplayed();
+          });
       } else if (
         this.lastBatchRow < this.pointCount &&
         this.lastPageRow < this.pointCount
@@ -383,6 +394,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         if (this.filter) {
           this.pointsService
             .GetNextBatch(
+              this.constituencyID,
               this.filter.sortType,
               this.lastBatchRow + 1,
               this.pointCount

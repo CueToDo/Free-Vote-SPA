@@ -71,7 +71,8 @@ export class PointsService {
         '/',
         ''
       )}/${questionID}/${myPointFilter.toString()}` +
-      `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortAscending}/${this.batchSize
+      `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortAscending}/${
+        this.batchSize
       }/${this.pageSize}`;
 
     return this.httpClientService
@@ -84,6 +85,7 @@ export class PointsService {
   // 2) Subsequent batch (very similar to above, can these be consolidated?)
   // 3) Page of points for all selection methods
   GetFirstBatchForTag(
+    constituencyID: number,
     slashTag: string,
     pointSortOrder: PointSortTypes,
     sortAscending: boolean,
@@ -91,7 +93,7 @@ export class PointsService {
   ): Observable<PointSelectionResult> {
     // No Filters + infinite scroll on DateOrder desc
     const apiUrl =
-      `points/getFirstBatchForTag/${slashTag.replace(
+      `points/getFirstBatchForTag/${constituencyID}/${slashTag.replace(
         '/',
         ''
       )}/${pointSortOrder}` +
@@ -144,10 +146,11 @@ export class PointsService {
   }
 
   GetSpecificPoint(
+    constituencyID: number,
     slashTag: string,
     pointTitle: string
   ): Observable<PointSelectionResult> {
-    const apiUrl = `points/point/${slashTag}/${pointTitle}`;
+    const apiUrl = `points/point/${constituencyID}/${slashTag}/${pointTitle}`;
 
     console.log('GET SPECIFIC', apiUrl);
 
@@ -156,8 +159,11 @@ export class PointsService {
       .pipe(map(returnData => this.CastToPointSelectionResult(returnData, 0)));
   }
 
-  PorQPoints(porQID: number): Observable<PointSelectionResult> {
-    const apiUrl = `points/getFirstBatchForPorQ/${porQID}/${this.batchSize}/${this.pageSize}`;
+  PorQPoints(
+    constituencyID: number,
+    porQID: number
+  ): Observable<PointSelectionResult> {
+    const apiUrl = `points/getFirstBatchForPorQ/${constituencyID}/${porQID}/${this.batchSize}/${this.pageSize}`;
 
     return this.httpClientService
       .get(apiUrl)
@@ -165,12 +171,14 @@ export class PointsService {
   }
 
   NewPointSelectionOrder(
+    constituencyID: number,
     pointSortOrder: PointSortTypes,
     reversalOnly: boolean,
     knownTotalPointCount: number
   ): Observable<PointSelectionResult> {
-    const apiUrl = `points/pointsSelectedReOrder/${pointSortOrder}/${reversalOnly ? 'Y' : 'N'
-      }`;
+    const apiUrl = `points/pointsSelectedReOrder/${constituencyID}/${pointSortOrder}/${
+      reversalOnly ? 'Y' : 'N'
+    }`;
 
     return this.httpClientService
       .get(apiUrl)
@@ -182,11 +190,12 @@ export class PointsService {
   }
 
   GetNextBatch(
+    constituencyID: number,
     pointSortOrder: PointSortTypes,
     fromRow: number,
     knowPointCountTotal: number
   ): Observable<PointSelectionResult> {
-    const apiUrl = `points/getNextBatch/${pointSortOrder}/${fromRow}/${this.batchSize}/${this.pageSize}`;
+    const apiUrl = `points/getNextBatch/${constituencyID}/${pointSortOrder}/${fromRow}/${this.batchSize}/${this.pageSize}`;
 
     return this.httpClientService
       .get(apiUrl)
@@ -198,12 +207,15 @@ export class PointsService {
   }
 
   // returns a batch of points based on a list of IDs peviously returned to the client
-  GetPage(pointIDs: ID[]): Observable<PointSelectionResult> {
+  GetPage(
+    constituencyID: number,
+    pointIDs: ID[]
+  ): Observable<PointSelectionResult> {
     if (!pointIDs || pointIDs.length === 0) {
       console.log('No points to select');
       return of(new PointSelectionResult());
     } else {
-      const apiUrl = 'points/getPage';
+      const apiUrl = `points/getPage/${constituencyID}`;
 
       // ToDo Removed 03/01/2021 const ids not used???
       // https://stackoverflow.com/questions/16553561/passing-list-of-keyvaluepair-or-idictionary-to-web-api-controller-from-javascrip
@@ -294,9 +306,9 @@ export class PointsService {
       .pipe(map(result => result));
   }
 
-  PointDelete(pointID: number): Observable<boolean> {
+  PointDelete(pointID: number, constituencyID: number): Observable<boolean> {
     return this.httpClientService
-      .get('points/pointDelete/' + pointID)
+      .get(`points/pointDelete/${pointID}/${constituencyID}`)
       .pipe(map(result => result as boolean));
   }
 
@@ -330,17 +342,6 @@ export class PointsService {
     }
 
     apiUrl += `/${pointID}/${pointFlagType}`;
-
-    return this.httpClientService
-      .get(apiUrl)
-      .pipe(map(result => result as boolean));
-  }
-
-  PointLocalInterest(
-    pointID: number,
-    localInterest: boolean
-  ): Observable<boolean> {
-    let apiUrl = `points/ConstituencyPoint/${pointID}/${localInterest}`;
 
     return this.httpClientService
       .get(apiUrl)

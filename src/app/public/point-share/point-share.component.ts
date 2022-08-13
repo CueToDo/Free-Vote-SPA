@@ -4,7 +4,8 @@ import {
   Inject,
   OnInit,
   Renderer2,
-  PLATFORM_ID
+  PLATFORM_ID,
+  Input
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
@@ -24,6 +25,8 @@ import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
   styleUrls: ['./point-share.component.css']
 })
 export class PointShareComponent implements OnInit {
+  @Input() constituencyID = 0;
+
   point = new Point();
 
   // bind to point slashtags (not topic)
@@ -65,33 +68,35 @@ export class PointShareComponent implements OnInit {
   public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
     this.alreadyFetchingPointFromDB = true;
 
-    this.pointsService.GetSpecificPoint(slashTag, pointTitle).subscribe({
-      next: psr => {
-        const point = psr.points[0];
-        this.point = point;
+    this.pointsService
+      .GetSpecificPoint(this.constituencyID, slashTag, pointTitle)
+      .subscribe({
+        next: psr => {
+          const point = psr.points[0];
+          this.point = point;
 
-        this.extractMediaEmbeds();
-        this.DisplayShareLinks();
+          this.extractMediaEmbeds();
+          this.DisplayShareLinks();
 
-        // SSR Initial page render
-        const preview = {
-          pagePath: this.router.url,
-          title: point.pointTitle,
-          description: point.preview,
-          image: point.previewImage
-        } as PagePreviewMetaData;
+          // SSR Initial page render
+          const preview = {
+            pagePath: this.router.url,
+            title: point.pointTitle,
+            description: point.preview,
+            image: point.previewImage
+          } as PagePreviewMetaData;
 
-        // Notify app.component to set meta data for SEO & Social scraping
-        this.appData.SSRInitialMetaData$.next(preview);
+          // Notify app.component to set meta data for SEO & Social scraping
+          this.appData.SSRInitialMetaData$.next(preview);
 
-        // Finally link back to all points for tag
-        this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
-      },
-      error: err => {
-        this.error = err.error.detail;
-      },
-      complete: () => (this.alreadyFetchingPointFromDB = false)
-    });
+          // Finally link back to all points for tag
+          this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
+        },
+        error: err => {
+          this.error = err.error.detail;
+        },
+        complete: () => (this.alreadyFetchingPointFromDB = false)
+      });
   }
 
   DisplayShareLinks(): void {

@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // rxjs
@@ -24,6 +24,8 @@ import { PointsService } from 'src/app/services/points.service';
   styleUrls: ['./porq-details.component.css']
 })
 export class PorqDetailsComponent implements OnInit {
+  @Input() constituencyID = 0;
+
   organisationName = '';
   groupName = '';
   issueTitle = '';
@@ -87,7 +89,7 @@ export class PorqDetailsComponent implements OnInit {
   }
 
   getPoints(): void {
-    this.pointsService.PorQPoints(this.porQID).subscribe({
+    this.pointsService.PorQPoints(this.constituencyID, this.porQID).subscribe({
       next: (psr: PointSelectionResult) => {
         this.pointCount = psr.pointCount;
         this.points = psr.points;
@@ -118,7 +120,10 @@ export class PorqDetailsComponent implements OnInit {
           // point attached, now fetch all points for PorQ
           concatMap(_ => {
             if (this.porQ?.porQID) {
-              return this.pointsService.PorQPoints(this.porQ.porQID);
+              return this.pointsService.PorQPoints(
+                this.constituencyID,
+                this.porQ.porQID
+              );
             } else {
               const psr = new PointSelectionResult();
               return of(psr);
