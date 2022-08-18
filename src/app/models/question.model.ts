@@ -1,4 +1,7 @@
 import { ID } from './common';
+
+// Models, enums
+import { Tag } from './tag.model';
 import { PointSupportLevels } from './enums';
 
 export class QuestionEdit {
@@ -6,7 +9,7 @@ export class QuestionEdit {
   question = '';
   details = '';
   draft = false;
-  slashTags: string[] = [];
+  tags: Tag[] = [];
 }
 
 export class Question {
@@ -15,7 +18,7 @@ export class Question {
   slug = '';
   points = 0;
   draft = false;
-  slashTags: string[] = [];
+  tags: Tag[] = [];
   questionID = 0;
   rowNumber = 0;
 

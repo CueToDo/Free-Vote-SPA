@@ -10,7 +10,7 @@ import { ByOn } from '../../models/ByOn.model';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { AppDataService } from './../../services/app-data.service';
+import { AppDataService } from '../../services/app-data.service';
 import { TagsService } from '../../services/tags.service';
 
 @Component({

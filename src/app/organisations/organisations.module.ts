@@ -14,11 +14,12 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 
 // FreeVote Modules
+import { BaseModule } from '../base/base.module';
 import { CustomModule } from 'src/app/custommodule/custom.module';
 import { IssuesModule } from 'src/app/issues/issues.module';
 import { PublicModule } from 'src/app/public/public.module';
 
-// Components not declared here
+// Components not declared here - required in routes
 import { TagsAndPointsComponent } from 'src/app/public/tags-and-points/tags-and-points.component';
 import { IssueDetailsComponent } from 'src/app/issues/issue-details/issue-details.component';
 import { PorqDetailsComponent } from 'src/app/issues/porq-details/porq-details.component';
@@ -68,6 +69,7 @@ const routes: Routes = [
     MatSelectModule,
 
     // FreeVote
+    BaseModule,
     CustomModule,
     IssuesModule,
     PublicModule

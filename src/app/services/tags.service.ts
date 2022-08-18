@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 // rxjs
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
 // Models
 import { TagCloudTypes } from '../models/enums';
@@ -13,6 +13,7 @@ import { ByOn } from '../models/ByOn.model';
 // Services
 import { LocalDataService } from './local-data.service';
 import { HttpService } from './http.service';
+import { tag } from '../models/common';
 
 @Injectable({ providedIn: 'root' })
 export class TagsService {
@@ -70,6 +71,9 @@ export class TagsService {
     let WebAPIUrl = '';
 
     switch (type) {
+      case TagCloudTypes.Local:
+        WebAPIUrl = 'tags/cloud/local';
+        break;
       case TagCloudTypes.Recent:
         WebAPIUrl = 'tags/cloud/recent';
         break;
@@ -79,6 +83,30 @@ export class TagsService {
     }
 
     return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
+  }
+
+  PointTags(pointID: number, constituencyID: number): Observable<Tag[]> {
+    const WebAPIUrl = `tags/point/${pointID}/${constituencyID}`;
+    return this.httpService.get(WebAPIUrl).pipe(
+      tap(data => console.log(data)),
+      map(data => data as Tag[])
+    );
+  }
+
+  PointTagsSave(
+    pointID: number,
+    constituencyID: number,
+    slashTags: string[]
+  ): Observable<boolean> {
+    const WebAPIUrl = `tags/pointTagsSave/${pointID}/${constituencyID}`;
+
+    // construct the postdata - why can't it be an array of string?
+    var tags: tag[] = [];
+    slashTags.forEach(function (slashTag) {
+      tags.push({ slashTag: slashTag });
+    });
+
+    return this.httpService.post(WebAPIUrl, tags);
   }
 
   ByAliases(dateFrom: string, dateTo: string): Observable<ByOn[]> {

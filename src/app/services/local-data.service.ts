@@ -109,8 +109,8 @@ export class LocalDataService {
     this.GotFreeVoteJwt$.next(false);
   }
 
-  public get ConstituencyID() {
-    return this.freeVoteProfile.constituencyID;
+  public ConstituencyID(): number {
+    return +this.freeVoteProfile.constituencyID;
   }
 
   private localLogging = '';

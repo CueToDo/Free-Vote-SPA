@@ -1,7 +1,7 @@
 <div fxLayout="row wrap">
-  <div *ngFor="let topic of Topics" class="topic">
-    {{topic}}
-    <mat-icon (click)="remove(topic)">cancel</mat-icon>
+  <div *ngFor="let tag of Tags" class="topic">
+    {{tag.slashTag}}
+    <mat-icon (click)="remove(tag.slashTag)">cancel</mat-icon>
   </div>
 </div>
 

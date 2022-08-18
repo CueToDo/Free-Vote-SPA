@@ -28,11 +28,11 @@ import { InterceptorService } from './services/interceptor.service';
 // import { FBTestComponent } from './fbtest/fbtest.component';
 
 // Modules
-import { LocalModule } from './local/local.module';
-import { CustomModule } from './custommodule/custom.module';
-import { IssuesModule } from './issues/issues.module';
-import { OrganisationsModule } from './organisations/organisations.module';
-import { PublicModule } from './public/public.module';
+import { LocalModule } from 'src/app/local/local.module';
+import { CustomModule } from 'src/app/custommodule/custom.module';
+import { IssuesModule } from 'src/app/issues/issues.module';
+import { OrganisationsModule } from 'src/app/organisations/organisations.module';
+import { PublicModule } from 'src/app/public/public.module';
 
 // Global Singleton Services imported from Services Module
 // https://angular.io/guide/singleton-services

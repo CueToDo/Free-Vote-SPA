@@ -22,38 +22,35 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CallbackComponent } from './callback/callback.component';
 
 // FreeVote Modules
+import { BaseModule } from '../base/base.module';
 import { CustomModule } from '../custommodule/custom.module';
 import { BreakOutGroupsModule } from '../breakoutgroups/break-out-groups.module';
+import { LocalModule } from '../local/local.module';
 
-// FreeVote Components
-import { HomeComponent } from './home/home.component';
+// FreeVote Components Declared here
 import { CardComponent } from './card/card.component';
-import { TakeActionComponent } from './take-action/take-action.component';
-import { PointComponent } from './point/point.component';
-import { PointEditComponent } from './point-edit/point-edit.component';
-import { TopicEditComponent } from './topic-edit/topic-edit.component';
-import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
-import { PointsFilterComponent } from './points-filter/points-filter.component';
-import { ByComponent } from './by/by.component';
+import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
+import { HomeComponent } from './home/home.component';
+import { NavBurgerComponent } from './nav-burger/nav-burger.component';
 import { NavItemsComponent } from './nav-items/nav-items.component';
 import { NavMainComponent } from './nav-main/nav-main.component';
-import { NavBurgerComponent } from './nav-burger/nav-burger.component';
-import { TagsComponent } from './tags/tags.component';
-import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
-import { ListComponent } from './list/list.component';
-import { PointsListComponent } from './points-list/points-list.component';
-import { QuestionsListComponent } from './questions-list/questions-list.component';
-import { QuestionEditComponent } from './question-edit/question-edit.component';
-import { QuestionComponent } from './question/question.component';
-import { QuestionAnswersComponent } from './question-answers/question-answers.component';
-import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
+import { PointComponent } from './point/point.component';
+import { PointEditComponent } from './point-edit/point-edit.component';
+import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
+import { PointsFilterComponent } from './points-filter/points-filter.component';
 import { PointShareComponent } from './point-share/point-share.component';
+import { PointsListComponent } from './points-list/points-list.component';
+import { QuestionComponent } from './question/question.component';
+import { QuestionEditComponent } from './question-edit/question-edit.component';
+import { QuestionsListComponent } from './questions-list/questions-list.component';
+import { QuestionAnswersComponent } from './question-answers/question-answers.component';
+import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
 import { TagSearchComponent } from './tag-search/tag-search.component';
+import { TakeActionComponent } from './take-action/take-action.component';
 import { WebsitePreviewComponent } from './website-preview/website-preview.component';
 
 @NgModule({
   imports: [
-    BreakOutGroupsModule,
     ClipboardModule,
     CommonModule,
     FlexLayoutModule,
@@ -71,15 +68,16 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     MatTabsModule,
     MatTooltipModule,
     // FreeVote
-    CustomModule
+    BaseModule,
+    BreakOutGroupsModule,
+    CustomModule,
+    LocalModule
   ],
   declarations: [
-    ByComponent,
     CallbackComponent,
     CardComponent,
     CkeUniversalComponent,
     HomeComponent,
-    ListComponent,
     NavBurgerComponent,
     NavItemsComponent,
     NavMainComponent,
@@ -94,16 +92,12 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     QuestionEditComponent,
     QuestionsListComponent,
     TagsAndPointsComponent,
-    TagsComponent,
     TagSearchComponent,
     TakeActionComponent,
-    TopicEditComponent,
     WebsitePreviewComponent
   ],
   exports: [
-    ByComponent,
     CkeUniversalComponent,
-    ListComponent,
     NavItemsComponent,
     NavMainComponent,
     NavBurgerComponent,

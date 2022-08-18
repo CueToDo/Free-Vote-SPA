@@ -12,7 +12,8 @@ import { PointTypesEnum, MyPointFilter } from 'src/app/models/enums';
 import {
   PointSelectionResult,
   Point,
-  PointEdit
+  PointEdit,
+  PointEditFormData
 } from 'src/app/models/point.model';
 import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 import {
@@ -250,7 +251,7 @@ export class PointsService {
       PSR.pointIDs = this.appData.CastObjectToIDs(sourceData.pointIDs);
       PSR.points = sourceData.points;
     }
-
+    console.log('PSR', PSR);
     return PSR;
   }
 
@@ -263,22 +264,22 @@ export class PointsService {
     // construct a new PointEdit (all that's needed)
 
     const postData = {
-      constituencyID: point.constituencyID,
-      pointID: point.pointID,
-      questionID: point.questionID,
-      pointTitle: point.pointTitle, // pointSlug constructed in API
-      pointHTML: point.pointHTML,
+      ConstituencyID: point.constituencyID,
+      PointID: point.pointID,
+      QuestionID: point.questionID,
+      PointTitle: point.pointTitle, // pointSlug constructed in API
+      PointHTML: point.pointHTML,
       csvImageIDs: point.csvImageIDs,
-      pointTypeID: point.pointTypeID,
+      PointTypeID: point.pointTypeID,
       isAnswer,
       isPorQPoint, // not a point property
-      linkText: point.linkText,
-      linkAddress: point.linkAddress,
-      youTubeID: point.youTubeID,
-      soundCloudTrackID: point.soundCloudTrackID,
-      slashTags: point.slashTags,
-      draft: point.draft
-    } as PointEdit;
+      LinkText: point.linkText,
+      LinkAddress: point.linkAddress,
+      YouTubeID: point.youTubeID,
+      SoundCloudTrackID: point.soundCloudTrackID,
+      Tags: point.tags.map(tag => tag.slashTag),
+      Draft: point.draft
+    } as PointEditFormData;
 
     return this.httpClientService
       .post('points/pointUpdate', postData)

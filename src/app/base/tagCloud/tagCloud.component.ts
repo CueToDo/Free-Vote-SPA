@@ -7,19 +7,19 @@ import { Subscription } from 'rxjs';
 
 // Models
 import { Tag } from '../../models/tag.model';
-import { TagCloudTypes } from './../../models/enums';
+import { TagCloudTypes } from '../../models/enums';
 
 // Services
 import { AppDataService } from '../../services/app-data.service';
 import { TagsService } from '../../services/tags.service';
 
 @Component({
-  selector: 'app-tags',
-  templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.css'],
+  selector: 'app-tag-cloud',
+  templateUrl: './tagCloud.component.html',
+  styleUrls: ['./tagCloud.component.css'],
   preserveWhitespaces: true
 })
-export class TagsComponent implements OnInit, OnDestroy {
+export class TagCloudComponent implements OnInit, OnDestroy {
   @Input() tagCloudType = TagCloudTypes.Trending;
 
   @Output() haveTags = new EventEmitter<boolean>();

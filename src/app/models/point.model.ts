@@ -1,4 +1,7 @@
 import { ID } from './common';
+
+// Models, enums
+import { Tag } from './tag.model';
 import { PointSupportLevels, PointTypesEnum } from './enums';
 
 export class PointEdit {
@@ -17,8 +20,22 @@ export class PointEdit {
 
   youTubeID = '';
   soundCloudTrackID = '';
-  slashTags: string[] = [];
+  tags: Tag[] = [];
   draft = false;
+}
+
+export class PointEditFormData {
+  PointID = -1;
+  ConstituencyID = -1;
+  QuestionID = 0;
+  PointTitle = '';
+  PointHTML = '';
+  csvImageIDs = '';
+  isAnswer = false;
+  isPorQPoint = false;
+  PointTypeID = PointTypesEnum.Opinion;
+  Draft = false;
+  Tags: string[] = [];
 }
 
 // Always use camelCase properties
@@ -90,7 +107,7 @@ export class Point {
   dateTimeUpdated = ''; // How many times am I going to attempt to make this a Date to use DateTime Pipe
   youTubeID = '';
   soundCloudTrackID = '';
-  slashTags: string[] = [];
+  tags: Tag[] = [];
 
   // Manually added link info
   linkText = '';

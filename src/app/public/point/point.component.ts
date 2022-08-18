@@ -1,3 +1,4 @@
+import { LocalTagsComponent } from './../../local/local-tags/local-tags.component';
 // Angular
 import {
   Component,
@@ -9,12 +10,16 @@ import {
   ElementRef
 } from '@angular/core';
 
+// Material
+import { MatDialog } from '@angular/material/dialog';
+
 // rxjs
 import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 
 // Models & enums
 import { Point, PointFeedback } from 'src/app/models/point.model';
+import { Tag } from 'src/app/models/tag.model';
 import {
   PointSupportLevels,
   PointFlags,
@@ -22,9 +27,10 @@ import {
 } from 'src/app/models/enums';
 
 // Services
+import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
-import { LocalDataService } from 'src/app/services/local-data.service';
+import { TagsService } from 'src/app/services/tags.service';
 
 @Component({
   selector: 'app-point',
@@ -47,7 +53,7 @@ export class PointComponent implements OnInit {
   @Output() RemovePointFromAnswers = new EventEmitter();
 
   // bind to point slashtags (not topic)
-  slashTags: string[] = []; // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
+  tags: Tag[] = [];
   youTubeIDs: string[] = [];
   vimeoIDs: string[] = [];
   soundCloudTrackIDs: string[] = [];
@@ -81,7 +87,9 @@ export class PointComponent implements OnInit {
   constructor(
     public localData: LocalDataService, // public - used in template
     private lookupsService: LookupsService,
-    private pointsService: PointsService
+    private pointsService: PointsService,
+    private tagsService: TagsService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -107,9 +115,9 @@ export class PointComponent implements OnInit {
     if (!this.point) {
       this.error = 'Missing: point';
     } else {
-      this.slashTags = this.point.slashTags.filter(
+      this.tags = this.point.tags.filter(
         tag =>
-          tag.toLowerCase() !==
+          tag.slashTag.toLowerCase() !==
           this.localData.PreviousSlashTagSelected.toLowerCase()
       );
     }
@@ -245,7 +253,7 @@ export class PointComponent implements OnInit {
 
   RemoveFromAnswers(pointID: number): void {
     let confirmRemove = true;
-    if (!this.point.slashTags || this.point.slashTags.length === 0) {
+    if (!this.point.tags || this.point.tags.length === 0) {
       confirmRemove = confirm(
         'As this answer is not tagged, removing this answer from the question is the same as delete. \n\nAre you sure you wish to delete this answer?'
       );
@@ -381,7 +389,23 @@ export class PointComponent implements OnInit {
     }
   }
 
-  addTags(): void {}
+  addLocalTags(): void {
+    const dialogRef = this.dialog.open(LocalTagsComponent, {
+      width: '480px',
+      data: { pointID: this.point.pointID }
+    });
+
+    dialogRef.afterClosed().subscribe((tags: Tag[]) => {
+      var slashTags = tags.map(tag => tag.slashTag);
+      this.tagsService
+        .PointTagsSave(
+          this.point.pointID,
+          this.localData.ConstituencyID,
+          slashTags
+        )
+        .subscribe(); // To do confirmation
+    });
+  }
 
   onCancelEdit(): void {
     this.editing = false;

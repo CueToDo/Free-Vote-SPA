@@ -30,7 +30,7 @@ import { TagsService } from 'src/app/services/tags.service';
 
 // Components
 import { PointsFilterComponent } from 'src/app/public/points-filter/points-filter.component';
-import { TagsComponent } from 'src/app/public/tags/tags.component';
+import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
 import { TagSearchComponent } from './../tag-search/tag-search.component';
 import { QuestionsListComponent } from 'src/app/public/questions-list/questions-list.component';
 import { QuestionAnswersComponent } from './../question-answers/question-answers.component';
@@ -141,7 +141,7 @@ export class TagsAndPointsComponent
   @ViewChild('pointsFilter') pointsFilterComponent!: PointsFilterComponent;
 
   // Tags (0-1-2)
-  @ViewChild('tagsRecent') tagsRecentComponent!: TagsComponent;
+  @ViewChild('tagsRecent') tagsRecentComponent!: TagCloudComponent;
   @ViewChild('tagSearch') tagSearchComponent!: TagSearchComponent;
 
   // BOG (5-6)

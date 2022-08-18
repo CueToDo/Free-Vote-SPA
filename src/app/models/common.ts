@@ -4,3 +4,7 @@ export class ID {
   rowNumber = 0;
   id = 0;
 }
+
+export class tag {
+  slashTag = '';
+}

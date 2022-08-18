@@ -1,12 +1,16 @@
+// Angular
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
+// Models
+import { Tag } from 'src/app/models/tag.model';
+
 @Component({
-  selector: 'app-topic-edit',
-  templateUrl: './topic-edit.component.html',
-  styleUrls: ['./topic-edit.component.css']
+  selector: 'app-tags-edit',
+  templateUrl: './tags-edit.component.html',
+  styleUrls: ['./tags-edit.component.css']
 })
-export class TopicEditComponent {
+export class TagsEditComponent {
   addOnBlur = true;
   newTopic = '';
   illegalTags = [
@@ -36,8 +40,8 @@ export class TopicEditComponent {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   // 2 way bound in point-edit component
-  @Input() Topics: string[] = [];
-  @Output() TopicsChange = new EventEmitter<string[]>();
+  @Input() Tags: Tag[] = [];
+  @Output() TagsChange = new EventEmitter<Tag[]>();
 
   constructor() {}
 
@@ -47,7 +51,7 @@ export class TopicEditComponent {
     if (!this.error) {
       const newTopic = this.newTopic.trim();
       if (!!newTopic && newTopic !== '/') {
-        this.Topics.push(newTopic);
+        this.Tags.push(new Tag(newTopic));
       }
       // Reset the input value
       this.newTopic = '';
@@ -55,10 +59,11 @@ export class TopicEditComponent {
   }
 
   remove(topic: string): void {
-    const index = this.Topics.indexOf(topic);
+    // get slashtag only using map to find index of tag in array
+    const index = this.Tags.map(tag => tag.slashTag).indexOf(topic);
 
     if (index >= 0) {
-      this.Topics.splice(index, 1);
+      this.Tags.splice(index, 1);
     }
   }
 

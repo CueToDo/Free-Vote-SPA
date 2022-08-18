@@ -31,6 +31,7 @@ import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
 import { HttpService } from 'src/app/services/http.service';
 import { TagsService } from 'src/app/services/tags.service';
+import { Tag } from 'src/app/models/tag.model';
 
 @Component({
   selector: 'app-point-edit',
@@ -252,7 +253,7 @@ export class PointEditComponent implements OnInit {
       if (
         !this.isMyAnswer &&
         !this.isPorQPoint &&
-        (!this.pointClone.slashTags || this.pointClone.slashTags.length === 0)
+        (!this.pointClone.tags || this.pointClone.tags.length === 0)
       ) {
         this.error = 'Points must have at least one slash tag';
       } else if (
@@ -270,7 +271,6 @@ export class PointEditComponent implements OnInit {
           'Point title and text OR url OR image OR media link must be provided';
       } else {
         this.saving = true;
-
         const isNew = !this.pointClone.pointID || this.pointClone.pointID < 1;
 
         // Point may be an answer
@@ -281,8 +281,12 @@ export class PointEditComponent implements OnInit {
         let returnToSlashTag = this.localData.PreviousSlashTagSelected;
         let tagChange = false;
 
-        if (!this.pointClone.slashTags.includes(returnToSlashTag)) {
-          returnToSlashTag = this.pointClone.slashTags[0];
+        let returnToTag = this.pointClone.tags.find(
+          tag => tag.slashTag == returnToSlashTag
+        );
+
+        if (!returnToTag) {
+          returnToSlashTag = this.pointClone.tags[0].slashTag;
           tagChange = true;
         }
 
@@ -376,9 +380,9 @@ export class PointEditComponent implements OnInit {
     this.ckeFudge.clearData(); // Must explicitly clear previous data
 
     if (!!slashTag) {
-      this.pointClone.slashTags = [slashTag];
+      this.pointClone.tags = [new Tag(slashTag)];
     } else {
-      this.pointClone.slashTags = [];
+      this.pointClone.tags = [];
     }
 
     this.error = '';

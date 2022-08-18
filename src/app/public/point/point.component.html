@@ -89,7 +89,7 @@
 
     <div [ngClass.xs]="'textXSmall'" [ngClass.sm]="'textSmall'" [ngClass.gt-sm]="'textMedium'" class="py-2">
       <span>
-        <a *ngFor="let slashTag of slashTags" class="slashTag" [routerLink]="slashTag">{{ slashTag }}</a>
+        <a *ngFor="let tag of tags" class="slashTag" [routerLink]="tag.slashTag">{{ tag.slashTag }}</a>
       </span>
     </div>
 
@@ -340,12 +340,7 @@
             important
           </button>
 
-          <button mat-menu-item (click)="addTags()">
-            <mat-icon matTooltip="add additional point tags">bookmark_border</mat-icon>
-            add new tag(s)
-          </button>
-
-          <button mat-menu-item [ngClass]="{selected:point.localInterest}">
+          <button mat-menu-item [ngClass]="{selected:point.localInterest}" (click)="addLocalTags()">
             <mat-icon matTooltip="make point local interest">mp</mat-icon>
             local interest
           </button>

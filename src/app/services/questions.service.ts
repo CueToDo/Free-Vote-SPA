@@ -111,7 +111,7 @@ export class QuestionsService {
       question: questionEdit.question,
       details: questionEdit.details,
       draft: questionEdit.draft,
-      slashTags: questionEdit.slashTags
+      tags: questionEdit.tags
     } as QuestionEdit;
 
     return this.httpClientService.post(apiUrl, postData);

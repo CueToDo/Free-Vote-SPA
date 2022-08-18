@@ -167,8 +167,8 @@
         'centerStage': tabIndex===0, 
         'stageLeft': tabIndex>0}" fxFill>
         <div class="content">
-          <app-tags [tagCloudType]="TagCloudTypes.Trending" (NewSlashTagSelected)="NewSlashTagSelected($event)">
-          </app-tags>
+          <app-tag-cloud [tagCloudType]="TagCloudTypes.Trending" (NewSlashTagSelected)="NewSlashTagSelected($event)">
+          </app-tag-cloud>
         </div>
       </div>
     </div>
@@ -180,8 +180,8 @@
         'stageLeft': tabIndex>1,
         'stageRight': tabIndex<1}" fxFill>
         <div class="content">
-          <app-tags [tagCloudType]="TagCloudTypes.Recent" #tagsRecent
-            (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tags>
+          <app-tag-cloud [tagCloudType]="TagCloudTypes.Recent" #tagsRecent
+            (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tag-cloud>
         </div>
       </div>
     </div>

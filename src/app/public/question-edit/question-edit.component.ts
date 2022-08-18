@@ -12,6 +12,7 @@ import {
 import { cloneDeep } from 'lodash-es';
 
 // Models, enums
+import { Tag } from 'src/app/models/tag.model';
 import { Question, QuestionEdit } from 'src/app/models/question.model';
 
 // Services
@@ -54,7 +55,7 @@ export class QuestionEditComponent implements OnInit {
     // Clear old Values when edit complete
     this.questionEdit = new QuestionEdit();
     this.ClearQuestion();
-    this.questionEdit.slashTags = [slashTag];
+    this.questionEdit.tags = [new Tag(slashTag)];
   }
 
   ClearQuestion(): void {
@@ -96,7 +97,7 @@ export class QuestionEditComponent implements OnInit {
         // Communicate change to sibling PointsComponent
         // where Points ReSelection Takes place:
         if (isNew) {
-          this.tagsService.SetSlashTag(this.questionEdit.slashTags[0]);
+          this.tagsService.SetSlashTag(this.questionEdit.tags[0].slashTag);
         }
       }
     });
