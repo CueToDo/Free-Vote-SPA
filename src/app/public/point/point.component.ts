@@ -400,7 +400,7 @@ export class PointComponent implements OnInit {
       this.tagsService
         .PointTagsSave(
           this.point.pointID,
-          this.localData.ConstituencyID,
+          this.localData.ConstituencyID(),
           slashTags
         )
         .subscribe(); // To do confirmation
