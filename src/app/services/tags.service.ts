@@ -13,7 +13,7 @@ import { ByOn } from '../models/ByOn.model';
 // Services
 import { LocalDataService } from './local-data.service';
 import { HttpService } from './http.service';
-import { tag } from '../models/common';
+import { slashTag } from '../models/common';
 
 @Injectable({ providedIn: 'root' })
 export class TagsService {
@@ -96,17 +96,18 @@ export class TagsService {
   PointTagsSave(
     pointID: number,
     constituencyID: number,
-    slashTags: string[]
+    tags: Tag[]
   ): Observable<boolean> {
     const WebAPIUrl = `tags/pointTagsSave/${pointID}/${constituencyID}`;
 
     // construct the postdata - why can't it be an array of string?
-    var tags: tag[] = [];
-    slashTags.forEach(function (slashTag) {
-      tags.push({ slashTag: slashTag });
+    var slashTags: slashTag[] = [];
+    tags.forEach(function (tag) {
+      if (constituencyID <= 0 || tag.myConTag)
+        slashTags.push({ slashTag: tag.slashTag });
     });
 
-    return this.httpService.post(WebAPIUrl, tags);
+    return this.httpService.post(WebAPIUrl, slashTags);
   }
 
   ByAliases(dateFrom: string, dateTo: string): Observable<ByOn[]> {

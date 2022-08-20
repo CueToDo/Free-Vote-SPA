@@ -4,10 +4,13 @@ export class Tag {
   tagWeight = 0;
   embedded = false;
   unseenPoints = 0;
-  constituencyTag = false;
-  myTag = false;
+  pointOwnerTag = false;
+  myConTag = false;
+  otherVoterConTag = false;
+  newTag = false;
 
   constructor(slashTag: string) {
     this.slashTag = slashTag;
+    this.newTag = true;
   }
 }

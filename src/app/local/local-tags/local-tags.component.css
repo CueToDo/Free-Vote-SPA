@@ -1,0 +1,32 @@
+.topic {
+  padding: 4px 8px;
+  font-size: 0.9em;
+  font-weight: normal;
+  border-radius: 14px;
+  display: inline-block;
+  white-space: nowrap; /* Keep icon on sme line as text on small screens */
+  margin-left: 10px;
+}
+
+.pointAuthor {
+  background-color: #ffd700;
+}
+.other {
+  background-color: aqua;
+}
+.me {
+  background-color: greenyellow;
+}
+
+mat-icon {
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.help {
+  margin-top: 25px;
+}
+
+td {
+  padding-left: 10px;
+}

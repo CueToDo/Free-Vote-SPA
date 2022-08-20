@@ -18,6 +18,8 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 })
 export class LocalTagsComponent implements OnInit {
   public Tags: Tag[] = [];
+  fetchingTags = false;
+  showHelp = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { pointID: number },
@@ -30,10 +32,12 @@ export class LocalTagsComponent implements OnInit {
   }
 
   GetPointTags(): void {
+    this.fetchingTags = true;
     this.tagsService
       .PointTags(this.data.pointID, this.localData.ConstituencyID())
       .subscribe(tags => {
         this.Tags = tags;
+        this.fetchingTags = false;
       });
   }
 }

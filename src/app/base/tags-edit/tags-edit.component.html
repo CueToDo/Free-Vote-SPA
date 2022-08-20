@@ -1,13 +1,15 @@
 <div fxLayout="row wrap">
-  <div *ngFor="let tag of Tags" class="topic">
+  <div *ngFor="let tag of Tags" class="topic"
+    [ngClass]="{'myConTag':tag.myConTag, 'conTag':tag.otherVoterConTag && !tag.myConTag, 'pointOwnerTag':tag.pointOwnerTag}">
     {{tag.slashTag}}
-    <mat-icon (click)="remove(tag.slashTag)">cancel</mat-icon>
+    <mat-icon *ngIf="IsMyPointEdit || tag.myConTag" (click)="addRemoveTag(tag.slashTag, false)">remove_circle</mat-icon>
+    <mat-icon *ngIf="!IsMyPointEdit && !tag.myConTag" (click)="addRemoveTag(tag.slashTag, true)">add_circle</mat-icon>
   </div>
 </div>
 
 <div>
   <input fxFlex placeholder="type new slash tag and press enter" (keydown.shift.enter)="$event.preventDefault()"
-    (keyup)="check()" (keydown.enter)="$event.preventDefault()" (keyup.enter)="add()" (blur)="add()"
+    (keyup)="check()" (keydown.enter)="$event.preventDefault()" (keyup.enter)="addNewTag()" (blur)="addNewTag()"
     [(ngModel)]="newTopic">
 </div>
 

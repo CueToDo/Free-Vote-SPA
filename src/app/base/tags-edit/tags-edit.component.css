@@ -2,7 +2,6 @@
   padding: 4px 8px;
   font-size: 0.9em;
   font-weight: normal;
-  background-color: #ffd700;
   border-radius: 14px;
   display: inline-block;
   white-space: nowrap; /* Keep icon on sme line as text on small screens */
@@ -10,6 +9,16 @@
 
 .topic + .topic {
   margin-left: 10px;
+}
+
+.pointOwnerTag {
+  background-color: #ffd700;
+}
+.conTag {
+  background-color: aqua;
+}
+.myConTag {
+  background-color: greenyellow;
 }
 
 mat-icon {

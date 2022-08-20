@@ -340,7 +340,7 @@ export class PointComponent implements OnInit {
     } else {
       if (confirm('Are you sure you wish to delete this point?')) {
         this.pointsService
-          .PointDelete(this.constituencyID, this.point.pointID)
+          .PointDelete(this.point.pointID, this.constituencyID)
           .subscribe({
             next: _ => {
               if (this.point) {
@@ -396,12 +396,11 @@ export class PointComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((tags: Tag[]) => {
-      var slashTags = tags.map(tag => tag.slashTag);
       this.tagsService
         .PointTagsSave(
           this.point.pointID,
           this.localData.ConstituencyID(),
-          slashTags
+          tags
         )
         .subscribe(); // To do confirmation
     });

@@ -1,6 +1,7 @@
 // Angular
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 // Material
@@ -47,6 +48,7 @@ const routes: Routes = [
   imports: [
     // Angular
     CommonModule,
+    FlexLayoutModule,
     RouterModule.forChild(routes),
     // Material
     MatButtonModule,

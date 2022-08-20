@@ -43,26 +43,41 @@ export class TagsEditComponent {
   @Input() Tags: Tag[] = [];
   @Output() TagsChange = new EventEmitter<Tag[]>();
 
+  @Input() IsMyPointEdit = false;
+
   constructor() {}
 
-  add(): void {
+  addNewTag(): void {
     this.check();
 
     if (!this.error) {
       const newTopic = this.newTopic.trim();
       if (!!newTopic && newTopic !== '/') {
-        this.Tags.push(new Tag(newTopic));
+        var tag = new Tag(newTopic);
+        tag.pointOwnerTag = this.IsMyPointEdit;
+        tag.myConTag = !this.IsMyPointEdit;
+        tag.otherVoterConTag = false;
+        this.Tags.push(tag);
       }
       // Reset the input value
       this.newTopic = '';
     }
   }
 
-  remove(topic: string): void {
+  addRemoveTag(topic: string, add: boolean): void {
     // get slashtag only using map to find index of tag in array
     const index = this.Tags.map(tag => tag.slashTag).indexOf(topic);
+    var tag = this.Tags[index];
 
-    if (index >= 0) {
+    tag.myConTag = !this.IsMyPointEdit && add; // own or disown the pointTag
+
+    if (
+      !add &&
+      (this.IsMyPointEdit ||
+        (!tag.pointOwnerTag && !tag.otherVoterConTag) ||
+        tag.newTag)
+    ) {
+      // Remove from the list
       this.Tags.splice(index, 1);
     }
   }

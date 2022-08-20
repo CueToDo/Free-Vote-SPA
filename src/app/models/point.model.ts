@@ -35,7 +35,7 @@ export class PointEditFormData {
   isPorQPoint = false;
   PointTypeID = PointTypesEnum.Opinion;
   Draft = false;
-  Tags: string[] = [];
+  SlashTags: string[] = [];
 }
 
 // Always use camelCase properties

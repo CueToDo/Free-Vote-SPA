@@ -5,6 +5,6 @@ export class ID {
   id = 0;
 }
 
-export class tag {
+export class slashTag {
   slashTag = '';
 }
