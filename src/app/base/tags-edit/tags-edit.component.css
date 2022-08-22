@@ -1,14 +1,12 @@
 .topic {
+  margin-right: 10px;
+  margin-top: 10px;
   padding: 4px 8px;
   font-size: 0.9em;
   font-weight: normal;
   border-radius: 14px;
   display: inline-block;
   white-space: nowrap; /* Keep icon on sme line as text on small screens */
-}
-
-.topic + .topic {
-  margin-left: 10px;
 }
 
 .pointOwnerTag {
@@ -19,6 +17,9 @@
 }
 .myConTag {
   background-color: greenyellow;
+}
+.deleteNewTag {
+  background-color: lightgray;
 }
 
 mat-icon {

@@ -73,9 +73,8 @@ export class TagsEditComponent {
 
     if (
       !add &&
-      (this.IsMyPointEdit ||
-        (!tag.pointOwnerTag && !tag.otherVoterConTag) ||
-        tag.newTag)
+      !tag.newTag &&
+      (this.IsMyPointEdit || (!tag.pointOwnerTag && !tag.otherVoterConTag))
     ) {
       // Remove from the list
       this.Tags.splice(index, 1);

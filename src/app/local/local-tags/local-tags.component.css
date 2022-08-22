@@ -17,6 +17,9 @@
 .me {
   background-color: greenyellow;
 }
+.deleteNew {
+  background-color: lightgray;
+}
 
 mat-icon {
   vertical-align: middle;
@@ -27,6 +30,9 @@ mat-icon {
   margin-top: 25px;
 }
 
+tr {
+  height: 46px;
+}
 td {
   padding-left: 10px;
 }
