@@ -1,9 +1,13 @@
 <div fxLayout="row wrap">
-  <div *ngFor="let tag of Tags" class="topic"
-    [ngClass]="{'myConTag':tag.myConTag, 'conTag':tag.otherVoterConTag && !tag.myConTag, 'pointOwnerTag':tag.pointOwnerTag, 'deleteNewTag':tag.newTag && !tag.myConTag}">
+  <div *ngFor="let tag of Tags" class="topic" [ngClass]="{'myConTag':tag.myConTag, 
+    'conTag':tag.otherVoterConTag && !tag.myConTag, 
+    'pointOwnerTag':tag.pointOwnerTag, 
+    'deleteNewTag':!tag.myConTag && !tag.otherVoterConTag && !tag.pointOwnerTag }">
     {{tag.slashTag}}
-    <mat-icon *ngIf="IsMyPointEdit || tag.myConTag" (click)="addRemoveTag(tag.slashTag, false)">remove_circle</mat-icon>
-    <mat-icon *ngIf="!IsMyPointEdit && !tag.myConTag" (click)="addRemoveTag(tag.slashTag, true)">add_circle</mat-icon>
+    <mat-icon *ngIf="IsMyPointEdit && tag.pointOwnerTag || !IsMyPointEdit && tag.myConTag"
+      (click)="addRemoveTag(tag.slashTag, false)">remove_circle</mat-icon>
+    <mat-icon *ngIf="IsMyPointEdit && !tag.pointOwnerTag || !IsMyPointEdit && !tag.myConTag"
+      (click)="addRemoveTag(tag.slashTag, true)">add_circle</mat-icon>
   </div>
 </div>
 

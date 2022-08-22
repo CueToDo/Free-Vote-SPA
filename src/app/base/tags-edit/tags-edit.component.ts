@@ -71,14 +71,15 @@ export class TagsEditComponent {
 
     tag.myConTag = !this.IsMyPointEdit && add; // own or disown the pointTag
 
-    if (
-      !add &&
-      !tag.newTag &&
-      (this.IsMyPointEdit || (!tag.pointOwnerTag && !tag.otherVoterConTag))
-    ) {
-      // Remove from the list
-      this.Tags.splice(index, 1);
+    if (this.IsMyPointEdit) {
+      tag.pointOwnerTag = add;
     }
+
+    // Don't ever remove from the list - always give chance to re-add
+    // if (!add && this.IsMyPointEdit && !tag.newTag) {
+    //   // Remove from the list
+    //   this.Tags.splice(index, 1);
+    // }
   }
 
   check() {
