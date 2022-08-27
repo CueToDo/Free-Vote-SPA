@@ -71,9 +71,6 @@ export class TagsService {
     let WebAPIUrl = '';
 
     switch (type) {
-      case TagCloudTypes.Local:
-        WebAPIUrl = 'tags/cloud/local';
-        break;
       case TagCloudTypes.Recent:
         WebAPIUrl = 'tags/cloud/recent';
         break;
@@ -82,6 +79,11 @@ export class TagsService {
         break;
     }
 
+    return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
+  }
+
+  TagCloudConstituency(constituencyID: number): Observable<Tag[]> {
+    let WebAPIUrl = `tags/cloud/local/${constituencyID}`;
     return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
   }
 

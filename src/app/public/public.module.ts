@@ -9,6 +9,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 // Material
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
@@ -25,7 +26,6 @@ import { CallbackComponent } from './callback/callback.component';
 import { BaseModule } from '../base/base.module';
 import { CustomModule } from '../custommodule/custom.module';
 import { BreakOutGroupsModule } from '../breakoutgroups/break-out-groups.module';
-import { LocalModule } from '../local/local.module';
 
 // FreeVote Components Declared here
 import { CardComponent } from './card/card.component';
@@ -59,6 +59,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     // Material
     MatButtonModule,
     MatCheckboxModule,
+    MatDialogModule,
     MatIconModule,
     MatInputModule,
     MatMenuModule,
@@ -70,8 +71,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     // FreeVote
     BaseModule,
     BreakOutGroupsModule,
-    CustomModule,
-    LocalModule
+    CustomModule
   ],
   declarations: [
     CallbackComponent,

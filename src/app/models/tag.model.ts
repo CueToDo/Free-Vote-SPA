@@ -12,5 +12,6 @@ export class Tag {
   constructor(slashTag: string) {
     this.slashTag = slashTag;
     this.newTag = true;
+    this.pointOwnerTag = true;
   }
 }

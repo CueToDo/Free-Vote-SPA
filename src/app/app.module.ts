@@ -23,15 +23,8 @@ import { environment } from '../environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor.service';
 
-// Facebook
-// import { FacebookModule } from 'ngx-facebook';
-// import { FBTestComponent } from './fbtest/fbtest.component';
-
 // Modules
-import { LocalModule } from 'src/app/local/local.module';
 import { CustomModule } from 'src/app/custommodule/custom.module';
-import { IssuesModule } from 'src/app/issues/issues.module';
-import { OrganisationsModule } from 'src/app/organisations/organisations.module';
 import { PublicModule } from 'src/app/public/public.module';
 
 // Global Singleton Services imported from Services Module
@@ -45,6 +38,8 @@ import { AppComponent } from './app.component';
 // https://indepth.dev/posts/1015/beware-angular-can-steal-your-time
 
 @NgModule({
+  // Do not import feature modules that should be lazy-loaded in your app module,
+  // otherwise they will be eager loaded.
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserTransferStateModule,
@@ -53,8 +48,6 @@ import { AppComponent } from './app.component';
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-
-    // FacebookModule.forRoot(),
 
     // PWA ServcieWorkerModule
     ServiceWorkerModule.register('ngsw-worker.js', {
@@ -68,13 +61,9 @@ import { AppComponent } from './app.component';
     MatButtonModule,
     MatIconModule,
 
-    // FreeVote
+    // FreeVote main modules - not lazy loaded feature modules
     CustomModule,
-    PublicModule,
-    OrganisationsModule,
-    LocalModule,
-
-    IssuesModule
+    PublicModule
   ],
   declarations: [
     AppComponent

@@ -38,11 +38,16 @@ const appRoutes: Routes = [
     canActivate: [LoginRouteGuardService]
   },
 
-  // constituency
+  // Being used even when not included!!!
+
+  // lazy loaded feature modules:
+
+  // local constituency
   {
     path: 'local',
     loadChildren: () => import('./local/local.module').then(m => m.LocalModule)
   },
+
   // organisations, groups
   {
     path: 'organisations',
@@ -52,9 +57,10 @@ const appRoutes: Routes = [
       ),
     canActivate: [LoginRouteGuardService]
   },
+
   // profile
   {
-    path: 'my/:tab',
+    path: 'my',
     loadChildren: () => import('./my/my.module').then(m => m.MyModule),
     canActivate: [LoginRouteGuardService]
   },
@@ -63,12 +69,22 @@ const appRoutes: Routes = [
   { path: 'trending', component: TagsAndPointsComponent }, // TAGS
   { path: 'recent', component: TagsAndPointsComponent }, // TAGS personal - recent selection - works on anon?
   { path: 'search', component: TagsAndPointsComponent }, // Tag Search
-  { path: ':tag', component: TagsAndPointsComponent }, // POINTS: still like the SlashTag
-  { path: ':tag/points', component: TagsAndPointsComponent }, // Return from point share
-  { path: ':tag/questions', component: TagsAndPointsComponent }, // Return from question answers
-  { path: ':tag/:title', component: PointShareComponent },
-  { path: ':tag/question/:questionSlug', component: TagsAndPointsComponent },
-  { path: ':tag/by/:alias', component: TagsAndPointsComponent },
+
+  // Finally :tag routeparameter is last
+  {
+    path: ':tag',
+    component: TagsAndPointsComponent,
+    children: [
+      { path: 'points', component: TagsAndPointsComponent }, // Return from point share
+      { path: 'questions', component: TagsAndPointsComponent }, // Return from question answers
+      { path: 'by/:alias', component: TagsAndPointsComponent },
+      { path: ':title', component: PointShareComponent },
+      {
+        path: ':question/:questionSlug',
+        component: TagsAndPointsComponent
+      }
+    ]
+  },
 
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
   { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )
@@ -78,6 +94,7 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(appRoutes, {
       initialNavigation: 'enabledBlocking'
+      // enableTracing: true // <-- debugging purposes only
     })
   ],
   exports: [RouterModule]

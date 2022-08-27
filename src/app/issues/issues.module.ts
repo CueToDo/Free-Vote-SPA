@@ -1,4 +1,3 @@
-import { FreeVoteProfile } from './../models/FreeVoteProfile';
 // Angular
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

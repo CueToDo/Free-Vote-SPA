@@ -9,6 +9,12 @@
 
     <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex">
 
+      <mat-tab label="issues">
+        <ng-template matTabContent>
+          <app-tag-cloud></app-tag-cloud>
+        </ng-template>
+      </mat-tab>
+
       <mat-tab label="mp">
         <ng-template matTabContent>
           <app-constituency></app-constituency>

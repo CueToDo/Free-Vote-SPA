@@ -23,3 +23,8 @@ div.burger button.selected {
   background-color: #e6e6fa;
   border: solid 1px #6033aa;
 }
+
+.profilePic {
+  width: 30px;
+  margin-right: 6px;
+}

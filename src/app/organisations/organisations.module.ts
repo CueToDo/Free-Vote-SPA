@@ -20,7 +20,6 @@ import { IssuesModule } from 'src/app/issues/issues.module';
 import { PublicModule } from 'src/app/public/public.module';
 
 // Components not declared here - required in routes
-import { TagsAndPointsComponent } from 'src/app/public/tags-and-points/tags-and-points.component';
 import { IssueDetailsComponent } from 'src/app/issues/issue-details/issue-details.component';
 import { PorqDetailsComponent } from 'src/app/issues/porq-details/porq-details.component';
 
@@ -34,31 +33,33 @@ import { OrganisationComponent } from './organisation/organisation.component';
 import { OrganisationListComponent } from './organisation-list/organisation-list.component';
 import { OrganisationsComponent } from './organisations/organisations.component';
 
-const routes: Routes = [
+const orgRoutes: Routes = [
   { path: 'membership', component: OrganisationsComponent },
   { path: 'available', component: OrganisationsComponent },
   { path: 'new', component: OrganisationsComponent },
-  { path: ':organisationName', component: OrganisationComponent },
-  { path: ':organisationName/:groupName', component: GroupComponent },
   {
-    path: ':organisationName/:groupName/:issue',
-    component: IssueDetailsComponent
-  },
-  {
-    path: ':organisationName/:groupName/:issue/:porqId',
-    component: PorqDetailsComponent
-  },
-  // This can't work
-  { path: ':group/:tag', component: TagsAndPointsComponent }
+    path: ':organisationName',
+    component: OrganisationComponent,
+    children: [
+      { path: ':groupName', component: GroupComponent },
+      {
+        path: ':groupName/:issue',
+        component: IssueDetailsComponent
+      },
+      {
+        path: ':groupName/:issue/:porqId',
+        component: PorqDetailsComponent
+      }
+    ]
+  }
 ];
-
 @NgModule({
   imports: [
     // Angular
     CommonModule,
     FlexLayoutModule,
     FormsModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(orgRoutes),
 
     // Material
     MatButtonModule,

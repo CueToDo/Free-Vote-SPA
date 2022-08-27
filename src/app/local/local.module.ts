@@ -29,16 +29,17 @@ import { LocalTagsComponent } from './local-tags/local-tags.component';
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from '../services/login-route-guard.service';
 
-const routes: Routes = [
+const localRoutes: Routes = [
   {
     path: 'voters',
     component: LocalMenuComponent,
-    canActivate: [LoginRouteGuardService]
-  },
-  {
-    path: 'voters/:alias',
-    component: LocalMenuComponent,
-    canActivate: [LoginRouteGuardService]
+    canActivate: [LoginRouteGuardService],
+    children: [
+      {
+        path: ':alias',
+        component: LocalMenuComponent
+      }
+    ]
   },
   { path: ':constituency', component: LocalMenuComponent }
 ];
@@ -49,7 +50,7 @@ const routes: Routes = [
     // Angular
     CommonModule,
     FlexLayoutModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(localRoutes),
     // Material
     MatButtonModule,
     MatDialogModule,

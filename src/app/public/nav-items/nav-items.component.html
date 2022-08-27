@@ -19,6 +19,13 @@
         slash tags
     </button>
 
+    <button mat-button *ngIf="localData.LoggedInToAuth0$ | async" routerLinkActive="active"
+        [class.selected]="navSvc.localMenuSelected" (click)="navSvc.localMenuItemSelected='local'"
+        [routerLink]="'/local/' + constituencyKebab">
+        <mat-icon>mp</mat-icon>
+        local
+    </button>
+
     <button mat-button routerLink="/organisations/membership" routerLinkActive="active"
         [class.selected]="navSvc.localMenuItemSelected==='organisations'"
         (click)="navSvc.localMenuItemSelected='organisations'" matTooltip="groups"
@@ -27,29 +34,43 @@
         groups
     </button>
 
-    <button mat-button *ngIf="localData.LoggedInToAuth0$ | async" routerLinkActive="active"
-        [class.selected]="navSvc.localMenuSelected" (click)="navSvc.localMenuItemSelected='local'"
-        [routerLink]="'local/' + constituencyKebab">
-        <mat-icon>mp</mat-icon>
-        local
+    <!-- Profile/SignOut Menu Trigger -->
+    <button mat-button [matMenuTriggerFor]="profileMenu" *ngIf="localData.LoggedInToAuth0$ | async"
+        [class.selected]="navSvc.localMenuItemSelected==='profile'" matTooltip="profile menu">
+
+        <img *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
+            [src]="localData.auth0Profile.picture" class="rounded-circle img-fluid profilePic">
+
+        <img *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2' && localData.freeVoteProfile.profilePicture"
+            [src]="localData.freeVoteProfile.profilePicture" class="rounded-circle img-fluid profilePic">
+
+        {{ localData.freeVoteProfile.givenName }}
     </button>
 
-    <button mat-button routerLink="/my/profile" routerLinkActive="active" *ngIf="localData.LoggedInToAuth0$ | async"
-        [class.selected]="navSvc.localMenuItemSelected==='profile'" (click)="navSvc.localMenuItemSelected='profile'"
-        matTooltip="profile">
-        <mat-icon>person</mat-icon>
-        profile
-    </button>
+    <!-- Profile/SignOut Menu -->
+    <mat-menu #profileMenu="matMenu">
 
+        <button mat-menu-item routerLink="/my/profile" routerLinkActive="active"
+            [class.selected]="navSvc.localMenuItemSelected==='profile'" (click)="navSvc.localMenuItemSelected='profile'"
+            matTooltip="profile">
+            <mat-icon>person</mat-icon>
+            profile
+        </button>
+
+        <button mat-menu-item (click)="logout()" matTooltip="sign out">
+            <mat-icon>person_outline</mat-icon>
+            sign out
+        </button>
+
+    </mat-menu>
+
+    <!-- Sign In -->
     <button mat-button (click)="authService.login()" *ngIf="(localData.LoggedInToAuth0$ | async) === false"
         matTooltip="sign in">
         <mat-icon>person</mat-icon>
         sign in
     </button>
 
-    <button mat-button (click)="logout()" *ngIf="localData.LoggedInToAuth0$ | async" matTooltip="sign out">
-        <mat-icon>person_outline</mat-icon>
-        sign out
-    </button>
+
 
 </div>

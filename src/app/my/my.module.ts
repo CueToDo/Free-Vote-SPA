@@ -23,13 +23,19 @@ import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-t
 import { CustomModule } from '../custommodule/custom.module';
 import { PublicModule } from '../public/public.module';
 
-const routes: Routes = [{ path: '', component: ProfileComponent }];
+const myRoutes: Routes = [
+  {
+    path: '',
+    component: ProfileComponent
+  },
+  { path: ':tab', component: ProfileComponent }
+];
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(myRoutes),
     FlexLayoutModule,
     // Material
     MatButtonModule,
