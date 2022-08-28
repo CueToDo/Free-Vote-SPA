@@ -52,6 +52,7 @@ export class CkeUniversalComponent implements OnInit {
       shouldNotGroupWhenFull: true
     },
     // htmlEncodeOutput: false
+    // mediaEmbed: { previewsInData: true }, // NO! Keep semantic elements and render appropriately on display
     allowedContent: true
   };
 
@@ -59,7 +60,7 @@ export class CkeUniversalComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: object,
     @Inject(DOCUMENT) private document: Document,
     private renderer2: Renderer2
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -90,18 +91,18 @@ export class CkeUniversalComponent implements OnInit {
 
     script.text = `
     ${(script.onload = async () => {
-        const CKEditor = (window as any).ClassicEditor;
+      const CKEditor = (window as any).ClassicEditor;
 
-        this.ckEditor = await CKEditor.create(
-          document.querySelector('#editor'),
-          this.ckeConfig
-        );
+      this.ckEditor = await CKEditor.create(
+        document.querySelector('#editor'),
+        this.ckeConfig
+      );
 
-        this.ckEditor.model.document.on('change', () => {
-          // this.textToEdit = JSON.stringify(editor.getData()); // necessary?
-          this.textToEditChange.emit(this.ckEditor.getData());
-        });
-      })}
+      this.ckEditor.model.document.on('change', () => {
+        // this.textToEdit = JSON.stringify(editor.getData()); // necessary?
+        this.textToEditChange.emit(this.ckEditor.getData());
+      });
+    })}
     `;
 
     this.renderer2.appendChild(this.document.body, script);
