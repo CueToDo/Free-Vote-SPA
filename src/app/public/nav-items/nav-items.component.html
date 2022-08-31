@@ -5,38 +5,36 @@
     </span>
 
     <button mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-        [class.selected]="navSvc.localMenuItemSelected===''" (click)="navSvc.localMenuItemSelected=''"
-        matTooltip="home">
+        [class.selected]="appData.MenuItemSelected===''" (click)="appData.MenuItemSelected=''" matTooltip="home">
         <mat-icon>search</mat-icon>
         home
     </button>
 
     <!-- https://github.com/angular/angular/issues/22588 -->
     <button mat-button [routerLink]="(localData.LoggedInToAuth0$ | async) ? '/recent' : '/trending'"
-        [class.selected]="navSvc.localMenuItemSelected==='slashTags'" (click)="navSvc.localMenuItemSelected='slashTags'"
+        [class.selected]="appData.MenuItemSelected==='slashTags'" (click)="appData.MenuItemSelected='slashTags'"
         matTooltip="slash tags">
         <mat-icon>bookmark_border</mat-icon>
         slash tags
     </button>
 
     <button mat-button *ngIf="localData.LoggedInToAuth0$ | async" routerLinkActive="active"
-        [class.selected]="navSvc.localMenuSelected" (click)="navSvc.localMenuItemSelected='local'"
+        [class.selected]="appData.MenuItemSelected==='local'" (click)="appData.MenuItemSelected='local'"
         [routerLink]="'/local/' + constituencyKebab">
         <mat-icon>mp</mat-icon>
         local
     </button>
 
     <button mat-button routerLink="/organisations/membership" routerLinkActive="active"
-        [class.selected]="navSvc.localMenuItemSelected==='organisations'"
-        (click)="navSvc.localMenuItemSelected='organisations'" matTooltip="groups"
-        *ngIf="localData.LoggedInToAuth0$ | async">
+        [class.selected]="appData.MenuItemSelected==='organisations'" (click)="appData.MenuItemSelected='organisations'"
+        matTooltip="groups" *ngIf="localData.LoggedInToAuth0$ | async">
         <mat-icon>people</mat-icon>
         groups
     </button>
 
     <!-- Profile/SignOut Menu Trigger -->
     <button mat-button [matMenuTriggerFor]="profileMenu" *ngIf="localData.LoggedInToAuth0$ | async"
-        [class.selected]="navSvc.localMenuItemSelected==='profile'" matTooltip="profile menu">
+        [class.selected]="appData.MenuItemSelected==='profile'" matTooltip="profile menu">
 
         <img *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
             [src]="localData.auth0Profile.picture" class="rounded-circle img-fluid profilePic">
@@ -51,7 +49,7 @@
     <mat-menu #profileMenu="matMenu">
 
         <button mat-menu-item routerLink="/my/profile" routerLinkActive="active"
-            [class.selected]="navSvc.localMenuItemSelected==='profile'" (click)="navSvc.localMenuItemSelected='profile'"
+            [class.selected]="appData.MenuItemSelected==='profile'" (click)="appData.MenuItemSelected='profile'"
             matTooltip="profile">
             <mat-icon>person</mat-icon>
             profile

@@ -1,8 +1,7 @@
 // Angular
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 // FreeVote
-import { NavItemsComponent } from '../nav-items/nav-items.component';
 
 @Component({
   selector: 'app-nav-main',

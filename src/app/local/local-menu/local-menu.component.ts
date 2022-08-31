@@ -10,7 +10,6 @@ import { Point } from 'src/app/models/point.model';
 import { AppDataService } from 'src/app/services/app-data.service';
 
 @Component({
-  selector: 'app-points-menu',
   templateUrl: './local-menu.component.html',
   styleUrls: ['./local-menu.component.css']
 })

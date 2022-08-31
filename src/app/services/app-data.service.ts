@@ -53,6 +53,8 @@ export class AppDataService {
   public DisplayWidth$ = new BehaviorSubject<number>(5); // Viewport width monitoring
   public InputSlashTagOnMobile$ = new BehaviorSubject<boolean>(false);
 
+  public MenuItemSelected = '';
+
   // Let the service handle the communication and the response data
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).
   // Could use Promise for sign-in component, but other components such as menu need to know sign-in status

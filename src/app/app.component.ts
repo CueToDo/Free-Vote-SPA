@@ -30,7 +30,6 @@ import { AppDataService } from 'src/app/services/app-data.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
-import { NavigationService } from './services/navigation.service';
 import { TagsService } from 'src/app/services/tags.service';
 import { UpdateService } from 'src/app/services/update.service';
 
@@ -87,7 +86,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
     private lookupsService: LookupsService,
-    private navSvc: NavigationService,
     private tagsService: TagsService,
     private breakpointObserver: BreakpointObserver,
     private location: Location,
@@ -399,15 +397,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           : route.substring(1);
 
       if (route.indexOf('local') > -1) {
-        // this.navMain?.setSelectedMenuItem('local');
-        this.navSvc.localMenuSelected = true;
-        if (route.indexOf('voters') > -1) {
-          this.navSvc.localMenuItemSelected = 'voters';
-        } else {
-          this.navSvc.localMenuItemSelected = 'mp';
-        }
-      } else {
-        this.navSvc.localMenuSelected = false;
+        this.appData.MenuItemSelected = 'local';
       }
 
       const topic = this.localData.SlashTagToTopic(this.routeDisplay);
