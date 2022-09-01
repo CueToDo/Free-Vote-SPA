@@ -11,6 +11,7 @@ import { TagCloudTypes } from '../../models/enums';
 
 // Services
 import { AppDataService } from '../../services/app-data.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 import { TagsService } from '../../services/tags.service';
 
 @Component({
@@ -40,7 +41,8 @@ export class TagCloudComponent implements OnInit, OnDestroy {
   error = '';
 
   constructor(
-    private appDataService: AppDataService,
+    private appData: AppDataService,
+    private localData: LocalDataService,
     private tagsService: TagsService
   ) {}
 
@@ -48,24 +50,37 @@ export class TagCloudComponent implements OnInit, OnDestroy {
     this.fetchTags();
 
     // appComponent monitors width and broadcasts via appDataService
-    this.width$ = this.appDataService.DisplayWidth$.subscribe(
-      (widthBand: number) => {
-        this.widthBand = widthBand;
-      }
-    );
+    this.width$ = this.appData.DisplayWidth$.subscribe((widthBand: number) => {
+      this.widthBand = widthBand;
+    });
   }
 
   public fetchTags(): void {
-    this.tags$ = this.tagsService.TagCloud(this.tagCloudType).subscribe({
-      next: response => {
-        this.tags = response;
-        this.waiting = false;
-        this.haveTags.emit(response && response.length > 0);
-      },
-      error: serverError => {
-        this.error = serverError.error.detail;
-      }
-    });
+    if (this.tagCloudType == TagCloudTypes.Local) {
+      this.tags$ = this.tagsService
+        .TagCloudConstituency(this.localData.ConstituencyID)
+        .subscribe({
+          next: response => {
+            this.tags = response;
+            this.waiting = false;
+            this.haveTags.emit(response && response.length > 0);
+          },
+          error: serverError => {
+            this.error = serverError.error.detail;
+          }
+        });
+    } else {
+      this.tags$ = this.tagsService.TagCloud(this.tagCloudType).subscribe({
+        next: response => {
+          this.tags = response;
+          this.waiting = false;
+          this.haveTags.emit(response && response.length > 0);
+        },
+        error: serverError => {
+          this.error = serverError.error.detail;
+        }
+      });
+    }
   }
 
   FontSize(Weight: number): string {

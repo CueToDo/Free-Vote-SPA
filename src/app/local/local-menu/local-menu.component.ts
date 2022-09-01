@@ -3,7 +3,11 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Models
-import { PointSelectionTypes, PointFlags } from 'src/app/models/enums';
+import {
+  PointSelectionTypes,
+  PointFlags,
+  TagCloudTypes
+} from 'src/app/models/enums';
 import { Point } from 'src/app/models/point.model';
 
 // Services
@@ -19,6 +23,8 @@ export class LocalMenuComponent {
   PointFlags = PointFlags;
 
   point = new Point();
+
+  public TagCloudTypes = TagCloudTypes;
 
   constructor(private router: Router, private appDataService: AppDataService) {}
 

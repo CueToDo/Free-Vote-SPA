@@ -34,7 +34,7 @@ export class LocalTagsComponent implements OnInit {
   GetPointTags(): void {
     this.fetchingTags = true;
     this.tagsService
-      .PointTags(this.data.pointID, this.localData.ConstituencyID())
+      .PointTags(this.data.pointID, this.localData.ConstituencyID)
       .subscribe(tags => {
         this.Tags = tags;
         this.fetchingTags = false;

@@ -109,7 +109,7 @@ export class LocalDataService {
     this.GotFreeVoteJwt$.next(false);
   }
 
-  public ConstituencyID(): number {
+  public get ConstituencyID(): number {
     return +this.freeVoteProfile.constituencyID;
   }
 

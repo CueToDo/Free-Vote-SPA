@@ -277,7 +277,9 @@ export class PointsService {
       LinkAddress: point.linkAddress,
       YouTubeID: point.youTubeID,
       SoundCloudTrackID: point.soundCloudTrackID,
-      SlashTags: point.tags.map(tag => tag.slashTag),
+      SlashTags: point.tags
+        .filter(tag => tag.pointOwnerTag)
+        .map(tag => tag.slashTag),
       Draft: point.draft
     } as PointEditFormData;
 

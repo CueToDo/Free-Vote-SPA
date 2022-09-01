@@ -408,11 +408,7 @@ export class PointComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((tags: Tag[]) => {
       this.tagsService
-        .PointTagsSave(
-          this.point.pointID,
-          this.localData.ConstituencyID(),
-          tags
-        )
+        .PointTagsSave(this.point.pointID, this.localData.ConstituencyID, tags)
         .subscribe(); // To do confirmation
     });
   }
