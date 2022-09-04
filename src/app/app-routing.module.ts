@@ -13,6 +13,7 @@ import { PointShareComponent } from './public/point-share/point-share.component'
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from './services/login-route-guard.service';
+import { ConstituencyComponent } from './local/constituency/constituency.component';
 
 const appRoutes: Routes = [
   // Refresh in browser fails - when route is specified
@@ -44,10 +45,11 @@ const appRoutes: Routes = [
 
   // local constituency
   {
-    path: 'local',
+    path: '[suspended]',
     loadChildren: () => import('./local/local.module').then(m => m.LocalModule)
   },
 
+  { path: 'local/:constituency', component: ConstituencyComponent },
   // organisations, groups
   {
     path: 'organisations',

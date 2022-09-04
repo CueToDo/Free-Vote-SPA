@@ -40,23 +40,24 @@ import { PointsListComponent } from 'src/app/public/points-list/points-list.comp
 import { PointEditComponent } from 'src/app/public//point-edit/point-edit.component';
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
 
-enum tabs {
+enum Tabs {
   // Tags
   trendingTags = 0,
   recentTags = 1,
-  tagSearch = 2,
+  localTags = 2,
+  tagSearch = 3,
 
   // Questions, Answers
-  questions = 3,
-  questionAnswers = 4,
+  questionList = 4,
+  questionAnswers = 5,
 
   // Groups, Discussions
-  groups = 5,
-  groupDiscussion = 6,
+  groups = 6,
+  groupDiscussion = 7,
 
   // Points
-  tagPoints = 7,
-  newPoint = 8
+  tagPoints = 8,
+  newPoint = 9
 }
 
 @Component({
@@ -73,8 +74,9 @@ export class TagsAndPointsComponent
   widthBand = 4;
 
   // Public variables for use in template
-  public tabIndex = tabs.recentTags;
-  public previousTabIndex = tabs.recentTags;
+  public Tabs = Tabs;
+  public tabIndex = Tabs.recentTags;
+  public previousTabIndex = Tabs.recentTags;
 
   // Topic - Tag Cloud
   public TagCloudTypes = TagCloudTypes;
@@ -225,7 +227,7 @@ export class TagsAndPointsComponent
       if (tag) this.localData.PreviousSlashTagSelected = tag;
 
       // QuestionAnswers
-      if (questionSlug) this.ChangeTab(tabs.questionAnswers);
+      if (questionSlug) this.ChangeTab(Tabs.questionAnswers);
 
       // PointShare
       if (titleParam) this.qp = 'point';
@@ -247,22 +249,27 @@ export class TagsAndPointsComponent
       switch (routeparts[1]) {
         // may have separate tab for following
         case 'trending':
-          this.tabIndex = tabs.trendingTags;
-          this.previousTabIndex = tabs.trendingTags;
+          this.tabIndex = Tabs.trendingTags;
+          this.previousTabIndex = Tabs.trendingTags;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
           break;
         case 'recent':
-          this.tabIndex = tabs.recentTags;
-          this.previousTabIndex = tabs.recentTags;
+          this.tabIndex = Tabs.recentTags;
+          this.previousTabIndex = Tabs.recentTags;
           this.appData.defaultSort = PointSortTypes.DateUpdated;
           break;
+        case 'local':
+          this.tabIndex = Tabs.localTags;
+          this.previousTabIndex = Tabs.localTags;
+          this.appData.defaultSort = PointSortTypes.TrendingActivity;
+          break;
         case 'search':
-          this.tabIndex = tabs.tagSearch;
-          this.previousTabIndex = tabs.tagSearch;
+          this.tabIndex = Tabs.tagSearch;
+          this.previousTabIndex = Tabs.tagSearch;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
           break;
         default:
-          this.tabIndex = tabs.questions;
+          this.tabIndex = Tabs.questionList;
           this.qp = 'question';
           this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
       }
@@ -273,15 +280,15 @@ export class TagsAndPointsComponent
 
       switch (routeparts[2]) {
         case 'questions':
-          this.tabIndex = tabs.questions;
+          this.tabIndex = Tabs.questionList;
           this.qp = 'question';
           break;
         case 'groups':
-          this.tabIndex = tabs.groups;
-          this.previousTabIndex = tabs.groups;
+          this.tabIndex = Tabs.groups;
+          this.previousTabIndex = Tabs.groups;
           break;
         case 'points':
-          this.tabIndex = tabs.tagPoints;
+          this.tabIndex = Tabs.tagPoints;
           this.qp = 'point';
           this.ReselectPoints(PointSortTypes.TrendingActivity);
           break;
@@ -293,18 +300,18 @@ export class TagsAndPointsComponent
 
       switch (routeparts[2]) {
         case 'question':
-          this.tabIndex = tabs.questionAnswers;
+          this.tabIndex = Tabs.questionAnswers;
           break;
         case 'by':
-          this.tabIndex = tabs.tagPoints;
-          this.previousTabIndex = tabs.tagPoints;
-          this.ShowFilterCriteria(true);
+          this.tabIndex = Tabs.tagPoints;
+          this.previousTabIndex = Tabs.tagPoints;
+          this.ShowPointFilterCriteria(true);
           break;
       }
     } else {
       // Default to trending - shouldn't be needed
-      this.tabIndex = tabs.trendingTags;
-      this.previousTabIndex = tabs.trendingTags;
+      this.tabIndex = Tabs.trendingTags;
+      this.previousTabIndex = Tabs.trendingTags;
       this.appData.defaultSort = PointSortTypes.TrendingActivity;
     }
   }
@@ -323,7 +330,7 @@ export class TagsAndPointsComponent
   ShowQuestions(): void {
     console.log('Manual stop auto switch');
     this.allowSwitchToPoints = false;
-    this.ChangeTab(tabs.questions);
+    this.ChangeTab(Tabs.questionList);
   }
 
   ReselectQuestions() {
@@ -331,7 +338,7 @@ export class TagsAndPointsComponent
     this.pointsSelected = false;
     this.allowSwitchToPoints = true;
 
-    this.ChangeTab(tabs.questions);
+    this.ChangeTab(Tabs.questionList);
   }
 
   ReselectForNewPoint() {
@@ -352,28 +359,32 @@ export class TagsAndPointsComponent
 
     this.allowSwitchToPoints = true;
 
-    this.ChangeTab(tabs.tagPoints);
+    this.ChangeTab(Tabs.tagPoints);
     this.pointsListComponent.SelectPoints();
 
     this.externalTrigger = false;
   }
 
   /// Change Tab and notify app component in TabChangeComplete
-  ChangeTab(tabIndex: tabs): void {
+  ChangeTab(tabIndex: Tabs): void {
     // Actual tab change, or just title change (due to voter filters)
     const tabChanged = this.tabIndex !== tabIndex;
 
     this.tabIndex = tabIndex;
     var newRoute = '';
 
+    // if (tabIndex != Tabs.tagPoints) {
+    //   this.ShowPointFilterCriteria(false);
+    // }
+
     switch (tabIndex) {
-      case tabs.trendingTags: // 0
+      case Tabs.trendingTags:
         this.previousTabIndex = tabIndex;
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         newRoute = '/trending';
         break;
 
-      case tabs.recentTags: // 1
+      case Tabs.recentTags:
         this.previousTabIndex = tabIndex;
         // (always) update on switching to tagsRecent tab
         if (this.refreshRecent) {
@@ -384,14 +395,20 @@ export class TagsAndPointsComponent
         newRoute = '/recent';
         break;
 
-      case tabs.tagSearch: // 2
+      case Tabs.localTags:
+        this.previousTabIndex = tabIndex;
+        this.appData.defaultSort = PointSortTypes.DateUpdated;
+        newRoute = '/local';
+        break;
+
+      case Tabs.tagSearch:
         this.previousTabIndex = tabIndex;
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         newRoute = '/search';
         this.tagSearchComponent?.restartSearch();
         break;
 
-      case tabs.questions: // 3
+      case Tabs.questionList:
         this.qp = 'question';
         this.filter.pointSelectionType = PointSelectionTypes.QuestionPoints;
 
@@ -407,23 +424,23 @@ export class TagsAndPointsComponent
 
         break;
 
-      case tabs.questionAnswers:
+      case Tabs.questionAnswers:
         newRoute = this.slashTagSelected;
         break;
 
-      case tabs.groups: // 5
+      case Tabs.groups:
         this.bogSelectionComponent.breakoutGroupsJoined(true);
         newRoute = this.slashTagSelected + '/break-out-groups';
         break;
 
-      case tabs.groupDiscussion:
+      case Tabs.groupDiscussion:
         newRoute =
           this.slashTagSelected +
           '/break-out-groups/' +
           this.appData.kebabUri(this.bogSelected.breakoutRoom);
         break;
 
-      case tabs.tagPoints: // 7
+      case Tabs.tagPoints:
         this.qp = 'point';
         this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
         // Don't save previous
@@ -437,7 +454,7 @@ export class TagsAndPointsComponent
           newRoute = `${this.slashTagSelected}/by/${alias}`;
 
           // ShowFilter for alias
-          if (!this.applyingFilter) this.ShowFilterCriteria(true);
+          if (!this.applyingFilter) this.ShowPointFilterCriteria(true);
         }
 
         this.newPointRefresh = false;
@@ -448,7 +465,7 @@ export class TagsAndPointsComponent
 
         break;
 
-      case tabs.newPoint: // 8
+      case Tabs.newPoint:
         if (this.qp === 'question') {
           this.newQuestionComponent.NewQuestion(this.slashTagSelected);
         } else {
@@ -477,26 +494,26 @@ export class TagsAndPointsComponent
   QuestionCount(count: number): void {
     this.questionCount = count;
     if (count == 0 && this.allowSwitchToPoints) {
-      this.ChangeTab(tabs.tagPoints);
+      this.ChangeTab(Tabs.tagPoints);
       this.pointsListComponent.SelectPoints();
     }
   }
 
   BackToSelectedTag() {
-    if (this.questionCount == 0) this.ChangeTab(tabs.tagPoints);
-    else this.ChangeTab(tabs.questions);
+    if (this.questionCount == 0) this.ChangeTab(Tabs.tagPoints);
+    else this.ChangeTab(Tabs.questionList);
   }
 
   QuestionSelected(questionID: number): void {
     this.filter.questionID = questionID;
     this.filter.slashTag = this.localData.PreviousSlashTagSelected;
     this.questionAnswersComponent.initialSelection();
-    this.ChangeTab(tabs.questionAnswers);
+    this.ChangeTab(Tabs.questionAnswers);
   }
 
   ViewAllQuestions(): void {
     // From QuestionAnswers
-    this.ChangeTab(tabs.questions);
+    this.ChangeTab(Tabs.questionList);
   }
 
   AnswerAdded(questionID: number) {
@@ -508,10 +525,10 @@ export class TagsAndPointsComponent
   }
 
   // init, subscription, ChangeTab, applyFilter
-  ShowFilterCriteria(show: boolean): void {
+  ShowPointFilterCriteria(show: boolean): void {
     this.showFilters = show;
 
-    if (this.showFilters) {
+    if (show) {
       this.filterIcon = 'manage_search';
       this.filterText = 'searching';
       this.filterToolTip = 'hide search criteria';
@@ -525,10 +542,10 @@ export class TagsAndPointsComponent
 
     if (!show) {
       switch (this.tabIndex) {
-        case tabs.questionAnswers:
+        case Tabs.questionAnswers:
           this.filter.pointSelectionType = PointSelectionTypes.QuestionPoints;
           break;
-        case tabs.tagPoints:
+        case Tabs.tagPoints:
           this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
           break;
       }
@@ -549,7 +566,6 @@ export class TagsAndPointsComponent
         this.ReselectPoints(PointSortTypes.NoChange);
       }
     }
-    this.tabIndex = tabs.tagPoints;
   }
 
   // From child Points Component
@@ -616,7 +632,7 @@ export class TagsAndPointsComponent
         this.pointsListComponent.NewSortType(pointSortType); // New random order or sort type
       }
 
-      this.tabIndex = tabs.tagPoints;
+      this.tabIndex = Tabs.tagPoints;
       this.ChangeTab(this.tabIndex);
 
       if (pointSortType === PointSortTypes.Random) {
@@ -649,34 +665,34 @@ export class TagsAndPointsComponent
     this.SetSortDescending(true);
 
     this.pointsListComponent.ReselectForNewPoint();
-    this.ChangeTab(tabs.tagPoints); // Causes reselection, but already selecting detected
+    this.ChangeTab(Tabs.tagPoints); // Causes reselection, but already selecting detected
 
     this.externalTrigger = false;
   }
 
   CancelNewPoint(): void {
-    this.ChangeTab(tabs.tagPoints);
+    this.ChangeTab(Tabs.tagPoints);
   }
 
   NewQuestion() {
     this.questionsListComponent.ReselectForNewQuestion();
 
     this.questionAnswersComponent.ReselectForNewAnswer();
-    this.ChangeTab(tabs.questions); // Causes reselection, but already selecting detected
+    this.ChangeTab(Tabs.questionList); // Causes reselection, but already selecting detected
   }
 
   CancelNewQuestion(): void {
-    this.ChangeTab(tabs.questions);
+    this.ChangeTab(Tabs.questionList);
   }
 
   BogSelected(bog: BreakoutGroup): void {
     this.bogSelected = bog;
-    this.ChangeTab(tabs.groupDiscussion);
+    this.ChangeTab(Tabs.groupDiscussion);
   }
 
   SelectAnotherBoG(): void {
     this.bogSelectionComponent.viewMyGroups();
-    this.ChangeTab(tabs.groups);
+    this.ChangeTab(Tabs.groups);
   }
 
   ngOnDestroy(): void {

@@ -11,14 +11,6 @@
 
       <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex">
 
-        <mat-tab label="issues">
-          <ng-template matTabContent>
-            <div class="mt-3">
-              <app-tag-cloud [tagCloudType]="TagCloudTypes.Local"></app-tag-cloud>
-            </div>
-          </ng-template>
-        </mat-tab>
-
         <mat-tab label="mp">
           <ng-template matTabContent>
             <app-constituency></app-constituency>

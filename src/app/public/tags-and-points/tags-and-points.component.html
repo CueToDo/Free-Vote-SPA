@@ -2,28 +2,37 @@
 
   <!-- Begin tab selection and point sort order -->
 
-  <div class="content" [ngClass]="{'show':tabIndex!==4, 'hide':tabIndex===4}">
+  <div class="content" [ngClass]="{'show':tabIndex!==Tabs.questionAnswers, 'hide':tabIndex===Tabs.questionAnswers}">
 
     <div ngClass.gt-xs="py-1">
 
-      <div *ngIf="tabIndex < 3" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
+      <div *ngIf="tabIndex < Tabs.questionList" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
         <!-- Trending Tags -->
-        <button mat-button (click)="ChangeTab(0)" [class.selected]="tabIndex===0" matTooltip="trending">
+        <button mat-button (click)="ChangeTab(Tabs.trendingTags)" [class.selected]="tabIndex===Tabs.trendingTags"
+          matTooltip="trending">
           trending
           <mat-icon>trending_up</mat-icon>
         </button>
 
         <!-- Recently selected tags -->
-        <button mat-button (click)="ChangeTab(1)" [class.selected]="tabIndex===1" matTooltip="recent"
-          *ngIf="localData.LoggedInToAuth0 || haveRecentSlashTags">
+        <button mat-button (click)="ChangeTab(Tabs.recentTags)" [class.selected]="tabIndex===Tabs.recentTags"
+          matTooltip="recent" *ngIf="localData.LoggedInToAuth0 || haveRecentSlashTags">
           recent
           <mat-icon>notifications</mat-icon>
         </button>
 
+        <!-- Local Topics -->
+        <button mat-button (click)="ChangeTab(Tabs.localTags)" [class.selected]="tabIndex===Tabs.localTags"
+          matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
+          local
+          <mat-icon>mp</mat-icon>
+        </button>
+
         <!-- Tag Search -->
-        <button mat-button (click)="ChangeTab(2)" [class.selected]="tabIndex===2" matTooltip="trending">
+        <button mat-button (click)="ChangeTab(Tabs.tagSearch)" [class.selected]="tabIndex===Tabs.tagSearch"
+          matTooltip="slash tag search">
           search
           <mat-icon>search</mat-icon>
         </button>
@@ -37,7 +46,7 @@
 
       </div>
 
-      <div *ngIf="tabIndex > 2" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
+      <div *ngIf="tabIndex > Tabs.tagSearch" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
         <!-- Show tag clouds and tag search -->
@@ -47,42 +56,44 @@
         </button>
 
         <!-- Questions -->
-        <button mat-button (click)="ShowQuestions()" [class.selected]="tabIndex===3 || tabIndex===4"
+        <button mat-button (click)="ShowQuestions()"
+          [class.selected]="tabIndex===Tabs.questionList || tabIndex===Tabs.questionAnswers"
           *ngIf="localData.LoggedInToAuth0" matTooltip="show questions">
           questions
           <mat-icon>help</mat-icon>
         </button>
 
         <!-- Break-out groups -->
-        <button mat-button (click)="ChangeTab(5)" [class.selected]="tabIndex===5" *ngIf="localData.LoggedInToAuth0"
-          [matTooltip]="'break-out groups'">
+        <button mat-button (click)="ChangeTab(Tabs.groups)" [class.selected]="tabIndex===Tabs.groups"
+          *ngIf="localData.LoggedInToAuth0" [matTooltip]="'break-out groups'">
           groups
           <mat-icon>groups</mat-icon>
         </button>
 
         <!-- Tag Points -->
-        <button mat-button (click)="qp='point';ChangeTab(7)" [class.selected]="tabIndex===7"
+        <button mat-button (click)="qp='point';ChangeTab(Tabs.tagPoints)" [class.selected]="tabIndex===Tabs.tagPoints"
           *ngIf="localData.LoggedInToAuth0" matTooltip="show points">
           points
           <mat-icon>comment</mat-icon>
         </button>
 
         <!-- New question answer or tag point  -->
-        <button mat-button (click)="ChangeTab(8)" [class.selected]="tabIndex===8" *ngIf="localData.LoggedInToAuth0"
-          [matTooltip]="'submit new ' + qp" id="newQP">
+        <button mat-button (click)="ChangeTab(Tabs.newPoint)" [class.selected]="tabIndex===Tabs.newPoint"
+          *ngIf="localData.LoggedInToAuth0" [matTooltip]="'submit new ' + qp" id="newQP">
           <span>new {{ qp }}</span>
           <mat-icon>library_add</mat-icon>
         </button>
 
         <!-- Show Point Filter Options -->
-        <button mat-button (click)="ShowFilterCriteria(!showFilters)" *ngIf="topicSelected"
+        <button mat-button (click)="ShowPointFilterCriteria(!showFilters)" *ngIf="tabIndex===Tabs.tagPoints"
           [matTooltip]="filterToolTip">
           <span>{{ filterText }}</span>
           <mat-icon>{{ filterIcon }}</mat-icon>
         </button>
 
         <!-- Begin Sort Menu -->
-        <button mat-button [matMenuTriggerFor]="sortOrderMenu" *ngIf="topicSelected" [matTooltip]="sortToolTip">
+        <button mat-button [matMenuTriggerFor]="sortOrderMenu" *ngIf="tabIndex===Tabs.tagPoints"
+          [matTooltip]="sortToolTip">
           <span>sort</span>
           <mat-icon>{{ sortTypeIcon }}</mat-icon>
         </button>
@@ -162,10 +173,10 @@
   <div fxFlex fxLayout="column" fxLayoutAlign="start center" class="tabContainer">
 
     <!-- 0 Tag Cloud Trending -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===0}">
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.trendingTags}">
       <div [ngClass]="{
-        'centerStage': tabIndex===0, 
-        'stageLeft': tabIndex>0}" fxFill>
+        'centerStage': tabIndex===Tabs.trendingTags, 
+        'stageLeft': tabIndex>Tabs.trendingTags}" fxFill>
         <div class="content">
           <app-tag-cloud [tagCloudType]="TagCloudTypes.Trending" (NewSlashTagSelected)="NewSlashTagSelected($event)">
           </app-tag-cloud>
@@ -174,11 +185,11 @@
     </div>
 
     <!-- 1 Tag Cloud Recent -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===1}">
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.recentTags}">
       <div [ngClass]="{
-        'centerStage': tabIndex===1, 
-        'stageLeft': tabIndex>1,
-        'stageRight': tabIndex<1}" fxFill>
+        'centerStage': tabIndex===Tabs.recentTags, 
+        'stageLeft': tabIndex>Tabs.recentTags,
+        'stageRight': tabIndex<Tabs.recentTags}" fxFill>
         <div class="content">
           <app-tag-cloud [tagCloudType]="TagCloudTypes.Recent" #tagsRecent
             (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tag-cloud>
@@ -186,24 +197,37 @@
       </div>
     </div>
 
-    <!-- 2 SlashTag Search -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===2}">
+    <!-- 2 Tag Cloud Local -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.localTags}">
       <div [ngClass]="{
-        'centerStage': tabIndex===2, 
-        'stageLeft': tabIndex>2, 
-        'stageRight': tabIndex<2}" fxFill>
+        'centerStage': tabIndex===Tabs.localTags, 
+        'stageLeft': tabIndex>Tabs.localTags,
+        'stageRight': tabIndex<Tabs.localTags}" fxFill>
+        <div class="content">
+          <app-tag-cloud [tagCloudType]="TagCloudTypes.Local" #tagsRecent
+            (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tag-cloud>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 SlashTag Search -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.tagSearch}">
+      <div [ngClass]="{
+        'centerStage': tabIndex===Tabs.tagSearch, 
+        'stageLeft': tabIndex>Tabs.tagSearch, 
+        'stageRight': tabIndex<Tabs.tagSearch}" fxFill>
         <div class="content">
           <app-tag-search (NewSlashTagSelected)="NewSlashTagSelected($event)" #tagSearch></app-tag-search>
         </div>
       </div>
     </div>
 
-    <!-- 3 Question List -->
-    <div class="tabContent" [ngClass]="{'topZ':tabIndex===3}">
+    <!-- 4 Question List -->
+    <div class="tabContent" [ngClass]="{'topZ':tabIndex===Tabs.questionList}">
       <div [ngClass]="{
-          'centerStage': tabIndex===3, 
-          'stageLeft': tabIndex>3,
-          'stageRight': tabIndex<3}" fxFill>
+          'centerStage': tabIndex===Tabs.questionList, 
+          'stageLeft': tabIndex>Tabs.questionList,
+          'stageRight': tabIndex<Tabs.questionList}" fxFill>
         <!-- "Fetch more" component must apply scroller and content classes internally -->
         <app-questions-list [SlashTag]="filter.slashTag" #appQuestionsList (QuestionCount)="QuestionCount($event)"
           (QuestionSelected)="QuestionSelected($event)">
@@ -211,12 +235,12 @@
       </div>
     </div>
 
-    <!-- 4 app points for question answers -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===4}">
+    <!-- 5 Question Answers -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.questionAnswers}">
       <div [ngClass]="{
-          'centerStage': tabIndex===4, 
-          'stageLeft': tabIndex>4,
-          'stageRight': tabIndex<4}" fxFill>
+          'centerStage': tabIndex===Tabs.questionAnswers, 
+          'stageLeft': tabIndex>Tabs.questionAnswers,
+          'stageRight': tabIndex<Tabs.questionAnswers}" fxFill>
         <!-- "Fetch more" component must apply scroller and content classes internally -->
         <app-question-answers [filter]="filter" (ViewAllQuestions)="ViewAllQuestions()" #appQuestionAnswers
           (AnswerAdded)="AnswerAdded($event)" (AnswerRemoved)="AnswerRemoved($event)">
@@ -224,9 +248,10 @@
       </div>
     </div>
 
-    <!-- 5 Break-out Group Selection -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===5}">
-      <div [ngClass]="{'centerStage': tabIndex===5, 'stageLeft': tabIndex>5,'stageRight': tabIndex<5}">
+    <!-- 6 Break-out Group Selection -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.groups}">
+      <div
+        [ngClass]="{'centerStage': tabIndex===Tabs.groups, 'stageLeft': tabIndex>Tabs.groups,'stageRight': tabIndex<Tabs.groups}">
         <div class="content">
           <app-group-selection [tagDisplay]="topicSelected" #bogSelection (BogSelected)="BogSelected($event)">
           </app-group-selection>
@@ -234,9 +259,10 @@
       </div>
     </div>
 
-    <!-- 6 Break-out Group Discussion -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===6}">
-      <div [ngClass]="{'centerStage': tabIndex===6, 'stageLeft': tabIndex>6,'stageRight': tabIndex<6}">
+    <!-- 7 Break-out Group Discussion -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.groupDiscussion}">
+      <div
+        [ngClass]="{'centerStage': tabIndex===Tabs.groupDiscussion, 'stageLeft': tabIndex>Tabs.groupDiscussion,'stageRight': tabIndex<Tabs.groupDiscussion}">
         <div class="content">
           <app-group-discussion [tagDisplay]="topicSelected" [bogSelected]="bogSelected"
             (SelectAnother)="SelectAnotherBoG()" #bogDiscussion>
@@ -245,23 +271,23 @@
       </div>
     </div>
 
-    <!-- 7 app points for tag points. Scroller class NOT applied to tabContent -->
-    <div class="tabContent" [ngClass]="{'topZ':tabIndex===7}">
+    <!-- 8 app points for tag points. Scroller class NOT applied to tabContent -->
+    <div class="tabContent" [ngClass]="{'topZ':tabIndex===Tabs.tagPoints}">
       <div [ngClass]="{
-          'centerStage': tabIndex===7, 
-          'stageLeft': tabIndex>7,
-          'stageRight': tabIndex<7}" fxFill>
+          'centerStage': tabIndex===Tabs.tagPoints, 
+          'stageLeft': tabIndex>Tabs.tagPoints,
+          'stageRight': tabIndex<Tabs.tagPoints}" fxFill>
         <!-- "Fetch more" component must apply scroller and content classes internally -->
         <app-points-list [filter]="filter" #appPointsList>
         </app-points-list>
       </div>
     </div>
 
-    <!-- 8 new question or point -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===8}">
+    <!-- 9 new question or point -->
+    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.newPoint}">
       <div [ngClass]="{
-        'centerStage': tabIndex===8, 
-        'stageRight': tabIndex<8 }" fxFill>
+        'centerStage': tabIndex===Tabs.newPoint, 
+        'stageRight': tabIndex<Tabs.newPoint }" fxFill>
         <div fxLayoutAlign="center">
           <div class="content mt-5 mb-3">
 

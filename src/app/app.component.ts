@@ -396,10 +396,6 @@ export class AppComponent implements OnInit, AfterViewInit {
           ? 'SlashTag/' + this.localData.PreviousTopicSelected
           : route.substring(1);
 
-      if (route.indexOf('local') > -1) {
-        this.appData.MenuItemSelected = 'local';
-      }
-
       const topic = this.localData.SlashTagToTopic(this.routeDisplay);
       this.setDocTitle(topic);
 

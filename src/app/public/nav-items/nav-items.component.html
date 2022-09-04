@@ -18,13 +18,6 @@
         slash tags
     </button>
 
-    <button mat-button *ngIf="localData.LoggedInToAuth0$ | async" routerLinkActive="active"
-        [class.selected]="appData.MenuItemSelected==='local'" (click)="appData.MenuItemSelected='local'"
-        [routerLink]="'/local/' + constituencyKebab">
-        <mat-icon>mp</mat-icon>
-        local
-    </button>
-
     <button mat-button routerLink="/organisations/membership" routerLinkActive="active"
         [class.selected]="appData.MenuItemSelected==='organisations'" (click)="appData.MenuItemSelected='organisations'"
         matTooltip="groups" *ngIf="localData.LoggedInToAuth0$ | async">
@@ -32,9 +25,10 @@
         groups
     </button>
 
-    <!-- Profile/SignOut Menu Trigger -->
+    <!-- Profile/Sign Out Menu Trigger -->
     <button mat-button [matMenuTriggerFor]="profileMenu" *ngIf="localData.LoggedInToAuth0$ | async"
-        [class.selected]="appData.MenuItemSelected==='profile'" matTooltip="profile menu">
+        [class.selected]="appData.MenuItemSelected==='profile' || appData.MenuItemSelected==='MP'"
+        matTooltip="profile menu">
 
         <img *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
             [src]="localData.auth0Profile.picture" class="rounded-circle img-fluid profilePic">
@@ -45,17 +39,23 @@
         {{ localData.freeVoteProfile.givenName }}
     </button>
 
-    <!-- Profile/SignOut Menu -->
+    <!-- Profile/Sign Out Menu -->
     <mat-menu #profileMenu="matMenu">
 
         <button mat-menu-item routerLink="/my/profile" routerLinkActive="active"
             [class.selected]="appData.MenuItemSelected==='profile'" (click)="appData.MenuItemSelected='profile'"
-            matTooltip="profile">
+            matTooltip="your profile" matTooltipPosition="right">
             <mat-icon>person</mat-icon>
             profile
         </button>
 
-        <button mat-menu-item (click)="logout()" matTooltip="sign out">
+        <button mat-menu-item [routerLink]="'/local/' + constituencyKebab" (click)="appData.MenuItemSelected='MP'"
+            matTooltip="Constituency MP" matTooltipPosition="right">
+            <mat-icon>mp</mat-icon>
+            MP
+        </button>
+
+        <button mat-menu-item (click)="logout()" matTooltip="sign out" matTooltipPosition="right">
             <mat-icon>person_outline</mat-icon>
             sign out
         </button>

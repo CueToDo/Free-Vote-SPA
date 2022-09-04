@@ -41,7 +41,7 @@ const localRoutes: Routes = [
       }
     ]
   },
-  { path: ':constituency', component: LocalMenuComponent }
+  { path: ':constituency', component: ConstituencyComponent }
 ];
 
 @NgModule({
