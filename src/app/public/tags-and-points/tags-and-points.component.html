@@ -178,7 +178,8 @@
         'centerStage': tabIndex===Tabs.trendingTags, 
         'stageLeft': tabIndex>Tabs.trendingTags}" fxFill>
         <div class="content">
-          <app-tag-cloud [tagCloudType]="TagCloudTypes.Trending" (NewSlashTagSelected)="NewSlashTagSelected($event)">
+          <app-tag-cloud [tagCloudType]="TagCloudTypes.Trending"
+            (NewSlashTagSelected)="ForConstituency(false);NewSlashTagSelected($event)">
           </app-tag-cloud>
         </div>
       </div>
@@ -192,7 +193,7 @@
         'stageRight': tabIndex<Tabs.recentTags}" fxFill>
         <div class="content">
           <app-tag-cloud [tagCloudType]="TagCloudTypes.Recent" #tagsRecent
-            (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tag-cloud>
+            (NewSlashTagSelected)="ForConstituency(false);NewSlashTagSelected($event)"></app-tag-cloud>
         </div>
       </div>
     </div>
@@ -205,7 +206,7 @@
         'stageRight': tabIndex<Tabs.localTags}" fxFill>
         <div class="content">
           <app-tag-cloud [tagCloudType]="TagCloudTypes.Local" #tagsRecent
-            (NewSlashTagSelected)="NewSlashTagSelected($event)"></app-tag-cloud>
+            (NewSlashTagSelected)="ForConstituency(true);NewSlashTagSelected($event)"></app-tag-cloud>
         </div>
       </div>
     </div>
@@ -217,7 +218,8 @@
         'stageLeft': tabIndex>Tabs.tagSearch, 
         'stageRight': tabIndex<Tabs.tagSearch}" fxFill>
         <div class="content">
-          <app-tag-search (NewSlashTagSelected)="NewSlashTagSelected($event)" #tagSearch></app-tag-search>
+          <app-tag-search (NewSlashTagSelected)="ForConstituency(false);NewSlashTagSelected($event)" #tagSearch>
+          </app-tag-search>
         </div>
       </div>
     </div>

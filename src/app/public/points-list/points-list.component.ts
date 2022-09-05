@@ -27,7 +27,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./points-list.component.css']
 })
 export class PointsListComponent implements OnDestroy, OnInit {
-  @Input() private constituencyID = 0;
   @Input() public filter = new FilterCriteria();
   @Input() public attachedToQuestion = false;
 
@@ -256,7 +255,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
             if (this.filter.slashTag) {
               this.pointsService
                 .GetFirstBatchForTag(
-                  this.constituencyID,
+                  this.filter.constituencyID,
                   this.filter.slashTag,
                   this.filter.sortType,
                   this.filter.sortAscending,
@@ -297,7 +296,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         this.pointsService
           // pass pointCount for the cast to PSR
           .NewPointSelectionOrder(
-            this.constituencyID,
+            this.filter.constituencyID,
             pointSortType,
             reversalOnly,
             this.pointCount
@@ -375,7 +374,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         this.allPointsDisplayed = false;
 
         this.pointsService
-          .GetPage(this.constituencyID, pids)
+          .GetPage(this.filter.constituencyID, pids)
           .subscribe(response => {
             this.points = this.points.concat(response.points);
             this.NewPointsDisplayed();
@@ -394,7 +393,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         if (this.filter) {
           this.pointsService
             .GetNextBatch(
-              this.constituencyID,
+              this.filter.constituencyID,
               this.filter.sortType,
               this.lastBatchRow + 1,
               this.pointCount

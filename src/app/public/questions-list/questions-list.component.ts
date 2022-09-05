@@ -20,7 +20,8 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   styleUrls: ['./questions-list.component.css']
 })
 export class QuestionsListComponent {
-  // Questions are filtered by SlashTag only
+  // Questions are filtered by Constituency and SlashTag only
+  @Input() private constituencyID = 0;
   @Input() SlashTag = '';
 
   // SortType and direction
@@ -83,6 +84,7 @@ export class QuestionsListComponent {
       // Infinite Scroll: Get questions in batches
       this.questionsService
         .GetFirstBatchForTag(
+          this.constituencyID,
           this.SlashTag,
           this.SortType,
           this.SortAscending,

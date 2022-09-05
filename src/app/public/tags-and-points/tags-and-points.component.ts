@@ -316,19 +316,28 @@ export class TagsAndPointsComponent
     }
   }
 
-  NewSlashTagSelected(slashTag: string): void {
-    // Direct communication from tags component
+  ForConstituency(forConstituency: boolean): void {
+    if (forConstituency) {
+      this.filter.constituencyID = this.localData.ConstituencyID;
+    } else {
+      this.filter.constituencyID = 0;
+    }
+  }
 
+  // TagCloud Components emits NewSlashTagSelected
+  NewSlashTagSelected(slashTag: string): void {
+    // Direct communication from tags components
     this.topicSelected = this.localData.SlashTagToTopic(slashTag);
     this.filter.updateTopicViewCount = true;
     this.pointsFilterComponent.ClearPointFilters();
     this.haveRecentSlashTags = true;
+    this.questionsSelected = false;
 
-    this.ReselectQuestions();
+    this.ReselectPoints(PointSortTypes.NoChange);
   }
 
   ShowQuestions(): void {
-    console.log('Manual stop auto switch');
+    // Manual stop auto switch
     this.allowSwitchToPoints = false;
     this.ChangeTab(Tabs.questionList);
   }
@@ -491,6 +500,7 @@ export class TagsAndPointsComponent
     this.applyingFilter = false;
   }
 
+  // QuestionsList emits the question count, which may cause switch to points
   QuestionCount(count: number): void {
     this.questionCount = count;
     if (count == 0 && this.allowSwitchToPoints) {
