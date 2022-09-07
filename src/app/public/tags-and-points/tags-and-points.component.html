@@ -9,6 +9,13 @@
       <div *ngIf="tabIndex < Tabs.questionList" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
+        <!-- Local Topics -->
+        <button mat-button (click)="ChangeLocal()" [class.selected]="forConstituency" matTooltip="local interest"
+          *ngIf="localData.LoggedInToAuth0">
+          local
+          <mat-icon>mp</mat-icon>
+        </button>
+
         <!-- Trending Tags -->
         <button mat-button (click)="ChangeTab(Tabs.trendingTags)" [class.selected]="tabIndex===Tabs.trendingTags"
           matTooltip="trending">
@@ -21,13 +28,6 @@
           matTooltip="recent" *ngIf="localData.LoggedInToAuth0 || haveRecentSlashTags">
           recent
           <mat-icon>notifications</mat-icon>
-        </button>
-
-        <!-- Local Topics -->
-        <button mat-button (click)="ChangeTab(Tabs.localTags)" [class.selected]="tabIndex===Tabs.localTags"
-          matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
-          local
-          <mat-icon>mp</mat-icon>
         </button>
 
         <!-- Tag Search -->
@@ -178,8 +178,8 @@
         'centerStage': tabIndex===Tabs.trendingTags, 
         'stageLeft': tabIndex>Tabs.trendingTags}" fxFill>
         <div class="content">
-          <app-tag-cloud [tagCloudType]="TagCloudTypes.Trending"
-            (NewSlashTagSelected)="ForConstituency(false);NewSlashTagSelected($event)">
+          <app-tag-cloud [tagCloudType]="TagCloudTypes.Trending" #tagsTrending
+            (NewSlashTagSelected)="NewSlashTagSelected($event)">
           </app-tag-cloud>
         </div>
       </div>
@@ -193,38 +193,27 @@
         'stageRight': tabIndex<Tabs.recentTags}" fxFill>
         <div class="content">
           <app-tag-cloud [tagCloudType]="TagCloudTypes.Recent" #tagsRecent
-            (NewSlashTagSelected)="ForConstituency(false);NewSlashTagSelected($event)"></app-tag-cloud>
+            (NewSlashTagSelected)="NewSlashTagSelected($event)">
+          </app-tag-cloud>
         </div>
       </div>
     </div>
 
-    <!-- 2 Tag Cloud Local -->
-    <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.localTags}">
-      <div [ngClass]="{
-        'centerStage': tabIndex===Tabs.localTags, 
-        'stageLeft': tabIndex>Tabs.localTags,
-        'stageRight': tabIndex<Tabs.localTags}" fxFill>
-        <div class="content">
-          <app-tag-cloud [tagCloudType]="TagCloudTypes.Local" #tagsRecent
-            (NewSlashTagSelected)="ForConstituency(true);NewSlashTagSelected($event)"></app-tag-cloud>
-        </div>
-      </div>
-    </div>
 
-    <!-- 3 SlashTag Search -->
+    <!-- 2 SlashTag Search -->
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.tagSearch}">
       <div [ngClass]="{
         'centerStage': tabIndex===Tabs.tagSearch, 
         'stageLeft': tabIndex>Tabs.tagSearch, 
         'stageRight': tabIndex<Tabs.tagSearch}" fxFill>
         <div class="content">
-          <app-tag-search (NewSlashTagSelected)="ForConstituency(false);NewSlashTagSelected($event)" #tagSearch>
+          <app-tag-search (NewSlashTagSelected)="NewSlashTagSelected($event)" #tagSearch>
           </app-tag-search>
         </div>
       </div>
     </div>
 
-    <!-- 4 Question List -->
+    <!-- 3 Question List -->
     <div class="tabContent" [ngClass]="{'topZ':tabIndex===Tabs.questionList}">
       <div [ngClass]="{
           'centerStage': tabIndex===Tabs.questionList, 
@@ -237,7 +226,7 @@
       </div>
     </div>
 
-    <!-- 5 Question Answers -->
+    <!-- 4 Question Answers -->
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.questionAnswers}">
       <div [ngClass]="{
           'centerStage': tabIndex===Tabs.questionAnswers, 
@@ -250,7 +239,7 @@
       </div>
     </div>
 
-    <!-- 6 Break-out Group Selection -->
+    <!-- 5 Break-out Group Selection -->
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.groups}">
       <div
         [ngClass]="{'centerStage': tabIndex===Tabs.groups, 'stageLeft': tabIndex>Tabs.groups,'stageRight': tabIndex<Tabs.groups}">
@@ -261,7 +250,7 @@
       </div>
     </div>
 
-    <!-- 7 Break-out Group Discussion -->
+    <!-- 6 Break-out Group Discussion -->
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.groupDiscussion}">
       <div
         [ngClass]="{'centerStage': tabIndex===Tabs.groupDiscussion, 'stageLeft': tabIndex>Tabs.groupDiscussion,'stageRight': tabIndex<Tabs.groupDiscussion}">
@@ -273,7 +262,7 @@
       </div>
     </div>
 
-    <!-- 8 app points for tag points. Scroller class NOT applied to tabContent -->
+    <!-- 7 app points for tag points. Scroller class NOT applied to tabContent -->
     <div class="tabContent" [ngClass]="{'topZ':tabIndex===Tabs.tagPoints}">
       <div [ngClass]="{
           'centerStage': tabIndex===Tabs.tagPoints, 
@@ -285,7 +274,7 @@
       </div>
     </div>
 
-    <!-- 9 new question or point -->
+    <!-- 8 new question or point -->
     <div class="tabContent scroller" [ngClass]="{'topZ':tabIndex===Tabs.newPoint}">
       <div [ngClass]="{
         'centerStage': tabIndex===Tabs.newPoint, 

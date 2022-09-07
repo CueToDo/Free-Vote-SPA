@@ -67,8 +67,7 @@ export enum PointTypesEnum {
 
 export enum TagCloudTypes {
   Trending,
-  Recent,
-  Local
+  Recent
 }
 
 export enum PointFlags {

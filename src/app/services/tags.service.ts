@@ -67,23 +67,18 @@ export class TagsService {
     return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
   }
 
-  TagCloud(type: TagCloudTypes): Observable<Tag[]> {
+  TagCloud(type: TagCloudTypes, constituencyID: number): Observable<Tag[]> {
     let WebAPIUrl = '';
 
     switch (type) {
       case TagCloudTypes.Recent:
-        WebAPIUrl = 'tags/cloud/recent';
+        WebAPIUrl = `tags/cloud/recent/${constituencyID}`;
         break;
       default:
-        WebAPIUrl = 'tags/cloud/trending';
+        WebAPIUrl = `tags/cloud/trending/${constituencyID}`;
         break;
     }
 
-    return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
-  }
-
-  TagCloudConstituency(constituencyID: number): Observable<Tag[]> {
-    let WebAPIUrl = `tags/cloud/local/${constituencyID}`;
     return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
   }
 

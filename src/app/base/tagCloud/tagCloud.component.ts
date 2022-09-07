@@ -26,9 +26,10 @@ export class TagCloudComponent implements OnInit, OnDestroy {
   @Output() haveTags = new EventEmitter<boolean>();
   @Output() NewSlashTagSelected = new EventEmitter<string>();
 
+  constituencyID = 0;
   tags: Tag[] = [];
 
-  waiting = true;
+  waiting = false;
   hideTags = false;
   toggleText = 'hide tags';
 
@@ -42,12 +43,11 @@ export class TagCloudComponent implements OnInit, OnDestroy {
 
   constructor(
     private appData: AppDataService,
-    private localData: LocalDataService,
     private tagsService: TagsService
   ) {}
 
   ngOnInit(): void {
-    this.fetchTags();
+    // this.fetchTags();
 
     // appComponent monitors width and broadcasts via appDataService
     this.width$ = this.appData.DisplayWidth$.subscribe((widthBand: number) => {
@@ -55,22 +55,17 @@ export class TagCloudComponent implements OnInit, OnDestroy {
     });
   }
 
+  public setConstituencyID(constituencyID: number) {
+    this.waiting = true;
+    this.tags = [];
+    this.constituencyID = constituencyID;
+    this.fetchTags();
+  }
+
   public fetchTags(): void {
-    if (this.tagCloudType == TagCloudTypes.Local) {
-      this.tags$ = this.tagsService
-        .TagCloudConstituency(this.localData.ConstituencyID)
-        .subscribe({
-          next: response => {
-            this.tags = response;
-            this.waiting = false;
-            this.haveTags.emit(response && response.length > 0);
-          },
-          error: serverError => {
-            this.error = serverError.error.detail;
-          }
-        });
-    } else {
-      this.tags$ = this.tagsService.TagCloud(this.tagCloudType).subscribe({
+    this.tags$ = this.tagsService
+      .TagCloud(this.tagCloudType, this.constituencyID)
+      .subscribe({
         next: response => {
           this.tags = response;
           this.waiting = false;
@@ -80,7 +75,6 @@ export class TagCloudComponent implements OnInit, OnDestroy {
           this.error = serverError.error.detail;
         }
       });
-    }
   }
 
   FontSize(Weight: number): string {

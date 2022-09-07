@@ -44,20 +44,19 @@ enum Tabs {
   // Tags
   trendingTags = 0,
   recentTags = 1,
-  localTags = 2,
-  tagSearch = 3,
+  tagSearch = 2,
 
   // Questions, Answers
-  questionList = 4,
-  questionAnswers = 5,
+  questionList = 3,
+  questionAnswers = 4,
 
   // Groups, Discussions
-  groups = 6,
-  groupDiscussion = 7,
+  groups = 5,
+  groupDiscussion = 6,
 
   // Points
-  tagPoints = 8,
-  newPoint = 9
+  tagPoints = 7,
+  newPoint = 8
 }
 
 @Component({
@@ -81,6 +80,11 @@ export class TagsAndPointsComponent
   // Topic - Tag Cloud
   public TagCloudTypes = TagCloudTypes;
   public haveRecentSlashTags = false;
+  public forConstituency = false;
+  fetchedTrending = false;
+  fetchedTrendingLocal = false;
+  fetchedRecent = false;
+  fetchedRecentLocal = false;
 
   public topicSelected = '';
   public get slashTagSelected(): string {
@@ -142,22 +146,23 @@ export class TagsAndPointsComponent
 
   @ViewChild('pointsFilter') pointsFilterComponent!: PointsFilterComponent;
 
-  // Tags (0-1-2)
+  // Tags
+  @ViewChild('tagsTrending') tagsTrendingComponent!: TagCloudComponent;
   @ViewChild('tagsRecent') tagsRecentComponent!: TagCloudComponent;
   @ViewChild('tagSearch') tagSearchComponent!: TagSearchComponent;
 
-  // BOG (5-6)
+  // BOG
   @ViewChild('bogSelection') bogSelectionComponent!: GroupSelectionComponent;
   @ViewChild('bogDiscussion') bogDiscussionComponent!: GroupDiscussionComponent;
 
-  //Points (3-4-7)
+  //Points
   @ViewChild('appQuestionsList')
   questionsListComponent!: QuestionsListComponent;
   @ViewChild('appQuestionAnswers')
   questionAnswersComponent!: QuestionAnswersComponent;
   @ViewChild('appPointsList') pointsListComponent!: PointsListComponent;
 
-  // New answer or point (8)
+  // New answer or point
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('newQuestion') newQuestionComponent!: QuestionEditComponent;
 
@@ -252,16 +257,28 @@ export class TagsAndPointsComponent
           this.tabIndex = Tabs.trendingTags;
           this.previousTabIndex = Tabs.trendingTags;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
+          this.tagsTrendingComponent.setConstituencyID(
+            this.filter.constituencyID
+          );
+          if (this.filter.constituencyID > 0) {
+            this.fetchedTrendingLocal = true;
+          } else {
+            this.fetchedTrending = true;
+          }
           break;
         case 'recent':
           this.tabIndex = Tabs.recentTags;
           this.previousTabIndex = Tabs.recentTags;
           this.appData.defaultSort = PointSortTypes.DateUpdated;
-          break;
-        case 'local':
-          this.tabIndex = Tabs.localTags;
-          this.previousTabIndex = Tabs.localTags;
-          this.appData.defaultSort = PointSortTypes.TrendingActivity;
+          this.tagsRecentComponent.setConstituencyID(
+            this.filter.constituencyID
+          );
+          if (this.filter.constituencyID > 0) {
+            this.fetchedRecentLocal = true;
+          } else {
+            this.fetchedRecent = true;
+          }
+
           break;
         case 'search':
           this.tabIndex = Tabs.tagSearch;
@@ -316,11 +333,39 @@ export class TagsAndPointsComponent
     }
   }
 
-  ForConstituency(forConstituency: boolean): void {
-    if (forConstituency) {
+  ChangeLocal(): void {
+    this.forConstituency = !this.forConstituency;
+    if (this.forConstituency) {
       this.filter.constituencyID = this.localData.ConstituencyID;
     } else {
       this.filter.constituencyID = 0;
+    }
+    if (this.tabIndex === Tabs.trendingTags) {
+      this.tagsTrendingComponent.setConstituencyID(this.filter.constituencyID);
+      if (this.filter.constituencyID > 0) {
+        this.fetchedTrendingLocal = true;
+        if (this.fetchedRecentLocal) {
+          this.fetchedRecentLocal = false;
+        }
+      } else {
+        this.fetchedTrending = true;
+        if (this.fetchedRecent) {
+          this.fetchedRecent = false;
+        }
+      }
+    } else if (this.tabIndex === Tabs.recentTags) {
+      this.tagsRecentComponent.setConstituencyID(this.filter.constituencyID);
+      if (this.filter.constituencyID > 0) {
+        this.fetchedRecentLocal = true;
+        if (this.fetchedTrendingLocal) {
+          this.fetchedTrendingLocal = false;
+        }
+      } else {
+        this.fetchedRecent = true;
+        if (this.fetchedTrending) {
+          this.fetchedTrending = false;
+        }
+      }
     }
   }
 
@@ -391,6 +436,16 @@ export class TagsAndPointsComponent
         this.previousTabIndex = tabIndex;
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         newRoute = '/trending';
+        if (!this.fetchedTrending || !this.fetchedTrendingLocal) {
+          this.tagsTrendingComponent.setConstituencyID(
+            this.filter.constituencyID
+          );
+          if (this.filter.constituencyID > 0) {
+            this.fetchedTrendingLocal = true;
+          } else {
+            this.fetchedTrending = true;
+          }
+        }
         break;
 
       case Tabs.recentTags:
@@ -402,12 +457,16 @@ export class TagsAndPointsComponent
         }
         this.appData.defaultSort = PointSortTypes.DateUpdated;
         newRoute = '/recent';
-        break;
-
-      case Tabs.localTags:
-        this.previousTabIndex = tabIndex;
-        this.appData.defaultSort = PointSortTypes.DateUpdated;
-        newRoute = '/local';
+        if (!this.fetchedRecent || !this.fetchedRecentLocal) {
+          this.tagsRecentComponent.setConstituencyID(
+            this.filter.constituencyID
+          );
+          if (this.filter.constituencyID > 0) {
+            this.fetchedRecentLocal = true;
+          } else {
+            this.fetchedRecent = true;
+          }
+        }
         break;
 
       case Tabs.tagSearch:
