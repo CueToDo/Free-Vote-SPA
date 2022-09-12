@@ -47,8 +47,6 @@ export class TagCloudComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // this.fetchTags();
-
     // appComponent monitors width and broadcasts via appDataService
     this.width$ = this.appData.DisplayWidth$.subscribe((widthBand: number) => {
       this.widthBand = widthBand;
