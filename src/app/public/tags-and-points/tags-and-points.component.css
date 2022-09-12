@@ -66,3 +66,8 @@ hr {
 ::ng-deep .mat-button {
   padding: 0 8px;
 }
+
+.localButton {
+  margin-left: 5px;
+  margin-right: 5px;
+}

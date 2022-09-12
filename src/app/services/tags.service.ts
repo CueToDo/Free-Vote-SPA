@@ -29,9 +29,10 @@ export class TagsService {
   // But NOT on return from sign out
   InitialisePreviousSlashTagSelected(): void {
     // LocalData LoadValues (called from its constructor) handles initial set up
+    const constituencyID = 0;
 
     if (!this.localData.PreviousSlashTagSelected) {
-      this.TagLatestActivity().subscribe({
+      this.TagLatestActivity(constituencyID).subscribe({
         next: previousSlashTagSelected => {
           this.localData.PreviousSlashTagSelected = previousSlashTagSelected;
         },
@@ -43,8 +44,8 @@ export class TagsService {
     }
   }
 
-  TagLatestActivity(): Observable<string> {
-    return this.httpService.get('tags/tagLatestActivity');
+  TagLatestActivity(constituencyID: number): Observable<string> {
+    return this.httpService.get(`tags/tagLatestActivity/${constituencyID}`);
   }
 
   // // Following not necessary on INITIALISE??
@@ -57,12 +58,12 @@ export class TagsService {
     this.localData.ActiveAliasForFilter = '';
   }
 
-  TagSearch(tagsearch: string): Observable<Tag[]> {
+  TagSearch(tagsearch: string, constituencyID: number): Observable<Tag[]> {
     // get rid of slash and dash
     tagsearch = tagsearch.split('/').join('');
     tagsearch = tagsearch.split('-').join('');
 
-    let WebAPIUrl = `tags/search/${tagsearch}`;
+    let WebAPIUrl = `tags/search/${tagsearch}/${constituencyID}`;
 
     return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
   }
