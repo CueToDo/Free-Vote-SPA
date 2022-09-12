@@ -9,13 +9,6 @@
       <div *ngIf="tabIndex < Tabs.questionList" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
-        <!-- Local Topics -->
-        <button mat-button (click)="ChangeLocal()" [class.selected]="forConstituency" matTooltip="local interest"
-          *ngIf="localData.LoggedInToAuth0">
-          local
-          <mat-icon>mp</mat-icon>
-        </button>
-
         <!-- Trending Tags -->
         <button mat-button (click)="ChangeTab(Tabs.trendingTags)" [class.selected]="tabIndex===Tabs.trendingTags"
           matTooltip="trending">
@@ -35,6 +28,13 @@
           matTooltip="slash tag search">
           search
           <mat-icon>search</mat-icon>
+        </button>
+
+        <!-- Local Topics -->
+        <button mat-button (click)="ChangeLocal()" class="localButton" [class.selected]="forConstituency"
+          matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
+          local
+          <mat-icon>mp</mat-icon>
         </button>
 
         <!-- Show previously selected tag results -->

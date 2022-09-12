@@ -41,6 +41,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     | undefined;
 
   slashTag = '';
+  constituencyID = 0;
   tagSearch$: Subscription | undefined;
   tagResults$: Subscription | undefined;
   tags: Tag[] = [];
@@ -144,21 +145,28 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     // This does not get communicated back to view until no cleanup is required
   }
 
+  SetConstituencyID(constituencyID: number) {
+    this.constituencyID = constituencyID;
+    this.tagSearch();
+  }
+
   // Go to API to get matching tags after debouncing keyups
   tagSearch() {
-    this.searching = true;
     //min 2 consonants to search api
     if (this.appData.uniqueConsonants(this.slashTag) > 1) {
-      this.tagResults$ = this.tagsService.TagSearch(this.slashTag).subscribe({
-        next: slashTags => {
-          this.tags = slashTags;
-          this.searching = false;
-        },
-        error: serverError => {
-          this.error = serverError.console.error.detail;
-          this.searching = false;
-        }
-      });
+      this.searching = true;
+      this.tagResults$ = this.tagsService
+        .TagSearch(this.slashTag, this.constituencyID)
+        .subscribe({
+          next: slashTags => {
+            this.tags = slashTags;
+            this.searching = false;
+          },
+          error: serverError => {
+            this.error = serverError.console.error.detail;
+            this.searching = false;
+          }
+        });
     }
   }
 

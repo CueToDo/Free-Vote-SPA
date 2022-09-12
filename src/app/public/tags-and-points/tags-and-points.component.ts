@@ -85,6 +85,8 @@ export class TagsAndPointsComponent
   fetchedTrendingLocal = false;
   fetchedRecent = false;
   fetchedRecentLocal = false;
+  fetchedSearch = false;
+  fetchedSearchLocal = false;
 
   public topicSelected = '';
   public get slashTagSelected(): string {
@@ -194,14 +196,16 @@ export class TagsAndPointsComponent
     }
 
     if (this.noTopic) {
-      this.tagLatestActivity$ = this.tagsService.TagLatestActivity().subscribe({
-        next: slashTag => {
-          this.localData.PreviousSlashTagSelected = slashTag;
-          this.topicSelected = this.localData.PreviousTopicSelected;
-        },
-        error: error =>
-          console.log('Server Error on getting last slash tag', error)
-      });
+      this.tagLatestActivity$ = this.tagsService
+        .TagLatestActivity(this.filter.constituencyID)
+        .subscribe({
+          next: slashTag => {
+            this.localData.PreviousSlashTagSelected = slashTag;
+            this.topicSelected = this.localData.PreviousTopicSelected;
+          },
+          error: error =>
+            console.log('Server Error on getting last slash tag', error)
+        });
     }
 
     // ==========   Subscriptions   ==========
@@ -257,7 +261,7 @@ export class TagsAndPointsComponent
           this.tabIndex = Tabs.trendingTags;
           this.previousTabIndex = Tabs.trendingTags;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
-          this.tagsTrendingComponent.setConstituencyID(
+          this.tagsTrendingComponent.SetConstituencyID(
             this.filter.constituencyID
           );
           if (this.filter.constituencyID > 0) {
@@ -270,7 +274,7 @@ export class TagsAndPointsComponent
           this.tabIndex = Tabs.recentTags;
           this.previousTabIndex = Tabs.recentTags;
           this.appData.defaultSort = PointSortTypes.DateUpdated;
-          this.tagsRecentComponent.setConstituencyID(
+          this.tagsRecentComponent.SetConstituencyID(
             this.filter.constituencyID
           );
           if (this.filter.constituencyID > 0) {
@@ -341,30 +345,37 @@ export class TagsAndPointsComponent
       this.filter.constituencyID = 0;
     }
     if (this.tabIndex === Tabs.trendingTags) {
-      this.tagsTrendingComponent.setConstituencyID(this.filter.constituencyID);
+      this.tagsTrendingComponent.SetConstituencyID(this.filter.constituencyID);
       if (this.filter.constituencyID > 0) {
         this.fetchedTrendingLocal = true;
-        if (this.fetchedRecentLocal) {
-          this.fetchedRecentLocal = false;
-        }
+        this.fetchedRecentLocal = false;
+        this.fetchedSearchLocal = false;
       } else {
         this.fetchedTrending = true;
-        if (this.fetchedRecent) {
-          this.fetchedRecent = false;
-        }
+        this.fetchedRecent = false;
+        this.fetchedSearch = false;
       }
     } else if (this.tabIndex === Tabs.recentTags) {
-      this.tagsRecentComponent.setConstituencyID(this.filter.constituencyID);
+      this.tagsRecentComponent.SetConstituencyID(this.filter.constituencyID);
       if (this.filter.constituencyID > 0) {
         this.fetchedRecentLocal = true;
-        if (this.fetchedTrendingLocal) {
-          this.fetchedTrendingLocal = false;
-        }
+        this.fetchedTrendingLocal = false;
+        this.fetchedSearchLocal = false;
       } else {
         this.fetchedRecent = true;
-        if (this.fetchedTrending) {
-          this.fetchedTrending = false;
-        }
+        this.fetchedTrending = false;
+        this.fetchedSearch = false;
+      }
+    } else if (this.tabIndex === Tabs.tagSearch) {
+      this.tagSearchComponent.SetConstituencyID(this.filter.constituencyID);
+      if (this.filter.constituencyID > 0) {
+        this.fetchedSearchLocal = true;
+        this.fetchedRecentLocal = false;
+        this.fetchedTrendingLocal = false;
+      } else {
+        this.fetchedSearch = true;
+        this.fetchedRecent = false;
+        this.fetchedTrending = false;
       }
     }
   }
@@ -437,7 +448,7 @@ export class TagsAndPointsComponent
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         newRoute = '/trending';
         if (!this.fetchedTrending || !this.fetchedTrendingLocal) {
-          this.tagsTrendingComponent.setConstituencyID(
+          this.tagsTrendingComponent.SetConstituencyID(
             this.filter.constituencyID
           );
           if (this.filter.constituencyID > 0) {
@@ -450,15 +461,11 @@ export class TagsAndPointsComponent
 
       case Tabs.recentTags:
         this.previousTabIndex = tabIndex;
-        // (always) update on switching to tagsRecent tab
-        if (this.refreshRecent) {
-          this.tagsRecentComponent.fetchTags();
-          this.refreshRecent = false;
-        }
+
         this.appData.defaultSort = PointSortTypes.DateUpdated;
         newRoute = '/recent';
         if (!this.fetchedRecent || !this.fetchedRecentLocal) {
-          this.tagsRecentComponent.setConstituencyID(
+          this.tagsRecentComponent.SetConstituencyID(
             this.filter.constituencyID
           );
           if (this.filter.constituencyID > 0) {
@@ -466,14 +473,24 @@ export class TagsAndPointsComponent
           } else {
             this.fetchedRecent = true;
           }
+        } else if (this.refreshRecent) {
+          this.tagsRecentComponent.fetchTags();
         }
+        this.refreshRecent = false;
         break;
 
       case Tabs.tagSearch:
         this.previousTabIndex = tabIndex;
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         newRoute = '/search';
-        this.tagSearchComponent?.restartSearch();
+        if (!this.fetchedSearch || !this.fetchedSearchLocal) {
+          this.tagSearchComponent.SetConstituencyID(this.filter.constituencyID);
+          if (this.filter.constituencyID > 0) {
+            this.fetchedSearchLocal = true;
+          } else {
+            this.fetchedSearch = true;
+          }
+        }
         break;
 
       case Tabs.questionList:

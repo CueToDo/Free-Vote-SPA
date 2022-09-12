@@ -55,7 +55,7 @@ export class TagCloudComponent implements OnInit, OnDestroy {
     });
   }
 
-  public setConstituencyID(constituencyID: number) {
+  public SetConstituencyID(constituencyID: number) {
     this.waiting = true;
     this.tags = [];
     this.constituencyID = constituencyID;
