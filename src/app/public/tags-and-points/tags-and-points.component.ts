@@ -1,3 +1,4 @@
+import { Point } from './../../models/point.model';
 // Angular
 import {
   Component,
@@ -377,6 +378,15 @@ export class TagsAndPointsComponent
         this.fetchedRecent = false;
         this.fetchedTrending = false;
       }
+    }
+  }
+
+  ChangeLocalPoints() {
+    this.ChangeLocal();
+    if (this.tabIndex == Tabs.tagPoints) {
+      this.ReselectPoints(PointSortTypes.NoChange);
+    } else {
+      this.ReselectQuestions();
     }
   }
 

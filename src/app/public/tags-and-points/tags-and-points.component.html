@@ -38,21 +38,34 @@
         </button>
 
         <!-- Show previously selected tag results -->
-        <button mat-button (click)="BackToSelectedTag()" *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
-          matTooltip="{{ topicSelected }}">
-          <span class="slash-tag">/</span>
-          <span>slash-tag</span>
-        </button>
+        <div fxLayout="row" fxLayoutAlign="left center">
+          <button mat-button (click)="BackToSelectedTag()" *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
+            matTooltip="{{ topicSelected }}">
+            <span class="slash-tag">/</span>
+            <span>slash-tag</span>
+          </button>
 
+          <i class="arrow right"></i>
+        </div>
       </div>
 
       <div *ngIf="tabIndex > Tabs.tagSearch" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
         <!-- Show tag clouds and tag search -->
-        <button mat-button (click)="ChangeTab(previousTabIndex)" matTooltip="trending">
-          <span class="slash-tag">/</span>
-          slash-tags
+        <div fxLayout="row-reverse" fxLayoutAlign="left center">
+          <button mat-button (click)="ChangeTab(previousTabIndex)" matTooltip="trending">
+            <span class="slash-tag">/</span>
+            <span>slash-tags</span>
+          </button>
+          <i class="arrow left"></i>
+        </div>
+
+        <!-- Local Topics -->
+        <button mat-button (click)="ChangeLocalPoints()" class="localButton" [class.selected]="forConstituency"
+          matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
+          local
+          <mat-icon>mp</mat-icon>
         </button>
 
         <!-- Questions -->
