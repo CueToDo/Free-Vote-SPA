@@ -22,9 +22,9 @@ import { AppDataService } from 'src/app/services/app-data.service';
 export class BreakOutGroupsService {
   constructor(private httpClientService: HttpService) {}
 
-  BreakoutRooms(tagDIsplay: string): Observable<Kvp[]> {
+  BreakoutRooms(constituencyID: number, tagDisplay: string): Observable<Kvp[]> {
     return this.httpClientService
-      .get(`breakoutGroups/roomsAvailable/${tagDIsplay}`)
+      .get(`breakoutGroups/roomsAvailable/${constituencyID}/${tagDisplay}`)
       .pipe(map(returnData => returnData as Kvp[]));
   }
 
@@ -93,9 +93,14 @@ export class BreakOutGroupsService {
     return a;
   }
 
-  BreakoutGroupsForTag(tagDisplay: string): Observable<BreakoutGroup[]> {
+  BreakoutGroupsForTag(
+    constituencyID: number,
+    tagDisplay: string
+  ): Observable<BreakoutGroup[]> {
     return this.httpClientService
-      .get(`breakoutGroups/breakoutGroupsForTag/${tagDisplay}`)
+      .get(
+        `breakoutGroups/breakoutGroupsForTag/${constituencyID}/${tagDisplay}`
+      )
       .pipe(
         // save copy for break-out group membership in different points
         map(BoGsForTag => BoGsForTag as BreakoutGroup[])
@@ -104,10 +109,11 @@ export class BreakOutGroupsService {
 
   // Just those I'm a member of
   GroupMembership(
+    constituencyID: number,
     tagDisplay: string,
     refresh: boolean
   ): Observable<BreakoutGroup[]> {
-    return this.BreakoutGroupsForTag(tagDisplay).pipe(
+    return this.BreakoutGroupsForTag(constituencyID, tagDisplay).pipe(
       tap(BoGsForTag => console.log(refresh, 'GroupMembership', BoGsForTag)),
       map(BoGsForTag =>
         BoGsForTag.filter(function (bog) {
@@ -118,8 +124,11 @@ export class BreakOutGroupsService {
   }
 
   // no need to refresh if refreshed for Membership
-  GroupsAvailable(tagDisplay: string): Observable<BreakoutGroup[]> {
-    return this.BreakoutGroupsForTag(tagDisplay).pipe(
+  GroupsAvailable(
+    constituencyID: number,
+    tagDisplay: string
+  ): Observable<BreakoutGroup[]> {
+    return this.BreakoutGroupsForTag(constituencyID, tagDisplay).pipe(
       map(BoGsForTag =>
         BoGsForTag.filter(function (bog) {
           return !bog.member && bog.spacesAvailable > 0;
@@ -129,12 +138,13 @@ export class BreakOutGroupsService {
   }
 
   GroupStart(
+    constituencyID: number,
     tagDisplay: string,
     breakoutRoomID: number,
     characterThemeID: number
   ): Observable<BreakoutGroup> {
     return this.httpClientService.get(
-      `breakoutGroups/start/${tagDisplay}/${breakoutRoomID}/${characterThemeID}`
+      `breakoutGroups/start/${constituencyID}/${tagDisplay}/${breakoutRoomID}/${characterThemeID}`
     );
   }
 
