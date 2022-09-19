@@ -81,7 +81,6 @@ export class TagsAndPointsComponent
   // Topic - Tag Cloud
   public TagCloudTypes = TagCloudTypes;
   public haveRecentSlashTags = false;
-  public forConstituency = false;
 
   // Tag fetch for tab switching after local setting change
   fetchedTagsTrending = false;
@@ -185,6 +184,9 @@ export class TagsAndPointsComponent
   ngOnInit(): void {
     // Initialise only - subscriptions follow
     this.appData.TagsPointsActive$.next(true);
+
+    // Local Politics - Constituency
+    this.SetConstituency();
 
     // Default Sort Type
     this.filter.sortType = PointSortTypes.TrendingActivity;
@@ -344,14 +346,18 @@ export class TagsAndPointsComponent
     }
   }
 
-  ChangeLocal(): void {
-    // Change constituency filter
-    this.forConstituency = !this.forConstituency;
-    if (this.forConstituency) {
+  SetConstituency() {
+    if (this.localData.forConstituency) {
       this.filter.constituencyID = this.localData.ConstituencyID;
     } else {
       this.filter.constituencyID = 0;
     }
+  }
+
+  ChangeLocal(): void {
+    // Change constituency filter
+    this.localData.forConstituency = !this.localData.forConstituency;
+    this.SetConstituency();
 
     // Default switch off one half of "fetches"
     if (this.filter.constituencyID > 0) {
@@ -397,17 +403,14 @@ export class TagsAndPointsComponent
 
   ChangeLocalPoints() {
     // Change constituency filter
-    this.forConstituency = !this.forConstituency;
-    if (this.forConstituency) {
-      this.filter.constituencyID = this.localData.ConstituencyID;
-
+    this.localData.forConstituency = !this.localData.forConstituency;
+    this.SetConstituency();
+    if (this.localData.forConstituency) {
       // switched to local - reselect local tags on tab switch
       this.fetchedTagsTrendingLocal = false;
       this.fetchedTagsRecentLocal = false;
       this.fetchedTagsSearchLocal = false;
     } else {
-      this.filter.constituencyID = 0;
-
       // switched to national - reselect national tags on tab switch
       this.fetchedTagsTrending = false;
       this.fetchedTagsRecent = false;
@@ -640,8 +643,8 @@ export class TagsAndPointsComponent
     if (this.questionCount == 0) {
       // If local setting has changed on tags screen, may need to reselect points
       if (
-        (this.forConstituency && !this.fetchedPointsLocal) ||
-        (!this.forConstituency && !this.fetchedPoints)
+        (this.localData.forConstituency && !this.fetchedPointsLocal) ||
+        (!this.localData.forConstituency && !this.fetchedPoints)
       )
         this.ReselectPoints(PointSortTypes.NoChange);
 

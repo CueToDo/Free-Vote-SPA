@@ -63,11 +63,6 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public MyPointFilter = MyPointFilter;
   public PointFeedbackFilter = PointFeedbackFilter;
 
-  // https://stackoverflow.com/questions/34947154/angular-2-viewchild-annotation-returns-undefined
-  // just use hidden insead of ngIf
-  // @ViewChild('PointsList') pointsList!: PointsListComponent;
-  // @ViewChild('QuestionsList') questionsList!: QuestionsListComponent;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     public localData: LocalDataService,

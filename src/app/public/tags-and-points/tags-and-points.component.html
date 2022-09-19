@@ -31,7 +31,7 @@
         </button>
 
         <!-- Local Topics -->
-        <button mat-button (click)="ChangeLocal()" class="localButton" [class.selected]="forConstituency"
+        <button mat-button (click)="ChangeLocal()" class="localButton" [class.selected]="localData.forConstituency"
           matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
           local
           <mat-icon>mp</mat-icon>
@@ -62,8 +62,8 @@
         </div>
 
         <!-- Local Topics -->
-        <button mat-button (click)="ChangeLocalPoints()" class="localButton" [class.selected]="forConstituency"
-          matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
+        <button mat-button (click)="ChangeLocalPoints()" class="localButton"
+          [class.selected]="localData.forConstituency" matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
           local
           <mat-icon>mp</mat-icon>
         </button>
