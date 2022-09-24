@@ -282,7 +282,7 @@
           'stageLeft': tabIndex>Tabs.tagPoints,
           'stageRight': tabIndex<Tabs.tagPoints}" fxFill>
         <!-- "Fetch more" component must apply scroller and content classes internally -->
-        <app-points-list [filter]="filter" #appPointsList>
+        <app-points-list [filter]="filter" #appPointsList (AltSLashTagSelected)="AltSLashTagSelected($event)">
         </app-points-list>
       </div>
     </div>

@@ -89,7 +89,7 @@
 
     <div [ngClass.xs]="'textXSmall'" [ngClass.sm]="'textSmall'" [ngClass.gt-sm]="'textMedium'" class="py-2">
       <span>
-        <a *ngFor="let tag of tags" class="slashTag" [routerLink]="tag.slashTag">{{ tag.slashTag }}</a>
+        <a *ngFor="let tag of tags" class="slashTag" (click)="setSlashTag(tag.slashTag)">{{ tag.slashTag }}</a>
       </span>
     </div>
 
