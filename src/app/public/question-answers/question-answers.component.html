@@ -6,29 +6,33 @@
 
             <div class="mt-4" fxLayout="row" fxLayoutAlign="center">
 
-                <button mat-button (click)="Back()">
+                <button mat-button (click)="Back()" matTooltip="Return to question list">
                     view all questions
                     <mat-icon>arrow_back</mat-icon>
                 </button>
 
                 <span *ngIf="localData.LoggedInToAuth0">
 
-                    <button mat-button (click)="viewAllAnswers()" [class.selected]="mode==='answers'">
+                    <button mat-button (click)="viewAllAnswers()" [class.selected]="mode==='answers'"
+                        matTooltip="Show all answers">
                         all answers
                         <mat-icon>autorenew</mat-icon>
                     </button>
 
-                    <button mat-button (click)="viewMyPoints()" [class.selected]="mode==='myPoints'">
+                    <button mat-button (click)="viewMyPoints()" [class.selected]="mode==='myPoints'"
+                        matTooltip="Show only my answers">
                         my answers only
                         <mat-icon>face</mat-icon>
                     </button>
 
-                    <button mat-button (click)="addAnswer()" [class.selected]="mode==='addAnswer'">
+                    <button mat-button (click)="addAnswer()" [class.selected]="mode==='addAnswer'"
+                        matTooltip="Add an existing answer">
                         add answer
                         <mat-icon>add</mat-icon>
                     </button>
 
-                    <button mat-button (click)="newAnswer()" [class.selected]="mode==='newAnswer'">
+                    <button mat-button (click)="newAnswer()" [class.selected]="mode==='newAnswer'"
+                        matTooltip="Submit a new answer">
                         new answer
                         <mat-icon>create</mat-icon>
                     </button>

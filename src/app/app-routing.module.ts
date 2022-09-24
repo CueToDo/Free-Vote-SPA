@@ -1,6 +1,6 @@
 // Angular
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, ExtraOptions } from '@angular/router';
 
 // Components
 import { CallbackComponent } from './public/callback/callback.component';
@@ -80,25 +80,28 @@ const appRoutes: Routes = [
       { path: 'points', component: TagsAndPointsComponent }, // Return from point share
       { path: 'questions', component: TagsAndPointsComponent }, // Return from question answers
       { path: 'by/:alias', component: TagsAndPointsComponent },
-      { path: ':title', component: PointShareComponent },
       {
-        path: ':question/:questionSlug',
+        path: 'question/:questionSlug',
         component: TagsAndPointsComponent
       }
     ]
   },
 
+  // Needs to be separate - not sure why this can't be a child of :tag
+  // despite fact this route is served by a different component
+  { path: ':tag/:title', component: PointShareComponent },
+
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
   { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )
 ];
 
+const routerSettings: ExtraOptions = {
+  initialNavigation: 'enabledBlocking'
+  // enableTracing: true // <-- debugging route issues only
+};
+
 @NgModule({
-  imports: [
-    RouterModule.forRoot(appRoutes, {
-      initialNavigation: 'enabledBlocking'
-      // enableTracing: true // <-- debugging purposes only
-    })
-  ],
+  imports: [RouterModule.forRoot(appRoutes, routerSettings)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

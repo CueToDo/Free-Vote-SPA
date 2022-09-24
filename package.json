@@ -1,6 +1,6 @@
 {
   "name": "free-vote",
-  "version": "14.1.13",
+  "version": "14.1.15",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --watch",

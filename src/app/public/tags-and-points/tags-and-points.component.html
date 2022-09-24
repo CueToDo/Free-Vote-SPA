@@ -31,28 +31,41 @@
         </button>
 
         <!-- Local Topics -->
-        <button mat-button (click)="ChangeLocal()" class="localButton" [class.selected]="forConstituency"
+        <button mat-button (click)="ChangeLocal()" class="localButton" [class.selected]="localData.forConstituency"
           matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
           local
           <mat-icon>mp</mat-icon>
         </button>
 
         <!-- Show previously selected tag results -->
-        <button mat-button (click)="BackToSelectedTag()" *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
-          matTooltip="{{ topicSelected }}">
-          <span class="slash-tag">/</span>
-          <span>slash-tag</span>
-        </button>
+        <div fxLayout="row" fxLayoutAlign="left center">
+          <button mat-button (click)="BackToSelectedTag()" *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
+            matTooltip="{{ topicSelected }}">
+            <span class="slash-tag">/</span>
+            <span>slash-tag</span>
+          </button>
 
+          <i class="arrow right"></i>
+        </div>
       </div>
 
       <div *ngIf="tabIndex > Tabs.tagSearch" fxLayout="row wrap" fxLayoutAlign.lt-md="space-around center"
         fxLayoutAlign.gt-sm="center center">
 
         <!-- Show tag clouds and tag search -->
-        <button mat-button (click)="ChangeTab(previousTabIndex)" matTooltip="trending">
-          <span class="slash-tag">/</span>
-          slash-tags
+        <div fxLayout="row-reverse" fxLayoutAlign="left center">
+          <button mat-button (click)="ChangeTab(previousTabIndex)" matTooltip="trending">
+            <span class="slash-tag">/</span>
+            <span>slash-tags</span>
+          </button>
+          <i class="arrow left"></i>
+        </div>
+
+        <!-- Local Topics -->
+        <button mat-button (click)="ChangeLocalSelection()" class="localButton"
+          [class.selected]="localData.forConstituency" matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
+          local
+          <mat-icon>mp</mat-icon>
         </button>
 
         <!-- Questions -->
@@ -220,7 +233,7 @@
           'stageLeft': tabIndex>Tabs.questionList,
           'stageRight': tabIndex<Tabs.questionList}" fxFill>
         <!-- "Fetch more" component must apply scroller and content classes internally -->
-        <app-questions-list [SlashTag]="filter.slashTag" #appQuestionsList (QuestionCount)="QuestionCount($event)"
+        <app-questions-list [filter]="filter" #appQuestionsList (QuestionCount)="QuestionCount($event)"
           (QuestionSelected)="QuestionSelected($event)">
         </app-questions-list>
       </div>

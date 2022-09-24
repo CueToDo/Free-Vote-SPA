@@ -40,9 +40,9 @@ hr {
 }
 
 .slash-tag {
-  margin-right: 5px;
-  font-weight: 900;
-  font-size: 2em;
+  margin-right: 2px;
+  font-weight: medium;
+  font-size: 1.8em;
 }
 
 .hide {
@@ -70,4 +70,34 @@ hr {
 .localButton {
   margin-left: 5px;
   margin-right: 5px;
+}
+
+button + i.arrow {
+  border: solid lightgray;
+  border-width: 0px 3px 3px 0px;
+  display: inline-block;
+  padding: 8px;
+  position: relative;
+}
+
+button + i.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  left: -6px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+button + i.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  left: 6px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+button:hover + i.arrow.right,
+button:hover + i.arrow.left {
+  opacity: 1;
+  transition: opacity 0.5s;
 }

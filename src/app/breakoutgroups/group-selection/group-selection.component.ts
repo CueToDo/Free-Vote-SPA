@@ -19,6 +19,7 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   styleUrls: ['./group-selection.component.css']
 })
 export class GroupSelectionComponent {
+  @Input() public constituencyID = 0;
   @Input() public tagDisplay = '';
   @Output() BogSelected = new EventEmitter<BreakoutGroup>();
 
@@ -67,7 +68,7 @@ export class GroupSelectionComponent {
     this.roomError = '';
     this.breakoutGroups = [];
     this.breakoutGroupsService
-      .GroupMembership(this.tagDisplay, refresh)
+      .GroupMembership(this.constituencyID, this.tagDisplay, refresh)
       .subscribe({
         next: bogs => {
           if (bogs.length === 0) {
@@ -83,17 +84,19 @@ export class GroupSelectionComponent {
   breakoutGroupsAvailable(): void {
     this.roomError = '';
     this.breakoutGroups = [];
-    this.breakoutGroupsService.GroupsAvailable(this.tagDisplay).subscribe({
-      next: bogs => {
-        if (bogs.length === 0) {
-          this.breakoutGroupsMessage =
-            'No break-out groups available to join. Consider starting a new group';
-        } else {
-          this.breakoutGroups = bogs;
-        }
-      },
-      error: serverError => (this.roomError = serverError.error.detail)
-    });
+    this.breakoutGroupsService
+      .GroupsAvailable(this.constituencyID, this.tagDisplay)
+      .subscribe({
+        next: bogs => {
+          if (bogs.length === 0) {
+            this.breakoutGroupsMessage =
+              'No break-out groups available to join. Consider starting a new group';
+          } else {
+            this.breakoutGroups = bogs;
+          }
+        },
+        error: serverError => (this.roomError = serverError.error.detail)
+      });
   }
 
   viewMyGroups(): void {
@@ -131,10 +134,12 @@ export class GroupSelectionComponent {
       isThemeOwner: false
     };
 
-    this.breakoutGroupsService.BreakoutRooms(this.tagDisplay).subscribe({
-      next: rooms => (this.rooms = rooms),
-      error: serverError => (this.roomError = serverError.error.detail)
-    });
+    this.breakoutGroupsService
+      .BreakoutRooms(this.constituencyID, this.tagDisplay)
+      .subscribe({
+        next: rooms => (this.rooms = rooms),
+        error: serverError => (this.roomError = serverError.error.detail)
+      });
 
     this.breakoutGroupsService
       .CharacterThemes()
@@ -156,6 +161,7 @@ export class GroupSelectionComponent {
     } else {
       this.breakoutGroupsService
         .GroupStart(
+          this.constituencyID,
           this.tagDisplay,
           this.roomSelected.value,
           this.characterThemeSelected.characterThemeID

@@ -95,7 +95,6 @@ export class PointsListComponent implements OnDestroy, OnInit {
       const tag = params.get('tag');
       if (tag && tag != this.filter.slashTag) {
         this.localData.PreviousSlashTagSelected = tag;
-        this.ReselectPoints(this.filter.sortType);
       }
     });
 
@@ -229,6 +228,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
           if (this.filter.questionID) {
             this.pointsService
               .GetFirstBatchQuestionPoints(
+                this.filter.constituencyID,
                 this.filter.slashTag,
                 this.filter.questionID,
                 this.filter.myPointFilter,

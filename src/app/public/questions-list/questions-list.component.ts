@@ -2,6 +2,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 // Models, enums
+import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 import { PointSortTypes } from 'src/app/models/enums';
 import { ID } from 'src/app/models/common';
 import {
@@ -21,8 +22,7 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 })
 export class QuestionsListComponent {
   // Questions are filtered by Constituency and SlashTag only
-  @Input() private constituencyID = 0;
-  @Input() SlashTag = '';
+  @Input() public filter = new FilterCriteria();
 
   // SortType and direction
   @Input() SortType = PointSortTypes.DateUpdated;
@@ -79,13 +79,11 @@ export class QuestionsListComponent {
       this.questions = [];
       this.error = '';
 
-      this.SlashTag = this.localData.PreviousSlashTagSelected;
-
       // Infinite Scroll: Get questions in batches
       this.questionsService
         .GetFirstBatchForTag(
-          this.constituencyID,
-          this.SlashTag,
+          this.filter.constituencyID,
+          this.filter.slashTag,
           this.SortType,
           this.SortAscending,
           updateTopicViewCount

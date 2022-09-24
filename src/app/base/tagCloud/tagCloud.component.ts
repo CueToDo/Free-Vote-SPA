@@ -53,14 +53,14 @@ export class TagCloudComponent implements OnInit, OnDestroy {
     });
   }
 
-  public SetConstituencyID(constituencyID: number) {
+  public FetchTagsForConstituency(constituencyID: number) {
     this.waiting = true;
     this.tags = [];
     this.constituencyID = constituencyID;
-    this.fetchTags();
+    this.FetchTags();
   }
 
-  public fetchTags(): void {
+  public FetchTags(): void {
     this.tags$ = this.tagsService
       .TagCloud(this.tagCloudType, this.constituencyID)
       .subscribe({
