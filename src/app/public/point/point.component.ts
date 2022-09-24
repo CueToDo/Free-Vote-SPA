@@ -51,6 +51,7 @@ export class PointComponent implements OnInit {
   @Output() PointDeleted = new EventEmitter();
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
+  @Output() AltSlashTagSelected = new EventEmitter<string>();
 
   // bind to point slashtags (not topic)
   tags: Tag[] = [];
@@ -442,6 +443,13 @@ export class PointComponent implements OnInit {
           emitted = true;
         });
     }
+  }
+
+  // Don't depend on routerLink - paramchange not detected - dunno why
+  setSlashTag(slashTag: string): void {
+    this.tagsService.SetSlashTag(slashTag);
+    // Communicate to parent
+    this.AltSlashTagSelected.emit(slashTag);
   }
 
   FetchMetaData(): void {

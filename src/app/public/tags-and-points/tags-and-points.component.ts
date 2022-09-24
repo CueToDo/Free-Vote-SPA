@@ -231,12 +231,13 @@ export class TagsAndPointsComponent
     // The ActivatedRoute dies with the routed component and so
     // the subscription dies with it.
     this.activatedRoute.paramMap.subscribe(params => {
-      const tag = params.get('tag');
+      const tagParam = params.get('tag'); // may be null
+      const slashTag = '/' + tagParam; // always not null
       const questionSlug = params.get('questionSlug');
       const titleParam = params.get('title');
 
-      if (!!tag && tag !== this.localData.PreviousSlashTagSelected) {
-        this.filter.slashTag = '/' + tag;
+      if (!!tagParam && slashTag !== this.localData.PreviousSlashTagSelected) {
+        this.filter.slashTag = tagParam;
         this.localData.PreviousSlashTagSelected = this.filter.slashTag;
 
         // QuestionAnswers
@@ -246,11 +247,15 @@ export class TagsAndPointsComponent
           } else {
             this.questionsListComponent.SelectQuestions(true);
           }
-        } else if (this.tabIndex !== Tabs.tagPoints) {
-          this.pointsSelected = false;
-          this.ChangeTab(Tabs.tagPoints);
         } else {
-          this.pointsListComponent.SelectPoints();
+          // PointsList now emits any new slashtag selected
+          // this.pointsSelected = false;
+          // if (this.tabIndex !== Tabs.tagPoints) {
+          //   this.ChangeTab(Tabs.tagPoints);
+          // } else {
+          //   this.pointsListComponent.SelectPoints();
+          //   this.pointsSelected = true;
+          // }
         }
       }
 
@@ -432,7 +437,12 @@ export class TagsAndPointsComponent
     }
   }
 
-  // TagCloud Components emits NewSlashTagSelected
+  AltSLashTagSelected(slashTag: string) {
+    this.NewSlashTagSelected(slashTag);
+    this.RouteParameterChanged(true, slashTag);
+  }
+
+  // TagCloud and PointsList Components emits NewSlashTagSelected
   NewSlashTagSelected(slashTag: string): void {
     // Direct communication from tags components
     this.filter.slashTag = slashTag;
@@ -472,8 +482,8 @@ export class TagsAndPointsComponent
 
     this.SetSortTypeIcon(pointSortType);
 
-    this.ChangeTab(Tabs.tagPoints);
-    this.pointsListComponent.SelectPoints();
+    this.pointsSelected = false;
+    this.ChangeTab(Tabs.tagPoints); // will select points
 
     this.externalTrigger = false;
   }
@@ -603,8 +613,10 @@ export class TagsAndPointsComponent
         this.newPointRefresh = false;
         this.refreshRecentTags = true; // Refresh Recent Tags when switch back from Point Selection
 
-        if (!this.pointsSelected) this.pointsListComponent.SelectPoints();
-        this.pointsSelected = true;
+        if (!this.pointsSelected && !!this.pointsListComponent) {
+          this.pointsListComponent.SelectPoints();
+          this.pointsSelected = true;
+        }
 
         break;
 

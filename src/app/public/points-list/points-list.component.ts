@@ -33,6 +33,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
   @Output() PointCount = new EventEmitter<number>();
+  @Output() AltSLashTagSelected = new EventEmitter<string>();
 
   // Subscriptions
   private pointSelection$: Subscription | undefined;
@@ -455,6 +456,10 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
   RemoveFromAnswers(pointID: number): void {
     this.RemovePointFromAnswers.emit(pointID);
+  }
+
+  setSlashTag(slashTag: string) {
+    this.AltSLashTagSelected.emit(slashTag);
   }
 
   ngOnDestroy(): void {
