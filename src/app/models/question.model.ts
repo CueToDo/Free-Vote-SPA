@@ -5,6 +5,7 @@ import { Tag } from './tag.model';
 import { PointSupportLevels } from './enums';
 
 export class QuestionEdit {
+  constituencyID = 0;
   questionID = 0;
   question = '';
   details = '';

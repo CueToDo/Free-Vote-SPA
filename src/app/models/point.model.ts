@@ -9,7 +9,7 @@ export class PointEdit {
   constituencyID = 0;
   pointID = 0;
   questionID = 0;
-  pointTitle = ''; // PointSlug constructed in API
+  pointTitle = ''; // PointSlug constructed in API from Title
   pointHTML = '';
   csvImageIDs = '';
   pointTypeID = PointTypesEnum.NotSelected;

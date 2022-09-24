@@ -1,4 +1,3 @@
-import { Point } from './../../models/point.model';
 // Angular
 import {
   Component,
@@ -10,7 +9,6 @@ import {
 import { ActivatedRoute } from '@angular/router';
 
 // Material
-// import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -94,9 +92,8 @@ export class TagsAndPointsComponent
   fetchedPoints = false;
   fetchedPointsLocal = false;
 
-  public topicSelected = '';
-  public get slashTagSelected(): string {
-    return this.localData.TopicToSlashTag(this.topicSelected);
+  public get topicSelected() {
+    return this.localData.SlashTagToTopic(this.filter.slashTag);
   }
 
   // Question Answers or Tag Points
@@ -105,8 +102,6 @@ export class TagsAndPointsComponent
   public get showQuestions(): boolean {
     return this.qp === 'question';
   }
-
-  allowSwitchToPoints = true; // Allowed after tag selection - not allowed if user clicks "questions"
 
   // Filter
   filter = new FilterCriteria();
@@ -201,7 +196,7 @@ export class TagsAndPointsComponent
     // No tag selected? Go to API to get latest
 
     if (this.noTopic && this.localData.PreviousSlashTagSelected) {
-      this.topicSelected = this.localData.PreviousTopicSelected;
+      this.filter.slashTag = this.localData.PreviousSlashTagSelected;
     }
 
     if (this.noTopic) {
@@ -210,7 +205,7 @@ export class TagsAndPointsComponent
         .subscribe({
           next: slashTag => {
             this.localData.PreviousSlashTagSelected = slashTag;
-            this.topicSelected = this.localData.PreviousTopicSelected;
+            this.filter.slashTag = slashTag;
           },
           error: error =>
             console.log('Server Error on getting last slash tag', error)
@@ -236,16 +231,28 @@ export class TagsAndPointsComponent
     // The ActivatedRoute dies with the routed component and so
     // the subscription dies with it.
     this.activatedRoute.paramMap.subscribe(params => {
-      console.log('TAP route change', params);
-
       const tag = params.get('tag');
       const questionSlug = params.get('questionSlug');
       const titleParam = params.get('title');
 
-      if (tag) this.localData.PreviousSlashTagSelected = tag;
+      if (!!tag && tag !== this.localData.PreviousSlashTagSelected) {
+        this.filter.slashTag = '/' + tag;
+        this.localData.PreviousSlashTagSelected = this.filter.slashTag;
 
-      // QuestionAnswers
-      if (questionSlug) this.ChangeTab(Tabs.questionAnswers);
+        // QuestionAnswers
+        if (questionSlug) {
+          if (this.tabIndex !== Tabs.questionAnswers) {
+            this.ChangeTab(Tabs.questionAnswers);
+          } else {
+            this.questionsListComponent.SelectQuestions(true);
+          }
+        } else if (this.tabIndex !== Tabs.tagPoints) {
+          this.pointsSelected = false;
+          this.ChangeTab(Tabs.tagPoints);
+        } else {
+          this.pointsListComponent.SelectPoints();
+        }
+      }
 
       // PointShare
       if (titleParam) this.qp = 'point';
@@ -262,7 +269,7 @@ export class TagsAndPointsComponent
     if (routeparts.length === 2) {
       // {0}/trending - length=2
 
-      this.topicSelected = this.localData.PreviousTopicSelected;
+      this.filter.slashTag = this.localData.PreviousSlashTagSelected;
 
       switch (routeparts[1]) {
         // may have separate tab for following
@@ -299,14 +306,14 @@ export class TagsAndPointsComponent
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
           break;
         default:
-          this.tabIndex = Tabs.questionList;
-          this.qp = 'question';
-          this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
+          this.tabIndex = Tabs.tagPoints;
+          this.qp = 'point';
+          this.filter.slashTag = '/' + routeparts[1];
       }
     } else if (routeparts.length === 3) {
       // {0}/{slashTag}/points
 
-      this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
+      this.filter.slashTag = '/' + routeparts[1];
 
       switch (routeparts[2]) {
         case 'questions':
@@ -326,7 +333,7 @@ export class TagsAndPointsComponent
     } else if (routeparts.length === 4) {
       // {0}/{slashTag}/by/{Alias}
       // {0}/{slashTag}/question/{question-slug}
-      this.topicSelected = this.localData.SlashTagToTopic(routeparts[1]);
+      this.filter.slashTag = '/' + routeparts[1];
 
       switch (routeparts[2]) {
         case 'question':
@@ -401,7 +408,7 @@ export class TagsAndPointsComponent
     }
   }
 
-  ChangeLocalPoints() {
+  ChangeLocalSelection() {
     // Change constituency filter
     this.localData.forConstituency = !this.localData.forConstituency;
     this.SetConstituency();
@@ -420,6 +427,7 @@ export class TagsAndPointsComponent
     if (this.tabIndex == Tabs.tagPoints) {
       this.ReselectPoints(PointSortTypes.NoChange);
     } else {
+      this.questionsSelected = false;
       this.ReselectQuestions();
     }
   }
@@ -427,7 +435,7 @@ export class TagsAndPointsComponent
   // TagCloud Components emits NewSlashTagSelected
   NewSlashTagSelected(slashTag: string): void {
     // Direct communication from tags components
-    this.topicSelected = this.localData.SlashTagToTopic(slashTag);
+    this.filter.slashTag = slashTag;
     this.filter.updateTopicViewCount = true;
     this.pointsFilterComponent.ClearPointFilters();
     this.haveRecentSlashTags = true;
@@ -437,17 +445,15 @@ export class TagsAndPointsComponent
   }
 
   ShowQuestions(): void {
-    // Manual stop auto switch
-    this.allowSwitchToPoints = false;
     this.ChangeTab(Tabs.questionList);
   }
 
   ReselectQuestions() {
     this.questionsSelected = false;
     this.pointsSelected = false;
-    this.allowSwitchToPoints = true;
 
     this.ChangeTab(Tabs.questionList);
+    this.questionsListComponent.SelectQuestions(false);
   }
 
   ReselectForNewPoint() {
@@ -458,15 +464,13 @@ export class TagsAndPointsComponent
   ReselectPoints(pointSortType: PointSortTypes) {
     this.externalTrigger = true;
 
-    this.topicSelected = this.localData.PreviousTopicSelected;
+    this.filter.slashTag = this.localData.PreviousSlashTagSelected;
 
     if (pointSortType !== PointSortTypes.NoChange) {
       this.filter.sortType = pointSortType;
     }
 
     this.SetSortTypeIcon(pointSortType);
-
-    this.allowSwitchToPoints = true;
 
     this.ChangeTab(Tabs.tagPoints);
     this.pointsListComponent.SelectPoints();
@@ -559,22 +563,22 @@ export class TagsAndPointsComponent
 
         this.questionsSelected = true;
 
-        newRoute = this.slashTagSelected;
+        newRoute = this.filter.slashTag;
 
         break;
 
       case Tabs.questionAnswers:
-        newRoute = this.slashTagSelected;
+        newRoute = this.filter.slashTag;
         break;
 
       case Tabs.groups:
         this.bogSelectionComponent.breakoutGroupsJoined(true);
-        newRoute = this.slashTagSelected + '/break-out-groups';
+        newRoute = this.filter.slashTag + '/break-out-groups';
         break;
 
       case Tabs.groupDiscussion:
         newRoute =
-          this.slashTagSelected +
+          this.filter.slashTag +
           '/break-out-groups/' +
           this.appData.kebabUri(this.bogSelected.breakoutRoom);
         break;
@@ -588,9 +592,9 @@ export class TagsAndPointsComponent
         const alias = this.localData.ActiveAliasForFilter;
         if (!alias) {
           // Unfiltered TagPoints
-          newRoute = this.slashTagSelected; // Tell the app component
+          newRoute = this.filter.slashTag; // Tell the app component
         } else {
-          newRoute = `${this.slashTagSelected}/by/${alias}`;
+          newRoute = `${this.filter.slashTag}/by/${alias}`;
 
           // ShowFilter for alias
           if (!this.applyingFilter) this.ShowPointFilterCriteria(true);
@@ -606,11 +610,11 @@ export class TagsAndPointsComponent
 
       case Tabs.newPoint:
         if (this.qp === 'question') {
-          this.newQuestionComponent.NewQuestion(this.slashTagSelected);
+          this.newQuestionComponent.NewQuestion(this.filter.slashTag);
         } else {
-          this.newPointComponent.NewPoint(this.slashTagSelected);
+          this.newPointComponent.NewPoint(this.filter.slashTag);
         }
-        newRoute = `${this.slashTagSelected}/new-${this.qp}`;
+        newRoute = `/${this.filter.slashTag}/new-${this.qp}`;
         break;
     }
 
@@ -619,6 +623,7 @@ export class TagsAndPointsComponent
 
   // Tell the App Component that the route has changed
   RouteParameterChanged(hasChanged: boolean, newRoute: string): void {
+    newRoute = this.localData.TopicToSlashTag(newRoute);
     if (hasChanged) this.appData.RouteParamChange$.next(newRoute);
   }
 
@@ -633,10 +638,6 @@ export class TagsAndPointsComponent
   // QuestionsList emits the question count, which may cause switch to points
   QuestionCount(count: number): void {
     this.questionCount = count;
-    if (count == 0 && this.allowSwitchToPoints) {
-      this.ChangeTab(Tabs.tagPoints);
-      this.pointsListComponent.SelectPoints();
-    }
   }
 
   BackToSelectedTag() {

@@ -176,7 +176,11 @@ export class LocalDataService {
     if (!topic) {
       return '';
     }
-    return '/' + topic.split(' ').join('-');
+    // topic should not begin with slash, but don't add another if it does
+    if (topic.charAt(0) !== '/') {
+      topic = '/' + topic;
+    }
+    return topic.split(' ').join('-');
   }
 
   // Depending on already being sanitised - straight conversion between values as would be saved in database

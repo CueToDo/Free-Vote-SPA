@@ -60,6 +60,7 @@ export class PointsService {
   }
 
   GetFirstBatchQuestionPoints(
+    constituencyID: number,
     slashTag: string,
     questionID: number,
     myPointFilter: MyPointFilter,
@@ -68,7 +69,7 @@ export class PointsService {
     sortAscending: boolean
   ): Observable<PointSelectionResult> {
     const apiUrl =
-      `points/getFirstBatchQuestionPoints/${slashTag.replace(
+      `points/getFirstBatchQuestionPoints/${constituencyID}/${slashTag.replace(
         '/',
         ''
       )}/${questionID}/${myPointFilter.toString()}` +

@@ -228,6 +228,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
           if (this.filter.questionID) {
             this.pointsService
               .GetFirstBatchQuestionPoints(
+                this.filter.constituencyID,
                 this.filter.slashTag,
                 this.filter.questionID,
                 this.filter.myPointFilter,

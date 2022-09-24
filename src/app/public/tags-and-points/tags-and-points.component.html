@@ -62,7 +62,7 @@
         </div>
 
         <!-- Local Topics -->
-        <button mat-button (click)="ChangeLocalPoints()" class="localButton"
+        <button mat-button (click)="ChangeLocalSelection()" class="localButton"
           [class.selected]="localData.forConstituency" matTooltip="local interest" *ngIf="localData.LoggedInToAuth0">
           local
           <mat-icon>mp</mat-icon>
@@ -233,7 +233,7 @@
           'stageLeft': tabIndex>Tabs.questionList,
           'stageRight': tabIndex<Tabs.questionList}" fxFill>
         <!-- "Fetch more" component must apply scroller and content classes internally -->
-        <app-questions-list [SlashTag]="filter.slashTag" #appQuestionsList (QuestionCount)="QuestionCount($event)"
+        <app-questions-list [filter]="filter" #appQuestionsList (QuestionCount)="QuestionCount($event)"
           (QuestionSelected)="QuestionSelected($event)">
         </app-questions-list>
       </div>

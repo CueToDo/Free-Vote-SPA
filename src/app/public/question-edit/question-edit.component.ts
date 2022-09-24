@@ -59,6 +59,7 @@ export class QuestionEditComponent implements OnInit {
   }
 
   ClearQuestion(): void {
+    this.questionEdit.constituencyID = -1;
     this.questionEdit.questionID = -1;
     this.questionEdit.question = '';
     this.questionEdit.details = ''; // doesn't get through to ckEditor on property binding
