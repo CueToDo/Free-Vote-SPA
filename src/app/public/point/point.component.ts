@@ -1,4 +1,3 @@
-import { LocalTagsComponent } from './../../local/local-tags/local-tags.component';
 // Angular
 import {
   Component,
@@ -25,6 +24,9 @@ import {
   PointFlags,
   PointTypesEnum
 } from 'src/app/models/enums';
+
+// Components
+import { LocalTagsComponent } from 'src/app/local/local-tags/local-tags.component';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';

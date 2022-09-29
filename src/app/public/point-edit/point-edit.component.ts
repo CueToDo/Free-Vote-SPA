@@ -43,6 +43,7 @@ export class PointEditComponent implements OnInit {
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent
   @Input() point = new Point();
   @Input() questionID = 0;
+  @Input() constituencyID = 0;
   @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
 
   @Input() isPorQPoint = false;
@@ -107,7 +108,7 @@ export class PointEditComponent implements OnInit {
     }
 
     if (!this.point) {
-      this.NewPoint(slashTag);
+      this.NewPoint(slashTag, this.constituencyID);
     } else {
       this.pointClone = cloneDeep(this.point) as PointEdit;
     }
@@ -331,7 +332,7 @@ export class PointEditComponent implements OnInit {
               // this.point.csvImageIDs = ''; // Only needed for upload, now complete??
 
               if (isNew) {
-                this.NewPoint(returnToSlashTag);
+                this.NewPoint(returnToSlashTag, this.constituencyID);
               } else {
                 // pointID only needed for new points, but parent reselects - we're not dependent on 2 way binding
                 // save response to point not pointClone, and manually emit
@@ -369,7 +370,7 @@ export class PointEditComponent implements OnInit {
     }
   }
 
-  NewPoint(slashTag: string): void {
+  NewPoint(slashTag: string, constituencyID: number): void {
     // Clear old Values when edit complete
     this.pointClone = new Point();
     this.pointClone.pointID = -1;
@@ -378,6 +379,8 @@ export class PointEditComponent implements OnInit {
 
     this.pointClone.pointHTML = ''; // doesn't get through to ckEditor on property binding
     this.ckeFudge.clearData(); // Must explicitly clear previous data
+
+    this.pointClone.constituencyID = constituencyID;
 
     if (!!slashTag) {
       this.pointClone.tags = [new Tag(slashTag)];
