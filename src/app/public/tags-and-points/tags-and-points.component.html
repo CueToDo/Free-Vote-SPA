@@ -299,8 +299,9 @@
               #newQuestion>
             </app-question-edit>
 
-            <app-point-edit *ngIf="!showQuestions" (CancelEdit)="CancelNewPoint()" (CompleteEdit)="NewPoint()"
-              (ReselectPoints)="ReselectForNewPoint()" #newPoint>
+            <app-point-edit *ngIf="!showQuestions" [constituencyID]="filter.constituencyID"
+              (CancelEdit)="CancelNewPoint()" (CompleteEdit)="NewPoint()" (ReselectPoints)="ReselectForNewPoint()"
+              #newPoint>
             </app-point-edit>
 
           </div>
