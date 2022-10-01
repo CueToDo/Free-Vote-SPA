@@ -1,4 +1,3 @@
-import { LocalDataService } from 'src/app/services/local-data.service';
 // Angular
 import { Injectable } from '@angular/core';
 
@@ -87,15 +86,17 @@ export class PointsService {
   // 2) Subsequent batch (very similar to above, can these be consolidated?)
   // 3) Page of points for all selection methods
   GetFirstBatchForTag(
-    constituencyID: number,
+    constituencyIDFilter: number,
+    constituencyIDVoter: number,
     slashTag: string,
     pointSortOrder: PointSortTypes,
     sortAscending: boolean,
     updateTopicCount: boolean
   ): Observable<PointSelectionResult> {
     // No Filters + infinite scroll on DateOrder desc
+
     const apiUrl =
-      `points/getFirstBatchForTag/${constituencyID}/${slashTag.replace(
+      `points/getFirstBatchForTag/${constituencyIDFilter}/${constituencyIDVoter}/${slashTag.replace(
         '/',
         ''
       )}/${pointSortOrder}` +
@@ -108,6 +109,8 @@ export class PointsService {
 
   // ToDo this is what needs to change for new selection methods
   GetFirstBatchFiltered(
+    constituencyIDFilter: number,
+    constituencyIDVoter: number,
     byAlias: string,
     onTopic: string,
     myPointsFilter: MyPointFilter,
@@ -127,6 +130,8 @@ export class PointsService {
     const apiUrl = 'points/getFirstBatchFiltered';
 
     const postData = {
+      constituencyIDFilter,
+      constituencyIDVoter,
       byAlias,
       onTopic,
       myPointsFilter,
@@ -192,12 +197,12 @@ export class PointsService {
   }
 
   GetNextBatch(
-    constituencyID: number,
+    constituencyIDVoter: number,
     pointSortOrder: PointSortTypes,
     fromRow: number,
     knowPointCountTotal: number
   ): Observable<PointSelectionResult> {
-    const apiUrl = `points/getNextBatch/${constituencyID}/${pointSortOrder}/${fromRow}/${this.batchSize}/${this.pageSize}`;
+    const apiUrl = `points/getNextBatch/${constituencyIDVoter}/${pointSortOrder}/${fromRow}/${this.batchSize}/${this.pageSize}`;
 
     return this.httpClientService
       .get(apiUrl)
@@ -210,14 +215,14 @@ export class PointsService {
 
   // returns a batch of points based on a list of IDs peviously returned to the client
   GetPage(
-    constituencyID: number,
+    constituencyIDVoter: number,
     pointIDs: ID[]
   ): Observable<PointSelectionResult> {
     if (!pointIDs || pointIDs.length === 0) {
       console.log('No points to select');
       return of(new PointSelectionResult());
     } else {
-      const apiUrl = `points/getPage/${constituencyID}`;
+      const apiUrl = `points/getPage/${constituencyIDVoter}`;
 
       // ToDo Removed 03/01/2021 const ids not used???
       // https://stackoverflow.com/questions/16553561/passing-list-of-keyvaluepair-or-idictionary-to-web-api-controller-from-javascrip
@@ -370,60 +375,4 @@ export class PointsService {
     // this.WoWWeekInfoVote.WoWWeekID = pointFeedback.WoWWeekID; // always update regardless
     // this.WoWWeekInfoVote.WoWWeekEndingDate = pointFeedback.WoWWeekEndingDate; // always update regardless
   }
-
-  // SelectedPoints(pageNumber: number): Promise<PointSelectionResult> {
-
-  //   const apiUrl = 'points/selected';
-
-  //   const postData = {
-  //     'pageSize': 10,
-  //     'pageNumber': pageNumber
-  //   };
-
-  //   return this.httpClientService
-  //     .post(apiUrl, postData)
-  //     .then(returnData => {
-  //       return returnData as PointSelectionResult;
-  //     });
-  // }
-
-  // GetNextBatchForTagID(tagID: number, sortRevision: number, pointCount: number,
-  //   mostRecentFirst: boolean, fromRow: number): Promise<PointSelectionResult> {
-
-  //   const apiUrl = `points/getNextBatchForTagID/${tagID}/${sortRevision}/${pointCount}/${mostRecentFirst ? 'Y' : 'N'}/${fromRow}`;
-
-  //   return this.httpClientService
-  //     .get(apiUrl)
-  //     .then(returnData => {
-  //       const PSR = new PointSelectionResult();
-
-  //       PSR.pointCount = returnData.pointCount;
-
-  //       // construct an Array of objects from an object
-  //       PSR.pointIDs = Object.keys(returnData.pointIDs).map(key => {
-  //         return { rowNumber: Number(key), pointID: returnData.pointIDs[key] };
-  //       });
-
-  //       PSR.points = returnData.points;
-
-  //       return PSR;
-  //     });
-  // }
-
-  // Service Returns Full PointFeedback for just the WoWWeekID and WoWWeekEndingDate to be saved in WoWWeekInfoVote
-  // GetWoWWeekInfoVote(): Promise<WoWWeekInfoVote> {
-  //   if (this.WoWWeekInfoVote) {
-  //     console.log('WoWWeekInfoVoteClient:', this.WoWWeekInfoVote);
-  //     return Promise.resolve(this.WoWWeekInfoVote);
-  //   } else {
-  //     return this.httpClientService
-  //       .get('points/WoWWeekInfoVote')
-  //       .then(result => {
-  //         console.log('GetWoWWeekInfoVote:', result);
-  //         this.WoWWeekInfoVote = result as WoWWeekInfoVote;
-  //         console.log('WoWWeekInfoVoteService:', this.WoWWeekInfoVote);
-  //         return this.WoWWeekInfoVote;
-  //       });
-  //   }
-  // }
 }

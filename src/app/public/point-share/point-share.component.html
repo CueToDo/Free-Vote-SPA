@@ -43,7 +43,15 @@
                 <!-- Point Display -->
                 <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
 
-                    <h1>{{ point.pointTitle }}</h1>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <h1>{{ point.pointTitle }}</h1>
+                        <div fxFlex></div>
+                        <mat-icon>comment</mat-icon>
+                        <mat-icon *ngIf="point.totalFeedback>0">star_half</mat-icon>
+                        <span *ngIf="point.totalFeedback>0">
+                            {{ point.totalFeedback }}
+                        </span>
+                    </div>
 
                     <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
 

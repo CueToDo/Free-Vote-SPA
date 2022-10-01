@@ -237,6 +237,8 @@ export class PointComponent implements OnInit {
           }
         }
 
+        const feedbackGiven = this.point.pointFeedback.feedbackGiven;
+
         this.pointsService
           .PointFeedback(this.point.pointID, pointSupportLevel, '', false)
           .subscribe({
@@ -249,6 +251,11 @@ export class PointComponent implements OnInit {
                 'CLIENT DATA UPDATED PointSupportlevel: ',
                 this.point?.pointFeedback?.supportLevelID
               );
+              if (feedbackGiven && !response.feedbackGiven) {
+                this.point.totalFeedback -= 1;
+              } else if (!feedbackGiven && response.feedbackGiven) {
+                this.point.totalFeedback += 1;
+              }
             },
             error: serverError => {
               console.log('PointFeedback Error', serverError);
@@ -411,7 +418,11 @@ export class PointComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((tags: Tag[]) => {
       this.tagsService
-        .PointTagsSave(this.point.pointID, this.localData.ConstituencyID, tags)
+        .PointTagsSave(
+          this.point.pointID,
+          this.localData.ConstituencyIDVoter,
+          tags
+        )
         .subscribe(); // To do confirmation
     });
   }

@@ -32,7 +32,7 @@ export class QuestionsService {
   }
 
   GetFirstBatchForTag(
-    constituencyID: number,
+    constituencyIDFilter: number,
     slashTag: string,
     pointSortOrder: PointSortTypes,
     sortAscending: boolean,
@@ -40,7 +40,7 @@ export class QuestionsService {
   ): Observable<QuestionSelectionResult> {
     // No Filters + infinite scroll on DateOrder desc
     const apiUrl =
-      `questions/getFirstBatchForTag/${constituencyID}/${slashTag.replace(
+      `questions/getFirstBatchForTag/${constituencyIDFilter}/${slashTag.replace(
         '/',
         ''
       )}/${pointSortOrder}` +
