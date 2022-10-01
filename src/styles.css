@@ -144,7 +144,9 @@ div.toolbar mat-form-field {
 
 .point {
   margin-top: 30px;
-  border-bottom: solid 3px #bbb;
+  padding-top: 10px;
+  border-bottom: solid 3px #ddd;
+  border-top: solid 3px #ddd;
 }
 
 .pagePreview {

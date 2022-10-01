@@ -202,6 +202,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
           this.pointsService
             .GetFirstBatchFiltered(
+              this.filter.constituencyID,
+              this.localData.ConstituencyIDVoter,
               aliasFilter,
               this.OnTopicSearch(),
               this.filter.myPointFilter,
@@ -257,6 +259,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
               this.pointsService
                 .GetFirstBatchForTag(
                   this.filter.constituencyID,
+                  this.localData.ConstituencyIDVoter,
                   this.filter.slashTag,
                   this.filter.sortType,
                   this.filter.sortAscending,
@@ -375,7 +378,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         this.allPointsDisplayed = false;
 
         this.pointsService
-          .GetPage(this.filter.constituencyID, pids)
+          .GetPage(this.localData.ConstituencyIDVoter, pids)
           .subscribe(response => {
             this.points = this.points.concat(response.points);
             this.NewPointsDisplayed();
@@ -394,7 +397,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         if (this.filter) {
           this.pointsService
             .GetNextBatch(
-              this.filter.constituencyID,
+              this.localData.ConstituencyIDVoter,
               this.filter.sortType,
               this.lastBatchRow + 1,
               this.pointCount

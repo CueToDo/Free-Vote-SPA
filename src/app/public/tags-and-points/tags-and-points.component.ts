@@ -360,7 +360,7 @@ export class TagsAndPointsComponent
 
   SetConstituency() {
     if (this.localData.forConstituency) {
-      this.filter.constituencyID = this.localData.ConstituencyID;
+      this.filter.constituencyID = this.localData.ConstituencyIDVoter;
     } else {
       this.filter.constituencyID = 0;
     }
