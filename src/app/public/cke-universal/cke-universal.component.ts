@@ -1,27 +1,34 @@
 // Angular
 import {
   Component,
-  OnInit,
   Inject,
   Renderer2,
   PLATFORM_ID,
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
 } from '@angular/core';
-import { isPlatformServer, isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformServer, isPlatformBrowser } from '@angular/common';
+
+// Services
+import { AppDataService } from 'src/app/services/app-data.service';
 
 @Component({
   selector: 'app-cke-universal',
   templateUrl: './cke-universal.component.html',
   styleUrls: ['./cke-universal.component.css']
 })
-export class CkeUniversalComponent implements OnInit {
+export class CkeUniversalComponent implements AfterViewInit {
   // https://www.lavalamp.biz/blogs/how-to-use-ckeditor-5-in-angular-with-server-side-rendering-support/
   // https://stackoverflow.com/questions/62076412/angular-universal-ckeditor5-window-is-not-defined
 
   @Input() textToEdit = '';
   @Output() textToEditChange = new EventEmitter();
+
+  @ViewChild('scriptHost') scriptHost!: ElementRef;
 
   ckEditor: any; // set in loadCkEditor
 
@@ -56,13 +63,16 @@ export class CkeUniversalComponent implements OnInit {
     allowedContent: true
   };
 
+  // Append script to local element, not document
+  // @Inject(DOCUMENT) private document: Document,
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    @Inject(DOCUMENT) private document: Document,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private appData: AppDataService
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.loadCkEditor();
     } else if (isPlatformServer(this.platformId)) {
@@ -81,16 +91,20 @@ export class CkeUniversalComponent implements OnInit {
     // Stick with this as official implementation requires editing of node_modules
     // as error in visibility of getter/setters AND npm audit issues
 
-    const script = this.renderer2.createElement('script');
+    // Global fix for ExpressionChangedAfterItHasBeenCheckedError causing script to load twice and getting 2 editors
+    if (this.appData.TAPInitialised) return;
 
-    script.type = 'application/javascript';
+    const ckeScript = this.renderer2.createElement('script');
+
+    ckeScript.type = 'application/javascript';
+    ckeScript.id = 'CKEScript';
 
     // script.src = 'https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js';
     // Use my custom build
-    script.src = 'https://free.vote/assets/ckeditor.js';
+    ckeScript.src = 'https://free.vote/assets/ckeditor.js';
 
-    script.text = `
-    ${(script.onload = async () => {
+    ckeScript.text = `
+    ${(ckeScript.onload = async () => {
       const CKEditor = (window as any).ClassicEditor;
 
       this.ckEditor = await CKEditor.create(
@@ -105,6 +119,8 @@ export class CkeUniversalComponent implements OnInit {
     })}
     `;
 
-    this.renderer2.appendChild(this.document.body, script);
+    this.renderer2.appendChild(this.scriptHost.nativeElement, ckeScript);
+
+    this.appData.TAPInitialised = true;
   }
 }
