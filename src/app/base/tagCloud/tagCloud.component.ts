@@ -29,7 +29,7 @@ export class TagCloudComponent implements OnInit, OnDestroy {
   constituencyID = 0;
   tags: Tag[] = [];
 
-  waiting = false;
+  waiting = true; // Avoids ExpressionHasChangedAfterItWasChecked
   hideTags = false;
   toggleText = 'hide tags';
 
@@ -56,13 +56,13 @@ export class TagCloudComponent implements OnInit, OnDestroy {
   }
 
   public FetchTagsForConstituency(constituencyID: number) {
-    this.waiting = true;
-    this.tags = [];
     this.constituencyID = constituencyID;
     this.FetchTags();
   }
 
   public FetchTags(): void {
+    this.waiting = true;
+    this.tags = [];
     this.tags$ = this.tagsService
       .TagCloud(this.tagCloudType, this.constituencyID)
       .subscribe({
