@@ -1,7 +1,5 @@
 <div fxFill fxLayout="column" class="app">
-
   <div id="titleBar">
-
     <!-- Burger menu for small screens -->
     <div *ngIf="showBurger" class="burger VC">
       <button type="button" class="burgerButton" (click)="toggleBurgerMenu()">
@@ -11,17 +9,15 @@
 
     <!-- Big URL confirmation -->
     <div id="title" class="VC">
-      <h1 [title]="pageTitleToolTip" [ngClass]="{under500:under500}">
-        <span *ngIf="routeDisplay===''">
+      <h1 [title]="pageTitleToolTip" [ngClass]="{ under500: under500 }">
+        <span *ngIf="routeDisplay === ''">
           {{ localData.website }}
         </span>
         {{ routeDisplay }}
       </h1>
     </div>
 
-    <div *ngIf="offline" class="amr-3 VC" id="offline">
-      OFFLINE
-    </div>
+    <div *ngIf="offline" class="amr-3 VC" id="offline">OFFLINE</div>
   </div>
 
   <app-nav-burger #burgerMenu></app-nav-burger>
@@ -38,19 +34,38 @@
 
   <!-- https://stackoverflow.com/questions/47829727/sticky-footer-at-bottom-in-angular -->
 
-  <div [ngClass]="{footerShow:showVulcan, footerHide:!showVulcan}">
-
+  <div [ngClass]="{ footerShow: showVulcan, footerHide: !showVulcan }">
     <div fxLayoutAlign="center">
       <div class="content" fxLayoutAlign="start end">
-        <img [src]="imgVulcan" [alt]="altVulcan" class="ms-3" height="143" (click)="vulcan()">
-        <span class="imgCredit" *ngIf="localData.website==='break-out.group'">Image by <a
-            href="https://www.flaticon.com/authors/freepik" title="Freepik" target="_blank">Freepik</a> from<a
-            href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></span>
+        <img
+          [src]="imgVulcan"
+          [alt]="altVulcan"
+          class="ms-3"
+          height="143"
+          (click)="vulcan()"
+        />
+        <span class="imgCredit" *ngIf="localData.website === 'break-out.group'"
+          >Image by
+          <a
+            href="https://www.flaticon.com/authors/freepik"
+            title="Freepik"
+            target="_blank"
+            >Freepik</a
+          >
+          from<a href="https://www.flaticon.com/" title="Flaticon"
+            >www.flaticon.com</a
+          ></span
+        >
       </div>
     </div>
 
-    <div fxLayout="row" [ngClass.lt-sm]="'x-small'" [ngClass.sm]="'small'" [ngClass.gt-sm]="'gt-small'" class="footer">
-
+    <div
+      fxLayout="row"
+      [ngClass.lt-sm]="'x-small'"
+      [ngClass.sm]="'small'"
+      [ngClass.gt-sm]="'gt-small'"
+      class="footer"
+    >
       <div fxFlex fxHide.lt-sm></div>
 
       <div fxFlex class="center" [ngClass.lt-sm]="'x-small'">
@@ -65,12 +80,9 @@
           {{ localAPI }}
         </span>
         <span class="align-middle copyright" (click)="toggleLocalAPI()">
-          {{ localData.website }} 2022 v14.1.18
+          {{ localData.website }} 2022 v14.1.19
         </span>
       </div>
-
     </div>
-
   </div>
-
 </div>

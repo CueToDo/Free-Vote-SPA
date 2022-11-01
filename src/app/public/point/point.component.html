@@ -1,30 +1,59 @@
 <div *ngIf="!editing" class="point">
-
   <!-- Point Display -->
   <a [id]="'id' + point.pointID">
-    <div [ngClass.xs]="'ugc xs'" [ngClass.sm]="'ugc sm'" [ngClass.gt-sm]="'ugc'">
-
+    <div
+      [ngClass.xs]="'ugc xs'"
+      [ngClass.sm]="'ugc sm'"
+      [ngClass.gt-sm]="'ugc'"
+    >
       <div fxLayout="row" fxLayoutAlign="start center">
         <h1 [innerHtml]="point.pointTitle"></h1>
         <div fxFlex></div>
-        <button mat-button [routerLink]="linkShare" matTooltip="share and comment">
+
+        <!-- PointNumber/Count -->
+
+        <div
+          [ngClass.xs]="'textXSmall'"
+          [ngClass.sm]="'textSmall'"
+          [ngClass.gt-sm]="'textMedium'"
+        >
+          {{ point.rowNumber }}/{{ pointCount }}
+        </div>
+
+        <!-- DateTimeUpdated -->
+
+        <div
+          [ngClass.xs]="'textXSmall'"
+          [ngClass.sm]="'textSmall'"
+          [ngClass.gt-sm]="'textMedium'"
+          [innerHtml]="point.dateTimeUpdated | nbsp"
+        ></div>
+
+        <button
+          mat-button
+          [routerLink]="linkShare"
+          matTooltip="share and comment"
+        >
           <mat-icon>comment</mat-icon>
-          <mat-icon *ngIf="point.totalFeedback>0">star_half</mat-icon>
-          <span *ngIf="point.totalFeedback>0">
+          <mat-icon *ngIf="point.totalFeedback > 0">star_half</mat-icon>
+          <span *ngIf="point.totalFeedback > 0">
             {{ point.totalFeedback }}
           </span>
         </button>
       </div>
 
-      <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle">
+      <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle" />
 
-      <div #elPointHtml [innerHTML]="pointHTMLwithoutEmbed | SafeHtml" [ngClass]="{'line-clamp': !showFullText}"></div>
+      <div
+        #elPointHtml
+        [innerHTML]="pointHTMLwithoutEmbed | SafeHtml"
+        [ngClass]="{ 'line-clamp': !showFullText }"
+      ></div>
 
       <div class="moreorless">
         <a *ngIf="elementTruncated()" (click)="showMore(true)">show more</a>
         <a *ngIf="showFullText" (click)="showMore(false)">show less</a>
       </div>
-
     </div>
   </a>
 
@@ -32,7 +61,10 @@
 
   <ng-container *ngIf="youTubeIDs.length > 0">
     <div *ngFor="let youTubeID of youTubeIDs" class="youTube">
-      <iframe [src]="'https://www.youtube.com/embed/' + youTubeID | SafeURL" allowfullscreen></iframe>
+      <iframe
+        [src]="'https://www.youtube.com/embed/' + youTubeID | SafeURL"
+        allowfullscreen
+      ></iframe>
     </div>
   </ng-container>
 
@@ -40,7 +72,11 @@
 
   <ng-container *ngIf="vimeoIDs.length > 0">
     <div *ngFor="let vimeoID of vimeoIDs" class="youTube">
-      <iframe [src]="'https://player.vimeo.com/video/' + vimeoID | SafeURL" frameborder="0" allowfullscreen></iframe>
+      <iframe
+        [src]="'https://player.vimeo.com/video/' + vimeoID | SafeURL"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
     </div>
   </ng-container>
 
@@ -49,7 +85,13 @@
   <ng-container class="youTube" *ngIf="soundCloudTrackIDs.length > 0">
     <div *ngFor="let soundCloudTrackID of soundCloudTrackIDs">
       <iframe
-        [src]="'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/' + soundCloudTrackID +  '&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true' | SafeURL"></iframe>
+        [src]="
+          'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/' +
+            soundCloudTrackID +
+            '&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true'
+            | SafeURL
+        "
+      ></iframe>
     </div>
   </ng-container>
 
@@ -62,14 +104,26 @@
     updating link preview
   </div>
 
-  <div *ngIf="point.pointFeedback.feedbackGiven || point.showLinkPreview || showLink || point.isNewSource"
-    class="pagePreview" [ngClass.lt-md]="'ltmd'">
-    <app-website-preview [ShowPreview]="point.showLinkPreview" [LinkAddress]="point.linkAddress"
-      [Title]="point.linkTitle" [Description]="point.linkDescription" [Image]="point.linkImage"
-      [NoPreviewText]="point.linkText">
+  <div
+    *ngIf="
+      point.pointFeedback.feedbackGiven ||
+      point.showLinkPreview ||
+      showLink ||
+      point.isNewSource
+    "
+    class="pagePreview"
+    [ngClass.lt-md]="'ltmd'"
+  >
+    <app-website-preview
+      [ShowPreview]="point.showLinkPreview"
+      [LinkAddress]="point.linkAddress"
+      [Title]="point.linkTitle"
+      [Description]="point.linkDescription"
+      [Image]="point.linkImage"
+      [NoPreviewText]="point.linkText"
+    >
     </app-website-preview>
   </div>
-
 
   <div class="alert alert-danger" *ngIf="!!error">
     {{ error }}
@@ -78,223 +132,428 @@
   <!-- Toolbar -->
 
   <div class="toolbar" fxLayout="row wrap" fxLayoutAlign="left center">
-
     <div *ngIf="possibleAnswer">
-      <button mat-button (click)="AddToAnswers(point.pointID)" matTooltip="Add to answers">
+      <button
+        mat-button
+        (click)="AddToAnswers(point.pointID)"
+        matTooltip="Add to answers"
+      >
         <mat-icon>add_circle</mat-icon>
       </button>
     </div>
 
     <div *ngIf="isMyAnswer">
-      <button mat-button (click)="RemoveFromAnswers(point.pointID)" matTooltip="Remove from answers">
+      <button
+        mat-button
+        (click)="RemoveFromAnswers(point.pointID)"
+        matTooltip="Remove from answers"
+      >
         <mat-icon>remove_circle</mat-icon>
       </button>
     </div>
 
-    <div *ngIf="point.draft" fxFlex class="draft">
-      Draft Only
-    </div>
+    <div *ngIf="point.draft" fxFlex class="draft">Draft Only</div>
 
     <!-- SlashTags -->
 
-    <div [ngClass.xs]="'textXSmall'" [ngClass.sm]="'textSmall'" [ngClass.gt-sm]="'textMedium'" class="py-2">
+    <div
+      [ngClass.xs]="'textXSmall'"
+      [ngClass.sm]="'textSmall'"
+      [ngClass.gt-sm]="'textMedium'"
+      class="py-2"
+    >
       <span>
-        <a *ngFor="let tag of tags" class="slashTag" (click)="setSlashTag(tag.slashTag)">{{ tag.slashTag }}</a>
+        <a
+          *ngFor="let tag of tags"
+          class="slashTag"
+          (click)="setSlashTag(tag.slashTag)"
+          >{{ tag.slashTag }}</a
+        >
       </span>
     </div>
 
     <!-- Toolbar Remainder -->
 
     <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
-
-      <!-- PointNumber/Count -->
-
-      <div [ngClass.xs]="'textXSmall'" [ngClass.sm]="'textSmall'" [ngClass.gt-sm]="'textMedium'">
-        {{ point.rowNumber }}/{{ pointCount }}
-      </div>
-
-      <!-- DateTimeUpdated -->
-
-      <div [ngClass.xs]="'textXSmall'" [ngClass.sm]="'textSmall'" [ngClass.gt-sm]="'textMedium'"
-        [innerHtml]="point.dateTimeUpdated | nbsp">
-      </div>
-
       <div>
-
         <!-- Point Type Indicator -->
 
-        <button mat-button [matMenuTriggerFor]="pointTypeVote" type='button'>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Opinion" matTooltip="Opinion">record_voice_over
+        <button mat-button [matMenuTriggerFor]="pointTypeVote" type="button">
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Opinion"
+            matTooltip="Opinion"
+            >record_voice_over
           </mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Fact" matTooltip="Fact">school</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Action" matTooltip="Action">directions_walk</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Quote" matTooltip="Quote">format_quote</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.ReportOrSurvey" matTooltip="Report or Survey">
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Fact"
+            matTooltip="Fact"
+            >school</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Action"
+            matTooltip="Action"
+            >directions_walk</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Quote"
+            matTooltip="Quote"
+            >format_quote</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.ReportOrSurvey"
+            matTooltip="Report or Survey"
+          >
             description
           </mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.CommentOrEditorial" matTooltip="Comment Or Editorial">
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.CommentOrEditorial"
+            matTooltip="Comment Or Editorial"
+          >
             comment
           </mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Petition" matTooltip="Petition">create</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.RecommendedReading" matTooltip="Recommended Reading">
-            local_library</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.RecommendedViewing" matTooltip="Recommended Viewing">
-            video_library</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.RecommendedListening" matTooltip="Recommended Listening">
-            video_library</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Assumption" matTooltip="Assumption">crop</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Belief" matTooltip="belief">speaker_notes</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Anecdote" matTooltip="Anecdote">hearing</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Tweet" matTooltip="Tweet">reply</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.CommonSense" matTooltip="Common Sense">how_to_reg
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Petition"
+            matTooltip="Petition"
+            >create</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.RecommendedReading"
+            matTooltip="Recommended Reading"
+          >
+            local_library</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.RecommendedViewing"
+            matTooltip="Recommended Viewing"
+          >
+            video_library</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.RecommendedListening"
+            matTooltip="Recommended Listening"
+          >
+            video_library</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Assumption"
+            matTooltip="Assumption"
+            >crop</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Belief"
+            matTooltip="belief"
+            >speaker_notes</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Anecdote"
+            matTooltip="Anecdote"
+            >hearing</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Tweet"
+            matTooltip="Tweet"
+            >reply</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.CommonSense"
+            matTooltip="Common Sense"
+            >how_to_reg
           </mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Question" matTooltip="Question">
-            device_unknown</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.RhetoricalQuestion" matTooltip="Rhetorical Question">
-            not_listed_location</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Definition" matTooltip="Definition">notes</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Meaning" matTooltip="Meaning">functions</mat-icon>
-          <mat-icon *ngIf="point.pointTypeID===PointTypesEnum.Prediction" matTooltip="Prediction">timeline</mat-icon>
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Question"
+            matTooltip="Question"
+          >
+            device_unknown</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.RhetoricalQuestion"
+            matTooltip="Rhetorical Question"
+          >
+            not_listed_location</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Definition"
+            matTooltip="Definition"
+            >notes</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Meaning"
+            matTooltip="Meaning"
+            >functions</mat-icon
+          >
+          <mat-icon
+            *ngIf="point.pointTypeID === PointTypesEnum.Prediction"
+            matTooltip="Prediction"
+            >timeline</mat-icon
+          >
         </button>
 
         <!-- PointType Explanation/Vote -->
 
         <mat-menu #pointTypeVote="matMenu">
-
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Opinion)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Opinion}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Opinion)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Opinion
+            }"
+          >
             <mat-icon>record_voice_over</mat-icon> opinion
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Fact)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Fact}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Fact)"
+            [ngClass]="{ selected: point.pointTypeID === PointTypesEnum.Fact }"
+          >
             <mat-icon>school</mat-icon> fact
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Action)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Action}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Action)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Action
+            }"
+          >
             <mat-icon>directions_walk</mat-icon> action
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Quote)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Quote}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Quote)"
+            [ngClass]="{ selected: point.pointTypeID === PointTypesEnum.Quote }"
+          >
             <mat-icon>format_quote</mat-icon> quote
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.ReportOrSurvey)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.ReportOrSurvey}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.ReportOrSurvey)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.ReportOrSurvey
+            }"
+          >
             <mat-icon>description</mat-icon> report or survey
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Petition)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Petition}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Petition)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Petition
+            }"
+          >
             <mat-icon>create</mat-icon> petition
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.RecommendedReading)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.RecommendedReading}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.RecommendedReading)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.RecommendedReading
+            }"
+          >
             <mat-icon>local_library</mat-icon> recommended reading
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.RecommendedViewing)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.RecommendedViewing}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.RecommendedViewing)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.RecommendedViewing
+            }"
+          >
             <mat-icon>video_library</mat-icon> recommended viewing
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.RecommendedViewing)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.RecommendedListening}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.RecommendedViewing)"
+            [ngClass]="{
+              selected:
+                point.pointTypeID === PointTypesEnum.RecommendedListening
+            }"
+          >
             <mat-icon>video_library</mat-icon> recommended listening
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Assumption)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Assumption}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Assumption)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Assumption
+            }"
+          >
             <mat-icon>crop</mat-icon> assumption
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Belief)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Belief}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Belief)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Belief
+            }"
+          >
             <mat-icon>speaker_notes</mat-icon> belief
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Anecdote)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Anecdote}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Anecdote)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Anecdote
+            }"
+          >
             <mat-icon>hearing</mat-icon> anecdote
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Tweet)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Tweet}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Tweet)"
+            [ngClass]="{ selected: point.pointTypeID === PointTypesEnum.Tweet }"
+          >
             <mat-icon>reply</mat-icon> tweet
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.CommonSense)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.CommonSense}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.CommonSense)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.CommonSense
+            }"
+          >
             <mat-icon>how_to_reg</mat-icon> common sense
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Question)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Question}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Question)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Question
+            }"
+          >
             <mat-icon>device_unknown</mat-icon> question
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.RhetoricalQuestion)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.RhetoricalQuestion}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.RhetoricalQuestion)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.RhetoricalQuestion
+            }"
+          >
             <mat-icon>not_listed_location</mat-icon> rhetorical question
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Definition)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Definition}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Definition)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Definition
+            }"
+          >
             <mat-icon>notes</mat-icon> definition
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Meaning)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Meaning}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Meaning)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Meaning
+            }"
+          >
             <mat-icon>functions</mat-icon> meaning
           </button>
 
-          <button mat-menu-item (click)="PointTypeVote(PointTypesEnum.Prediction)"
-            [ngClass]="{selected:point.pointTypeID===PointTypesEnum.Prediction}">
+          <button
+            mat-menu-item
+            (click)="PointTypeVote(PointTypesEnum.Prediction)"
+            [ngClass]="{
+              selected: point.pointTypeID === PointTypesEnum.Prediction
+            }"
+          >
             <mat-icon>timeline</mat-icon> prediction
           </button>
         </mat-menu>
       </div>
 
-
       <!-- Point Owner and Feedback Menu -->
 
       <div *ngIf="localData.LoggedInToAuth0">
-
         <!-- type='button' https://stackoverflow.com/questions/12319758/clicking-a-button-within-a-form-causes-page-refresh -->
         <!-- https://stackblitz.com/angular/rllvqdkjedar -->
-        <button mat-button [matMenuTriggerFor]="pointCommands" type='button'>
+        <button mat-button [matMenuTriggerFor]="pointCommands" type="button">
+          <mat-icon
+            *ngIf="!point.pointFeedback.feedbackIsUpdatable"
+            matTooltip="anon feedback locked"
+            >lock</mat-icon
+          >
 
-          <mat-icon *ngIf="!point.pointFeedback.feedbackIsUpdatable" matTooltip="anon feedback locked">lock</mat-icon>
+          <mat-icon
+            *ngIf="
+              point.pointFeedback.feedbackIsUpdatable &&
+              !point.pointFeedback.supportLevelID
+            "
+            matTooltip="feedback options"
+            >menu</mat-icon
+          >
 
-          <mat-icon *ngIf="point.pointFeedback.feedbackIsUpdatable && !point.pointFeedback.supportLevelID"
-            matTooltip="feedback options">menu</mat-icon>
+          <img
+            src="./assets/Modified.png"
+            *ngIf="point.pointFeedback.pointModified"
+            matTooltip="Point has been updated. Please confirm your feedback."
+          />
+          <img
+            src="./assets/Agree.png"
+            *ngIf="
+              !point.pointFeedback.pointModified &&
+              point.pointFeedback.supportLevelID === 1
+            "
+            matTooltip="Upvoted"
+          />
+          <img
+            src="./assets/Disagree.png"
+            *ngIf="
+              !point.pointFeedback.pointModified &&
+              point.pointFeedback.supportLevelID === -8
+            "
+            matTooltip="Neutral"
+          />
+          <img
+            src="./assets/Oppose.png"
+            *ngIf="
+              !point.pointFeedback.pointModified &&
+              point.pointFeedback.supportLevelID === -1
+            "
+            matTooltip="Downvoted"
+          />
+          <img
+            src="./assets/Block.png"
+            *ngIf="
+              !point.pointFeedback.pointModified &&
+              point.pointFeedback.supportLevelID === -9
+            "
+            matTooltip="Blocked"
+          />
 
-          <img src="./assets/Modified.png" *ngIf="point.pointFeedback.pointModified"
-            matTooltip="Point has been updated. Please confirm your feedback.">
-          <img src="./assets/Agree.png"
-            *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===1" matTooltip="Upvoted">
-          <img src="./assets/Disagree.png"
-            *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===-8" matTooltip="Neutral">
-          <img src="./assets/Oppose.png"
-            *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===-1"
-            matTooltip="Downvoted">
-          <img src="./assets/Block.png"
-            *ngIf="!point.pointFeedback.pointModified && point.pointFeedback.supportLevelID===-9" matTooltip="Blocked">
-
-          <mat-icon *ngIf="point.isFavourite" matTooltip="Is favourite">favorite</mat-icon>
-          <mat-icon *ngIf="point.isImportant" matTooltip="Is Important">priority_high</mat-icon>
-          <mat-icon *ngIf="point.localInterest" matTooltip="Local Interest">mp</mat-icon>
-          <mat-icon *ngIf="point.draft" matTooltip="draft point - not public">visibility_off</mat-icon>
-
+          <mat-icon *ngIf="point.isFavourite" matTooltip="Is favourite"
+            >favorite</mat-icon
+          >
+          <mat-icon *ngIf="point.isImportant" matTooltip="Is Important"
+            >priority_high</mat-icon
+          >
+          <mat-icon *ngIf="point.localInterest" matTooltip="Local Interest"
+            >mp</mat-icon
+          >
+          <mat-icon *ngIf="point.draft" matTooltip="draft point - not public"
+            >visibility_off</mat-icon
+          >
         </button>
 
         <!-- Voter Point Feedback Options -->
 
         <mat-menu #pointCommands="matMenu">
-
           <!-- Point Owner Commands -->
 
           <button mat-menu-item (click)="edit()" *ngIf="point.isPointOwner">
@@ -311,28 +570,48 @@
 
           <!-- End Point Owner -->
 
-          <button mat-menu-item (click)="Support()" *ngIf="point.pointFeedback.feedbackIsUpdatable"
-            [ngClass]="{selected:point.pointFeedback.supportLevelID===1}">
-            <img src="./assets/Agree.png" alt="Agree"> up-vote
+          <button
+            mat-menu-item
+            (click)="Support()"
+            *ngIf="point.pointFeedback.feedbackIsUpdatable"
+            [ngClass]="{ selected: point.pointFeedback.supportLevelID === 1 }"
+          >
+            <img src="./assets/Agree.png" alt="Agree" /> up-vote
           </button>
 
-          <button mat-menu-item (click)="Neutral()" *ngIf="point.pointFeedback.feedbackIsUpdatable"
-            [ngClass]="{selected:point.pointFeedback.supportLevelID===-8}">
-            <img src="./assets/Disagree.png" alt="Neutral"> neutral
+          <button
+            mat-menu-item
+            (click)="Neutral()"
+            *ngIf="point.pointFeedback.feedbackIsUpdatable"
+            [ngClass]="{ selected: point.pointFeedback.supportLevelID === -8 }"
+          >
+            <img src="./assets/Disagree.png" alt="Neutral" /> neutral
           </button>
 
-          <button mat-menu-item (click)="Oppose()" *ngIf="point.pointFeedback.feedbackIsUpdatable"
-            [ngClass]="{selected:point.pointFeedback.supportLevelID===-1}">
-            <img src="./assets/Oppose.png" alt="Oppose"> down-vote
+          <button
+            mat-menu-item
+            (click)="Oppose()"
+            *ngIf="point.pointFeedback.feedbackIsUpdatable"
+            [ngClass]="{ selected: point.pointFeedback.supportLevelID === -1 }"
+          >
+            <img src="./assets/Oppose.png" alt="Oppose" /> down-vote
           </button>
 
-          <button mat-menu-item (click)="Report()" *ngIf="point.pointFeedback.feedbackIsUpdatable"
-            [ngClass]="{selected:point.pointFeedback.supportLevelID===-9}">
-            <img src="./assets/Block.png" alt="Block"> block
+          <button
+            mat-menu-item
+            (click)="Report()"
+            *ngIf="point.pointFeedback.feedbackIsUpdatable"
+            [ngClass]="{ selected: point.pointFeedback.supportLevelID === -9 }"
+          >
+            <img src="./assets/Block.png" alt="Block" /> block
           </button>
 
-          <button mat-menu-item (click)="OccupyHandSignals()" *ngIf="point.pointFeedback.feedbackIsUpdatable">
-            <img src="./assets/Clarify.png" alt="Clarify"> all meeting signs
+          <button
+            mat-menu-item
+            (click)="OccupyHandSignals()"
+            *ngIf="point.pointFeedback.feedbackIsUpdatable"
+          >
+            <img src="./assets/Clarify.png" alt="Clarify" /> all meeting signs
           </button>
 
           <hr class="hr" />
@@ -342,46 +621,71 @@
             share and comment
           </button>
 
-          <button mat-menu-item [ngClass]="{selected:point.localInterest}" (click)="addLocalTags()">
+          <button
+            mat-menu-item
+            [ngClass]="{ selected: point.localInterest }"
+            (click)="addLocalTags()"
+          >
             <mat-icon matTooltip="make point local interest">mp</mat-icon>
             local interest
           </button>
 
-          <button mat-menu-item (click)="favourite()" matTooltip="flag point as a favourite"
-            [ngClass]="{selected:point.isFavourite}">
+          <button
+            mat-menu-item
+            (click)="favourite()"
+            matTooltip="flag point as a favourite"
+            [ngClass]="{ selected: point.isFavourite }"
+          >
             <mat-icon>{{ favoriteIcon }}</mat-icon>
             favourite
           </button>
 
-          <button mat-menu-item (click)="important()" matTooltip="flag point as important"
-            [ngClass]="{selected:point.isImportant}">
+          <button
+            mat-menu-item
+            (click)="important()"
+            matTooltip="flag point as important"
+            [ngClass]="{ selected: point.isImportant }"
+          >
             <mat-icon>priority_high</mat-icon>
             important
           </button>
 
           <hr class="hr" />
 
-          <button mat-menu-item (click)="anon()" *ngIf="point.pointFeedback.feedbackIsUpdatable">
+          <button
+            mat-menu-item
+            (click)="anon()"
+            *ngIf="point.pointFeedback.feedbackIsUpdatable"
+          >
             <mat-icon>lock</mat-icon>
             anonymous feedback
           </button>
 
-          <button mat-menu-item *ngIf="point.pointFeedback.feedbackGiven" matTooltip="date feedback given">
+          <button
+            mat-menu-item
+            *ngIf="point.pointFeedback.feedbackGiven"
+            matTooltip="date feedback given"
+          >
             <mat-icon>date_range</mat-icon>
             <span [innerHTML]="point.pointFeedback.feedbackDate | nbsp"></span>
           </button>
-
         </mat-menu>
-
       </div>
-
-    </div> <!-- End Toolbar Remainder -->
-
-  </div> <!-- End Toolbar -->
-
-</div> <!-- End Point Display -->
+    </div>
+    <!-- End Toolbar Remainder -->
+  </div>
+  <!-- End Toolbar -->
+</div>
+<!-- End Point Display -->
 
 <!-- Removing the banana from the box [(point)] is not necessary - https://medium.com/@preethi.s/angular-custom-two-way-data-binding-3e618309d6c7 -->
-<app-point-edit *ngIf="editing" [isPorQPoint]="isPorQPoint" (CancelEdit)="onCancelEdit()"
-  (CompleteEdit)="onCompleteEdit()" [(point)]="point" [isMyAnswer]="isMyAnswer" [constituencyID]="constituencyID">
+<app-point-edit
+  *ngIf="editing"
+  [isPorQPoint]="isPorQPoint"
+  (CancelEdit)="onCancelEdit()"
+  (CompleteEdit)="onCompleteEdit()"
+  [(point)]="point"
+  [isMyAnswer]="isMyAnswer"
+  [constituencyID]="constituencyID"
+>
 </app-point-edit>

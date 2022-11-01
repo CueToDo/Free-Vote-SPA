@@ -269,7 +269,7 @@ export class TagsAndPointsComponent
     const routeparts = this.appData.Route.split('/');
     if (routeparts) this.InitialRoute(routeparts);
 
-    this.appData.TAPInitialised = true;
+    this.appData.CKEInitialised = true;
   }
 
   InitialRoute(routeparts: string[]): void {

@@ -92,7 +92,7 @@ export class CkeUniversalComponent implements AfterViewInit {
     // as error in visibility of getter/setters AND npm audit issues
 
     // Global fix for ExpressionChangedAfterItHasBeenCheckedError causing script to load twice and getting 2 editors
-    if (this.appData.TAPInitialised) return;
+    if (this.appData.CKEInitialised) return;
 
     const ckeScript = this.renderer2.createElement('script');
 
@@ -121,6 +121,6 @@ export class CkeUniversalComponent implements AfterViewInit {
 
     this.renderer2.appendChild(this.scriptHost.nativeElement, ckeScript);
 
-    this.appData.TAPInitialised = true;
+    this.appData.CKEInitialised = true;
   }
 }

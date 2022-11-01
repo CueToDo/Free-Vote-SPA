@@ -64,7 +64,7 @@ export class PointShareComponent implements OnInit {
 
     this.SelectSpecificPoint(slashTag, pointTitle);
 
-    this.appData.TAPInitialised = false;
+    this.appData.CKEInitialised = false;
   }
 
   public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
@@ -165,23 +165,34 @@ export class PointShareComponent implements OnInit {
         let url: string;
         let id = '';
         let urlParts = [];
+        let lastPart = '';
+        let timeSplit = [];
+        let start = '';
 
         for (i = 1; i < split.length; i++) {
           oembedPlus = split[i].split('</figure>');
           url = oembedPlus[0].split('"')[1];
           urlParts = url.split('/');
+          lastPart = urlParts[urlParts.length - 1]; // watch?v=Ef9QnZVpVd8&amp;t=49s
 
           if (url.includes('youtu.be')) {
-            id = urlParts[urlParts.length - 1];
+            id = lastPart;
             this.youTubeIDs.push(id);
           } else if (url.includes('youtube.com')) {
-            id = urlParts[urlParts.length - 1].split('v=')[1];
+            id = lastPart.split('v=')[1]; // Ef9QnZVpVd8 &amp;t= 49s
+
+            timeSplit = id.split('&amp;t='); // Ef9QnZVpVd8 49s
+            if (timeSplit.length > 1) {
+              start = timeSplit[1].replace('s', ''); // 49
+              id = `${timeSplit[0]}?start=${start}`; // Ef9QnZVpVd8?start=49
+            }
             this.youTubeIDs.push(id);
           } else if (url.includes('vimeo.com')) {
-            id = urlParts[urlParts.length - 1];
+            id = lastPart;
             this.vimeoIDs.push(id);
           } else if (url.includes('soundcloud')) {
           }
+
           split[i] = oembedPlus[1]; // Use only what's after the figure element
         }
       }
