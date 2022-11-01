@@ -7,12 +7,15 @@
       [ngClass.gt-sm]="'ugc'"
     >
       <div fxLayout="row" fxLayoutAlign="start center">
-        <h1 [innerHtml]="point.pointTitle"></h1>
+        <div>
+          <h1 [innerHtml]="point.pointTitle"></h1>
+        </div>
         <div fxFlex></div>
 
         <!-- PointNumber/Count -->
 
         <div
+          class="aml-2 amr-2"
           [ngClass.xs]="'textXSmall'"
           [ngClass.sm]="'textSmall'"
           [ngClass.gt-sm]="'textMedium'"
@@ -28,18 +31,6 @@
           [ngClass.gt-sm]="'textMedium'"
           [innerHtml]="point.dateTimeUpdated | nbsp"
         ></div>
-
-        <button
-          mat-button
-          [routerLink]="linkShare"
-          matTooltip="share and comment"
-        >
-          <mat-icon>comment</mat-icon>
-          <mat-icon *ngIf="point.totalFeedback > 0">star_half</mat-icon>
-          <span *ngIf="point.totalFeedback > 0">
-            {{ point.totalFeedback }}
-          </span>
-        </button>
       </div>
 
       <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle" />
@@ -174,7 +165,7 @@
 
     <!-- Toolbar Remainder -->
 
-    <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+    <div fxFlex fxLayout="row" fxLayoutAlign="end center">
       <div>
         <!-- Point Type Indicator -->
 
@@ -611,7 +602,7 @@
             (click)="OccupyHandSignals()"
             *ngIf="point.pointFeedback.feedbackIsUpdatable"
           >
-            <img src="./assets/Clarify.png" alt="Clarify" /> all meeting signs
+            <img src="./assets/Clarify.png" alt="Clarify" /> view all signs
           </button>
 
           <hr class="hr" />
@@ -671,6 +662,18 @@
           </button>
         </mat-menu>
       </div>
+
+      <button
+        mat-button
+        [routerLink]="linkShare"
+        matTooltip="share and comment"
+      >
+        <mat-icon>comment</mat-icon>
+        <mat-icon *ngIf="point.totalFeedback > 0">star_half</mat-icon>
+        <span *ngIf="point.totalFeedback > 0">
+          {{ point.totalFeedback }}
+        </span>
+      </button>
     </div>
     <!-- End Toolbar Remainder -->
   </div>
