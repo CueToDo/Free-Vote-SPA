@@ -1,112 +1,175 @@
-<div [ngClass]="{edit: organisation?.organisationID || 0 > 0}">
-
-    <div fxLayout="column" fxLayoutAlign="start stretch">
-
-        <div fxLayout="row" fxLayoutAlign="start center">
-            <mat-form-field fxFlex>
-                <input matInput placeholder="organisation website" [(ngModel)]="organisation.organisationWebsite"
-                    #groupWebsite (keyup.enter)="websiteComplete()" (ngModelChange)="checkWebsite()">
-                <button mat-button *ngIf="organisation?.organisationWebsite" matSuffix mat-icon-button
-                    aria-label="clear" (click)="organisation.organisationWebsite='';">
-                    <mat-icon>close</mat-icon>
-                </button>
-            </mat-form-field>
-
-            <div class="ms-3">
-                <button mat-stroked-button (click)="FetchMetaData()" matTooltip="refresh website data"
-                    [disabled]="disableWebsiteRefresh">
-                    <span *ngIf="!isNew">refresh</span>
-                    <span *ngIf="isNew">fetch</span>
-                    <mat-icon>refresh</mat-icon>
-                </button>
-            </div>
-        </div>
-
-
-
-        <mat-form-field>
-            <input matInput placeholder="organisation name" [(ngModel)]="organisation.organisationName" #groupName
-                (keyup.enter)="nameComplete()">
-            <button mat-button *ngIf="organisation?.organisationName" matSuffix mat-icon-button aria-label="clear"
-                (click)="organisation.organisationName='';">
-                <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput placeholder="organisation description" [(ngModel)]="organisation.description"
-                #groupDescription (keyup.enter)="descriptionComplete()">
-            <button mat-button *ngIf="organisation?.description" matSuffix mat-icon-button aria-label="clear"
-                (click)="organisation.description='';">
-                <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput placeholder="organisation image" [(ngModel)]="organisation.image" #groupDescription
-                (keyup.enter)="descriptionComplete()">
-            <button mat-button *ngIf="organisation?.image" matSuffix mat-icon-button aria-label="clear"
-                (click)="organisation.image='';">
-                <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-
-        <div>
-            <img [src]="organisation.image" class="imageEdit" />
-        </div>
-
-        <mat-form-field>
-            <mat-select #geoExtent (ngModelChange)="extentSelected($event)" name="selectExtent"
-                [(ngModel)]="organisation.geographicalExtentID" placeholder="organisation type/geographical extent">
-                <mat-option *ngFor="let extent of extents" [value]="extent.value.toString()">{{ extent.key }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <div *ngIf="organisation?.geographicalExtentID===GeographicalExtentID.PrivateOrganisation.toString()">
-            <mat-radio-group [(ngModel)]="organisation.invitationOnly">
-                <mat-radio-button labelPosition="before" [value]="true">new members by invitation only
-                </mat-radio-button>
-                <mat-radio-button labelPosition="before" [value]="false">accept requests
-                </mat-radio-button>
-            </mat-radio-group>
-        </div>
-
-        <div *ngIf="showCountries">
-            Country or Countries
-            <app-list [(Items)]="organisation.countries" [ItemName]="'country'"></app-list>
-        </div>
-
-        <div *ngIf="showCities">
-            City or Cities
-            <app-list [(Items)]="organisation.cities" [ItemName]="'city'"></app-list>
-        </div>
-
-    </div>
-
-    <div *ngIf="updatingPreview">
-        <span class="spinner-grow text-primary ms-3 spinner" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </span>
-        updating website preview
-    </div>
-
-    <div fxLayout="row" fxLayoutAlign="end">
-
-        <button mat-stroked-button (click)="CancelEdit()" matTooltip="cancel edit">
-            <span>cancel</span>
-            <mat-icon>close</mat-icon>
+<div [ngClass]="{ edit: organisation.organisationID || 0 > 0 }">
+  <div fxLayout="column" fxLayoutAlign="start stretch">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <mat-form-field fxFlex>
+        <input
+          matInput
+          placeholder="organisation website"
+          [(ngModel)]="organisation.organisationWebsite"
+          #groupWebsite
+          (keyup.enter)="websiteComplete()"
+          (ngModelChange)="checkWebsite()"
+        />
+        <button
+          mat-button
+          *ngIf="organisation.organisationWebsite"
+          matSuffix
+          mat-icon-button
+          aria-label="clear"
+          (click)="organisation.organisationWebsite = ''"
+        >
+          <mat-icon>close</mat-icon>
         </button>
+      </mat-form-field>
 
-        <button mat-stroked-button (click)="Update()" matTooltip="update organisation details">
-            <span>save</span>
-            <mat-icon>check</mat-icon>
+      <div class="ms-3">
+        <button
+          mat-stroked-button
+          (click)="FetchMetaData()"
+          matTooltip="refresh website data"
+          [disabled]="disableWebsiteRefresh"
+        >
+          <span *ngIf="!isNew">refresh</span>
+          <span *ngIf="isNew">fetch</span>
+          <mat-icon>refresh</mat-icon>
         </button>
-
+      </div>
     </div>
 
-    <div *ngIf="error" class="alert alert-danger">
-        {{ error }}
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="organisation name"
+        [(ngModel)]="organisation.organisationName"
+        #groupName
+        (keyup.enter)="nameComplete()"
+      />
+      <button
+        mat-button
+        *ngIf="organisation.organisationName"
+        matSuffix
+        mat-icon-button
+        aria-label="clear"
+        (click)="organisation.organisationName = ''"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="organisation description"
+        [(ngModel)]="organisation.description"
+        #groupDescription
+        (keyup.enter)="descriptionComplete()"
+      />
+      <button
+        mat-button
+        *ngIf="organisation.description"
+        matSuffix
+        mat-icon-button
+        aria-label="clear"
+        (click)="organisation.description = ''"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="organisation image"
+        [(ngModel)]="organisation.image"
+        #groupDescription
+        (keyup.enter)="descriptionComplete()"
+      />
+      <button
+        mat-button
+        *ngIf="organisation.image"
+        matSuffix
+        mat-icon-button
+        aria-label="clear"
+        (click)="organisation.image = ''"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <div>
+      <img [src]="organisation.image" class="imageEdit" />
     </div>
 
+    <mat-form-field>
+      <mat-select
+        #geoExtent
+        (ngModelChange)="extentSelected($event)"
+        name="selectExtent"
+        [(ngModel)]="organisation.geographicalExtentID"
+        placeholder="organisation type/geographical extent"
+      >
+        <mat-option
+          *ngFor="let extent of extents"
+          [value]="extent.value.toString()"
+          >{{ extent.key }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div
+      *ngIf="
+        organisation.geographicalExtentID ===
+        GeographicalExtentID.PrivateOrganisation.toString()
+      "
+    >
+      <mat-radio-group [(ngModel)]="organisation.invitationOnly">
+        <mat-radio-button labelPosition="before" [value]="true"
+          >new members by invitation only
+        </mat-radio-button>
+        <mat-radio-button labelPosition="before" [value]="false"
+          >accept requests
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div *ngIf="showCountries">
+      Country or Countries
+      <app-list
+        [(Items)]="organisation.countries"
+        [ItemName]="'country'"
+      ></app-list>
+    </div>
+
+    <div *ngIf="showCities">
+      City or Cities
+      <app-list [(Items)]="organisation.cities" [ItemName]="'city'"></app-list>
+    </div>
+  </div>
+
+  <div *ngIf="updatingPreview">
+    <span class="spinner-grow text-primary ms-3 spinner" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </span>
+    updating website preview
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-stroked-button (click)="CancelEdit()" matTooltip="cancel edit">
+      <span>cancel</span>
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <button
+      mat-stroked-button
+      (click)="Update()"
+      matTooltip="update organisation details"
+    >
+      <span>save</span>
+      <mat-icon>check</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
 </div>

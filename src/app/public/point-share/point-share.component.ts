@@ -64,7 +64,7 @@ export class PointShareComponent implements OnInit {
 
     this.SelectSpecificPoint(slashTag, pointTitle);
 
-    this.appData.TAPInitialised = false;
+    this.appData.CKEInitialised = false;
   }
 
   public SelectSpecificPoint(slashTag: string, pointTitle: string): void {

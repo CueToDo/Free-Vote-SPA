@@ -55,7 +55,7 @@ export class AppDataService {
 
   public MenuItemSelected = '';
 
-  public TAPInitialised = false;
+  public CKEInitialised = false;
 
   // Let the service handle the communication and the response data
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).

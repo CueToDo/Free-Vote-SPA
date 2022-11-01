@@ -29,6 +29,7 @@ import {
 import { LocalTagsComponent } from 'src/app/local/local-tags/local-tags.component';
 
 // Services
+import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
@@ -88,6 +89,7 @@ export class PointComponent implements OnInit {
   public PointTypesEnum = PointTypesEnum;
 
   constructor(
+    private appData: AppDataService,
     public localData: LocalDataService, // public - used in template
     private lookupsService: LookupsService,
     private pointsService: PointsService,
@@ -351,6 +353,7 @@ export class PointComponent implements OnInit {
   }
 
   edit(): void {
+    this.appData.CKEInitialised = false;
     this.error = '';
     this.editing = true;
   }
