@@ -91,20 +91,22 @@ export class CkeUniversalComponent implements AfterViewInit {
     // Stick with this as official implementation requires editing of node_modules
     // as error in visibility of getter/setters AND npm audit issues
 
-    // Global fix for ExpressionChangedAfterItHasBeenCheckedError causing script to load twice and getting 2 editors
+    // Global fix for ExpressionChangedAfterItHasBeenCheckedError
+    // causing script to load twice and getting 2 editors
+
     if (this.appData.CKEInitialised) return;
 
-    const ckeScript = this.renderer2.createElement('script');
+    const ckeScriptElement = this.renderer2.createElement('script');
 
-    ckeScript.type = 'application/javascript';
-    ckeScript.id = 'CKEScript';
+    ckeScriptElement.type = 'application/javascript';
+    ckeScriptElement.id = 'CKEScript';
 
     // script.src = 'https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js';
     // Use my custom build
-    ckeScript.src = 'https://free.vote/assets/ckeditor.js';
+    ckeScriptElement.src = 'https://free.vote/assets/ckeditor.js';
 
-    ckeScript.text = `
-    ${(ckeScript.onload = async () => {
+    ckeScriptElement.text = `
+    ${(ckeScriptElement.onload = async () => {
       const CKEditor = (window as any).ClassicEditor;
 
       this.ckEditor = await CKEditor.create(
@@ -119,7 +121,7 @@ export class CkeUniversalComponent implements AfterViewInit {
     })}
     `;
 
-    this.renderer2.appendChild(this.scriptHost.nativeElement, ckeScript);
+    this.renderer2.appendChild(this.scriptHost.nativeElement, ckeScriptElement);
 
     this.appData.CKEInitialised = true;
   }

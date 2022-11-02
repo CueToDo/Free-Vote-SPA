@@ -822,7 +822,7 @@ export class TagsAndPointsComponent
     this.externalTrigger = false;
   }
 
-  NewPoint(): void {
+  NewPointCreated(): void {
     // Do nothing, this component also handles subscriptions
 
     this.externalTrigger = true;

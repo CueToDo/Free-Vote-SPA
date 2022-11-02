@@ -499,7 +499,7 @@
               *ngIf="!showQuestions"
               [constituencyID]="filter.constituencyID"
               (CancelEdit)="CancelNewPoint()"
-              (CompleteEdit)="NewPoint()"
+              (CompleteEdit)="NewPointCreated()"
               (ReselectPoints)="ReselectForNewPoint()"
               #newPoint
             >

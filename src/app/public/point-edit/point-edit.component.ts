@@ -41,7 +41,7 @@ import { Tag } from 'src/app/models/tag.model';
 })
 export class PointEditComponent implements OnInit {
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent
-  @Input() point = new Point();
+  @Input() point: Point | undefined;
   @Input() questionID = 0;
   @Input() constituencyID = 0;
   @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
@@ -107,9 +107,7 @@ export class PointEditComponent implements OnInit {
       slashTag = this.localData.PreviousSlashTagSelected;
     }
 
-    if (!this.point) {
-      this.NewPoint(slashTag, this.constituencyID);
-    } else {
+    if (!!this.point) {
       this.pointClone = cloneDeep(this.point) as PointEdit;
     }
 
