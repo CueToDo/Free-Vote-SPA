@@ -353,7 +353,6 @@ export class PointComponent implements OnInit {
   }
 
   edit(): void {
-    this.appData.CKEInitialised = false;
     this.error = '';
     this.editing = true;
   }

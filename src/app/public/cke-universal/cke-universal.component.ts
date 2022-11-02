@@ -74,7 +74,7 @@ export class CkeUniversalComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.loadCkEditor();
+      this.initialiseCKEditor();
     } else if (isPlatformServer(this.platformId)) {
       //  server mode detected
     }
@@ -83,10 +83,12 @@ export class CkeUniversalComponent implements AfterViewInit {
   clearData() {
     // editor must be retaining old data somehow and property binding breaks down
     this.textToEdit = '';
-    this.ckEditor.setData('');
+    if (!!this.ckEditor) {
+      this.ckEditor.setData('');
+    }
   }
 
-  loadCkEditor(): void {
+  initialiseCKEditor(): void {
     // Append script to document body
     // Stick with this as official implementation requires editing of node_modules
     // as error in visibility of getter/setters AND npm audit issues
@@ -94,7 +96,7 @@ export class CkeUniversalComponent implements AfterViewInit {
     // Global fix for ExpressionChangedAfterItHasBeenCheckedError
     // causing script to load twice and getting 2 editors
 
-    if (this.appData.CKEInitialised) return;
+    if (!!this.ckEditor) return; // Don't re-initialise
 
     const ckeScriptElement = this.renderer2.createElement('script');
 
@@ -122,7 +124,5 @@ export class CkeUniversalComponent implements AfterViewInit {
     `;
 
     this.renderer2.appendChild(this.scriptHost.nativeElement, ckeScriptElement);
-
-    this.appData.CKEInitialised = true;
   }
 }

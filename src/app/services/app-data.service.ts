@@ -55,8 +55,6 @@ export class AppDataService {
 
   public MenuItemSelected = '';
 
-  public CKEInitialised = false;
-
   // Let the service handle the communication and the response data
   // Notify service users via Behavioursubject. (Use Behavioursubject to ensure initial value).
   // Could use Promise for sign-in component, but other components such as menu need to know sign-in status
