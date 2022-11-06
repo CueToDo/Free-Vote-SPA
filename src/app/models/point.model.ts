@@ -38,6 +38,12 @@ export class PointEditFormData {
   SlashTags: string[] = [];
 }
 
+export class PointCommentFormData {
+  ParentPointID = -1;
+  PointID = -1;
+  PointHTML = '';
+}
+
 // Always use camelCase properties
 // https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_Serialization_CamelCasePropertyNamesContractResolver.htm
 export class PointSelectionResult {

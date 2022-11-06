@@ -1,68 +1,120 @@
 <form (ngSubmit)="onSubmit()" #formPoint="ngForm">
-
   <!-- Title -->
   <div class="mx-3 mt-3">
     <mat-form-field class="pointTitle">
-      <input matInput placeholder="point title" [(ngModel)]="pointClone.pointTitle" type="text" name="pointTitle">
+      <input
+        matInput
+        placeholder="point title"
+        [(ngModel)]="pointClone.pointTitle"
+        type="text"
+        name="pointTitle"
+      />
     </mat-form-field>
   </div>
 
   <!-- The Editor -->
-  <app-cke-universal name="point" [(textToEdit)]="pointClone.pointHTML" (blur)="onCKEBlur()" #CKEfudge>
+  <app-cke-universal
+    name="point"
+    [(textToEdit)]="pointClone.pointHTML"
+    (blur)="onCKEBlur()"
+    #CKEfudge
+  >
   </app-cke-universal>
 
   <!-- Image Upload -->
-  <div class="px-3 pt-3 mediaLinks" *ngIf="imageFileForUpload || uploadingImage">
-
+  <div
+    class="px-3 pt-3 mediaLinks"
+    *ngIf="imageFileForUpload || uploadingImage"
+  >
     <div fxLayout="column" fxLayoutAlign="space-around">
-
       <div *ngIf="imageFileForUpload" fxLayoutAlign="space-between center">
         <!-- To Be Animated with css transition" -->
         <mat-form-field fxFlex>
-          <input matInput placeholder="image to be uploaded" [(ngModel)]="imageName" readonly name="imagePath">
+          <input
+            matInput
+            placeholder="image to be uploaded"
+            [(ngModel)]="imageName"
+            readonly
+            name="imagePath"
+          />
         </mat-form-field>
-        <button mat-stroked-button class="ms-3" type="button" (click)="uploadImage()">
+        <button
+          mat-stroked-button
+          class="ms-3"
+          type="button"
+          (click)="uploadImage()"
+        >
           <mat-icon>publish</mat-icon>
           upload
         </button>
       </div>
 
       <div *ngIf="uploadingImage">
-        <mat-progress-bar mode="determinate" [value]="imageUploadProgress"></mat-progress-bar>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="imageUploadProgress"
+        ></mat-progress-bar>
       </div>
-
     </div>
-
   </div>
 
   <!-- Slash Tags -->
   <div class="m-3">
-    <app-tags-edit [(Tags)]="pointClone.tags" [IsMyPointEdit]="true"></app-tags-edit>
+    <app-tags-edit
+      [(Tags)]="pointClone.tags"
+      [IsMyPointEdit]="true"
+    ></app-tags-edit>
   </div>
 
   <!-- ToolBar -->
   <div class="toolbar pb-3" fxLayout="row wrap" fxLayoutAlign="start center">
-
     <!-- Using [(ngModel)] is the correct way to do this 
       https://stackoverflow.com/questions/46000950/angular-4-setting-selected-option-in-dropdown -->
     <mat-form-field>
-      <mat-select (ngModelChange)="onPointTypeChange($event)" name="pt" [(ngModel)]="pointClone.pointTypeID">
-        <mat-option *ngFor="let pointType of pointTypes" [value]="pointType.value">{{ pointType.key }}</mat-option>
+      <mat-select
+        (ngModelChange)="onPointTypeChange($event)"
+        name="pt"
+        [(ngModel)]="pointClone.pointTypeID"
+      >
+        <mat-option
+          *ngFor="let pointType of pointTypes"
+          [value]="pointType.value"
+          >{{ pointType.key }}</mat-option
+        >
       </mat-select>
     </mat-form-field>
 
-    <mat-checkbox [(ngModel)]="pointClone.draft" name="draftPoint" class="draft">
+    <mat-checkbox
+      [(ngModel)]="pointClone.draft"
+      name="draftPoint"
+      class="draft"
+    >
       draft
     </mat-checkbox>
 
     <!-- https://www.youtube.com/watch?v=YkvqLNcJz3Y -->
-    <input type="file" (change)="imageSelected($event)" style="display: none" #imageSelect>
-    <button mat-stroked-button type="button" *ngIf="!imageFileForUpload" (click)="imageSelect.click()">
+    <input
+      type="file"
+      (change)="imageSelected($event)"
+      style="display: none"
+      #imageSelect
+    />
+    <button
+      mat-stroked-button
+      type="button"
+      *ngIf="!imageFileForUpload"
+      (click)="imageSelect.click()"
+    >
       <mat-icon>add_photo_alternate</mat-icon>
       add image
     </button>
 
-    <button mat-stroked-button type="button" *ngIf="imageFileForUpload" (click)="imageRemove()">
+    <button
+      mat-stroked-button
+      type="button"
+      *ngIf="imageFileForUpload"
+      (click)="imageRemove()"
+    >
       <mat-icon>clear</mat-icon>
       remove images
     </button>
@@ -91,7 +143,5 @@
     <div class="fv-error mt-2" *ngIf="error && error !== ''">
       {{ error }}
     </div>
-
   </div>
-
 </form>

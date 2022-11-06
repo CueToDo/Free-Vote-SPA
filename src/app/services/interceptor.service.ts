@@ -100,9 +100,9 @@ export class InterceptorService implements HttpInterceptor {
     if (error instanceof HttpErrorResponse && error.status === 404) {
       console.log('404 Error', error);
       const error404 = { error: { detail: error.message } };
-      return throwError(error404);
+      return throwError(() => error404);
     } else {
-      return throwError(error);
+      return throwError(() => error);
     }
   }
 }

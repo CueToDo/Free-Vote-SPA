@@ -29,7 +29,6 @@ import {
 import { LocalTagsComponent } from 'src/app/local/local-tags/local-tags.component';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
@@ -49,12 +48,14 @@ export class PointComponent implements OnInit {
   @Input() isMyAnswer = false;
   @Input() searchTerm = '';
   @Input() constituencyID = 0;
+  @Input() sharing = false;
 
   @Output() CompleteEdit = new EventEmitter();
   @Output() PointDeleted = new EventEmitter();
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
   @Output() AltSlashTagSelected = new EventEmitter<string>();
+  @Output() NewComment = new EventEmitter();
 
   // bind to point slashtags (not topic)
   tags: Tag[] = [];
@@ -62,7 +63,6 @@ export class PointComponent implements OnInit {
   vimeoIDs: string[] = [];
   soundCloudTrackIDs: string[] = [];
   pointHTMLwithoutEmbed = '';
-  linkShare = '';
 
   editing = false;
   updatingPreview = false;
@@ -72,6 +72,12 @@ export class PointComponent implements OnInit {
   @ViewChild('elPointHtml') elPointHtml: ElementRef | undefined;
 
   public PointSupportLevels = PointSupportLevels;
+
+  get linkShare(): string {
+    return (
+      this.localData.PreviousSlashTagSelected + '/' + this.SelectSingleTitle
+    );
+  }
 
   get showLink(): boolean {
     if (!this.point) {
@@ -89,7 +95,6 @@ export class PointComponent implements OnInit {
   public PointTypesEnum = PointTypesEnum;
 
   constructor(
-    private appData: AppDataService,
     public localData: LocalDataService, // public - used in template
     private lookupsService: LookupsService,
     private pointsService: PointsService,
@@ -109,9 +114,6 @@ export class PointComponent implements OnInit {
     }
 
     this.extractMediaEmbeds();
-
-    this.linkShare =
-      this.localData.PreviousSlashTagSelected + '/' + this.SelectSingleTitle;
   }
 
   AssignTags(): void {
@@ -518,5 +520,9 @@ export class PointComponent implements OnInit {
 
   showMore(more: boolean): void {
     this.showFullText = more;
+  }
+
+  newComment() {
+    this.NewComment.emit();
   }
 }

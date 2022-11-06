@@ -38,7 +38,6 @@ import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
 import { PointsFilterComponent } from './points-filter/points-filter.component';
-import { PointShareComponent } from './point-share/point-share.component';
 import { PointsListComponent } from './points-list/points-list.component';
 import { QuestionComponent } from './question/question.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
@@ -49,6 +48,7 @@ import { TagSearchComponent } from './tag-search/tag-search.component';
 import { TakeActionComponent } from './take-action/take-action.component';
 import { WebsitePreviewComponent } from './website-preview/website-preview.component';
 import { PointCommentsComponent } from './point-comments/point-comments.component';
+import { PointCommentComponent } from './point-comment/point-comment.component';
 
 @NgModule({
   imports: [
@@ -87,7 +87,6 @@ import { PointCommentsComponent } from './point-comments/point-comments.componen
     PointsFilterComponent,
     PointsListComponent,
     PointOfTheWeekComponent,
-    PointShareComponent,
     QuestionAnswersComponent,
     QuestionComponent,
     QuestionEditComponent,
@@ -96,7 +95,8 @@ import { PointCommentsComponent } from './point-comments/point-comments.componen
     TagSearchComponent,
     TakeActionComponent,
     WebsitePreviewComponent,
-    PointCommentsComponent
+    PointCommentsComponent,
+    PointCommentComponent
   ],
   exports: [
     CkeUniversalComponent,

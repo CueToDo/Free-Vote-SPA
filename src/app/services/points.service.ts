@@ -9,6 +9,7 @@ import { map, tap } from 'rxjs/operators';
 import { ID } from 'src/app/models/common';
 import { PointTypesEnum, MyPointFilter } from 'src/app/models/enums';
 import {
+  PointCommentFormData,
   PointSelectionResult,
   Point,
   PointEdit,
@@ -292,6 +293,29 @@ export class PointsService {
     return this.httpClientService
       .post('points/pointUpdate', postData)
       .pipe(map(result => result as Point));
+  }
+
+  PointCommentUpdate(
+    ParentPointID: number,
+    PointID: number,
+    PointHTML: string
+  ): Observable<number> {
+    const postData = {
+      ParentPointID,
+      PointID,
+      PointHTML
+    } as PointCommentFormData;
+
+    return this.httpClientService.post('points/pointCommentUpdate', postData);
+  }
+
+  PointsSelectComments(
+    parentPointID: number,
+    constituencyIDVoter: number
+  ): Observable<PointSelectionResult> {
+    return this.httpClientService
+      .get(`points/pointCommentsSelect/${parentPointID}/${constituencyIDVoter}`)
+      .pipe(map(returnData => returnData as PointSelectionResult));
   }
 
   PointSourceMetaDataUpdate(

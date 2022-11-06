@@ -8,7 +8,7 @@ import { HomeComponent } from './public/home/home.component';
 import { CardComponent } from './public/card/card.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
 import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points.component';
-import { PointShareComponent } from './public/point-share/point-share.component';
+import { PointCommentsComponent } from './public/point-comments/point-comments.component';
 
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
@@ -89,7 +89,7 @@ const appRoutes: Routes = [
 
   // Needs to be separate - not sure why this can't be a child of :tag
   // despite fact this route is served by a different component
-  { path: ':tag/:title', component: PointShareComponent },
+  { path: ':tag/:title', component: PointCommentsComponent },
 
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
   { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )

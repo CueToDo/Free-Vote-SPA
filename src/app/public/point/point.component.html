@@ -15,6 +15,7 @@
         <!-- PointNumber/Count -->
 
         <div
+          *ngIf="!sharing"
           class="aml-2 amr-2"
           [ngClass.xs]="'textXSmall'"
           [ngClass.sm]="'textSmall'"
@@ -607,9 +608,9 @@
 
           <hr class="hr" />
 
-          <button mat-menu-item [routerLink]="linkShare">
-            <mat-icon matTooltip="social media share">share</mat-icon>
-            share and comment
+          <button mat-menu-item [routerLink]="linkShare" [disabled]="sharing">
+            <mat-icon matTooltip="social media share">comment</mat-icon>
+            comment and share
           </button>
 
           <button
@@ -663,13 +664,27 @@
         </mat-menu>
       </div>
 
+      <!-- Not already sharing -->
       <button
+        *ngIf="!sharing"
         mat-button
         [routerLink]="linkShare"
         matTooltip="share and comment"
       >
         <mat-icon>comment</mat-icon>
-        <mat-icon *ngIf="point.totalFeedback > 0">star_half</mat-icon>
+        <span *ngIf="point.totalFeedback > 0">
+          {{ point.totalFeedback }}
+        </span>
+      </button>
+
+      <!-- Already sharing -->
+      <button
+        *ngIf="sharing"
+        mat-button
+        (click)="newComment()"
+        matTooltip="new comment"
+      >
+        <mat-icon>comment</mat-icon>
         <span *ngIf="point.totalFeedback > 0">
           {{ point.totalFeedback }}
         </span>
