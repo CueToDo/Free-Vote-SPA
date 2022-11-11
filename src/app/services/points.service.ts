@@ -265,6 +265,7 @@ export class PointsService {
   PointUpdate(
     point: PointEdit,
     isAnswer: boolean,
+    isComment: boolean,
     isPorQPoint: boolean
   ): Observable<Point> {
     // Input parameter is Point not PointEdit
@@ -279,6 +280,7 @@ export class PointsService {
       csvImageIDs: point.csvImageIDs,
       PointTypeID: point.pointTypeID,
       isAnswer,
+      isComment,
       isPorQPoint, // not a point property
       LinkText: point.linkText,
       LinkAddress: point.linkAddress,

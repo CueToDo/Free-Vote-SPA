@@ -3,7 +3,7 @@
   "version": "14.2.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -o --watch",
+    "start": "ng serve -o --watch --host=localhost",
     "pwa": "http-server -p 7027 -c-1 dist/free-vote/browser",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",

@@ -1,3 +1,4 @@
+import { concatMap } from 'rxjs/operators';
 // Angular
 import {
   Component,
@@ -25,9 +26,8 @@ import { PointsService } from 'src/app/services/points.service';
   styleUrls: ['./point-comments.component.css']
 })
 export class PointCommentsComponent implements OnInit {
-  @Input() constituencyID = 0;
-
-  point = new Point();
+  parentPoint = new Point();
+  points: Point[] = [];
 
   // bind to point slashtags (not topic)
   slashTags: string[] = []; // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
@@ -70,11 +70,15 @@ export class PointCommentsComponent implements OnInit {
     this.alreadyFetchingPointFromDB = true;
 
     this.pointsService
-      .GetSpecificPoint(this.constituencyID, slashTag, pointTitle)
-      .subscribe({
-        next: psr => {
+      .GetSpecificPoint(
+        this.localData.ConstituencyIDVoter,
+        slashTag,
+        pointTitle
+      )
+      .pipe(
+        concatMap(psr => {
           const point = psr.points[0];
-          this.point = point;
+          this.parentPoint = point;
 
           this.extractMediaEmbeds();
           this.DisplayShareLinks();
@@ -92,7 +96,16 @@ export class PointCommentsComponent implements OnInit {
 
           // Finally link back to all points for tag
           this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
-        },
+
+          // now we have pointID, select comments
+          return this.pointsService.PointsSelectComments(
+            point.pointID,
+            this.localData.ConstituencyIDVoter
+          );
+        })
+      )
+      .subscribe({
+        next: psr => (this.points = psr.points),
         error: err => {
           this.error = err.error.detail;
         },
@@ -111,7 +124,7 @@ export class PointCommentsComponent implements OnInit {
       this.SelectSingleTitle;
 
     const linkShareEncoded = encodeURIComponent(this.linkShare);
-    const titleEncoded = encodeURIComponent(this.point.pointTitle);
+    const titleEncoded = encodeURIComponent(this.parentPoint.pointTitle);
 
     this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
     this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
@@ -125,14 +138,14 @@ export class PointCommentsComponent implements OnInit {
 
   // PointTitle or PointID to be able to select single point
   get SelectSingleTitle(): string {
-    if (!this.point) {
+    if (!this.parentPoint) {
       this.error = 'Missing: point';
       return '';
     } else {
-      if (!!this.point.pointSlug) {
-        return this.point.pointSlug;
+      if (!!this.parentPoint.pointSlug) {
+        return this.parentPoint.pointSlug;
       } else {
-        return this.point.pointID.toString();
+        return this.parentPoint.pointID.toString();
       }
     }
   }
@@ -141,22 +154,22 @@ export class PointCommentsComponent implements OnInit {
   extractMediaEmbeds(): void {
     // https://ckeditor.com/docs/ckeditor5/latest/features/media-embed.html
 
-    if (!this.point) {
+    if (!this.parentPoint) {
       this.error = 'Missing: point';
     } else {
       this.youTubeIDs = [];
-      if (this.point.youTubeID) {
-        this.youTubeIDs.push(this.point.youTubeID);
+      if (this.parentPoint.youTubeID) {
+        this.youTubeIDs.push(this.parentPoint.youTubeID);
       }
 
       this.soundCloudTrackIDs = [];
-      if (this.point.soundCloudTrackID) {
-        this.soundCloudTrackIDs.push(this.point.soundCloudTrackID);
+      if (this.parentPoint.soundCloudTrackID) {
+        this.soundCloudTrackIDs.push(this.parentPoint.soundCloudTrackID);
       }
 
       this.vimeoIDs = [];
 
-      const split = this.point.pointHTML.split('<figure class="media">');
+      const split = this.parentPoint.pointHTML.split('<figure class="media">');
 
       if (split.length > 0) {
         let i: number;
@@ -202,7 +215,7 @@ export class PointCommentsComponent implements OnInit {
 
   ShareByEmail() {
     window.open(
-      `mailto:?subject=${this.point.pointTitle}&body=Hi,%0D%0A%0D%0ATake a look at this from the ${this.localData.website} website - what do you think?%0D%0A%0D%0A${this.linkShare}`,
+      `mailto:?subject=${this.parentPoint.pointTitle}&body=Hi,%0D%0A%0D%0ATake a look at this from the ${this.localData.website} website - what do you think?%0D%0A%0D%0A${this.linkShare}`,
       '_blank'
     );
   }

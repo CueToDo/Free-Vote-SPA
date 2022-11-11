@@ -48,6 +48,7 @@ export class PointEditComponent implements OnInit {
 
   @Input() isPorQPoint = false;
   @Input() isMyAnswer = false;
+  @Input() isComment = false;
 
   @ViewChild('CKEfudge', { static: true }) ckeFudge: any;
 
@@ -252,6 +253,7 @@ export class PointEditComponent implements OnInit {
       if (
         !this.isMyAnswer &&
         !this.isPorQPoint &&
+        !this.isComment &&
         (!this.pointClone.tags || this.pointClone.tags.length === 0)
       ) {
         this.error = 'Points must have at least one slash tag';
@@ -284,7 +286,7 @@ export class PointEditComponent implements OnInit {
           tag => tag.slashTag == returnToSlashTag
         );
 
-        if (!returnToTag) {
+        if (!returnToTag && !this.isComment) {
           returnToSlashTag = this.pointClone.tags[0].slashTag;
           tagChange = true;
         }
@@ -316,6 +318,7 @@ export class PointEditComponent implements OnInit {
                 return this.pointsService.PointUpdate(
                   this.pointClone,
                   this.isMyAnswer,
+                  this.isComment,
                   this.isPorQPoint
                 );
               }

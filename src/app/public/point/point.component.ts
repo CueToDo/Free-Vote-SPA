@@ -46,6 +46,7 @@ export class PointComponent implements OnInit {
   @Input() isPorQPoint = false;
   @Input() possibleAnswer = false;
   @Input() isMyAnswer = false;
+  @Input() isComment = false;
   @Input() searchTerm = '';
   @Input() constituencyID = 0;
   @Input() sharing = false;

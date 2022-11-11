@@ -1,3 +1,6 @@
+// Comments not permitted in json (package.json --host=127.0.0.1")
+// https://stackoverflow.com/questions/72203399/suddenly-gets-could-not-read-source-map-in-vscode-using-angular
+
 // Angular
 import {
   Component,

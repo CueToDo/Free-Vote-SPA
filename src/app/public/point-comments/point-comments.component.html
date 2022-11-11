@@ -59,15 +59,21 @@
 
         <div>
           <app-point
-            [point]="point"
+            [point]="parentPoint"
             [sharing]="true"
             (NewComment)="NewComment()"
           ></app-point>
         </div>
 
+        <div>
+          <div *ngFor="let point of points">
+            <app-point [point]="point" [isComment]="true"> </app-point>
+          </div>
+        </div>
+
         <div *ngIf="newComment">
           <app-point-comment
-            [ParentPointID]="point.pointID"
+            [ParentPointID]="parentPoint.pointID"
             (CancelEdit)="CancelComment()"
             (CompleteEdit)="NewCommentCreated()"
           ></app-point-comment>

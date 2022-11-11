@@ -700,10 +700,11 @@
 <app-point-edit
   *ngIf="editing"
   [isPorQPoint]="isPorQPoint"
+  [isMyAnswer]="isMyAnswer"
+  [isComment]="isComment"
   (CancelEdit)="onCancelEdit()"
   (CompleteEdit)="onCompleteEdit()"
   [(point)]="point"
-  [isMyAnswer]="isMyAnswer"
   [constituencyID]="constituencyID"
 >
 </app-point-edit>

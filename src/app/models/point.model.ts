@@ -32,6 +32,7 @@ export class PointEditFormData {
   PointHTML = '';
   csvImageIDs = '';
   isAnswer = false;
+  isComment = false;
   isPorQPoint = false;
   PointTypeID = PointTypesEnum.Opinion;
   Draft = false;
