@@ -13,9 +13,6 @@ import {
 } from '@angular/core';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 
-// Services
-import { AppDataService } from 'src/app/services/app-data.service';
-
 @Component({
   selector: 'app-cke-universal',
   templateUrl: './cke-universal.component.html',
@@ -25,12 +22,19 @@ export class CkeUniversalComponent implements AfterViewInit {
   // https://www.lavalamp.biz/blogs/how-to-use-ckeditor-5-in-angular-with-server-side-rendering-support/
   // https://stackoverflow.com/questions/62076412/angular-universal-ckeditor5-window-is-not-defined
 
+  @Input() ID = 'default'; // To distinguish multiple editors on same page
+  // We now still get the error "duplicate modules" but we don't actually get duplicate editors
+  // A/W an Ivy impementation of CKEditor
+
   @Input() textToEdit = '';
   @Output() textToEditChange = new EventEmitter();
 
   @ViewChild('scriptHost') scriptHost!: ElementRef;
 
-  ckEditor: any; // set in loadCkEditor
+  localEditor: any; // set in loadCkEditor
+  get editorID(): string {
+    return `editor${this.ID}`;
+  }
 
   public ckeConfig = {
     toolbar: {
@@ -68,8 +72,7 @@ export class CkeUniversalComponent implements AfterViewInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private renderer2: Renderer2,
-    private appData: AppDataService
+    private renderer2: Renderer2
   ) {}
 
   ngAfterViewInit(): void {
@@ -83,10 +86,14 @@ export class CkeUniversalComponent implements AfterViewInit {
   clearData() {
     // editor must be retaining old data somehow and property binding breaks down
     this.textToEdit = '';
-    if (!!this.ckEditor) {
-      this.ckEditor.setData('');
+    if (!!this.localEditor) {
+      this.localEditor.setData('');
     }
   }
+
+  // Need to wait for Ivy enabled editor
+  // https://github.com/ckeditor/ckeditor5-angular/issues/99
+  // This is without Angular support - https://www.lavalamp.biz/blogs/how-to-use-ckeditor-5-in-angular-with-server-side-rendering-support/
 
   initialiseCKEditor(): void {
     // Append script to document body
@@ -96,8 +103,9 @@ export class CkeUniversalComponent implements AfterViewInit {
     // Global fix for ExpressionChangedAfterItHasBeenCheckedError
     // causing script to load twice and getting 2 editors
 
-    if (!!this.ckEditor) return; // Don't re-initialise
+    if (!!this.localEditor) return; // Don't recreate (shouldn't be an issue)
 
+    // dynamically create and load the script element
     const ckeScriptElement = this.renderer2.createElement('script');
 
     ckeScriptElement.type = 'application/javascript';
@@ -106,19 +114,27 @@ export class CkeUniversalComponent implements AfterViewInit {
     // script.src = 'https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js';
     // Use my custom build
     ckeScriptElement.src = 'https://free.vote/assets/ckeditor.js';
+    // ckeScriptElement.src = 'https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js';
 
     ckeScriptElement.text = `
     ${(ckeScriptElement.onload = async () => {
+      // Presumably ClassicEditor is a class defined in the classic/custom build
+      // CKEditor is our instance
       const CKEditor = (window as any).ClassicEditor;
 
-      this.ckEditor = await CKEditor.create(
-        document.querySelector('#editor'),
+      // ckEditor is an instance of our text editor, charged with capabilities from CKEditor
+      // Make sure we target a specific editor, not all that may be on a page
+      // get referenece to the created editor so that we can add a behaviour
+      // and so that clearData() has a target
+      this.localEditor = await CKEditor.create(
+        document.querySelector(`#${this.editorID}`),
         this.ckeConfig
       );
 
-      this.ckEditor.model.document.on('change', () => {
+      // Add behaviour to pass text to host component
+      this.localEditor.model.document.on('change', () => {
         // this.textToEdit = JSON.stringify(editor.getData()); // necessary?
-        this.textToEditChange.emit(this.ckEditor.getData());
+        this.textToEditChange.emit(this.localEditor.getData());
       });
     })}
     `;

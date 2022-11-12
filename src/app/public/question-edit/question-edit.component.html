@@ -1,15 +1,25 @@
 <form (ngSubmit)="onSubmit()" #formQuestion="ngForm">
-
   <!-- Title -->
   <div class="mx-3 mt-3">
     <mat-form-field class="questionEdit">
-      <textarea matInput placeholder="question" [(ngModel)]="questionEdit.question" name="questionEdit"
-        #tvQuestion="ngModel" (blur)="onQuestionBlur()"></textarea>
+      <textarea
+        matInput
+        placeholder="question"
+        [(ngModel)]="questionEdit.question"
+        name="questionEdit"
+        #tvQuestion="ngModel"
+        (blur)="onQuestionBlur()"
+      ></textarea>
     </mat-form-field>
   </div>
 
   <!-- Details: The Editor -->
-  <app-cke-universal name="questionDetails" [(textToEdit)]="questionEdit.details" #CKEfudge>
+  <app-cke-universal
+    [ID]="questionEdit.questionID.toString()"
+    name="questionDetails"
+    [(textToEdit)]="questionEdit.details"
+    #CKEfudge
+  >
     <!-- ToDo: Fudge see point edit -->
   </app-cke-universal>
 
@@ -20,7 +30,6 @@
 
   <!-- ToolBar -->
   <div class="toolbar" fxLayout="row wrap" fxLayoutAlign="end center">
-
     <span class="spinner-grow text-primary ms-3" role="status" *ngIf="saving">
       <span class="visually-hidden">Loading...</span>
     </span>
@@ -46,7 +55,5 @@
       <mat-icon>cancel</mat-icon>
       cancel
     </button>
-
   </div>
-
 </form>

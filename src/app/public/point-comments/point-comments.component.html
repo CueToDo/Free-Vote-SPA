@@ -72,11 +72,15 @@
         </div>
 
         <div *ngIf="newComment">
-          <app-point-comment
-            [ParentPointID]="parentPoint.pointID"
+          <app-point-edit
+            [parentPointID]="parentPoint.pointID"
+            [isComment]="true"
             (CancelEdit)="CancelComment()"
             (CompleteEdit)="NewCommentCreated()"
-          ></app-point-comment>
+            [constituencyID]="constituencyID"
+            (ReselectPoints)="ReselectForNewComment()"
+            #newPoint
+          ></app-point-edit>
         </div>
       </div>
     </div>

@@ -42,6 +42,7 @@ import { Tag } from 'src/app/models/tag.model';
 export class PointEditComponent implements OnInit {
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent
   @Input() point: Point | undefined;
+  @Input() parentPointID = 0;
   @Input() questionID = 0;
   @Input() constituencyID = 0;
   @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
@@ -250,10 +251,14 @@ export class PointEditComponent implements OnInit {
     } else {
       this.error = '';
 
+      if (this.isComment) {
+        this.saveComment();
+        return;
+      }
+
       if (
         !this.isMyAnswer &&
         !this.isPorQPoint &&
-        !this.isComment &&
         (!this.pointClone.tags || this.pointClone.tags.length === 0)
       ) {
         this.error = 'Points must have at least one slash tag';
@@ -369,6 +374,17 @@ export class PointEditComponent implements OnInit {
           });
       }
     }
+  }
+
+  saveComment() {
+    this.pointsService
+      .PointCommentUpdate(this.parentPointID, -1, this.pointClone.pointHTML)
+      .subscribe({
+        next: _ => this.CompleteEdit.emit(),
+        error: err => {
+          this.error = err.error.detail;
+        }
+      });
   }
 
   NewPoint(slashTag: string, constituencyID: number): void {

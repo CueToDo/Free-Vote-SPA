@@ -1,49 +1,62 @@
 <form (ngSubmit)="onSubmit()" #formPoint="ngForm">
+  <!-- Title -->
+  <div class="mx-3 mt-3">
+    <mat-form-field class="issueTitle">
+      <input
+        matInput
+        placeholder="discussion title"
+        [(ngModel)]="issueClone.title"
+        type="text"
+        name="issueTitle"
+      />
+    </mat-form-field>
+  </div>
 
-    <!-- Title -->
-    <div class="mx-3 mt-3">
-        <mat-form-field class="issueTitle">
-            <input matInput placeholder="discussion title" [(ngModel)]="issueClone.title" type="text" name="issueTitle">
-        </mat-form-field>
+  <!-- The Editor -->
+  <app-cke-universal ID="issue"></app-cke-universal>
+
+  <!-- ToolBar -->
+  <div class="toolbar py-3" fxLayout="row wrap" fxLayoutAlign="start center">
+    <app-datepicker
+      [(Date)]="issueClone.selectionDateEarliest"
+      [UserPrompt]="'valid from'"
+      class="mr-3"
+    >
+    </app-datepicker>
+
+    <app-datepicker
+      [(Date)]="issueClone.selectionDateLatest"
+      [UserPrompt]="'valid to'"
+      class="mr-3"
+    >
+    </app-datepicker>
+
+    <div id="cbxPublish">
+      <mat-checkbox
+        [(ngModel)]="issueClone.publish"
+        name="issuePublish"
+        class="mr-3"
+      >
+        publish
+      </mat-checkbox>
     </div>
 
-    <!-- The Editor -->
-    <app-cke-universal></app-cke-universal>
+    <button mat-stroked-button class="mr-3">
+      <mat-icon>save</mat-icon>
+      save
+    </button>
 
-    <!-- ToolBar -->
-    <div class="toolbar py-3" fxLayout="row wrap" fxLayoutAlign="start center">
+    <button mat-stroked-button type="button" (click)="Cancel()">
+      <mat-icon>cancel</mat-icon>
+      cancel
+    </button>
 
-        <app-datepicker [(Date)]="issueClone.selectionDateEarliest" [UserPrompt]="'valid from'" class="mr-3">
-        </app-datepicker>
+    <span class="spinner-grow text-primary ms-3" role="status" *ngIf="saving">
+      <span class="visually-hidden">Loading...</span>
+    </span>
 
-        <app-datepicker [(Date)]="issueClone.selectionDateLatest" [UserPrompt]="'valid to'" class="mr-3">
-        </app-datepicker>
-
-        <div id="cbxPublish">
-            <mat-checkbox [(ngModel)]="issueClone.publish" name="issuePublish" class="mr-3">
-                publish
-            </mat-checkbox>
-        </div>
-
-        <button mat-stroked-button class="mr-3">
-            <mat-icon>save</mat-icon>
-            save
-        </button>
-
-        <button mat-stroked-button type="button" (click)="Cancel()">
-            <mat-icon>cancel</mat-icon>
-            cancel
-        </button>
-
-        <span class="spinner-grow text-primary ms-3" role="status" *ngIf="saving">
-            <span class="visually-hidden">Loading...</span>
-        </span>
-
-        <div class="fv-error mt-2" *ngIf="error && error !== ''">
-            {{ error }}
-        </div>
-
+    <div class="fv-error mt-2" *ngIf="error && error !== ''">
+      {{ error }}
     </div>
-
-
+  </div>
 </form>

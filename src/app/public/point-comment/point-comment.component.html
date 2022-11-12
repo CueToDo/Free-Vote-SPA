@@ -1,6 +1,7 @@
 <form (ngSubmit)="onSubmit()" #formPoint="ngForm">
   <!-- The Editor -->
   <app-cke-universal
+    [ID]="ParentPointID.toString()"
     name="point"
     [(textToEdit)]="Comment"
     (blur)="onCKEBlur()"

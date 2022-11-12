@@ -42,6 +42,10 @@ export class PointCommentsComponent implements OnInit {
   linkToAll = '';
   newComment = false;
 
+  get constituencyID(): number {
+    return this.localData.ConstituencyIDVoter;
+  }
+
   alreadyFetchingPointFromDB = false;
 
   error = '';
@@ -243,4 +247,6 @@ export class PointCommentsComponent implements OnInit {
   NewCommentCreated() {
     this.newComment = false;
   }
+
+  ReselectForNewComment() {}
 }

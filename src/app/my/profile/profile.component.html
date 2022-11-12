@@ -1,11 +1,7 @@
 <div class="tabContainer">
-
   <div class="tabContent scroller">
-
     <div fxLayoutAlign="center">
-
       <div fxLayout="row wrap" class="profile">
-
         <div fxFlex="100">
           <h1>
             {{ localData.freeVoteProfile.givenName }}
@@ -19,26 +15,53 @@
 
         <!-- Picture -->
         <div fxFlex="100">
-
           <div fxLayout="column" fxLayoutAlign="start center">
+            <img
+              *ngIf="
+                localData.freeVoteProfile.profilePictureOptionID === '1' &&
+                localData.auth0Profile &&
+                localData.auth0Profile.picture
+              "
+              [src]="localData.auth0Profile.picture"
+              alt="profile picture"
+              class="rounded-circle img-fluid"
+            />
 
             <img
-              *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
-              [src]="localData.auth0Profile.picture" alt="profile picture" class="rounded-circle img-fluid">
+              *ngIf="
+                localData.freeVoteProfile.profilePictureOptionID === '2' &&
+                localData.freeVoteProfile.profilePicture
+              "
+              [src]="localData.freeVoteProfile.profilePicture"
+              alt="profile picture"
+              class="rounded-circle img-fluid"
+            />
 
-            <img
-              *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2' && localData.freeVoteProfile.profilePicture"
-              [src]="localData.freeVoteProfile.profilePicture" alt="profile picture" class="rounded-circle img-fluid">
-
-            <div fxLayout="row wrap" fxLayoutAlign="center center" class="buttons">
-              <input type="file" (change)="profilePictureSelected($event)" style="display: none" #pictureSelect>
-              <button mat-stroked-button *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2'"
-                (click)="deleteProfilePictue()">
+            <div
+              fxLayout="row wrap"
+              fxLayoutAlign="center center"
+              class="buttons"
+            >
+              <input
+                type="file"
+                (change)="profilePictureSelected($event)"
+                style="display: none"
+                #pictureSelect
+              />
+              <button
+                mat-stroked-button
+                *ngIf="localData.freeVoteProfile.profilePictureOptionID === '2'"
+                (click)="deleteProfilePictue()"
+              >
                 <mat-icon>cancel</mat-icon>
                 delete uploaded picture
               </button>
-              <button mat-stroked-button type="button" (click)="pictureSelect.click()"
-                *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2'">
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="pictureSelect.click()"
+                *ngIf="localData.freeVoteProfile.profilePictureOptionID === '2'"
+              >
                 <mat-icon>add_photo_alternate</mat-icon>
                 upload new picture
               </button>
@@ -46,29 +69,29 @@
                 <span class="spinner-grow text-primary ms-3" role="status">
                   <span class="visually-hidden">Loading...</span>
                 </span>
-                <span>
-                  {{ uploadPercentDone }}%
-                </span>
+                <span> {{ uploadPercentDone }}% </span>
               </div>
             </div>
-
           </div>
-
         </div>
-
-
 
         <!-- Edit Profile Picture to use -->
         <div fxFlex="40" *ngIf="editing">profile picture to use</div>
         <div fxFlex="60" *ngIf="editing">
-          <mat-radio-group [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
-            (ngModelChange)="profilePictureOptionUpdate()">
+          <mat-radio-group
+            [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
+            (ngModelChange)="profilePictureOptionUpdate()"
+          >
             <div fxLayout="row wrap" fxLayoutAlign="left">
               <mat-radio-button name="PPOID" value="1" labelPosition="before">
                 social media
               </mat-radio-button>
-              <mat-radio-button name="PPOID" value="2" labelPosition="before"
-                *ngIf="localData.freeVoteProfile.profilePicture">
+              <mat-radio-button
+                name="PPOID"
+                value="2"
+                labelPosition="before"
+                *ngIf="localData.freeVoteProfile.profilePicture"
+              >
                 upload
               </mat-radio-button>
               <mat-radio-button name="PPOID" value="3" labelPosition="before">
@@ -79,19 +102,17 @@
         </div>
 
         <div fxFlex="100">
-          <hr>
+          <hr />
         </div>
 
-        <div fxFlex="100" style="margin-top:16px;"></div>
+        <div fxFlex="100" style="margin-top: 16px"></div>
 
         <!-- Postcode -->
         <div fxFlex="40" *ngIf="editing">
-          <span class="align-middle">
-            post code
-          </span>
+          <span class="align-middle"> post code </span>
         </div>
         <div fxFlex="60" *ngIf="editing">
-          <input type="text" [(ngModel)]="postcode">
+          <input type="text" [(ngModel)]="postcode" />
           <button mat-stroked-button (click)="lookupPostCode()">
             <mat-icon>search</mat-icon>
             lookup
@@ -100,13 +121,10 @@
 
         <!-- Country -->
         <div fxFlex="40">
-          <span class="align-middle">
-            home country
-          </span>
+          <span class="align-middle"> home country </span>
         </div>
 
         <div fxFlex="60">
-
           <span class="align-middle" *ngIf="true || !editing">
             {{ localData.freeVoteProfile.country }}
           </span>
@@ -123,18 +141,14 @@
             <input matInput placeholder="your home country" [(ngModel)]="localData.freeVoteProfile.country"
               name="country" required #tvCountry="ngModel" type="text">
           </mat-form-field> -->
-
         </div>
 
         <!-- City -->
         <div fxFlex="40" *ngIf="true || !editNewCountry">
-          <span class="align-middle">
-            home city
-          </span>
+          <span class="align-middle"> home city </span>
         </div>
 
         <div fxFlex="60" *ngIf="true || !editNewCountry">
-
           <span *ngIf="true || !editing" class="align-middle">
             {{ localData.freeVoteProfile.city }}
           </span>
@@ -149,27 +163,26 @@
             <input matInput placeholder="your home city" [(ngModel)]="localData.freeVoteProfile.city" name="city"
               required #tvCity="ngModel" type="text">
           </mat-form-field> -->
-
         </div>
 
         <!-- Constituency -->
         <div fxFlex="40" *ngIf="!!localData.freeVoteProfile.constituency">
-          <span class="align-middle">
-            constituency
-          </span>
+          <span class="align-middle"> constituency </span>
         </div>
-        <div fxFlex="60" *ngIf="true || !!localData.freeVoteProfile.constituency">
+        <div
+          fxFlex="60"
+          *ngIf="true || !!localData.freeVoteProfile.constituency"
+        >
           <span class="align-middle">
             <a [routerLink]="constituencyLink">{{
-              localData.freeVoteProfile.constituency }}</a>
+              localData.freeVoteProfile.constituency
+            }}</a>
           </span>
         </div>
 
         <!-- Council -->
         <div fxFlex="40" *ngIf="!!localData.freeVoteProfile.council">
-          <span class="align-middle">
-            council
-          </span>
+          <span class="align-middle"> council </span>
         </div>
         <div fxFlex="60" *ngIf="!!localData.freeVoteProfile.council">
           <span class="align-middle">
@@ -179,9 +192,7 @@
 
         <!-- Council Ward -->
         <div fxFlex="40" *ngIf="true || !!localData.freeVoteProfile.ward">
-          <span class="align-middle">
-            council ward
-          </span>
+          <span class="align-middle"> council ward </span>
         </div>
         <div fxFlex="60" *ngIf="true || !!localData.freeVoteProfile.ward">
           <span class="align-middle">
@@ -189,7 +200,7 @@
           </span>
         </div>
 
-        <div fxFlex="100" style="margin-top:20px;"></div>
+        <div fxFlex="100" style="margin-top: 20px"></div>
 
         <!-- Start Edit Commands -->
         <div fxFlex="40" *ngIf="!editing"></div>
@@ -206,23 +217,38 @@
 
         <!-- Complete Edit Commands -->
         <div fxFlex fxLayout="row wrap" fxLayoutAlign="center" *ngIf="editing">
-
-          <button mat-stroked-button (click)="newCountry()" *ngIf="false && editing && !editNewCountry && !editNewCity">
+          <button
+            mat-stroked-button
+            (click)="newCountry()"
+            *ngIf="false && editing && !editNewCountry && !editNewCity"
+          >
             <mat-icon>add_circle_outline</mat-icon>
             new country
           </button>
 
-          <button mat-stroked-button (click)="newCity()" *ngIf="editing && !editNewCountry && !editNewCity">
+          <button
+            mat-stroked-button
+            (click)="newCity()"
+            *ngIf="editing && !editNewCountry && !editNewCity"
+          >
             <mat-icon>add_circle_outline</mat-icon>
             new city
           </button>
 
-          <button mat-stroked-button (click)="save()" *ngIf="!editNewCountry && !editNewCity">
+          <button
+            mat-stroked-button
+            (click)="save()"
+            *ngIf="!editNewCountry && !editNewCity"
+          >
             <mat-icon>save</mat-icon>
             save
           </button>
 
-          <button mat-stroked-button (click)="saveCountry()" *ngIf="editNewCountry">
+          <button
+            mat-stroked-button
+            (click)="saveCountry()"
+            *ngIf="editNewCountry"
+          >
             <mat-icon>save</mat-icon>
             save country
           </button>
@@ -237,15 +263,25 @@
             cancel
           </button>
 
-          <span class="spinner-grow text-primary ms-3" role="status" *ngIf="saving">
+          <span
+            class="spinner-grow text-primary ms-3"
+            role="status"
+            *ngIf="saving"
+          >
             <span class="visually-hidden">Loading...</span>
           </span>
-
         </div>
 
         <!-- Update message -->
-        <div fxFlex="100" [ngClass]="{'alert':error, 'alert-danger':error, 'success':success}">
-          <div fxLayoutAlign="center" *ngIf="!!updateMessage" class="mt-2 primary">
+        <div
+          fxFlex="100"
+          [ngClass]="{ alert: error, 'alert-danger': error, success: success }"
+        >
+          <div
+            fxLayoutAlign="center"
+            *ngIf="!!updateMessage"
+            class="mt-2 primary"
+          >
             {{ updateMessage }}
           </div>
         </div>
@@ -253,9 +289,7 @@
         <!-- To do -->
         <div hidden="true">
           <div fxFlex="40">
-            <span class="align-middle">
-              alias
-            </span>
+            <span class="align-middle"> alias </span>
           </div>
 
           <div fxFlex="60">
@@ -263,23 +297,26 @@
               {{ localData.freeVoteProfile.alias }}
             </span>
             <mat-form-field *ngIf="editing" class="mff">
-              <input matInput placeholder="your alias or ID" [(ngModel)]="localData.freeVoteProfile.alias" name="by"
-                required #tvAlias="ngModel" type="text">
+              <input
+                matInput
+                placeholder="your alias or ID"
+                [(ngModel)]="localData.freeVoteProfile.alias"
+                name="by"
+                required
+                #tvAlias="ngModel"
+                type="text"
+              />
             </mat-form-field>
           </div>
 
           <!-- Groups -->
 
           <div fxFlex="40" *ngIf="!editing">
-            <span class="align-middle">
-              groups
-            </span>
+            <span class="align-middle"> groups </span>
           </div>
 
           <div fxFlex="60" *ngIf="!editing">
-            <span class="align-middle">
-              List groups
-            </span>
+            <span class="align-middle"> List groups </span>
           </div>
 
           <div *ngIf="!editing">
@@ -287,26 +324,21 @@
           </div>
 
           <div fxFlex="40">
-            <span class="align-middle">
-              Break-out groups
-            </span>
+            <span class="align-middle"> Break-out groups </span>
           </div>
           <div fxFlex="60">
-            <span class="align-middle">
-              Preferred Room Size
-            </span>
+            <span class="align-middle"> Preferred Room Size </span>
           </div>
 
           <div *ngIf="editing">
-            <app-cke-universal name="profile" [(textToEdit)]="localData.freeVoteProfile.profile"></app-cke-universal>
+            <app-cke-universal
+              ID="profile"
+              name="profile"
+              [(textToEdit)]="localData.freeVoteProfile.profile"
+            ></app-cke-universal>
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>
