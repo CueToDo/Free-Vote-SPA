@@ -46,6 +46,7 @@ export class PointComponent implements OnInit {
   @Input() isPorQPoint = false;
   @Input() possibleAnswer = false;
   @Input() isMyAnswer = false;
+  @Input() isParentPoint = false;
   @Input() isComment = false;
   @Input() searchTerm = '';
   @Input() constituencyID = 0;
@@ -104,8 +105,13 @@ export class PointComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // No subscriptions
+    //ngOnInit occurs too soon for parentPoint in pointComments
+    if (!this.isParentPoint) {
+      this.Initialise();
+    }
+  }
 
+  Initialise() {
     this.AssignTags();
 
     if (this.point?.isNewSource) {
@@ -115,6 +121,11 @@ export class PointComponent implements OnInit {
     }
 
     this.extractMediaEmbeds();
+  }
+
+  public AssignAndInitialise(point: Point) {
+    this.point = point;
+    this.Initialise();
   }
 
   AssignTags(): void {

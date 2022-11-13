@@ -12,6 +12,7 @@ export class PointEdit {
   pointTitle = ''; // PointSlug constructed in API from Title
   pointHTML = '';
   csvImageIDs = '';
+  parentPointID = -1;
   pointTypeID = PointTypesEnum.NotSelected;
 
   // Link meta data update is handled in the server API
@@ -34,15 +35,10 @@ export class PointEditFormData {
   isAnswer = false;
   isComment = false;
   isPorQPoint = false;
+  ParentPointID = -1;
   PointTypeID = PointTypesEnum.Opinion;
   Draft = false;
   SlashTags: string[] = [];
-}
-
-export class PointCommentFormData {
-  ParentPointID = -1;
-  PointID = -1;
-  PointHTML = '';
 }
 
 // Always use camelCase properties
@@ -95,6 +91,7 @@ export class WoWWeekInfoVoteNotNeeded {
 export class Point {
   constituencyID = 0;
   pointID = 0;
+  parentPointID = 0;
   questionID = 0;
   voterIDPoint = 0;
   isPointOwner = false;

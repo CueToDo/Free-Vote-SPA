@@ -61,7 +61,7 @@ export class PointEditComponent implements OnInit {
 
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
-  @Output() ReselectPoints = new EventEmitter<PointSortTypes>();
+  @Output() ReselectForTagChange = new EventEmitter<PointSortTypes>();
 
   @ViewChild('imageSelect', { static: true }) imageSelect:
     | ElementRef
@@ -251,12 +251,8 @@ export class PointEditComponent implements OnInit {
     } else {
       this.error = '';
 
-      if (this.isComment) {
-        this.saveComment();
-        return;
-      }
-
       if (
+        !this.isComment &&
         !this.isMyAnswer &&
         !this.isPorQPoint &&
         (!this.pointClone.tags || this.pointClone.tags.length === 0)
@@ -338,7 +334,12 @@ export class PointEditComponent implements OnInit {
               // this.point.csvImageIDs = ''; // Only needed for upload, now complete??
 
               if (isNew) {
-                this.NewPoint(returnToSlashTag, this.constituencyID);
+                this.NewPoint(
+                  returnToSlashTag,
+                  this.constituencyID,
+                  this.pointClone
+                    .parentPointID /* ((parentPointID re-assigned)) */
+                );
               } else {
                 // pointID only needed for new points, but parent reselects - we're not dependent on 2 way binding
                 // save response to point not pointClone, and manually emit
@@ -351,17 +352,15 @@ export class PointEditComponent implements OnInit {
               // Communicate the change to PointComponent (No subscriptions)
               // Emit to TagsPoints component for sort descending indication only
               // But don't get parent TagsPoints to trigger reselection in sibling points now
-
               if (response) {
                 this.CompleteEdit.emit(response.pointID); // emit pointID for porq to attach
               }
 
               // Communicate change to sibling PointsComponent
               // where Points ReSelection Takes place:
-
               if (tagChange && !isNew) {
                 this.tagsService.SetSlashTag(returnToSlashTag);
-                this.ReselectPoints.emit(PointSortTypes.DateDescend);
+                this.ReselectForTagChange.emit(PointSortTypes.DateDescend);
               }
             },
             error: serverError => {
@@ -376,21 +375,15 @@ export class PointEditComponent implements OnInit {
     }
   }
 
-  saveComment() {
-    this.pointsService
-      .PointCommentUpdate(this.parentPointID, -1, this.pointClone.pointHTML)
-      .subscribe({
-        next: _ => this.CompleteEdit.emit(),
-        error: err => {
-          this.error = err.error.detail;
-        }
-      });
-  }
-
-  NewPoint(slashTag: string, constituencyID: number): void {
+  NewPoint(
+    slashTag: string,
+    constituencyID: number,
+    parentPointID: number
+  ): void {
     // Clear old Values when edit complete
     this.pointClone = new Point();
     this.pointClone.pointID = -1;
+    this.pointClone.parentPointID = parentPointID;
     this.pointClone.questionID = 0;
     this.pointClone.pointTypeID = PointTypesEnum.Opinion;
 

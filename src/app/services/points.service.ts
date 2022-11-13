@@ -9,7 +9,6 @@ import { map, tap } from 'rxjs/operators';
 import { ID } from 'src/app/models/common';
 import { PointTypesEnum, MyPointFilter } from 'src/app/models/enums';
 import {
-  PointCommentFormData,
   PointSelectionResult,
   Point,
   PointEdit,
@@ -282,6 +281,7 @@ export class PointsService {
       isAnswer,
       isComment,
       isPorQPoint, // not a point property
+      ParentPointID: point.parentPointID,
       LinkText: point.linkText,
       LinkAddress: point.linkAddress,
       YouTubeID: point.youTubeID,
@@ -295,20 +295,6 @@ export class PointsService {
     return this.httpClientService
       .post('points/pointUpdate', postData)
       .pipe(map(result => result as Point));
-  }
-
-  PointCommentUpdate(
-    ParentPointID: number,
-    PointID: number,
-    PointHTML: string
-  ): Observable<number> {
-    const postData = {
-      ParentPointID,
-      PointID,
-      PointHTML
-    } as PointCommentFormData;
-
-    return this.httpClientService.post('points/pointCommentUpdate', postData);
   }
 
   PointsSelectComments(

@@ -59,7 +59,9 @@
 
         <div>
           <app-point
+            #trvParentPoint
             [point]="parentPoint"
+            [isParentPoint]="true"
             [sharing]="true"
             (NewComment)="NewComment()"
           ></app-point>
@@ -67,21 +69,24 @@
 
         <div>
           <div *ngFor="let point of points">
-            <app-point [point]="point" [isComment]="true"> </app-point>
+            <app-point
+              [point]="point"
+              [isComment]="true"
+              (PointDeleted)="onPointDeleted($event)"
+            >
+            </app-point>
           </div>
         </div>
 
-        <div *ngIf="newComment">
-          <app-point-edit
-            [parentPointID]="parentPoint.pointID"
-            [isComment]="true"
-            (CancelEdit)="CancelComment()"
-            (CompleteEdit)="NewCommentCreated()"
-            [constituencyID]="constituencyID"
-            (ReselectPoints)="ReselectForNewComment()"
-            #newPoint
-          ></app-point-edit>
-        </div>
+        <app-point-edit
+          #newPoint
+          [hidden]="!newComment"
+          [parentPointID]="parentPoint.pointID"
+          [isComment]="true"
+          [constituencyID]="constituencyID"
+          (CancelEdit)="CancelComment()"
+          (CompleteEdit)="NewCommentCreated()"
+        ></app-point-edit>
       </div>
     </div>
   </div>

@@ -1,12 +1,12 @@
-import { concatMap } from 'rxjs/operators';
+import { concatMap, tap } from 'rxjs/operators';
 // Angular
 import {
   Component,
   Inject,
-  Input,
   OnInit,
   PLATFORM_ID,
-  Renderer2
+  Renderer2,
+  ViewChild
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
@@ -14,11 +14,16 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 //Models
 import { Point } from 'src/app/models/point.model';
 import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
+import { ID } from 'src/app/models/common';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { PointsService } from 'src/app/services/points.service';
+
+// Components
+import { PointComponent } from '../point/point.component';
+import { PointEditComponent } from '../point-edit/point-edit.component';
 
 @Component({
   selector: 'app-point-comments',
@@ -26,8 +31,12 @@ import { PointsService } from 'src/app/services/points.service';
   styleUrls: ['./point-comments.component.css']
 })
 export class PointCommentsComponent implements OnInit {
+  @ViewChild('newPoint') newPointComponent!: PointEditComponent;
+  @ViewChild('trvParentPoint') parentPointComponent!: PointComponent;
+
   parentPoint = new Point();
   points: Point[] = [];
+  public IDs: ID[] = [];
 
   // bind to point slashtags (not topic)
   slashTags: string[] = []; // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
@@ -78,13 +87,15 @@ export class PointCommentsComponent implements OnInit {
         this.localData.ConstituencyIDVoter,
         slashTag,
         pointTitle
-      )
+      ) // Returns a PointSelectionResult
       .pipe(
-        concatMap(psr => {
+        tap(psr => {
           const point = psr.points[0];
-          this.parentPoint = point;
+          this.parentPoint = point; // Change detection is not working immediately here.
+          // PointComponent does not receive the update automatically
+          // Manually pass the vlaue just received and initialise the component
+          this.parentPointComponent.AssignAndInitialise(point);
 
-          this.extractMediaEmbeds();
           this.DisplayShareLinks();
 
           // SSR Initial page render
@@ -102,11 +113,24 @@ export class PointCommentsComponent implements OnInit {
           this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
 
           // now we have pointID, select comments
-          return this.pointsService.PointsSelectComments(
-            point.pointID,
-            this.localData.ConstituencyIDVoter
-          );
+          this.SelectComments(); // doesn't return anything
+
+          // will return original psr from GetSpecificPoint
         })
+      )
+      .subscribe(); // no need to do anything
+  }
+
+  // return this.pointsService.PointsSelectComments(
+  //   point.pointID,
+  //   this.localData.ConstituencyIDVoter
+  // ); // Returns a PointSelectionResult
+
+  SelectComments() {
+    this.pointsService
+      .PointsSelectComments(
+        this.parentPoint.pointID,
+        this.localData.ConstituencyIDVoter
       )
       .subscribe({
         next: psr => (this.points = psr.points),
@@ -154,69 +178,6 @@ export class PointCommentsComponent implements OnInit {
     }
   }
 
-  // gawd a copy and paste job
-  extractMediaEmbeds(): void {
-    // https://ckeditor.com/docs/ckeditor5/latest/features/media-embed.html
-
-    if (!this.parentPoint) {
-      this.error = 'Missing: point';
-    } else {
-      this.youTubeIDs = [];
-      if (this.parentPoint.youTubeID) {
-        this.youTubeIDs.push(this.parentPoint.youTubeID);
-      }
-
-      this.soundCloudTrackIDs = [];
-      if (this.parentPoint.soundCloudTrackID) {
-        this.soundCloudTrackIDs.push(this.parentPoint.soundCloudTrackID);
-      }
-
-      this.vimeoIDs = [];
-
-      const split = this.parentPoint.pointHTML.split('<figure class="media">');
-
-      if (split.length > 0) {
-        let i: number;
-        let oembedPlus: string[];
-        let url: string;
-        let id = '';
-        let urlParts = [];
-        let lastPart = '';
-        let timeSplit = [];
-        let start = '';
-
-        for (i = 1; i < split.length; i++) {
-          oembedPlus = split[i].split('</figure>');
-          url = oembedPlus[0].split('"')[1];
-          urlParts = url.split('/');
-          lastPart = urlParts[urlParts.length - 1]; // watch?v=Ef9QnZVpVd8&amp;t=49s
-
-          if (url.includes('youtu.be')) {
-            id = lastPart;
-            this.youTubeIDs.push(id);
-          } else if (url.includes('youtube.com')) {
-            id = lastPart.split('v=')[1]; // Ef9QnZVpVd8 &amp;t= 49s
-
-            timeSplit = id.split('&amp;t='); // Ef9QnZVpVd8 49s
-            if (timeSplit.length > 1) {
-              start = timeSplit[1].replace('s', ''); // 49
-              id = `${timeSplit[0]}?start=${start}`; // Ef9QnZVpVd8?start=49
-            }
-            this.youTubeIDs.push(id);
-          } else if (url.includes('vimeo.com')) {
-            id = lastPart;
-            this.vimeoIDs.push(id);
-          } else if (url.includes('soundcloud')) {
-          }
-
-          split[i] = oembedPlus[1]; // Use only what's after the figure element
-        }
-      }
-
-      this.pointHTMLwithoutEmbed = split.join(''); // pointHTML stripped of <figure> elements added by ckEditor for media embed
-    }
-  }
-
   ShareByEmail() {
     window.open(
       `mailto:?subject=${this.parentPoint.pointTitle}&body=Hi,%0D%0A%0D%0ATake a look at this from the ${this.localData.website} website - what do you think?%0D%0A%0D%0A${this.linkShare}`,
@@ -238,6 +199,11 @@ export class PointCommentsComponent implements OnInit {
 
   NewComment() {
     this.newComment = true;
+    this.newPointComponent.NewPoint(
+      '',
+      this.constituencyID,
+      this.parentPoint.pointID
+    );
   }
 
   CancelComment() {
@@ -246,7 +212,42 @@ export class PointCommentsComponent implements OnInit {
 
   NewCommentCreated() {
     this.newComment = false;
+    this.SelectComments();
   }
 
-  ReselectForNewComment() {}
+  onPointDeleted(id: number): void {
+    // this.SelectPoints(); No need to reselect.
+    // Already deleted from server, now remove from the array
+    // https://love2dev.com/blog/javascript-remove-from-array/
+
+    // Update the row number displayed before removing from array
+    // get deleted point (array)
+    const deleted = this.points.filter(p => p.pointID === id);
+
+    if (!!deleted && deleted.length > 0) {
+      // Get deleted question row number
+      const pointRowNo = deleted[0].rowNumber;
+
+      // decrement rownumber for all questions above that
+      for (var i = 0, len = this.points.length; i < len; i++) {
+        if (this.points[i].rowNumber > pointRowNo) this.points[i].rowNumber--;
+      }
+
+      for (var i = 0, len = this.IDs.length; i < len; i++) {
+        if (this.IDs[i].rowNumber > pointRowNo) this.IDs[i].rowNumber--;
+      }
+    }
+
+    // Filter out the deleted point
+    this.points = this.points.filter(value => value.pointID !== id);
+
+    // Remove id from IDs before getting next batch
+    this.IDs = this.IDs.filter(value => value.id != id);
+
+    //ToDo Restore
+    // this.pointCount--; // decrement before calling NewPointsDisplayed which updates allPointsDisplayed
+
+    // this.NewPointsDisplayed();
+    // this.RemovePointFromAnswers.emit(id);
+  }
 }

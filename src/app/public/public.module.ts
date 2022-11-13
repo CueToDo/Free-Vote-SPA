@@ -48,7 +48,6 @@ import { TagSearchComponent } from './tag-search/tag-search.component';
 import { TakeActionComponent } from './take-action/take-action.component';
 import { WebsitePreviewComponent } from './website-preview/website-preview.component';
 import { PointCommentsComponent } from './point-comments/point-comments.component';
-import { PointCommentComponent } from './point-comment/point-comment.component';
 
 @NgModule({
   imports: [
@@ -82,6 +81,7 @@ import { PointCommentComponent } from './point-comment/point-comment.component';
     NavBurgerComponent,
     NavItemsComponent,
     NavMainComponent,
+    PointCommentsComponent,
     PointComponent,
     PointEditComponent,
     PointsFilterComponent,
@@ -94,9 +94,7 @@ import { PointCommentComponent } from './point-comment/point-comment.component';
     TagsAndPointsComponent,
     TagSearchComponent,
     TakeActionComponent,
-    WebsitePreviewComponent,
-    PointCommentsComponent,
-    PointCommentComponent
+    WebsitePreviewComponent
   ],
   exports: [
     CkeUniversalComponent,

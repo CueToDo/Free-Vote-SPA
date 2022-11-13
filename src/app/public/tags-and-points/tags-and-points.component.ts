@@ -626,7 +626,8 @@ export class TagsAndPointsComponent
         } else {
           this.newPointComponent.NewPoint(
             this.filter.slashTag,
-            this.filter.constituencyID
+            this.filter.constituencyID,
+            0
           );
         }
         newRoute = `/${this.filter.slashTag}/new-${this.qp}`;
