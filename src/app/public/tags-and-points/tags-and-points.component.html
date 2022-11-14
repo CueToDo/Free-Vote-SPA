@@ -287,6 +287,7 @@
         <!-- "Fetch more" component must apply scroller and content classes internally -->
         <app-questions-list
           [filter]="filter"
+          [SortDescending]="filter.sortDescending"
           #appQuestionsList
           (QuestionCount)="QuestionCount($event)"
           (QuestionSelected)="QuestionSelected($event)"

@@ -38,7 +38,6 @@ export class PointsListComponent implements OnDestroy, OnInit {
   // Subscriptions
   private pointSelection$: Subscription | undefined;
   private pointSortType$: Subscription | undefined;
-  private pointSortAscending$: Subscription | undefined;
 
   public pointCount = 0;
   public IDs: ID[] = [];
@@ -262,7 +261,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
                   this.localData.ConstituencyIDVoter,
                   this.filter.slashTag,
                   this.filter.sortType,
-                  !this.filter.sortDescending,
+                  this.filter.sortDescending,
                   this.filter.updateTopicViewCount
                 )
                 .subscribe({
@@ -468,6 +467,5 @@ export class PointsListComponent implements OnDestroy, OnInit {
   ngOnDestroy(): void {
     this.pointSelection$?.unsubscribe();
     this.pointSortType$?.unsubscribe();
-    this.pointSortAscending$?.unsubscribe();
   }
 }

@@ -1,5 +1,17 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "eslint.lintTask.enable": true
+  "eslint.lintTask.enable": true,
+  "workbench.colorCustomizations": {
+    "tab.activeBorder": "#0000ff",
+    "tab.unfocusedActiveBorder": "#000000",
+    "tab.activeBackground": "#000044",
+    "[Default Dark+]": {
+      "editor.lineHighlightBackground": "#000044",
+      "editor.lineHighlightBorder": "#000099"
+    },
+    "[Default Light+]": {
+      "editor.lineHighlightBackground": "#0000003f"
+    }
+  }
 }

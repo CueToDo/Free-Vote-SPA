@@ -26,7 +26,7 @@ export class QuestionsListComponent {
 
   // SortType and direction
   @Input() SortType = PointSortTypes.DateUpdated;
-  @Input() SortAscending = false;
+  @Input() SortDescending = false;
 
   @Output() QuestionCount = new EventEmitter<number>();
   @Output() QuestionSelected = new EventEmitter<number>();
@@ -85,7 +85,7 @@ export class QuestionsListComponent {
           this.filter.constituencyID,
           this.filter.slashTag,
           this.SortType,
-          this.SortAscending,
+          this.SortDescending,
           updateTopicViewCount
         )
         .subscribe({

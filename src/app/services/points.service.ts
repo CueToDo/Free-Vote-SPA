@@ -66,14 +66,14 @@ export class PointsService {
     myPointFilter: MyPointFilter,
     unAttached: boolean,
     pointSortOrder: PointSortTypes,
-    sortAscending: boolean
+    sortDescending: boolean
   ): Observable<PointSelectionResult> {
     const apiUrl =
       `points/getFirstBatchQuestionPoints/${constituencyID}/${slashTag.replace(
         '/',
         ''
       )}/${questionID}/${myPointFilter.toString()}` +
-      `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortAscending}/${
+      `/${unAttached ? 'Y' : 'N'}/${pointSortOrder}/${sortDescending}/${
         this.batchSize
       }/${this.pageSize}`;
 
@@ -91,7 +91,7 @@ export class PointsService {
     constituencyIDVoter: number,
     slashTag: string,
     pointSortOrder: PointSortTypes,
-    sortAscending: boolean,
+    sortDescending: boolean,
     updateTopicCount: boolean
   ): Observable<PointSelectionResult> {
     // No Filters + infinite scroll on DateOrder desc
@@ -101,7 +101,7 @@ export class PointsService {
         '/',
         ''
       )}/${pointSortOrder}` +
-      `/${sortAscending}/${this.batchSize}/${this.pageSize}/${updateTopicCount}`;
+      `/${sortDescending}/${this.batchSize}/${this.pageSize}/${updateTopicCount}`;
 
     return this.httpClientService
       .get(apiUrl)

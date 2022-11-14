@@ -22,7 +22,7 @@ export enum PointSelectionTypes {
 }
 
 export enum PointSortTypes {
-  DateDescend = -1, // For new point at top of selection - sortAscending = false
+  DateDescend = -1, // For new point at top of selection - sortDescending = true
   NoChange = 0,
   DateUpdated = 1, // ToDo: Allows users to "bump" points
   TrendingActivity = 2,

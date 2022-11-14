@@ -35,7 +35,7 @@ export class QuestionsService {
     constituencyIDFilter: number,
     slashTag: string,
     pointSortOrder: PointSortTypes,
-    sortAscending: boolean,
+    sortDescending: boolean,
     updateTopicViewCount: boolean
   ): Observable<QuestionSelectionResult> {
     // No Filters + infinite scroll on DateOrder desc
@@ -44,7 +44,7 @@ export class QuestionsService {
         '/',
         ''
       )}/${pointSortOrder}` +
-      `/${sortAscending}/${this.batchSize}/${this.pageSize}/${updateTopicViewCount}`;
+      `/${sortDescending}/${this.batchSize}/${this.pageSize}/${updateTopicViewCount}`;
 
     return this.httpClientService
       .get(apiUrl)
