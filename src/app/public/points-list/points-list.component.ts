@@ -214,7 +214,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
               dateFrom,
               dateTo,
               this.filter.sortType,
-              !this.filter.sortDescending
+              this.filter.sortDescending
             )
             .subscribe({
               next: psr => this.DisplayPoints(psr),

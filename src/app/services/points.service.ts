@@ -8,6 +8,7 @@ import { map, tap } from 'rxjs/operators';
 // Models, Enums
 import { ID } from 'src/app/models/common';
 import { PointTypesEnum, MyPointFilter } from 'src/app/models/enums';
+import { PointsFilterFormData } from 'src/app/models/filterCriteria.model';
 import {
   PointSelectionResult,
   Point,
@@ -121,7 +122,7 @@ export class PointsService {
     from: Date,
     to: Date,
     pointSortOrder: PointSortTypes,
-    sortAscending: boolean
+    sortDescending: boolean
   ): Observable<PointSelectionResult> {
     const fromDate = this.appData.UDF(from);
     const toDate = this.appData.UDF(to);
@@ -142,10 +143,10 @@ export class PointsService {
       fromDate,
       toDate,
       pointSortOrder,
-      sortAscending,
+      sortDescending,
       batchSize: this.batchSize,
       pageSize: this.pageSize
-    };
+    } as PointsFilterFormData;
 
     return this.httpClientService
       .post(apiUrl, postData)

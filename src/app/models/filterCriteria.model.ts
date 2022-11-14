@@ -58,3 +58,21 @@ export class FilterCriteria {
   // Sort Order
   sortDescending = true;
 }
+
+export class PointsFilterFormData {
+  constituencyIDFilter = 0;
+  constituencyIDVoter = 0;
+  byAlias = '';
+  onTopic = '';
+  pointTextFilter = '';
+  pointTypeID = PointTypesEnum.Opinion;
+  myPointsFilter = MyPointFilter.AllVoters;
+  feedbackFilter = PointFeedbackFilter.Any;
+  pointFlag = PointFlags.Any;
+  fromDate = '';
+  toDate = '';
+  pointSortOrder = PointSortTypes.DateUpdated;
+  sortDescending = true;
+  batchSize = 50;
+  pageSize = 10;
+}
