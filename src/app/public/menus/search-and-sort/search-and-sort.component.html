@@ -1,0 +1,100 @@
+<!-- Menu Trigger -->
+
+<button
+  mat-button
+  [matMenuTriggerFor]="sortOrderMenu"
+  [matTooltip]="sortToolTip"
+>
+  search & sort
+  <mat-icon>{{ sortTypeIcon }}</mat-icon>
+</button>
+
+<!-- Search and Sort menu -->
+
+<mat-menu #sortOrderMenu="matMenu">
+  <!-- Show Search (Point Filter) Options -->
+  <button
+    mat-menu-item
+    (click)="toggleShowPointFilterCriteria()"
+    [matTooltip]="filterToolTip"
+  >
+    <mat-icon>{{ filterIcon }}</mat-icon>
+    {{ filterText }}
+  </button>
+
+  <hr />
+
+  <!-- Sort Type -->
+  <button
+    mat-menu-item
+    (click)="setSortType(PointSortTypes.TrendingActivity)"
+    [matTooltip]="'trending now'"
+    [class.selected]="pointSortType === PointSortTypes.TrendingActivity"
+  >
+    <mat-icon>trending_up</mat-icon>
+    trending
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="setSortType(PointSortTypes.AllTimePopularity)"
+    [matTooltip]="'most popular first (all time)'"
+    [class.selected]="pointSortType === PointSortTypes.AllTimePopularity"
+  >
+    <mat-icon>favorite_border</mat-icon>
+    popularity
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="setSortType(PointSortTypes.DateUpdated)"
+    [matTooltip]="'date order - most recent first'"
+    [class.selected]="pointSortType === PointSortTypes.DateUpdated"
+  >
+    <mat-icon>calendar_today</mat-icon>
+    date
+  </button>
+
+  <hr />
+
+  <!-- Sort Order -->
+  <button
+    mat-menu-item
+    [matTooltip]="'descending order'"
+    (click)="setSortDescending(true)"
+    [class.selected]="sortDescending && pointSortType !== PointSortTypes.Random"
+  >
+    <mat-icon>arrow_downward</mat-icon>
+    descending
+  </button>
+
+  <button
+    mat-menu-item
+    [matTooltip]="'ascending order'"
+    (click)="setSortDescending(false)"
+    [class.selected]="
+      !sortDescending && pointSortType !== PointSortTypes.Random
+    "
+  >
+    <mat-icon>arrow_upward</mat-icon>
+    ascending
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="setSortType(PointSortTypes.Random)"
+    [matTooltip]="'random order'"
+    [class.selected]="pointSortType === PointSortTypes.Random"
+  >
+    <mat-icon>gesture</mat-icon>
+    random
+  </button>
+
+  <hr />
+
+  <!-- Refresh -->
+  <button mat-menu-item (click)="refreshSelection()" [matTooltip]="'refresh'">
+    <mat-icon>refresh</mat-icon>
+    refresh
+  </button>
+</mat-menu>

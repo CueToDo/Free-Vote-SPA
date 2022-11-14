@@ -130,7 +130,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
       if (pointSortType === PointSortTypes.DateDescend) {
         // Ensure new point at top
         this.filter.sortType = PointSortTypes.DateUpdated;
-        this.filter.sortAscending = false;
+        this.filter.sortDescending = true;
       } else {
         this.filter.sortType = pointSortType;
       }
@@ -160,7 +160,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
   public ReselectForNewPoint(): void {
     this.filter.updateTopicViewCount = false;
     this.filter.sortType = PointSortTypes.DateUpdated;
-    this.filter.sortAscending = false;
+    this.filter.sortDescending = true;
     this.SelectPoints();
   }
 
@@ -214,7 +214,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
               dateFrom,
               dateTo,
               this.filter.sortType,
-              this.filter.sortAscending
+              !this.filter.sortDescending
             )
             .subscribe({
               next: psr => this.DisplayPoints(psr),
@@ -237,7 +237,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
                 this.filter.myPointFilter,
                 this.filter.sharesTagButNotAttached,
                 this.filter.sortType,
-                this.filter.sortAscending
+                !this.filter.sortDescending
               )
               .subscribe({
                 next: psr => this.DisplayPoints(psr),
@@ -262,7 +262,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
                   this.localData.ConstituencyIDVoter,
                   this.filter.slashTag,
                   this.filter.sortType,
-                  this.filter.sortAscending,
+                  !this.filter.sortDescending,
                   this.filter.updateTopicViewCount
                 )
                 .subscribe({

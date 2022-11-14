@@ -161,104 +161,16 @@
         </button>
 
         <!-- Begin Sort Menu -->
-        <button
-          mat-button
-          [matMenuTriggerFor]="sortOrderMenu"
+        <app-search-and-sort
           *ngIf="tabIndex === Tabs.tagPoints"
-          [matTooltip]="sortToolTip"
-        >
-          search & sort
-          <mat-icon>{{ sortTypeIcon }}</mat-icon>
-        </button>
-
-        <mat-menu #sortOrderMenu="matMenu">
-          <!-- Show Point Filter Options -->
-          <button
-            mat-menu-item
-            (click)="ShowPointFilterCriteria(!showFilters)"
-            *ngIf="tabIndex === Tabs.tagPoints"
-            [matTooltip]="filterToolTip"
-          >
-            <mat-icon>{{ filterIcon }}</mat-icon>
-            {{ filterText }}
-          </button>
-
-          <hr />
-
-          <button
-            mat-menu-item
-            (click)="sortBy(PointSortTypes.TrendingActivity)"
-            [matTooltip]="'trending now'"
-            [class.selected]="
-              filter.sortType === PointSortTypes.TrendingActivity
-            "
-          >
-            <mat-icon>trending_up</mat-icon>
-            trending
-          </button>
-
-          <button
-            mat-menu-item
-            (click)="sortBy(PointSortTypes.AllTimePopularity)"
-            [matTooltip]="'most popular first (all time)'"
-            [class.selected]="
-              filter.sortType === PointSortTypes.AllTimePopularity
-            "
-          >
-            <mat-icon>favorite_border</mat-icon>
-            popularity
-          </button>
-
-          <button
-            mat-menu-item
-            (click)="sortBy(PointSortTypes.DateUpdated)"
-            [matTooltip]="'date order - most recent first'"
-            [class.selected]="filter.sortType === PointSortTypes.DateUpdated"
-          >
-            <mat-icon>calendar_today</mat-icon>
-            date
-          </button>
-
-          <hr />
-
-          <button
-            mat-menu-item
-            [matTooltip]="'ascending order'"
-            (click)="SetSortDescending(false)"
-            [class.selected]="filter.sortAscending"
-          >
-            <mat-icon>arrow_upward</mat-icon>
-            ascending
-          </button>
-
-          <button
-            mat-menu-item
-            [matTooltip]="'descending order'"
-            (click)="SetSortDescending(true)"
-            [class.selected]="filter.sortDescending"
-          >
-            <mat-icon>arrow_downward</mat-icon>
-            descending
-          </button>
-
-          <button
-            mat-menu-item
-            (click)="sortBy(PointSortTypes.Random)"
-            [matTooltip]="'random order'"
-            [class.selected]="filter.sortType === PointSortTypes.Random"
-          >
-            <mat-icon>gesture</mat-icon>
-            random
-          </button>
-
-          <hr />
-
-          <button mat-menu-item (click)="refresh()" [matTooltip]="'refresh'">
-            <mat-icon>refresh</mat-icon>
-            refresh
-          </button>
-        </mat-menu>
-
+          [showFilters]="showFilters"
+          (showFiltersChange)="ShowPointFilterCriteria($event)"
+          [pointSortType]="filter.sortType"
+          (pointSortTypeChange)="SetSortType($event)"
+          [sortDescending]="this.filter.sortDescending"
+          (sortDescendingChange)="SetSortDescending($event)"
+          (refresh)="refresh()"
+        ></app-search-and-sort>
         <!-- End Sort Menu -->
       </div>
     </div>
@@ -269,6 +181,7 @@
   <!-- End tab selection and point sort order -->
 
   <!-- Points filter for tagPoints list or questionAnswers -->
+
   <app-points-filter
     [filter]="filter"
     (filterChange)="applyFilter()"
@@ -277,6 +190,7 @@
     #pointsFilter
   >
   </app-points-filter>
+
   <!-- End points filter -->
 
   <!-- Begin Tab Content -->

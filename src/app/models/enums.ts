@@ -65,6 +65,25 @@ export enum PointTypesEnum {
   CommentOrEditorial = 29
 }
 
+export enum Tabs {
+  // Tags
+  trendingTags = 0,
+  recentTags = 1,
+  tagSearch = 2,
+
+  // Questions, Answers
+  questionList = 3,
+  questionAnswers = 4,
+
+  // Groups, Discussions
+  groups = 5,
+  groupDiscussion = 6,
+
+  // Points
+  tagPoints = 7,
+  newPoint = 8
+}
+
 export enum TagCloudTypes {
   Trending,
   Recent

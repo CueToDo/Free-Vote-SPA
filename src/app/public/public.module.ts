@@ -31,9 +31,9 @@ import { BreakOutGroupsModule } from '../breakoutgroups/break-out-groups.module'
 import { CardComponent } from './card/card.component';
 import { CkeUniversalComponent } from './cke-universal/cke-universal.component';
 import { HomeComponent } from './home/home.component';
-import { NavBurgerComponent } from './nav-burger/nav-burger.component';
-import { NavItemsComponent } from './nav-items/nav-items.component';
-import { NavMainComponent } from './nav-main/nav-main.component';
+import { NavBurgerComponent } from './menus/nav-burger/nav-burger.component';
+import { NavItemsComponent } from './menus/nav-items/nav-items.component';
+import { NavMainComponent } from './menus/nav-main/nav-main.component';
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
@@ -48,6 +48,8 @@ import { TagSearchComponent } from './tag-search/tag-search.component';
 import { TakeActionComponent } from './take-action/take-action.component';
 import { WebsitePreviewComponent } from './website-preview/website-preview.component';
 import { PointCommentsComponent } from './point-comments/point-comments.component';
+import { SearchAndSortComponent } from './menus/search-and-sort/search-and-sort.component';
+import { ShareAndCommentComponent } from './menus/share-and-comment/share-and-comment.component';
 
 @NgModule({
   imports: [
@@ -94,7 +96,9 @@ import { PointCommentsComponent } from './point-comments/point-comments.componen
     TagsAndPointsComponent,
     TagSearchComponent,
     TakeActionComponent,
-    WebsitePreviewComponent
+    WebsitePreviewComponent,
+    SearchAndSortComponent,
+    ShareAndCommentComponent
   ],
   exports: [
     CkeUniversalComponent,

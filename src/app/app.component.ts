@@ -37,8 +37,8 @@ import { TagsService } from 'src/app/services/tags.service';
 import { UpdateService } from 'src/app/services/update.service';
 
 // FreeVote Components
-import { NavBurgerComponent } from 'src/app/public/nav-burger/nav-burger.component';
-import { NavMainComponent } from 'src/app/public/nav-main/nav-main.component';
+import { NavBurgerComponent } from 'src/app/public/menus/nav-burger/nav-burger.component';
+import { NavMainComponent } from 'src/app/public/menus/nav-main/nav-main.component';
 
 // Other
 import { environment } from 'src/environments/environment';

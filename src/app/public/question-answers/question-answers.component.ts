@@ -5,11 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 
 // Models, Enums
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-import {
-  MyPointFilter,
-  PointSelectionTypes,
-  PointSortTypes
-} from 'src/app/models/enums';
+import { MyPointFilter, PointSortTypes } from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -43,7 +39,6 @@ export class QuestionAnswersComponent {
 
   constructor(
     public localData: LocalDataService,
-    private activeRoute: ActivatedRoute,
     private questionsService: QuestionsService
   ) {}
 
@@ -77,7 +72,7 @@ export class QuestionAnswersComponent {
 
   public ReselectForNewAnswer(): void {
     this.filter.sortType = PointSortTypes.DateUpdated;
-    this.filter.sortAscending = false;
+    this.filter.sortDescending = true;
     this.viewAllAnswers();
   }
 

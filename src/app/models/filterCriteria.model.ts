@@ -56,9 +56,5 @@ export class FilterCriteria {
   sortType = PointSortTypes.TrendingActivity;
 
   // Sort Order
-  sortAscending = false;
-  get sortDescending(): boolean {
-    return !this.sortAscending;
-  }
-  savedSortDescending = !this.sortAscending;
+  sortDescending = true;
 }

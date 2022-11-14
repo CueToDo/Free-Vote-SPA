@@ -17,7 +17,8 @@ import { Subscription } from 'rxjs';
 import {
   TagCloudTypes,
   PointSortTypes,
-  PointSelectionTypes
+  PointSelectionTypes,
+  Tabs
 } from 'src/app/models/enums';
 import { BreakoutGroup } from 'src/app/models/break-out-group.model';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
@@ -38,25 +39,6 @@ import { GroupDiscussionComponent } from 'src/app/breakoutgroups/group-discussio
 import { PointsListComponent } from 'src/app/public/points-list/points-list.component';
 import { PointEditComponent } from 'src/app/public//point-edit/point-edit.component';
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
-
-enum Tabs {
-  // Tags
-  trendingTags = 0,
-  recentTags = 1,
-  tagSearch = 2,
-
-  // Questions, Answers
-  questionList = 3,
-  questionAnswers = 4,
-
-  // Groups, Discussions
-  groups = 5,
-  groupDiscussion = 6,
-
-  // Points
-  tagPoints = 7,
-  newPoint = 8
-}
 
 @Component({
   templateUrl: './tags-and-points.component.html',
@@ -108,11 +90,6 @@ export class TagsAndPointsComponent
   showFilters = false;
   applyingFilter = false; // prevent cascading burgerMenuTrigger
 
-  // Filter button
-  public filterIcon = 'search';
-  public filterText = 'search';
-  public filterToolTip = 'not filtering point selection';
-
   // Questions Select
   questionCount = 0;
   questionsSelected = false;
@@ -122,11 +99,6 @@ export class TagsAndPointsComponent
   refreshRecentTags = false;
   newPointRefresh = false;
   pointsSelected = false;
-
-  // Point Sort
-  public PointSortTypes = PointSortTypes; // enum - template
-  public sortToolTip = '';
-  public sortTypeIcon = '';
 
   bogSelected: BreakoutGroup = {
     tagDisplay: '',
@@ -185,10 +157,9 @@ export class TagsAndPointsComponent
 
     // Default Sort Type
     this.filter.sortType = PointSortTypes.TrendingActivity;
-    this.SetSortTypeIcon(PointSortTypes.TrendingActivity);
 
     // Default SortOrder
-    this.filter.sortAscending = false;
+    this.filter.sortDescending = true;
 
     // EXTERNAL ROUTECHANGE (not tab change): Need to subscribe to route change to get route params
     // https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
@@ -480,8 +451,6 @@ export class TagsAndPointsComponent
       this.filter.sortType = pointSortType;
     }
 
-    this.SetSortTypeIcon(pointSortType);
-
     this.pointsSelected = false;
     this.ChangeTab(Tabs.tagPoints); // will select points
 
@@ -695,16 +664,6 @@ export class TagsAndPointsComponent
   ShowPointFilterCriteria(show: boolean): void {
     this.showFilters = show;
 
-    if (show) {
-      this.filterIcon = 'manage_search';
-      this.filterText = 'searching';
-      this.filterToolTip = 'hide search criteria';
-    } else {
-      this.filterIcon = 'search';
-      this.filterText = 'search';
-      this.filterToolTip = 'show point search criteria';
-    }
-
     this.filter.pointSelectionType = PointSelectionTypes.Filtered;
 
     if (!show) {
@@ -738,42 +697,12 @@ export class TagsAndPointsComponent
   // From child Points Component
   pointSortTypeChanged(pointSortType: PointSortTypes): void {
     this.externalTrigger = true;
-    this.SetSortTypeIcon(pointSortType);
+    this.filter.sortType = pointSortType; // Pass update to sort menu
     this.externalTrigger = false;
   }
 
-  SetSortTypeIcon(pointSortType: PointSortTypes): void {
-    if (pointSortType !== PointSortTypes.NoChange) {
-      if (pointSortType === PointSortTypes.DateDescend) {
-        pointSortType = PointSortTypes.DateUpdated;
-      }
-
-      this.filter.sortType = pointSortType;
-
-      switch (pointSortType) {
-        case PointSortTypes.TrendingActivity:
-          this.sortTypeIcon = 'trending_up';
-          this.sortToolTip = 'showing points trending now';
-          break;
-        case PointSortTypes.AllTimePopularity:
-          this.sortTypeIcon = 'favorite_border';
-          this.sortToolTip = 'showing most popular first (all time)';
-          break;
-        case PointSortTypes.Random:
-          this.sortTypeIcon = 'gesture';
-          this.sortToolTip = 'showing in random order';
-          break;
-        default:
-          this.sortTypeIcon = 'calendar_today';
-          this.sortToolTip = 'showing most recent first';
-          break;
-      }
-    }
-  }
-
   SetSortDescending(descending: boolean): void {
-    this.filter.savedSortDescending = descending;
-    this.filter.sortAscending = !descending;
+    this.filter.sortDescending = descending;
 
     // Can't reverse random, so default to TrendingActivity
     if (this.filter.sortType === PointSortTypes.Random) {
@@ -783,11 +712,10 @@ export class TagsAndPointsComponent
     if (!this.externalTrigger) {
       this.pointsListComponent.NewSortOrder();
     }
-
-    this.SetSortTypeIcon(this.filter.sortType);
   }
 
-  sortBy(pointSortType: PointSortTypes): void {
+  // If sort type is random, order (ascending/descending) is irrelevant
+  SetSortType(pointSortType: PointSortTypes): void {
     if (
       this.filter.sortType !== pointSortType ||
       pointSortType === PointSortTypes.Random // new random order
@@ -802,16 +730,7 @@ export class TagsAndPointsComponent
       this.tabIndex = Tabs.tagPoints;
       this.ChangeTab(this.tabIndex);
 
-      if (pointSortType === PointSortTypes.Random) {
-        // Save old values and set to false
-        this.filter.savedSortDescending = this.filter.sortDescending;
-        this.filter.sortAscending = false;
-      } else {
-        // restore old values if switch to non-random sort
-        this.filter.sortAscending = !this.filter.savedSortDescending;
-      }
-
-      this.SetSortTypeIcon(pointSortType);
+      this.filter.sortType = pointSortType;
     }
   }
 
