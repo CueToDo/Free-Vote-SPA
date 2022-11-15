@@ -40,6 +40,7 @@ import { PointEditComponent } from './point-edit/point-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
 import { PointsFilterComponent } from './points-filter/points-filter.component';
 import { PointsListComponent } from './points-list/points-list.component';
+import { PointTypesComponent } from './menus/point-types/point-types.component';
 import { QuestionComponent } from './question/question.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
@@ -88,6 +89,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     PointsFilterComponent,
     PointsListComponent,
     PointOfTheWeekComponent,
+    PointTypesComponent,
     QuestionAnswersComponent,
     QuestionComponent,
     QuestionEditComponent,

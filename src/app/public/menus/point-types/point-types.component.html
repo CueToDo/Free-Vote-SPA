@@ -1,0 +1,291 @@
+<div>
+  <!-- Point Type Indicator -->
+
+  <button mat-button [matMenuTriggerFor]="pointTypeVoteMenuItems" type="button">
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.Opinion"
+      matTooltip="Opinion"
+      >record_voice_over
+    </mat-icon>
+    <mat-icon *ngIf="pointTypeID === PointTypesEnum.Fact" matTooltip="Fact"
+      >school</mat-icon
+    >
+    <mat-icon *ngIf="pointTypeID === PointTypesEnum.Action" matTooltip="Action"
+      >directions_walk</mat-icon
+    >
+    <mat-icon *ngIf="pointTypeID === PointTypesEnum.Quote" matTooltip="Quote"
+      >format_quote</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.ReportOrSurvey"
+      matTooltip="Report or Survey"
+    >
+      description
+    </mat-icon>
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.CommentOrEditorial"
+      matTooltip="Comment Or Editorial"
+    >
+      comment
+    </mat-icon>
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.Petition"
+      matTooltip="Petition"
+      >create</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.RecommendedReading"
+      matTooltip="Recommended Reading"
+    >
+      local_library</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.RecommendedViewing"
+      matTooltip="Recommended Viewing"
+    >
+      video_library</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.RecommendedListening"
+      matTooltip="Recommended Listening"
+    >
+      video_library</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.Assumption"
+      matTooltip="Assumption"
+      >crop</mat-icon
+    >
+    <mat-icon *ngIf="pointTypeID === PointTypesEnum.Belief" matTooltip="belief"
+      >speaker_notes</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.Anecdote"
+      matTooltip="Anecdote"
+      >hearing</mat-icon
+    >
+    <mat-icon *ngIf="pointTypeID === PointTypesEnum.Tweet" matTooltip="Tweet"
+      >reply</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.CommonSense"
+      matTooltip="Common Sense"
+      >how_to_reg
+    </mat-icon>
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.Question"
+      matTooltip="Question"
+    >
+      device_unknown</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.RhetoricalQuestion"
+      matTooltip="Rhetorical Question"
+    >
+      not_listed_location</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.Definition"
+      matTooltip="Definition"
+      >notes</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.Meaning"
+      matTooltip="Meaning"
+      >functions</mat-icon
+    >
+    <mat-icon
+      *ngIf="pointTypeID === PointTypesEnum.Prediction"
+      matTooltip="Prediction"
+      >timeline</mat-icon
+    >
+  </button>
+
+  <!-- PointType Explanation/Vote -->
+
+  <mat-menu #pointTypeVoteMenuItems="matMenu">
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Opinion)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Opinion
+      }"
+    >
+      <mat-icon>record_voice_over</mat-icon> opinion
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Fact)"
+      [ngClass]="{ selected: pointTypeID === PointTypesEnum.Fact }"
+    >
+      <mat-icon>school</mat-icon> fact
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Action)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Action
+      }"
+    >
+      <mat-icon>directions_walk</mat-icon> action
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Quote)"
+      [ngClass]="{ selected: pointTypeID === PointTypesEnum.Quote }"
+    >
+      <mat-icon>format_quote</mat-icon> quote
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.ReportOrSurvey)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.ReportOrSurvey
+      }"
+    >
+      <mat-icon>description</mat-icon> report or survey
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Petition)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Petition
+      }"
+    >
+      <mat-icon>create</mat-icon> petition
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.RecommendedReading)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.RecommendedReading
+      }"
+    >
+      <mat-icon>local_library</mat-icon> recommended reading
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.RecommendedViewing)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.RecommendedViewing
+      }"
+    >
+      <mat-icon>video_library</mat-icon> recommended viewing
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.RecommendedViewing)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.RecommendedListening
+      }"
+    >
+      <mat-icon>video_library</mat-icon> recommended listening
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Assumption)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Assumption
+      }"
+    >
+      <mat-icon>crop</mat-icon> assumption
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Belief)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Belief
+      }"
+    >
+      <mat-icon>speaker_notes</mat-icon> belief
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Anecdote)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Anecdote
+      }"
+    >
+      <mat-icon>hearing</mat-icon> anecdote
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Tweet)"
+      [ngClass]="{ selected: pointTypeID === PointTypesEnum.Tweet }"
+    >
+      <mat-icon>reply</mat-icon> tweet
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.CommonSense)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.CommonSense
+      }"
+    >
+      <mat-icon>how_to_reg</mat-icon> common sense
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Question)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Question
+      }"
+    >
+      <mat-icon>device_unknown</mat-icon> question
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.RhetoricalQuestion)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.RhetoricalQuestion
+      }"
+    >
+      <mat-icon>not_listed_location</mat-icon> rhetorical question
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Definition)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Definition
+      }"
+    >
+      <mat-icon>notes</mat-icon> definition
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Meaning)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Meaning
+      }"
+    >
+      <mat-icon>functions</mat-icon> meaning
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Prediction)"
+      [ngClass]="{
+        selected: pointTypeID === PointTypesEnum.Prediction
+      }"
+    >
+      <mat-icon>timeline</mat-icon> prediction
+    </button>
+  </mat-menu>
+</div>
