@@ -236,7 +236,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
                 this.filter.myPointFilter,
                 this.filter.sharesTagButNotAttached,
                 this.filter.sortType,
-                !this.filter.sortDescending
+                this.filter.sortDescending
               )
               .subscribe({
                 next: psr => this.DisplayPoints(psr),

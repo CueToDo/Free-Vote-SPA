@@ -1,4 +1,3 @@
-import { concatMap, tap } from 'rxjs/operators';
 // Angular
 import {
   Component,
@@ -6,12 +5,17 @@ import {
   OnInit,
   PLATFORM_ID,
   Renderer2,
-  ViewChild
+  ViewChild,
+  AfterViewInit
 } from '@angular/core';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
-//Models
+// rxjs
+import { tap } from 'rxjs';
+
+// Models
 import { Point } from 'src/app/models/point.model';
 import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 import { ID } from 'src/app/models/common';
@@ -30,7 +34,7 @@ import { PointEditComponent } from '../point-edit/point-edit.component';
   templateUrl: './point-comments.component.html',
   styleUrls: ['./point-comments.component.css']
 })
-export class PointCommentsComponent implements OnInit {
+export class PointCommentsComponent implements OnInit, AfterViewInit {
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('trvParentPoint') parentPointComponent!: PointComponent;
 
@@ -49,6 +53,7 @@ export class PointCommentsComponent implements OnInit {
   facebookShare = '';
   twitterShare = '';
   linkToAll = '';
+
   newComment = false;
 
   get constituencyID(): number {
@@ -142,6 +147,8 @@ export class PointCommentsComponent implements OnInit {
   }
 
   DisplayShareLinks(): void {
+    console.log('WTS:', this.localData.websiteUrlWTS);
+
     this.linkShare =
       this.localData.websiteUrlWTS.replace(
         'http://localhost:7027',
@@ -151,11 +158,15 @@ export class PointCommentsComponent implements OnInit {
       '/' +
       this.SelectSingleTitle;
 
+    console.log('LS:', this.linkShare);
+
     const linkShareEncoded = encodeURIComponent(this.linkShare);
     const titleEncoded = encodeURIComponent(this.parentPoint.pointTitle);
 
     this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
     this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
+
+    console.log('FBS:', this.facebookShare);
 
     // Client side scripts
     if (isPlatformBrowser(this.platformId)) {
@@ -249,5 +260,9 @@ export class PointCommentsComponent implements OnInit {
 
     // this.NewPointsDisplayed();
     // this.RemovePointFromAnswers.emit(id);
+  }
+
+  ngAfterViewInit(): void {
+    window.FB.XFBML.parse();
   }
 }

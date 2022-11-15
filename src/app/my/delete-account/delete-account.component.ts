@@ -4,9 +4,6 @@ import { Component, Inject } from '@angular/core';
 // Material
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-// Free Vote
-import { LocalDataService } from 'src/app/services/local-data.service';
-
 export interface DialogData {
   name: string;
   response: string;

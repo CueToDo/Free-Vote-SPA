@@ -34,6 +34,7 @@ import { HomeComponent } from './home/home.component';
 import { NavBurgerComponent } from './menus/nav-burger/nav-burger.component';
 import { NavItemsComponent } from './menus/nav-items/nav-items.component';
 import { NavMainComponent } from './menus/nav-main/nav-main.component';
+import { PointCommentsComponent } from './point-comments/point-comments.component';
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
@@ -43,13 +44,11 @@ import { QuestionComponent } from './question/question.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionAnswersComponent } from './question-answers/question-answers.component';
+import { SearchAndSortComponent } from './menus/search-and-sort/search-and-sort.component';
 import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
 import { TagSearchComponent } from './tag-search/tag-search.component';
 import { TakeActionComponent } from './take-action/take-action.component';
 import { WebsitePreviewComponent } from './website-preview/website-preview.component';
-import { PointCommentsComponent } from './point-comments/point-comments.component';
-import { SearchAndSortComponent } from './menus/search-and-sort/search-and-sort.component';
-import { ShareAndCommentComponent } from './menus/share-and-comment/share-and-comment.component';
 
 @NgModule({
   imports: [
@@ -93,12 +92,11 @@ import { ShareAndCommentComponent } from './menus/share-and-comment/share-and-co
     QuestionComponent,
     QuestionEditComponent,
     QuestionsListComponent,
+    SearchAndSortComponent,
     TagsAndPointsComponent,
     TagSearchComponent,
     TakeActionComponent,
-    WebsitePreviewComponent,
-    SearchAndSortComponent,
-    ShareAndCommentComponent
+    WebsitePreviewComponent
   ],
   exports: [
     CkeUniversalComponent,
