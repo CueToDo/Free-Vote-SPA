@@ -34,6 +34,7 @@ import { HomeComponent } from './home/home.component';
 import { NavBurgerComponent } from './menus/nav-burger/nav-burger.component';
 import { NavItemsComponent } from './menus/nav-items/nav-items.component';
 import { NavMainComponent } from './menus/nav-main/nav-main.component';
+import { PointCommandsComponent } from './menus/point-commands/point-commands.component';
 import { PointCommentsComponent } from './point-comments/point-comments.component';
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
@@ -83,6 +84,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     NavBurgerComponent,
     NavItemsComponent,
     NavMainComponent,
+    PointCommandsComponent,
     PointCommentsComponent,
     PointComponent,
     PointEditComponent,

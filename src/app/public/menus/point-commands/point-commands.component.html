@@ -1,0 +1,184 @@
+<!-- type='button' https://stackoverflow.com/questions/12319758/clicking-a-button-within-a-form-causes-page-refresh -->
+<!-- https://stackblitz.com/angular/rllvqdkjedar -->
+<button mat-button [matMenuTriggerFor]="pointCommands" type="button">
+  <mat-icon
+    *ngIf="!point.pointFeedback.feedbackIsUpdatable"
+    matTooltip="anon feedback locked"
+    >lock</mat-icon
+  >
+
+  <mat-icon
+    *ngIf="
+      point.pointFeedback.feedbackIsUpdatable &&
+      !point.pointFeedback.supportLevelID
+    "
+    matTooltip="feedback options"
+    >menu</mat-icon
+  >
+
+  <img
+    src="./assets/Modified.png"
+    *ngIf="point.pointFeedback.pointModified"
+    matTooltip="Point has been updated. Please confirm your feedback."
+  />
+  <img
+    src="./assets/Agree.png"
+    *ngIf="
+      !point.pointFeedback.pointModified &&
+      point.pointFeedback.supportLevelID === 1
+    "
+    matTooltip="Upvoted"
+  />
+  <img
+    src="./assets/Disagree.png"
+    *ngIf="
+      !point.pointFeedback.pointModified &&
+      point.pointFeedback.supportLevelID === -8
+    "
+    matTooltip="Neutral"
+  />
+  <img
+    src="./assets/Oppose.png"
+    *ngIf="
+      !point.pointFeedback.pointModified &&
+      point.pointFeedback.supportLevelID === -1
+    "
+    matTooltip="Downvoted"
+  />
+  <img
+    src="./assets/Block.png"
+    *ngIf="
+      !point.pointFeedback.pointModified &&
+      point.pointFeedback.supportLevelID === -9
+    "
+    matTooltip="Blocked"
+  />
+
+  <mat-icon *ngIf="point.isFavourite" matTooltip="Is favourite"
+    >favorite</mat-icon
+  >
+  <mat-icon *ngIf="point.isImportant" matTooltip="Is Important"
+    >priority_high</mat-icon
+  >
+  <mat-icon *ngIf="point.localInterest" matTooltip="Local Interest"
+    >mp</mat-icon
+  >
+  <mat-icon *ngIf="point.draft" matTooltip="draft point - not public"
+    >visibility_off</mat-icon
+  >
+</button>
+
+<!-- Voter Point Feedback Options -->
+
+<mat-menu #pointCommands="matMenu">
+  <!-- Point Owner Commands -->
+
+  <button mat-menu-item (click)="edit()" *ngIf="point.isPointOwner">
+    <mat-icon>edit</mat-icon>
+    edit
+  </button>
+
+  <button mat-menu-item (click)="delete()" *ngIf="point.isPointOwner">
+    <mat-icon>delete_forever</mat-icon>
+    delete
+  </button>
+
+  <hr class="hr" *ngIf="point.isPointOwner" />
+
+  <!-- End Point Owner -->
+
+  <button
+    mat-menu-item
+    (click)="pointFeedback(PointSupportLevels.Support)"
+    *ngIf="point.pointFeedback.feedbackIsUpdatable"
+    [ngClass]="{ selected: point.pointFeedback.supportLevelID === 1 }"
+  >
+    <img src="./assets/Agree.png" alt="Agree" /> up-vote
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="pointFeedback(PointSupportLevels.StandAside)"
+    *ngIf="point.pointFeedback.feedbackIsUpdatable"
+    [ngClass]="{ selected: point.pointFeedback.supportLevelID === -8 }"
+  >
+    <img src="./assets/Disagree.png" alt="Neutral" /> neutral
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="pointFeedback(PointSupportLevels.Oppose)"
+    *ngIf="point.pointFeedback.feedbackIsUpdatable"
+    [ngClass]="{ selected: point.pointFeedback.supportLevelID === -1 }"
+  >
+    <img src="./assets/Oppose.png" alt="Oppose" /> down-vote
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="pointFeedback(PointSupportLevels.Report)"
+    *ngIf="point.pointFeedback.feedbackIsUpdatable"
+    [ngClass]="{ selected: point.pointFeedback.supportLevelID === -9 }"
+  >
+    <img src="./assets/Block.png" alt="Block" /> block
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="occupyHandSignals()"
+    *ngIf="point.pointFeedback.feedbackIsUpdatable"
+  >
+    <img src="./assets/Clarify.png" alt="Clarify" /> view all signs
+  </button>
+
+  <hr class="hr" />
+
+  <button
+    mat-menu-item
+    [ngClass]="{ selected: point.localInterest }"
+    (click)="addLocalTags()"
+  >
+    <mat-icon matTooltip="make point local interest">mp</mat-icon>
+    local interest
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="favourite()"
+    matTooltip="flag point as a favourite"
+    [ngClass]="{ selected: point.isFavourite }"
+  >
+    <mat-icon>{{ favoriteIcon }}</mat-icon>
+    favourite
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="important()"
+    matTooltip="flag point as important"
+    [ngClass]="{ selected: point.isImportant }"
+  >
+    <mat-icon>priority_high</mat-icon>
+    important
+  </button>
+
+  <hr class="hr" />
+
+  <button
+    mat-menu-item
+    (click)="anon()"
+    *ngIf="point.pointFeedback.feedbackIsUpdatable"
+  >
+    <mat-icon>lock</mat-icon>
+    anonymous feedback
+  </button>
+
+  <button
+    mat-menu-item
+    *ngIf="point.pointFeedback.feedbackGiven"
+    matTooltip="date feedback given"
+  >
+    <mat-icon>date_range</mat-icon>
+    <span [innerHTML]="point.pointFeedback.feedbackDate | nbsp"></span>
+  </button>
+</mat-menu>

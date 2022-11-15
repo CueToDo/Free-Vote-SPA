@@ -1,0 +1,9 @@
+button img {
+  width: 28px;
+  margin-right: 10px;
+}
+
+.hr {
+  border: solid 1px lightgray;
+  margin: 0;
+}

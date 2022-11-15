@@ -232,54 +232,8 @@ export class PointComponent implements OnInit {
     }
   }
 
-  PointFeedback(pointSupportLevel: PointSupportLevels): void {
-    this.error = '';
-
-    if (!this.point) {
-      this.error = 'Missing: point';
-    } else {
-      if (!this.point.pointFeedback.feedbackIsUpdatable) {
-        alert('Feedback is not updatable');
-      } else {
-        if (
-          this.point.pointFeedback.supportLevelID === pointSupportLevel &&
-          !this.point.pointFeedback.pointModified
-        ) {
-          // If clicked on the current support level then delete it
-          if (confirm('Are you sure you wish to delete your feedback?')) {
-            pointSupportLevel = PointSupportLevels.None;
-          } else {
-            return; // Cancel feedback delete
-          }
-        }
-
-        const feedbackGiven = this.point.pointFeedback.feedbackGiven;
-
-        this.pointsService
-          .PointFeedback(this.point.pointID, pointSupportLevel, '', false)
-          .subscribe({
-            next: response => {
-              console.log('FEEDBACK API RESPONSE', response);
-              if (this.point) {
-                this.point.pointFeedback = response as PointFeedback;
-              }
-              console.log(
-                'CLIENT DATA UPDATED PointSupportlevel: ',
-                this.point?.pointFeedback?.supportLevelID
-              );
-              if (feedbackGiven && !response.feedbackGiven) {
-                this.point.totalFeedback -= 1;
-              } else if (!feedbackGiven && response.feedbackGiven) {
-                this.point.totalFeedback += 1;
-              }
-            },
-            error: serverError => {
-              console.log('PointFeedback Error', serverError);
-              this.error = serverError.error.detail;
-            }
-          });
-      }
-    }
+  Error(error: string) {
+    this.error = error;
   }
 
   PointTypeVote(pointTypesEnum: PointTypesEnum): void {}
@@ -296,15 +250,6 @@ export class PointComponent implements OnInit {
       );
     }
     if (confirmRemove) this.RemovePointFromAnswers.emit(pointID);
-  }
-
-  get favoriteIcon(): string {
-    if (!this.point) {
-      this.error = 'Missing: point';
-      return '';
-    } else {
-      return this.point.isFavourite ? 'favorite' : 'favorite_border';
-    }
   }
 
   // ToDo Again (Maybe)
@@ -341,25 +286,6 @@ export class PointComponent implements OnInit {
           }
         });
     }
-  }
-
-  Support(): void {
-    this.PointFeedback(PointSupportLevels.Support);
-  }
-
-  Neutral(): void {
-    // this.point.pointFeedback.woWVote = false;
-    this.PointFeedback(PointSupportLevels.StandAside);
-  }
-
-  Oppose(): void {
-    // this.point.pointFeedback.woWVote = false;
-    this.PointFeedback(PointSupportLevels.Oppose);
-  }
-
-  Report(): void {
-    // this.point.pointFeedback.woWVote = false;
-    this.PointFeedback(PointSupportLevels.Report);
   }
 
   anon(): void {
@@ -512,13 +438,6 @@ export class PointComponent implements OnInit {
           });
       }
     }
-  }
-
-  OccupyHandSignals(): void {
-    window.open(
-      'https://en.m.wikipedia.org/wiki/Occupy_movement_hand_signals',
-      '_blank'
-    );
   }
 
   elementTruncated(): boolean {
