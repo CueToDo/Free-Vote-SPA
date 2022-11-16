@@ -6,7 +6,7 @@ import {
   PLATFORM_ID,
   Renderer2,
   ViewChild,
-  AfterViewInit
+  ElementRef
 } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,9 +34,11 @@ import { PointEditComponent } from '../point-edit/point-edit.component';
   templateUrl: './point-comments.component.html',
   styleUrls: ['./point-comments.component.css']
 })
-export class PointCommentsComponent implements OnInit, AfterViewInit {
+export class PointCommentsComponent implements OnInit {
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('trvParentPoint') parentPointComponent!: PointComponent;
+
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   parentPoint = new Point();
   points: Point[] = [];
@@ -158,15 +160,11 @@ export class PointCommentsComponent implements OnInit, AfterViewInit {
       '/' +
       this.SelectSingleTitle;
 
-    console.log('LS:', this.linkShare);
-
     const linkShareEncoded = encodeURIComponent(this.linkShare);
     const titleEncoded = encodeURIComponent(this.parentPoint.pointTitle);
 
     this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
     this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
-
-    console.log('FBS:', this.facebookShare);
 
     // Client side scripts
     if (isPlatformBrowser(this.platformId)) {
@@ -215,6 +213,7 @@ export class PointCommentsComponent implements OnInit, AfterViewInit {
       this.constituencyID,
       this.parentPoint.pointID
     );
+    setTimeout(() => this.scrollToBottom(), 100);
   }
 
   CancelComment() {
@@ -264,5 +263,16 @@ export class PointCommentsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     window.FB.XFBML.parse();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.scrollContainer.nativeElement.scrollTop =
+        this.scrollContainer.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+
+  scrollToTop() {
+    this.scrollContainer.nativeElement.scrollTop = 0;
   }
 }

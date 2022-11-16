@@ -1,6 +1,6 @@
 <div fxFill fxLayout="column">
   <div class="tabContainer mt-3">
-    <div class="tabContent scroller">
+    <div class="tabContent scroller" #scrollContainer>
       <div class="content mb-5">
         <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 mb-4">
           <button mat-button [routerLink]="linkToAll">
@@ -57,6 +57,10 @@
           {{ error }}
         </div>
 
+        <!-- Ancestors -->
+        <div></div>
+
+        <!-- Parent -->
         <div>
           <app-point
             #trvParentPoint
@@ -67,26 +71,37 @@
           ></app-point>
         </div>
 
-        <div>
-          <div *ngFor="let point of points">
-            <app-point
-              [point]="point"
-              [isComment]="true"
-              (PointDeleted)="onPointDeleted($event)"
-            >
-            </app-point>
-          </div>
+        <!-- Children -->
+        <div *ngFor="let point of points">
+          <app-point
+            [point]="point"
+            [isComment]="true"
+            (PointDeleted)="onPointDeleted($event)"
+          >
+          </app-point>
         </div>
 
-        <app-point-edit
-          #newPoint
-          [hidden]="!newComment"
-          [parentPointID]="parentPoint.pointID"
-          [isComment]="true"
-          [constituencyID]="constituencyID"
-          (CancelEdit)="CancelComment()"
-          (CompleteEdit)="NewCommentCreated()"
-        ></app-point-edit>
+        <div
+          fxLayoutAlign="end"
+          fxLayoutGap="10"
+          class="commands"
+          *ngIf="!newComment"
+        >
+          <button mat-stroked-button (click)="scrollToTop()">top</button>
+          <button mat-stroked-button (click)="NewComment()">new point</button>
+        </div>
+
+        <div id="newPoint">
+          <app-point-edit
+            #newPoint
+            [hidden]="!newComment"
+            [parentPointID]="parentPoint.pointID"
+            [isComment]="true"
+            [constituencyID]="constituencyID"
+            (CancelEdit)="CancelComment()"
+            (CompleteEdit)="NewCommentCreated()"
+          ></app-point-edit>
+        </div>
       </div>
     </div>
   </div>
