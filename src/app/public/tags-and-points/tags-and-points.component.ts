@@ -613,11 +613,18 @@ export class TagsAndPointsComponent
   }
 
   // From child PointsFilter Component
+  // It's not banana in a box, but filter gets updated
   applyFilter(): void {
     this.applyingFilter = true;
     this.pointsSelected = false;
     this.pointsListComponent.SelectPoints();
     this.applyingFilter = false;
+  }
+
+  cancelSearch(): void {
+    this.showFilters = false;
+    this.pointsSelected = false;
+    this.pointsListComponent.SelectPoints();
   }
 
   // QuestionsList emits the question count, which may cause switch to points

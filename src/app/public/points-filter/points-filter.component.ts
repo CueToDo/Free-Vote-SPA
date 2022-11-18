@@ -49,6 +49,7 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() public filterChange = new EventEmitter<FilterCriteria>();
 
   @Output() pointSortTypeChanged = new EventEmitter<PointSortTypes>();
+  @Output() cancelSearch = new EventEmitter();
 
   // Subscriptions
   private widthSubject$: Subscription | undefined;
@@ -151,6 +152,8 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filter.pointTypeID = PointTypesEnum.NotSelected;
 
     this.filter.anyTag = false;
+    this.filter.text = '';
+    this.filterChange.emit(this.filter);
   }
 
   // MyFilter(): void {
@@ -220,6 +223,11 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.filter.pointFlag = PointFlags.Any;
     }
+  }
+
+  Cancel() {
+    this.ClearPointFilters();
+    this.cancelSearch.emit();
   }
 
   ngOnDestroy(): void {

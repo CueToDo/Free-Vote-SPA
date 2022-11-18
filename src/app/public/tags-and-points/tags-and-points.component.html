@@ -164,10 +164,10 @@
         <app-search-and-sort
           *ngIf="tabIndex === Tabs.tagPoints"
           [showFilters]="showFilters"
-          (showFiltersChange)="ShowPointFilterCriteria($event)"
           [pointSortType]="filter.sortType"
+          [sortDescending]="filter.sortDescending"
+          (showFiltersChange)="ShowPointFilterCriteria($event)"
           (pointSortTypeChange)="SetSortType($event)"
-          [sortDescending]="this.filter.sortDescending"
           (sortDescendingChange)="SetSortDescending($event)"
           (refresh)="refresh()"
         ></app-search-and-sort>
@@ -183,11 +183,12 @@
   <!-- Points filter for tagPoints list or questionAnswers -->
 
   <app-points-filter
+    #pointsFilter
+    [showFilters]="showFilters"
     [filter]="filter"
     (filterChange)="applyFilter()"
     (pointSortTypeChanged)="pointSortTypeChanged($event)"
-    [showFilters]="showFilters"
-    #pointsFilter
+    (cancelSearch)="cancelSearch()"
   >
   </app-points-filter>
 

@@ -68,3 +68,7 @@ mat-form-field + button {
   margin-left: 16px;
   margin-right: 16px;
 }
+
+.filters button + button {
+  margin-left: 10px;
+}
