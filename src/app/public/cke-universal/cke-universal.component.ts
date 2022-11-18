@@ -22,19 +22,17 @@ export class CkeUniversalComponent implements AfterViewInit {
   // https://www.lavalamp.biz/blogs/how-to-use-ckeditor-5-in-angular-with-server-side-rendering-support/
   // https://stackoverflow.com/questions/62076412/angular-universal-ckeditor5-window-is-not-defined
 
-  @Input() ID = 'default'; // To distinguish multiple editors on same page
-  // We now still get the error "duplicate modules" but we don't actually get duplicate editors
-  // A/W an Ivy impementation of CKEditor
-
   @Input() textToEdit = '';
   @Output() textToEditChange = new EventEmitter();
 
   @ViewChild('scriptHost') scriptHost!: ElementRef;
 
   localEditor: any; // set in loadCkEditor
-  get editorID(): string {
-    return `editor${this.ID}`;
-  }
+
+  editorID = '';
+  // To distinguish multiple editors on same page (can't use pointID for multiple new points)
+  // We now still get the error "duplicate modules" but we don't actually get duplicate editors
+  // A/W an Ivy impementation of CKEditor
 
   public ckeConfig = {
     toolbar: {
@@ -73,7 +71,10 @@ export class CkeUniversalComponent implements AfterViewInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private renderer2: Renderer2
-  ) {}
+  ) {
+    // identifiers cannot be numbers - prefix with cke
+    this.editorID = `cke${Math.floor(Math.random() * 1000)}`;
+  }
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -111,7 +112,6 @@ export class CkeUniversalComponent implements AfterViewInit {
     ckeScriptElement.type = 'application/javascript';
     ckeScriptElement.id = 'CKEScript';
 
-    // script.src = 'https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js';
     // Use my custom build
     ckeScriptElement.src = 'https://free.vote/assets/ckeditor.js';
     // ckeScriptElement.src = 'https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js';
