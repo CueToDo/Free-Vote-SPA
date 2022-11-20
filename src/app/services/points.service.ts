@@ -307,6 +307,17 @@ export class PointsService {
       .pipe(map(returnData => returnData as PointSelectionResult));
   }
 
+  PointCommentAncestors(
+    replyPointID: number,
+    constituencyIDVoter: number
+  ): Observable<PointSelectionResult> {
+    return this.httpClientService
+      .get(
+        `points/pointCommentAncestors/${replyPointID}/${constituencyIDVoter}`
+      )
+      .pipe(map(returnData => returnData as PointSelectionResult));
+  }
+
   PointSourceMetaDataUpdate(
     pointID: number,
     link: string
