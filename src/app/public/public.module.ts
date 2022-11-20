@@ -47,6 +47,7 @@ import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionAnswersComponent } from './question-answers/question-answers.component';
 import { SearchAndSortComponent } from './menus/search-and-sort/search-and-sort.component';
+import { SocialShareComponent } from './menus/social-share/social-share.component';
 import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
 import { TagSearchComponent } from './tag-search/tag-search.component';
 import { TakeActionComponent } from './take-action/take-action.component';
@@ -97,6 +98,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     QuestionEditComponent,
     QuestionsListComponent,
     SearchAndSortComponent,
+    SocialShareComponent,
     TagsAndPointsComponent,
     TagSearchComponent,
     TakeActionComponent,

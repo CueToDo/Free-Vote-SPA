@@ -2,47 +2,11 @@
   <div class="tabContainer mt-3">
     <div class="tabContent scroller" #scrollContainer>
       <div class="content mb-5">
-        <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 mb-4">
-          <button mat-button [routerLink]="linkToAll">
-            <mat-icon>list</mat-icon>
-            view all
-          </button>
-
-          <div
-            class="fb-share-button mx-2"
-            [attr.data-href]="linkShare"
-            data-layout="button"
-            data-size="large"
-          >
-            <a
-              target="_blank"
-              [attr.href]="facebookShare"
-              class="fb-xfbml-parse-ignore"
-              >Share</a
-            >
-          </div>
-
-          <a
-            [href]="twitterShare"
-            data-size="large"
-            class="twitter-hashtag-button"
-            data-show-count="false"
-            >Tweet</a
-          >
-
-          <button mat-button (click)="ShareByEmail()">
-            <mat-icon>email</mat-icon>
-            email
-          </button>
-
-          <button
-            mat-button
-            [cdkCopyToClipboard]="linkShare"
-            (click)="message('Link copied to clipboard')"
-          >
-            <mat-icon>playlist_add</mat-icon>
-            copy link
-          </button>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <app-social-share
+            #socialShare
+            [point]="parentPoint"
+          ></app-social-share>
 
           <span
             class="spinner-grow text-primary"

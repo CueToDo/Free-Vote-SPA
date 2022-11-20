@@ -1,16 +1,6 @@
 // Angular
-import {
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  Renderer2,
-  ViewChild,
-  ElementRef
-} from '@angular/core';
-
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 // rxjs
 import { tap } from 'rxjs';
@@ -28,6 +18,7 @@ import { PointsService } from 'src/app/services/points.service';
 // Components
 import { PointComponent } from '../point/point.component';
 import { PointEditComponent } from '../point-edit/point-edit.component';
+import { SocialShareComponent } from './../menus/social-share/social-share.component';
 
 @Component({
   selector: 'app-point-comments',
@@ -37,7 +28,7 @@ import { PointEditComponent } from '../point-edit/point-edit.component';
 export class PointCommentsComponent implements OnInit {
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('trvParentPoint') parentPointComponent!: PointComponent;
-
+  @ViewChild('socialShare') socialShareComponent!: SocialShareComponent;
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   parentPoint = new Point();
@@ -50,11 +41,6 @@ export class PointCommentsComponent implements OnInit {
   vimeoIDs: string[] = [];
   soundCloudTrackIDs: string[] = [];
   pointHTMLwithoutEmbed = '';
-
-  linkShare = '';
-  facebookShare = '';
-  twitterShare = '';
-  linkToAll = '';
 
   newComment = false;
 
@@ -71,10 +57,7 @@ export class PointCommentsComponent implements OnInit {
     private activeRoute: ActivatedRoute,
     private pointsService: PointsService,
     public localData: LocalDataService, // public - used in template)
-    public appData: AppDataService,
-    @Inject(DOCUMENT) private htmlDocument: HTMLDocument,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private renderer2: Renderer2
+    public appData: AppDataService
   ) {}
 
   ngOnInit(): void {
@@ -103,7 +86,7 @@ export class PointCommentsComponent implements OnInit {
           // Manually pass the vlaue just received and initialise the component
           this.parentPointComponent.AssignAndInitialise(point);
 
-          this.DisplayShareLinks();
+          this.socialShareComponent.DisplayShareLinks();
 
           // SSR Initial page render
           const preview = {
@@ -116,9 +99,6 @@ export class PointCommentsComponent implements OnInit {
           // Notify app.component to set meta data for SEO & Social scraping
           this.appData.SSRInitialMetaData$.next(preview);
 
-          // Finally link back to all points for tag
-          this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
-
           // now we have pointID, select comments
           this.SelectComments(); // doesn't return anything
 
@@ -127,11 +107,6 @@ export class PointCommentsComponent implements OnInit {
       )
       .subscribe(); // no need to do anything
   }
-
-  // return this.pointsService.PointsSelectComments(
-  //   point.pointID,
-  //   this.localData.ConstituencyIDVoter
-  // ); // Returns a PointSelectionResult
 
   SelectComments() {
     this.pointsService
@@ -146,64 +121,6 @@ export class PointCommentsComponent implements OnInit {
         },
         complete: () => (this.alreadyFetchingPointFromDB = false)
       });
-  }
-
-  DisplayShareLinks(): void {
-    console.log('WTS:', this.localData.websiteUrlWTS);
-
-    this.linkShare =
-      this.localData.websiteUrlWTS.replace(
-        'http://localhost:7027',
-        'https://free.vote'
-      ) +
-      this.localData.PreviousSlashTagSelected +
-      '/' +
-      this.SelectSingleTitle;
-
-    const linkShareEncoded = encodeURIComponent(this.linkShare);
-    const titleEncoded = encodeURIComponent(this.parentPoint.pointTitle);
-
-    this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
-    this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${titleEncoded}&url=${linkShareEncoded}`;
-
-    // Client side scripts
-    if (isPlatformBrowser(this.platformId)) {
-      FB.XFBML.parse(); // now we can safely call parse method
-      this.loadTwitterScript();
-    }
-  }
-
-  // PointTitle or PointID to be able to select single point
-  get SelectSingleTitle(): string {
-    if (!this.parentPoint) {
-      this.error = 'Missing: point';
-      return '';
-    } else {
-      if (!!this.parentPoint.pointSlug) {
-        return this.parentPoint.pointSlug;
-      } else {
-        return this.parentPoint.pointID.toString();
-      }
-    }
-  }
-
-  ShareByEmail() {
-    window.open(
-      `mailto:?subject=${this.parentPoint.pointTitle}&body=Hi,%0D%0A%0D%0ATake a look at this from the ${this.localData.website} website - what do you think?%0D%0A%0D%0A${this.linkShare}`,
-      '_blank'
-    );
-  }
-
-  message(message: string) {
-    alert(message);
-  }
-
-  loadTwitterScript(): void {
-    // Append script to document body
-    const script = this.renderer2.createElement('script');
-    script.type = 'application/javascript';
-    script.src = 'https://platform.twitter.com/widgets.js';
-    this.renderer2.appendChild(this.htmlDocument.body, script);
   }
 
   NewComment() {
@@ -259,10 +176,6 @@ export class PointCommentsComponent implements OnInit {
 
     // this.NewPointsDisplayed();
     // this.RemovePointFromAnswers.emit(id);
-  }
-
-  ngAfterViewInit(): void {
-    window.FB.XFBML.parse();
   }
 
   scrollToBottom(): void {
