@@ -160,7 +160,16 @@ export class PointsService {
   ): Observable<PointSelectionResult> {
     const apiUrl = `points/point/${constituencyID}/${slashTag}/${pointTitle}`;
 
-    console.log('GET SPECIFIC', apiUrl);
+    return this.httpClientService
+      .get(apiUrl)
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData, 0)));
+  }
+
+  GetComment(
+    constituencyID: number,
+    pointID: number
+  ): Observable<PointSelectionResult> {
+    const apiUrl = `points/comment/${constituencyID}/${pointID}`;
 
     return this.httpClientService
       .get(apiUrl)

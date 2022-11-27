@@ -1,74 +1,139 @@
-<div [class.main]="MenuType==='main'" [class.burger]="MenuType==='burger'">
+<div [class.main]="MenuType === 'main'" [class.burger]="MenuType === 'burger'">
+  <span *ngIf="error" class="fv-error">
+    {{ error }}
+  </span>
 
-    <span *ngIf="error" class="fv-error">
-        {{ error }}
-    </span>
+  <button
+    mat-button
+    routerLink="/"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [class.selected]="appData.MenuItemSelected === ''"
+    (click)="appData.MenuItemSelected = ''"
+    matTooltip="home"
+  >
+    <mat-icon>search</mat-icon>
+    home
+  </button>
 
-    <button mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-        [class.selected]="appData.MenuItemSelected===''" (click)="appData.MenuItemSelected=''" matTooltip="home">
-        <mat-icon>search</mat-icon>
-        home
+  <!-- https://github.com/angular/angular/issues/22588 -->
+  <button
+    mat-button
+    [routerLink]="
+      (localData.LoggedInToAuth0$ | async) ? '/recent' : '/trending'
+    "
+    [class.selected]="appData.MenuItemSelected === 'slashTags'"
+    (click)="appData.MenuItemSelected = 'slashTags'"
+    matTooltip="slash tags"
+  >
+    <mat-icon>bookmark_border</mat-icon>
+    slash tags
+  </button>
+
+  <button
+    mat-button
+    routerLink="/organisations/membership"
+    routerLinkActive="active"
+    [class.selected]="appData.MenuItemSelected === 'organisations'"
+    (click)="appData.MenuItemSelected = 'organisations'"
+    matTooltip="groups"
+    *ngIf="localData.LoggedInToAuth0$ | async"
+  >
+    <mat-icon>people</mat-icon>
+    organisations
+  </button>
+
+  <!-- Profile/Sign Out Menu Trigger -->
+  <button
+    mat-button
+    [matMenuTriggerFor]="profileMenu"
+    *ngIf="localData.LoggedInToAuth0$ | async"
+    [class.selected]="
+      appData.MenuItemSelected === 'profile' ||
+      appData.MenuItemSelected === 'MP'
+    "
+    matTooltip="profile menu"
+  >
+    <img
+      *ngIf="
+        localData.freeVoteProfile.profilePictureOptionID === '1' &&
+        localData.auth0Profile &&
+        localData.auth0Profile.picture
+      "
+      [src]="localData.auth0Profile.picture"
+      class="rounded-circle img-fluid profilePic"
+    />
+
+    <img
+      *ngIf="
+        localData.freeVoteProfile.profilePictureOptionID === '2' &&
+        localData.freeVoteProfile.profilePicture
+      "
+      [src]="localData.freeVoteProfile.profilePicture"
+      class="rounded-circle img-fluid profilePic"
+    />
+
+    {{ localData.freeVoteProfile.givenName }}
+  </button>
+
+  <!-- Profile/Sign Out Menu -->
+  <mat-menu #profileMenu="matMenu">
+    <button
+      mat-menu-item
+      routerLink="/my/profile"
+      routerLinkActive="active"
+      [class.selected]="appData.MenuItemSelected === 'profile'"
+      (click)="appData.MenuItemSelected = 'profile'"
+      matTooltip="your profile"
+      matTooltipPosition="right"
+    >
+      <mat-icon>person</mat-icon>
+      profile
     </button>
 
-    <!-- https://github.com/angular/angular/issues/22588 -->
-    <button mat-button [routerLink]="(localData.LoggedInToAuth0$ | async) ? '/recent' : '/trending'"
-        [class.selected]="appData.MenuItemSelected==='slashTags'" (click)="appData.MenuItemSelected='slashTags'"
-        matTooltip="slash tags">
-        <mat-icon>bookmark_border</mat-icon>
-        slash tags
+    <button
+      mat-menu-item
+      [routerLink]="'/local/' + constituencyKebab"
+      (click)="appData.MenuItemSelected = 'MP'"
+      [class.selected]="appData.MenuItemSelected === 'MP'"
+      matTooltip="Constituency MP"
+      matTooltipPosition="right"
+    >
+      <mat-icon>mp</mat-icon>
+      MP
     </button>
 
-    <button mat-button routerLink="/organisations/membership" routerLinkActive="active"
-        [class.selected]="appData.MenuItemSelected==='organisations'" (click)="appData.MenuItemSelected='organisations'"
-        matTooltip="groups" *ngIf="localData.LoggedInToAuth0$ | async">
-        <mat-icon>people</mat-icon>
-        organisations
+    <button
+      mat-menu-item
+      [routerLink]="'/local/' + constituencyKebab"
+      (click)="appData.MenuItemSelected = 'Council'"
+      [class.selected]="appData.MenuItemSelected === 'Council'"
+      matTooltip="Local Council"
+      matTooltipPosition="right"
+    >
+      <mat-icon>mp</mat-icon>
+      Council
     </button>
 
-    <!-- Profile/Sign Out Menu Trigger -->
-    <button mat-button [matMenuTriggerFor]="profileMenu" *ngIf="localData.LoggedInToAuth0$ | async"
-        [class.selected]="appData.MenuItemSelected==='profile' || appData.MenuItemSelected==='MP'"
-        matTooltip="profile menu">
-
-        <img *ngIf="localData.freeVoteProfile.profilePictureOptionID==='1' && localData.auth0Profile && localData.auth0Profile.picture"
-            [src]="localData.auth0Profile.picture" class="rounded-circle img-fluid profilePic">
-
-        <img *ngIf="localData.freeVoteProfile.profilePictureOptionID==='2' && localData.freeVoteProfile.profilePicture"
-            [src]="localData.freeVoteProfile.profilePicture" class="rounded-circle img-fluid profilePic">
-
-        {{ localData.freeVoteProfile.givenName }}
+    <button
+      mat-menu-item
+      (click)="logout()"
+      matTooltip="sign out"
+      matTooltipPosition="right"
+    >
+      <mat-icon>person_outline</mat-icon>
+      sign out
     </button>
+  </mat-menu>
 
-    <!-- Profile/Sign Out Menu -->
-    <mat-menu #profileMenu="matMenu">
-
-        <button mat-menu-item routerLink="/my/profile" routerLinkActive="active"
-            [class.selected]="appData.MenuItemSelected==='profile'" (click)="appData.MenuItemSelected='profile'"
-            matTooltip="your profile" matTooltipPosition="right">
-            <mat-icon>person</mat-icon>
-            profile
-        </button>
-
-        <button mat-menu-item [routerLink]="'/local/' + constituencyKebab" (click)="appData.MenuItemSelected='MP'"
-            matTooltip="Constituency MP" matTooltipPosition="right">
-            <mat-icon>mp</mat-icon>
-            MP
-        </button>
-
-        <button mat-menu-item (click)="logout()" matTooltip="sign out" matTooltipPosition="right">
-            <mat-icon>person_outline</mat-icon>
-            sign out
-        </button>
-
-    </mat-menu>
-
-    <!-- Sign In -->
-    <button mat-button (click)="authService.login()" *ngIf="(localData.LoggedInToAuth0$ | async) === false"
-        matTooltip="sign in">
-        <mat-icon>person</mat-icon>
-        sign in
-    </button>
-
-
-
+  <!-- Sign In -->
+  <button
+    mat-button
+    (click)="authService.login()"
+    *ngIf="(localData.LoggedInToAuth0$ | async) === false"
+    matTooltip="sign in"
+  >
+    <mat-icon>person</mat-icon>
+    sign in
+  </button>
 </div>

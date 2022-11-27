@@ -22,7 +22,9 @@
         </div>
 
         <!-- Ancestors -->
-        <div></div>
+        <div *ngFor="let ancestor of ancestors">
+          <app-point [point]="ancestor" [isComment]="true"> </app-point>
+        </div>
 
         <!-- Parent -->
         <div>
@@ -31,7 +33,9 @@
             [point]="parentPoint"
             [isParentPoint]="true"
             [sharing]="true"
+            [creatingNewComment]="newComment"
             (NewComment)="NewComment()"
+            (CancelNewComment)="CancelComment()"
           ></app-point>
         </div>
 
@@ -40,6 +44,8 @@
           <app-point
             [point]="point"
             [isComment]="true"
+            [feedbackOn]="feedbackOn"
+            (SelectComment)="SelectComment($event)"
             (PointDeleted)="onPointDeleted($event)"
           >
           </app-point>

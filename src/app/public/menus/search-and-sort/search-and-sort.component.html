@@ -92,6 +92,14 @@
 
   <hr />
 
+  <!-- Feedback Switch -->
+  <button mat-menu-item (click)="toggleFeedback()" matTooltip="toggle feedback">
+    <mat-icon>{{ feedbackIcon }}</mat-icon>
+    {{ feedbackText }}
+  </button>
+
+  <hr />
+
   <!-- Refresh -->
   <button mat-menu-item (click)="refreshSelection()" [matTooltip]="'refresh'">
     <mat-icon>refresh</mat-icon>

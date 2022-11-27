@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // rxjs
@@ -18,7 +18,7 @@ import { PointsService } from 'src/app/services/points.service';
 // Components
 import { PointComponent } from '../point/point.component';
 import { PointEditComponent } from '../point-edit/point-edit.component';
-import { SocialShareComponent } from './../menus/social-share/social-share.component';
+import { SocialShareComponent } from '../menus/social-share/social-share.component';
 
 @Component({
   selector: 'app-point-comments',
@@ -26,12 +26,15 @@ import { SocialShareComponent } from './../menus/social-share/social-share.compo
   styleUrls: ['./point-comments.component.css']
 })
 export class PointCommentsComponent implements OnInit {
+  @Input() feedbackOn = true;
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('trvParentPoint') parentPointComponent!: PointComponent;
   @ViewChild('socialShare') socialShareComponent!: SocialShareComponent;
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
+  initialised = false;
   parentPoint = new Point();
+  ancestors: Point[] = [];
   points: Point[] = [];
   public IDs: ID[] = [];
 
@@ -54,21 +57,31 @@ export class PointCommentsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private activeRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private pointsService: PointsService,
     public localData: LocalDataService, // public - used in template)
     public appData: AppDataService
   ) {}
 
   ngOnInit(): void {
-    const routeParams = this.activeRoute.snapshot.params;
+    const routeParams = this.activatedRoute.snapshot.params;
 
     const slashTag = routeParams['tag'];
     const pointTitle = routeParams['title'];
 
     this.SelectSpecificPoint(slashTag, pointTitle);
+
+    // The ActivatedRoute dies with the routed component and so
+    // the subscription dies with it.
+    this.activatedRoute.paramMap.subscribe(params => {
+      if (this.initialised) {
+        const pointTitle = params.get('title');
+        if (!!pointTitle) this.SelectSpecificPoint(slashTag, pointTitle);
+      }
+    });
   }
 
+  // Select point from title in route
   public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
     this.alreadyFetchingPointFromDB = true;
 
@@ -80,32 +93,69 @@ export class PointCommentsComponent implements OnInit {
       ) // Returns a PointSelectionResult
       .pipe(
         tap(psr => {
-          const point = psr.points[0];
-          this.parentPoint = point; // Change detection is not working immediately here.
-          // PointComponent does not receive the update automatically
-          // Manually pass the vlaue just received and initialise the component
-          this.parentPointComponent.AssignAndInitialise(point);
-
-          this.socialShareComponent.DisplayShareLinks();
-
-          // SSR Initial page render
-          const preview = {
-            pagePath: this.router.url,
-            title: point.pointTitle,
-            description: point.preview,
-            image: point.previewImage
-          } as PagePreviewMetaData;
-
-          // Notify app.component to set meta data for SEO & Social scraping
-          this.appData.SSRInitialMetaData$.next(preview);
-
-          // now we have pointID, select comments
-          this.SelectComments(); // doesn't return anything
-
+          this.AssignPoint(psr.points[0]);
           // will return original psr from GetSpecificPoint
         })
       )
-      .subscribe(); // no need to do anything
+      .subscribe(_ => {
+        this.initialised = true;
+      }); // no need to do anything
+  }
+
+  // Select Specific Point from pointID
+  SelectComment(pointID: number): void {
+    this.alreadyFetchingPointFromDB = true;
+
+    this.pointsService
+      .GetComment(this.localData.ConstituencyIDVoter, pointID) // Returns a PointSelectionResult
+      .pipe(
+        tap(psr => {
+          this.AssignPoint(psr.points[0]);
+          // will return original psr from GetSpecificPoint
+        })
+      )
+      .subscribe(_ => {
+        this.initialised = true;
+      }); // no need to do anything
+  }
+
+  AssignPoint(point: Point) {
+    this.parentPoint = point; // Change detection is not working immediately here.
+    // PointComponent does not receive the update automatically
+    // Manually pass the value just received and initialise the component
+    this.parentPointComponent.AssignAndInitialise(point);
+
+    this.socialShareComponent.DisplayShareLinks();
+
+    // SSR Initial page render
+    const preview = {
+      pagePath: this.router.url,
+      title: point.pointTitle,
+      description: point.preview,
+      image: point.previewImage
+    } as PagePreviewMetaData;
+
+    // Notify app.component to set meta data for SEO & Social scraping
+    this.appData.SSRInitialMetaData$.next(preview);
+
+    // now we have pointID, select ancestors and comments
+    this.SelectAncestors(); // doesn't return anything
+    this.SelectComments(); // doesn't return anything
+  }
+
+  SelectAncestors() {
+    this.pointsService
+      .PointCommentAncestors(
+        this.parentPoint.pointID,
+        this.localData.ConstituencyIDVoter
+      )
+      .subscribe({
+        next: psr => (this.ancestors = psr.points),
+        error: err => {
+          this.error = err.error.detail;
+        },
+        complete: () => {}
+      });
   }
 
   SelectComments() {

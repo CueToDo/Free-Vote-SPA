@@ -42,6 +42,7 @@ div.toolbar {
   background-color: whitesmoke;
   padding-left: 10px;
   padding-right: 10px;
+  border-bottom: solid 3px #ddd;
 }
 
 div.toolbar mat-form-field {
@@ -145,7 +146,6 @@ div.toolbar mat-form-field {
 .point {
   margin-top: 30px;
   padding-top: 10px;
-  border-bottom: solid 3px #ddd;
 }
 
 .pagePreview {

@@ -29,6 +29,7 @@ import { Subscription } from 'rxjs';
 export class PointsListComponent implements OnDestroy, OnInit {
   @Input() public filter = new FilterCriteria();
   @Input() public attachedToQuestion = false;
+  @Input() feedbackOn = true; // Passed to points in list
 
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();

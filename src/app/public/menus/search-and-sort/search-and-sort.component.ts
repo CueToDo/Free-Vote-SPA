@@ -24,7 +24,10 @@ export class SearchAndSortComponent {
   @Input() sortDescending!: boolean;
   @Output() sortDescendingChange = new EventEmitter<boolean>();
 
-  // 4. Refresh
+  // 4. Feedback
+  @Output() feedbackChange = new EventEmitter<boolean>();
+
+  // 5. Refresh
   @Output() refresh = new EventEmitter();
   public Tabs = Tabs;
 
@@ -99,7 +102,23 @@ export class SearchAndSortComponent {
     this.sortDescendingChange.emit(descending);
   }
 
-  // 4. Refresh
+  // 4. Feedback
+  feedbackOn = true;
+  get feedbackIcon(): string {
+    if (this.feedbackOn) return 'speaker_notes_off';
+    return 'view_list';
+  }
+  get feedbackText(): string {
+    if (this.feedbackOn) return 'turn feedback OFF';
+    return 'turn feedback ON';
+  }
+
+  toggleFeedback() {
+    this.feedbackOn = !this.feedbackOn;
+    this.feedbackChange.emit(this.feedbackOn);
+  }
+
+  // 5. Refresh
   refreshSelection() {
     this.refresh.emit();
   }

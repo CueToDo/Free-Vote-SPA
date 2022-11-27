@@ -116,6 +116,9 @@ export class TagsAndPointsComponent
     return !this.topicSelected || this.topicSelected === 'null';
   }
 
+  // Feedback
+  feedbackOn = true;
+
   // use TRV in parent template https://stackblitz.com/edit/angular-vjbf4s?file=src%2Fapp%2Fcart-table-modal.component.ts
   // use child component type in parent component https://stackoverflow.com/questions/31013461/call-a-method-of-the-child-component
 
@@ -218,15 +221,6 @@ export class TagsAndPointsComponent
           } else {
             this.questionsListComponent.SelectQuestions(true);
           }
-        } else {
-          // PointsList now emits any new slashtag selected
-          // this.pointsSelected = false;
-          // if (this.tabIndex !== Tabs.tagPoints) {
-          //   this.ChangeTab(Tabs.tagPoints);
-          // } else {
-          //   this.pointsListComponent.SelectPoints();
-          //   this.pointsSelected = true;
-          // }
         }
       }
 
@@ -776,6 +770,10 @@ export class TagsAndPointsComponent
 
   CancelNewQuestion(): void {
     this.ChangeTab(Tabs.questionList);
+  }
+
+  FeedbackChange(feedbackOn: boolean) {
+    this.feedbackOn = feedbackOn;
   }
 
   BogSelected(bog: BreakoutGroup): void {

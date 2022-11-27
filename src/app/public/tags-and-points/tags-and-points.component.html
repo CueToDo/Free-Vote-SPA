@@ -169,6 +169,7 @@
           (showFiltersChange)="ShowPointFilterCriteria($event)"
           (pointSortTypeChange)="SetSortType($event)"
           (sortDescendingChange)="SetSortDescending($event)"
+          (feedbackChange)="FeedbackChange($event)"
           (refresh)="refresh()"
         ></app-search-and-sort>
         <!-- End Sort Menu -->
@@ -381,8 +382,9 @@
       >
         <!-- "Fetch more" component must apply scroller and content classes internally -->
         <app-points-list
-          [filter]="filter"
           #appPointsList
+          [filter]="filter"
+          [feedbackOn]="feedbackOn"
           (AltSLashTagSelected)="AltSLashTagSelected($event)"
         >
         </app-points-list>

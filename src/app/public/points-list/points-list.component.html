@@ -28,6 +28,7 @@
         [searchTerm]="filter.text"
         [possibleAnswer]="possibleAnswers"
         [isMyAnswer]="attachedToQuestion && point.isPointOwner"
+        [feedbackOn]="feedbackOn"
         (AddPointToAnswers)="AddToAnswers($event)"
         (RemovePointFromAnswers)="RemoveFromAnswers($event)"
         (CompleteEdit)="CompleteEdit($event)"

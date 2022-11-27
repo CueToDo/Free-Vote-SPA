@@ -124,20 +124,20 @@
 
     <button
       mat-menu-item
+      (click)="pointTypeVote(PointTypesEnum.Quote)"
+      [ngClass]="{ selected: pointTypeID === PointTypesEnum.Quote }"
+    >
+      <mat-icon>format_quote</mat-icon> quote
+    </button>
+
+    <button
+      mat-menu-item
       (click)="pointTypeVote(PointTypesEnum.Action)"
       [ngClass]="{
         selected: pointTypeID === PointTypesEnum.Action
       }"
     >
-      <mat-icon>directions_walk</mat-icon> action
-    </button>
-
-    <button
-      mat-menu-item
-      (click)="pointTypeVote(PointTypesEnum.Quote)"
-      [ngClass]="{ selected: pointTypeID === PointTypesEnum.Quote }"
-    >
-      <mat-icon>format_quote</mat-icon> quote
+      <mat-icon>directions_walk</mat-icon> proposed action
     </button>
 
     <button

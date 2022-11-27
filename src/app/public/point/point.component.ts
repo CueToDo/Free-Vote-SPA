@@ -51,13 +51,17 @@ export class PointComponent implements OnInit {
   @Input() searchTerm = '';
   @Input() constituencyID = 0;
   @Input() sharing = false;
+  @Input() creatingNewComment = false; // New comment button has not been clicked
+  @Input() feedbackOn = true; // Controls toolbar display
 
   @Output() CompleteEdit = new EventEmitter();
   @Output() PointDeleted = new EventEmitter();
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
   @Output() AltSlashTagSelected = new EventEmitter<string>();
+  @Output() SelectComment = new EventEmitter<number>();
   @Output() NewComment = new EventEmitter();
+  @Output() CancelNewComment = new EventEmitter();
 
   // bind to point slashtags (not topic)
   tags: Tag[] = [];
@@ -453,7 +457,16 @@ export class PointComponent implements OnInit {
     this.showFullText = more;
   }
 
+  selectComment() {
+    this.SelectComment.emit(this.point.pointID);
+  }
+
+  // Snme button used to create and cancel new comment
   newComment() {
-    this.NewComment.emit();
+    if (this.creatingNewComment) {
+      this.CancelNewComment.emit();
+    } else {
+      this.NewComment.emit();
+    }
   }
 }

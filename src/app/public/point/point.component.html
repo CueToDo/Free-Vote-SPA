@@ -123,7 +123,12 @@
 
   <!-- Toolbar -->
 
-  <div class="toolbar" fxLayout="row wrap" fxLayoutAlign="left center">
+  <div
+    *ngIf="feedbackOn"
+    class="toolbar"
+    fxLayout="row wrap"
+    fxLayoutAlign="left center"
+  >
     <div *ngIf="possibleAnswer">
       <button
         mat-button
@@ -190,6 +195,7 @@
         *ngIf="!sharing"
         mat-button
         [routerLink]="linkShare"
+        (click)="selectComment()"
         matTooltip="share and comment"
       >
         <mat-icon>comment</mat-icon>
