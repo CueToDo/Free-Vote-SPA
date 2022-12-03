@@ -22,12 +22,12 @@
         </div>
 
         <!-- Ancestors -->
-        <div *ngFor="let ancestor of ancestors">
+        <ng-container *ngFor="let ancestor of ancestors">
           <app-point [point]="ancestor" [isComment]="true"> </app-point>
-        </div>
+        </ng-container>
 
         <!-- Parent -->
-        <div>
+        <div class="parent mt-3" [ngClass]="{ 'aml-2': ancestors.length > 0 }">
           <app-point
             #trvParentPoint
             [point]="parentPoint"
@@ -40,7 +40,13 @@
         </div>
 
         <!-- Children -->
-        <div *ngFor="let point of points">
+        <div
+          *ngFor="let point of points"
+          [ngClass]="{
+            'aml-2': ancestors.length == 0,
+            'aml-5': ancestors.length > 0
+          }"
+        >
           <app-point
             [point]="point"
             [isComment]="true"
@@ -58,7 +64,7 @@
           *ngIf="!newComment"
         >
           <button mat-stroked-button (click)="scrollToTop()">top</button>
-          <button mat-stroked-button (click)="NewComment()">new point</button>
+          <button mat-stroked-button (click)="NewComment()">new comment</button>
         </div>
 
         <div id="newPoint">

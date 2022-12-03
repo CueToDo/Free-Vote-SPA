@@ -53,3 +53,8 @@
 ::ng-deep .highlight {
   background-color: yellow;
 }
+
+.parentPoint {
+  padding-left: 10px;
+  padding-right: 10px;
+}

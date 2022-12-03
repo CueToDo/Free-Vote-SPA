@@ -59,7 +59,7 @@
   </div>
 
   <!-- Slash Tags -->
-  <div class="m-3">
+  <div *ngIf="allowTags" class="m-3">
     <app-tags-edit
       [(Tags)]="pointClone.tags"
       [IsMyPointEdit]="true"

@@ -83,6 +83,7 @@ export class PointEditComponent implements OnInit {
   saving = false;
   uploadingImage = false;
   imageUploadProgress = 0;
+  allowTags = true;
   error = '';
 
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
@@ -122,6 +123,10 @@ export class PointEditComponent implements OnInit {
         this.pointClone.youTubeID || this.pointClone.soundCloudTrackID
           ? true
           : false;
+    }
+
+    if (this.isComment) {
+      this.allowTags = false;
     }
   }
 

@@ -6,7 +6,11 @@
       [ngClass.sm]="'ugc sm'"
       [ngClass.gt-sm]="'ugc'"
     >
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        [ngClass]="{ parentPoint: isParentPoint }"
+      >
         <div>
           <h1 [innerHtml]="point.pointTitle"></h1>
         </div>
@@ -39,10 +43,10 @@
       <div
         #elPointHtml
         [innerHTML]="pointHTMLwithoutEmbed | SafeHtml"
-        [ngClass]="{ 'line-clamp': !showFullText }"
+        [ngClass]="{ 'line-clamp': !showFullText, parentPoint: isParentPoint }"
       ></div>
 
-      <div class="moreorless">
+      <div class="moreorless" [ngClass]="{ parentPoint: isParentPoint }">
         <a *ngIf="elementTruncated()" (click)="showMore(true)">show more</a>
         <a *ngIf="showFullText" (click)="showMore(false)">show less</a>
       </div>
@@ -211,7 +215,7 @@
         (click)="newComment()"
         matTooltip="new comment"
       >
-        <mat-icon>comment</mat-icon>
+        <mat-icon>note_add</mat-icon>
         <span *ngIf="point.totalFeedback > 0">
           {{ point.totalFeedback }}
         </span>
