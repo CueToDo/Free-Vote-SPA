@@ -5,10 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 // rxjs
 import { tap } from 'rxjs';
 
-// Models
+// Models/Enums
 import { Point } from 'src/app/models/point.model';
 import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
-import { ID } from 'src/app/models/common';
+import { FilterCriteria } from 'src/app/models/filterCriteria.model';
+import { PointSelectionTypes } from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -19,6 +20,7 @@ import { PointsService } from 'src/app/services/points.service';
 import { PointComponent } from '../point/point.component';
 import { PointEditComponent } from '../point-edit/point-edit.component';
 import { SocialShareComponent } from '../menus/social-share/social-share.component';
+import { PointsListComponent } from '../points-list/points-list.component';
 
 @Component({
   selector: 'app-point-comments',
@@ -26,17 +28,18 @@ import { SocialShareComponent } from '../menus/social-share/social-share.compone
   styleUrls: ['./point-comments.component.css']
 })
 export class PointCommentsComponent implements OnInit {
-  @Input() feedbackOn = true;
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
   @ViewChild('trvParentPoint') parentPointComponent!: PointComponent;
   @ViewChild('socialShare') socialShareComponent!: SocialShareComponent;
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  @ViewChild('appPointsList') pointsListComponent!: PointsListComponent;
 
   initialised = false;
   parentPoint = new Point();
   ancestors: Point[] = [];
-  points: Point[] = [];
-  public IDs: ID[] = [];
+
+  filter = new FilterCriteria();
+  fetchingComments = false;
 
   // bind to point slashtags (not topic)
   slashTags: string[] = []; // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
@@ -99,6 +102,7 @@ export class PointCommentsComponent implements OnInit {
       )
       .subscribe(_ => {
         this.initialised = true;
+        this.alreadyFetchingPointFromDB = false;
       }); // no need to do anything
   }
 
@@ -140,7 +144,9 @@ export class PointCommentsComponent implements OnInit {
 
     // now we have pointID, select ancestors and comments
     this.SelectAncestors(); // doesn't return anything
-    this.SelectComments(); // doesn't return anything
+    this.filter.pointSelectionType = PointSelectionTypes.Comments;
+    this.filter.pointID = point.pointID;
+    this.pointsListComponent.SelectPoints();
   }
 
   SelectAncestors() {
@@ -155,21 +161,6 @@ export class PointCommentsComponent implements OnInit {
           this.error = err.error.detail;
         },
         complete: () => {}
-      });
-  }
-
-  SelectComments() {
-    this.pointsService
-      .PointsSelectComments(
-        this.parentPoint.pointID,
-        this.localData.ConstituencyIDVoter
-      )
-      .subscribe({
-        next: psr => (this.points = psr.points),
-        error: err => {
-          this.error = err.error.detail;
-        },
-        complete: () => (this.alreadyFetchingPointFromDB = false)
       });
   }
 
@@ -189,43 +180,7 @@ export class PointCommentsComponent implements OnInit {
 
   NewCommentCreated() {
     this.newComment = false;
-    this.SelectComments();
-  }
-
-  onPointDeleted(id: number): void {
-    // this.SelectPoints(); No need to reselect.
-    // Already deleted from server, now remove from the array
-    // https://love2dev.com/blog/javascript-remove-from-array/
-
-    // Update the row number displayed before removing from array
-    // get deleted point (array)
-    const deleted = this.points.filter(p => p.pointID === id);
-
-    if (!!deleted && deleted.length > 0) {
-      // Get deleted question row number
-      const pointRowNo = deleted[0].rowNumber;
-
-      // decrement rownumber for all questions above that
-      for (var i = 0, len = this.points.length; i < len; i++) {
-        if (this.points[i].rowNumber > pointRowNo) this.points[i].rowNumber--;
-      }
-
-      for (var i = 0, len = this.IDs.length; i < len; i++) {
-        if (this.IDs[i].rowNumber > pointRowNo) this.IDs[i].rowNumber--;
-      }
-    }
-
-    // Filter out the deleted point
-    this.points = this.points.filter(value => value.pointID !== id);
-
-    // Remove id from IDs before getting next batch
-    this.IDs = this.IDs.filter(value => value.id != id);
-
-    //ToDo Restore
-    // this.pointCount--; // decrement before calling NewPointsDisplayed which updates allPointsDisplayed
-
-    // this.NewPointsDisplayed();
-    // this.RemovePointFromAnswers.emit(id);
+    this.pointsListComponent.SelectPoints();
   }
 
   scrollToBottom(): void {

@@ -10,7 +10,8 @@ export enum PointSelectionTypes {
   TagPoints = 0, // Standard slection
   Filtered = 1, // Custom selection
   QuestionPoints = 2,
-  Point = 3 // Individual Point
+  Point = 3, // Individual Point
+  Comments = 4
 
   // WoW
   // POTW = 4,

@@ -30,11 +30,14 @@ export class PointsListComponent implements OnDestroy, OnInit {
   @Input() public filter = new FilterCriteria();
   @Input() public attachedToQuestion = false;
   @Input() feedbackOn = true; // Passed to points in list
+  @Input() AlreadyFetchingPointsFromDB = false;
 
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
   @Output() PointCount = new EventEmitter<number>();
   @Output() AltSLashTagSelected = new EventEmitter<string>();
+  @Output() AlreadyFetchingPointsFromDBChange = new EventEmitter<boolean>();
+  @Output() SelectComment = new EventEmitter<number>();
 
   // Subscriptions
   private pointSelection$: Subscription | undefined;
@@ -44,16 +47,20 @@ export class PointsListComponent implements OnDestroy, OnInit {
   public IDs: ID[] = [];
   public points: Point[] = [];
   public possibleAnswers = false;
+  public get pointComments(): boolean {
+    return this.filter.pointSelectionType == PointSelectionTypes.Comments;
+  }
 
   // Prompt to be first to create point for tag or answer to question
   public get firstResponse() {
-    if (this.pointCount > 0) return '';
+    if (this.pointCount > 0 || this.pointComments) return '';
+
     if (this.attachedToQuestion)
       return 'Click "new answer" to create the first response to this question.';
+
     return 'Click "new point" to create the first point for this tag.';
   }
 
-  public alreadyFetchingPointsFromDB = false;
   public allPointsDisplayed = false;
 
   private fragment = '';
@@ -167,8 +174,9 @@ export class PointsListComponent implements OnDestroy, OnInit {
   public SelectPoints(): void {
     this.possibleAnswers = false;
 
-    if (!this.alreadyFetchingPointsFromDB) {
-      this.alreadyFetchingPointsFromDB = true;
+    if (!this.AlreadyFetchingPointsFromDB) {
+      this.AlreadyFetchingPointsFromDB = true;
+      this.AlreadyFetchingPointsFromDBChange.emit(true);
       this.pointCount = 0;
       this.points = [];
       this.error = '';
@@ -220,7 +228,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
               next: psr => this.DisplayPoints(psr),
               error: err => {
                 this.error = err.error.detail;
-                this.alreadyFetchingPointsFromDB = false;
+                this.AlreadyFetchingPointsFromDB = false;
+                this.AlreadyFetchingPointsFromDBChange.emit(false);
               }
             });
           break;
@@ -244,10 +253,34 @@ export class PointsListComponent implements OnDestroy, OnInit {
                 error: err => {
                   console.log(err);
                   this.error = err.error.detail;
-                  this.alreadyFetchingPointsFromDB = false;
+                  this.AlreadyFetchingPointsFromDB = false;
+                  this.AlreadyFetchingPointsFromDBChange.emit(false);
                 }
               });
           }
+          break;
+
+        case PointSelectionTypes.Comments:
+          if (this.filter.pointID == 0) {
+            this.error = 'No point selected to show comments';
+            return;
+          }
+
+          this.pointsService
+            .PointsSelectComments(
+              this.filter.pointID,
+              this.localData.ConstituencyIDVoter
+            )
+            .subscribe({
+              next: psr => this.DisplayPoints(psr),
+              error: err => {
+                this.error = err.error.detail;
+              },
+              complete: () => {
+                this.AlreadyFetchingPointsFromDB = false;
+                this.AlreadyFetchingPointsFromDBChange.emit(false);
+              }
+            });
           break;
 
         default:
@@ -269,7 +302,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
                   next: psr => this.DisplayPoints(psr),
                   error: err => {
                     this.error = err.error.detail;
-                    this.alreadyFetchingPointsFromDB = false;
+                    this.AlreadyFetchingPointsFromDB = false;
+                    this.AlreadyFetchingPointsFromDBChange.emit(false);
                   }
                 });
             }
@@ -295,7 +329,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
         // No need to check need to change
         this.filter.sortType = pointSortType;
 
-        this.alreadyFetchingPointsFromDB = true;
+        this.AlreadyFetchingPointsFromDB = true;
+        this.AlreadyFetchingPointsFromDBChange.emit(true);
 
         this.pointsService
           // pass pointCount for the cast to PSR
@@ -306,7 +341,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
             this.pointCount
           )
           .subscribe(response => {
-            this.alreadyFetchingPointsFromDB = false;
+            this.AlreadyFetchingPointsFromDB = false;
+            this.AlreadyFetchingPointsFromDBChange.emit(false);
 
             // pointCount is not updated for re-ordering
             this.IDs = response.pointIDs;
@@ -318,7 +354,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
   }
 
   DisplayPoints(psr: PointSelectionResult): void {
-    this.alreadyFetchingPointsFromDB = false;
+    this.AlreadyFetchingPointsFromDB = false;
+    this.AlreadyFetchingPointsFromDBChange.emit(false);
 
     this.PointCount.emit(psr.pointCount);
 
@@ -361,7 +398,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
   // https://stackblitz.com/edit/free-vote-infinite-scroll
   fetchMorePoints(): void {
-    if (!this.alreadyFetchingPointsFromDB) {
+    if (!this.AlreadyFetchingPointsFromDB) {
       // ToDo infinite scroll for MyPoints this.SelectedPoints();
 
       // https://stackoverflow.com/questions/38824349/how-to-convert-an-object-to-an-array-of-key-value-pairs-in-javascript
@@ -374,7 +411,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
       // already filtered above - this is what we need to fetch now
       if (pids && pids.length > 0) {
         // Get new PAGE of points
-        this.alreadyFetchingPointsFromDB = true;
+        this.AlreadyFetchingPointsFromDB = true;
+        this.AlreadyFetchingPointsFromDBChange.emit(true);
         this.allPointsDisplayed = false;
 
         this.pointsService
@@ -391,7 +429,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
         // Get another BATCH of points
 
-        this.alreadyFetchingPointsFromDB = true;
+        this.AlreadyFetchingPointsFromDB = true;
+        this.AlreadyFetchingPointsFromDBChange.emit(true);
         this.allPointsDisplayed = false;
 
         if (this.filter) {
@@ -414,7 +453,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
   }
 
   NewPointsDisplayed(): void {
-    this.alreadyFetchingPointsFromDB = false;
+    this.AlreadyFetchingPointsFromDB = false;
+    this.AlreadyFetchingPointsFromDBChange.emit(false);
     this.allPointsDisplayed = this.points.length >= this.pointCount;
   }
 

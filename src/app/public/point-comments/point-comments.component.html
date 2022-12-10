@@ -11,7 +11,7 @@
           <span
             class="spinner-grow text-primary"
             role="status"
-            *ngIf="alreadyFetchingPointFromDB"
+            *ngIf="alreadyFetchingPointFromDB || fetchingComments"
           >
             <span class="visually-hidden">Loading...</span>
           </span>
@@ -40,22 +40,13 @@
         </div>
 
         <!-- Children -->
-        <div
-          *ngFor="let point of points"
-          [ngClass]="{
-            'aml-2': ancestors.length == 0,
-            'aml-5': ancestors.length > 0
-          }"
+        <app-points-list
+          #appPointsList
+          [filter]="filter"
+          [(AlreadyFetchingPointsFromDB)]="fetchingComments"
+          (SelectComment)="SelectComment($event)"
         >
-          <app-point
-            [point]="point"
-            [isComment]="true"
-            [feedbackOn]="feedbackOn"
-            (SelectComment)="SelectComment($event)"
-            (PointDeleted)="onPointDeleted($event)"
-          >
-          </app-point>
-        </div>
+        </app-points-list>
 
         <div
           fxLayoutAlign="end"

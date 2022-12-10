@@ -313,7 +313,7 @@ export class PointsService {
   ): Observable<PointSelectionResult> {
     return this.httpClientService
       .get(`points/pointCommentsSelect/${parentPointID}/${constituencyIDVoter}`)
-      .pipe(map(returnData => returnData as PointSelectionResult));
+      .pipe(map(returnData => this.CastToPointSelectionResult(returnData, 0)));
   }
 
   PointCommentAncestors(

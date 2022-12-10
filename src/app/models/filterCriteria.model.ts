@@ -16,6 +16,9 @@ export class FilterCriteria {
   single = false;
   pointSelectionType = PointSelectionTypes.TagPoints;
 
+  // Comments on a Point
+  pointID = 0;
+
   // Answers to Questions
   questionID = 0;
 
