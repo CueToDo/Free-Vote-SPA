@@ -32,6 +32,7 @@
             #trvParentPoint
             [point]="parentPoint"
             [isParentPoint]="true"
+            [isComment]="ancestors.length > 0"
             [sharing]="true"
             [creatingNewComment]="newComment"
             (NewComment)="NewComment()"
