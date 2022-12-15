@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Material
 import { MatButtonModule } from '@angular/material/button';
@@ -57,7 +56,6 @@ const orgRoutes: Routes = [
   imports: [
     // Angular
     CommonModule,
-    FlexLayoutModule,
     FormsModule,
     RouterModule.forChild(orgRoutes),
 

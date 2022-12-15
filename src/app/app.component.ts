@@ -19,9 +19,6 @@ import { Router, NavigationEnd } from '@angular/router';
 import { fromEvent } from 'rxjs';
 import { filter, debounceTime, map } from 'rxjs/operators';
 
-// ngx-bootstrap
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-
 // Auth0
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -51,13 +48,7 @@ export enum NetworkStatus {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers: [
-    {
-      provide: BsDropdownConfig,
-      useValue: { isAnimated: false, autoClose: true }
-    }
-  ]
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterViewInit {
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions

@@ -1,84 +1,67 @@
-<h1>{{localData.freeVoteProfile.constituency}}</h1>
+<h1>{{ localData.freeVoteProfile.constituency }}</h1>
 
 <app-tags-edit [(Tags)]="Tags" [IsMyPointEdit]="false"></app-tags-edit>
 
-
 <div mat-dialog-actions>
-    <button mat-stroked-button [mat-dialog-close]="Tags">
-        <mat-icon>save</mat-icon>
-        save
-    </button>
-    <button mat-stroked-button mat-dialog-close>
-        <mat-icon>cancel</mat-icon>
-        cancel
-    </button>
-    <button mat-stroked-button (click)="showHelp=!showHelp">
-        <mat-icon>help_outline</mat-icon>
-        help
-    </button>
+  <button mat-stroked-button [mat-dialog-close]="Tags">
+    <mat-icon>save</mat-icon>
+    save
+  </button>
+  <button mat-stroked-button mat-dialog-close>
+    <mat-icon>cancel</mat-icon>
+    cancel
+  </button>
+  <button mat-stroked-button (click)="showHelp = !showHelp">
+    <mat-icon>help_outline</mat-icon>
+    help
+  </button>
 
-    <div *ngIf="fetchingTags" fxLayout="start stretch">
-        <span class="spinner-grow text-info m-2" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </span>
-    </div>
+  <div *ngIf="fetchingTags" fxLayout="start stretch">
+    <span class="spinner-grow text-info m-2" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </span>
+  </div>
 </div>
 <div *ngIf="showHelp" class="help">
-    <table>
-        <tr>
-            <th>
-                <div class="topic pointAuthor">
-                    author
-                </div>
-            </th>
-            <td>
-                tag has been applied by the point author
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <div class="topic other">
-                    other
-                </div>
-            </th>
-            <td>
-                Another voter in your constituency has tagged this point for local interest
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <div class="topic me">
-                    me
-                </div>
-            </th>
-            <td>
-                You have tagged this point for local interest
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <div class="topic deleteNew">
-                    remove
-                </div>
-            </th>
-            <td>
-                you're tag will be removed
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <mat-icon class="aml-2 amt-1">add_circle</mat-icon>
-            </th>
-            <td>add your tag</td>
-        </tr>
-        <tr>
-            <th>
-                <mat-icon class="aml-2 amt-1">remove_circle</mat-icon>
-            </th>
-            <td>remove your tag</td>
-        </tr>
-    </table>
-
-
-
+  <table>
+    <tr>
+      <th>
+        <div class="topic pointAuthor">author</div>
+      </th>
+      <td>tag has been applied by the point author</td>
+    </tr>
+    <tr>
+      <th>
+        <div class="topic other">other</div>
+      </th>
+      <td>
+        Another voter in your constituency has tagged this point for local
+        interest
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <div class="topic me">me</div>
+      </th>
+      <td>You have tagged this point for local interest</td>
+    </tr>
+    <tr>
+      <th>
+        <div class="topic deleteNew">remove</div>
+      </th>
+      <td>you're tag will be removed</td>
+    </tr>
+    <tr>
+      <th>
+        <mat-icon class="aml-2 amt-1">add_circle</mat-icon>
+      </th>
+      <td>add your tag</td>
+    </tr>
+    <tr>
+      <th>
+        <mat-icon class="aml-2 amt-1">remove_circle</mat-icon>
+      </th>
+      <td>remove your tag</td>
+    </tr>
+  </table>
 </div>

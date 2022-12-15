@@ -1,11 +1,7 @@
 <div *ngIf="!editing" class="point">
   <!-- Point Display -->
   <a [id]="'id' + point.pointID">
-    <div
-      [ngClass.xs]="'ugc xs'"
-      [ngClass.sm]="'ugc sm'"
-      [ngClass.gt-sm]="'ugc'"
-    >
+    <div class="ugc">
       <div
         fxLayout="row"
         fxLayoutAlign="start center"
@@ -18,24 +14,13 @@
 
         <!-- PointNumber/Count -->
 
-        <div
-          *ngIf="!sharing"
-          class="aml-2 amr-2"
-          [ngClass.xs]="'textXSmall'"
-          [ngClass.sm]="'textSmall'"
-          [ngClass.gt-sm]="'textMedium'"
-        >
+        <div *ngIf="!sharing" class="aml-2 amr-2 text">
           {{ point.rowNumber }}/{{ pointCount }}
         </div>
 
         <!-- DateTimeUpdated -->
 
-        <div
-          [ngClass.xs]="'textXSmall'"
-          [ngClass.sm]="'textSmall'"
-          [ngClass.gt-sm]="'textMedium'"
-          [innerHtml]="point.dateTimeUpdated | nbsp"
-        ></div>
+        <div class="text" [innerHtml]="point.dateTimeUpdated | nbsp"></div>
       </div>
 
       <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle" />
@@ -107,8 +92,7 @@
       showLink ||
       point.isNewSource
     "
-    class="pagePreview"
-    [ngClass.lt-md]="'ltmd'"
+    class="pagePreview ltmd"
   >
     <app-website-preview
       [ShowPreview]="point.showLinkPreview"
@@ -157,12 +141,7 @@
 
     <!-- SlashTags -->
 
-    <div
-      [ngClass.xs]="'textXSmall'"
-      [ngClass.sm]="'textSmall'"
-      [ngClass.gt-sm]="'textMedium'"
-      class="py-2"
-    >
+    <div class="py-2 text">
       <span>
         <a
           *ngFor="let tag of tags"

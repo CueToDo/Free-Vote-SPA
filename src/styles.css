@@ -153,8 +153,10 @@ div.toolbar mat-form-field {
   margin-bottom: 10px;
 }
 
-.pagePreview.ltmd {
-  margin: 0 10px 10px 10px;
+@media only screen and (max-width: 960px) {
+  .pagePreview.ltmd {
+    margin: 0 10px 10px 10px;
+  }
 }
 
 .pagePreview a {
@@ -312,38 +314,35 @@ a:hover {
   display: none;
 }
 
-.ugc.xs h1,
-.ugc.sm h1 {
-  font-size: 1.1em;
+/* xs and sm */
+@media screen and (max-width: 959px) {
+  .ugc h1 {
+    font-size: 1.1em;
+  }
+  .ugc h2 {
+    font-size: 1em;
+  }
+  .ugc {
+    margin: 0 12px;
+  }
+  .ugc p {
+    font-size: medium;
+  }
 }
 
-.ugc h1 {
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
-.ugc.xs h2,
-.ugc.sm h2 {
-  font-size: 1em;
-}
-
-.ugc h2 {
-  font-size: 1.1em;
-  font-weight: bold;
-}
-
-.ugc.xs,
-.ugc.sm {
-  margin: 0 12px;
-}
-
-.ugc.xs p,
-.ugc.sm p {
-  font-size: medium;
-}
-
-.ugc p {
-  font-size: medium;
+/* medium and above */
+@media screen and (min-width: 960px) {
+  .ugc h1 {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  .ugc h2 {
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  .ugc p {
+    font-size: medium;
+  }
 }
 
 .ugc img {

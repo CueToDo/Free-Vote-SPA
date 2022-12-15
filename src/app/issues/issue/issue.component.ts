@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 
 // Material
-import { MatSlider, MatSliderChange } from '@angular/material/slider';
+import { MatSlider, MatSliderDragEvent } from '@angular/material/slider';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -83,7 +83,7 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   editTooltip = 'edit issue';
 
   @ViewChild('voteSlider') voteSlider!: MatSlider;
-  votechange$: Subscription | undefined;
+  // votechange$: Subscription | undefined;
 
   constructor(
     private issuesService: IssuesService,
@@ -105,11 +105,11 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     // voteSlider may not be visible
-    if (this.voteSlider) {
-      this.votechange$ = this.voteSlider.valueChange
-        // Don't need a debounce time - slider does not emit value until user releases slider
-        .subscribe({ next: (value: number) => this.voteToDiscuss(value) });
-    }
+    // if (this.voteSlider) {
+    //   this.votechange$ = this.voteSlider.
+    //     // Don't need a debounce time - slider does not emit value until user releases slider
+    //     .subscribe({ next: (value: number) => this.voteToDiscuss(value) });
+    // }
   }
 
   edit(): void {
@@ -156,13 +156,13 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  instantVoteChange(event: MatSliderChange): void {
+  instantVoteChange(vote: MatSliderDragEvent): void {
     if (!this.issue) {
       this.error = 'Issue not selected';
     } else {
       let priority = 0;
-      if (event.value) {
-        priority = event.value;
+      if (!!vote) {
+        priority = vote.value;
       }
       this.issue.voterPriority = priority;
     }
@@ -188,8 +188,8 @@ export class IssueComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.votechange$) {
-      this.votechange$.unsubscribe();
-    }
+    // if (this.votechange$) {
+    //   this.votechange$.unsubscribe();
+    // }
   }
 }

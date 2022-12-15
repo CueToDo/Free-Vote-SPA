@@ -1,29 +1,50 @@
 <div fxLayoutAlign="center center" fxLayoutGap="20px" class="mb-4">
-
   <mat-form-field>
-    <input matInput placeholder="search for organisation" [(ngModel)]="organisationFilter" (keyup.enter)="Refresh()"
-      #trvOrgSearch>
-    <button mat-button *ngIf="organisationFilter" matSuffix mat-icon-button aria-label="clear"
-      (click)="organisationFilter='';Refresh()">
+    <input
+      matInput
+      placeholder="search for organisation"
+      [(ngModel)]="organisationFilter"
+      (keyup.enter)="Refresh()"
+      #trvOrgSearch
+    />
+    <button
+      mat-button
+      *ngIf="organisationFilter"
+      matSuffix
+      mat-icon-button
+      aria-label="clear"
+      (click)="organisationFilter = ''; Refresh()"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
-
 </div>
 
 <h1>Select an organisation</h1>
 
 <div *ngFor="let organisation of organisations" class="groupDiv">
   <!-- router link to organisation -->
-  <div class="pagePreview" [ngClass.lt-md]="'ltmd'">
-    <a [routerLink]="['/organisations', appData.kebabUri(organisation.organisationName)]">
-      <app-website-preview [ShowPreview]="true" [LinkAddress]="'#'"
-        [Title]="organisation.organisationName + (organisation.active? '' : ' (Inactive)')"
-        [Description]="organisation.description" [Image]="organisation.image" [NoPreviewText]="''">
+  <div class="pagePreview ltmd">
+    <a
+      [routerLink]="[
+        '/organisations',
+        appData.kebabUri(organisation.organisationName)
+      ]"
+    >
+      <app-website-preview
+        [ShowPreview]="true"
+        [LinkAddress]="'#'"
+        [Title]="
+          organisation.organisationName +
+          (organisation.active ? '' : ' (Inactive)')
+        "
+        [Description]="organisation.description"
+        [Image]="organisation.image"
+        [NoPreviewText]="''"
+      >
       </app-website-preview>
     </a>
   </div>
-
 </div>
 
 <div *ngIf="waiting" fxLayoutAlign="center">

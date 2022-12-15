@@ -84,16 +84,22 @@ h1 {
   color: white;
 }
 
-.footer .x-small {
-  font-size: x-small;
+@media screen and (max-width: 599px) {
+  .footer {
+    font-size: x-small;
+  }
 }
 
-.footer .small {
-  font-size: small;
+@media screen and (max-width: 959px) {
+  .footer {
+    font-size: small;
+  }
 }
 
-.footer .gt-small {
-  font-size: medium;
+@media screen and (min-width: 960px) {
+  .footer {
+    font-size: medium;
+  }
 }
 
 .copyright {

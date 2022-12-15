@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // Material
@@ -57,7 +56,6 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
   imports: [
     ClipboardModule,
     CommonModule,
-    FlexLayoutModule,
     FormsModule,
     RouterModule,
     // Material

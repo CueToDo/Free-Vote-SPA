@@ -1,7 +1,6 @@
 // Angular
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -21,7 +20,6 @@ import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
   imports: [
     // Angular
     CommonModule,
-    FlexLayoutModule,
     FormsModule,
     RouterModule,
     // Material

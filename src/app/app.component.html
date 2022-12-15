@@ -59,17 +59,11 @@
       </div>
     </div>
 
-    <div
-      fxLayout="row"
-      [ngClass.lt-sm]="'x-small'"
-      [ngClass.sm]="'small'"
-      [ngClass.gt-sm]="'gt-small'"
-      class="footer"
-    >
+    <div fxLayout="row" class="footer">
       <div fxFlex fxHide.lt-sm></div>
 
-      <div fxFlex class="center" [ngClass.lt-sm]="'x-small'">
-        <span class="align-middle" [ngClass.xs]="'xs-strapline'">
+      <div fxFlex class="center">
+        <span class="align-middle">
           {{ localData.strapline }}
         </span>
       </div>

@@ -12,12 +12,16 @@ div.Search {
   padding: 10px;
 }
 
-.gtxsSearch input {
-  max-width: 340px;
+@media screen and (min-width: 600px) {
+  .Search input {
+    max-width: 340px; /* restrict input max-width */
+  }
 }
 
-.xsSearch Input {
-  width: 100%;
+@media screen and (max-width: 599.999px) {
+  .Search input {
+    width: 100%;
+  }
 }
 
 .gtxsSearch button {
