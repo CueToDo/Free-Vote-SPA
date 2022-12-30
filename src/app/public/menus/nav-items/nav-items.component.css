@@ -1,3 +1,8 @@
+div.main {
+  display: flex;
+  justify-content: center;
+}
+
 div.main button.selected {
   background-color: #9066ee;
   border: solid 1px #6033aa;

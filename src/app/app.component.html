@@ -1,4 +1,4 @@
-<div fxFill fxLayout="column" class="app">
+<div class="app">
   <div id="titleBar">
     <!-- Burger menu for small screens -->
     <div *ngIf="showBurger" class="burger VC">
@@ -23,20 +23,22 @@
   <app-nav-burger #burgerMenu></app-nav-burger>
 
   <!-- Main Menu on large screens -->
-  <nav fxLayoutAlign="center" *ngIf="!showBurger">
-    <app-nav-main #navMain></app-nav-main>
-  </nav>
+  <div>
+    <nav *ngIf="!showBurger">
+      <app-nav-main #navMain></app-nav-main>
+    </nav>
+  </div>
 
   <!-- Use of main element is messing with flexLayout -->
-  <div fxFlex (click)="closeBurgerMenu()">
+  <div class="routerOutlet" (click)="closeBurgerMenu()">
     <router-outlet></router-outlet>
   </div>
 
   <!-- https://stackoverflow.com/questions/47829727/sticky-footer-at-bottom-in-angular -->
 
   <div [ngClass]="{ footerShow: showVulcan, footerHide: !showVulcan }">
-    <div fxLayoutAlign="center">
-      <div class="content" fxLayoutAlign="start end">
+    <div>
+      <div class="content">
         <img
           [src]="imgVulcan"
           [alt]="altVulcan"
@@ -44,7 +46,7 @@
           height="143"
           (click)="vulcan()"
         />
-        <span class="imgCredit" *ngIf="localData.website === 'break-out.group'"
+        <span *ngIf="localData.website === 'break-out.group'" class="imgCredit"
           >Image by
           <a
             href="https://www.flaticon.com/authors/freepik"
@@ -59,21 +61,12 @@
       </div>
     </div>
 
-    <div fxLayout="row" class="footer">
-      <div fxFlex fxHide.lt-sm></div>
-
-      <div fxFlex class="center">
-        <span class="align-middle">
-          {{ localData.strapline }}
-        </span>
+    <div class="footer">
+      <div class="strapline">
+        {{ localData.strapline }}
       </div>
 
-      <div fxFlex fxHide.xs>
-        <span fxFlex></span>
-        <span class="align-middle copyright">
-          {{ localData.website }} 2022 v15.0.0
-        </span>
-      </div>
+      <div class="copyright">{{ localData.website }} 2023 v15.0.0</div>
     </div>
   </div>
 </div>
