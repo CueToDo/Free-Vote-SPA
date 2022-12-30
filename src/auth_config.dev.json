@@ -1,0 +1,8 @@
+{
+  "domain": "freevote.eu.auth0.com",
+  "clientId": "8LP3ZQ8EpAujVoTruLcI2YNsO0yQry9D",
+  "audience": "https://free.vote",
+  "apiUri": "https://localhost:44389/",
+  "appUri": "https://localhost:7027/",
+  "errorPath": "/error"
+}

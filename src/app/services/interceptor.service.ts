@@ -1,5 +1,5 @@
-import { isPlatformServer } from '@angular/common';
 // angular
+import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import {
   HttpRequest,
@@ -16,20 +16,24 @@ import {
 } from '@angular/platform-browser';
 
 // rxjs
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { mergeMap, catchError, tap } from 'rxjs/operators';
 
 // auth0
-import { AuthService } from './auth.service';
+import { AuthService } from '@auth0/auth0-angular';
 
-// FreeVote
-import { LocalDataService } from './local-data.service';
-import { _MatSlideToggleRequiredValidatorModule } from '@angular/material/slide-toggle';
+// FreeVote Services
+import { LocalDataService } from 'src/app/services/local-data.service';
+import { Auth0Wrapper } from './auth.service';
+
+// Injects the Auth0 Access Token into headers
+// Freevote jwt injected separately in http.service
 
 @Injectable({ providedIn: 'root' })
 export class InterceptorService implements HttpInterceptor {
   constructor(
-    private auth: AuthService,
+    private auth0Service: AuthService,
+    private auth0Wrapper: Auth0Wrapper,
     private localData: LocalDataService,
     private transferState: TransferState,
     @Inject(PLATFORM_ID) private platformId: object
@@ -61,7 +65,6 @@ export class InterceptorService implements HttpInterceptor {
     } else {
       // Check if we already have this response
       const storedResponse = this.transferState.get<any>(key, null);
-
       if (storedResponse) {
         this.transferState.remove(key);
         const response = new HttpResponse({
@@ -69,24 +72,31 @@ export class InterceptorService implements HttpInterceptor {
           status: 200
         });
         return of(response);
-      } else if (this.localData.LoggedInToAuth0) {
-        // Refresh token (EVERY time?), add to header
-        return this.auth.getTokenSilently$().pipe(
+      } else if (this.auth0Wrapper.LoggedInToAuth0) {
+        this.localData.Log(
+          'Interceptor: Logged In requesting Auth0 AccessToken'
+        );
+        // Refresh Access Token EVERY time, add to header
+        return this.auth0Service.getAccessTokenSilently().pipe(
           mergeMap(token => {
-            this.localData.SetItem('Access-Token', token.toString());
-
-            const tokenReq = request.clone({
+            this.localData.Log(
+              `Adding AccessToken to headers for ${request.url}`
+            );
+            const requestWithAuth0Token = request.clone({
               setHeaders: {
                 Authorization: `Bearer ${token}`
               }
             });
 
-            return next.handle(tokenReq);
+            return next.handle(requestWithAuth0Token);
           }),
           // https://stackoverflow.com/questions/43115390/type-void-is-not-assignable-to-type-observableinput
           catchError(err => this.handleError(err))
         );
       } else {
+        this.localData.Log(
+          'Interceptor: Not logged in - not requesting Auth0 access token'
+        );
         return next.handle(request);
       }
     }

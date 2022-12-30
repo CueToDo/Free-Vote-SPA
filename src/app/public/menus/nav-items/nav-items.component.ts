@@ -4,9 +4,12 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 // rxjs
 import { Subscription } from 'rxjs/internal/Subscription';
 
+// Auth0
+import { AuthService } from '@auth0/auth0-angular';
+
 // FreeVote Services
 import { AppDataService } from 'src/app/services/app-data.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { Auth0Wrapper } from 'src/app/services/auth.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
@@ -27,7 +30,8 @@ export class NavItemsComponent implements OnInit, OnDestroy {
 
   constructor(
     public appData: AppDataService,
-    public authService: AuthService,
+    public auth0Service: AuthService,
+    public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService
   ) {}
 
@@ -49,7 +53,7 @@ export class NavItemsComponent implements OnInit, OnDestroy {
 
   logout() {
     this.localData.LocalLogging = false;
-    this.authService.logout();
+    this.auth0Wrapper.logout();
   }
 
   ngOnDestroy(): void {

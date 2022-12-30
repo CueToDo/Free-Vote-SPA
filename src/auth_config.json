@@ -1,5 +1,8 @@
 {
-  "clientId": "2R7Db5byd6g7h2K2oj3MUGoiHaoqnM1Y",
   "domain": "freevote.eu.auth0.com",
-  "audience": "https://free.vote"
+  "clientId": "2R7Db5byd6g7h2K2oj3MUGoiHaoqnM1Y",
+  "audience": "https://free.vote",
+  "apiUri": "https://api.free.vote/",
+  "appUri": "https://free.vote/",
+  "errorPath": "/error"
 }

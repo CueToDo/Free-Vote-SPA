@@ -24,7 +24,7 @@ import {
 import { ProfilePicture } from 'src/app/models/Image.model';
 
 // Services
-import { AuthService } from 'src/app/services/auth.service';
+import { Auth0Wrapper } from 'src/app/services/auth.service';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { HttpService } from 'src/app/services/http.service';
@@ -88,7 +88,7 @@ export class ProfileComponent implements OnDestroy {
   dialogRef: any;
 
   constructor(
-    private authService: AuthService,
+    public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService,
     private appData: AppDataService,
     private httpService: HttpService,
@@ -188,7 +188,7 @@ export class ProfileComponent implements OnDestroy {
         this.profileService.DELETE_ME().subscribe({
           next: () => {
             this.updateMessage = 'Thank you and goodbye';
-            this.authService.logout();
+            this.auth0Wrapper.logout();
           },
           error: err => this.ShowError(err)
         });
@@ -306,7 +306,7 @@ export class ProfileComponent implements OnDestroy {
     const profilePicture = {
       profilePictureOptionID:
         this.localData.freeVoteProfile.profilePictureOptionID,
-      socialMediaProfilePicture: this.localData.auth0Profile.picture // sent whether used or not
+      socialMediaProfilePicture: this.auth0Wrapper.auth0Profile?.picture // sent whether used or not
     } as ProfilePictureOption;
 
     this.profileService.profilePictureOptionUpdate(profilePicture).subscribe({

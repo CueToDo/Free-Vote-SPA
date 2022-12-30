@@ -1,3 +1,5 @@
+import { AuthService } from '@auth0/auth0-angular';
+
 // Comments not permitted in json (package.json --host=127.0.0.1")
 // https://stackoverflow.com/questions/72203399/suddenly-gets-could-not-read-source-map-in-vscode-using-angular
 
@@ -5,7 +7,6 @@
 import {
   Component,
   OnInit,
-  AfterViewInit,
   Inject,
   PLATFORM_ID,
   ViewChild
@@ -20,7 +21,7 @@ import { fromEvent } from 'rxjs';
 import { filter, debounceTime, map } from 'rxjs/operators';
 
 // Auth0
-import { AuthService } from 'src/app/services/auth.service';
+import { Auth0Wrapper } from 'src/app/services/auth.service';
 
 // FreeVote Models
 import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
@@ -50,7 +51,7 @@ export enum NetworkStatus {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
 
@@ -60,7 +61,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   routeDisplay = '';
   pageTitleToolTip = '';
 
-  localAPI = '';
   offline = false;
 
   widthBand = 4; // 0 400, 1 550, 2 700, 3 800, 4 900
@@ -76,7 +76,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    public auth: AuthService,
+    public auth0Wrapper: Auth0Wrapper,
+    public auth0Service: AuthService,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
     private lookupsService: LookupsService,
@@ -103,6 +104,10 @@ export class AppComponent implements OnInit, AfterViewInit {
         window.location.href = location.href.replace('http', 'https');
       }
     }
+
+    // Do this before any API calls
+    this.auth0Wrapper.SetUpAuth0Subscriptions();
+
     this.subscribeNetworkStatus();
 
     // https://stackoverflow.com/questions/39845082/angular-2-change-favicon-icon-as-per-configuration/45753615
@@ -119,16 +124,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       .getElementById('appFavicon')
       ?.setAttribute('href', `/assets/${favicon}?d=${Date.now()}`);
 
-    // On initial load, check authentication state with authorization server
-    // Set up local auth streams if user is already authenticated
-    this.auth.localAuthSetup();
     this.lookupsService.InitialiseStrapline();
 
-    // The app component is initialised when we come back from Auth0 login
-    // Wait until we have a pukka free.vote jwt before doing the following
-    this.localData.GotFreeVoteJwt$.subscribe({
-      next: _ => this.tagsService.InitialisePreviousSlashTagSelected()
-    });
+    // The app component is re-initialised on callback from Auth0 login
+
+    this.tagsService.InitialisePreviousSlashTagSelected();
 
     // Route and Route Parameters: Setup and subscribe to changes (SSR and CSR)
     // https://ultimatecourses.com/blog/dynamic-page-titles-angular-2-router-events
@@ -206,12 +206,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       // Triggered by HomeComponent (only) on begin or end input
       this.showVulcan = !istom;
     });
-  }
-
-  ngAfterViewInit(): void {
-    if (this.localData.GetItem('localAPI') === 'true') {
-      this.localAPI = 'Local API';
-    }
   }
 
   // https://www.inoaspect.com.au/creating-a-progressive-web-app-pwa-service-to-include-all-features-angular/
@@ -459,23 +453,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.burgerMenu?.ShowMenu(false);
   }
 
-  toggleLocalAPI(): void {
-    if (this.localData.GetItem('localAPI') === 'true') {
-      this.localData.SetItem('localAPI', 'false');
-      this.localAPI = '';
-    } else {
-      this.localData.SetItem('localAPI', 'true');
-      this.localAPI = 'Local API';
-    }
-
-    this.localData.SetServiceURL();
-  }
-
   vulcan() {
     this.localData.LocalLogging = true;
     this.localData.Log('Logged out via vulcan');
     console.log('vulcan logging updated');
-    this.auth.logout();
+    this.auth0Wrapper.logout();
   }
   // ngOnDestroy(): void {
   // No need to create subscriptions to unsubscribe in app.component

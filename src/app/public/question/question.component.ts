@@ -1,6 +1,8 @@
 // Angular
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
+
+// Auth0
+import { AuthService } from '@auth0/auth0-angular';
 
 // Models, enums
 import { Question } from 'src/app/models/question.model';
@@ -29,9 +31,9 @@ export class QuestionComponent {
 
   constructor(
     public localData: LocalDataService, // public - used in template
+    public auth0Service: AuthService,
     public appData: AppDataService,
-    private questionsService: QuestionsService,
-    private router: Router
+    private questionsService: QuestionsService
   ) {}
 
   edit(): void {

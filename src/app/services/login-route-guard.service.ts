@@ -1,17 +1,22 @@
+// Angular
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 
-import { LocalDataService } from './local-data.service';
+// Auth0
+import { AuthService } from '@auth0/auth0-angular';
 
 @Injectable({ providedIn: 'root' })
 export class LoginRouteGuardService implements CanActivate {
-  currentDate = new Date();
+  private loggedIn = false;
 
-  constructor(private localData: LocalDataService) {}
+  constructor(private auth0Service: AuthService) {
+    this.auth0Service.isAuthenticated$.subscribe(
+      loggedIn => (this.loggedIn = loggedIn)
+    );
+  }
 
   canActivate(): boolean {
-    this.currentDate = new Date();
-    return this.localData.LoggedInToAuth0;
+    return this.loggedIn;
   }
 
   requiresLogin(url: string): boolean {

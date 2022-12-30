@@ -3,9 +3,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 
-// Auth0
-import { AuthService } from 'src/app/services/auth.service';
-
 // FreeVote
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -31,8 +28,7 @@ export class HomeComponent implements OnInit {
   constructor(
     public appData: AppDataService,
     public localData: LocalDataService,
-    private activatedRoute: ActivatedRoute,
-    public auth: AuthService
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {

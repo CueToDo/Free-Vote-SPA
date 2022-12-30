@@ -10,6 +10,9 @@ import { BehaviorSubject } from 'rxjs';
 // Models
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
 
+// Other
+import { environment as env } from 'src/environments/environment';
+
 // Mainly intended for client side, but has server side only code
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
@@ -18,47 +21,25 @@ export class LocalDataService {
   public websiteUrlWTS = ''; // WTS: without trailing slash
   public apiUrl = '';
 
-  // Subscribe to these in components rather than reference static values in localData
-  public LoggingInToAuth0$ = new BehaviorSubject<boolean>(
-    this.LoggingInToAuth0
-  );
+  // jwt contains All claims
+  // SessionID is baked into jwt for anon or signed-in users
+  // jwt must be in-memory for server side rendering
 
-  public LoggedInToAuth0$ = new BehaviorSubject<boolean>(this.LoggedInToAuth0);
-
-  public GotFreeVoteJwt$ = new BehaviorSubject<boolean>(false);
-
-  public auth0Profile: any; // Auth0 Profile Data saved to app on login
-
-  public freeVoteProfile = new FreeVoteProfile(); // For client updates to API
-  public updatingProfile = false; // on all backend interactions we get jwt and assignservervalues - don't reassign before backend update
-
-  public questionSelected = '';
-  public questionDetails = '';
-
-  // Auth0 and FreeVote Profile - Following static values not to be used in component initialisation where a change subscription is needed
-  public get LoggingInToAuth0(): boolean {
-    return this.GetItem('loggingInToAuth0') === 'true';
+  private jwt = '';
+  public get JWT(): string {
+    return this.jwt;
   }
-  public set LoggingInToAuth0(loggingInToAuth0: boolean) {
-    // Save
-    this.SetItem('loggingInToAuth0', String(loggingInToAuth0));
-    this.SetItem('loggedInToAuth0', String(false));
-    // Communicate
-    this.LoggingInToAuth0$.next(loggingInToAuth0);
-    this.LoggedInToAuth0$.next(false);
+  public set JWT(jwt: string) {
+    if (jwt === null || jwt === undefined) {
+      jwt = '';
+    }
+    this.jwt = jwt;
   }
 
-  public get LoggedInToAuth0(): boolean {
-    return this.GetItem('loggedInToAuth0') === 'true';
-  }
-  public set LoggedInToAuth0(loggedIn: boolean) {
-    // Save
-    this.SetItem('loggingInToAuth0', String(false));
-    this.SetItem('loggedInToAuth0', String(loggedIn));
-    // Communicate
-    this.Log(`Communicating logged in to Auth0: ${loggedIn}`);
-    this.LoggingInToAuth0$.next(false);
-    this.LoggedInToAuth0$.next(loggedIn);
+  // We have a jwt - signed in or not - unless just signed out or never signed in
+  public get GotFreeVoteJwt(): boolean {
+    // actually have a jwt
+    return !!this.JWT;
   }
 
   // Need in-memory value for server side tasks (no local storage)
@@ -73,41 +54,19 @@ export class LocalDataService {
     }
     // Save Status
     this.gettingFreevoteJwt = getting; // no need to save to local storage
-
-    // Communicate
-    this.GotFreeVoteJwt$.next(false); // Getting, haven't yet got
-  }
-
-  // We have a jwt - signed in or not - unless just signed out or never signed in
-  public get GotFreeVoteJwt(): boolean {
-    // actually have a jwt
-    return !!this.JWT;
-  }
-
-  // Where an anon user selects items by sessionID, so does signed in user
-  // Anon sessionIDs should be renewed opportunistically and returned if updated?
-
-  // jwt contains All claims
-  // SessionID is baked into jwt for anon or signed-in users
-  // jwt must be in-memory for server side rendering
-  private jwt = '';
-  public get JWT(): string {
-    return this.jwt;
-  }
-  public set JWT(jwt: string) {
-    if (jwt === null || jwt === undefined) {
-      jwt = '';
-    }
-    this.jwt = jwt;
-    // Communicate
-    this.GotFreeVoteJwt$.next(!!jwt);
   }
 
   public ClearExistingJwt(): void {
     this.JWT = '';
-    // Communicate
-    this.GotFreeVoteJwt$.next(false);
+    // any credentials supplied to get jwt are now invalid - allow call to get fresh jwt
+    this.gettingFreevoteJwt = false;
   }
+
+  public freeVoteProfile = new FreeVoteProfile(); // For client updates to API
+  public updatingProfile = false; // on all backend interactions we get jwt and assignservervalues - don't reassign before backend update
+
+  public questionSelected = '';
+  public questionDetails = '';
 
   // Local Politics - Constituency
   public forConstituency = false;
@@ -146,6 +105,7 @@ export class LocalDataService {
       console.log('Logging', log);
       // Add new log
       this.localLog += `${log}<br>`;
+      this.SetItem('localLog', this.localLog);
     } else {
       console.log('Local Logging is OFF');
     }
@@ -153,6 +113,7 @@ export class LocalDataService {
 
   public ClearLog() {
     this.localLog = '';
+    this.SetItem('localLog', this.localLog);
   }
 
   public get roles(): string[] {
@@ -229,19 +190,12 @@ export class LocalDataService {
     // Defaults
 
     // Server or Client
-    this.apiUrl = 'https://api.free.vote/';
+    this.apiUrl = env.apiUri;
 
     if (isPlatformBrowser(this.platformId)) {
       this.website = window.location.origin.replace('https://', '');
       this.website = this.website.replace('http://', '');
       this.websiteUrlWTS = window.location.origin;
-
-      // API: Always use live unless there is a local manual override
-      const localAPI: boolean = this.GetItem('localAPI') === 'true';
-
-      if (localAPI) {
-        this.apiUrl = 'https://localhost:44389/';
-      }
     } else {
       // window not available on server
       this.website = this.request.hostname;
@@ -251,7 +205,7 @@ export class LocalDataService {
 
   public LoadClientValues(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.jwt = this.GetItem('jwt');
+      this.JWT = this.GetItem('jwt');
       this.localLogging = this.GetItem('localLogging');
       this.localLog = this.GetItem('localLog');
 
@@ -480,14 +434,7 @@ export class LocalDataService {
   }
 
   public SignedOut(): void {
-    // Save signed out state
-    this.LoggingInToAuth0 = false;
-    this.LoggedInToAuth0 = false;
-
     this.ClearExistingJwt();
-
-    // Communicate
-    this.LoggedInToAuth0$.next(false);
 
     // client side values - user may update and post to API
     this.freeVoteProfile.alias = '';
@@ -505,14 +452,10 @@ export class LocalDataService {
     this.freeVoteProfile.profilePictureOptionID = '';
     this.freeVoteProfile.profilePicture = '';
 
-    // Preserve use of local variables after sign out/sign in
-    const localAPI = this.GetItem('localAPI');
-
     // clear all local storage
     localStorage.clear();
 
     // Re-Save Values we wish to preserve after LocalStorage Clear
-    this.SetItem('localAPI', localAPI);
     this.SetItem('previousTopicSelected', 'SignedOut'); // Used in AppDataService InitialisePreviousAliasAndTopic
 
     this.SetItem('localLogging', this.localLogging); // Must set logging on before adding to log

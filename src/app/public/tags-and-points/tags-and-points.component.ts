@@ -8,7 +8,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-// Material
+// Auth0
+import { AuthService } from '@auth0/auth0-angular';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -148,6 +149,7 @@ export class TagsAndPointsComponent
     private activatedRoute: ActivatedRoute,
     private appData: AppDataService,
     public localData: LocalDataService,
+    public auth0Service: AuthService,
     private tagsService: TagsService
   ) {}
 
@@ -402,7 +404,7 @@ export class TagsAndPointsComponent
     }
   }
 
-  AltSLashTagSelected(slashTag: string) {
+  AltSlashTagSelected(slashTag: string) {
     this.NewSlashTagSelected(slashTag);
     this.RouteParameterChanged(true, slashTag);
   }

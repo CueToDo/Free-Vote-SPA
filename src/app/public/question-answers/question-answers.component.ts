@@ -1,7 +1,17 @@
-import { EventEmitter } from '@angular/core';
 // Angular
-import { Component, Input, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {
+  Component,
+  Input,
+  Output,
+  ViewChild,
+  EventEmitter
+} from '@angular/core';
+
+// rxjs
+import { Subscription } from 'rxjs';
+
+// Auth0
+import { AuthService } from '@auth0/auth0-angular';
 
 // Models, Enums
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
@@ -13,7 +23,6 @@ import { QuestionsService } from 'src/app/services/questions.service';
 
 // Components
 import { PointsListComponent } from '../points-list/points-list.component';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-question-answers',
@@ -38,6 +47,7 @@ export class QuestionAnswersComponent {
   public error = '';
 
   constructor(
+    public auth0Service: AuthService,
     public localData: LocalDataService,
     private questionsService: QuestionsService
   ) {}

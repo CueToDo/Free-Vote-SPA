@@ -1,6 +1,8 @@
 // Post data to API
 
 export class FreeVoteProfile {
+  public email = '';
+
   public givenName = '';
   public familyName = '';
   public alias = '';

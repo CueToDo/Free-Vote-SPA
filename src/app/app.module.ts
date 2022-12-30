@@ -6,8 +6,7 @@ import {
 } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
@@ -15,14 +14,17 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
+// Auth0 - Use custom interceptor to add Auth0 Access Token, not the Auth0 interceptor
+import { AuthModule } from '@auth0/auth0-angular';
+
 // Other
-import { environment } from '../environments/environment';
+import { environment as env } from 'src/environments/environment';
 
 // Services
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { InterceptorService } from './services/interceptor.service';
+import { InterceptorService } from 'src/app/services/interceptor.service';
 
 // Modules
+import { AppRoutingModule } from 'src/app/app-routing.module';
 import { CustomModule } from 'src/app/custommodule/custom.module';
 import { PublicModule } from 'src/app/public/public.module';
 
@@ -47,9 +49,17 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     AppRoutingModule,
 
+    // Auth0
+    AuthModule.forRoot({
+      ...env.auth,
+      httpInterceptor: {
+        ...env.httpInterceptor
+      }
+    }),
+
     // PWA ServcieWorkerModule
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
+      enabled: env.production,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
@@ -63,10 +73,7 @@ import { AppComponent } from './app.component';
     CustomModule,
     PublicModule
   ],
-  declarations: [
-    AppComponent
-    // FBTestComponent
-  ],
+  declarations: [AppComponent],
   // Singleton Services are provided in AppRoot
   providers: [
     {

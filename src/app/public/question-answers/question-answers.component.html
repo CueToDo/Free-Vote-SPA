@@ -1,72 +1,93 @@
 <div class="content">
+  <div fxFill fxLayout="column" fxLayoutAlign="start center">
+    <div class="content">
+      <div class="mt-4" fxLayout="row" fxLayoutAlign="center">
+        <button
+          mat-button
+          (click)="Back()"
+          matTooltip="Return to question list"
+        >
+          view all questions
+          <mat-icon>arrow_back</mat-icon>
+        </button>
 
-    <div fxFill fxLayout="column" fxLayoutAlign="start center">
+        <span *ngIf="auth0Service.isAuthenticated$ | async">
+          <button
+            mat-button
+            (click)="viewAllAnswers()"
+            [class.selected]="mode === 'answers'"
+            matTooltip="Show all answers"
+          >
+            all answers
+            <mat-icon>autorenew</mat-icon>
+          </button>
 
-        <div class="content">
+          <button
+            mat-button
+            (click)="viewMyPoints()"
+            [class.selected]="mode === 'myPoints'"
+            matTooltip="Show only my answers"
+          >
+            my answers only
+            <mat-icon>face</mat-icon>
+          </button>
 
-            <div class="mt-4" fxLayout="row" fxLayoutAlign="center">
+          <button
+            mat-button
+            (click)="addAnswer()"
+            [class.selected]="mode === 'addAnswer'"
+            matTooltip="Add an existing answer"
+          >
+            add answer
+            <mat-icon>add</mat-icon>
+          </button>
 
-                <button mat-button (click)="Back()" matTooltip="Return to question list">
-                    view all questions
-                    <mat-icon>arrow_back</mat-icon>
-                </button>
+          <button
+            mat-button
+            (click)="newAnswer()"
+            [class.selected]="mode === 'newAnswer'"
+            matTooltip="Submit a new answer"
+          >
+            new answer
+            <mat-icon>create</mat-icon>
+          </button>
+        </span>
+      </div>
 
-                <span *ngIf="localData.LoggedInToAuth0">
+      <div class="ugc Question mt-5 px-3 pt-3">
+        <h1>{{ QuestionSelected }}</h1>
+        <div [innerHtml]="QuestionDetails"></div>
+      </div>
 
-                    <button mat-button (click)="viewAllAnswers()" [class.selected]="mode==='answers'"
-                        matTooltip="Show all answers">
-                        all answers
-                        <mat-icon>autorenew</mat-icon>
-                    </button>
+      <hr />
 
-                    <button mat-button (click)="viewMyPoints()" [class.selected]="mode==='myPoints'"
-                        matTooltip="Show only my answers">
-                        my answers only
-                        <mat-icon>face</mat-icon>
-                    </button>
+      <div *ngIf="!!error" class="alert alert-danger mt-3">
+        {{ error }}
+      </div>
 
-                    <button mat-button (click)="addAnswer()" [class.selected]="mode==='addAnswer'"
-                        matTooltip="Add an existing answer">
-                        add answer
-                        <mat-icon>add</mat-icon>
-                    </button>
-
-                    <button mat-button (click)="newAnswer()" [class.selected]="mode==='newAnswer'"
-                        matTooltip="Submit a new answer">
-                        new answer
-                        <mat-icon>create</mat-icon>
-                    </button>
-
-                </span>
-
-            </div>
-
-            <div class="ugc Question mt-5 px-3 pt-3">
-                <h1>{{ QuestionSelected }}</h1>
-                <div [innerHtml]="QuestionDetails"></div>
-            </div>
-
-            <hr>
-
-            <div *ngIf="!!error" class="alert alert-danger mt-3">
-                {{ error }}
-            </div>
-
-            <div class="mt-5" *ngIf="mode==='newAnswer'">
-                <app-point-edit (CancelEdit)="cancelNewAnswer()" (CompleteEdit)="newAnswerSaved()" [isMyAnswer]="true"
-                    [questionID]="filter.questionID" [constituencyID]="filter.constituencyID">
-                </app-point-edit>
-            </div>
-        </div>
-
-        <!-- Answers -->
-        <app-points-list [hidden]="mode==='newAnswer'" [filter]="filter" #PointsList
-            [attachedToQuestion]="attachedToQuestion" (AddPointToAnswers)="AddRemovePointFromAnswers(true, $event)"
-            (RemovePointFromAnswers)="AddRemovePointFromAnswers(false, $event)">
-        </app-points-list>
-
-        <div fxFlex></div>
-
+      <div class="mt-5" *ngIf="mode === 'newAnswer'">
+        <app-point-edit
+          (CancelEdit)="cancelNewAnswer()"
+          (CompleteEdit)="newAnswerSaved()"
+          [isMyAnswer]="true"
+          [questionID]="filter.questionID"
+          [constituencyID]="filter.constituencyID"
+        >
+        </app-point-edit>
+      </div>
     </div>
 
+    <!-- Answers -->
+    <app-points-list
+      [hidden]="mode === 'newAnswer'"
+      [filter]="filter"
+      #PointsList
+      [attachedToQuestion]="attachedToQuestion"
+      (AddPointToAnswers)="AddRemovePointFromAnswers(true, $event)"
+      (RemovePointFromAnswers)="AddRemovePointFromAnswers(false, $event)"
+    >
+    </app-points-list>
+
+    <div fxFlex></div>
+  </div>
 </div>

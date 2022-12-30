@@ -20,7 +20,7 @@
   <button
     mat-button
     [routerLink]="
-      (localData.LoggedInToAuth0$ | async) ? '/recent' : '/trending'
+      (auth0Service.isAuthenticated$ | async) ? '/recent' : '/trending'
     "
     [class.selected]="appData.MenuItemSelected === 'slashTags'"
     (click)="appData.MenuItemSelected = 'slashTags'"
@@ -32,12 +32,12 @@
 
   <button
     mat-button
+    *ngIf="auth0Service.isAuthenticated$ | async"
     routerLink="/organisations/membership"
     routerLinkActive="active"
     [class.selected]="appData.MenuItemSelected === 'organisations'"
     (click)="appData.MenuItemSelected = 'organisations'"
     matTooltip="groups"
-    *ngIf="localData.LoggedInToAuth0$ | async"
   >
     <mat-icon>people</mat-icon>
     organisations
@@ -46,8 +46,8 @@
   <!-- Profile/Sign Out Menu Trigger -->
   <button
     mat-button
+    *ngIf="auth0Service.isAuthenticated$ | async"
     [matMenuTriggerFor]="profileMenu"
-    *ngIf="localData.LoggedInToAuth0$ | async"
     [class.selected]="
       appData.MenuItemSelected === 'profile' ||
       appData.MenuItemSelected === 'MP'
@@ -57,10 +57,10 @@
     <img
       *ngIf="
         localData.freeVoteProfile.profilePictureOptionID === '1' &&
-        localData.auth0Profile &&
-        localData.auth0Profile.picture
+        auth0Wrapper.auth0Profile &&
+        auth0Wrapper.auth0Profile.picture
       "
-      [src]="localData.auth0Profile.picture"
+      [src]="auth0Wrapper.auth0Profile.picture"
       class="rounded-circle img-fluid profilePic"
     />
 
@@ -129,8 +129,8 @@
   <!-- Sign In -->
   <button
     mat-button
-    (click)="authService.login()"
-    *ngIf="(localData.LoggedInToAuth0$ | async) === false"
+    *ngIf="(auth0Service.isAuthenticated$ | async) == false"
+    (click)="auth0Wrapper.login()"
     matTooltip="sign in"
   >
     <mat-icon>person</mat-icon>

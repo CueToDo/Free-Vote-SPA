@@ -16,8 +16,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 
+// Auth0
+import { AuthService } from '@auth0/auth0-angular';
+
 // Models & enums
-import { Point, PointFeedback } from 'src/app/models/point.model';
+import { Point } from 'src/app/models/point.model';
 import { Tag } from 'src/app/models/tag.model';
 import {
   PointSupportLevels,
@@ -102,6 +105,7 @@ export class PointComponent implements OnInit {
 
   constructor(
     public localData: LocalDataService, // public - used in template
+    public auth0Service: AuthService,
     private lookupsService: LookupsService,
     private pointsService: PointsService,
     private tagsService: TagsService,
