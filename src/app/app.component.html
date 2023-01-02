@@ -1,72 +1,68 @@
-<div class="app">
-  <div id="titleBar">
-    <!-- Burger menu for small screens -->
-    <div *ngIf="showBurger" class="burger VC">
-      <button type="button" class="burgerButton" (click)="toggleBurgerMenu()">
-        <mat-icon aria-label="drop down menu">menu</mat-icon>
-      </button>
-    </div>
-
-    <!-- Big URL confirmation -->
-    <div id="title" class="VC">
-      <h1 [title]="pageTitleToolTip" [ngClass]="{ under500: under500 }">
-        <span *ngIf="routeDisplay === ''">
-          {{ localData.website }}
-        </span>
-        {{ routeDisplay }}
-      </h1>
-    </div>
-
-    <div *ngIf="offline" class="amr-3 VC" id="offline">OFFLINE</div>
+<div class="titleBar flexRowCenter">
+  <!-- Burger menu for small screens -->
+  <div *ngIf="showBurger" class="burger">
+    <button type="button" class="burgerButton" (click)="toggleBurgerMenu()">
+      <mat-icon aria-label="drop down menu">menu</mat-icon>
+    </button>
   </div>
 
-  <app-nav-burger #burgerMenu></app-nav-burger>
-
-  <!-- Main Menu on large screens -->
+  <!-- Big URL confirmation -->
   <div>
-    <nav *ngIf="!showBurger">
-      <app-nav-main #navMain></app-nav-main>
-    </nav>
+    <h1 [title]="pageTitleToolTip" [ngClass]="{ under500: under500 }">
+      <span *ngIf="routeDisplay === ''">
+        {{ localData.website }}
+      </span>
+      {{ routeDisplay }}
+    </h1>
   </div>
 
-  <!-- Use of main element is messing with flexLayout -->
-  <div class="routerOutlet" (click)="closeBurgerMenu()">
-    <router-outlet></router-outlet>
-  </div>
+  <div *ngIf="offline" class="amr-3" id="offline">OFFLINE</div>
+</div>
 
-  <!-- https://stackoverflow.com/questions/47829727/sticky-footer-at-bottom-in-angular -->
+<app-nav-burger #burgerMenu></app-nav-burger>
 
-  <div [ngClass]="{ footerShow: showVulcan, footerHide: !showVulcan }">
-    <div>
-      <div class="content">
-        <img
-          [src]="imgVulcan"
-          [alt]="altVulcan"
-          class="ms-3"
-          height="143"
-          (click)="vulcan()"
-        />
-        <span *ngIf="localData.website === 'break-out.group'" class="imgCredit"
-          >Image by
-          <a
-            href="https://www.flaticon.com/authors/freepik"
-            title="Freepik"
-            target="_blank"
-            >Freepik</a
-          >
-          from<a href="https://www.flaticon.com/" title="Flaticon"
-            >www.flaticon.com</a
-          ></span
+<!-- Main Menu on large screens -->
+<div>
+  <nav *ngIf="!showBurger">
+    <app-nav-main #navMain></app-nav-main>
+  </nav>
+</div>
+
+<main (click)="closeBurgerMenu()">
+  <router-outlet></router-outlet>
+  <!-- Content injected AFTER, not within -->
+</main>
+
+<div [ngClass]="{ footerShow: showVulcan, footerHide: !showVulcan }">
+  <div>
+    <div class="content">
+      <img
+        [src]="imgVulcan"
+        [alt]="altVulcan"
+        class="ms-3"
+        height="143"
+        (click)="vulcan()"
+      />
+      <span *ngIf="localData.website === 'break-out.group'" class="imgCredit"
+        >Image by
+        <a
+          href="https://www.flaticon.com/authors/freepik"
+          title="Freepik"
+          target="_blank"
+          >Freepik</a
         >
-      </div>
+        from<a href="https://www.flaticon.com/" title="Flaticon"
+          >www.flaticon.com</a
+        ></span
+      >
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="strapline">
+      {{ localData.strapline }}
     </div>
 
-    <div class="footer">
-      <div class="strapline">
-        {{ localData.strapline }}
-      </div>
-
-      <div class="copyright">{{ localData.website }} 2023 v15.0.0</div>
-    </div>
+    <div class="copyright">{{ localData.website }} 2023 v15.0.0</div>
   </div>
 </div>

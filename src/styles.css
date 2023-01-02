@@ -12,6 +12,28 @@ body {
   /* for slide right transistion */
 }
 
+body,
+app-root, /* app-root in index.html */
+main,
+router-outlet + *, /* All content injected after router-outlet */
+.tabContainer,
+.tabContent,
+.col-stretch {
+  flex: 1 1 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: stretch; /* col height */
+  align-items: stretch; /* col width */
+}
+
+.flexRowCenter {
+  flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
+  display: flex;
+  flex-flow: row;
+  justify-content: center; /* center on the row */
+  align-items: center; /* center on cross-axis */
+}
+
 .primary {
   color: #3700b3;
 }
@@ -28,14 +50,6 @@ body {
   -o-transition: opacity 3s;
   -ms-transition: opacity 3s;
   transition: opacity 3s;
-}
-
-/* Vertically centred */
-.VC {
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
 }
 
 div.toolbar {
@@ -56,7 +70,6 @@ div.toolbar mat-form-field {
 .tabContainer {
   overflow: hidden;
   position: relative;
-  height: 100%;
 }
 
 @media (max-width: 940px) {
@@ -67,8 +80,9 @@ div.toolbar mat-form-field {
 }
 
 .tabContent {
+  top: 0; /* all tabs start at same position */
   position: absolute;
-  top: 0;
+  /* lose some flexy fill on position absolute? */
   height: 100%;
   width: 100%;
 }
@@ -87,6 +101,10 @@ div.toolbar mat-form-field {
 }
 
 .centerStage {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-items: stretch;
   position: relative;
   left: 0px;
   min-width: 320px;

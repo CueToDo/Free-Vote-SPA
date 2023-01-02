@@ -3,6 +3,11 @@ div.main {
   justify-content: center;
 }
 
+div.main button {
+  font-weight: 500;
+  color: white;
+}
+
 div.main button.selected {
   background-color: #9066ee;
   border: solid 1px #6033aa;

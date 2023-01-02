@@ -15,7 +15,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Auth0
@@ -68,7 +67,6 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
-    MatTabsModule,
     MatTooltipModule,
     // FreeVote
     BaseModule,

@@ -43,170 +43,206 @@
 
 <!-- Begin Actual -->
 
-<div fxFill fxLayout="column">
-  <div class="policy mt-4" fxLayoutAlign="center">
-    <a class="clicker" (click)="tabIndex = 0" [class.selected]="tabIndex === 0"
-      >start here</a
-    >
-    <a class="clicker" (click)="tabIndex = 1" [class.selected]="tabIndex === 1"
-      >about</a
-    >
-    <a class="clicker" (click)="tabIndex = 2" [class.selected]="tabIndex === 2"
-      >privacy policy</a
-    >
-    <a
-      class="clicker"
-      (click)="tabIndex = 3"
-      [class.selected]="tabIndex === 3"
-      *ngIf="localData.LocalLogging"
-      >Logs</a
-    >
-    <!-- <a href="https://charter2019.uk" target="_blank">charter2019.uk</a> -->
-  </div>
+<div class="flexRowCenter policy mt-4">
+  <a class="clicker" (click)="tabIndex = 0" [class.selected]="tabIndex === 0"
+    >start here</a
+  >
+  <a class="clicker" (click)="tabIndex = 1" [class.selected]="tabIndex === 1"
+    >about</a
+  >
+  <a class="clicker" (click)="tabIndex = 2" [class.selected]="tabIndex === 2"
+    >privacy policy</a
+  >
+  <a
+    class="clicker"
+    (click)="tabIndex = 3"
+    [class.selected]="tabIndex === 3"
+    *ngIf="localData.LocalLogging"
+    >Logs</a
+  >
+</div>
 
-  <div class="tabContainer my-3">
-    <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 0 }">
-      <div
-        [ngClass]="{
-          centerStage: tabIndex === 0,
-          stageLeft: tabIndex > 0
-        }"
-        fxFill
-      >
-        <div
-          class="content"
-          fxFlex
-          fxLayout="column"
-          fxLayoutAlign="center center"
-        >
-          <div>
-            <h1><a routerLink="trending" class="slashTag">/trending</a></h1>
-            <p>The topics that are getting all the attention right now</p>
+<div class="tabContainer my-3">
+  <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 0 }">
+    <div
+      class="content"
+      [ngClass]="{
+        centerStage: tabIndex === 0,
+        stageLeft: tabIndex > 0
+      }"
+    >
+      <div class="col-stretch">
+        <div class="tab">
+          <h1><a routerLink="trending" class="slashTag">/trending</a></h1>
+          <p>The topics that are getting all the attention right now</p>
 
-            <h1>
-              <a routerLink="search" class="slashTag">{{ '/{slash-tag}' }}</a>
-            </h1>
-            <p>A topic for discussion</p>
-          </div>
-
-          <div *ngIf="false">
-            What's the best way to start a conversation? Signal to noise - fewer
-            notifications Engage on issues Less distraction, more focus on
-            issues Stop the concentration of power in too few hands It's not
-            about the immediate, it's about the important Gamification - an easy
-            "in"
-
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/zJvJ50caIHM"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-          </div>
+          <h1>
+            <a routerLink="search" class="slashTag">{{ '/{slash-tag}' }}</a>
+          </h1>
+          <p>A topic for discussion</p>
         </div>
       </div>
 
-      <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 1 }">
-        <div
-          [ngClass]="{
-            centerStage: tabIndex === 1,
-            stageLeft: tabIndex > 1,
-            stageRight: tabIndex < 1
-          }"
-          fxFill
-        >
-          <div class="content" fxFlex fxLayout="column" fxLayoutAlign="center">
-            <h1>{{ localData.website }}</h1>
+      <div *ngIf="false">
+        What's the best way to start a conversation? Signal to noise - fewer
+        notifications Engage on issues Less distraction, more focus on issues
+        Stop the concentration of power in too few hands It's not about the
+        immediate, it's about the important Gamification - an easy "in"
 
-            <p>
-              {{ localData.website }} is an anonymous decision making platform
-              for groups
-            </p>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/zJvJ50caIHM"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
 
-            <p>
-              Anonymity on the internet can have its problems, but anonymity
-              does have its place.
-            </p>
+    <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 1 }">
+      <div
+        class="content"
+        [ngClass]="{
+          centerStage: tabIndex === 1,
+          stageLeft: tabIndex > 1,
+          stageRight: tabIndex < 1
+        }"
+      >
+        <div class="tab">
+          <h1>{{ localData.website }}</h1>
 
-            <p>Think about this:</p>
+          <p>
+            {{ localData.website }} is an anonymous decision making platform for
+            groups
+          </p>
 
-            <ul>
-              <li>
-                Why do
-                <a
-                  class="clicker"
-                  (click)="
-                    survey = true;
-                    justice = false;
-                    ballot = false;
-                    anonimity = false;
-                    threats = false;
-                    threads = false
-                  "
-                  [class.selected]="survey"
-                  >staff surveys</a
-                >
-                always guarantee anonymity?
-              </li>
-              <li>
-                Why does
-                <a
-                  class="clicker"
-                  (click)="
-                    survey = false;
-                    justice = true;
-                    ballot = false;
-                    anonimity = false;
-                    threats = false;
-                    threads = false
-                  "
-                  [class.selected]="justice"
-                  >Lady Justice</a
-                >
-                wear a blindfold?
-              </li>
-              <li>
-                Why do we use
-                <a
-                  class="clicker"
-                  (click)="
-                    survey = false;
-                    justice = false;
-                    ballot = true;
-                    anonimity = false;
-                    threats = false;
-                    threads = false
-                  "
-                  [class.selected]="ballot"
-                  >secret ballots</a
-                >
-                in elections?
-              </li>
-            </ul>
+          <p>
+            Anonymity on the internet can have its problems, but anonymity does
+            have its place.
+          </p>
 
-            <img
-              src="assets/Staff Survey.png"
-              alt="Staff Survey"
-              [ngClass]="{ show: survey, hide: !survey }"
-            />
+          <p>Think about this:</p>
 
-            <div [ngClass]="{ show: justice, hide: !justice }">
-              <img src="assets/Lady Justice.jpg" alt="Lady Justice" />
-              Lady Justice makes her judgements based on the evidence she hears,
-              not on whether she sees a prince or a pauper in front of her.
-            </div>
+          <ul>
+            <li>
+              Why do
+              <a
+                class="clicker"
+                (click)="
+                  survey = true;
+                  justice = false;
+                  ballot = false;
+                  anonimity = false;
+                  threats = false;
+                  threads = false
+                "
+                [class.selected]="survey"
+                >staff surveys</a
+              >
+              always guarantee anonymity?
+            </li>
+            <li>
+              Why does
+              <a
+                class="clicker"
+                (click)="
+                  survey = false;
+                  justice = true;
+                  ballot = false;
+                  anonimity = false;
+                  threats = false;
+                  threads = false
+                "
+                [class.selected]="justice"
+                >Lady Justice</a
+              >
+              wear a blindfold?
+            </li>
+            <li>
+              Why do we use
+              <a
+                class="clicker"
+                (click)="
+                  survey = false;
+                  justice = false;
+                  ballot = true;
+                  anonimity = false;
+                  threats = false;
+                  threads = false
+                "
+                [class.selected]="ballot"
+                >secret ballots</a
+              >
+              in elections?
+            </li>
+          </ul>
 
-            <img
-              src="assets/Secret Ballots.jpg"
-              alt="Secret Ballots"
-              [ngClass]="{ show: ballot, hide: !ballot }"
-            />
+          <img
+            src="assets/Staff Survey.png"
+            alt="Staff Survey"
+            [ngClass]="{ show: survey, hide: !survey }"
+          />
 
-            <p class="mt-3">
-              Anonymity is important
+          <div [ngClass]="{ show: justice, hide: !justice }">
+            <img src="assets/Lady Justice.jpg" alt="Lady Justice" />
+            Lady Justice makes her judgements based on the evidence she hears,
+            not on whether she sees a prince or a pauper in front of her.
+          </div>
+
+          <img
+            src="assets/Secret Ballots.jpg"
+            alt="Secret Ballots"
+            [ngClass]="{ show: ballot, hide: !ballot }"
+          />
+
+          <p class="mt-3">
+            Anonymity is important
+            <a
+              class="clicker"
+              (click)="
+                survey = false;
+                justice = false;
+                ballot = false;
+                anonimity = true;
+                threats = false;
+                threads = false
+              "
+              [class.selected]="anonimity"
+              >because</a
+            >
+          </p>
+
+          <ul [ngClass]="{ show: anonimity, hide: !anonimity }">
+            <li>The “truth” should not depend upon who says it.</li>
+            <li>
+              Facts and opinions should be allowed to speak for themselves and
+              should not carry more or less weight depending upon a person’s
+              wealth, power, status or social standing.
+            </li>
+            <li>
+              There should be no consequences for daring to speak the truth, nor
+              favouritism for bending the truth in favour of those with power
+              and influence.
+            </li>
+            <li>
+              Facing up to the truth can be difficult. Anonymity allows everyone
+              to express themselves honestly and to
+              <a
+                class="clicker"
+                (click)="
+                  survey = false;
+                  justice = false;
+                  ballot = false;
+                  anonimity = true;
+                  threats = true;
+                  threads = false
+                "
+                [class.selected]="threats"
+                >disagree without fear</a
+              >
+              and
               <a
                 class="clicker"
                 (click)="
@@ -215,137 +251,92 @@
                   ballot = false;
                   anonimity = true;
                   threats = false;
-                  threads = false
+                  threads = true
                 "
-                [class.selected]="anonimity"
-                >because</a
-              >
-            </p>
+                [class.selected]="threads"
+                >agree without favour</a
+              >.
+            </li>
+          </ul>
 
-            <ul [ngClass]="{ show: anonimity, hide: !anonimity }">
-              <li>The “truth” should not depend upon who says it.</li>
-              <li>
-                Facts and opinions should be allowed to speak for themselves and
-                should not carry more or less weight depending upon a person’s
-                wealth, power, status or social standing.
-              </li>
-              <li>
-                There should be no consequences for daring to speak the truth,
-                nor favouritism for bending the truth in favour of those with
-                power and influence.
-              </li>
-              <li>
-                Facing up to the truth can be difficult. Anonymity allows
-                everyone to express themselves honestly and to
-                <a
-                  class="clicker"
-                  (click)="
-                    survey = false;
-                    justice = false;
-                    ballot = false;
-                    anonimity = true;
-                    threats = true;
-                    threads = false
-                  "
-                  [class.selected]="threats"
-                  >disagree without fear</a
-                >
-                and
-                <a
-                  class="clicker"
-                  (click)="
-                    survey = false;
-                    justice = false;
-                    ballot = false;
-                    anonimity = true;
-                    threats = false;
-                    threads = true
-                  "
-                  [class.selected]="threads"
-                  >agree without favour</a
-                >.
-              </li>
-            </ul>
+          <img
+            src="assets/threats.png"
+            alt="Threatened to vote the right way"
+            [ngClass]="{ show: threats, hide: !threats }"
+          />
 
-            <img
-              src="assets/threats.png"
-              alt="Threatened to vote the right way"
-              [ngClass]="{ show: threats, hide: !threats }"
-            />
-
-            <div [ngClass]="{ show: threads, hide: !threads }">
-              <img src="assets/threads.jpeg" alt="Emperor's Clothes" />
-              <p class="mt-3">
-                Flattering the leader can lead to personal favour, but in the
-                long run, leads to the disempowerment of everybody.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 2 }">
-        <div
-          [ngClass]="{
-            centerStage: tabIndex === 2,
-            stageLeft: tabIndex > 2,
-            stageRight: tabIndex < 2
-          }"
-          fxFill
-        >
-          <div class="content" fxFlex fxLayout="column" fxLayoutAlign="center">
-            <h1>{{ localData.website }} privacy policy</h1>
-
-            <p>
-              Personal data is stored for identification purposes only - for
-              example your name, email address, and location.
-            </p>
-
-            <h2>Cookies</h2>
-
-            <p>Coookies are used for identification purposes only.</p>
-
-            <p>
-              Other cookies relate to user embedded content such as youtube
-              videos over which free.vote has no control.
-            </p>
-
-            <h2>History</h2>
-            <p>
-              Your browsing history is never collected and so is neither stored,
-              nor passed on to any third party, for any reason, ever.
-            </p>
-
-            <h2>Voting Record</h2>
-            <p>
-              Your voting record is held in a database. If you anonymise your
-              vote, it cannot be changed and you cannot vote again. How you vote
-              is never revealed to others.
-            </p>
-
-            <h2>Account deletion</h2>
-            <p>
-              To delete your account immediately and permanently, go to your
-              profile and click "delete account". Your name, email address and
-              location will be wiped from the system.
+          <div [ngClass]="{ show: threads, hide: !threads }">
+            <img src="assets/threads.jpeg" alt="Emperor's Clothes" />
+            <p class="mt-3">
+              Flattering the leader can lead to personal favour, but in the long
+              run, leads to the disempowerment of everybody.
             </p>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 3 }">
-        <div
-          [ngClass]="{
-            centerStage: tabIndex === 3,
-            stageRight: tabIndex < 3
-          }"
-          fxFill
-        >
-          <div class="content" fxFlex fxLayout="column" fxLayoutAlign="center">
-            <h1>Log</h1>
-            <div><button (click)="localData.ClearLog()">Clear Log</button></div>
-            <div [innerHtml]="localData.LocalLog"></div>
-          </div>
+    <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 2 }">
+      <div
+        class="content"
+        [ngClass]="{
+          centerStage: tabIndex === 2,
+          stageLeft: tabIndex > 2,
+          stageRight: tabIndex < 2
+        }"
+      >
+        <div class="tab">
+          <h1>{{ localData.website }} privacy policy</h1>
+
+          <p>
+            Personal data is stored for identification purposes only - for
+            example your name, email address, and location.
+          </p>
+
+          <h2>Cookies</h2>
+
+          <p>Coookies are used for identification purposes only.</p>
+
+          <p>
+            Other cookies relate to user embedded content such as youtube videos
+            over which free.vote has no control.
+          </p>
+
+          <h2>History</h2>
+          <p>
+            Your browsing history is never collected and so is neither stored,
+            nor passed on to any third party, for any reason, ever.
+          </p>
+
+          <h2>Voting Record</h2>
+          <p>
+            Your voting record is held in a database. If you anonymise your
+            vote, it cannot be changed and you cannot vote again. How you vote
+            is never revealed to others.
+          </p>
+
+          <h2>Account deletion</h2>
+          <p>
+            To delete your account immediately and permanently, go to your
+            profile and click "delete account". Your name, email address and
+            location will be wiped from the system.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 3 }">
+      <div
+        class="content"
+        [ngClass]="{
+          centerStage: tabIndex === 3,
+          stageRight: tabIndex < 3
+        }"
+      >
+        <div>
+          <h1>Log</h1>
+          <div><button (click)="localData.ClearLog()">Clear Log</button></div>
+          <div [innerHtml]="localData.LocalLog"></div>
         </div>
       </div>
     </div>
