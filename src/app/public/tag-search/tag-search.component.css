@@ -12,6 +12,10 @@ div.Search {
   padding: 10px;
 }
 
+.Search button {
+  margin-left: 10px;
+}
+
 @media screen and (min-width: 600px) {
   .Search input {
     max-width: 340px; /* restrict input max-width */
@@ -32,7 +36,7 @@ div.Search {
   margin-top: 10px;
 }
 
-#container {
+#tagContainer {
   position: relative;
   display: inline-block;
   margin-bottom: 10px;

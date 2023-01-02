@@ -34,6 +34,14 @@ router-outlet + *, /* All content injected after router-outlet */
   align-items: center; /* center on cross-axis */
 }
 
+.flexRowReverse {
+  flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
+  display: flex;
+  flex-flow: row-reverse;
+  justify-content: center; /* center on the row */
+  align-items: center; /* center on cross-axis */
+}
+
 .primary {
   color: #3700b3;
 }
@@ -97,7 +105,7 @@ div.toolbar mat-form-field {
 .content {
   width: 100%;
   max-width: 720px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .centerStage {
@@ -312,7 +320,8 @@ a + a {
 }
 
 a:hover,
-.selected {
+.selected,
+button.mdc-button.selected {
   background-color: #e7e7e7;
 }
 
@@ -500,6 +509,9 @@ a.clicker:hover {
 }
 
 /* Alternate to Bootstrap when bootstrap styles just won't apply */
+
+/* Alternative margin left */
+
 .aml-1 {
   margin-left: 5px;
 }
@@ -519,6 +531,8 @@ a.clicker:hover {
 .aml-5 {
   margin-left: 25px;
 }
+
+/* Alternative margin right */
 
 .amr-1 {
   margin-right: 5px;
@@ -540,6 +554,8 @@ a.clicker:hover {
   margin-right: 25px;
 }
 
+/* Alternative margin top */
+
 .amt-1 {
   margin-top: 5px;
 }
@@ -559,6 +575,8 @@ a.clicker:hover {
 .amt-5 {
   margin-top: 25px;
 }
+
+/* Alternative margin bottom */
 
 .amb-1 {
   margin-bottom: 5px;
@@ -580,6 +598,8 @@ a.clicker:hover {
   margin-bottom: 25px;
 }
 
+/* Alternative margin all */
+
 .am-1 {
   margin: 5px;
 }
@@ -599,6 +619,8 @@ a.clicker:hover {
 .am-5 {
   margin: 25px;
 }
+
+/* Alternative margin left and right */
 
 .amx-1 {
   margin-left: 5px;
@@ -623,4 +645,31 @@ a.clicker:hover {
 .amx-5 {
   margin-left: 25px;
   margin-right: 25px;
+}
+
+/* Alternative margin top and bottom */
+
+.amy-1 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.amy-2 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.amy-3 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.amy-4 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.amy-5 {
+  margin-top: 25px;
+  margin-bottom: 25px;
 }

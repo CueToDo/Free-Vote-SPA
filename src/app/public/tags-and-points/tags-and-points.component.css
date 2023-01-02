@@ -26,17 +26,13 @@ mat-radio-button + mat-radio-button {
   margin-left: 12px;
 }
 
-.content {
-  margin-top: 20px;
-}
-
 hr {
   height: 2px;
   background: gray;
-  margin: 0px;
+  margin: 0.5rem 0;
 }
 
-.slash-tag {
+.slash {
   margin-right: 2px;
   font-weight: medium;
   font-size: 1.8em;

@@ -1,13 +1,7 @@
 <!-- Tags matching hard sound criteria -->
-<div class="linkCloud">
+<div>
   <!-- SlashTag Search -->
-  <div
-    fxLayout.gt-xs="row"
-    fxLayoutAlign.gt-xs="center stretch"
-    fxLayout.xs="column"
-    fxLayoutAlign.xs="space-around stretch"
-    class="Search mt-5"
-  >
+  <div class="flexRowCenter Search mt-5">
     <div>
       <input
         type="text"
@@ -39,7 +33,7 @@
   </div>
 
   <ng-container *ngFor="let tag of tags">
-    <div id="container">
+    <div id="tagContainer" class="linkCloud">
       <a
         [innerHTML]="tag.tagDisplay | TagDisplay"
         [ngStyle]="{
