@@ -188,26 +188,24 @@
 
 <!-- Begin Tab Content -->
 
-<div fxFlex fxLayout="column" fxLayoutAlign="start center" class="tabContainer">
+<div class="tabContainer">
   <!-- 0 Tag Cloud Trending -->
-  <div
-    class="tabContent scroller"
-    [ngClass]="{ topZ: tabIndex === Tabs.trendingTags }"
-  >
+  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.trendingTags }">
     <div
       [ngClass]="{
         centerStage: tabIndex === Tabs.trendingTags,
         stageLeft: tabIndex > Tabs.trendingTags
       }"
-      fxFill
     >
-      <div class="content">
-        <app-tag-cloud
-          [tagCloudType]="TagCloudTypes.Trending"
-          #tagsTrending
-          (NewSlashTagSelected)="NewSlashTagSelected($event)"
-        >
-        </app-tag-cloud>
+      <div class="scroller">
+        <div class="content">
+          <app-tag-cloud
+            [tagCloudType]="TagCloudTypes.Trending"
+            #tagsTrending
+            (NewSlashTagSelected)="NewSlashTagSelected($event)"
+          >
+          </app-tag-cloud>
+        </div>
       </div>
     </div>
   </div>
@@ -223,7 +221,6 @@
         stageLeft: tabIndex > Tabs.recentTags,
         stageRight: tabIndex < Tabs.recentTags
       }"
-      fxFill
     >
       <div class="content">
         <app-tag-cloud
@@ -247,7 +244,6 @@
         stageLeft: tabIndex > Tabs.tagSearch,
         stageRight: tabIndex < Tabs.tagSearch
       }"
-      fxFill
     >
       <div class="content">
         <app-tag-search
@@ -267,7 +263,6 @@
         stageLeft: tabIndex > Tabs.questionList,
         stageRight: tabIndex < Tabs.questionList
       }"
-      fxFill
     >
       <!-- "Fetch more" component must apply scroller and content classes internally -->
       <app-questions-list
@@ -292,7 +287,6 @@
         stageLeft: tabIndex > Tabs.questionAnswers,
         stageRight: tabIndex < Tabs.questionAnswers
       }"
-      fxFill
     >
       <!-- "Fetch more" component must apply scroller and content classes internally -->
       <app-question-answers
@@ -353,7 +347,7 @@
     </div>
   </div>
 
-  <!-- 7 app points for tag points. Scroller class NOT applied to tabContent -->
+  <!-- 7 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagPoints }">
     <div
       [ngClass]="{
@@ -361,7 +355,6 @@
         stageLeft: tabIndex > Tabs.tagPoints,
         stageRight: tabIndex < Tabs.tagPoints
       }"
-      fxFill
     >
       <!-- "Fetch more" component must apply scroller and content classes internally -->
       <app-points-list
@@ -384,28 +377,25 @@
         centerStage: tabIndex === Tabs.newPoint,
         stageRight: tabIndex < Tabs.newPoint
       }"
-      fxFill
     >
-      <div fxLayoutAlign="center">
-        <div class="content mt-5 mb-3">
-          <app-question-edit
-            *ngIf="showQuestions"
-            (CancelEdit)="CancelNewQuestion()"
-            (CompleteEdit)="NewQuestion()"
-            #newQuestion
-          >
-          </app-question-edit>
+      <div class="content mt-5 mb-3">
+        <app-question-edit
+          *ngIf="showQuestions"
+          (CancelEdit)="CancelNewQuestion()"
+          (CompleteEdit)="NewQuestion()"
+          #newQuestion
+        >
+        </app-question-edit>
 
-          <app-point-edit
-            *ngIf="!showQuestions"
-            [constituencyID]="filter.constituencyID"
-            (CancelEdit)="CancelNewPoint()"
-            (CompleteEdit)="NewPointCreated()"
-            (ReselectPoints)="ReselectForNewPoint()"
-            #newPoint
-          >
-          </app-point-edit>
-        </div>
+        <app-point-edit
+          *ngIf="!showQuestions"
+          [constituencyID]="filter.constituencyID"
+          (CancelEdit)="CancelNewPoint()"
+          (CompleteEdit)="NewPointCreated()"
+          (ReselectPoints)="ReselectForNewPoint()"
+          #newPoint
+        >
+        </app-point-edit>
       </div>
     </div>
   </div>

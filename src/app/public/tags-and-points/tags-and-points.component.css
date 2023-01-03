@@ -26,6 +26,12 @@ mat-radio-button + mat-radio-button {
   margin-left: 12px;
 }
 
+/* Important! */
+app-points-list {
+  display: flex;
+  overflow: hidden;
+}
+
 hr {
   height: 2px;
   background: gray;

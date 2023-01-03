@@ -1,86 +1,85 @@
-<div
-  fxFill
-  class="scroller"
-  appElementScrollEnd
-  (scrollEnd)="fetchMorePoints()"
->
+<div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
   <div class="content">
-    <div *ngIf="error !== ''" class="text-danger mx-3">
-      {{ error }}
-    </div>
+    <div class="col-stretch">
+      <div *ngIf="error !== ''" class="text-danger mx-3">
+        {{ error }}
+      </div>
 
-    <!-- Top Spinner for reselect -->
-    <div *ngIf="AlreadyFetchingPointsFromDB && pointCount > 0">
-      <div fxLayout="row" fxLayoutAlign="end center">
-        <div class="amr-2">reselecting points</div>
-        <div class="spinner-grow text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
+      <!-- Top Spinner for reselect -->
+      <div *ngIf="AlreadyFetchingPointsFromDB && pointCount > 0">
+        <div class="flexRowEnd">
+          <div class="amr-2">reselecting points</div>
+          <div class="spinner-grow text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Points List -->
-    <div *ngFor="let point of points">
-      <app-point
-        [point]="point"
-        [pointCount]="pointCount"
-        [isParentPoint]="false"
-        [searchTerm]="filter.text"
-        [possibleAnswer]="possibleAnswers"
-        [isComment]="pointComments"
-        [isMyAnswer]="attachedToQuestion && point.isPointOwner"
-        [feedbackOn]="feedbackOn"
-        (AddPointToAnswers)="AddToAnswers($event)"
-        (RemovePointFromAnswers)="RemoveFromAnswers($event)"
-        (CompleteEdit)="CompleteEdit($event)"
-        (PointDeleted)="onPointDeleted($event)"
-        (AltSlashTagSelected)="setSlashTag($event)"
-        (SelectComment)="SelectComment.emit($event)"
-      >
-      </app-point>
-    </div>
-
-    <!-- Prompt New Point or Answer to Question -->
-    <div
-      *ngIf="
-        !AlreadyFetchingPointsFromDB && pointCount === 0 && !this.pointComments
-      "
-      class="alert alert-warning"
-    >
-      {{ firstResponse }}
-    </div>
-
-    <!-- Count -->
-    <div class="pointCount" fxLayoutAlign="end center">
-      <span *ngIf="!AlreadyFetchingPointsFromDB && !filter?.single">
-        {{ points.length }} point{{ appData.plural(points.length) }} displayed
-        of {{ pointCount
-        }}<span *ngIf="!allPointsDisplayed">
-          <a
-            *ngIf="points.length < pointCount"
-            routerLink="."
-            (click)="fetchMorePoints()"
-            >more</a
-          ></span
+      <!-- Points List -->
+      <div *ngFor="let point of points">
+        <app-point
+          [point]="point"
+          [pointCount]="pointCount"
+          [isParentPoint]="false"
+          [searchTerm]="filter.text"
+          [possibleAnswer]="possibleAnswers"
+          [isComment]="pointComments"
+          [isMyAnswer]="attachedToQuestion && point.isPointOwner"
+          [feedbackOn]="feedbackOn"
+          (AddPointToAnswers)="AddToAnswers($event)"
+          (RemovePointFromAnswers)="RemoveFromAnswers($event)"
+          (CompleteEdit)="CompleteEdit($event)"
+          (PointDeleted)="onPointDeleted($event)"
+          (AltSlashTagSelected)="setSlashTag($event)"
+          (SelectComment)="SelectComment.emit($event)"
         >
-      </span>
+        </app-point>
+      </div>
 
-      <span *ngIf="filter?.single">
-        <a [routerLink]="filter.slashTag">show all</a>
-      </span>
-
-      <span class="amr-2" *ngIf="AlreadyFetchingPointsFromDB">
-        ... fetching next batch of points
-      </span>
-
-      <!-- Bottom spinner -->
-      <span
-        class="spinner-grow text-primary"
-        role="status"
-        *ngIf="AlreadyFetchingPointsFromDB"
+      <!-- Prompt New Point or Answer to Question -->
+      <div
+        *ngIf="
+          !AlreadyFetchingPointsFromDB &&
+          pointCount === 0 &&
+          !this.pointComments
+        "
+        class="alert alert-warning"
       >
-        <span class="visually-hidden">Loading...</span>
-      </span>
+        {{ firstResponse }}
+      </div>
+
+      <!-- Count -->
+      <div class="pointCount">
+        <span *ngIf="!AlreadyFetchingPointsFromDB && !filter?.single">
+          {{ points.length }} point{{ appData.plural(points.length) }} displayed
+          of {{ pointCount
+          }}<span *ngIf="!allPointsDisplayed">
+            <a
+              *ngIf="points.length < pointCount"
+              routerLink="."
+              (click)="fetchMorePoints()"
+              >more</a
+            ></span
+          >
+        </span>
+
+        <span *ngIf="filter?.single">
+          <a [routerLink]="filter.slashTag">show all</a>
+        </span>
+
+        <span class="amr-2" *ngIf="AlreadyFetchingPointsFromDB">
+          ... fetching next batch of points
+        </span>
+
+        <!-- Bottom spinner -->
+        <span
+          class="spinner-grow text-primary"
+          role="status"
+          *ngIf="AlreadyFetchingPointsFromDB"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </div>
     </div>
   </div>
 </div>

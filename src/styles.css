@@ -17,13 +17,16 @@ app-root, /* app-root in index.html */
 main,
 router-outlet + *, /* All content injected after router-outlet */
 .tabContainer,
-.tabContent,
-.col-stretch {
+.tabContent {
   flex: 1 1 100%;
   display: flex;
   flex-flow: column;
   justify-content: stretch; /* col height */
   align-items: stretch; /* col width */
+}
+
+.col-stretch {
+  overflow: hidden;
 }
 
 .flexRowCenter {
@@ -34,10 +37,18 @@ router-outlet + *, /* All content injected after router-outlet */
   align-items: center; /* center on cross-axis */
 }
 
+.flexRowEnd {
+  flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end; /*  */
+  align-items: center; /* center on cross-axis */
+}
+
 .flexRowReverse {
   flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
   display: flex;
-  flex-flow: row-reverse;
+  flex-flow: row-reverse; /* special case for tags and points slash tag button */
   justify-content: center; /* center on the row */
   align-items: center; /* center on cross-axis */
 }
@@ -88,17 +99,29 @@ div.toolbar mat-form-field {
 }
 
 .tabContent {
-  top: 0; /* all tabs start at same position */
-  position: absolute;
+  position: absolute; /* all tabs start at same position */
+  top: 0;
   /* lose some flexy fill on position absolute? */
   height: 100%;
   width: 100%;
+  overflow: hidden;
+}
+
+.centerStage {
+  position: relative;
+  left: 0px;
+  min-width: 320px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 1;
+  z-index: 5;
 }
 
 .scroller {
   overflow-y: auto;
   overflow-x: hidden;
-  /* height:100%; */
   width: 100%;
 }
 
@@ -106,19 +129,6 @@ div.toolbar mat-form-field {
   width: 100%;
   max-width: 720px;
   margin: 0 auto;
-}
-
-.centerStage {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  justify-items: stretch;
-  position: relative;
-  left: 0px;
-  min-width: 320px;
-  width: 100%;
-  opacity: 1;
-  z-index: 5;
 }
 
 .stageLeft {
