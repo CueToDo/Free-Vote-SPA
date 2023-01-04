@@ -1,16 +1,12 @@
-<div *ngIf="!editing" class="point">
+<div *ngIf="!editing" class="ugc point">
   <!-- Point Display -->
   <a [id]="'id' + point.pointID">
-    <div class="ugc">
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        [ngClass]="{ parentPoint: isParentPoint }"
-      >
+    <div>
+      <div class="flexRow center" [ngClass]="{ parentPoint: isParentPoint }">
         <div>
           <h1 [innerHtml]="point.pointTitle"></h1>
         </div>
-        <div fxFlex></div>
+        <div class="flexStretch"></div>
 
         <!-- PointNumber/Count -->
 
@@ -111,12 +107,7 @@
 
   <!-- Toolbar -->
 
-  <div
-    *ngIf="feedbackOn"
-    class="toolbar"
-    fxLayout="row wrap"
-    fxLayoutAlign="left center"
-  >
+  <div *ngIf="feedbackOn" class="toolbar flexRow stretch">
     <div *ngIf="possibleAnswer">
       <button
         mat-button
@@ -137,7 +128,7 @@
       </button>
     </div>
 
-    <div *ngIf="point.draft" fxFlex class="draft">Draft Only</div>
+    <div *ngIf="point.draft" class="draft">Draft Only</div>
 
     <!-- SlashTags -->
 
@@ -152,9 +143,11 @@
       </span>
     </div>
 
+    <div class="flexStretch"></div>
+
     <!-- Toolbar Remainder -->
 
-    <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+    <div class="flexRow">
       <app-point-types
         [pointTypeID]="point.pointTypeID"
         (PointTypeVote)="PointTypeVote($event)"

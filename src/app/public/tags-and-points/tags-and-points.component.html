@@ -7,7 +7,7 @@
   }"
   class="amy-2"
 >
-  <div *ngIf="tabIndex < Tabs.questionList" class="flexRowCenter">
+  <div *ngIf="tabIndex < Tabs.questionList" class="flexRow center">
     <!-- Trending Tags -->
     <button
       mat-button
@@ -56,14 +56,14 @@
     </button>
 
     <!-- Show previously selected tag results -->
-    <div class="flexRowCenter">
+    <div class="flexRow center">
       <button
         mat-button
         (click)="BackToSelectedTag()"
         *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
         matTooltip="{{ topicSelected }}"
       >
-        <div class="flexRowCenter">
+        <div class="flexRow center">
           <span class="slash">/</span>
           <span>slash-tag</span>
         </div>
@@ -73,15 +73,15 @@
     </div>
   </div>
 
-  <div *ngIf="tabIndex > Tabs.tagSearch" class="flexRowCenter">
+  <div *ngIf="tabIndex > Tabs.tagSearch" class="flexRow center">
     <!-- Show tag clouds and tag search -->
-    <div class="flexRowReverse">
+    <div class="flexRow reverse">
       <button
         mat-button
         (click)="ChangeTab(previousTabIndex)"
         matTooltip="trending"
       >
-        <div class="flexRowCenter">
+        <div class="flexRow center">
           <span class="slash">/</span>
           <span>slash-tags</span>
         </div>

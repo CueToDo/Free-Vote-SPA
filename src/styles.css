@@ -29,28 +29,27 @@ router-outlet + *, /* All content injected after router-outlet */
   overflow: hidden;
 }
 
-.flexRowCenter {
+.flexRow {
   flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
   display: flex;
   flex-flow: row;
-  justify-content: center; /* center on the row */
-  align-items: center; /* center on cross-axis */
+  align-items: center; /* center on cross-axis - vertical align middle*/
 }
 
-.flexRowEnd {
-  flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
-  display: flex;
-  flex-flow: row;
+.flexRow.center {
+  justify-content: center; /* center on the row */
+}
+
+.flexRow.end {
   justify-content: flex-end; /*  */
-  align-items: center; /* center on cross-axis */
 }
 
-.flexRowReverse {
-  flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
-  display: flex;
+.flexRow.reverse {
   flex-flow: row-reverse; /* special case for tags and points slash tag button */
-  justify-content: center; /* center on the row */
-  align-items: center; /* center on cross-axis */
+}
+
+.flexStretch {
+  flex: 10 1;
 }
 
 .primary {
@@ -358,14 +357,15 @@ a:hover {
 
 /* xs and sm */
 @media screen and (max-width: 959px) {
+  .ugc {
+    margin: 0 12px;
+  }
   .ugc h1 {
     font-size: 1.1em;
+    font-weight: 600; /* Semi Bold */
   }
   .ugc h2 {
     font-size: 1em;
-  }
-  .ugc {
-    margin: 0 12px;
   }
   .ugc p {
     font-size: medium;
