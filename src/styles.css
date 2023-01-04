@@ -199,30 +199,35 @@ div.toolbar mat-form-field {
   text-decoration: none;
 }
 
-.linkFromMeta,
-.noLinkPreview {
+.websiteMeta {
+  display: flex;
+  justify-content: stretch;
+  overflow: hidden;
   border: solid 1px black;
   border-radius: 12px;
-  overflow: hidden;
   color: black;
   background-color: #f0f4ff;
 }
 
-.linkFromMeta:hover,
+.websiteMeta:hover,
 .preview {
   color: #3700b3;
 }
 
+.websiteMetaImage {
+  flex: 3 0;
+}
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit */
 /* https://stackoverflow.com/questions/37127384/why-isnt-object-fit-working-in-flexbox */
-.linkFromMeta img {
+.websiteMetaImage img {
   max-height: 132px;
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
 
-.linkMetaText {
+.websiteMetaText {
+  flex: 7 0;
   margin: 10px;
 }
 
@@ -246,13 +251,13 @@ div.toolbar mat-form-field {
 }
 
 @media only screen and (max-width: 600px) {
-  .linkMetaText.linkTitle {
+  .websiteMetaText.linkTitle {
     font-size: 0.8em;
     font-weight: bolder;
     margin-bottom: 8px;
   }
 
-  .linkMetaText {
+  .websiteMetaText {
     font-size: 0.75em;
   }
 }

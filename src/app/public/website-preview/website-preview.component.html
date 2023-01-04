@@ -1,46 +1,45 @@
 <!-- With Actual Link -->
 <a *ngIf="!!LinkAddress" [href]="LinkAddress" target="_blank">
-
-    <!-- Link Preview -->
-    <div *ngIf="ShowPreview" class="linkFromMeta" fxLayout="row" fxLayoutAlign="center stretch">
-        <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!Image">
-            <img [src]="Image" alt="">
-        </div>
-        <div fxFlex.gt-xs="LinkImage?70:100" fxFlex.lt-sm="Image?50:100" class="linkMetaText">
-            <div class="linkTitle">
-                {{ Title }}
-            </div>
-            <div class="linkDescription">
-                {{ Description }}
-            </div>
-        </div>
+  <!-- Link preview -->
+  <div *ngIf="ShowPreview" class="websiteMeta">
+    <div *ngIf="!!Image" class="websiteMetaImage">
+      <img [src]="Image" alt="" />
     </div>
-
-    <!-- No Link Preview -->
-    <div *ngIf="!ShowPreview">
-        {{ NoPreviewText }}
+    <div class="websiteMetaText">
+      <div class="linkTitle">
+        {{ Title }}
+      </div>
+      <div class="linkDescription">
+        {{ Description }}
+      </div>
     </div>
+  </div>
+
+  <!-- No Link Preview -->
+  <div *ngIf="!ShowPreview">
+    {{ NoPreviewText }}
+  </div>
 </a>
 
-<!-- No link -->
+<!-- No link - copy of above without the link -->
 <div *ngIf="!LinkAddress">
-    <!-- Show preview image title description -->
-    <div *ngIf="ShowPreview" class="noLinkPreview" fxLayout="row" fxLayoutAlign="center center">
-        <div fxFlex.gt-xs="30" fxFlex.lt-sm="50" *ngIf="!!Image" fxLayoutAlign="center">
-            <img [src]="Image" alt="">
-        </div>
-        <div fxFlex.gt-xs="LinkImage?70:100" fxFlex.lt-sm="Image?50:100" class="linkMetaText">
-            <div class="linkTitle">
-                {{ Title }}
-            </div>
-            <div class="linkDescription">
-                {{ Description }}
-            </div>
-        </div>
+  <!-- Link preview -->
+  <div *ngIf="ShowPreview" class="websiteMeta">
+    <div *ngIf="!!Image" class="websiteMetaImage">
+      <img [src]="Image" alt="" />
     </div>
+    <div class="websiteMetaText">
+      <div class="linkTitle">
+        {{ Title }}
+      </div>
+      <div class="linkDescription">
+        {{ Description }}
+      </div>
+    </div>
+  </div>
 
-    <!-- No preview image title description -->
-    <div *ngIf="!ShowPreview">
-        {{ NoPreviewText }}
-    </div>
+  <!-- No preview image title description -->
+  <div *ngIf="!ShowPreview">
+    {{ NoPreviewText }}
+  </div>
 </div>
