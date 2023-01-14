@@ -1,7 +1,3 @@
-.question {
-  margin-top: 30px;
-}
-
 .draft {
   font-weight: bold;
   color: #3700b3;
@@ -17,7 +13,17 @@ button img {
   margin: 0;
 }
 
+.Question {
+  background-color: #fffcf2;
+  padding: 10px;
+}
+
 .Question:hover {
   cursor: pointer;
   color: #3700b3;
+}
+
+.Question h1 {
+  margin-left: 0;
+  margin-bottom: 0;
 }

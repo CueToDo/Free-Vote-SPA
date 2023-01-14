@@ -6,7 +6,7 @@
       "name": "Launch Chrome against localhost",
       "type": "chrome",
       "request": "launch",
-      "preLaunchTask": "npm: start",
+      // "preLaunchTask": "npm: start",
       "url": "http://localhost:7027",
       "webRoot": "${workspaceFolder}",
       "skipFiles": [

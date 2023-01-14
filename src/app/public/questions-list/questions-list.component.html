@@ -1,52 +1,73 @@
-<div fxFill class="scroller" appElementScrollEnd (scrollEnd)="fetchMoreQuestions()">
-
-    <div class="content">
-
-        <div *ngIf="error!==''" class="text-danger mx-3">
-            {{ error }}
-        </div>
-
-        <!-- Top Spinner for reselect -->
-        <div *ngIf="alreadyFetchingFromDB && questionCount > 0" fxLayoutAlign="center center">
-            <span>reselecting questions</span>
-            <span class="spinner-grow text-primary ms-3" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </span>
-        </div>
-
-        <!-- Questions List -->
-        <div *ngFor="let question of questions">
-            <app-question [question]="question" [questionCount]="questionCount"
-                (QuestionDeleted)="onQuestionDeleted($event)"
-                (QuestionSelected)="questionSelected(question.questionID)">
-            </app-question>
-        </div>
-
-        <!-- Prompt New Question -->
-        <div *ngIf="!alreadyFetchingFromDB && questionCount===0" class="alert alert-warning">
-            Click "new question" to create the first question for this slash tag
-        </div>
-
-        <!-- Count -->
-        <div class="questionCount" fxLayoutAlign="end center">
-
-            <span *ngIf="!alreadyFetchingFromDB">
-                {{ questions.length }} question{{ appData.plural(questions.length) }} displayed of {{ questionCount
-                }}<span *ngIf="!allQuestionsDisplayed"> <a *ngIf="questions.length < questionCount" routerLink="."
-                        (click)="fetchMoreQuestions()">more</a></span>
-            </span>
-
-            <span *ngIf="alreadyFetchingFromDB" class="amr-3">
-                ... fetching next batch of questions
-            </span>
-
-            <!-- Bottom spinner -->
-            <span class="spinner-grow text-primary" role="status" *ngIf="alreadyFetchingFromDB">
-                <span class="visually-hidden">Loading...</span>
-            </span>
-
-        </div>
-
+<div
+  fxFill
+  class="scroller"
+  appElementScrollEnd
+  (scrollEnd)="fetchMoreQuestions()"
+>
+  <div class="content">
+    <div *ngIf="error !== ''" class="text-danger mx-3">
+      {{ error }}
     </div>
 
+    <!-- Top Spinner for reselect -->
+    <div
+      *ngIf="alreadyFetchingFromDB && questionCount > 0"
+      fxLayoutAlign="center center"
+    >
+      <span>reselecting questions</span>
+      <span class="spinner-grow text-primary ms-3" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </span>
+    </div>
+
+    <!-- Questions List -->
+    <div *ngFor="let question of questions">
+      <app-question
+        [question]="question"
+        [questionCount]="questionCount"
+        (QuestionDeleted)="onQuestionDeleted($event)"
+        (QuestionSelected)="questionSelected(question.questionID)"
+      >
+      </app-question>
+    </div>
+
+    <!-- Prompt New Question -->
+    <div
+      *ngIf="!alreadyFetchingFromDB && questionCount === 0"
+      class="alert alert-warning"
+    >
+      Click "new question" to create the first question for this slash tag
+    </div>
+
+    <!-- Count -->
+    <div class="questionCount" fxLayoutAlign="end center">
+      <span *ngIf="!alreadyFetchingFromDB">
+        {{ questions.length }} question{{
+          appData.plural(questions.length)
+        }}
+        displayed of {{ questionCount
+        }}<span *ngIf="!allQuestionsDisplayed">
+          <a
+            *ngIf="questions.length < questionCount"
+            routerLink="."
+            (click)="fetchMoreQuestions()"
+            >more</a
+          ></span
+        >
+      </span>
+
+      <span *ngIf="alreadyFetchingFromDB" class="amr-3">
+        ... fetching next batch of questions
+      </span>
+
+      <!-- Bottom spinner -->
+      <span
+        class="spinner-grow text-primary"
+        role="status"
+        *ngIf="alreadyFetchingFromDB"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </span>
+    </div>
+  </div>
 </div>

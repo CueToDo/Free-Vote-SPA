@@ -55,7 +55,7 @@ export class QuestionEditComponent implements OnInit {
     // Clear old Values when edit complete
     this.questionEdit = new QuestionEdit();
     this.ClearQuestion();
-    this.questionEdit.tags = [new Tag(slashTag)];
+    this.questionEdit.slashtags = [new Tag(slashTag)];
   }
 
   ClearQuestion(): void {
@@ -98,7 +98,7 @@ export class QuestionEditComponent implements OnInit {
         // Communicate change to sibling PointsComponent
         // where Points ReSelection Takes place:
         if (isNew) {
-          this.tagsService.SetSlashTag(this.questionEdit.tags[0].slashTag);
+          this.tagsService.SetSlashTag(this.questionEdit.slashtags[0].slashTag);
         }
       }
     });

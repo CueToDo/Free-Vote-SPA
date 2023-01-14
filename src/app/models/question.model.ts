@@ -10,7 +10,16 @@ export class QuestionEdit {
   question = '';
   details = '';
   draft = false;
-  tags: Tag[] = [];
+  slashtags: Tag[] = [];
+}
+
+export class QuestionEditFormData {
+  constituencyID = 0;
+  questionID = 0;
+  question = '';
+  details = '';
+  draft = false;
+  slashtags: string[] = [];
 }
 
 export class Question {

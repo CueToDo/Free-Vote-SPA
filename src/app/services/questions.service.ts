@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 
 // rxjs
 import { Observable } from 'rxjs/internal/Observable';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 // Models, enums
 import { PointSortTypes, PointSupportLevels } from '../models/enums';
 import {
   QuestionSelectionResult,
-  QuestionEdit
+  QuestionEdit,
+  QuestionEditFormData
 } from '../models/question.model';
 import { ID } from '../models/common';
 
@@ -107,13 +108,18 @@ export class QuestionsService {
   QuestionUpdate(questionEdit: QuestionEdit): Observable<Kvp> {
     const apiUrl = 'questions/questionUpdate';
 
+    const slashtags = questionEdit.slashtags
+      .filter(tag => tag.pointOwnerTag)
+      .map(tag => tag.slashTag);
+
     const postData = {
       questionID: questionEdit.questionID,
       question: questionEdit.question,
       details: questionEdit.details,
       draft: questionEdit.draft,
-      tags: questionEdit.tags
-    } as QuestionEdit;
+      slashtags: slashtags,
+      constituencyID: questionEdit.constituencyID
+    } as QuestionEditFormData;
 
     return this.httpClientService.post(apiUrl, postData);
   }

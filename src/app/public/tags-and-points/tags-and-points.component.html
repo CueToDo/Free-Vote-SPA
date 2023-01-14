@@ -211,10 +211,7 @@
   </div>
 
   <!-- 1 Tag Cloud Recent -->
-  <div
-    class="tabContent scroller"
-    [ngClass]="{ topZ: tabIndex === Tabs.recentTags }"
-  >
+  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.recentTags }">
     <div
       [ngClass]="{
         centerStage: tabIndex === Tabs.recentTags,
@@ -222,22 +219,21 @@
         stageRight: tabIndex < Tabs.recentTags
       }"
     >
-      <div class="content">
-        <app-tag-cloud
-          [tagCloudType]="TagCloudTypes.Recent"
-          #tagsRecent
-          (NewSlashTagSelected)="NewSlashTagSelected($event)"
-        >
-        </app-tag-cloud>
+      <div class="scroller">
+        <div class="content">
+          <app-tag-cloud
+            [tagCloudType]="TagCloudTypes.Recent"
+            #tagsRecent
+            (NewSlashTagSelected)="NewSlashTagSelected($event)"
+          >
+          </app-tag-cloud>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- 2 SlashTag Search -->
-  <div
-    class="tabContent scroller"
-    [ngClass]="{ topZ: tabIndex === Tabs.tagSearch }"
-  >
+  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagSearch }">
     <div
       [ngClass]="{
         centerStage: tabIndex === Tabs.tagSearch,
@@ -245,12 +241,14 @@
         stageRight: tabIndex < Tabs.tagSearch
       }"
     >
-      <div class="content">
-        <app-tag-search
-          (NewSlashTagSelected)="NewSlashTagSelected($event)"
-          #tagSearch
-        >
-        </app-tag-search>
+      <div class="scroller">
+        <div class="content">
+          <app-tag-search
+            (NewSlashTagSelected)="NewSlashTagSelected($event)"
+            #tagSearch
+          >
+          </app-tag-search>
+        </div>
       </div>
     </div>
   </div>
@@ -278,7 +276,7 @@
 
   <!-- 4 Question Answers -->
   <div
-    class="tabContent scroller"
+    class="tabContent"
     [ngClass]="{ topZ: tabIndex === Tabs.questionAnswers }"
   >
     <div
@@ -312,20 +310,22 @@
         stageRight: tabIndex < Tabs.groups
       }"
     >
-      <div class="content">
-        <app-group-selection
-          [tagDisplay]="topicSelected"
-          #bogSelection
-          (BogSelected)="BogSelected($event)"
-        >
-        </app-group-selection>
+      <div class="scroller">
+        <div class="content">
+          <app-group-selection
+            [tagDisplay]="topicSelected"
+            #bogSelection
+            (BogSelected)="BogSelected($event)"
+          >
+          </app-group-selection>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- 6 Break-out Group Discussion -->
   <div
-    class="tabContent scroller"
+    class="tabContent"
     [ngClass]="{ topZ: tabIndex === Tabs.groupDiscussion }"
   >
     <div
@@ -335,14 +335,16 @@
         stageRight: tabIndex < Tabs.groupDiscussion
       }"
     >
-      <div class="content">
-        <app-group-discussion
-          [tagDisplay]="topicSelected"
-          [bogSelected]="bogSelected"
-          (SelectAnother)="SelectAnotherBoG()"
-          #bogDiscussion
-        >
-        </app-group-discussion>
+      <div class="scroller">
+        <div class="content">
+          <app-group-discussion
+            [tagDisplay]="topicSelected"
+            [bogSelected]="bogSelected"
+            (SelectAnother)="SelectAnotherBoG()"
+            #bogDiscussion
+          >
+          </app-group-discussion>
+        </div>
       </div>
     </div>
   </div>
@@ -368,37 +370,36 @@
   </div>
 
   <!-- 8 new question or point -->
-  <div
-    class="tabContent scroller"
-    [ngClass]="{ topZ: tabIndex === Tabs.newPoint }"
-  >
+  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.newPoint }">
     <div
       [ngClass]="{
         centerStage: tabIndex === Tabs.newPoint,
         stageRight: tabIndex < Tabs.newPoint
       }"
     >
-      <div class="content mt-5 mb-3">
-        <app-question-edit
-          *ngIf="showQuestions"
-          (CancelEdit)="CancelNewQuestion()"
-          (CompleteEdit)="NewQuestion()"
-          #newQuestion
-        >
-        </app-question-edit>
+      <div class="scroller">
+        <div class="content mt-5 mb-3">
+          <app-question-edit
+            *ngIf="showQuestions"
+            (CancelEdit)="CancelNewQuestion()"
+            (CompleteEdit)="NewQuestion()"
+            #newQuestion
+          >
+          </app-question-edit>
 
-        <app-point-edit
-          *ngIf="!showQuestions"
-          [constituencyID]="filter.constituencyID"
-          (CancelEdit)="CancelNewPoint()"
-          (CompleteEdit)="NewPointCreated()"
-          (ReselectPoints)="ReselectForNewPoint()"
-          #newPoint
-        >
-        </app-point-edit>
+          <app-point-edit
+            *ngIf="!showQuestions"
+            [constituencyID]="filter.constituencyID"
+            (CancelEdit)="CancelNewPoint()"
+            (CompleteEdit)="NewPointCreated()"
+            (ReselectPoints)="ReselectForNewPoint()"
+            #newPoint
+          >
+          </app-point-edit>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- End Tab Container and Content -->
+  <!-- End Tab Container and Content -->
+</div>

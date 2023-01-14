@@ -34,6 +34,7 @@ router-outlet + *, /* All content injected after router-outlet */
   display: flex;
   flex-flow: row;
   align-items: center; /* center on cross-axis - vertical align middle*/
+  gap: 10px;
 }
 
 .flexRow.center {
@@ -190,7 +191,7 @@ div.toolbar mat-form-field {
 
 @media only screen and (max-width: 960px) {
   .pagePreview.ltmd {
-    margin: 0 10px 10px 10px;
+    margin: 0 0 10px 0;
   }
 }
 
@@ -316,7 +317,8 @@ button + span {
   margin-left: 5px;
 }
 
-span + mat-icon {
+/* ToDo apply class mi to spans preceding mat-icon */
+span.mi + mat-icon {
   margin-left: 8px;
 }
 
@@ -492,11 +494,6 @@ a.clicker:hover {
   cursor: pointer;
 }
 
-.Question {
-  background-color: #fffcf2;
-  padding: 5px;
-}
-
 .Issues:hover,
 .Questions:hover {
   background-color: #fff4d0;
@@ -521,170 +518,4 @@ a.clicker:hover {
 .small {
   font-size: 0.7rem;
   color: gray;
-}
-
-/* Alternate to Bootstrap when bootstrap styles just won't apply */
-
-/* Alternative margin left */
-
-.aml-1 {
-  margin-left: 5px;
-}
-
-.aml-2 {
-  margin-left: 10px;
-}
-
-.aml-3 {
-  margin-left: 15px;
-}
-
-.aml-4 {
-  margin-left: 20px;
-}
-
-.aml-5 {
-  margin-left: 25px;
-}
-
-/* Alternative margin right */
-
-.amr-1 {
-  margin-right: 5px;
-}
-
-.amr-2 {
-  margin-right: 10px;
-}
-
-.amr-3 {
-  margin-right: 15px;
-}
-
-.amr-4 {
-  margin-right: 20px;
-}
-
-.amr-5 {
-  margin-right: 25px;
-}
-
-/* Alternative margin top */
-
-.amt-1 {
-  margin-top: 5px;
-}
-
-.amt-2 {
-  margin-top: 10px;
-}
-
-.amt-3 {
-  margin-top: 15px;
-}
-
-.amt-4 {
-  margin-top: 20px;
-}
-
-.amt-5 {
-  margin-top: 25px;
-}
-
-/* Alternative margin bottom */
-
-.amb-1 {
-  margin-bottom: 5px;
-}
-
-.amb-2 {
-  margin-bottom: 10px;
-}
-
-.amb-3 {
-  margin-bottom: 15px;
-}
-
-.amb-4 {
-  margin-bottom: 20px;
-}
-
-.amb-5 {
-  margin-bottom: 25px;
-}
-
-/* Alternative margin all */
-
-.am-1 {
-  margin: 5px;
-}
-
-.am-2 {
-  margin: 10px;
-}
-
-.am-3 {
-  margin: 15px;
-}
-
-.am-4 {
-  margin: 20px;
-}
-
-.am-5 {
-  margin: 25px;
-}
-
-/* Alternative margin left and right */
-
-.amx-1 {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.amx-2 {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.amx-3 {
-  margin-left: 15px;
-  margin-right: 15px;
-}
-
-.amx-4 {
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
-.amx-5 {
-  margin-left: 25px;
-  margin-right: 25px;
-}
-
-/* Alternative margin top and bottom */
-
-.amy-1 {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.amy-2 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.amy-3 {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.amy-4 {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.amy-5 {
-  margin-top: 25px;
-  margin-bottom: 25px;
 }

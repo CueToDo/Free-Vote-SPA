@@ -16,6 +16,10 @@
   }
 }
 
+.content {
+  padding-top: 15px;
+}
+
 mat-radio-button {
   margin-top: 0px;
   margin-left: 25px;
