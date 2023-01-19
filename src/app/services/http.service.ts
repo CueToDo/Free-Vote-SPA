@@ -116,7 +116,7 @@ export class HttpService {
 
     this.localData.Log(`For This ${url}`);
     return this.auth0Wrapper
-      .getApiJwt()
+      .getApiJwt$()
       .pipe(switchMap(_ => this.getWithJwt(url)));
   }
 
@@ -124,7 +124,7 @@ export class HttpService {
     // always check we have a valid jwt first whether logged in with Auth0 or not
     // ignore output of getApiJwt - it's passed in the headers of the post
     return this.auth0Wrapper
-      .getApiJwt()
+      .getApiJwt$()
       .pipe(switchMap(_ => this.postWithJwt(url, data)));
   }
 
@@ -132,7 +132,7 @@ export class HttpService {
     // always check we have a valid jwt first whether logged in with Auth0 or not
     // ignore output of getApiJwt - it's passed in the headers of the post
     return this.auth0Wrapper
-      .getApiJwt()
+      .getApiJwt$()
       .pipe(switchMap(_ => this.postFormWithJwt(url, form)));
   }
 
@@ -141,7 +141,7 @@ export class HttpService {
     // ignore output of getApiJwt - it's passed in the headers of the post
 
     return this.auth0Wrapper
-      .getApiJwt()
+      .getApiJwt$()
       .pipe(switchMap(_ => this.postFormWithJwtType<T>(url, formData)));
   }
 
@@ -153,7 +153,7 @@ export class HttpService {
     const url = this.localData.apiUrl + 'points/imageUpload';
 
     // Max Shwartzmuller https://www.youtube.com/watch?v=YkvqLNcJz3Y
-    return this.auth0Wrapper.getApiJwt().pipe(
+    return this.auth0Wrapper.getApiJwt$().pipe(
       switchMap(_ =>
         this.httpClient.post<Image>(url, fd, {
           reportProgress: true,
@@ -173,7 +173,7 @@ export class HttpService {
     const url = this.localData.apiUrl + 'profile/pictureUpload';
 
     // Max Shwartzmuller https://www.youtube.com/watch?v=YkvqLNcJz3Y
-    return this.auth0Wrapper.getApiJwt().pipe(
+    return this.auth0Wrapper.getApiJwt$().pipe(
       switchMap(_ =>
         this.httpClient.post<ProfilePicture>(url, fd, {
           reportProgress: true,

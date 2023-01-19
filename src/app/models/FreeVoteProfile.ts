@@ -31,6 +31,15 @@ export class FreeVoteProfile {
   public profile = '';
 }
 
+export class ProfileEditFormData {
+  public alias = '';
+  public postcode = '';
+  public countryID = 0;
+  public cityID = 0;
+  public constituencyID = 0;
+  public wardID = 0;
+}
+
 // For profile picture option update
 export class ProfilePictureOption {
   public profilePictureOptionID = '';

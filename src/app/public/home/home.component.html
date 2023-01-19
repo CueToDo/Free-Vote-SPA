@@ -325,18 +325,20 @@
       </div>
     </div>
 
-    <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 3 }">
-      <div
-        class="content"
-        [ngClass]="{
-          centerStage: tabIndex === 3,
-          stageRight: tabIndex < 3
-        }"
-      >
-        <div>
-          <h1>Log</h1>
-          <div><button (click)="localData.ClearLog()">Clear Log</button></div>
-          <div [innerHtml]="localData.LocalLog"></div>
+    <div class="tabContent" [ngClass]="{ topZ: tabIndex === 3 }">
+      <div class="scroller">
+        <div
+          class="content"
+          [ngClass]="{
+            centerStage: tabIndex === 3,
+            stageRight: tabIndex < 3
+          }"
+        >
+          <div>
+            <h1>Log</h1>
+            <div><button (click)="localData.ClearLog()">Clear Log</button></div>
+            <div [innerHtml]="localData.LocalLog"></div>
+          </div>
         </div>
       </div>
     </div>

@@ -19,33 +19,34 @@ import { LocalDataService } from './local-data.service';
 export class Auth0Wrapper {
   // Auth0 logged in status, profile and FreeVote jwt:
 
-  private loggedInToAuth0 = false;
-
   // Used by interceptor service - interrogated rather than relying on push
+  // Always save to localdata
   public get LoggedInToAuth0(): boolean {
-    return this.loggedInToAuth0;
+    return this.localData.GetItem('loggedInToAuth0') == 'true';
   }
 
   public set LoggedInToAuth0(loggedIn: boolean) {
-    if (this.loggedInToAuth0 != loggedIn) {
-      this.loggedInToAuth0 = loggedIn;
-      this.localData.ClearExistingJwt(); // Discard any previous anonymous Jwt
+    this.localData.SetItem('loggedInToAuth0', loggedIn ? 'true' : 'false');
+    if (this.LoggedInToAuth0 != loggedIn) {
+      this.localData.ClearExistingJwt(); // Discard any previous voter or anonymous Jwt
     }
   }
 
   public auth0Profile: User | null | undefined; // Auth0 Profile Data saved to app on login
 
-  public IsAuth0Callback = false;
+  public IsAuth0Callback = false; // Set in callback component
 
-  public Auth0Ready = new Subject<boolean>();
+  public HaveAuth0User = new Subject<boolean>();
 
-  private auth0Ready(): Observable<boolean> {
+  private haveAuth0User$(): Observable<boolean> {
     if (this.IsAuth0Callback) {
-      this.localData.Log('RETURN A SUBJECT - ie WAIT');
-      return this.Auth0Ready;
+      this.localData.Log('WAIT for user to be returned after callback');
+      return this.HaveAuth0User; // wait for user to be returned after callback
     } else {
-      this.localData.Log('NO WAITING');
-      return of(true);
+      this.localData.Log(
+        'Not a callback - no need to wait for user to be returned'
+      );
+      return of(true); // we're ready
     }
   }
 
@@ -70,31 +71,37 @@ export class Auth0Wrapper {
       });
 
       // Subscribe to getUser for login and logout
-      this.auth0Service.user$.subscribe({
-        next: (user: User | null | undefined) => {
-          this.auth0Profile = user;
-          this.IsAuth0Callback = false;
-          this.Auth0Ready.next(true);
+      this.auth0Service.user$
+        .pipe(
+          concatMap((user: User | null | undefined) => {
+            this.auth0Profile = user;
+            this.IsAuth0Callback = false;
+            this.HaveAuth0User.next(true);
 
-          this.localData.Log('Auth0 User Subscribe');
-          const loggedIn = !!user;
-          if (loggedIn) {
+            const loggedIn = !!user;
+
+            // Always ClearExistingJwt BEFORE getting new ApiJwt for signed in or signed out user
             this.localData.Log(
-              `User from Auth0 - User email: ${user?.email}, LoggedIn:${loggedIn}`
+              `Clear on have user from Auth0 - get fresh api jwt. LoggedIn:${loggedIn} User email:${user?.email}`
             );
-
-            // Always ClearExistingJwt BEFORE getting new ApiJwt for signed in user
             this.localData.ClearExistingJwt();
-            this.getApiJwt();
-          } else {
-            this.localData.Log('localAuthSetup getUser() thinks NOT logged in');
+
+            // Now we can call the api for a jwt
+            return this.getApiJwt$();
+          })
+        )
+        .subscribe({
+          next: () => {},
+          error: error => {
+            console.log(
+              'ERROR: localAuthSetup, user subscription, getApiJwt',
+              error
+            );
+            this.localData.Log(
+              `ERROR: localAuthSetup, user subscription, getApiJwt ${error}`
+            );
           }
-        },
-        error: error => {
-          console.log('ERROR: localAuthSetup', error);
-          this.localData.Log(`ERROR: localAuthSetup, ${error}`);
-        }
-      });
+        });
     }
   }
 
@@ -130,35 +137,32 @@ export class Auth0Wrapper {
   // Anon sessionIDs should be renewed opportunistically and returned if updated?
 
   // The API JWT is the FreeVote user profile
-  getApiJwt(): Observable<boolean | undefined> {
+  getApiJwt$(): Observable<boolean | undefined> {
     // It doesn't matter if you're not logged in with Auth0, you still need a FreeVote JWT
     // For Anon or authenticated
 
     // getApiJwt calls get, but get calls getApiJwt - need to prevent endless loop
     // Anon users have a jwt
 
-    this.localData.Log('getApiJwt WAITING');
+    this.localData.Log('getApiJwt called');
 
-    return this.auth0Ready().pipe(
+    // Wait for user from Auth0 before getting api jwt from free.vote API
+    return this.haveAuth0User$().pipe(
       concatMap(_ => {
-        this.localData.Log('getApiJwt PIPED');
-        if (
-          this.localData.GotFreeVoteJwt &&
-          this.localData.freeVoteProfile.email == this.auth0Profile?.email
-        ) {
+        if (this.localData.GotFreeVoteJwt) {
           // Already have jwt - no need to do anything
           this.localData.Log('Already have API Jwt');
           return of(true);
         } else if (this.localData.GettingFreeVoteJwt) {
           // Don't issue request yet - now's not the time,
           // or must wait for existing request to complete
-          this.localData.Log('Middle of getting API Jwt');
+          this.localData.Log('Waiting for API Jwt');
           return this.jwtFetched$;
         } else {
           // Only the first jwt request comes down here
 
           this.localData.Log(
-            `Ready to request ApiJwt from ${this.localData.apiUrl} and be intercepted to add auth token`
+            `Ready to request ApiJwt from ${this.localData.apiUrl} and be intercepted to add auth token.`
           );
 
           this.localData.GettingFreeVoteJwt = true; // prevent infinite loop - and communicate
@@ -175,7 +179,7 @@ export class Auth0Wrapper {
             .pipe(
               tap(response => {
                 if (!!response) {
-                  this.localData.Log(`GOT API JWT: ${response}`);
+                  this.localData.Log(`GOT JWT from Api: ${response}`);
 
                   this.localData.AssignServerValues(response); /// but new sessionid is not returned so can't be assigned (that's OK)
                   this.localData.SaveValues();

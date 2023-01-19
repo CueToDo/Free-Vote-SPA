@@ -45,6 +45,10 @@ router-outlet + *, /* All content injected after router-outlet */
   justify-content: flex-end; /*  */
 }
 
+.flexRow.space-between {
+  justify-content: space-between; /*  */
+}
+
 .flexRow.reverse {
   flex-flow: row-reverse; /* special case for tags and points slash tag button */
 }

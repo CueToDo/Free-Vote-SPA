@@ -76,8 +76,6 @@ export class ProfileComponent implements OnDestroy {
   public uploadPercentDone = 0;
 
   editing = false;
-  editNewCountry = false;
-  editNewCity = false;
 
   uploading = false;
   saving = false;
@@ -125,52 +123,34 @@ export class ProfileComponent implements OnDestroy {
 
     this.oldProfile = Object.assign({}, this.localData.freeVoteProfile);
 
-    this.GetCountries();
     this.constituencySearch = this.localData.freeVoteProfile.constituency;
   }
 
   save(): void {
-    if (this.editNewCountry) {
-      // Save new text & get ID
-      this.editNewCountry = false;
-      this.editNewCity = true;
-    } else if (this.editNewCity) {
-      // Save new text & get ID
-      this.editNewCity = false;
-    } else {
-      this.Saving();
+    this.Saving();
 
-      this.localData.freeVoteProfile.constituencyID = this.constituencyID;
-      this.localData.freeVoteProfile.wardID = this.wardID;
+    this.localData.freeVoteProfile.constituencyID = this.constituencyID;
+    this.localData.freeVoteProfile.wardID = this.wardID;
 
-      this.profileService
-        .SaveProfile(this.localData.freeVoteProfile)
-        .subscribe({
-          next: result => {
-            if (result) {
-              this.updateMessage = 'saved';
+    this.profileService.SaveProfile(this.localData.freeVoteProfile).subscribe({
+      next: result => {
+        if (result) {
+          this.updateMessage = 'saved';
 
-              this.localData.SaveValues();
+          this.localData.SaveValues();
 
-              // Save in old profile
-              this.oldProfile = Object.assign(
-                {},
-                this.localData.freeVoteProfile
-              );
+          // Save in old profile
+          this.oldProfile = Object.assign({}, this.localData.freeVoteProfile);
 
-              this.Saved(true);
-            } else {
-              this.updateMessage = 'error';
-              this.error = true;
-              this.localData.freeVoteProfile = Object.assign(
-                {},
-                this.oldProfile
-              );
-            }
-          },
-          error: err => this.ShowError(err)
-        });
-    }
+          this.Saved(true);
+        } else {
+          this.updateMessage = 'error';
+          this.error = true;
+          this.localData.freeVoteProfile = Object.assign({}, this.oldProfile);
+        }
+      },
+      error: err => this.ShowError(err)
+    });
   }
 
   deleteAccount(): void {
@@ -205,8 +185,6 @@ export class ProfileComponent implements OnDestroy {
     this.localData.freeVoteProfile = Object.assign({}, this.oldProfile);
 
     this.editing = false;
-    this.editNewCountry = false;
-    this.editNewCity = false;
   }
 
   deleteProfilePictue(): void {
@@ -315,43 +293,6 @@ export class ProfileComponent implements OnDestroy {
     });
   }
 
-  newCountry(): void {
-    this.editNewCountry = true;
-    this.localData.freeVoteProfile.country = '';
-    this.localData.freeVoteProfile.city = '';
-  }
-
-  newCity(): void {
-    this.editNewCity = true;
-    this.localData.freeVoteProfile.city = '';
-  }
-
-  onCountrySelect(countryId: string): void {
-    // (already bound to profile countryId)
-    this.GetCities(countryId, true);
-    this.editNewCity = false;
-  }
-
-  GetCountries(): void {
-    this.lookupsService.GetCountries().subscribe({
-      next: value => {
-        this.countries = value;
-        this.GetCities(this.localData.freeVoteProfile.countryId, false);
-      }
-    });
-  }
-
-  GetCities(countryId: string, newCountry: boolean): void {
-    this.lookupsService.GetCities(countryId).subscribe({
-      next: value => {
-        this.cities = value;
-        if (newCountry) {
-          this.localData.freeVoteProfile.cityId = value[0].value.toString();
-        }
-      }
-    });
-  }
-
   clearConstituency() {
     if (
       this.constituencySearch === this.localData.freeVoteProfile.constituency
@@ -442,41 +383,6 @@ export class ProfileComponent implements OnDestroy {
     }
   }
 
-  saveCountry(): void {
-    this.Saving();
-
-    this.lookupsService
-      .CountrySave(this.localData.freeVoteProfile.country)
-      .subscribe({
-        next: countryID => {
-          this.localData.freeVoteProfile.countryId = countryID.toString();
-          this.GetCountries();
-          this.editNewCountry = false;
-          this.Saved(true);
-        },
-        error: err => this.ShowError(err)
-      });
-  }
-
-  saveCity(): void {
-    this.Saving();
-
-    this.lookupsService
-      .CitySave(
-        this.localData.freeVoteProfile.countryId,
-        this.localData.freeVoteProfile.city
-      )
-      .subscribe({
-        next: cityID => {
-          this.localData.freeVoteProfile.cityId = cityID.toString();
-          this.GetCities(this.localData.freeVoteProfile.countryId, false);
-          this.editNewCity = false;
-          this.Saved(true);
-        },
-        error: err => this.ShowError(err)
-      });
-  }
-
   Saving(): void {
     this.localData.updatingProfile = true;
     this.saving = true;
@@ -493,11 +399,12 @@ export class ProfileComponent implements OnDestroy {
     this.saving = false;
     this.success = true;
     this.editing = !complete;
-    this.editNewCountry = false;
-    this.editNewCity = false;
   }
 
   ShowError(err: any): void {
+    this.saving = false;
+    this.success = false;
+
     if (err?.error?.detail) {
       this.updateMessage = err.error.detail;
     } else if (err?.error) {

@@ -50,6 +50,7 @@ export class LocalDataService {
   public set GettingFreeVoteJwt(getting: boolean) {
     if (getting) {
       // Clear existing
+      this.Log('GettingFreeVoteJwt - ClearExistingJwt');
       this.ClearExistingJwt();
     }
     // Save Status

@@ -1,88 +1,83 @@
 <div class="tabContainer">
   <div class="tabContent scroller">
-    <div fxLayoutAlign="center">
-      <div fxLayout="row wrap" class="profile">
-        <div fxFlex="100">
-          <h1>
-            {{ localData.freeVoteProfile.givenName }}
-            {{ localData.freeVoteProfile.familyName }}
-          </h1>
+    <div class="profile">
+      <h1>
+        {{ localData.freeVoteProfile.givenName }}
+        {{ localData.freeVoteProfile.familyName }}
+      </h1>
+
+      <div>
+        {{ localData.freeVoteProfile.location }}
+      </div>
+
+      <!-- Picture -->
+
+      <div class="flexRow center">
+        <img
+          *ngIf="
+            localData.freeVoteProfile.profilePictureOptionID === '1' &&
+            auth0Wrapper.auth0Profile?.picture
+          "
+          [src]="auth0Wrapper.auth0Profile?.picture"
+          alt="profile picture"
+          class="rounded-circle img-fluid"
+        />
+
+        <img
+          *ngIf="
+            localData.freeVoteProfile.profilePictureOptionID === '2' &&
+            localData.freeVoteProfile.profilePicture
+          "
+          [src]="localData.freeVoteProfile.profilePicture"
+          alt="profile picture"
+          class="rounded-circle img-fluid"
+        />
+      </div>
+
+      <div class="flexRow buttons">
+        <input
+          type="file"
+          (change)="profilePictureSelected($event)"
+          style="display: none"
+          #pictureSelect
+        />
+
+        <button
+          *ngIf="localData.freeVoteProfile.profilePictureOptionID === '2'"
+          mat-stroked-button
+          (click)="deleteProfilePictue()"
+        >
+          <mat-icon>cancel</mat-icon>
+          delete uploaded picture
+        </button>
+
+        <button
+          *ngIf="localData.freeVoteProfile.profilePictureOptionID === '2'"
+          mat-stroked-button
+          type="button"
+          (click)="pictureSelect.click()"
+        >
+          <mat-icon>add_photo_alternate</mat-icon>
+          upload new picture
+        </button>
+
+        <div *ngIf="uploading" class="uploading">
+          <span class="spinner-grow text-primary ms-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </span>
+          <span> {{ uploadPercentDone }}% </span>
         </div>
+      </div>
 
-        <div fxFlex="100">
-          {{ localData.freeVoteProfile.location }}
-        </div>
-
-        <!-- Picture -->
-        <div fxFlex="100">
-          <div fxLayout="column" fxLayoutAlign="start center">
-            <img
-              *ngIf="
-                localData.freeVoteProfile.profilePictureOptionID === '1' &&
-                auth0Wrapper.auth0Profile &&
-                auth0Wrapper.auth0Profile.picture
-              "
-              [src]="auth0Wrapper.auth0Profile.picture"
-              alt="profile picture"
-              class="rounded-circle img-fluid"
-            />
-
-            <img
-              *ngIf="
-                localData.freeVoteProfile.profilePictureOptionID === '2' &&
-                localData.freeVoteProfile.profilePicture
-              "
-              [src]="localData.freeVoteProfile.profilePicture"
-              alt="profile picture"
-              class="rounded-circle img-fluid"
-            />
-
-            <div
-              fxLayout="row wrap"
-              fxLayoutAlign="center center"
-              class="buttons"
-            >
-              <input
-                type="file"
-                (change)="profilePictureSelected($event)"
-                style="display: none"
-                #pictureSelect
-              />
-              <button
-                mat-stroked-button
-                *ngIf="localData.freeVoteProfile.profilePictureOptionID === '2'"
-                (click)="deleteProfilePictue()"
-              >
-                <mat-icon>cancel</mat-icon>
-                delete uploaded picture
-              </button>
-              <button
-                mat-stroked-button
-                type="button"
-                (click)="pictureSelect.click()"
-                *ngIf="localData.freeVoteProfile.profilePictureOptionID === '2'"
-              >
-                <mat-icon>add_photo_alternate</mat-icon>
-                upload new picture
-              </button>
-              <div *ngIf="uploading" class="uploading">
-                <span class="spinner-grow text-primary ms-3" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </span>
-                <span> {{ uploadPercentDone }}% </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Edit Profile Picture to use -->
-        <div fxFlex="40" *ngIf="editing">profile picture to use</div>
-        <div fxFlex="60" *ngIf="editing">
+      <!-- Edit Profile Picture to use -->
+      <div *ngIf="editing" class="flexRow buttons">
+        <div style="flex: 4">profile picture to use</div>
+        <div style="flex: 6">
           <mat-radio-group
             [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
             (ngModelChange)="profilePictureOptionUpdate()"
           >
-            <div fxLayout="row wrap" fxLayoutAlign="left">
+            <div class="flexRow space-between">
               <mat-radio-button name="PPOID" value="1" labelPosition="before">
                 social media
               </mat-radio-button>
@@ -100,31 +95,35 @@
             </div>
           </mat-radio-group>
         </div>
+      </div>
 
-        <div fxFlex="100">
-          <hr />
-        </div>
+      <div>
+        <hr />
+      </div>
 
-        <div fxFlex="100" style="margin-top: 16px"></div>
+      <div fxFlex="100" style="margin-top: 16px"></div>
 
-        <!-- Postcode -->
-        <div fxFlex="40" *ngIf="editing">
+      <!-- Postcode -->
+      <div *ngIf="editing" class="flexRow">
+        <div style="flex: 4">
           <span class="align-middle"> post code </span>
         </div>
-        <div fxFlex="60" *ngIf="editing">
+        <div style="flex: 6">
           <input type="text" [(ngModel)]="postcode" />
           <button mat-stroked-button (click)="lookupPostCode()">
             <mat-icon>search</mat-icon>
             lookup
           </button>
         </div>
+      </div>
 
-        <!-- Country -->
-        <div fxFlex="40">
+      <!-- Country -->
+      <div class="flexRow">
+        <div style="flex: 4">
           <span class="align-middle"> home country </span>
         </div>
 
-        <div fxFlex="60">
+        <div style="flex: 6">
           <span class="align-middle" *ngIf="true || !editing">
             {{ localData.freeVoteProfile.country }}
           </span>
@@ -142,13 +141,15 @@
               name="country" required #tvCountry="ngModel" type="text">
           </mat-form-field> -->
         </div>
+      </div>
 
-        <!-- City -->
-        <div fxFlex="40" *ngIf="true || !editNewCountry">
+      <!-- City -->
+      <div class="flexRow">
+        <div style="flex: 4">
           <span class="align-middle"> home city </span>
         </div>
 
-        <div fxFlex="60" *ngIf="true || !editNewCountry">
+        <div style="flex: 6">
           <span *ngIf="true || !editing" class="align-middle">
             {{ localData.freeVoteProfile.city }}
           </span>
@@ -164,47 +165,53 @@
               required #tvCity="ngModel" type="text">
           </mat-form-field> -->
         </div>
+      </div>
 
-        <!-- Constituency -->
-        <div fxFlex="40" *ngIf="!!localData.freeVoteProfile.constituency">
+      <!-- Constituency -->
+      <div *ngIf="!!localData.freeVoteProfile.constituency" class="flexRow">
+        <div style="flex: 4">
           <span class="align-middle"> constituency </span>
         </div>
-        <div
-          fxFlex="60"
-          *ngIf="true || !!localData.freeVoteProfile.constituency"
-        >
+        <div style="flex: 6">
           <span class="align-middle">
             <a [routerLink]="constituencyLink">{{
               localData.freeVoteProfile.constituency
             }}</a>
           </span>
         </div>
+      </div>
 
-        <!-- Council -->
-        <div fxFlex="40" *ngIf="!!localData.freeVoteProfile.council">
+      <!-- Council -->
+      <div *ngIf="!!localData.freeVoteProfile.council" class="flexRow">
+        <div style="flex: 4">
           <span class="align-middle"> council </span>
         </div>
-        <div fxFlex="60" *ngIf="!!localData.freeVoteProfile.council">
+        <div style="flex: 6">
           <span class="align-middle">
             {{ localData.freeVoteProfile.council }}
           </span>
         </div>
+      </div>
 
-        <!-- Council Ward -->
-        <div fxFlex="40" *ngIf="true || !!localData.freeVoteProfile.ward">
+      <!-- Council Ward -->
+      <div *ngIf="!!localData.freeVoteProfile.ward" class="flexRow">
+        <div style="flex: 4">
           <span class="align-middle"> council ward </span>
         </div>
-        <div fxFlex="60" *ngIf="true || !!localData.freeVoteProfile.ward">
+        <div style="flex: 6">
           <span class="align-middle">
             {{ localData.freeVoteProfile.ward }}
           </span>
         </div>
+      </div>
 
-        <div fxFlex="100" style="margin-top: 20px"></div>
+      <div fxFlex="100" style="margin-top: 20px"></div>
 
-        <!-- Start Edit Commands -->
-        <div fxFlex="40" *ngIf="!editing"></div>
-        <div fxFlex="60" *ngIf="!editing">
+      <div>Alias</div>
+      <!-- Start Edit Commands -->
+      <div *ngIf="!editing" class="flexRow">
+        <div style="flex: 4"></div>
+        <div style="flex: 6">
           <button mat-stroked-button (click)="edit()">
             <mat-icon>edit</mat-icon>
             edit
@@ -214,129 +221,121 @@
             delete
           </button>
         </div>
+      </div>
 
-        <!-- Complete Edit Commands -->
-        <div fxFlex fxLayout="row wrap" fxLayoutAlign="center" *ngIf="editing">
-          <button
-            mat-stroked-button
-            (click)="newCountry()"
-            *ngIf="false && editing && !editNewCountry && !editNewCity"
-          >
-            <mat-icon>add_circle_outline</mat-icon>
-            new country
-          </button>
-
-          <button
-            mat-stroked-button
-            (click)="newCity()"
-            *ngIf="editing && !editNewCountry && !editNewCity"
-          >
-            <mat-icon>add_circle_outline</mat-icon>
-            new city
-          </button>
-
-          <button
-            mat-stroked-button
-            (click)="save()"
-            *ngIf="!editNewCountry && !editNewCity"
-          >
-            <mat-icon>save</mat-icon>
-            save
-          </button>
-
-          <button
-            mat-stroked-button
-            (click)="saveCountry()"
-            *ngIf="editNewCountry"
-          >
-            <mat-icon>save</mat-icon>
-            save country
-          </button>
-
-          <button mat-stroked-button (click)="saveCity()" *ngIf="editNewCity">
-            <mat-icon>save</mat-icon>
-            save city
-          </button>
-
-          <button mat-stroked-button (click)="cancel()">
-            <mat-icon>cancel</mat-icon>
-            cancel
-          </button>
-
-          <span
-            class="spinner-grow text-primary ms-3"
-            role="status"
-            *ngIf="saving"
-          >
-            <span class="visually-hidden">Loading...</span>
-          </span>
-        </div>
-
-        <!-- Update message -->
-        <div
-          fxFlex="100"
-          [ngClass]="{ alert: error, 'alert-danger': error, success: success }"
+      <!-- Complete Edit Commands -->
+      <div fxFlex fxLayout="row wrap" fxLayoutAlign="center" *ngIf="editing">
+        <!-- <button
+          mat-stroked-button
+          (click)="newCountry()"
+          *ngIf="false && editing && !editNewCountry && !editNewCity"
         >
-          <div
-            fxLayoutAlign="center"
-            *ngIf="!!updateMessage"
-            class="mt-2 primary"
-          >
-            {{ updateMessage }}
-          </div>
+          <mat-icon>add_circle_outline</mat-icon>
+          new country
+        </button>
+
+        <button
+          mat-stroked-button
+          (click)="newCity()"
+          *ngIf="editing && !editNewCountry && !editNewCity"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+          new city
+        </button> -->
+
+        <button mat-stroked-button (click)="save()">
+          <mat-icon>save</mat-icon>
+          save
+        </button>
+
+        <!-- <button
+          mat-stroked-button
+          (click)="saveCountry()"
+          *ngIf="editNewCountry"
+        >
+          <mat-icon>save</mat-icon>
+          save country
+        </button> -->
+
+        <!-- <button mat-stroked-button (click)="saveCity()" *ngIf="editNewCity">
+          <mat-icon>save</mat-icon>
+          save city
+        </button> -->
+
+        <button mat-stroked-button (click)="cancel()">
+          <mat-icon>cancel</mat-icon>
+          cancel
+        </button>
+
+        <span
+          class="spinner-grow text-primary ms-3"
+          role="status"
+          *ngIf="saving"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </div>
+
+      <!-- Update message -->
+      <div
+        fxFlex="100"
+        [ngClass]="{ alert: error, 'alert-danger': error, success: success }"
+      >
+        <div *ngIf="!!updateMessage">
+          {{ updateMessage }}
+        </div>
+      </div>
+
+      <!-- To do -->
+      <div hidden="true">
+        <div fxFlex="40">
+          <span class="align-middle"> alias </span>
         </div>
 
-        <!-- To do -->
-        <div hidden="true">
-          <div fxFlex="40">
-            <span class="align-middle"> alias </span>
-          </div>
+        <div fxFlex="60">
+          <span class="align-middle" *ngIf="!editing">
+            {{ localData.freeVoteProfile.alias }}
+          </span>
+          <mat-form-field *ngIf="editing" class="mff">
+            <input
+              matInput
+              placeholder="your alias or ID"
+              [(ngModel)]="localData.freeVoteProfile.alias"
+              name="by"
+              required
+              #tvAlias="ngModel"
+              type="text"
+            />
+          </mat-form-field>
+        </div>
 
-          <div fxFlex="60">
-            <span class="align-middle" *ngIf="!editing">
-              {{ localData.freeVoteProfile.alias }}
-            </span>
-            <mat-form-field *ngIf="editing" class="mff">
-              <input
-                matInput
-                placeholder="your alias or ID"
-                [(ngModel)]="localData.freeVoteProfile.alias"
-                name="by"
-                required
-                #tvAlias="ngModel"
-                type="text"
-              />
-            </mat-form-field>
-          </div>
+        <!-- Groups -->
 
-          <!-- Groups -->
+        <div fxFlex="40" *ngIf="!editing">
+          <span class="align-middle"> groups </span>
+        </div>
 
-          <div fxFlex="40" *ngIf="!editing">
-            <span class="align-middle"> groups </span>
-          </div>
+        <div fxFlex="60" *ngIf="!editing">
+          <span class="align-middle"> List groups </span>
+        </div>
 
-          <div fxFlex="60" *ngIf="!editing">
-            <span class="align-middle"> List groups </span>
-          </div>
+        <div *ngIf="!editing">
+          {{ localData.freeVoteProfile.profile }}
+        </div>
 
-          <div *ngIf="!editing">
-            {{ localData.freeVoteProfile.profile }}
-          </div>
+        <div fxFlex="40">
+          <span class="align-middle"> Break-out groups </span>
+        </div>
+        <div fxFlex="60">
+          <span class="align-middle"> Preferred Room Size </span>
+        </div>
 
-          <div fxFlex="40">
-            <span class="align-middle"> Break-out groups </span>
-          </div>
-          <div fxFlex="60">
-            <span class="align-middle"> Preferred Room Size </span>
-          </div>
-
-          <div *ngIf="editing">
-            <app-cke-universal
-              ID="profile"
-              name="profile"
-              [(textToEdit)]="localData.freeVoteProfile.profile"
-            ></app-cke-universal>
-          </div>
+        <div *ngIf="editing">
+          <app-cke-universal
+            ID="profile"
+            name="profile"
+            [(textToEdit)]="localData.freeVoteProfile.profile"
+          ></app-cke-universal>
         </div>
       </div>
     </div>
