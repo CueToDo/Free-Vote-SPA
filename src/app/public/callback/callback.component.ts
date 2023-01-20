@@ -25,7 +25,6 @@ export class CallbackComponent implements OnInit, OnDestroy {
 
   constructor(
     public auth0Service: AuthService,
-    private auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService // private router: Router
   ) {}
 
@@ -37,11 +36,13 @@ export class CallbackComponent implements OnInit, OnDestroy {
     // Do very little here - danger of invalid state
     // https://community.auth0.com/t/invalid-state-on-reload-auth0-callback-url-using-auth0-spa-js-and-angular-8/36469/3
 
-    this.auth0Wrapper.IsAuth0Callback = true;
-
+    // handleRedirectCallback deprecated ???
     this.callback$ = this.auth0Service.handleRedirectCallback().subscribe({
       next: result => {
-        this.localData.Log(result.appState?.target + '');
+        // this.auth0Wrapper.IsAuth0Callback = true;
+        this.localData.Log(
+          `handleRedirectCallback ${result.appState?.target + ''}`
+        );
         // this.router.navigate([result]);
       },
       error: serverError => {

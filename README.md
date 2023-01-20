@@ -1,5 +1,12 @@
 # Free Vote
 
+Debug using SSL - not completed
+See app component ngOninit
+https://stackoverflow.com/questions/10175812/how-to-generate-a-self-signed-ssl-certificate-using-openssl
+GitBash in cert directory:
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365
+chrome://flags/#allow-insecure-localhost
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.3.
 
 ## Development server

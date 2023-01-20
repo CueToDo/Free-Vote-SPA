@@ -114,7 +114,7 @@ export class HttpService {
     // always check we have a valid jwt first whether logged in with Auth0 or not
     // ignore output of getApiJwt - it's passed in the headers of the post
 
-    this.localData.Log(`For This ${url}`);
+    this.localData.Log(`Initial request: ${url}`);
     return this.auth0Wrapper
       .getApiJwt$()
       .pipe(switchMap(_ => this.getWithJwt(url)));

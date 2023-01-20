@@ -97,6 +97,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.localData.Log(`<br><br>APP Initialising`);
+
     // Force https
     // https://stackoverflow.com/questions/48739768/host-angular-app-on-iis-redirect-to-root-and-force-https
     if (environment.production) {

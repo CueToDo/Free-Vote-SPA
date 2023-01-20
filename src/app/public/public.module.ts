@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Auth0
-import { CallbackComponent } from './callback/callback.component';
+// import { CallbackComponent } from './callback/callback.component';
 
 // FreeVote Modules
 import { BaseModule } from '../base/base.module';
@@ -74,7 +74,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     CustomModule
   ],
   declarations: [
-    CallbackComponent,
+    // CallbackComponent,
     CardComponent,
     CkeUniversalComponent,
     HomeComponent,

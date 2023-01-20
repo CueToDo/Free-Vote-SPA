@@ -34,19 +34,18 @@ export class Auth0Wrapper {
 
   public auth0Profile: User | null | undefined; // Auth0 Profile Data saved to app on login
 
-  public IsAuth0Callback = false; // Set in callback component
+  public Auth0Initialised = false;
 
-  public HaveAuth0User = new Subject<boolean>();
+  private auth0Initialisd$ = new Subject<boolean>();
 
-  private haveAuth0User$(): Observable<boolean> {
-    if (this.IsAuth0Callback) {
-      this.localData.Log('WAIT for user to be returned after callback');
-      return this.HaveAuth0User; // wait for user to be returned after callback
-    } else {
-      this.localData.Log(
-        'Not a callback - no need to wait for user to be returned'
-      );
+  private Auth0Initialised$(): Observable<boolean> {
+    if (this.Auth0Initialised) {
+      this.localData.Log('Log in state known');
       return of(true); // we're ready
+    } else {
+      this.localData.Log('WAITING for log in state');
+      return this.auth0Initialisd$; // wait for user to be returned after callback
+      // only set in auth0Service.isAuthenticated$.subscribe
     }
   }
 
@@ -67,16 +66,28 @@ export class Auth0Wrapper {
       // subscribe to auth0Service.isAuthenticated$
       this.auth0Service.isAuthenticated$.subscribe(isAuthenticated => {
         this.LoggedInToAuth0 = isAuthenticated;
-        this.localData.Log(`Auth0 subscription ${isAuthenticated}`);
+        if (!this.Auth0Initialised) {
+          this.Auth0Initialised = true; // Just need to know whether logged in or not
+          this.auth0Initialisd$.next(isAuthenticated);
+          this.localData.Log(
+            `Auth0 returned authenticated: ${isAuthenticated}`
+          );
+        }
       });
 
       // Subscribe to getUser for login and logout
       this.auth0Service.user$
         .pipe(
           concatMap((user: User | null | undefined) => {
+            // Auth0 returns user more than once - may already have auth0Profile
+            if (!!this.auth0Profile) {
+              this.localData.Log('User received from Auth0 - duplicate');
+              return of(true);
+            }
+
             this.auth0Profile = user;
-            this.IsAuth0Callback = false;
-            this.HaveAuth0User.next(true);
+            // this.IsAuth0Callback = false;
+            // this.HaveAuth0User$.next(true);
 
             const loggedIn = !!user;
 
@@ -87,11 +98,13 @@ export class Auth0Wrapper {
             this.localData.ClearExistingJwt();
 
             // Now we can call the api for a jwt
-            return this.getApiJwt$();
+            return this.getApiJwt$(); // Don't put this in the subscribe
           })
         )
         .subscribe({
           next: () => {},
+          complete: () =>
+            this.localData.Log('Complete: User received from Auth0'),
           error: error => {
             console.log(
               'ERROR: localAuthSetup, user subscription, getApiJwt',
@@ -130,6 +143,7 @@ export class Auth0Wrapper {
     });
 
     this.LoggedInToAuth0 = false;
+    this.auth0Profile = null;
     this.localData.SignedOut(); // And Communicate
   }
 
@@ -137,6 +151,7 @@ export class Auth0Wrapper {
   // Anon sessionIDs should be renewed opportunistically and returned if updated?
 
   // The API JWT is the FreeVote user profile
+  // When getting API JWT, don't have to wait for user from Auth0, because interceptor gets fresh AccessToken - that's what we
   getApiJwt$(): Observable<boolean | undefined> {
     // It doesn't matter if you're not logged in with Auth0, you still need a FreeVote JWT
     // For Anon or authenticated
@@ -144,11 +159,17 @@ export class Auth0Wrapper {
     // getApiJwt calls get, but get calls getApiJwt - need to prevent endless loop
     // Anon users have a jwt
 
-    this.localData.Log('getApiJwt called');
+    this.localData.Log(
+      `getApiJwt called (Auth0Initialised:${this.Auth0Initialised})`
+    );
 
-    // Wait for user from Auth0 before getting api jwt from free.vote API
-    return this.haveAuth0User$().pipe(
+    // Wait for logged in state from Auth0 before getting api jwt from free.vote API
+    return this.Auth0Initialised$().pipe(
       concatMap(_ => {
+        this.localData.Log(
+          `Login state now known to getApiJwt: ${this.LoggedInToAuth0}`
+        );
+
         if (this.localData.GotFreeVoteJwt) {
           // Already have jwt - no need to do anything
           this.localData.Log('Already have API Jwt');

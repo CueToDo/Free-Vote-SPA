@@ -48,13 +48,13 @@ export class LocalDataService {
     return this.gettingFreevoteJwt;
   }
   public set GettingFreeVoteJwt(getting: boolean) {
-    if (getting) {
-      // Clear existing
-      this.Log('GettingFreeVoteJwt - ClearExistingJwt');
-      this.ClearExistingJwt();
-    }
     // Save Status
     this.gettingFreevoteJwt = getting; // no need to save to local storage
+    this.Log(`Set GettingFreeVoteJwt: ${getting}`);
+    if (getting) {
+      // Clear existing
+      this.ClearExistingJwt();
+    }
   }
 
   public ClearExistingJwt(): void {
