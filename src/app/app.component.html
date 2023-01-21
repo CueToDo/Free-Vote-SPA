@@ -34,7 +34,7 @@
 </main>
 
 <div [ngClass]="{ footerShow: showVulcan, footerHide: !showVulcan }">
-  <div>
+  <div [hidden]="!showVulcan">
     <div class="content">
       <img
         [src]="imgVulcan"

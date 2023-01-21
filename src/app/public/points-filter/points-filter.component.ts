@@ -6,7 +6,9 @@ import {
   OnDestroy,
   EventEmitter,
   Output,
-  Input
+  Input,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -41,8 +43,22 @@ import { MatCheckbox } from '@angular/material/checkbox';
   // for space between buttons - https://github.com/angular/material2/issues/11397
 })
 export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('pointTextFilter', { static: true }) pointTextFilter:
+    | ElementRef
+    | undefined;
+
   // Point selection filters
-  @Input() showFilters = false;
+  private showFilters = false;
+  @Input() set ShowFilters(showFilters: boolean) {
+    this.showFilters = showFilters;
+    if (showFilters) {
+      // https://stackoverflow.com/questions/52143052/how-to-manually-set-focus-on-mat-form-field-in-angular-6
+      setTimeout(() => this.pointTextFilter?.nativeElement.focus());
+    }
+  }
+  get ShowFilters(): boolean {
+    return this.showFilters;
+  }
 
   // 2-way bind filter criteria
   @Input() public filter = new FilterCriteria();
@@ -150,7 +166,7 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.filter.myPointFilter = MyPointFilter.AllVoters;
     this.filter.pointTypeID = PointTypesEnum.NotSelected;
-
+    this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
     this.filter.anyTag = false;
     this.filter.text = '';
     this.filterChange.emit(this.filter);

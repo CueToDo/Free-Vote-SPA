@@ -65,7 +65,7 @@ mat-form-field + button {
 
 .searchInput {
   width: 200px;
-  margin-left: 16px;
+  margin-left: 0px;
   margin-right: 16px;
 }
 

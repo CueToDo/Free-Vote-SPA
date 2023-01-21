@@ -1,13 +1,14 @@
 <div fxFill fxLayout="column" fxLayoutAlign="start center">
   <div class="content">
     <!-- Show Filtering Options, controlled from Tag-Points component -->
-    <div [ngClass]="{ show: showFilters, hide: !showFilters }">
+    <div [ngClass]="{ show: ShowFilters, hide: !ShowFilters }">
       <div class="mt-3">
         <div class="filters" fxLayout="row wrap" fxLayoutAlign="start center">
           <!-- Text search -->
           <mat-form-field class="searchInput">
             <input
               matInput
+              #pointTextFilter
               name="pointTextFilter"
               placeholder="enter point search text"
               [(ngModel)]="filter.text"

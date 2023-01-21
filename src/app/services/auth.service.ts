@@ -86,9 +86,6 @@ export class Auth0Wrapper {
             }
 
             this.auth0Profile = user;
-            // this.IsAuth0Callback = false;
-            // this.HaveAuth0User$.next(true);
-
             const loggedIn = !!user;
 
             // Always ClearExistingJwt BEFORE getting new ApiJwt for signed in or signed out user

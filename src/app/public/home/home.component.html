@@ -65,22 +65,20 @@
 <div class="tabContainer my-3">
   <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 0 }">
     <div
-      class="content"
+      class="content flexStretch"
       [ngClass]="{
         centerStage: tabIndex === 0,
         stageLeft: tabIndex > 0
       }"
     >
-      <div class="col-stretch">
-        <div class="tab">
-          <h1><a routerLink="trending" class="slashTag">/trending</a></h1>
-          <p>The topics that are getting all the attention right now</p>
+      <div class="tab">
+        <h1><a routerLink="trending" class="slashTag">/trending</a></h1>
+        <p>The topics that are getting all the attention right now</p>
 
-          <h1>
-            <a routerLink="search" class="slashTag">{{ '/{slash-tag}' }}</a>
-          </h1>
-          <p>A topic for discussion</p>
-        </div>
+        <h1>
+          <a routerLink="search" class="slashTag">{{ '/{slash-tag}' }}</a>
+        </h1>
+        <p>A topic for discussion</p>
       </div>
 
       <div *ngIf="false">
@@ -103,7 +101,7 @@
 
     <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 1 }">
       <div
-        class="content"
+        class="content flexStretch"
         [ngClass]="{
           centerStage: tabIndex === 1,
           stageLeft: tabIndex > 1,
@@ -278,7 +276,7 @@
 
     <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 2 }">
       <div
-        class="content"
+        class="content flexStretch"
         [ngClass]="{
           centerStage: tabIndex === 2,
           stageLeft: tabIndex > 2,
@@ -328,7 +326,7 @@
     <div class="tabContent" [ngClass]="{ topZ: tabIndex === 3 }">
       <div class="scroller">
         <div
-          class="content"
+          class="content flexStretch"
           [ngClass]="{
             centerStage: tabIndex === 3,
             stageRight: tabIndex < 3

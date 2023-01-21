@@ -67,7 +67,7 @@
   </div>
 
   <!-- ToolBar -->
-  <div class="toolbar pb-3" fxLayout="row wrap" fxLayoutAlign="start center">
+  <div class="toolbar pb-3">
     <!-- Using [(ngModel)] is the correct way to do this 
       https://stackoverflow.com/questions/46000950/angular-4-setting-selected-option-in-dropdown -->
     <mat-form-field>
@@ -119,7 +119,7 @@
       remove images
     </button>
 
-    <div fxFlex></div>
+    <div class="flexStretch"></div>
 
     <button mat-stroked-button type="button" (click)="Cancel()">
       <mat-icon>cancel</mat-icon>

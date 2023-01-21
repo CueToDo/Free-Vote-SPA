@@ -7,7 +7,7 @@ export enum ContentType {
 export enum PointSelectionTypes {
   // Not used in database
 
-  TagPoints = 0, // Standard slection
+  TagPoints = 0, // Standard selection
   Filtered = 1, // Custom selection
   QuestionPoints = 2,
   Point = 3, // Individual Point

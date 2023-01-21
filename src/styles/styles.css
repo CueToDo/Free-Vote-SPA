@@ -80,6 +80,10 @@ div.toolbar {
   padding-left: 10px;
   padding-right: 10px;
   border-bottom: solid 3px #ddd;
+  flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
 }
 
 div.toolbar mat-form-field {
@@ -142,7 +146,7 @@ div.toolbar mat-form-field {
   opacity: 0;
 
   /* [matches - for no scrollbars on recent and trending] */
-  max-height: 80vh;
+  max-height: 20vh;
   overflow: hidden;
   z-index: -1;
   /* Otherwise links still active with 0 opacity */
@@ -156,7 +160,7 @@ div.toolbar mat-form-field {
   opacity: 0;
 
   /* for no scrollbars on recent and trending */
-  max-height: 80vh;
+  max-height: 20vh;
   overflow: hidden;
   z-index: -1;
   /* Otherwise links still active with 0 opacity */
@@ -341,7 +345,8 @@ a + a {
 
 a:hover,
 .selected,
-button.mdc-button.selected {
+button.mdc-button.selected,
+button.mat-mdc-menu-item.mdc-list-item.selected /* Angular 15 */ {
   background-color: #e7e7e7;
 }
 
