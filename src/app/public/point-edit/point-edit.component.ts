@@ -63,6 +63,13 @@ export class PointEditComponent implements OnInit {
   @Output() CompleteEdit = new EventEmitter();
   @Output() ReselectForTagChange = new EventEmitter<PointSortTypes>();
 
+  // https://stackoverflow.com/questions/51193187/my-template-reference-variable-nativeelement-is-undefined
+  // https://stackoverflow.com/questions/37450805/what-is-the-read-parameter-in-viewchild-for
+  // read ElementRef required because this example is within a form?
+  @ViewChild('tvPointTitle', { read: ElementRef }) tvPointTitle:
+    | ElementRef
+    | undefined;
+
   @ViewChild('imageSelect', { static: true }) imageSelect:
     | ElementRef
     | undefined;
@@ -411,6 +418,11 @@ export class PointEditComponent implements OnInit {
 
     this.error = '';
     this.userTouched = false;
+
+    setTimeout(() => {
+      console.log('focusing ' + !!this.tvPointTitle?.nativeElement);
+      this.tvPointTitle?.nativeElement.focus();
+    }, 500);
   }
 
   Cancel(): void {

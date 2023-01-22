@@ -1,16 +1,14 @@
 <form (ngSubmit)="onSubmit()" #formQuestion="ngForm">
   <!-- Title -->
-  <div class="mx-3 mt-3">
-    <mat-form-field class="questionEdit">
-      <textarea
-        matInput
-        placeholder="question"
-        [(ngModel)]="questionEdit.question"
-        name="questionEdit"
-        #tvQuestion="ngModel"
-        (blur)="onQuestionBlur()"
-      ></textarea>
-    </mat-form-field>
+  <div class="questionEdit m-3">
+    <input
+      placeholder="question"
+      [(ngModel)]="questionEdit.question"
+      name="questionEdit"
+      #tvQuestionTitle="ngModel"
+      class="form-control"
+      (blur)="onQuestionBlur()"
+    />
   </div>
 
   <!-- Details: The Editor -->
@@ -28,12 +26,12 @@
   </div>
 
   <!-- ToolBar -->
-  <div class="toolbar" fxLayout="row wrap" fxLayoutAlign="end center">
+  <div class="toolbar pt-2 pb-1">
     <span class="spinner-grow text-primary ms-3" role="status" *ngIf="saving">
       <span class="visually-hidden">Loading...</span>
     </span>
 
-    <span class="fv-error" *ngIf="userTouched && !tvQuestion.valid">
+    <span class="fv-error" *ngIf="userTouched && !tvQuestionTitle.valid">
       Question text is required
     </span>
 
@@ -45,14 +43,16 @@
       draft
     </mat-checkbox>
 
-    <button mat-stroked-button>
-      <mat-icon>save</mat-icon>
-      save
-    </button>
+    <div class="flexStretch"></div>
 
     <button mat-stroked-button type="button" (click)="Cancel()">
       <mat-icon>cancel</mat-icon>
       cancel
+    </button>
+
+    <button mat-stroked-button>
+      <mat-icon>save</mat-icon>
+      save
     </button>
   </div>
 </form>

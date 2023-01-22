@@ -1,3 +1,4 @@
+import { ElementRef } from '@angular/core';
 // Angular
 import {
   Component,
@@ -31,6 +32,13 @@ export class QuestionEditComponent implements OnInit {
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
 
+  // https://stackoverflow.com/questions/51193187/my-template-reference-variable-nativeelement-is-undefined
+  // https://stackoverflow.com/questions/37450805/what-is-the-read-parameter-in-viewchild-for
+  // read ElementRef required because this example is within a form?
+  @ViewChild('tvQuestionTitle', { read: ElementRef }) tvQuestionTitle:
+    | ElementRef
+    | undefined;
+
   @ViewChild('CKEfudge', { static: true }) ckeFudge: any;
 
   userTouched = false;
@@ -56,6 +64,10 @@ export class QuestionEditComponent implements OnInit {
     this.questionEdit = new QuestionEdit();
     this.ClearQuestion();
     this.questionEdit.slashtags = [new Tag(slashTag)];
+    setTimeout(() => {
+      console.log('focusing ' + !!this.tvQuestionTitle?.nativeElement);
+      this.tvQuestionTitle?.nativeElement.focus();
+    }, 500);
   }
 
   ClearQuestion(): void {

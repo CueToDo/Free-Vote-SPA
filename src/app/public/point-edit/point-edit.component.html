@@ -1,15 +1,14 @@
 <form (ngSubmit)="onSubmit()" #formPoint="ngForm">
   <!-- Title -->
-  <div class="mx-3 mt-3">
-    <mat-form-field class="pointTitle">
-      <input
-        matInput
-        placeholder="point title"
-        [(ngModel)]="pointClone.pointTitle"
-        type="text"
-        name="pointTitle"
-      />
-    </mat-form-field>
+  <div class="m-3">
+    <input
+      placeholder="point title"
+      [(ngModel)]="pointClone.pointTitle"
+      type="text"
+      name="pointTitle"
+      class="form-control"
+      #tvPointTitle
+    />
   </div>
 
   <!-- The Editor -->
@@ -67,7 +66,7 @@
   </div>
 
   <!-- ToolBar -->
-  <div class="toolbar pb-3">
+  <div class="toolbar pb-1">
     <!-- Using [(ngModel)] is the correct way to do this 
       https://stackoverflow.com/questions/46000950/angular-4-setting-selected-option-in-dropdown -->
     <mat-form-field>

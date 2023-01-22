@@ -79,8 +79,6 @@ div.toolbar {
   background-color: whitesmoke;
   padding-left: 10px;
   padding-right: 10px;
-  border-bottom: solid 3px #ddd;
-  flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
@@ -527,4 +525,10 @@ a.clicker:hover {
 .small {
   font-size: 0.7rem;
   color: gray;
+}
+
+input {
+  border: none;
+  font-size: 1.2em;
+  flex: 1;
 }

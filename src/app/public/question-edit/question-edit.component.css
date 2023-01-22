@@ -1,21 +1,12 @@
 form {
-    border: solid 2px green;
+  border: solid 2px green;
 }
 
 .questionEdit {
-    width: 100%;
-}
-
-input {
-    font-size: 32px;
-}
-
-mat-checkbox {
-    position: relative;
-    top: 5px;
-    padding: 20px;
+  display: flex;
 }
 
 button {
-    margin: 0px 10px 0 0;
+  margin: 0px 10px 0 0;
 }
+
