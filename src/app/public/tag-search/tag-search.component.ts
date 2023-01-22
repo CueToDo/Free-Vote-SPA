@@ -117,6 +117,16 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     }
   }
 
+  continueSearch() {
+    setTimeout(() => {
+      // Set focus on input
+      if (!this.slashTag) {
+        this.slashTag = '/';
+      }
+      this.tvSlashTag?.nativeElement?.focus();
+    });
+  }
+
   slashTagCleanUp(input: string): void {
     if (!input) {
       this.slashTag = '/';

@@ -524,6 +524,7 @@ export class TagsAndPointsComponent
             this.fetchedTagsSearch = true;
           }
         }
+        this.tagSearchComponent.continueSearch();
         break;
 
       case Tabs.questionList:

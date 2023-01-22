@@ -36,9 +36,9 @@
             mat-button
             (click)="addAnswer()"
             [class.selected]="mode === 'addAnswer'"
-            matTooltip="Add an existing answer"
+            matTooltip="Link an existing point as an answer to this question"
           >
-            add answer
+            link point
             <mat-icon>add</mat-icon>
           </button>
 
@@ -54,7 +54,7 @@
         </span>
       </div>
 
-      <div class="ugc Question mt-5 px-3 pt-3">
+      <div class="ugc Question mt-5 pt-3">
         <h1>{{ QuestionSelected }}</h1>
         <div [innerHtml]="QuestionDetails"></div>
       </div>

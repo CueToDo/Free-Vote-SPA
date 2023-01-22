@@ -292,7 +292,13 @@ export class PointEditComponent implements OnInit {
           tag => tag.slashTag == returnToSlashTag
         );
 
-        if (!returnToTag && !this.isComment) {
+        // return to slashTag required if not comment or questionAnswer
+        if (
+          !returnToTag &&
+          !this.isComment &&
+          this.questionID == 0 &&
+          !!this.pointClone?.tags[0]?.slashTag
+        ) {
           returnToSlashTag = this.pointClone.tags[0].slashTag;
           tagChange = true;
         }
