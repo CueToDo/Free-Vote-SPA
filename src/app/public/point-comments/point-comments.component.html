@@ -1,75 +1,65 @@
-<div fxFill fxLayout="column">
-  <div class="tabContainer mt-3">
-    <div class="tabContent scroller" #scrollContainer>
-      <div class="content mb-5">
-        <div fxLayout="row" fxLayoutAlign="center center">
-          <app-social-share
-            #socialShare
-            [point]="parentPoint"
-          ></app-social-share>
+<div class="tabContainer mt-3">
+  <div class="tabContent scroller" #scrollContainer>
+    <div class="content mb-5">
+      <div class="flexRow">
+        <app-social-share #socialShare [point]="parentPoint"></app-social-share>
 
-          <span
-            class="spinner-grow text-primary"
-            role="status"
-            *ngIf="alreadyFetchingPointFromDB || fetchingComments"
-          >
-            <span class="visually-hidden">Loading...</span>
-          </span>
-        </div>
-
-        <div *ngIf="!!error" class="alert alert-danger">
-          {{ error }}
-        </div>
-
-        <!-- Ancestors -->
-        <ng-container *ngFor="let ancestor of ancestors">
-          <app-point [point]="ancestor" [isComment]="true"> </app-point>
-        </ng-container>
-
-        <!-- Parent -->
-        <div class="parent mt-3" [ngClass]="{ 'aml-2': ancestors.length > 0 }">
-          <app-point
-            #trvParentPoint
-            [point]="parentPoint"
-            [isParentPoint]="true"
-            [isComment]="ancestors.length > 0"
-            [sharing]="true"
-            [creatingNewComment]="newComment"
-            (NewComment)="NewComment()"
-            (CancelNewComment)="CancelComment()"
-          ></app-point>
-        </div>
-
-        <!-- Children -->
-        <app-points-list
-          #appPointsList
-          [filter]="filter"
-          [(AlreadyFetchingPointsFromDB)]="fetchingComments"
-          (SelectComment)="SelectComment($event)"
+        <span
+          class="spinner-grow text-primary"
+          role="status"
+          *ngIf="alreadyFetchingPointFromDB || fetchingComments"
         >
-        </app-points-list>
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </div>
 
-        <div
-          fxLayoutAlign="end"
-          fxLayoutGap="10"
-          class="commands"
-          *ngIf="!newComment"
-        >
-          <button mat-stroked-button (click)="scrollToTop()">top</button>
-          <button mat-stroked-button (click)="NewComment()">new comment</button>
-        </div>
+      <div *ngIf="!!error" class="alert alert-danger">
+        {{ error }}
+      </div>
 
-        <div id="newPoint">
-          <app-point-edit
-            #newPoint
-            [hidden]="!newComment"
-            [parentPointID]="parentPoint.pointID"
-            [isComment]="true"
-            [constituencyID]="constituencyID"
-            (CancelEdit)="CancelComment()"
-            (CompleteEdit)="NewCommentCreated()"
-          ></app-point-edit>
-        </div>
+      <!-- Ancestors -->
+      <ng-container *ngFor="let ancestor of ancestors">
+        <app-point [point]="ancestor" [isComment]="true"> </app-point>
+      </ng-container>
+
+      <!-- Parent -->
+      <div class="parent mt-3" [ngClass]="{ 'aml-2': ancestors.length > 0 }">
+        <app-point
+          #trvParentPoint
+          [point]="parentPoint"
+          [isParentPoint]="true"
+          [isComment]="ancestors.length > 0"
+          [sharing]="true"
+          [creatingNewComment]="newComment"
+          (NewComment)="NewComment()"
+          (CancelNewComment)="CancelComment()"
+        ></app-point>
+      </div>
+
+      <!-- Children -->
+      <app-points-list
+        #appPointsList
+        [filter]="filter"
+        [(AlreadyFetchingPointsFromDB)]="fetchingComments"
+        (SelectComment)="SelectComment($event)"
+      >
+      </app-points-list>
+
+      <div *ngIf="!newComment" class="flexRow end commands">
+        <button mat-stroked-button (click)="scrollToTop()">top</button>
+        <button mat-stroked-button (click)="NewComment()">new comment</button>
+      </div>
+
+      <div id="newPoint">
+        <app-point-edit
+          #newPoint
+          [hidden]="!newComment"
+          [parentPointID]="parentPoint.pointID"
+          [isComment]="true"
+          [constituencyID]="constituencyID"
+          (CancelEdit)="CancelComment()"
+          (CompleteEdit)="NewCommentCreated()"
+        ></app-point-edit>
       </div>
     </div>
   </div>
