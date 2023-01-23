@@ -30,7 +30,7 @@ router-outlet + *, /* All content injected after router-outlet */
 }
 
 .flexRow {
-  flex: 0 1 auto; /* Don't grow to fill vertical space, don't shrink smaller than content */
+  /* flex: 0 1 auto; */ /* Don't grow to fill vertical space, don't shrink smaller than content */
   display: flex;
   flex-flow: row;
   align-items: center; /* center on cross-axis - vertical align middle*/
@@ -187,12 +187,19 @@ div.toolbar mat-form-field {
 
 .point {
   margin-top: 30px;
+  margin-bottom: 10px;
   padding-top: 10px;
 }
 
+@media (max-width: 960px) {
+  .pointTitleRow {
+    margin-bottom: 5px;
+  }
+}
+
 .pagePreview {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 @media only screen and (max-width: 960px) {
@@ -366,12 +373,10 @@ a:hover {
 
 /* xs and sm */
 @media screen and (max-width: 959px) {
-  .ugc {
-    margin: 0 12px;
-  }
   .ugc h1 {
     font-size: 1.1em;
     font-weight: 600; /* Semi Bold */
+    margin-bottom: 0px;
   }
   .ugc h2 {
     font-size: 1em;
@@ -386,6 +391,7 @@ a:hover {
   .ugc h1 {
     font-size: 1.2em;
     font-weight: bold;
+    margin-bottom: 0px;
   }
   .ugc h2 {
     font-size: 1.1em;

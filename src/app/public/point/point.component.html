@@ -1,7 +1,7 @@
 <div *ngIf="!editing" class="ugc point">
   <!-- Point Display -->
   <a [id]="'id' + point.pointID">
-    <div>
+    <div class="pointTitleRow">
       <div class="flexRow" [ngClass]="{ parentPoint: isParentPoint }">
         <div>
           <h1 [innerHtml]="point.pointTitle"></h1>
