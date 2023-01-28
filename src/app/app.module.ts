@@ -1,9 +1,5 @@
 // Angular
-import {
-  BrowserModule,
-  BrowserTransferStateModule,
-  Title
-} from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -43,7 +39,6 @@ import { AppComponent } from './app.component';
   // otherwise they will be eager loaded.
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    BrowserTransferStateModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,

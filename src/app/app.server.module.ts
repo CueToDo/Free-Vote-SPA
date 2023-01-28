@@ -1,24 +1,14 @@
 // Angular
 import { NgModule } from '@angular/core';
-import {
-  ServerModule,
-  ServerTransferStateModule
-} from '@angular/platform-server';
+import { ServerModule } from '@angular/platform-server';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutServerModule } from '@angular/flex-layout/server';
 
 // App
 import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  imports: [
-    AppModule,
-    ServerModule,
-    ServerTransferStateModule,
-    NoopAnimationsModule,
-    FlexLayoutServerModule
-  ],
+  imports: [AppModule, ServerModule, NoopAnimationsModule],
   bootstrap: [AppComponent]
 })
 export class AppServerModule {
