@@ -57,7 +57,7 @@
     "@angular-eslint/template-parser": "^15.1.0",
     "@angular/cli": "~15.0.3",
     "@angular/compiler-cli": "^15.0.0",
-    "@nguniversal/builders": "^14.2.3",
+    "@nguniversal/builders": "^15.1.0",
     "@types/express": "^4.17.14",
     "@types/facebook-js-sdk": "^3.3.5",
     "@types/jasmine": "~4.3.0",
@@ -80,6 +80,6 @@
   },
   "engines": {
     "node": "18.x",
-    "npm": "9.2.0"
+    "npm": "9.4.0"
   }
 }
