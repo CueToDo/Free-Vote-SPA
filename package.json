@@ -76,6 +76,7 @@
     "fs": false
   },
   "engines": {
-    "node": "18.x"
+    "node": "18.x",
+    "npm": "9.2.0"
   }
 }
