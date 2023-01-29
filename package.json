@@ -1,6 +1,6 @@
 {
   "name": "free-vote",
-  "version": "15.1.0",
+  "version": "15.1.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --watch --host=localhost",
@@ -8,21 +8,20 @@
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "dev:ssr": "ng run free-vote:serve-ssr --port 7027",
+    "serve:ssr": "node dist/free-vote/server/main.js",
+    "build:ssr": "ng build && ng run free-vote:server",
+    "prerender": "ng run free-vote:prerender",
     "lint": "eslint . --ext .ts",
     "e2e": "ng e2e",
-    "build:ssr": "ng build && ng run free-vote:server",
-    "serve:ssr": "node dist/free-vote/server/main.js",
     "ssr": "npm run build:ssr && npm run serve:ssr",
     "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
     "prerender-dynamic": "ng run free-vote:prerender --routes-file dynamic-routes.txt",
-    "prerender": "ng run free-vote:prerender",
-    "dev:ssr": "ng run free-vote:serve-ssr --port 7027",
     "start:heroku": "node dist/free-vote/server/main.js",
     "heroku-postbuild": "npm run build:ssr"
   },
   "private": true,
   "dependencies": {
-    "": "",
     "@angular/animations": "^15.0.0",
     "@angular/cdk": "~15.1.1",
     "@angular/common": "^15.0.0",
@@ -37,7 +36,7 @@
     "@angular/router": "^15.0.0",
     "@angular/service-worker": "^15.0.0",
     "@auth0/auth0-angular": "^1.11.1",
-    "@nguniversal/express-engine": "^15.0.0",
+    "@nguniversal/express-engine": "^15.1.0",
     "bootstrap": "^5.2.3",
     "express": "^4.18.2",
     "hammerjs": "^2.0.8",
@@ -49,7 +48,7 @@
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^15.0.3",
+    "@angular-devkit/build-angular": "^15.0.4",
     "@angular-eslint/builder": "^15.1.0",
     "@angular-eslint/eslint-plugin": "^15.1.0",
     "@angular-eslint/eslint-plugin-template": "^15.1.0",

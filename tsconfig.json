@@ -9,7 +9,6 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
@@ -21,8 +20,8 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "resolveJsonModule": true, // required for import auth_config.json in environment.ts
+    "allowSyntheticDefaultImports": true // required for import auth_config.json in environment.ts
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
