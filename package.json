@@ -10,7 +10,7 @@
     "test": "ng test",
     "dev:ssr": "ng run free-vote:serve-ssr --port 7027",
     "serve:ssr": "node dist/free-vote/server/main.js",
-    "build:ssr": "ng build --configuration production && ng run free-vote:server",
+    "build:ssr": "ng build --configuration production && ng run free-vote:server:production",
     "prerender": "ng run free-vote:prerender",
     "lint": "eslint . --ext .ts",
     "e2e": "ng e2e",
