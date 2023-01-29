@@ -19,7 +19,7 @@ export const environment = {
     domain,
     clientId,
     ...(audience && audience !== 'YOUR_API_IDENTIFIER' ? { audience } : null),
-    redirectUri: 'https://free.vote/callback',
+    redirectUri: 'https://free.vote',
     errorPath
   },
   httpInterceptor: {

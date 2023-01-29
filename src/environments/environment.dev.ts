@@ -15,7 +15,7 @@ export const environment = {
     domain,
     clientId,
     ...(audience && audience !== 'YOUR_API_IDENTIFIER' ? { audience } : null),
-    redirectUri: 'http://localhost:7027/callback',
+    redirectUri: 'http://localhost:7027',
     errorPath
   },
   httpInterceptor: {
