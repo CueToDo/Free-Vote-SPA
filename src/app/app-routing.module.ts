@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, ExtraOptions } from '@angular/router';
 
 // Components
-// import { CallbackComponent } from './public/callback/callback.component';
+import { CallbackComponent } from './public/callback/callback.component';
 import { HomeComponent } from './public/home/home.component';
 import { CardComponent } from './public/card/card.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
@@ -30,7 +30,7 @@ const appRoutes: Routes = [
   { path: 'about', component: HomeComponent },
   { path: 'card', component: CardComponent },
 
-  // { path: 'callback', component: CallbackComponent },
+  { path: 'callback', component: CallbackComponent },
 
   { path: 'by/:alias', component: TagsAndPointsComponent },
   {

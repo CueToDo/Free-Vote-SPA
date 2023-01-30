@@ -102,19 +102,25 @@ export class LocalDataService {
   }
 
   public Log(log: string) {
-    if (this.LocalLogging) {
-      console.log('Logging', log);
-      // Add new log
-      this.localLog += `${log}<br>`;
-      this.SetItem('localLog', this.localLog);
-    } else {
-      console.log('Local Logging is OFF');
+    if (isPlatformBrowser(this.platformId)) {
+      var time = new Date();
+      var hms = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+      if (this.LocalLogging) {
+        console.log('Logging', log);
+        // Add new log
+        this.localLog += `${hms} ${log}<br>`;
+        this.SetItem('localLog', this.localLog);
+      } else {
+        console.log('Local Logging is OFF');
+      }
     }
   }
 
   public ClearLog() {
-    this.localLog = '';
-    this.SetItem('localLog', this.localLog);
+    if (isPlatformBrowser(this.platformId)) {
+      this.localLog = '';
+      this.SetItem('localLog', this.localLog);
+    }
   }
 
   public get roles(): string[] {

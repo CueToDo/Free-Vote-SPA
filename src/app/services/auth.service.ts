@@ -1,3 +1,4 @@
+import { isPlatformServer } from '@angular/common';
 // angular
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -39,11 +40,11 @@ export class Auth0Wrapper {
   private auth0Initialisd$ = new Subject<boolean>();
 
   private Auth0Initialised$(): Observable<boolean> {
-    if (this.Auth0Initialised) {
-      this.localData.Log('Log in state known');
+    if (this.Auth0Initialised || isPlatformServer(this.platformId)) {
+      this.localData.Log('Login state known or not required on server');
       return of(true); // we're ready
     } else {
-      this.localData.Log('WAITING for log in state');
+      this.localData.Log('WAITING for Login state');
       return this.auth0Initialisd$; // wait for user to be returned after callback
       // only set in auth0Service.isAuthenticated$.subscribe
     }
