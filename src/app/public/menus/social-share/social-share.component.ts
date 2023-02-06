@@ -44,7 +44,7 @@ export class SocialShareComponent implements OnInit {
 
     this.linkShare =
       this.localData.websiteUrlWTS.replace(
-        'http://localhost:7027',
+        'https://localhost:7027',
         'https://free.vote'
       ) +
       this.localData.PreviousSlashTagSelected +

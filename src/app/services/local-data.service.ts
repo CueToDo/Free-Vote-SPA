@@ -1,11 +1,8 @@
 // Angular
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Request } from 'express';
-
-// rxjs
-import { BehaviorSubject } from 'rxjs';
 
 // Models
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
@@ -248,6 +245,10 @@ export class LocalDataService {
   }
 
   public SaveValues(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.SetItem('jwt', this.JWT);
     this.SetItem('localLogging', this.localLogging);
     this.SetItem('localLog', this.localLog);
@@ -313,7 +314,11 @@ export class LocalDataService {
   }
 
   // DIY rather than Object.Assign
-  public AssignServerValues(values: any): void {
+  public AssignAPIValues(values: any): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     if (values && !this.updatingProfile) {
       if (!!values.jwt) {
         // Set

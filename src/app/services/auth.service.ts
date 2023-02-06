@@ -1,11 +1,10 @@
-import { isPlatformServer } from '@angular/common';
 // angular
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 // rxjs
-import { Observable, of, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { tap, map, concatMap } from 'rxjs/operators';
 
 // auth0
@@ -135,10 +134,7 @@ export class Auth0Wrapper {
 
   logout(): void {
     // Call method to log out
-    this.auth0Service.logout({
-      returnTo: window.location.origin // window reference: Manual logout - No SSR issue
-      // Above casues a reload and updates app if service worker hasn't done so
-    });
+    this.auth0Service.logout();
 
     this.LoggedInToAuth0 = false;
     this.auth0Profile = null;
@@ -200,7 +196,7 @@ export class Auth0Wrapper {
                 if (!!response) {
                   this.localData.Log(`GOT JWT from Api: ${response}`);
 
-                  this.localData.AssignServerValues(response); /// but new sessionid is not returned so can't be assigned (that's OK)
+                  this.localData.AssignAPIValues(response); /// but new sessionid is not returned so can't be assigned (that's OK)
                   this.localData.SaveValues();
 
                   this.jwtFetched$.next(true); // Any subsequently queued requests are now unlocked
