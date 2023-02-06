@@ -10,7 +10,7 @@
     "test": "ng test",
     "dev:ssr": "ng run free-vote:serve-ssr --port 7027",
     "serve:ssr": "node dist/free-vote/server/main.js",
-    "build:ssr": "ng build --configuration production && ng run free-vote:server:production",
+    "build:ssr": "ng build --configuration production && ng run free-vote:production",
     "prerender": "ng run free-vote:prerender",
     "lint": "eslint . --ext .ts",
     "e2e": "ng e2e",
@@ -18,7 +18,7 @@
     "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
     "prerender-dynamic": "ng run free-vote:prerender --routes-file dynamic-routes.txt",
     "start:heroku": "node dist/free-vote/server/main.js",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build:ssr"
   },
   "private": true,
   "dependencies": {
