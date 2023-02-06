@@ -1,6 +1,6 @@
 {
   "name": "free-vote",
-  "version": "15.1.7",
+  "version": "15.1.8",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --watch --host=localhost --configuration development",
@@ -17,7 +17,8 @@
     "ssr": "npm run build:ssr && npm run serve:ssr",
     "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
     "prerender-dynamic": "ng run free-vote:prerender --routes-file dynamic-routes.txt",
-    "start:heroku": "node dist/free-vote/server/main.js"
+    "start:heroku": "node dist/free-vote/server/main.js",
+    "heroku-postbuild": "npm run build"
   },
   "private": true,
   "dependencies": {
