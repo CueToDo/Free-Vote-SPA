@@ -66,14 +66,13 @@
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "free-vote:build",
-            "port": 7027,
-            "ssl": true
+            "port": 7027
           },
           "configurations": {
             "production": {
@@ -154,7 +153,7 @@
               "vendorChunk": true
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",
