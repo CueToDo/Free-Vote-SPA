@@ -1,9 +1,9 @@
 {
   "name": "free-vote",
-  "version": "15.1.8",
+  "version": "15.1.9",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -o --watch --host=localhost --configuration development",
+    "start": "ng serve -o --watch --host=localhost --configuration development --ssl true --ssl-key ssl/server.key --ssl-cert ssl/server.crt",
     "pwa": "http-server -p 7027 -c-1 dist/free-vote/browser",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",

@@ -1,22 +1,19 @@
-import config from '../auth_config.dev.json';
+// This file can be replaced during build by using the `fileReplacements` array.
+// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
+// The list of file replacements can be found in `angular.json`.
 
-const { domain, clientId, audience, apiUri, errorPath } = config as {
-  domain: string;
-  clientId: string;
-  audience?: string;
-  apiUri: string;
-  errorPath: string;
-};
+const apiUri = 'https://localhost:44389/';
 
 export const environment = {
   production: false,
   facebookAppId: '802708376543547',
   auth: {
-    domain,
-    clientId,
-    ...(audience && audience !== 'YOUR_API_IDENTIFIER' ? { audience } : null),
-    redirectUri: 'https://localhost:7027',
-    errorPath
+    domain: 'freevote.eu.auth0.com',
+    clientId: '8LP3ZQ8EpAujVoTruLcI2YNsO0yQry9D',
+    authorizationParams: {
+      audience: 'https://free.vote'
+    },
+    errorPath: ''
   },
   httpInterceptor: {
     allowedList: [`${apiUri}/*`]
@@ -25,9 +22,10 @@ export const environment = {
 };
 
 /*
- * In development mode, to ignore zone related error stack frames such as
- * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
- * import the following file, but please comment it out in production mode
- * because it will have performance impact when throw error
+ * For easier debugging in development mode, you can import the following file
+ * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+ *
+ * This import should be commented out in production mode because it will have a negative impact
+ * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
