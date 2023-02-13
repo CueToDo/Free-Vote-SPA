@@ -11,7 +11,8 @@ export const environment = {
     domain: 'freevote.eu.auth0.com',
     clientId: '8LP3ZQ8EpAujVoTruLcI2YNsO0yQry9D',
     authorizationParams: {
-      audience: 'https://free.vote'
+      audience: 'https://free.vote',
+      redirect_uri: window.location.origin
     },
     errorPath: ''
   },

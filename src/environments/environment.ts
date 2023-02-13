@@ -12,7 +12,7 @@ export const environment = {
     clientId: '2R7Db5byd6g7h2K2oj3MUGoiHaoqnM1Y',
     authorizationParams: {
       audience: 'https://free.vote',
-      redirect_uri: 'https://free.vote'
+      redirect_uri: window.location.origin
     },
     errorPath: ''
   },
