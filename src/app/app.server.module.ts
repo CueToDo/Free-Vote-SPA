@@ -7,8 +7,17 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
 
+import { AuthConfigService, AuthService } from '@auth0/auth0-angular';
+
 @NgModule({
   imports: [AppModule, ServerModule, NoopAnimationsModule],
+  providers: [
+    {
+      provide: AuthService,
+      useValue: {}
+    },
+    { provide: AuthConfigService, useValue: {} as any }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppServerModule {

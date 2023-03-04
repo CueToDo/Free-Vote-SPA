@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     public auth0Wrapper: Auth0Wrapper,
-    public auth0Service: AuthService,
+    // public auth0Service: AuthService,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
     private lookupsService: LookupsService,
@@ -101,10 +101,12 @@ export class AppComponent implements OnInit {
 
     // Force https
     // https://stackoverflow.com/questions/48739768/host-angular-app-on-iis-redirect-to-root-and-force-https
-    if (environment.production) {
-      if (location.protocol === 'http:') {
-        window.location.href = location.href.replace('http', 'https');
-      }
+    if (
+      environment.production &&
+      isPlatformBrowser(this.platformId) &&
+      location.protocol === 'http:'
+    ) {
+      window.location.href = location.href.replace('http', 'https');
     }
 
     // Do this before any API calls
@@ -212,14 +214,16 @@ export class AppComponent implements OnInit {
 
   // https://www.inoaspect.com.au/creating-a-progressive-web-app-pwa-service-to-include-all-features-angular/
   subscribeNetworkStatus() {
-    window.addEventListener(
-      NetworkStatus.ONLINE,
-      this.onNetworkStatusChange.bind(this)
-    );
-    window.addEventListener(
-      NetworkStatus.OFFLINE,
-      this.onNetworkStatusChange.bind(this)
-    );
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener(
+        NetworkStatus.ONLINE,
+        this.onNetworkStatusChange.bind(this)
+      );
+      window.addEventListener(
+        NetworkStatus.OFFLINE,
+        this.onNetworkStatusChange.bind(this)
+      );
+    }
   }
 
   onNetworkStatusChange() {

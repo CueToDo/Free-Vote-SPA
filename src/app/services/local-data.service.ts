@@ -200,9 +200,9 @@ export class LocalDataService {
       this.website = window.location.origin.replace('https://', '');
       this.website = this.website.replace('http://', '');
       this.websiteUrlWTS = window.location.origin;
-    } else {
+    } else if (isPlatformServer(this.platformId)) {
       // window not available on server
-      this.website = this.request.hostname;
+      // this.website = this.request.hostname;
       this.websiteUrlWTS = `https://${this.website}`;
     }
   }

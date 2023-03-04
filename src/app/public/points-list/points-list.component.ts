@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 // Angular
 import {
   Component,
@@ -5,7 +6,9 @@ import {
   EventEmitter,
   Output,
   OnDestroy,
-  OnInit
+  OnInit,
+  Inject,
+  PLATFORM_ID
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -95,7 +98,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
     public appData: AppDataService,
     public localData: LocalDataService,
     private pointsService: PointsService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   ngOnInit(): void {
@@ -116,16 +120,18 @@ export class PointsListComponent implements OnDestroy, OnInit {
   }
 
   ScrollIntoView(): void {
-    try {
-      console.log('Scrolling into view', this.fragment);
-      var a = document.querySelector('#id' + this.fragment);
-      if (!!a) {
-        a.scrollIntoView();
-      } else {
-        console.log(a);
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        console.log('Scrolling into view', this.fragment);
+        var a = document.querySelector('#id' + this.fragment);
+        if (!!a) {
+          a.scrollIntoView();
+        } else {
+          console.log(a);
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
     }
   }
 

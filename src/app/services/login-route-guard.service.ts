@@ -1,5 +1,6 @@
+import { isPlatformBrowser } from '@angular/common';
 // Angular
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { CanActivate } from '@angular/router';
 
 // Auth0
@@ -9,10 +10,15 @@ import { AuthService } from '@auth0/auth0-angular';
 export class LoginRouteGuardService implements CanActivate {
   private loggedIn = false;
 
-  constructor(private auth0Service: AuthService) {
-    this.auth0Service.isAuthenticated$.subscribe(
-      loggedIn => (this.loggedIn = loggedIn)
-    );
+  constructor(
+    private auth0Service: AuthService,
+    @Inject(PLATFORM_ID) private platformId: object
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.auth0Service.isAuthenticated$.subscribe(
+        loggedIn => (this.loggedIn = loggedIn)
+      );
+    }
   }
 
   canActivate(): boolean {
