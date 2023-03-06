@@ -13,7 +13,7 @@ import { environment as env } from 'src/environments/environment';
 // Mainly intended for client side, but has server side only code
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
-  public website = 'https://free.vote';
+  public website = 'free.vote';
   public strapline = '';
   public websiteUrlWTS = ''; // WTS: without trailing slash
   public apiUrl = '';
