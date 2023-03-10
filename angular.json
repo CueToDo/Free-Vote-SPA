@@ -82,7 +82,7 @@
               "browserTarget": "free-vote:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -167,7 +167,7 @@
               "serverTarget": "free-vote:server:production"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "prerender": {
           "builder": "@nguniversal/builders:prerender",
