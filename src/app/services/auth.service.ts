@@ -151,7 +151,8 @@ export class Auth0Wrapper {
     // For Anon or authenticated
 
     // getApiJwt calls get, but get calls getApiJwt - need to prevent endless loop
-    // Anon users have a jwt
+
+    // Anon users have a jwt - including anon usage from server for prerendering
 
     this.localData.Log(
       `getApiJwt called (Auth0Initialised:${this.Auth0Initialised})`
