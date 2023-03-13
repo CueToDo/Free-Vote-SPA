@@ -135,8 +135,8 @@ export class PointCommentsComponent implements OnInit {
     const preview = {
       pagePath: this.router.url,
       title: point.pointTitle,
-      description: point.linkDescription,
-      image: point.linkImage
+      description: point.preview,
+      image: point.previewImage
     } as PagePreviewMetaData;
 
     // Notify app.component to set meta data for SEO & Social scraping
