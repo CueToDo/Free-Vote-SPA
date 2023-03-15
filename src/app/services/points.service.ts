@@ -294,7 +294,6 @@ export class PointsService {
       ParentPointID: point.parentPointID,
       LinkText: point.linkText,
       LinkAddress: point.linkAddress,
-      YouTubeID: point.youTubeID,
       SoundCloudTrackID: point.soundCloudTrackID,
       SlashTags: point.tags
         .filter(tag => tag.pointOwnerTag)
@@ -336,16 +335,6 @@ export class PointsService {
     return this.httpClientService
       .post('points/pointSourceMetaDataUpdate', postData)
       .pipe(map(result => result as PagePreviewMetaData));
-  }
-
-  // Not really needed: when we update an existing point,
-  // we get the updated point back from the API along with YouTubeID
-  YouTubeID(youTubeLink: string): Observable<string> {
-    youTubeLink = encodeURI(youTubeLink);
-
-    return this.httpClientService
-      .get(`points/youTubeID/${youTubeLink}`)
-      .pipe(map(result => result));
   }
 
   PointDelete(pointID: number, constituencyID: number): Observable<boolean> {

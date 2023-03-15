@@ -171,9 +171,6 @@ export class PointComponent implements OnInit {
       this.error = 'Missing: point';
     } else {
       this.youTubeIDs = [];
-      if (this.point.youTubeID) {
-        this.youTubeIDs.push(this.point.youTubeID);
-      }
 
       this.soundCloudTrackIDs = [];
       if (this.point.soundCloudTrackID) {

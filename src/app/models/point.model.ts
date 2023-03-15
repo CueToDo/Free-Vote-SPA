@@ -19,7 +19,6 @@ export class PointEdit {
   linkText = ''; // May not be a link, could just be a name
   linkAddress = ''; // link url to the source if any
 
-  youTubeID = '';
   soundCloudTrackID = '';
   tags: Tag[] = [];
   draft = false;
@@ -109,7 +108,6 @@ export class Point {
 
   dateTimeCreated = '';
   dateTimeUpdated = ''; // How many times am I going to attempt to make this a Date to use DateTime Pipe
-  youTubeID = '';
   soundCloudTrackID = '';
   tags: Tag[] = [];
 

@@ -126,10 +126,7 @@ export class PointEditComponent implements OnInit {
       .subscribe(pointTypes => (this.pointTypes = pointTypes));
 
     if (this.pointClone) {
-      this.hasMedia =
-        this.pointClone.youTubeID || this.pointClone.soundCloudTrackID
-          ? true
-          : false;
+      this.hasMedia = this.pointClone.soundCloudTrackID ? true : false;
     }
 
     if (this.isComment) {
@@ -275,7 +272,6 @@ export class PointEditComponent implements OnInit {
         !(
           !!this.pointClone.linkAddress ||
           !!this.pointClone.pointHTML ||
-          !!this.pointClone.youTubeID ||
           !!this.pointClone.soundCloudTrackID ||
           !!this.pointClone.csvImageIDs ||
           !!this.imageSelect?.nativeElement.value
