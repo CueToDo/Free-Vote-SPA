@@ -43,7 +43,6 @@ export class PointCommentsComponent implements OnInit {
 
   // bind to point slashtags (not topic)
   slashTags: string[] = []; // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
-  youTubeIDs: string[] = [];
   vimeoIDs: string[] = [];
   soundCloudTrackIDs: string[] = [];
   pointHTMLwithoutEmbed = '';

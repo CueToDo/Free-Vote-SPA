@@ -596,7 +596,7 @@ export class TagsAndPointsComponent
             0
           );
         }
-        newRoute = `/${this.filter.slashTag}/new-${this.qp}`;
+        newRoute = `${this.filter.slashTag}/new-${this.qp}`;
         break;
     }
 
