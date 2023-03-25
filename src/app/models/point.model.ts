@@ -15,10 +15,6 @@ export class PointEdit {
   parentPointID = -1;
   pointTypeID = PointTypesEnum.NotSelected;
 
-  // Link meta data update is handled in the server API
-  linkText = ''; // May not be a link, could just be a name
-  linkAddress = ''; // link url to the source if any
-
   soundCloudTrackID = '';
   tags: Tag[] = [];
   draft = false;
@@ -111,15 +107,12 @@ export class Point {
   soundCloudTrackID = '';
   tags: Tag[] = [];
 
-  // Manually added link info
-  linkText = '';
-  linkAddress = '';
-  showLinkPreview = true;
-
   // Additional link info from site meta data
+  linkAddress = '';
   linkTitle = '';
   linkDescription = '';
   linkImage = '';
+  showPreview = true;
   isNewSource = false;
 
   archived = false;

@@ -1,7 +1,7 @@
 // Angular
 import {
   Component,
-  OnInit,
+  AfterViewInit,
   Input,
   Output,
   EventEmitter,
@@ -43,7 +43,7 @@ import { TagsService } from 'src/app/services/tags.service';
   styleUrls: ['./point.component.css'],
   preserveWhitespaces: true
 })
-export class PointComponent implements OnInit {
+export class PointComponent implements AfterViewInit {
   @Input() point = new Point();
   @Input() pointCount = 0;
   @Input() isPorQPoint = false;
@@ -109,10 +109,11 @@ export class PointComponent implements OnInit {
     private lookupsService: LookupsService,
     private pointsService: PointsService,
     private tagsService: TagsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private elem: ElementRef
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit() {
     //ngOnInit occurs too soon for parentPoint in pointComments
     if (!this.isParentPoint) {
       this.Initialise();
@@ -129,6 +130,7 @@ export class PointComponent implements OnInit {
     }
 
     this.extractMediaEmbeds();
+    this.showPreview();
   }
 
   public AssignAndInitialise(point: Point) {
@@ -429,7 +431,10 @@ export class PointComponent implements OnInit {
                 this.point.linkTitle = metaData.title;
                 this.point.linkDescription = metaData.description;
                 this.point.linkImage = metaData.image;
+                this.point.showPreview = metaData.showPreview;
                 this.updatingPreview = false;
+
+                this.showPreview();
               }
             },
             error: err => {
@@ -441,6 +446,16 @@ export class PointComponent implements OnInit {
               this.updatingPreview = false;
             }
           });
+      }
+    }
+  }
+
+  showPreview() {
+    if (this.point.showPreview) {
+      let elements = this.elem.nativeElement.querySelectorAll('.lastAnchor');
+
+      if (elements?.length == 1) {
+        elements[0].className = 'hidden';
       }
     }
   }

@@ -14,32 +14,19 @@
       </div>
     </div>
   </div>
-
-  <!-- No Link Preview -->
-  <div *ngIf="!ShowPreview">
-    {{ NoPreviewText }}
-  </div>
 </a>
 
 <!-- No link - copy of above without the link -->
-<div *ngIf="!LinkAddress">
-  <!-- Link preview -->
-  <div *ngIf="ShowPreview" class="websiteMeta">
-    <div *ngIf="!!Image" class="websiteMetaImage">
-      <img [src]="Image" alt="" />
-    </div>
-    <div class="websiteMetaText">
-      <div class="linkTitle">
-        {{ Title }}
-      </div>
-      <div class="linkDescription">
-        {{ Description }}
-      </div>
-    </div>
+<div *ngIf="ShowPreview && !LinkAddress" class="websiteMeta">
+  <div *ngIf="!!Image" class="websiteMetaImage">
+    <img [src]="Image" alt="" />
   </div>
-
-  <!-- No preview image title description -->
-  <div *ngIf="!ShowPreview">
-    {{ NoPreviewText }}
+  <div class="websiteMetaText">
+    <div class="linkTitle">
+      {{ Title }}
+    </div>
+    <div class="linkDescription">
+      {{ Description }}
+    </div>
   </div>
 </div>

@@ -4,4 +4,5 @@ export class PagePreviewMetaData {
   image = '';
   pagePath = '';
   url = '';
+  showPreview = false;
 }

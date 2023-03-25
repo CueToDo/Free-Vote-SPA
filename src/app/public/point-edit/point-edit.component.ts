@@ -80,7 +80,6 @@ export class PointEditComponent implements OnInit {
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
   pointTypes: Kvp[] = [];
   hasMedia = false;
-  linkTextSave = '';
   imageFileForUpload: File | undefined;
   imageName = '';
   quoteOrLinkTextPlaceholder = 'quote or link text';
@@ -270,7 +269,6 @@ export class PointEditComponent implements OnInit {
       } else if (
         // Title is always optional
         !(
-          !!this.pointClone.linkAddress ||
           !!this.pointClone.pointHTML ||
           !!this.pointClone.soundCloudTrackID ||
           !!this.pointClone.csvImageIDs ||
@@ -481,11 +479,8 @@ export class PointEditComponent implements OnInit {
     if (this.pointClone) {
       if (show) {
         this.quoteOrLinkTextPlaceholder = 'quote or link text not required';
-        this.linkTextSave = this.pointClone.linkText;
-        this.pointClone.linkText = '';
       } else {
         this.quoteOrLinkTextPlaceholder = 'quote or link text';
-        this.pointClone.linkText = this.linkTextSave;
       }
     }
   }

@@ -15,9 +15,6 @@ export class WebsitePreviewComponent implements OnInit {
   @Input() public Description = '';
   @Input() public Image = '';
 
-  // No Preview
-  @Input() public NoPreviewText = '';
-
   constructor() {}
 
   ngOnInit(): void {}

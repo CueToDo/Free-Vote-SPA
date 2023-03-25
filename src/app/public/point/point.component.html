@@ -84,19 +84,18 @@
   <div
     *ngIf="
       point.pointFeedback.feedbackGiven ||
-      point.showLinkPreview ||
+      point.showPreview ||
       showLink ||
       point.isNewSource
     "
     class="pagePreview ltmd"
   >
     <app-website-preview
-      [ShowPreview]="point.showLinkPreview"
+      [ShowPreview]="point.showPreview"
       [LinkAddress]="point.linkAddress"
       [Title]="point.linkTitle"
       [Description]="point.linkDescription"
       [Image]="point.linkImage"
-      [NoPreviewText]="point.linkText"
     >
     </app-website-preview>
   </div>

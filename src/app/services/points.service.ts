@@ -292,8 +292,6 @@ export class PointsService {
       isComment,
       isPorQPoint, // not a point property
       ParentPointID: point.parentPointID,
-      LinkText: point.linkText,
-      LinkAddress: point.linkAddress,
       SoundCloudTrackID: point.soundCloudTrackID,
       SlashTags: point.tags
         .filter(tag => tag.pointOwnerTag)
