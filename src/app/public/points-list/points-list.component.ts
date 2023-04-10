@@ -125,7 +125,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         console.log('Scrolling into view', this.fragment);
         var a = document.querySelector('#id' + this.fragment);
         if (!!a) {
-          a.scrollIntoView();
+          // a.scrollIntoView(); // Causes collapse of titleBar on point save
         } else {
           console.log(a);
         }
