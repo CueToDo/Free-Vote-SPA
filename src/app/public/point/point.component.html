@@ -171,7 +171,7 @@
         mat-button
         [routerLink]="linkShare"
         (click)="selectComment()"
-        matTooltip="share and comment"
+        matTooltip="share and reply"
       >
         <mat-icon>comment</mat-icon>
         <span *ngIf="point.totalFeedback > 0">
@@ -184,7 +184,7 @@
         *ngIf="sharing"
         mat-button
         (click)="newComment()"
-        matTooltip="new comment"
+        matTooltip="new reply"
       >
         <mat-icon>note_add</mat-icon>
         <span *ngIf="point.totalFeedback > 0">

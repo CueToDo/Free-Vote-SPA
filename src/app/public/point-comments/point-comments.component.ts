@@ -72,15 +72,6 @@ export class PointCommentsComponent implements OnInit {
     const pointTitle = routeParams['title'];
 
     this.SelectSpecificPoint(slashTag, pointTitle);
-
-    // The ActivatedRoute dies with the routed component and so
-    // the subscription dies with it.
-    this.activatedRoute.paramMap.subscribe(params => {
-      if (this.initialised) {
-        const pointTitle = params.get('title');
-        if (!!pointTitle) this.SelectSpecificPoint(slashTag, pointTitle);
-      }
-    });
   }
 
   // Select point from title in route
@@ -119,6 +110,7 @@ export class PointCommentsComponent implements OnInit {
       )
       .subscribe(_ => {
         this.initialised = true;
+        this.alreadyFetchingPointFromDB = false;
       }); // no need to do anything
   }
 

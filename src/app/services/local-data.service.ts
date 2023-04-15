@@ -108,7 +108,7 @@ export class LocalDataService {
         this.localLog += `${hms} ${log}<br>`;
         this.SetItem('localLog', this.localLog);
       } else {
-        console.log('Local Logging is OFF');
+        // console.log('Local Logging is OFF');
       }
     }
   }

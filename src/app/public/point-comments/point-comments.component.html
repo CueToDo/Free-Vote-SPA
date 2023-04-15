@@ -19,7 +19,12 @@
 
       <!-- Ancestors -->
       <ng-container *ngFor="let ancestor of ancestors">
-        <app-point [point]="ancestor" [isComment]="true"> </app-point>
+        <app-point
+          [point]="ancestor"
+          [isComment]="true"
+          (SelectComment)="SelectComment($event)"
+        >
+        </app-point>
       </ng-container>
 
       <!-- Parent -->
