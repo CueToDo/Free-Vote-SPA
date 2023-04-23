@@ -1,4 +1,3 @@
-import { isPlatformBrowser } from '@angular/common';
 // Angular
 import {
   Component,
@@ -10,6 +9,7 @@ import {
   Inject,
   PLATFORM_ID
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 // Models, enums

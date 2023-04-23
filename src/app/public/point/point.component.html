@@ -10,7 +10,7 @@
 
         <!-- PointNumber/Count -->
 
-        <div *ngIf="!sharing" class="aml-2 amr-2 text">
+        <div *ngIf="!sharing && !ancestor" class="aml-2 amr-2 text">
           {{ point.rowNumber }}/{{ pointCount }}
         </div>
 

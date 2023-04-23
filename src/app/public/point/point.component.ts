@@ -54,6 +54,7 @@ export class PointComponent implements AfterViewInit {
   @Input() searchTerm = '';
   @Input() constituencyID = 0;
   @Input() sharing = false;
+  @Input() ancestor = false;
   @Input() creatingNewComment = false; // New comment button has not been clicked
   @Input() feedbackOn = true; // Controls toolbar display
 

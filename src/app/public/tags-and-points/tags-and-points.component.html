@@ -266,7 +266,6 @@
       <app-questions-list
         [filter]="filter"
         [SortDescending]="filter.sortDescending"
-        #appQuestionsList
         (QuestionCount)="QuestionCount($event)"
         (QuestionSelected)="QuestionSelected($event)"
       >
@@ -360,7 +359,6 @@
     >
       <!-- "Fetch more" component must apply scroller and content classes internally -->
       <app-points-list
-        #appPointsList
         [filter]="filter"
         [feedbackOn]="feedbackOn"
         (AltSLashTagSelected)="AltSlashTagSelected($event)"
