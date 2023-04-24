@@ -380,20 +380,20 @@
       <div class="scroller">
         <div class="content mt-5 mb-3">
           <app-question-edit
+            #newQuestion
             *ngIf="showQuestions"
             (CancelEdit)="CancelNewQuestion()"
             (CompleteEdit)="NewQuestion()"
-            #newQuestion
           >
           </app-question-edit>
 
           <app-point-edit
+            #newPoint
             *ngIf="!showQuestions"
             [constituencyID]="filter.constituencyID"
             (CancelEdit)="CancelNewPoint()"
             (CompleteEdit)="NewPointCreated()"
             (ReselectPoints)="ReselectForNewPoint()"
-            #newPoint
           >
           </app-point-edit>
         </div>

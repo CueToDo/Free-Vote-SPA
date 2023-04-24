@@ -32,6 +32,7 @@ mat-radio-button + mat-radio-button {
 
 /* Important! */
 app-questions-list,
+app-question-answers,
 app-points-list {
   display: flex;
   overflow: hidden;

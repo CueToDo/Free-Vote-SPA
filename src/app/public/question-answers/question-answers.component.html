@@ -1,7 +1,7 @@
-<div class="content">
-  <div fxFill fxLayout="column" fxLayoutAlign="start center">
-    <div class="content">
-      <div class="mt-4" fxLayout="row" fxLayoutAlign="center">
+<div class="scroller">
+  <div class="content">
+    <div class="col-stretch">
+      <div class="mt-4">
         <button
           mat-button
           (click)="Back()"
@@ -75,19 +75,17 @@
         >
         </app-point-edit>
       </div>
+
+      <!-- Answers -->
+      <app-points-list
+        #PointsList
+        [hidden]="mode === 'newAnswer'"
+        [filter]="filter"
+        [attachedToQuestion]="attachedToQuestion"
+        (AddPointToAnswers)="AddRemovePointFromAnswers(true, $event)"
+        (RemovePointFromAnswers)="AddRemovePointFromAnswers(false, $event)"
+      >
+      </app-points-list>
     </div>
-
-    <!-- Answers -->
-    <app-points-list
-      [hidden]="mode === 'newAnswer'"
-      [filter]="filter"
-      #PointsList
-      [attachedToQuestion]="attachedToQuestion"
-      (AddPointToAnswers)="AddRemovePointFromAnswers(true, $event)"
-      (RemovePointFromAnswers)="AddRemovePointFromAnswers(false, $event)"
-    >
-    </app-points-list>
-
-    <div fxFlex></div>
   </div>
 </div>

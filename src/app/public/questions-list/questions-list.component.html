@@ -1,9 +1,4 @@
-<div
-  fxFill
-  class="scroller"
-  appElementScrollEnd
-  (scrollEnd)="fetchMoreQuestions()"
->
+<div class="scroller" appElementScrollEnd (scrollEnd)="fetchMoreQuestions()">
   <div class="content">
     <div *ngIf="error !== ''" class="text-danger mx-3">
       {{ error }}
