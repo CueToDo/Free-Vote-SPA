@@ -233,7 +233,6 @@ div.toolbar mat-form-field {
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit */
 /* https://stackoverflow.com/questions/37127384/why-isnt-object-fit-working-in-flexbox */
 .websiteMetaImage img {
-  max-height: 132px;
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -402,7 +401,7 @@ a:hover {
   }
 }
 
-.ugc img {
+.ugc img :not(.websiteMetaImage) {
   max-width: 100%;
   height: auto;
 }
