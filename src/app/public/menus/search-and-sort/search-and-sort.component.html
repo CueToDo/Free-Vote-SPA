@@ -92,6 +92,19 @@
 
   <hr />
 
+  <!-- Local Topics -->
+  <button
+    mat-menu-item
+    *ngIf="auth0Service.isAuthenticated$ | async"
+    class="localButton"
+    [class.selected]="localData.forConstituency"
+    (click)="ChangeLocalSelection()"
+    matTooltip="local interest"
+  >
+    local
+    <mat-icon>mp</mat-icon>
+  </button>
+
   <!-- Feedback Switch -->
   <button mat-menu-item (click)="toggleFeedback()" matTooltip="toggle feedback">
     <mat-icon>{{ feedbackIcon }}</mat-icon>

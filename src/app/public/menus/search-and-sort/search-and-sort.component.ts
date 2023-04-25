@@ -1,8 +1,14 @@
 // Angular
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
+// Auth0
+import { AuthService } from '@auth0/auth0-angular';
+
 // Model/Enums
 import { PointSortTypes, Tabs } from 'src/app/models/enums';
+
+// Services
+import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
   selector: 'app-search-and-sort',
@@ -24,10 +30,13 @@ export class SearchAndSortComponent {
   @Input() sortDescending!: boolean;
   @Output() sortDescendingChange = new EventEmitter<boolean>();
 
-  // 4. Feedback
+  // 4. Local
+  @Output() changeLocalSelection = new EventEmitter();
+
+  // 5. Feedback
   @Output() feedbackChange = new EventEmitter<boolean>();
 
-  // 5. Refresh
+  // 6. Refresh
   @Output() refresh = new EventEmitter();
   public Tabs = Tabs;
 
@@ -78,7 +87,10 @@ export class SearchAndSortComponent {
     }
   }
 
-  constructor() {}
+  constructor(
+    public localData: LocalDataService,
+    public auth0Service: AuthService
+  ) {}
 
   // 1. Filters
   toggleShowPointFilterCriteria(): void {
@@ -102,7 +114,12 @@ export class SearchAndSortComponent {
     this.sortDescendingChange.emit(descending);
   }
 
-  // 4. Feedback
+  // 4. Local
+  ChangeLocalSelection() {
+    this.changeLocalSelection.emit();
+  }
+
+  // 5. Feedback
   feedbackOn = true;
   get feedbackIcon(): string {
     if (this.feedbackOn) return 'speaker_notes_off';
@@ -118,7 +135,7 @@ export class SearchAndSortComponent {
     this.feedbackChange.emit(this.feedbackOn);
   }
 
-  // 5. Refresh
+  // 6. Refresh
   refreshSelection() {
     this.refresh.emit();
   }

@@ -27,6 +27,7 @@ import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { Auth0Wrapper } from 'src/app/services/auth.service';
 import { TagsService } from 'src/app/services/tags.service';
 
 // Components
@@ -56,8 +57,9 @@ export class TagsAndPointsComponent
 
   // Public variables for use in template
   public Tabs = Tabs;
-  public tabIndex = Tabs.recentTags;
-  public previousTabIndex = Tabs.recentTags;
+  public tabIndex = Tabs.trendingTags;
+  public previousTabIndex = Tabs.trendingTags;
+  public trendingRecent = Tabs.trendingTags;
 
   // Topic - Tag Cloud
   public TagCloudTypes = TagCloudTypes;
@@ -150,6 +152,7 @@ export class TagsAndPointsComponent
     private appData: AppDataService,
     public localData: LocalDataService,
     public auth0Service: AuthService,
+    private auth0Wrapper: Auth0Wrapper,
     private tagsService: TagsService
   ) {}
 
@@ -248,6 +251,7 @@ export class TagsAndPointsComponent
         case 'trending':
           this.tabIndex = Tabs.trendingTags;
           this.previousTabIndex = Tabs.trendingTags;
+          this.trendingRecent = Tabs.trendingTags;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
           this.tagsTrendingComponent.FetchTagsForConstituency(
             this.filter.constituencyID
@@ -261,6 +265,7 @@ export class TagsAndPointsComponent
         case 'recent':
           this.tabIndex = Tabs.recentTags;
           this.previousTabIndex = Tabs.recentTags;
+          this.trendingRecent = Tabs.recentTags;
           this.appData.defaultSort = PointSortTypes.DateUpdated;
           this.tagsRecentComponent.FetchTagsForConstituency(
             this.filter.constituencyID
@@ -451,6 +456,26 @@ export class TagsAndPointsComponent
     this.ChangeTab(Tabs.tagPoints); // will select points
 
     this.externalTrigger = false;
+  }
+
+  ChangeTrendingRecent() {
+    if (!this.auth0Wrapper.LoggedInToAuth0) {
+      if (this.trendingRecent != Tabs.trendingTags) {
+        this.trendingRecent = Tabs.trendingTags;
+      }
+    } else if (this.previousTabIndex === this.trendingRecent) {
+      // Toggle
+      if (this.trendingRecent === Tabs.trendingTags) {
+        this.trendingRecent = Tabs.recentTags;
+      } else {
+        this.trendingRecent = Tabs.trendingTags;
+      }
+    }
+
+    if (this.previousTabIndex != this.trendingRecent) {
+      this.previousTabIndex = this.trendingRecent;
+      this.ChangeTab(this.previousTabIndex);
+    }
   }
 
   /// Change Tab and notify app component in TabChangeComplete

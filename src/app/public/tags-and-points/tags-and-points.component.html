@@ -8,27 +8,24 @@
   class="amy-2"
 >
   <div *ngIf="tabIndex < Tabs.questionList" class="flexRow center">
-    <!-- Trending Tags -->
+    <!-- Trending/Recently selected tags -->
+    <!-- ((auth0Service.isAuthenticated$ | async) || haveRecentSlashTags) -->
     <button
       mat-button
-      (click)="ChangeTab(Tabs.trendingTags)"
-      [class.selected]="tabIndex === Tabs.trendingTags"
-      matTooltip="trending"
+      (click)="ChangeTrendingRecent()"
+      [class.selected]="
+        tabIndex === Tabs.trendingTags || tabIndex === Tabs.recentTags
+      "
+      matTooltip="tabIndex === Tabs.trendingTags? 'trending': recent"
     >
-      trending
-      <mat-icon>trending_up</mat-icon>
-    </button>
-
-    <!-- Recently selected tags -->
-    <button
-      mat-button
-      (click)="ChangeTab(Tabs.recentTags)"
-      [class.selected]="tabIndex === Tabs.recentTags"
-      matTooltip="recent"
-      *ngIf="(auth0Service.isAuthenticated$ | async) || haveRecentSlashTags"
-    >
-      recent
-      <mat-icon>notifications</mat-icon>
+      <span *ngIf="trendingRecent === Tabs.trendingTags">trending</span>
+      <span *ngIf="trendingRecent === Tabs.recentTags">recent</span>
+      <mat-icon *ngIf="trendingRecent === Tabs.trendingTags"
+        >trending_up</mat-icon
+      >
+      <mat-icon *ngIf="trendingRecent === Tabs.recentTags"
+        >notifications</mat-icon
+      >
     </button>
 
     <!-- Tag Search -->
@@ -89,19 +86,6 @@
       <i class="arrow left"></i>
     </div>
 
-    <!-- Local Topics -->
-    <button
-      mat-button
-      (click)="ChangeLocalSelection()"
-      class="localButton"
-      [class.selected]="localData.forConstituency"
-      matTooltip="local interest"
-      *ngIf="auth0Service.isAuthenticated$ | async"
-    >
-      local
-      <mat-icon>mp</mat-icon>
-    </button>
-
     <!-- Questions -->
     <button
       mat-button
@@ -119,10 +103,10 @@
     <!-- Break-out groups -->
     <button
       mat-button
-      (click)="ChangeTab(Tabs.groups)"
+      *ngIf="false && (auth0Service.isAuthenticated$ | async)"
       [class.selected]="tabIndex === Tabs.groups"
-      *ngIf="auth0Service.isAuthenticated$ | async"
       [matTooltip]="'break-out groups'"
+      (click)="ChangeTab(Tabs.groups)"
     >
       groups
       <mat-icon>groups</mat-icon>
@@ -161,6 +145,7 @@
       (showFiltersChange)="ShowPointFilterCriteria($event)"
       (pointSortTypeChange)="SetSortType($event)"
       (sortDescendingChange)="SetSortDescending($event)"
+      (changeLocalSelection)="ChangeLocalSelection()"
       (feedbackChange)="FeedbackChange($event)"
       (refresh)="refresh()"
     ></app-search-and-sort>
