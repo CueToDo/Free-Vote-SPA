@@ -23,11 +23,11 @@ export class TagSearchMenuComponent implements OnInit {
   // Public variables for use in template
   public Tabs = Tabs;
 
-  isMediumMobile = false;
+  isMobile = false;
 
   get menuTriggerText(): string {
     if (this.FilterForConstituency) return 'local';
-    if (this.isMediumMobile) return 'search';
+    if (this.isMobile) return 'search';
     return 'search tags';
   }
 
@@ -46,7 +46,7 @@ export class TagSearchMenuComponent implements OnInit {
     this.breakpointObserver
       .observe(['(max-width: 425px)'])
       .subscribe((state: BreakpointState) => {
-        this.isMediumMobile = state.matches;
+        this.isMobile = state.matches;
       });
   }
   search(): void {

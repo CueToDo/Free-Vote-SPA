@@ -64,6 +64,22 @@ export class TagsAndPointsComponent
     return 'slash-tag';
   }
 
+  get slashTagsButtonText(): string {
+    if (this.isLargeMobile) return 'tags';
+    return 'slash-tags';
+  }
+
+  public get slashTagButtonToolTip(): string {
+    return `show points for\n"${this.topicSelected}"`;
+  }
+
+  public get slashTagsButtonToolTip(): string {
+    return (
+      'show ' +
+      (this.previousTabIndex === Tabs.recentTags ? 'recent' : 'trending') +
+      ' slash-tags'
+    );
+  }
   // Public variables for use in template
   public Tabs = Tabs;
   public tabIndex = Tabs.trendingTags;

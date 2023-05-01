@@ -16,7 +16,11 @@
       [class.selected]="
         tabIndex === Tabs.trendingTags || tabIndex === Tabs.recentTags
       "
-      matTooltip="tabIndex === Tabs.trendingTags? 'trending': recent"
+      [matTooltip]="
+        tabIndex === Tabs.trendingTags
+          ? 'showing trending slash-tags'
+          : 'showing recent slash-tags'
+      "
     >
       <span *ngIf="trendingRecent === Tabs.trendingTags">trending</span>
       <span *ngIf="trendingRecent === Tabs.recentTags">recent</span>
@@ -43,7 +47,8 @@
         mat-button
         (click)="BackToSelectedTag()"
         *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
-        matTooltip="{{ topicSelected }}"
+        [matTooltip]="slashTagButtonToolTip"
+        matTooltipClass="multiLine"
       >
         <div class="flexRow center">
           <span class="slash">/</span>
@@ -61,11 +66,11 @@
       <button
         mat-button
         (click)="ChangeTab(previousTabIndex)"
-        matTooltip="trending"
+        [matTooltip]="slashTagsButtonToolTip"
       >
         <div class="flexRow center">
           <span class="slash">/</span>
-          <span>slash-tags</span>
+          <span>{{ slashTagsButtonText }}</span>
         </div>
       </button>
       <i class="arrow left"></i>

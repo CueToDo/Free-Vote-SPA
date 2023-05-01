@@ -354,6 +354,10 @@ button.mat-mdc-menu-item.mdc-list-item.selected /* Angular 15 */ {
   background-color: #e7e7e7;
 }
 
+.multiLine {
+  white-space: pre-line;
+}
+
 a:hover {
   text-decoration: none;
 }

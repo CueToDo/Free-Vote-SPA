@@ -17,6 +17,7 @@
     (click)="search()"
     [class.selected]="TabIndex === Tabs.tagSearch"
     matTooltip="slash tag search"
+    matTooltipPosition="right"
   >
     search
     <mat-icon>search</mat-icon>
@@ -29,6 +30,7 @@
     class="localButton"
     [class.selected]="FilterForConstituency"
     matTooltip="local interest"
+    matTooltipPosition="right"
     *ngIf="auth0Service.isAuthenticated$ | async"
   >
     local

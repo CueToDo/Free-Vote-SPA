@@ -1,5 +1,6 @@
 // Angular
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 // Auth0
 import { AuthService } from '@auth0/auth0-angular';
@@ -15,7 +16,7 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   templateUrl: './search-and-sort.component.html',
   styleUrls: ['./search-and-sort.component.css']
 })
-export class SearchAndSortComponent {
+export class SearchAndSortComponent implements OnInit {
   // 2 way bindings with parent
 
   // 1. Point search/filter criteria
@@ -40,7 +41,11 @@ export class SearchAndSortComponent {
   @Output() refresh = new EventEmitter();
   public Tabs = Tabs;
 
-  // Button properties
+  isMobile = false;
+  get searchAndSortText(): string {
+    if (this.isMobile) return 'search';
+    return 'search & sort';
+  }
 
   // 1. Point Search (Filter) button
   public get filterText() {
@@ -62,15 +67,16 @@ export class SearchAndSortComponent {
   public PointSortTypes = PointSortTypes; // enum - template
 
   public get sortToolTip(): string {
+    let tooltip = `showing points for\n"${this.localData.PreviousTopicSelected}"\n`;
     switch (this.pointSortType) {
       case PointSortTypes.TrendingActivity:
-        return 'showing points trending now';
+        return tooltip + `in trending order`;
       case PointSortTypes.AllTimePopularity:
-        return 'showing most popular first (all time)';
+        return tooltip + `ordered by all time popularity`;
       case PointSortTypes.Random:
-        return 'showing in random order';
-      default:
-        return 'showing most recent first';
+        return tooltip + `in random order`;
+      default: // Date
+        return tooltip + `ordered by date updated`;
     }
   }
 
@@ -89,8 +95,18 @@ export class SearchAndSortComponent {
 
   constructor(
     public localData: LocalDataService,
-    public auth0Service: AuthService
+    public auth0Service: AuthService,
+    private breakpointObserver: BreakpointObserver
   ) {}
+
+  ngOnInit() {
+    // https://alligator.io/angular/breakpoints-angular-cdk/
+    this.breakpointObserver
+      .observe(['(max-width: 425px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isMobile = state.matches;
+      });
+  }
 
   // 1. Filters
   toggleShowPointFilterCriteria(): void {

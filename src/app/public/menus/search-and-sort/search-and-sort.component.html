@@ -4,9 +4,9 @@
   mat-button
   [matMenuTriggerFor]="sortOrderMenu"
   [matTooltip]="sortToolTip"
-  matTooltipPosition="right"
+  matTooltipClass="multiLine"
 >
-  search & sort
+  {{ searchAndSortText }}
   <mat-icon>{{ sortTypeIcon }}</mat-icon>
 </button>
 
