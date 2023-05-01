@@ -28,29 +28,14 @@
       >
     </button>
 
-    <!-- Tag Search -->
-    <button
-      mat-button
-      (click)="ChangeTab(Tabs.tagSearch)"
-      [class.selected]="tabIndex === Tabs.tagSearch"
-      matTooltip="slash tag search"
+    <!-- Tag search and local tags -->
+    <app-tag-search-menu
+      [FilterForConstituency]="localData.forConstituency"
+      [TabIndex]="tabIndex"
+      (changeLocal)="ChangeLocal()"
+      (tagSearch)="ChangeTab(Tabs.tagSearch)"
     >
-      search
-      <mat-icon>search</mat-icon>
-    </button>
-
-    <!-- Local Topics -->
-    <button
-      mat-button
-      (click)="ChangeLocal()"
-      class="localButton"
-      [class.selected]="localData.forConstituency"
-      matTooltip="local interest"
-      *ngIf="auth0Service.isAuthenticated$ | async"
-    >
-      local
-      <mat-icon>mp</mat-icon>
-    </button>
+    </app-tag-search-menu>
 
     <!-- Show previously selected tag results -->
     <div class="flexRow center">
@@ -62,7 +47,7 @@
       >
         <div class="flexRow center">
           <span class="slash">/</span>
-          <span>slash-tag</span>
+          <span>{{ slashTagButtonText }}</span>
         </div>
       </button>
 

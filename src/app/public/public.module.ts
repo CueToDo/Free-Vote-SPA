@@ -45,6 +45,7 @@ import { SearchAndSortComponent } from './menus/search-and-sort/search-and-sort.
 import { SocialShareComponent } from './menus/social-share/social-share.component';
 import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
 import { TagSearchComponent } from './tag-search/tag-search.component';
+import { TagSearchMenuComponent } from './menus/tag-search-menu/tag-search-menu.component';
 import { TakeActionComponent } from './take-action/take-action.component';
 import { WebsitePreviewComponent } from './website-preview/website-preview.component';
 
@@ -93,6 +94,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     SocialShareComponent,
     TagsAndPointsComponent,
     TagSearchComponent,
+    TagSearchMenuComponent,
     TakeActionComponent,
     WebsitePreviewComponent
   ],

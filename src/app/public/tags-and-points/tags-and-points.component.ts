@@ -7,6 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // Auth0
 import { AuthService } from '@auth0/auth0-angular';
@@ -31,16 +32,16 @@ import { Auth0Wrapper } from 'src/app/services/auth.service';
 import { TagsService } from 'src/app/services/tags.service';
 
 // Components
-import { PointsFilterComponent } from 'src/app/public/points-filter/points-filter.component';
-import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
-import { TagSearchComponent } from './../tag-search/tag-search.component';
-import { QuestionsListComponent } from 'src/app/public/questions-list/questions-list.component';
-import { QuestionAnswersComponent } from './../question-answers/question-answers.component';
 import { GroupSelectionComponent } from 'src/app/breakoutgroups/group-selection/group-selection.component';
 import { GroupDiscussionComponent } from 'src/app/breakoutgroups/group-discussion/group-discussion.component';
-import { PointsListComponent } from 'src/app/public/points-list/points-list.component';
 import { PointEditComponent } from 'src/app/public//point-edit/point-edit.component';
+import { PointsFilterComponent } from 'src/app/public/points-filter/points-filter.component';
+import { PointsListComponent } from 'src/app/public/points-list/points-list.component';
+import { QuestionAnswersComponent } from './../question-answers/question-answers.component';
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
+import { QuestionsListComponent } from 'src/app/public/questions-list/questions-list.component';
+import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
+import { TagSearchComponent } from './../tag-search/tag-search.component';
 
 @Component({
   templateUrl: './tags-and-points.component.html',
@@ -53,7 +54,15 @@ export class TagsAndPointsComponent
   tagLatestActivity$: Subscription | undefined;
   pointsFilterRemove$: Subscription | undefined;
   width$: Subscription | undefined; // Viewport width monitoring
+
+  // responsive variables
   widthBand = 4;
+  isLargeMobile = false;
+
+  get slashTagButtonText(): string {
+    if (this.isLargeMobile) return 'tag';
+    return 'slash-tag';
+  }
 
   // Public variables for use in template
   public Tabs = Tabs;
@@ -153,7 +162,8 @@ export class TagsAndPointsComponent
     public localData: LocalDataService,
     public auth0Service: AuthService,
     private auth0Wrapper: Auth0Wrapper,
-    private tagsService: TagsService
+    private tagsService: TagsService,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
@@ -232,6 +242,13 @@ export class TagsAndPointsComponent
       // PointShare
       if (titleParam) this.qp = 'point';
     });
+
+    // https://alligator.io/angular/breakpoints-angular-cdk/
+    this.breakpointObserver
+      .observe(['(max-width: 425px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isLargeMobile = state.matches;
+      });
   }
 
   ngAfterViewInit() {

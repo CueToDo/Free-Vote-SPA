@@ -15,6 +15,7 @@ import { isPlatformServer } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
 import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // rxjs
 import { fromEvent } from 'rxjs';
@@ -28,7 +29,6 @@ import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 
 // FreeVote Services
 import { AppDataService } from 'src/app/services/app-data.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { TagsService } from 'src/app/services/tags.service';
