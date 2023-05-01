@@ -34,6 +34,7 @@ import { PointCommentsComponent } from './point-comments/point-comments.componen
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
+import { PointsAndQuestionsMenuComponent } from './menus/points-and-questions-menu/points-and-questions-menu.component';
 import { PointsFilterComponent } from './points-filter/points-filter.component';
 import { PointsListComponent } from './points-list/points-list.component';
 import { PointTypesComponent } from './menus/point-types/point-types.component';
@@ -82,6 +83,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     PointCommentsComponent,
     PointComponent,
     PointEditComponent,
+    PointsAndQuestionsMenuComponent,
     PointsFilterComponent,
     PointsListComponent,
     PointOfTheWeekComponent,
