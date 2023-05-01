@@ -91,7 +91,7 @@ export class TagsAndPointsComponent
   }
 
   // Question Answers or Tag Points
-  qp = 'question'; // bound to radio button value
+  qp = 'point';
 
   public get showQuestions(): boolean {
     return this.qp === 'question';

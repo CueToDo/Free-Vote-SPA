@@ -4,6 +4,7 @@
   mat-button
   [matMenuTriggerFor]="sortOrderMenu"
   [matTooltip]="sortToolTip"
+  matTooltipPosition="right"
 >
   search & sort
   <mat-icon>{{ sortTypeIcon }}</mat-icon>
@@ -17,6 +18,7 @@
     mat-menu-item
     (click)="toggleShowPointFilterCriteria()"
     [matTooltip]="filterToolTip"
+    matTooltipPosition="right"
   >
     <mat-icon>{{ filterIcon }}</mat-icon>
     {{ filterText }}
@@ -27,9 +29,10 @@
   <!-- Sort Type -->
   <button
     mat-menu-item
+    [class.selected]="pointSortType === PointSortTypes.TrendingActivity"
     (click)="setSortType(PointSortTypes.TrendingActivity)"
     [matTooltip]="'trending now'"
-    [class.selected]="pointSortType === PointSortTypes.TrendingActivity"
+    matTooltipPosition="right"
   >
     <mat-icon>trending_up</mat-icon>
     trending
@@ -37,9 +40,10 @@
 
   <button
     mat-menu-item
+    [class.selected]="pointSortType === PointSortTypes.AllTimePopularity"
     (click)="setSortType(PointSortTypes.AllTimePopularity)"
     [matTooltip]="'most popular first (all time)'"
-    [class.selected]="pointSortType === PointSortTypes.AllTimePopularity"
+    matTooltipPosition="right"
   >
     <mat-icon>favorite_border</mat-icon>
     popularity
@@ -47,9 +51,10 @@
 
   <button
     mat-menu-item
+    [class.selected]="pointSortType === PointSortTypes.DateUpdated"
     (click)="setSortType(PointSortTypes.DateUpdated)"
     [matTooltip]="'date order - most recent first'"
-    [class.selected]="pointSortType === PointSortTypes.DateUpdated"
+    matTooltipPosition="right"
   >
     <mat-icon>calendar_today</mat-icon>
     date
@@ -60,9 +65,10 @@
   <!-- Sort Order -->
   <button
     mat-menu-item
-    [matTooltip]="'descending order'"
-    (click)="setSortDescending(true)"
     [class.selected]="sortDescending && pointSortType !== PointSortTypes.Random"
+    (click)="setSortDescending(true)"
+    [matTooltip]="'descending order'"
+    matTooltipPosition="right"
   >
     <mat-icon>arrow_downward</mat-icon>
     descending
@@ -70,11 +76,12 @@
 
   <button
     mat-menu-item
-    [matTooltip]="'ascending order'"
-    (click)="setSortDescending(false)"
     [class.selected]="
       !sortDescending && pointSortType !== PointSortTypes.Random
     "
+    (click)="setSortDescending(false)"
+    [matTooltip]="'ascending order'"
+    matTooltipPosition="right"
   >
     <mat-icon>arrow_upward</mat-icon>
     ascending
@@ -82,9 +89,10 @@
 
   <button
     mat-menu-item
+    [class.selected]="pointSortType === PointSortTypes.Random"
     (click)="setSortType(PointSortTypes.Random)"
     [matTooltip]="'random order'"
-    [class.selected]="pointSortType === PointSortTypes.Random"
+    matTooltipPosition="right"
   >
     <mat-icon>gesture</mat-icon>
     random
@@ -100,13 +108,19 @@
     [class.selected]="localData.forConstituency"
     (click)="ChangeLocalSelection()"
     matTooltip="local interest"
+    matTooltipPosition="right"
   >
     local
     <mat-icon>mp</mat-icon>
   </button>
 
   <!-- Feedback Switch -->
-  <button mat-menu-item (click)="toggleFeedback()" matTooltip="toggle feedback">
+  <button
+    mat-menu-item
+    (click)="toggleFeedback()"
+    matTooltip="toggle feedback"
+    matTooltipPosition="right"
+  >
     <mat-icon>{{ feedbackIcon }}</mat-icon>
     {{ feedbackText }}
   </button>
@@ -114,7 +128,12 @@
   <hr />
 
   <!-- Refresh -->
-  <button mat-menu-item (click)="refreshSelection()" [matTooltip]="'refresh'">
+  <button
+    mat-menu-item
+    (click)="refreshSelection()"
+    matTooltip="refresh"
+    matTooltipPosition="right"
+  >
     <mat-icon>refresh</mat-icon>
     refresh
   </button>
