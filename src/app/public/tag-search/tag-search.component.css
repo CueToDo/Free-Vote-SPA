@@ -1,39 +1,18 @@
 div.Search {
-  margin-bottom: 30px;
+  max-width: 480px;
+  margin: auto;
+  margin-bottom: 16px;
 }
 
 .Search input,
 .Search button {
-  height: 50px !important;
+  height: 40px !important;
   font-size: 1.2em !important;
 }
 
 .Search input {
+  width: 100%;
   padding: 10px;
-}
-
-.Search button {
-  margin-left: 10px;
-}
-
-@media screen and (min-width: 600px) {
-  .Search input {
-    max-width: 340px; /* restrict input max-width */
-  }
-}
-
-@media screen and (max-width: 599.999px) {
-  .Search input {
-    width: 100%;
-  }
-}
-
-.gtxsSearch button {
-  margin-left: 10px;
-}
-
-.xsSearch button {
-  margin-top: 10px;
 }
 
 #tagContainer {

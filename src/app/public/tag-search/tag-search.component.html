@@ -1,19 +1,20 @@
 <!-- Tags matching hard sound criteria -->
-<div>
+<div class="Search">
   <!-- SlashTag Search -->
-  <div class="flexRow center Search mt-5">
-    <div>
-      <input
-        type="text"
-        [(ngModel)]="slashTag"
-        (ngModelChange)="slashTagCleanUp($event)"
-        (keyup.enter)="newTag()"
-        class="form-control"
-        #tvSlashTag
-        placeholder="/slash tag"
-      />
-    </div>
 
+  <div class="center">
+    <input
+      type="text"
+      #tvSlashTag
+      [(ngModel)]="slashTag"
+      (ngModelChange)="slashTagCleanUp($event)"
+      (keyup.enter)="newTag()"
+      class="form-control"
+      placeholder="/slash tag"
+    />
+  </div>
+
+  <div class="flexRow center mt-3">
     <button mat-stroked-button (click)="newTag()">
       <mat-icon>add</mat-icon>
       create
@@ -31,9 +32,11 @@
       <span class="visually-hidden">Loading...</span>
     </span>
   </div>
+</div>
 
+<div class="linkCloud">
   <ng-container *ngFor="let tag of tags">
-    <div id="tagContainer" class="linkCloud">
+    <div id="tagContainer">
       <a
         [innerHTML]="tag.tagDisplay | TagDisplay"
         [ngStyle]="{
@@ -44,8 +47,8 @@
       ></a>
     </div>
   </ng-container>
+</div>
 
-  <div class="fv-error" *ngIf="!!error">
-    {{ error }}
-  </div>
+<div class="fv-error" *ngIf="!!error">
+  {{ error }}
 </div>

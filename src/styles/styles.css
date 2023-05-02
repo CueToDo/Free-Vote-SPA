@@ -53,6 +53,10 @@ router-outlet + *, /* All content injected after router-outlet */
   flex-flow: row-reverse; /* special case for tags and points slash tag button */
 }
 
+.flexRow.wrap {
+  flex-wrap: wrap;
+}
+
 .flexStretch {
   flex: 10 1;
 }
