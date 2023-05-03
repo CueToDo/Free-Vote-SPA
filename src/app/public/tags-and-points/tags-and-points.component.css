@@ -44,8 +44,11 @@ hr {
   margin: 0.5rem 0;
 }
 
+.flexRow .smallGap {
+  gap: 5px;
+}
 .slash {
-  margin-right: 2px;
+  margin-right: 0px;
   font-weight: medium;
   font-size: 1.8em;
 }
