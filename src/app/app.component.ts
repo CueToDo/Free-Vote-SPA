@@ -1,5 +1,3 @@
-import { AuthService } from '@auth0/auth0-angular';
-
 // Comments not permitted in json (package.json --host=127.0.0.1")
 // https://stackoverflow.com/questions/72203399/suddenly-gets-could-not-read-source-map-in-vscode-using-angular
 
@@ -77,7 +75,6 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     public auth0Wrapper: Auth0Wrapper,
-    // public auth0Service: AuthService,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
     private lookupsService: LookupsService,
@@ -98,19 +95,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.localData.Log(`<br><br>APP Initialising`);
-
-    // Force https
-    // https://stackoverflow.com/questions/48739768/host-angular-app-on-iis-redirect-to-root-and-force-https
-    if (
-      environment.production &&
-      isPlatformBrowser(this.platformId) &&
-      location.protocol === 'http:'
-    ) {
-      window.location.href = location.href.replace('http', 'https');
-      console.log('https redirect',window.location.href);
-    } else{
-      console.log('No redirect', environment.production, isPlatformBrowser(this.platformId), location.protocol);
-    }
 
     // Do this before any API calls
     this.auth0Wrapper.SetUpAuth0Subscriptions();

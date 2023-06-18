@@ -7,10 +7,23 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 import { AppServerModule } from './src/main.server';
+import { environment } from './src/environments/environment';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
+
+  // ---- REDIRECT TO HTTPS ---- //
+  if (environment.production) {
+    server.use(function (req, res, next) {
+      // if (!req.secure) {
+      if (req.headers['x-forwarded-proto'] !== 'https') {
+        res.redirect(301, `https://${req.hostname}${req.originalUrl}`);
+      }
+      next();
+    });
+  }
+
   const distFolder = join(process.cwd(), 'dist/free-vote/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
