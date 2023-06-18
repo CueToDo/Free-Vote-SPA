@@ -107,6 +107,9 @@ export class AppComponent implements OnInit {
       location.protocol === 'http:'
     ) {
       window.location.href = location.href.replace('http', 'https');
+      console.log('https redirect',window.location.href);
+    } else{
+      console.log('No redirect', environment.production, isPlatformBrowser(this.platformId), location.protocol);
     }
 
     // Do this before any API calls
