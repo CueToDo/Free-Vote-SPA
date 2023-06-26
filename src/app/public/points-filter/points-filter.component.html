@@ -32,6 +32,15 @@
             >any tag
           </mat-checkbox>
 
+          <mat-checkbox
+            labelPosition="before"
+            [(ngModel)]="filter.favourites"
+            #checkbox="matCheckbox"
+            (change)="FilterFavs(checkbox)"
+          >
+            {{ favouritesText }}</mat-checkbox
+          >
+
           <!-- Advanced Search Options -->
           <mat-checkbox labelPosition="before" [(ngModel)]="advanced" hidden
             >advanced search
@@ -132,15 +141,6 @@
 
       <!-- Favourites -->
       <div class="aml-3 mt-3">
-        <mat-checkbox
-          labelPosition="before"
-          [(ngModel)]="filter.favourites"
-          #checkbox="matCheckbox"
-          (change)="FilterFavs(checkbox)"
-        >
-          my {{ favouritesText }}</mat-checkbox
-        >
-
         <mat-form-field floatLabel="always">
           <mat-select
             name="pt"
