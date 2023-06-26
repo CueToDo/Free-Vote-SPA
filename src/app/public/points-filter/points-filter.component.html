@@ -3,7 +3,7 @@
     <!-- Show Filtering Options, controlled from Tag-Points component -->
     <div [ngClass]="{ show: ShowFilters, hide: !ShowFilters }">
       <div class="mt-3">
-        <div class="filters" fxLayout="row wrap" fxLayoutAlign="start center">
+        <div class="filters">
           <!-- Text search -->
           <mat-form-field class="searchInput">
             <input
@@ -14,9 +14,9 @@
               [(ngModel)]="filter.text"
               (keyup.enter)="SelectPoints()"
             />
+
             <button
-              mat-button
-              *ngIf="filter.text"
+              *ngIf="!!filter.text"
               matSuffix
               mat-icon-button
               aria-label="Clear"

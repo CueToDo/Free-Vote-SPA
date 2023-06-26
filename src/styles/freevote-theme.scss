@@ -1,0 +1,132 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Colours
+
+// https://stackoverflow.com/questions/59866748/angular-material-custom-theme-from-material-color-tool
+// http://mcg.mbitson.com/#!?mcgpalette0=%238b5890
+$freevoteprimarycolours: (
+  50: #ede4ff,
+  100: #d1bcff,
+  200: #b28fff,
+  300: #9362ff,
+  400: #7c41ff,
+  500: #651fff,
+  600: #5d1bff,
+  700: #5317ff,
+  800: #4912ff,
+  900: #370aff,
+  A100: #ffffff,
+  A200: #f6f5ff,
+  A400: #cbc2ff,
+  A700: #b5a8ff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000
+  )
+);
+
+$freevoteaccentcolours: (
+  50: #e4ffed,
+  100: #bcffd1,
+  200: #8fffb2,
+  300: #62ff93,
+  400: #41ff7c,
+  500: #1fff65,
+  600: #1bff5d,
+  700: #17ff53,
+  800: #12ff49,
+  900: #0aff37,
+  A100: #ffffff,
+  A200: #f5fff6,
+  A400: #c2ffcb,
+  A700: #a8ffb5,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000
+  )
+);
+
+// Palettes
+
+$freevote-primary-palette: mat.define-palette($freevoteprimarycolours);
+$freevote-accent-palette: mat.define-palette($freevoteaccentcolours);
+$freevote-warn-palette: mat.define-palette(mat.$red-palette);
+
+// Themes
+
+$freevotetheme: mat.define-light-theme(
+  (
+    color: (
+      primary: $freevote-primary-palette,
+      accent: $freevote-accent-palette,
+      warn: $freevote-warn-palette
+    ),
+    typography: mat.define-typography-config(),
+    density: 0
+  )
+);
+
+// @include mat.all-component-themes($freevotetheme);
+@include mat.core-theme($freevotetheme);
+// @include card-theme.theme($freevotetheme);
+// @include progress-bar-theme.theme($freevotetheme);
+@include mat.tooltip-theme($freevotetheme);
+@include mat.form-field-theme($freevotetheme);
+@include mat.input-theme($freevotetheme);
+// @include select-theme.theme($freevotetheme);
+// @include autocomplete-theme.theme($freevotetheme);
+// @include dialog-theme.theme($freevotetheme);
+// @include chips-theme.theme($freevotetheme);
+// @include slide-toggle-theme.theme($freevotetheme);
+// @include radio-theme.theme($freevotetheme);
+// @include slider-theme.theme($freevotetheme);
+@include mat.menu-theme($freevotetheme);
+// @include list-theme.theme($freevotetheme);
+// @include paginator-theme.theme($freevotetheme);
+// @include tabs-theme.theme($freevotetheme);
+// @include checkbox-theme.theme($freevotetheme);
+// @include button-theme.theme($freevotetheme);
+@include mat.icon-button-theme($freevotetheme);
+// @include fab-theme.theme($freevotetheme);
+// @include snack-bar-theme.theme($freevotetheme);
+// @include table-theme.theme($freevotetheme);
+// @include progress-spinner-theme.theme($freevotetheme);
+// @include badge-theme.theme($freevotetheme);
+// @include bottom-sheet-theme.theme($freevotetheme);
+// @include button-toggle-theme.theme($freevotetheme);
+// @include datepicker-theme.theme($freevotetheme);
+// @include divider-theme.theme($freevotetheme);
+// @include expansion-theme.theme($freevotetheme);
+// @include grid-list-theme.theme($freevotetheme);
+// @include icon-theme.theme($freevotetheme);
+// @include sidenav-theme.theme($freevotetheme);
+// @include stepper-theme.theme($freevotetheme);
+// @include sort-theme.theme($freevotetheme);
+// @include toolbar-theme.theme($freevotetheme);
+// @include tree-theme.theme($freevotetheme);

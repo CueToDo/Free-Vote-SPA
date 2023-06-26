@@ -28,7 +28,10 @@
               "src/manifest.json",
               "src/manifest.webmanifest"
             ],
-            "styles": ["src/styles/styles.css", "src/styles/bootstrap-alt.css"],
+            "styles": [
+              "src/styles/styles.scss",
+              "src/styles/bootstrap-alt.css"
+            ],
             "scripts": [],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"

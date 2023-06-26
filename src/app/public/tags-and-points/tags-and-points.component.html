@@ -8,8 +8,8 @@
   class="amy-2"
 >
   <div *ngIf="tabIndex < Tabs.questionList" class="flexRow center">
+
     <!-- Trending/Recently selected tags -->
-    <!-- ((auth0Service.isAuthenticated$ | async) || haveRecentSlashTags) -->
     <button
       mat-button
       (click)="ChangeTrendingRecent()"
