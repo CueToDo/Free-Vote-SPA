@@ -116,9 +116,9 @@ export class PointCommandsComponent implements OnInit {
     this.Favourite.emit();
   }
 
-  important() {
-    this.Important.emit();
-  }
+  // important() {
+  //   this.Important.emit();
+  // }
 
   anon() {
     this.Anon.emit();
