@@ -24,7 +24,10 @@
       <div
         #elPointHtml
         [innerHTML]="pointHTMLwithoutEmbed | SafeHtml"
-        [ngClass]="{ 'line-clamp': !showFullText, parentPoint: isParentPoint }"
+        [ngClass]="{
+          'line-clamp': !showFullText,
+          parentPoint: isParentPoint
+        }"
       ></div>
 
       <div class="moreorless" [ngClass]="{ parentPoint: isParentPoint }">

@@ -131,7 +131,6 @@ export class PointComponent implements AfterViewInit {
     }
 
     this.extractMediaEmbeds();
-    this.showPreview();
   }
 
   public AssignAndInitialise(point: Point) {
@@ -434,8 +433,6 @@ export class PointComponent implements AfterViewInit {
                 this.point.linkImage = metaData.image;
                 this.point.showPreview = metaData.showPreview;
                 this.updatingPreview = false;
-
-                this.showPreview();
               }
             },
             error: err => {
@@ -447,16 +444,6 @@ export class PointComponent implements AfterViewInit {
               this.updatingPreview = false;
             }
           });
-      }
-    }
-  }
-
-  showPreview() {
-    if (this.point.showPreview) {
-      let elements = this.elem.nativeElement.querySelectorAll('.lastAnchor');
-
-      if (elements?.length == 1) {
-        elements[0].className = 'hidden';
       }
     }
   }
