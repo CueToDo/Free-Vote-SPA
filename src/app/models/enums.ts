@@ -63,7 +63,9 @@ export enum PointTypesEnum {
   RecommendedListening = 26,
   Petition = 27,
   Question = 28,
-  CommentOrEditorial = 29
+  CommentOrEditorial = 29,
+  NewsReport = 30,
+  Observation = 32
 }
 
 export enum Tabs {
