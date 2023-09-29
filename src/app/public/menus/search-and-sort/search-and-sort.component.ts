@@ -126,7 +126,11 @@ export class SearchAndSortComponent implements OnInit {
   // 3. Sort Order
   setSortDescending(descending: boolean) {
     this.sortDescending = descending;
-    this.pointSortType = PointSortTypes.TrendingActivity;
+
+    // ascending/descending not applicable to random
+    if (this.pointSortType === PointSortTypes.Random) {
+      this.pointSortType = PointSortTypes.TrendingActivity;
+    }
     this.sortDescendingChange.emit(descending);
   }
 

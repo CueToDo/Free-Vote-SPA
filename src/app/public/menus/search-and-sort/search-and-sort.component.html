@@ -60,6 +60,17 @@
     date
   </button>
 
+  <button
+    mat-menu-item
+    [class.selected]="pointSortType === PointSortTypes.Random"
+    (click)="setSortType(PointSortTypes.Random)"
+    [matTooltip]="'random order'"
+    matTooltipPosition="right"
+  >
+    <mat-icon>gesture</mat-icon>
+    random
+  </button>
+
   <hr />
 
   <!-- Sort Order -->
@@ -85,17 +96,6 @@
   >
     <mat-icon>arrow_upward</mat-icon>
     ascending
-  </button>
-
-  <button
-    mat-menu-item
-    [class.selected]="pointSortType === PointSortTypes.Random"
-    (click)="setSortType(PointSortTypes.Random)"
-    [matTooltip]="'random order'"
-    matTooltipPosition="right"
-  >
-    <mat-icon>gesture</mat-icon>
-    random
   </button>
 
   <hr />

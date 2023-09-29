@@ -163,21 +163,21 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
   // Go to API to get matching tags after debouncing keyups
   tagSearch() {
     //min 2 consonants to search api
-    if (this.appData.uniqueConsonants(this.slashTag) > 1) {
-      this.searching = true;
-      this.tagResults$ = this.tagsService
-        .TagSearch(this.slashTag, this.constituencyID)
-        .subscribe({
-          next: slashTags => {
-            this.tags = slashTags;
-            this.searching = false;
-          },
-          error: serverError => {
-            this.error = serverError.console.error.detail;
-            this.searching = false;
-          }
-        });
-    }
+    // if (this.appData.uniqueConsonants(this.slashTag) > 1) {
+    this.searching = true;
+    this.tagResults$ = this.tagsService
+      .TagSearch(this.slashTag, this.constituencyID)
+      .subscribe({
+        next: slashTags => {
+          this.tags = slashTags;
+          this.searching = false;
+        },
+        error: serverError => {
+          this.error = serverError.console.error.detail;
+          this.searching = false;
+        }
+      });
+    // }
   }
 
   newTag(): void {
