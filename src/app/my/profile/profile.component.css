@@ -16,10 +16,6 @@
   margin-bottom: 4px;
 }
 
-button {
-  margin-bottom: 12px;
-}
-
 button + button {
   margin-left: 12px;
 }

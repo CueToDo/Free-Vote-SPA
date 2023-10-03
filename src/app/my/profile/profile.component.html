@@ -104,8 +104,8 @@
         <div style="flex: 4">
           <span class="align-middle"> post code </span>
         </div>
-        <div style="flex: 6">
-          <input type="text" [(ngModel)]="postcode" />
+        <div style="flex: 6" class="flexRow">
+          <input type="text" class="form-control" [(ngModel)]="postcode" />
           <button mat-stroked-button (click)="lookupPostCode()">
             <mat-icon>search</mat-icon>
             lookup
@@ -221,8 +221,10 @@
       </div>
 
       <!-- Complete Edit Commands -->
-      <div fxFlex fxLayout="row wrap" fxLayoutAlign="center" *ngIf="editing">
-        <!-- <button
+      <div class="flexRow" *ngIf="editing">
+        <div style="flex: 4"></div>
+        <div style="flex: 6">
+          <!-- <button
           mat-stroked-button
           (click)="newCountry()"
           *ngIf="false && editing && !editNewCountry && !editNewCity"
@@ -240,12 +242,12 @@
           new city
         </button> -->
 
-        <button mat-stroked-button (click)="save()">
-          <mat-icon>save</mat-icon>
-          save
-        </button>
+          <button mat-stroked-button (click)="save()">
+            <mat-icon>save</mat-icon>
+            save
+          </button>
 
-        <!-- <button
+          <!-- <button
           mat-stroked-button
           (click)="saveCountry()"
           *ngIf="editNewCountry"
@@ -254,32 +256,36 @@
           save country
         </button> -->
 
-        <!-- <button mat-stroked-button (click)="saveCity()" *ngIf="editNewCity">
+          <!-- <button mat-stroked-button (click)="saveCity()" *ngIf="editNewCity">
           <mat-icon>save</mat-icon>
           save city
         </button> -->
 
-        <button mat-stroked-button (click)="cancel()">
-          <mat-icon>cancel</mat-icon>
-          cancel
-        </button>
+          <button mat-stroked-button (click)="cancel()">
+            <mat-icon>cancel</mat-icon>
+            cancel
+          </button>
 
-        <span
-          class="spinner-grow text-primary ms-3"
-          role="status"
-          *ngIf="saving"
-        >
-          <span class="visually-hidden">Loading...</span>
-        </span>
+          <span
+            class="spinner-grow text-primary ms-3"
+            role="status"
+            *ngIf="saving || lookingUpPostcode"
+          >
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </div>
       </div>
 
       <!-- Update message -->
       <div
-        fxFlex="100"
+        class="flexRow"
         [ngClass]="{ alert: error, 'alert-danger': error, success: success }"
       >
-        <div *ngIf="!!updateMessage">
-          {{ updateMessage }}
+        <div style="flex: 4"></div>
+        <div style="flex: 6">
+          <div *ngIf="!!updateMessage">
+            {{ updateMessage }}
+          </div>
         </div>
       </div>
 

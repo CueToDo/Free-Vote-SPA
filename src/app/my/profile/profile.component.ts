@@ -1,9 +1,11 @@
 // Angular
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   NgZone,
   OnDestroy,
+  OnInit,
   ViewChild
 } from '@angular/core';
 import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
@@ -39,7 +41,7 @@ import { DeleteAccountComponent } from 'src/app/my/delete-account/delete-account
   styleUrls: ['./profile.component.css'],
   preserveWhitespaces: true
 })
-export class ProfileComponent implements OnDestroy {
+export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   constituencySearch$: Subscription | undefined;
 
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
@@ -77,6 +79,7 @@ export class ProfileComponent implements OnDestroy {
 
   editing = false;
 
+  lookingUpPostcode = false;
   uploading = false;
   saving = false;
   success = false;
@@ -95,6 +98,10 @@ export class ProfileComponent implements OnDestroy {
     public dialog: MatDialog,
     private ngZone: NgZone
   ) {}
+
+  ngOnInit() {
+    this.postcode = this.localData.freeVoteProfile.postcode;
+  }
 
   ngAfterViewInit() {
     // Debounce the keyup outside of angular zone
@@ -356,6 +363,7 @@ export class ProfileComponent implements OnDestroy {
     this.error = false;
     this.updateMessage = '';
     if (!!this.postcode) {
+      this.lookingUpPostcode = true;
       this.lookupsService.PostCodeSearch(this.postcode).subscribe({
         next: votingArea => {
           // Geographical
@@ -373,11 +381,13 @@ export class ProfileComponent implements OnDestroy {
           this.localData.freeVoteProfile.ward = votingArea.ward;
           this.localData.freeVoteProfile.council = votingArea.council;
           this.wardID = votingArea.wardID;
+          this.lookingUpPostcode = false;
         },
         error: err => {
           this.error = true;
           this.updateMessage = err.error.detail;
           console.log(this.updateMessage);
+          this.lookingUpPostcode = false;
         }
       });
     }
