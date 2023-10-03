@@ -409,7 +409,10 @@ export class TagsAndPointsComponent
         this.fetchedTagsRecent = true;
       }
     } else if (this.tabIndex === Tabs.tagSearch) {
-      this.tagSearchComponent.SetConstituencyID(this.filter.constituencyID);
+      this.tagSearchComponent.SetConstituencyID(
+        this.filter.constituencyID,
+        true
+      );
       if (this.filter.constituencyID > 0) {
         this.fetchedTagsSearchLocal = true;
       } else {
@@ -575,7 +578,10 @@ export class TagsAndPointsComponent
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         newRoute = '/search';
         if (!this.fetchedTagsSearch || !this.fetchedTagsSearchLocal) {
-          this.tagSearchComponent.SetConstituencyID(this.filter.constituencyID);
+          this.tagSearchComponent.SetConstituencyID(
+            this.filter.constituencyID,
+            false
+          );
           if (this.filter.constituencyID > 0) {
             this.fetchedTagsSearchLocal = true;
           } else {

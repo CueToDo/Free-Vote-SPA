@@ -100,6 +100,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     if (isPlatformBrowser(this.platformId)) {
       this.slashTag = '/';
       this.tags = [];
+      this.searching = false;
 
       window.setTimeout(() => {
         // Set focus on input
@@ -155,29 +156,31 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     // This does not get communicated back to view until no cleanup is required
   }
 
-  SetConstituencyID(constituencyID: number) {
+  SetConstituencyID(constituencyID: number, search: boolean) {
     this.constituencyID = constituencyID;
-    this.tagSearch();
+    if (search) {
+      this.tagSearch();
+    }
   }
 
   // Go to API to get matching tags after debouncing keyups
   tagSearch() {
-    //min 2 consonants to search api
-    // if (this.appData.uniqueConsonants(this.slashTag) > 1) {
-    this.searching = true;
-    this.tagResults$ = this.tagsService
-      .TagSearch(this.slashTag, this.constituencyID)
-      .subscribe({
-        next: slashTags => {
-          this.tags = slashTags;
-          this.searching = false;
-        },
-        error: serverError => {
-          this.error = serverError.console.error.detail;
-          this.searching = false;
-        }
-      });
-    // }
+    //min '/' plus 2 characters to search api
+    if (this.slashTag.length > 2) {
+      this.searching = true;
+      this.tagResults$ = this.tagsService
+        .TagSearch(this.slashTag, this.constituencyID)
+        .subscribe({
+          next: slashTags => {
+            this.tags = slashTags;
+            this.searching = false;
+          },
+          error: serverError => {
+            this.error = serverError.console.error.detail;
+            this.searching = false;
+          }
+        });
+    }
   }
 
   newTag(): void {
