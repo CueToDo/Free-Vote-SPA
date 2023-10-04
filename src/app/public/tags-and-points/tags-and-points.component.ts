@@ -625,7 +625,10 @@ export class TagsAndPointsComponent
 
       case Tabs.tagPoints:
         this.qp = 'point';
-        this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
+        // Don't remove filter
+        if (this.filter.pointSelectionType != PointSelectionTypes.Filtered) {
+          this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
+        }
         // Don't save previous
         // ActiveAliasForFilter update by the "By" Component (sibling),
         // AND child Tags and Points Components

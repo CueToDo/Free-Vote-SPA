@@ -31,13 +31,10 @@ export class SearchAndSortComponent implements OnInit {
   @Input() sortDescending!: boolean;
   @Output() sortDescendingChange = new EventEmitter<boolean>();
 
-  // 4. Local
-  @Output() changeLocalSelection = new EventEmitter();
-
-  // 5. Feedback
+  // 4. Feedback
   @Output() feedbackChange = new EventEmitter<boolean>();
 
-  // 6. Refresh
+  // 5. Refresh
   @Output() refresh = new EventEmitter();
   public Tabs = Tabs;
 
@@ -134,12 +131,7 @@ export class SearchAndSortComponent implements OnInit {
     this.sortDescendingChange.emit(descending);
   }
 
-  // 4. Local
-  ChangeLocalSelection() {
-    this.changeLocalSelection.emit();
-  }
-
-  // 5. Feedback
+  // 4. Feedback
   feedbackOn = true;
   get feedbackIcon(): string {
     if (this.feedbackOn) return 'speaker_notes_off';
@@ -155,7 +147,7 @@ export class SearchAndSortComponent implements OnInit {
     this.feedbackChange.emit(this.feedbackOn);
   }
 
-  // 6. Refresh
+  // 5. Refresh
   refreshSelection() {
     this.refresh.emit();
   }

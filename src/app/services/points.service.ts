@@ -267,7 +267,6 @@ export class PointsService {
       PSR.pointIDs = this.appData.CastObjectToIDs(sourceData.pointIDs);
       PSR.points = sourceData.points;
     }
-    console.log('PSR', PSR);
     return PSR;
   }
 

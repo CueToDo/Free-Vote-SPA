@@ -8,7 +8,6 @@
   class="amy-2"
 >
   <div *ngIf="tabIndex < Tabs.questionList" class="flexRow center">
-
     <!-- Trending/Recently selected tags -->
     <button
       mat-button
@@ -32,14 +31,31 @@
       >
     </button>
 
-    <!-- Tag search and local tags -->
-    <app-tag-search-menu
-      [FilterForConstituency]="localData.forConstituency"
-      [TabIndex]="tabIndex"
-      (changeLocal)="ChangeLocal()"
-      (tagSearch)="ChangeTab(Tabs.tagSearch)"
+    <!-- Tag Search -->
+    <button
+      mat-button
+      (click)="ChangeTab(Tabs.tagSearch)"
+      [class.selected]="tabIndex === Tabs.tagSearch"
+      matTooltip="slash tag search"
+      matTooltipPosition="right"
     >
-    </app-tag-search-menu>
+      search
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <!-- Local Topics -->
+    <button
+      mat-button
+      (click)="ChangeLocal()"
+      class="localButton"
+      [class.selected]="localData.forConstituency"
+      matTooltip="local interest"
+      matTooltipPosition="right"
+      *ngIf="auth0Service.isAuthenticated$ | async"
+    >
+      local
+      <mat-icon>mp</mat-icon>
+    </button>
 
     <!-- Show previously selected tag results -->
     <div class="flexRow center">
@@ -109,6 +125,20 @@
       (refresh)="refresh()"
     ></app-search-and-sort>
     <!-- End Sort Menu -->
+
+    <!-- Local Topics -->
+    <button
+      mat-button
+      *ngIf="auth0Service.isAuthenticated$ | async"
+      class="localButton"
+      [class.selected]="localData.forConstituency"
+      (click)="ChangeLocalSelection()"
+      matTooltip="local interest"
+      matTooltipPosition="right"
+    >
+      local
+      <mat-icon>mp</mat-icon>
+    </button>
   </div>
 
   <hr />
