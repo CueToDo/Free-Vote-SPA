@@ -292,14 +292,12 @@ export class PointsService {
       isPorQPoint, // not a point property
       ParentPointID: point.parentPointID,
       SoundCloudTrackID: point.soundCloudTrackID,
-      SlashTags: point.tags
-        .filter(tag => tag.pointOwnerTag)
-        .map(tag => tag.slashTag),
+      TagsList: point.tags.filter(tag => tag.myTag),
       Draft: point.draft
     } as PointEditFormData;
 
     return this.httpClientService
-      .post('points/pointUpdate', postData)
+      .post('points/pointUpdate', JSON.stringify(postData))
       .pipe(map(result => result as Point));
   }
 

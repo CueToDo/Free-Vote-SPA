@@ -33,7 +33,7 @@ export class PointEditFormData {
   ParentPointID = -1;
   PointTypeID = PointTypesEnum.Opinion;
   Draft = false;
-  SlashTags: string[] = [];
+  TagsList: Tag[] = [];
 }
 
 // Always use camelCase properties

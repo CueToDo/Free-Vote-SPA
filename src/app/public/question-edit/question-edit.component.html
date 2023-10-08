@@ -3,7 +3,7 @@
   <div class="questionEdit m-3">
     <input
       placeholder="question"
-      [(ngModel)]="questionEdit.question"
+      [(ngModel)]="questionClone.question"
       name="questionEdit"
       #tvQuestionTitle="ngModel"
       class="form-control"
@@ -14,7 +14,7 @@
   <!-- Details: The Editor -->
   <app-cke-universal
     name="questionDetails"
-    [(textToEdit)]="questionEdit.details"
+    [(textToEdit)]="questionClone.details"
     #CKEfudge
   >
     <!-- ToDo: Fudge see point edit -->
@@ -22,7 +22,7 @@
 
   <!-- Slash Tags -->
   <div class="m-3">
-    <app-tags-edit [(Tags)]="questionEdit.slashtags"></app-tags-edit>
+    <app-tags-edit [(Tags)]="questionClone.tags"></app-tags-edit>
   </div>
 
   <!-- ToolBar -->
@@ -39,7 +39,7 @@
       {{ error }}
     </div>
 
-    <mat-checkbox [(ngModel)]="questionEdit.draft" name="draftQuestion">
+    <mat-checkbox [(ngModel)]="questionClone.draft" name="draftQuestion">
       draft
     </mat-checkbox>
 

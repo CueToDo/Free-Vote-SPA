@@ -1,20 +1,40 @@
 <div fxLayout="row wrap">
-  <div *ngFor="let tag of Tags" class="topic" [ngClass]="{'myConTag':tag.myConTag, 
-    'conTag':tag.otherVoterConTag && !tag.myConTag, 
-    'pointOwnerTag':tag.pointOwnerTag, 
-    'deleteNewTag':!tag.myConTag && !tag.otherVoterConTag && !tag.pointOwnerTag }">
-    {{tag.slashTag}}
-    <mat-icon *ngIf="IsMyPointEdit && tag.pointOwnerTag || !IsMyPointEdit && tag.myConTag"
-      (click)="addRemoveTag(tag.slashTag, false)">remove_circle</mat-icon>
-    <mat-icon *ngIf="IsMyPointEdit && !tag.pointOwnerTag || !IsMyPointEdit && !tag.myConTag"
-      (click)="addRemoveTag(tag.slashTag, true)">add_circle</mat-icon>
+  <div
+    *ngFor="let tag of Tags"
+    class="topic"
+    [ngClass]="{
+      deleteMyTag: !tag.myTag && !tag.otherVoterTag,
+      otherVoterTag: !tag.myTag && tag.otherVoterTag,
+      myTag: tag.myTag,
+    }"
+  >
+    {{ tag.slashTag }}
+    <mat-icon
+      *ngIf="tag.myTag"
+      (click)="addRemoveTag(tag.slashTag, false)"
+      matTooltip="remove tag"
+      >remove_circle</mat-icon
+    >
+    <mat-icon
+      *ngIf="!tag.myTag"
+      (click)="addRemoveTag(tag.slashTag, true)"
+      [matTooltip]="'add tag'"
+      >add_circle</mat-icon
+    >
   </div>
 </div>
 
 <div>
-  <input fxFlex placeholder="type new slash tag and press enter" (keydown.shift.enter)="$event.preventDefault()"
-    (keyup)="check()" (keydown.enter)="$event.preventDefault()" (keyup.enter)="addNewTag()" (blur)="addNewTag()"
-    [(ngModel)]="newTopic">
+  <input
+    fxFlex
+    placeholder="type new slash tag and press enter"
+    (keydown.shift.enter)="$event.preventDefault()"
+    (keyup)="check()"
+    (keydown.enter)="$event.preventDefault()"
+    (keyup.enter)="addNewTag()"
+    (blur)="addNewTag()"
+    [(ngModel)]="newSlashTag"
+  />
 </div>
 
 <div class="alert alert-danger m-2" *ngIf="error">

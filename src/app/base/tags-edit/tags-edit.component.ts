@@ -12,7 +12,8 @@ import { Tag } from 'src/app/models/tag.model';
 })
 export class TagsEditComponent {
   addOnBlur = true;
-  newTopic = '';
+  newSlashTag = '';
+
   illegalTags = [
     '/about',
     '/by',
@@ -39,7 +40,7 @@ export class TagsEditComponent {
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  // 2 way bound in point-edit component
+  // 2 way bound in point-edit and question-edit components
   @Input() Tags: Tag[] = [];
   @Output() TagsChange = new EventEmitter<Tag[]>();
 
@@ -51,16 +52,15 @@ export class TagsEditComponent {
     this.check();
 
     if (!this.error) {
-      const newTopic = this.newTopic.trim();
-      if (!!newTopic && newTopic !== '/') {
-        var tag = new Tag(newTopic);
-        tag.pointOwnerTag = this.IsMyPointEdit;
-        tag.myConTag = !this.IsMyPointEdit;
-        tag.otherVoterConTag = false;
+      const newSlashTag = this.newSlashTag.trim();
+      if (!!newSlashTag && newSlashTag !== '/') {
+        var tag = new Tag(newSlashTag);
+        tag.myTag = true;
+        tag.otherVoterTag = false;
         this.Tags.push(tag);
       }
       // Reset the input value
-      this.newTopic = '';
+      this.newSlashTag = '';
     }
   }
 
@@ -68,38 +68,28 @@ export class TagsEditComponent {
     // get slashtag only using map to find index of tag in array
     const index = this.Tags.map(tag => tag.slashTag).indexOf(topic);
     var tag = this.Tags[index];
-
-    tag.myConTag = !this.IsMyPointEdit && add; // own or disown the pointTag
-
-    if (this.IsMyPointEdit) {
-      tag.pointOwnerTag = add;
-    }
-
-    // Don't ever remove from the list - always give chance to re-add
-    // if (!add && this.IsMyPointEdit && !tag.newTag) {
-    //   // Remove from the list
-    //   this.Tags.splice(index, 1);
-    // }
+    tag.myTag = add;
+    // Don't remove from the list - always give chance to re-add
   }
 
   check() {
     this.error = '';
 
     // https://stackoverflow.com/questions/1981349/regex-to-replace-multiple-spaces-with-a-single-space
-    this.newTopic = (this.newTopic || '')
+    this.newSlashTag = (this.newSlashTag || '')
       .replace(/\s\s+/g, ' ')
       .split(' ')
       .join('-');
 
     // Add our tag
     // Ensured unique on server
-    if (this.newTopic) {
-      if (this.newTopic.charAt(0) !== '/') {
-        this.newTopic = '/' + this.newTopic;
+    if (this.newSlashTag) {
+      if (this.newSlashTag.charAt(0) !== '/') {
+        this.newSlashTag = '/' + this.newSlashTag;
       }
 
-      if (this.illegalTags.includes(this.newTopic.trim())) {
-        this.error = `"${this.newTopic}" is not a permitted slash tag`;
+      if (this.illegalTags.includes(this.newSlashTag.trim())) {
+        this.error = `"${this.newSlashTag}" is not a permitted slash tag`;
       }
     }
   }

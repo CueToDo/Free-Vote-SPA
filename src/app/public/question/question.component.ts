@@ -46,13 +46,15 @@ export class QuestionComponent {
 
     if (questionID) {
       if (confirm('Are you sure you wish to delete this question?')) {
-        this.questionsService.QuestionDelete(questionID).subscribe({
-          next: () => this.QuestionDeleted.emit(questionID),
-          // not looking at any result <<<
-          error: serverError => {
-            this.error = serverError.error.detail;
-          }
-        });
+        this.questionsService
+          .QuestionDelete(questionID, this.localData.ConstituencyIDVoter)
+          .subscribe({
+            next: () => this.QuestionDeleted.emit(questionID),
+            // not looking at any result <<<
+            error: serverError => {
+              this.error = serverError.error.detail;
+            }
+          });
       }
     } else {
       this.error = 'Unknown question id - cannot be deleted';

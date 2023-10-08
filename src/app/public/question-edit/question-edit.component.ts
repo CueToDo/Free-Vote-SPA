@@ -27,7 +27,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
 })
 export class QuestionEditComponent implements OnInit {
   @Input() public question = new Question();
-  questionEdit!: QuestionEdit;
+  questionClone!: QuestionEdit;
 
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
@@ -53,7 +53,7 @@ export class QuestionEditComponent implements OnInit {
 
   ngOnInit(): void {
     if (!!this.question) {
-      this.questionEdit = cloneDeep(this.question) as any as QuestionEdit;
+      this.questionClone = cloneDeep(this.question) as any as QuestionEdit;
       // this.questionEdit.slashTag = this.localData.PreviousSlashTagSelected;
     }
     // If a new question, parent must initialise with NewQuestion
@@ -61,22 +61,21 @@ export class QuestionEditComponent implements OnInit {
 
   NewQuestion(slashTag: string): void {
     // Clear old Values when edit complete
-    this.questionEdit = new QuestionEdit();
+    this.questionClone = new QuestionEdit();
     this.ClearQuestion();
-    this.questionEdit.slashtags = [new Tag(slashTag)];
+    this.questionClone.tags = [new Tag(slashTag)];
     setTimeout(() => {
-      console.log('focusing ' + !!this.tvQuestionTitle?.nativeElement);
       this.tvQuestionTitle?.nativeElement.focus();
     }, 500);
   }
 
   ClearQuestion(): void {
-    this.questionEdit.constituencyID = -1;
-    this.questionEdit.questionID = -1;
-    this.questionEdit.question = '';
-    this.questionEdit.details = ''; // doesn't get through to ckEditor on property binding
+    this.questionClone.constituencyID = -1;
+    this.questionClone.questionID = -1;
+    this.questionClone.question = '';
+    this.questionClone.details = ''; // doesn't get through to ckEditor on property binding
     this.ckeFudge.clearData(); // Must explicitly clear previous data
-    this.questionEdit.draft = false;
+    this.questionClone.draft = false;
 
     this.error = '';
     this.userTouched = false;
@@ -88,15 +87,15 @@ export class QuestionEditComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const isNew = this.questionEdit.questionID < 1;
+    const isNew = this.questionClone.questionID < 1;
 
-    this.questionService.QuestionUpdate(this.questionEdit).subscribe({
+    this.questionService.QuestionUpdate(this.questionClone).subscribe({
       next: IDnSlug => {
         this.question.questionID = IDnSlug.value;
         this.question.slug = IDnSlug.key;
-        this.question.question = this.questionEdit.question;
-        this.question.details = this.questionEdit.details;
-        this.question.draft = this.questionEdit.draft;
+        this.question.question = this.questionClone.question;
+        this.question.details = this.questionClone.details;
+        this.question.draft = this.questionClone.draft;
         // SlashTag can't be upated
       },
       error: serverError => {
@@ -110,7 +109,7 @@ export class QuestionEditComponent implements OnInit {
         // Communicate change to sibling PointsComponent
         // where Points ReSelection Takes place:
         if (isNew) {
-          this.tagsService.SetSlashTag(this.questionEdit.slashtags[0].slashTag);
+          this.tagsService.SetSlashTag(this.questionClone.tags[0].slashTag);
         }
       }
     });

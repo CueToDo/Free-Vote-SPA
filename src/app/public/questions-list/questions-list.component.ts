@@ -108,7 +108,11 @@ export class QuestionsListComponent {
       this.alreadyFetchingFromDB = true;
 
       this.questionsService
-        .NewQuestionSelectionOrder(pointSortType, reversalOnly)
+        .NewQuestionSelectionOrder(
+          this.filter.constituencyID,
+          pointSortType,
+          reversalOnly
+        )
         .subscribe({
           next: response => {
             this.alreadyFetchingFromDB = false;
@@ -178,7 +182,11 @@ export class QuestionsListComponent {
         this.allQuestionsDisplayed = false;
 
         this.questionsService
-          .GetNextBatch(this.SortType, this.lastBatchRow + 1)
+          .GetNextBatch(
+            this.filter.constituencyID,
+            this.SortType,
+            this.lastBatchRow + 1
+          )
           .subscribe({
             next: response => {
               // New Batch

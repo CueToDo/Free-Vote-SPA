@@ -68,10 +68,11 @@ export class QuestionsService {
   }
 
   GetNextBatch(
+    constituencyIDVoter: number,
     pointSortOrder: PointSortTypes,
     fromRow: number
   ): Observable<QuestionSelectionResult> {
-    const apiUrl = `questions/getNextBatch/${pointSortOrder}/${fromRow}/${this.batchSize}/${this.pageSize}`;
+    const apiUrl = `questions/getNextBatch/${constituencyIDVoter}/${pointSortOrder}/${fromRow}/${this.batchSize}/${this.pageSize}`;
 
     return this.httpClientService
       .get(apiUrl)
@@ -93,10 +94,11 @@ export class QuestionsService {
   }
 
   NewQuestionSelectionOrder(
+    constituencyIDVoter: number,
     sortOrder: PointSortTypes,
     reversalOnly: boolean
   ): Observable<QuestionSelectionResult> {
-    const apiUrl = `questions/questionsSelectedReOrder/${sortOrder}/${
+    const apiUrl = `questions/questionsSelectedReOrder/${constituencyIDVoter}/${sortOrder}/${
       reversalOnly ? 'Y' : 'N'
     }`;
 
@@ -108,9 +110,7 @@ export class QuestionsService {
   QuestionUpdate(questionEdit: QuestionEdit): Observable<Kvp> {
     const apiUrl = 'questions/questionUpdate';
 
-    const slashtags = questionEdit.slashtags
-      .filter(tag => tag.pointOwnerTag)
-      .map(tag => tag.slashTag);
+    const slashtags = questionEdit.tags.filter(tag => tag.myTag);
 
     const postData = {
       questionID: questionEdit.questionID,
@@ -124,9 +124,12 @@ export class QuestionsService {
     return this.httpClientService.post(apiUrl, postData);
   }
 
-  QuestionDelete(questionID: number): Observable<boolean> {
+  QuestionDelete(
+    questionID: number,
+    constituencyID: number
+  ): Observable<boolean> {
     return this.httpClientService
-      .get(`questions/questionDelete/${questionID}`)
+      .get(`questions/questionDelete/${questionID}/${constituencyID}`)
       .pipe(map(result => result as boolean));
   }
 

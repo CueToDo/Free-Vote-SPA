@@ -9,17 +9,14 @@
   white-space: nowrap; /* Keep icon on sme line as text on small screens */
 }
 
-.pointOwnerTag {
-  background-color: #ffd700;
+.deleteMyTag {
+  background-color: lightgray;
 }
-.conTag {
+.otherVoterTag {
   background-color: aqua;
 }
-.myConTag {
-  background-color: greenyellow;
-}
-.deleteNewTag {
-  background-color: lightgray;
+.myTag {
+  background-color: #ffd700;
 }
 
 mat-icon {

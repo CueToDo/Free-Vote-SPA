@@ -101,7 +101,7 @@ export class TagsService {
     // construct the postdata - why can't it be an array of string?
     var slashTags: slashTag[] = [];
     tags.forEach(function (tag) {
-      if (constituencyID <= 0 || tag.myConTag)
+      if (constituencyID <= 0 || tag.myTag)
         slashTags.push({ slashTag: tag.slashTag });
     });
 

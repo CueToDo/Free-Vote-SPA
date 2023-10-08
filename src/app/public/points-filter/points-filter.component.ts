@@ -121,8 +121,6 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
       let tagParam = params.get('tag');
       let aliasParam = params.get('alias');
 
-      console.log('Tag', tagParam, 'Title', titleParam, 'Alias', aliasParam);
-
       if (!titleParam) {
         titleParam = '';
       }

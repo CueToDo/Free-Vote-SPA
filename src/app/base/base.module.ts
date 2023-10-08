@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 // Material
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Free Vote Modules
 import { CustomModule } from '../custommodule/custom.module';
@@ -24,6 +25,7 @@ import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
     RouterModule,
     // Material
     MatIconModule,
+    MatTooltipModule,
     // Free Vote
     CustomModule
   ],

@@ -10,7 +10,7 @@ export class QuestionEdit {
   question = '';
   details = '';
   draft = false;
-  slashtags: Tag[] = [];
+  tags: Tag[] = [];
 }
 
 export class QuestionEditFormData {
@@ -19,7 +19,7 @@ export class QuestionEditFormData {
   question = '';
   details = '';
   draft = false;
-  slashtags: string[] = [];
+  slashtags: Tag[] = [];
 }
 
 export class Question {
