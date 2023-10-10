@@ -27,6 +27,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
 })
 export class QuestionEditComponent implements OnInit {
   @Input() public question = new Question();
+  @Input() constituencyID = 0;
   questionClone!: QuestionEdit;
 
   @Output() CancelEdit = new EventEmitter();
@@ -63,7 +64,7 @@ export class QuestionEditComponent implements OnInit {
     // Clear old Values when edit complete
     this.questionClone = new QuestionEdit();
     this.ClearQuestion();
-    this.questionClone.tags = [new Tag(slashTag)];
+    this.questionClone.tags = [new Tag(slashTag, this.constituencyID)];
     setTimeout(() => {
       this.tvQuestionTitle?.nativeElement.focus();
     }, 500);

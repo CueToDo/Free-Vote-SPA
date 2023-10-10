@@ -68,6 +68,7 @@ export class LocalDataService {
 
   // Local Politics - Constituency
   public forConstituency = false;
+
   public get ConstituencyIDVoter(): number {
     return +this.freeVoteProfile.constituencyID;
   }

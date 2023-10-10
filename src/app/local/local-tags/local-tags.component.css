@@ -8,19 +8,6 @@
   margin-left: 10px;
 }
 
-.pointAuthor {
-  background-color: #ffd700;
-}
-.other {
-  background-color: aqua;
-}
-.me {
-  background-color: greenyellow;
-}
-.deleteNew {
-  background-color: lightgray;
-}
-
 mat-icon {
   vertical-align: middle;
   cursor: pointer;

@@ -11,6 +11,11 @@ import { Tag } from 'src/app/models/tag.model';
   styleUrls: ['./tags-edit.component.css']
 })
 export class TagsEditComponent {
+  // 2 way bound in point-edit and question-edit components
+  @Input() Tags: Tag[] = [];
+  @Input() ConstituencyID = 0; // required to add new tags
+  @Output() TagsChange = new EventEmitter<Tag[]>();
+
   addOnBlur = true;
   newSlashTag = '';
 
@@ -40,12 +45,6 @@ export class TagsEditComponent {
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  // 2 way bound in point-edit and question-edit components
-  @Input() Tags: Tag[] = [];
-  @Output() TagsChange = new EventEmitter<Tag[]>();
-
-  @Input() IsMyPointEdit = false;
-
   constructor() {}
 
   addNewTag(): void {
@@ -54,9 +53,10 @@ export class TagsEditComponent {
     if (!this.error) {
       const newSlashTag = this.newSlashTag.trim();
       if (!!newSlashTag && newSlashTag !== '/') {
-        var tag = new Tag(newSlashTag);
-        tag.myTag = true;
-        tag.otherVoterTag = false;
+        var tag = new Tag(newSlashTag, this.ConstituencyID);
+        tag.tagByMe = false;
+        tag.tagByMeNew = true;
+        tag.tagByOther = false;
         this.Tags.push(tag);
       }
       // Reset the input value
@@ -64,14 +64,16 @@ export class TagsEditComponent {
     }
   }
 
+  // Update tagByMe ONLY
   addRemoveTag(topic: string, add: boolean): void {
     // get slashtag only using map to find index of tag in array
     const index = this.Tags.map(tag => tag.slashTag).indexOf(topic);
     var tag = this.Tags[index];
-    tag.myTag = add;
+    tag.tagByMeNew = add;
     // Don't remove from the list - always give chance to re-add
   }
 
+  // Update user input to correct slashTag format and ensure this is not an illegal tag
   check() {
     this.error = '';
 

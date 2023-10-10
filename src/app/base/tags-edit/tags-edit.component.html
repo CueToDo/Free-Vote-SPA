@@ -3,20 +3,20 @@
     *ngFor="let tag of Tags"
     class="topic"
     [ngClass]="{
-      deleteMyTag: !tag.myTag && !tag.otherVoterTag,
-      otherVoterTag: !tag.myTag && tag.otherVoterTag,
-      myTag: tag.myTag,
+      tagByOther: tag.tagByOther && !tag.tagByMeNew,
+      tagByMe: tag.tagByMeNew,
+      tagDelete: !tag.tagByOther && !tag.tagByMeNew
     }"
   >
     {{ tag.slashTag }}
     <mat-icon
-      *ngIf="tag.myTag"
+      *ngIf="tag.tagByMeNew"
       (click)="addRemoveTag(tag.slashTag, false)"
       matTooltip="remove tag"
       >remove_circle</mat-icon
     >
     <mat-icon
-      *ngIf="!tag.myTag"
+      *ngIf="!tag.tagByMeNew"
       (click)="addRemoveTag(tag.slashTag, true)"
       [matTooltip]="'add tag'"
       >add_circle</mat-icon

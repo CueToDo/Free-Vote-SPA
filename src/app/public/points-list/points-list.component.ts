@@ -217,7 +217,6 @@ export class PointsListComponent implements OnDestroy, OnInit {
           this.pointsService
             .GetFirstBatchFiltered(
               this.filter.constituencyID,
-              this.localData.ConstituencyIDVoter,
               aliasFilter,
               this.OnTopicSearch(),
               this.filter.myPointFilter,
@@ -298,7 +297,6 @@ export class PointsListComponent implements OnDestroy, OnInit {
               this.pointsService
                 .GetFirstBatchForTag(
                   this.filter.constituencyID,
-                  this.localData.ConstituencyIDVoter,
                   this.filter.slashTag,
                   this.filter.sortType,
                   this.filter.sortDescending,

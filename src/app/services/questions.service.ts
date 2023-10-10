@@ -110,7 +110,9 @@ export class QuestionsService {
   QuestionUpdate(questionEdit: QuestionEdit): Observable<Kvp> {
     const apiUrl = 'questions/questionUpdate';
 
-    const slashtags = questionEdit.tags.filter(tag => tag.myTag);
+    const slashtags = questionEdit.tags.filter(
+      tag => tag.tagByMe != tag.tagByMeNew
+    );
 
     const postData = {
       questionID: questionEdit.questionID,

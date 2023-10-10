@@ -1,11 +1,12 @@
 // Angular
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 // Material
 import { MatButtonModule } from '@angular/material/button';
-// import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 // import { MatInputModule } from '@angular/material/input';
 // import { MatMenuModule } from '@angular/material/menu';
@@ -48,9 +49,11 @@ const localRoutes: Routes = [
   imports: [
     // Angular
     CommonModule,
+    FormsModule,
     RouterModule.forChild(localRoutes),
     // Material
     MatButtonModule,
+    MatCheckboxModule,
     MatDialogModule,
     MatIconModule,
     MatTabsModule,

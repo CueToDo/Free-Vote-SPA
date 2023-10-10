@@ -9,16 +9,6 @@
   white-space: nowrap; /* Keep icon on sme line as text on small screens */
 }
 
-.deleteMyTag {
-  background-color: lightgray;
-}
-.otherVoterTag {
-  background-color: aqua;
-}
-.myTag {
-  background-color: #ffd700;
-}
-
 mat-icon {
   vertical-align: middle;
   cursor: pointer;

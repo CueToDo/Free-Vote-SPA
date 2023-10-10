@@ -52,7 +52,6 @@ export class PointComponent implements AfterViewInit {
   @Input() isParentPoint = false;
   @Input() isComment = false;
   @Input() searchTerm = '';
-  @Input() constituencyID = 0;
   @Input() sharing = false;
   @Input() ancestor = false;
   @Input() creatingNewComment = false; // New comment button has not been clicked
@@ -310,7 +309,7 @@ export class PointComponent implements AfterViewInit {
     } else {
       if (confirm('Are you sure you wish to delete this point?')) {
         this.pointsService
-          .PointDelete(this.point.pointID, this.constituencyID)
+          .PointDelete(this.point.pointID, this.localData.ConstituencyIDVoter)
           .subscribe({
             next: _ => {
               if (this.point) {
@@ -360,9 +359,15 @@ export class PointComponent implements AfterViewInit {
   }
 
   addLocalTags(): void {
+    // Open LocalTagsComponent as dialog. COmponent fetches relevant tags from API
+
     const dialogRef = this.dialog.open(LocalTagsComponent, {
       width: '480px',
-      data: { pointID: this.point.pointID }
+      data: {
+        pointID: this.point.pointID,
+        constituencyTags: this.localData.forConstituency,
+        constituencyID: this.localData.ConstituencyIDVoter
+      }
     });
 
     dialogRef.afterClosed().subscribe((tags: Tag[]) => {
@@ -370,7 +375,7 @@ export class PointComponent implements AfterViewInit {
         .PointTagsSave(
           this.point.pointID,
           this.localData.ConstituencyIDVoter,
-          tags
+          tags.filter(tag => tag.tagByMe != tag.tagByMeNew)
         )
         .subscribe(); // To do confirmation
     });

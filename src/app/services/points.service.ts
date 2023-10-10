@@ -87,8 +87,7 @@ export class PointsService {
   // 2) Subsequent batch (very similar to above, can these be consolidated?)
   // 3) Page of points for all selection methods
   GetFirstBatchForTag(
-    constituencyIDFilter: number,
-    constituencyIDVoter: number,
+    constituencyID: number,
     slashTag: string,
     pointSortOrder: PointSortTypes,
     sortDescending: boolean,
@@ -97,7 +96,7 @@ export class PointsService {
     // No Filters + infinite scroll on DateOrder desc
 
     const apiUrl =
-      `points/getFirstBatchForTag/${constituencyIDFilter}/${constituencyIDVoter}/${slashTag.replace(
+      `points/getFirstBatchForTag/${constituencyID}/${slashTag.replace(
         '/',
         ''
       )}/${pointSortOrder}` +
@@ -110,8 +109,7 @@ export class PointsService {
 
   // ToDo this is what needs to change for new selection methods
   GetFirstBatchFiltered(
-    constituencyIDFilter: number,
-    constituencyIDVoter: number,
+    constituencyID: number,
     byAlias: string,
     onTopic: string,
     myPointsFilter: MyPointFilter,
@@ -131,8 +129,7 @@ export class PointsService {
     const apiUrl = 'points/getFirstBatchFiltered';
 
     const postData = {
-      constituencyIDFilter,
-      constituencyIDVoter,
+      constituencyID,
       byAlias,
       onTopic,
       myPointsFilter,
@@ -292,7 +289,7 @@ export class PointsService {
       isPorQPoint, // not a point property
       ParentPointID: point.parentPointID,
       SoundCloudTrackID: point.soundCloudTrackID,
-      TagsList: point.tags.filter(tag => tag.myTag),
+      TagsList: point.tags.filter(tag => tag.tagByMe != tag.tagByMeNew),
       Draft: point.draft
     } as PointEditFormData;
 

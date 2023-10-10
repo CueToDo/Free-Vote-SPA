@@ -63,8 +63,7 @@ export class FilterCriteria {
 }
 
 export class PointsFilterFormData {
-  constituencyIDFilter = 0;
-  constituencyIDVoter = 0;
+  constituencyID = 0;
   byAlias = '';
   onTopic = '';
   pointTextFilter = '';

@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // Material
+// import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 // Pipe
 import { NbspPipe } from './pipes/nbsp.pipe';
@@ -26,10 +27,11 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
   imports: [
     CommonModule,
     FormsModule,
+    // MatCheckboxModule,
     MatDatepickerModule,
-    MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
+    MatNativeDateModule,
     RouterModule
   ],
   declarations: [
