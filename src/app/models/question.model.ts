@@ -30,6 +30,7 @@ export class Question {
   draft = false;
   tags: Tag[] = [];
   questionID = 0;
+  constituencyID = 0;
   rowNumber = 0;
 
   voterIDQuestion = 0;

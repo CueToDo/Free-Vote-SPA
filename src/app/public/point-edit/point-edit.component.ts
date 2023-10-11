@@ -86,7 +86,7 @@ export class PointEditComponent implements OnInit {
 
   userTouched = false;
   cancelled = false;
-  saving = false;
+  waiting = false;
   uploadingImage = false;
   imageUploadProgress = 0;
   allowTags = true;
@@ -110,14 +110,9 @@ export class PointEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let slashTag = '';
-
-    if (!this.isPorQPoint) {
-      slashTag = this.localData.PreviousSlashTagSelected;
-    }
-
     if (!!this.point) {
       this.pointClone = cloneDeep(this.point) as PointEdit;
+      this.GetPointTagsEdit();
     }
 
     this.lookupsService
@@ -131,6 +126,22 @@ export class PointEditComponent implements OnInit {
     if (this.isComment) {
       this.allowTags = false;
     }
+  }
+
+  GetPointTagsEdit(): void {
+    // Get all national and constituency tags for the point
+    this.waiting = true;
+    this.tagsService
+      .PointTagsEdit(
+        this.pointClone.pointID,
+        this.localData.ConstituencyIDVoter
+      )
+      .subscribe(tags => {
+        this.pointClone.tags = tags.filter(
+          tag => tag.constituencyTag === this.localData.forConstituency
+        );
+        this.waiting = false;
+      });
   }
 
   onCKEBlur(): void {
@@ -278,7 +289,7 @@ export class PointEditComponent implements OnInit {
         this.error =
           'Point title and text OR url OR image OR media link must be provided';
       } else {
-        this.saving = true;
+        this.waiting = true;
         const isNew = !this.pointClone.pointID || this.pointClone.pointID < 1;
 
         // Point may be an answer
@@ -341,7 +352,7 @@ export class PointEditComponent implements OnInit {
           )
           .subscribe({
             next: (response: Point) => {
-              this.saving = false;
+              this.waiting = false;
               this.userTouched = false;
               // this.point.csvImageIDs = ''; // Only needed for upload, now complete??
 
@@ -376,7 +387,7 @@ export class PointEditComponent implements OnInit {
               }
             },
             error: serverError => {
-              this.saving = false;
+              this.waiting = false;
               this.error = serverError.error.detail;
             },
             complete: () => {

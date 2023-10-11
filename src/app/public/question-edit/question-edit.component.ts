@@ -17,8 +17,9 @@ import { Tag } from 'src/app/models/tag.model';
 import { Question, QuestionEdit } from 'src/app/models/question.model';
 
 // Services
-import { TagsService } from 'src/app/services/tags.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
+import { TagsService } from 'src/app/services/tags.service';
 
 @Component({
   selector: 'app-question-edit',
@@ -45,19 +46,38 @@ export class QuestionEditComponent implements OnInit {
   userTouched = false;
   saving = false;
 
+  waiting = false;
   error = '';
 
   constructor(
     private tagsService: TagsService,
-    private questionService: QuestionsService
+    private questionService: QuestionsService,
+    private localData: LocalDataService
   ) {}
 
   ngOnInit(): void {
     if (!!this.question) {
       this.questionClone = cloneDeep(this.question) as any as QuestionEdit;
+      this.GetQuestionTagsEdit();
       // this.questionEdit.slashTag = this.localData.PreviousSlashTagSelected;
     }
     // If a new question, parent must initialise with NewQuestion
+  }
+
+  GetQuestionTagsEdit(): void {
+    // Get all national and constituency tags for the point
+    this.waiting = true;
+    this.tagsService
+      .QuestionTagsEdit(
+        this.questionClone.questionID,
+        this.localData.ConstituencyIDVoter
+      )
+      .subscribe(tags => {
+        this.questionClone.tags = tags.filter(
+          tag => tag.constituencyTag === this.localData.forConstituency
+        );
+        this.waiting = false;
+      });
   }
 
   NewQuestion(slashTag: string): void {

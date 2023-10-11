@@ -82,12 +82,9 @@ export class TagsService {
     return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
   }
 
-  PointTags(pointID: number, constituencyID: number): Observable<Tag[]> {
+  PointTagsEdit(pointID: number, constituencyID: number): Observable<Tag[]> {
     const WebAPIUrl = `tags/point/${pointID}/${constituencyID}`;
-    return this.httpService.get(WebAPIUrl).pipe(
-      tap(data => console.log(data)),
-      map(data => data as Tag[])
-    );
+    return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
   }
 
   PointTagsSave(
@@ -97,6 +94,14 @@ export class TagsService {
   ): Observable<boolean> {
     const WebAPIUrl = `tags/pointTagsSave/${pointID}/${constituencyID}`;
     return this.httpService.post(WebAPIUrl, tags);
+  }
+
+  QuestionTagsEdit(
+    questionID: number,
+    constituencyID: number
+  ): Observable<Tag[]> {
+    const WebAPIUrl = `tags/question/${questionID}/${constituencyID}`;
+    return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
   }
 
   ByAliases(dateFrom: string, dateTo: string): Observable<ByOn[]> {

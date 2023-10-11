@@ -41,7 +41,7 @@ export class LocalTagsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.GetPointTags();
+    this.GetPointTagsEdit();
   }
 
   onConstituencyFilterChanged($filterForConstituency: MatCheckboxChange) {
@@ -55,11 +55,11 @@ export class LocalTagsComponent implements OnInit {
     );
   }
 
-  GetPointTags(): void {
+  GetPointTagsEdit(): void {
     // Get all national and constituency tags for the point
     this.fetchingTags = true;
     this.tagsService
-      .PointTags(this.data.pointID, this.localData.ConstituencyIDVoter)
+      .PointTagsEdit(this.data.pointID, this.localData.ConstituencyIDVoter)
       .subscribe(tags => {
         this.AllTags = tags;
         this.filterTags(); // Display only national or constituency tags
