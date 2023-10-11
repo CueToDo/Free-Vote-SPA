@@ -74,13 +74,11 @@
   <!-- Point Owner Commands -->
 
   <button mat-menu-item (click)="edit()" *ngIf="point.isPointOwner">
-    <mat-icon>edit</mat-icon>
-    edit
+    <mat-icon>edit</mat-icon>edit
   </button>
 
   <button mat-menu-item (click)="delete()" *ngIf="point.isPointOwner">
-    <mat-icon>delete_forever</mat-icon>
-    delete
+    <mat-icon>delete_forever</mat-icon>delete
   </button>
 
   <hr class="hr" *ngIf="point.isPointOwner" />
@@ -93,7 +91,7 @@
     *ngIf="point.pointFeedback.feedbackIsUpdatable"
     [ngClass]="{ selected: point.pointFeedback.supportLevelID === 1 }"
   >
-    <img src="./assets/Agree.png" alt="Agree" /> up-vote
+    <img src="./assets/Agree.png" alt="Agree" />up-vote
   </button>
 
   <button
@@ -102,7 +100,7 @@
     *ngIf="point.pointFeedback.feedbackIsUpdatable"
     [ngClass]="{ selected: point.pointFeedback.supportLevelID === -8 }"
   >
-    <img src="./assets/Disagree.png" alt="Neutral" /> neutral
+    <img src="./assets/Disagree.png" alt="Neutral" />neutral
   </button>
 
   <button
@@ -111,7 +109,7 @@
     *ngIf="point.pointFeedback.feedbackIsUpdatable"
     [ngClass]="{ selected: point.pointFeedback.supportLevelID === -1 }"
   >
-    <img src="./assets/Oppose.png" alt="Oppose" /> down-vote
+    <img src="./assets/Oppose.png" alt="Oppose" />down-vote
   </button>
 
   <button
@@ -120,7 +118,7 @@
     *ngIf="point.pointFeedback.feedbackIsUpdatable"
     [ngClass]="{ selected: point.pointFeedback.supportLevelID === -9 }"
   >
-    <img src="./assets/Block.png" alt="Block" /> block
+    <img src="./assets/Block.png" alt="Block" />block
   </button>
 
   <button
@@ -128,7 +126,7 @@
     (click)="occupyHandSignals()"
     *ngIf="point.pointFeedback.feedbackIsUpdatable"
   >
-    <img src="./assets/Clarify.png" alt="Clarify" /> view all signs
+    <img src="./assets/Clarify.png" alt="Clarify" />view all signs
   </button>
 
   <hr class="hr" />
@@ -137,9 +135,9 @@
     mat-menu-item
     [ngClass]="{ selected: point.localInterest }"
     (click)="addLocalTags()"
+    matTooltip="update my slash tags for point"
   >
-    <mat-icon matTooltip="make point local interest">mp</mat-icon>
-    local interest
+    <img src="./assets/slashTag.png" alt="slash tag" />my slash tags
   </button>
 
   <button
@@ -148,8 +146,8 @@
     matTooltip="flag point as a favourite"
     [ngClass]="{ selected: point.isFavourite }"
   >
-    <mat-icon>{{ favoriteIcon }}</mat-icon>
-    favourite
+    <mat-icon>{{ favoriteIcon }}</mat-icon
+    >favourite
   </button>
 
   <!-- <button
@@ -169,8 +167,7 @@
     (click)="anon()"
     *ngIf="point.pointFeedback.feedbackIsUpdatable"
   >
-    <mat-icon>lock</mat-icon>
-    anonymous feedback
+    <mat-icon>lock</mat-icon>anonymous feedback
   </button>
 
   <button

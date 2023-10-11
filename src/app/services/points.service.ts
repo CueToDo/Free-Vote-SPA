@@ -268,29 +268,28 @@ export class PointsService {
   }
 
   PointUpdate(
-    point: PointEdit,
+    pointEdit: PointEdit,
     isAnswer: boolean,
     isComment: boolean,
     isPorQPoint: boolean
   ): Observable<Point> {
-    // Input parameter is Point not PointEdit
-    // construct a new PointEdit (all that's needed)
+    // Input parameter is PointEditFormData not PointEdit
 
     const postData = {
-      ConstituencyID: point.constituencyID,
-      PointID: point.pointID,
-      QuestionID: point.questionID,
-      PointTitle: point.pointTitle, // pointSlug constructed in API
-      PointHTML: point.pointHTML,
-      csvImageIDs: point.csvImageIDs,
-      PointTypeID: point.pointTypeID,
+      ConstituencyID: pointEdit.constituencyID,
+      PointID: pointEdit.pointID,
+      QuestionID: pointEdit.questionID,
+      PointTitle: pointEdit.pointTitle, // pointSlug constructed in API
+      PointHTML: pointEdit.pointHTML,
+      csvImageIDs: pointEdit.csvImageIDs,
+      PointTypeID: pointEdit.pointTypeID,
       isAnswer,
       isComment,
       isPorQPoint, // not a point property
-      ParentPointID: point.parentPointID,
-      SoundCloudTrackID: point.soundCloudTrackID,
-      TagsList: point.tags.filter(tag => tag.tagByMe != tag.tagByMeNew),
-      Draft: point.draft
+      ParentPointID: pointEdit.parentPointID,
+      SoundCloudTrackID: pointEdit.soundCloudTrackID,
+      TagsList: pointEdit.tags.filter(tag => tag.tagByMe != tag.tagByMeNew),
+      Draft: pointEdit.draft
     } as PointEditFormData;
 
     return this.httpClientService
