@@ -73,7 +73,7 @@
       <!-- Picture -->
 
       <div
-        class="flexRow center"
+        class="flexRow center profilePicture"
         *ngIf="
           localData.freeVoteProfile.profilePictureOptionID === '1' ||
           (localData.freeVoteProfile.profilePictureOptionID === '2' &&
@@ -127,19 +127,6 @@
           <span class="align-middle" *ngIf="true || !editing">
             {{ localData.freeVoteProfile.country }}
           </span>
-
-          <!-- <mat-form-field *ngIf="editing && !editNewCountry" class="mff">
-            <mat-select (ngModelChange)="onCountrySelect($event)" name="selectCountry"
-              [(ngModel)]="localData.freeVoteProfile.countryId" placeholder="your home country">
-              <mat-option *ngFor="let country of countries" [value]="country.value.toString()">{{ country.key }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field *ngIf="editNewCountry" class="mff">
-            <input matInput placeholder="your home country" [(ngModel)]="localData.freeVoteProfile.country"
-              name="country" required #tvCountry="ngModel" type="text">
-          </mat-form-field> -->
         </div>
       </div>
 
@@ -153,17 +140,6 @@
           <span *ngIf="true || !editing" class="align-middle">
             {{ localData.freeVoteProfile.city }}
           </span>
-
-          <!-- <mat-form-field *ngIf="editing && !editNewCity" class="mff">
-            <mat-select name="selectCity" [(ngModel)]="localData.freeVoteProfile.cityId" placeholder="your home city">
-              <mat-option *ngFor="let city of cities" [value]="city.value.toString()">{{ city.key }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field *ngIf="editNewCity" class="mff">
-            <input matInput placeholder="your home city" [(ngModel)]="localData.freeVoteProfile.city" name="city"
-              required #tvCity="ngModel" type="text">
-          </mat-form-field> -->
         </div>
       </div>
 

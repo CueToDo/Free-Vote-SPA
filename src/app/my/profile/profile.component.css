@@ -6,9 +6,14 @@
   margin-right: auto;
 }
 
+.profilePicture {
+  max-height: 360px;
+  overflow: hidden;
+}
+
 .profile img {
   min-width: 180px;
-  max-width: 100%;
+  max-width: 240px;
 }
 
 .buttons {
@@ -30,11 +35,6 @@ mat-radio-button {
 
 .uploading span {
   vertical-align: middle;
-}
-
-img {
-  max-height: 200px;
-  max-width: 400px;
 }
 
 .constituencyList a:first-of-type {
