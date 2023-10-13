@@ -93,11 +93,7 @@
         </div>
       </div>
 
-      <div>
-        <hr />
-      </div>
-
-      <div fxFlex="100" style="margin-top: 16px"></div>
+      <hr />
 
       <!-- Postcode -->
       <div *ngIf="editing" class="flexRow">
@@ -201,9 +197,23 @@
         </div>
       </div>
 
-      <div fxFlex="100" style="margin-top: 20px"></div>
-
-      <div>Alias</div>
+      <!-- Alias -->
+      <div class="flexRow mb-2">
+        <div style="flex: 4">
+          <span class="align-middle"> alias </span>
+        </div>
+        <div style="flex: 6">
+          <span *ngIf="!editing" class="align-middle">
+            {{ localData.freeVoteProfile.alias }}
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            *ngIf="editing"
+            [(ngModel)]="localData.freeVoteProfile.alias"
+          />
+        </div>
+      </div>
 
       <!-- Start Edit Commands -->
       <div *ngIf="!editing" class="flexRow">
@@ -224,42 +234,10 @@
       <div class="flexRow" *ngIf="editing">
         <div style="flex: 4"></div>
         <div style="flex: 6">
-          <!-- <button
-          mat-stroked-button
-          (click)="newCountry()"
-          *ngIf="false && editing && !editNewCountry && !editNewCity"
-        >
-          <mat-icon>add_circle_outline</mat-icon>
-          new country
-        </button>
-
-        <button
-          mat-stroked-button
-          (click)="newCity()"
-          *ngIf="editing && !editNewCountry && !editNewCity"
-        >
-          <mat-icon>add_circle_outline</mat-icon>
-          new city
-        </button> -->
-
           <button mat-stroked-button (click)="save()">
             <mat-icon>save</mat-icon>
             save
           </button>
-
-          <!-- <button
-          mat-stroked-button
-          (click)="saveCountry()"
-          *ngIf="editNewCountry"
-        >
-          <mat-icon>save</mat-icon>
-          save country
-        </button> -->
-
-          <!-- <button mat-stroked-button (click)="saveCity()" *ngIf="editNewCity">
-          <mat-icon>save</mat-icon>
-          save city
-        </button> -->
 
           <button mat-stroked-button (click)="cancel()">
             <mat-icon>cancel</mat-icon>
@@ -283,9 +261,7 @@
       >
         <div style="flex: 4"></div>
         <div style="flex: 6">
-          <div *ngIf="!!updateMessage">
-            {{ updateMessage }}
-          </div>
+          <div *ngIf="!!updateMessage">{{ updateMessage }}</div>
         </div>
       </div>
 
