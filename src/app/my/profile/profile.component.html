@@ -6,9 +6,80 @@
         {{ localData.freeVoteProfile.familyName }}
       </h1>
 
+      <!-- Edit Profile Picture to use -->
+      <div *ngIf="editing" class="flexRow buttons">
+        <div style="flex: 4">profile picture to use</div>
+        <div style="flex: 6">
+          <mat-radio-group
+            [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
+            (ngModelChange)="profilePictureOptionUpdate()"
+          >
+            <div class="flexRow space-between">
+              <mat-radio-button name="PPOID" value="1" labelPosition="before">
+                social media
+              </mat-radio-button>
+
+              <mat-radio-button name="PPOID" value="2" labelPosition="before">
+                upload
+              </mat-radio-button>
+
+              <mat-radio-button name="PPOID" value="3" labelPosition="before">
+                none
+              </mat-radio-button>
+            </div>
+          </mat-radio-group>
+        </div>
+      </div>
+
+      <!-- Upload/Delete Profile Picture -->
+      <div
+        *ngIf="
+          editing && localData.freeVoteProfile.profilePictureOptionID === '2'
+        "
+        class="flexRow buttons"
+      >
+        <div style="flex: 4"></div>
+        <div style="flex: 6">
+          <input
+            type="file"
+            (change)="profilePictureSelected($event)"
+            style="display: none"
+            #pictureSelect
+          />
+
+          <button mat-stroked-button (click)="deleteProfilePictue()">
+            <mat-icon>cancel</mat-icon>
+            delete
+          </button>
+
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="pictureSelect.click()"
+          >
+            <mat-icon>add_photo_alternate</mat-icon>
+            upload new
+          </button>
+
+          <div *ngIf="uploading" class="uploading">
+            <span class="spinner-grow text-primary ms-3" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </span>
+            <span> {{ uploadPercentDone }}% </span>
+          </div>
+        </div>
+      </div>
+
       <!-- Picture -->
 
-      <div class="flexRow center">
+      <div
+        class="flexRow center"
+        *ngIf="
+          localData.freeVoteProfile.profilePictureOptionID === '1' ||
+          (localData.freeVoteProfile.profilePictureOptionID === '2' &&
+            localData.freeVoteProfile.profilePicture)
+        "
+      >
         <img
           *ngIf="
             localData.freeVoteProfile.profilePictureOptionID === '1' &&
@@ -28,69 +99,6 @@
           alt="profile picture"
           class="rounded-circle img-fluid"
         />
-      </div>
-
-      <div class="flexRow buttons">
-        <input
-          type="file"
-          (change)="profilePictureSelected($event)"
-          style="display: none"
-          #pictureSelect
-        />
-
-        <button
-          *ngIf="localData.freeVoteProfile.profilePictureOptionID === '2'"
-          mat-stroked-button
-          (click)="deleteProfilePictue()"
-        >
-          <mat-icon>cancel</mat-icon>
-          delete uploaded picture
-        </button>
-
-        <button
-          *ngIf="localData.freeVoteProfile.profilePictureOptionID === '2'"
-          mat-stroked-button
-          type="button"
-          (click)="pictureSelect.click()"
-        >
-          <mat-icon>add_photo_alternate</mat-icon>
-          upload new picture
-        </button>
-
-        <div *ngIf="uploading" class="uploading">
-          <span class="spinner-grow text-primary ms-3" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </span>
-          <span> {{ uploadPercentDone }}% </span>
-        </div>
-      </div>
-
-      <!-- Edit Profile Picture to use -->
-      <div *ngIf="editing" class="flexRow buttons">
-        <div style="flex: 4">profile picture to use</div>
-        <div style="flex: 6">
-          <mat-radio-group
-            [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
-            (ngModelChange)="profilePictureOptionUpdate()"
-          >
-            <div class="flexRow space-between">
-              <mat-radio-button name="PPOID" value="1" labelPosition="before">
-                social media
-              </mat-radio-button>
-              <mat-radio-button
-                name="PPOID"
-                value="2"
-                labelPosition="before"
-                *ngIf="localData.freeVoteProfile.profilePicture"
-              >
-                upload
-              </mat-radio-button>
-              <mat-radio-button name="PPOID" value="3" labelPosition="before">
-                none
-              </mat-radio-button>
-            </div>
-          </mat-radio-group>
-        </div>
       </div>
 
       <hr />
