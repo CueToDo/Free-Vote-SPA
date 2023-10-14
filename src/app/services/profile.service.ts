@@ -21,6 +21,8 @@ export class ProfileService {
   SaveProfile(profile: FreeVoteProfile): Observable<boolean> {
     const profileUpdate = {
       alias: profile.alias,
+      firstName: profile.givenName,
+      lastName: profile.familyName,
       postcode: profile.postcode,
       countryID: Number(profile.countryId),
       cityID: Number(profile.cityId),

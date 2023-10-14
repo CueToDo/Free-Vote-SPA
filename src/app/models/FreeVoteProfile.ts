@@ -33,6 +33,8 @@ export class FreeVoteProfile {
 
 export class ProfileEditFormData {
   public alias = '';
+  public firstName = '';
+  public lastName = '';
   public postcode = '';
   public countryID = 0;
   public cityID = 0;

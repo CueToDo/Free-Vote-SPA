@@ -103,6 +103,60 @@
 
       <hr />
 
+      <!-- First Name -->
+      <div class="flexRow mb-2">
+        <div style="flex: 4">
+          <span class="align-middle"> first name </span>
+        </div>
+        <div style="flex: 6">
+          <span *ngIf="!editing" class="align-middle">
+            {{ localData.freeVoteProfile.givenName }}
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            *ngIf="editing"
+            [(ngModel)]="localData.freeVoteProfile.givenName"
+          />
+        </div>
+      </div>
+
+      <!-- Last Name -->
+      <div class="flexRow mb-2">
+        <div style="flex: 4">
+          <span class="align-middle"> last name </span>
+        </div>
+        <div style="flex: 6">
+          <span *ngIf="!editing" class="align-middle">
+            {{ localData.freeVoteProfile.familyName }}
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            *ngIf="editing"
+            [(ngModel)]="localData.freeVoteProfile.familyName"
+          />
+        </div>
+      </div>
+
+      <!-- Alias -->
+      <div class="flexRow mb-2">
+        <div style="flex: 4">
+          <span class="align-middle"> alias </span>
+        </div>
+        <div style="flex: 6">
+          <span *ngIf="!editing" class="align-middle">
+            {{ localData.freeVoteProfile.alias }}
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            *ngIf="editing"
+            [(ngModel)]="localData.freeVoteProfile.alias"
+          />
+        </div>
+      </div>
+
       <!-- Postcode -->
       <div *ngIf="editing" class="flexRow">
         <div style="flex: 4">
@@ -178,24 +232,6 @@
           <span class="align-middle">
             {{ localData.freeVoteProfile.ward }}
           </span>
-        </div>
-      </div>
-
-      <!-- Alias -->
-      <div class="flexRow mb-2">
-        <div style="flex: 4">
-          <span class="align-middle"> alias </span>
-        </div>
-        <div style="flex: 6">
-          <span *ngIf="!editing" class="align-middle">
-            {{ localData.freeVoteProfile.alias }}
-          </span>
-          <input
-            type="text"
-            class="form-control"
-            *ngIf="editing"
-            [(ngModel)]="localData.freeVoteProfile.alias"
-          />
         </div>
       </div>
 
