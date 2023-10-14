@@ -416,7 +416,9 @@ export class PointEditComponent implements OnInit {
     this.pointClone.constituencyID = constituencyID;
 
     if (!!slashTag) {
-      this.pointClone.tags = [new Tag(slashTag, constituencyID)];
+      let newTag = new Tag(slashTag, constituencyID);
+      newTag.tagByMeNew = true;
+      this.pointClone.tags = [newTag];
     } else {
       this.pointClone.tags = [];
     }
