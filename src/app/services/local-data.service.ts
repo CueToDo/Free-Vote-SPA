@@ -73,6 +73,13 @@ export class LocalDataService {
     return +this.freeVoteProfile.constituencyID;
   }
 
+  public get ConstituencyID(): number {
+    if (this.forConstituency) {
+      return +this.freeVoteProfile.constituencyID;
+    }
+    return 0;
+  }
+
   private localLogging = '';
 
   public get LocalLogging(): boolean {

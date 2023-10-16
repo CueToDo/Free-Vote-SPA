@@ -79,11 +79,7 @@ export class PointCommentsComponent implements OnInit {
     this.alreadyFetchingPointFromDB = true;
 
     this.pointsService
-      .GetSpecificPoint(
-        this.localData.ConstituencyIDVoter,
-        slashTag,
-        pointTitle
-      ) // Returns a PointSelectionResult
+      .GetSpecificPoint(this.localData.ConstituencyID, slashTag, pointTitle) // Returns a PointSelectionResult
       .pipe(
         tap(psr => {
           this.AssignPoint(psr.points[0]);

@@ -222,14 +222,14 @@ export class PointsService {
 
   // returns a batch of points based on a list of IDs peviously returned to the client
   GetPage(
-    constituencyIDVoter: number,
+    constituencyID: number,
     pointIDs: ID[]
   ): Observable<PointSelectionResult> {
     if (!pointIDs || pointIDs.length === 0) {
       console.log('No points to select');
       return of(new PointSelectionResult());
     } else {
-      const apiUrl = `points/getPage/${constituencyIDVoter}`;
+      const apiUrl = `points/getPage/${constituencyID}`;
 
       // ToDo Removed 03/01/2021 const ids not used???
       // https://stackoverflow.com/questions/16553561/passing-list-of-keyvaluepair-or-idictionary-to-web-api-controller-from-javascrip

@@ -420,7 +420,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         this.allPointsDisplayed = false;
 
         this.pointsService
-          .GetPage(this.localData.ConstituencyIDVoter, pids)
+          .GetPage(this.localData.ConstituencyID, pids)
           .subscribe(response => {
             this.points = this.points.concat(response.points);
             this.NewPointsDisplayed();
@@ -440,7 +440,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
         if (this.filter) {
           this.pointsService
             .GetNextBatch(
-              this.localData.ConstituencyIDVoter,
+              this.localData.ConstituencyID,
               this.filter.sortType,
               this.lastBatchRow + 1,
               this.pointCount
