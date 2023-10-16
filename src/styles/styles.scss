@@ -229,7 +229,7 @@ div.toolbar mat-form-field {
   color: black;
   overflow: hidden;
   background-color: #f0f4ff;
-  max-height: 180px;
+  max-height: 120px;
 }
 
 .websiteMeta:hover,
@@ -421,11 +421,9 @@ a:hover {
   }
 }
 
-//
-
-.ugc img :not(.websiteMetaImage) {
+.ugc img {
   max-width: 100%;
-  height: auto;
+  max-height: 320px;
 }
 
 .ugc.porQ p:last-of-type {
