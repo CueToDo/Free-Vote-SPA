@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // rxjs
@@ -175,5 +175,9 @@ export class PointCommentsComponent implements OnInit {
 
   scrollToTop() {
     this.scrollContainer.nativeElement.scrollTop = 0;
+  }
+
+  setSlashTag(slashTag: string) {
+    this.router.navigate([`${slashTag}/points`]);
   }
 }
