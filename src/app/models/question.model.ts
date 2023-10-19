@@ -19,7 +19,7 @@ export class QuestionEditFormData {
   question = '';
   details = '';
   draft = false;
-  slashtags: Tag[] = [];
+  TagsList: Tag[] = [];
 }
 
 export class Question {

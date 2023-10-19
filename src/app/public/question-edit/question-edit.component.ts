@@ -1,11 +1,11 @@
-import { ElementRef } from '@angular/core';
 // Angular
 import {
   Component,
-  OnInit,
+  ElementRef,
   EventEmitter,
-  Output,
   Input,
+  OnInit,
+  Output,
   ViewChild
 } from '@angular/core';
 
@@ -84,14 +84,22 @@ export class QuestionEditComponent implements OnInit {
     // Clear old Values when edit complete
     this.questionClone = new QuestionEdit();
     this.ClearQuestion();
-    this.questionClone.tags = [new Tag(slashTag, this.constituencyID)];
+
+    if (!!slashTag) {
+      let newTag = new Tag(slashTag, this.constituencyID);
+      newTag.tagByMeNew = true;
+      this.questionClone.tags = [newTag];
+    } else {
+      this.questionClone.tags = [];
+    }
+
     setTimeout(() => {
       this.tvQuestionTitle?.nativeElement.focus();
     }, 500);
   }
 
   ClearQuestion(): void {
-    this.questionClone.constituencyID = -1;
+    this.questionClone.constituencyID = this.question.constituencyID;
     this.questionClone.questionID = -1;
     this.questionClone.question = '';
     this.questionClone.details = ''; // doesn't get through to ckEditor on property binding

@@ -356,6 +356,7 @@
           <app-question-edit
             #newQuestion
             *ngIf="showQuestions"
+            [constituencyID]="filter.constituencyID"
             (CancelEdit)="CancelNewQuestion()"
             (CompleteEdit)="NewQuestion()"
           >

@@ -153,11 +153,7 @@ export class PointCommentsComponent implements OnInit {
 
   NewComment() {
     this.newComment = true;
-    this.newPointComponent.NewPoint(
-      '',
-      this.constituencyID,
-      this.parentPoint.pointID
-    );
+    this.newPointComponent.NewPoint('', this.parentPoint.pointID);
     setTimeout(() => this.scrollToBottom(), 100);
   }
 

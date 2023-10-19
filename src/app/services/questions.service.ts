@@ -119,7 +119,7 @@ export class QuestionsService {
       question: questionEdit.question,
       details: questionEdit.details,
       draft: questionEdit.draft,
-      slashtags: slashtags,
+      TagsList: questionEdit.tags.filter(tag => tag.tagByMe != tag.tagByMeNew),
       constituencyID: questionEdit.constituencyID
     } as QuestionEditFormData;
 

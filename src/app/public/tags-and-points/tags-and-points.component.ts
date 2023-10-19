@@ -657,11 +657,7 @@ export class TagsAndPointsComponent
         if (this.qp === 'question') {
           this.newQuestionComponent.NewQuestion(this.filter.slashTag);
         } else {
-          this.newPointComponent.NewPoint(
-            this.filter.slashTag,
-            this.filter.constituencyID,
-            0
-          );
+          this.newPointComponent.NewPoint(this.filter.slashTag, 0);
         }
         newRoute = `${this.filter.slashTag}/new-${this.qp}`;
         break;

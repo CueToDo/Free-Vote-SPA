@@ -359,7 +359,6 @@ export class PointEditComponent implements OnInit {
               if (isNew) {
                 this.NewPoint(
                   returnToSlashTag,
-                  this.constituencyID,
                   this.pointClone
                     .parentPointID /* ((parentPointID re-assigned)) */
                 );
@@ -398,11 +397,7 @@ export class PointEditComponent implements OnInit {
     }
   }
 
-  NewPoint(
-    slashTag: string,
-    constituencyID: number,
-    parentPointID: number
-  ): void {
+  NewPoint(slashTag: string, parentPointID: number): void {
     // Clear old Values when edit complete
     this.pointClone = new Point();
     this.pointClone.pointID = -1;
@@ -413,10 +408,10 @@ export class PointEditComponent implements OnInit {
     this.pointClone.pointHTML = ''; // doesn't get through to ckEditor on property binding
     this.ckeFudge.clearData(); // Must explicitly clear previous data
 
-    this.pointClone.constituencyID = constituencyID;
+    this.pointClone.constituencyID = this.constituencyID;
 
     if (!!slashTag) {
-      let newTag = new Tag(slashTag, constituencyID);
+      let newTag = new Tag(slashTag, this.constituencyID);
       newTag.tagByMeNew = true;
       this.pointClone.tags = [newTag];
     } else {
