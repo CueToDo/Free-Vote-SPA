@@ -36,22 +36,19 @@ const orgRoutes: Routes = [
   { path: 'membership', component: OrganisationsComponent },
   { path: 'available', component: OrganisationsComponent },
   { path: 'new', component: OrganisationsComponent },
+
+  { path: ':organisationName', component: OrganisationComponent },
+  { path: ':organisationName/:groupName', component: GroupComponent },
   {
-    path: ':organisationName',
-    component: OrganisationComponent,
-    children: [
-      { path: ':groupName', component: GroupComponent },
-      {
-        path: ':groupName/:issue',
-        component: IssueDetailsComponent
-      },
-      {
-        path: ':groupName/:issue/:porqId',
-        component: PorqDetailsComponent
-      }
-    ]
+    path: ':organisationName/:groupName/:issue',
+    component: IssueDetailsComponent
+  },
+  {
+    path: ':organisationName/:groupName/:issue/:porqId',
+    component: PorqDetailsComponent
   }
 ];
+
 @NgModule({
   imports: [
     // Angular

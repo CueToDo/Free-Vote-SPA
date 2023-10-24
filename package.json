@@ -1,6 +1,6 @@
 {
   "name": "free-vote",
-  "version": "15.3.19",
+  "version": "15.3.20",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --watch --host=localhost --configuration development --ssl true --ssl-key ssl/server.key --ssl-cert ssl/server.crt",

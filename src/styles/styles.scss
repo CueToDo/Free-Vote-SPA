@@ -67,6 +67,21 @@ router-outlet + *, /* All content injected after router-outlet */
   flex: 10 1;
 }
 
+.flexRow.stretch {
+  align-items: stretch;
+}
+
+.flexCol {
+  display: flex;
+  flex-flow: column;
+  align-items: center; /* center on cross-axis - vertical align middle*/
+  gap: 10px;
+}
+
+.flexCol.stretch {
+  align-items: stretch;
+}
+
 .primary {
   color: #3700b3;
 }

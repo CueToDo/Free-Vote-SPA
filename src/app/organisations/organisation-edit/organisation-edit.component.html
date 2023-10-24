@@ -1,7 +1,8 @@
 <div [ngClass]="{ edit: organisation.organisationID || 0 > 0 }">
-  <div fxLayout="column" fxLayoutAlign="start stretch">
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <mat-form-field fxFlex>
+  <div class="flexCol stretch">
+    <div class="flexRow">
+      <mat-form-field>
+        <mat-label>organisation website</mat-label>
         <input
           matInput
           placeholder="organisation website"
@@ -11,7 +12,6 @@
           (ngModelChange)="checkWebsite()"
         />
         <button
-          mat-button
           *ngIf="organisation.organisationWebsite"
           matSuffix
           mat-icon-button
@@ -37,15 +37,14 @@
     </div>
 
     <mat-form-field>
+      <mat-label>organisation name</mat-label>
       <input
         matInput
-        placeholder="organisation name"
         [(ngModel)]="organisation.organisationName"
         #groupName
         (keyup.enter)="nameComplete()"
       />
       <button
-        mat-button
         *ngIf="organisation.organisationName"
         matSuffix
         mat-icon-button
@@ -57,15 +56,15 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input
+      <mat-label>organisation description</mat-label>
+      <textarea
         matInput
-        placeholder="organisation description"
         [(ngModel)]="organisation.description"
         #groupDescription
         (keyup.enter)="descriptionComplete()"
-      />
+        rows="3"
+      ></textarea>
       <button
-        mat-button
         *ngIf="organisation.description"
         matSuffix
         mat-icon-button
@@ -77,15 +76,14 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>organisation image</mat-label>
       <input
         matInput
-        placeholder="organisation image"
         [(ngModel)]="organisation.image"
         #groupDescription
         (keyup.enter)="descriptionComplete()"
       />
       <button
-        mat-button
         *ngIf="organisation.image"
         matSuffix
         mat-icon-button
@@ -101,6 +99,7 @@
     </div>
 
     <mat-form-field>
+      <mat-label>extent</mat-label>
       <mat-select
         #geoExtent
         (ngModelChange)="extentSelected($event)"
@@ -153,7 +152,7 @@
     updating website preview
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="end">
+  <div class="flexRow" fxLayoutAlign="end">
     <button mat-stroked-button (click)="CancelEdit()" matTooltip="cancel edit">
       <span>cancel</span>
       <mat-icon>close</mat-icon>

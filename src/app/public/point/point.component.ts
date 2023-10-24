@@ -429,7 +429,11 @@ export class PointComponent implements AfterViewInit {
         // Also handled in new point in tags-and-points component
         this.updatingPreview = true;
         this.pointsService
-          .PointSourceMetaDataUpdate(this.point.pointID, this.point.linkAddress)
+          .PointLinkedWebsiteMetaDataUpdate(
+            this.point.pointID,
+            this.point.pointHTML,
+            this.point.linkAddress
+          )
           .subscribe({
             next: metaData => {
               if (this.point) {
@@ -437,7 +441,9 @@ export class PointComponent implements AfterViewInit {
                 this.point.linkDescription = metaData.description;
                 this.point.linkImage = metaData.image;
                 this.point.showPreview = metaData.showPreview;
+                this.point.pointHTML = metaData.htmlWithLastAnchorHidden;
                 this.updatingPreview = false;
+                this.extractMediaEmbeds();
               }
             },
             error: err => {

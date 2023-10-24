@@ -317,14 +317,15 @@ export class PointsService {
       .pipe(map(returnData => returnData as PointSelectionResult));
   }
 
-  PointSourceMetaDataUpdate(
+  PointLinkedWebsiteMetaDataUpdate(
     pointID: number,
+    pointHTML: string,
     link: string
   ): Observable<PagePreviewMetaData> {
-    const postData = { ID: pointID, websiteUrl: link };
+    const postData = { ID: pointID, pointHTML: pointHTML, websiteUrl: link };
 
     return this.httpClientService
-      .post('points/pointSourceMetaDataUpdate', postData)
+      .post('points/pointLinkedWebsiteMetaDataUpdate', postData)
       .pipe(map(result => result as PagePreviewMetaData));
   }
 

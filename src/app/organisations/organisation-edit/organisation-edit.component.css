@@ -19,3 +19,7 @@ mat-radio-button + mat-radio-button {
 div + mat-form-field {
   margin-top: 16px;
 }
+
+mat-form-field {
+  width: 100%;
+}
