@@ -1,45 +1,44 @@
 .GroupEdit {
-    background-color: whitesmoke;
-    padding: 20px, 10px;
+  background-color: whitesmoke;
+  padding: 20px, 10px;
 }
 
 mat-form-field.name {
-    width: 100%;
+  width: 100%;
 }
 
-mat-form-field+mat-form-field {
-    margin-left: 10px;
+mat-form-field + mat-form-field {
+  margin-left: 10px;
 }
 
 .name input {
-    font-size: 32px;
-    line-height: 40px;
-    font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 400;
 }
 
 mat-radio-button {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-button+button {
-    margin-left: 10px;
+button + button {
+  margin-left: 10px;
 }
 
 .hide {
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
 }
 
 .show {
-    max-height: 80px;
-    /* When datepicker filters wrap on mobile */
-    overflow: hidden;
-    opacity: 1;
+  max-height: 80px;
+  /* When datepicker filters wrap on mobile */
+  overflow: hidden;
+  opacity: 1;
 }
 
 .show,
 .hide {
-    transition: max-height .6s ease-out,
-        opacity .6s ease-out;
+  transition: max-height 0.6s ease-out, opacity 0.6s ease-out;
 }
