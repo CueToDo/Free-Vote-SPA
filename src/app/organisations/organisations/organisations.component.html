@@ -53,16 +53,15 @@
     </div>
   </div>
 
-  <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 1 }">
+  <div class="tabContent" [ngClass]="{ topZ: tabIndex === 1 }">
     <div
       [ngClass]="{
         centerStage: tabIndex === 1,
         stageLeft: tabIndex > 1,
         stageRight: tabIndex < 1
       }"
-      fxFill
     >
-      <div fxLayoutAlign="center">
+      <div class="scroller">
         <div class="content">
           <app-organisation-list
             #OrganisationsAvailable
@@ -73,16 +72,15 @@
     </div>
   </div>
 
-  <div class="tabContent scroller" [ngClass]="{ topZ: tabIndex === 2 }">
+  <div class="tabContent" [ngClass]="{ topZ: tabIndex === 2 }">
     <div
       [ngClass]="{
         centerStage: tabIndex === 2,
         stageLeft: tabIndex > 2,
         stageRight: tabIndex < 2
       }"
-      fxFill
     >
-      <div fxLayoutAlign="center">
+      <div class="scroller">
         <div class="content">
           <app-organisation-edit
             (Cancel)="CancelNew()"

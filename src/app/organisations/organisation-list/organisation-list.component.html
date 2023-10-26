@@ -1,5 +1,6 @@
-<div class="flexRow center" class="mb-4">
+<div class="flexRow">
   <mat-form-field>
+    <mat-label>search for organisation</mat-label>
     <input
       matInput
       placeholder="search for organisation"
@@ -8,8 +9,7 @@
       #trvOrgSearch
     />
     <button
-      mat-button
-      *ngIf="organisationFilter"
+      *ngIf="!!organisationFilter"
       matSuffix
       mat-icon-button
       aria-label="clear"
