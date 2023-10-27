@@ -17,7 +17,7 @@ import { Organisation } from 'src/app/models/organisation.model';
 
 // Services
 import { AppDataService } from '../../services/app-data.service';
-import { OrganisationsService } from 'src/app/services/groups.service';
+import { OrganisationsService } from 'src/app/services/organisations.service';
 import {
   debounceTime,
   distinctUntilChanged,

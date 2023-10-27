@@ -99,18 +99,6 @@
       (ChangeTab)="ChangeTab($event)"
     ></app-points-and-questions-menu>
 
-    <!-- Break-out groups -->
-    <button
-      mat-button
-      *ngIf="false && (auth0Service.isAuthenticated$ | async)"
-      [class.selected]="tabIndex === Tabs.groups"
-      [matTooltip]="'break-out groups'"
-      (click)="ChangeTab(Tabs.groups)"
-    >
-      groups
-      <mat-icon>groups</mat-icon>
-    </button>
-
     <!-- Begin Sort Menu -->
     <app-search-and-sort
       *ngIf="tabIndex === Tabs.tagPoints"
@@ -272,58 +260,7 @@
     </div>
   </div>
 
-  <!-- 5 Break-out Group Selection -->
-  <div
-    class="tabContent scroller"
-    [ngClass]="{ topZ: tabIndex === Tabs.groups }"
-  >
-    <div
-      [ngClass]="{
-        centerStage: tabIndex === Tabs.groups,
-        stageLeft: tabIndex > Tabs.groups,
-        stageRight: tabIndex < Tabs.groups
-      }"
-    >
-      <div class="scroller">
-        <div class="content">
-          <app-group-selection
-            [tagDisplay]="topicSelected"
-            #bogSelection
-            (BogSelected)="BogSelected($event)"
-          >
-          </app-group-selection>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6 Break-out Group Discussion -->
-  <div
-    class="tabContent"
-    [ngClass]="{ topZ: tabIndex === Tabs.groupDiscussion }"
-  >
-    <div
-      [ngClass]="{
-        centerStage: tabIndex === Tabs.groupDiscussion,
-        stageLeft: tabIndex > Tabs.groupDiscussion,
-        stageRight: tabIndex < Tabs.groupDiscussion
-      }"
-    >
-      <div class="scroller">
-        <div class="content">
-          <app-group-discussion
-            [tagDisplay]="topicSelected"
-            [bogSelected]="bogSelected"
-            (SelectAnother)="SelectAnotherBoG()"
-            #bogDiscussion
-          >
-          </app-group-discussion>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 7 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
+  <!-- 5 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagPoints }">
     <div
       [ngClass]="{
@@ -343,7 +280,7 @@
     </div>
   </div>
 
-  <!-- 8 new question or point -->
+  <!-- 6 new question or point -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.newPoint }">
     <div
       [ngClass]="{

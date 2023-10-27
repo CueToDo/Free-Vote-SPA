@@ -22,7 +22,7 @@ import { Organisation } from 'src/app/models/organisation.model';
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
-import { OrganisationsService } from 'src/app/services/groups.service';
+import { OrganisationsService } from 'src/app/services/organisations.service';
 
 @Component({
   selector: 'app-organisation-edit',

@@ -8,12 +8,11 @@ import { cloneDeep } from 'lodash-es';
 // Models
 import { GeographicalExtentID, MeetingIntervals } from 'src/app/models/enums';
 import { Organisation } from 'src/app/models/organisation.model';
-import { Group } from 'src/app/models/group.model';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
-import { OrganisationsService } from 'src/app/services/groups.service';
+import { OrganisationsService } from 'src/app/services/organisations.service';
 
 @Component({
   selector: 'app-organisation',
@@ -30,7 +29,6 @@ export class OrganisationComponent implements OnInit {
   groupEdit = false;
   membershipMessage = '';
 
-  newGroupTemplate = new Group();
   creatingNewGroup = false;
 
   error = '';
@@ -209,29 +207,8 @@ This cannot be undone.`)
     this.groupEdit = false;
   }
 
-  Complete(group: Organisation): void {
-    this.OrganisationDisplay = group;
+  Complete(organisation: Organisation): void {
+    this.OrganisationDisplay = organisation;
     this.groupEdit = false;
-  }
-
-  newGroup(): void {
-    this.newGroupTemplate = new Group();
-    this.newGroupTemplate.organisationID = this.OrganisationDisplay
-      ?.organisationID
-      ? this.OrganisationDisplay.organisationID
-      : 0;
-    this.newGroupTemplate.open = true;
-    this.newGroupTemplate.meetingIntervalID =
-      MeetingIntervals.Weekly.toString();
-    this.newGroupTemplate.selectionDayOfWeek = 1;
-    this.newGroupTemplate.selectionTimeOfDay = '19:00';
-    this.newGroupTemplate.nextIssueSelectionDate = this.appData.NextMonday();
-    this.newGroupTemplate.nextIssueSelectionTime = '19:00';
-    this.creatingNewGroup = true;
-  }
-
-  newGroupCreated(): void {
-    this.creatingNewGroup = false;
-    this.getGroup();
   }
 }

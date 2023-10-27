@@ -32,8 +32,6 @@ import { Auth0Wrapper } from 'src/app/services/auth.service';
 import { TagsService } from 'src/app/services/tags.service';
 
 // Components
-import { GroupSelectionComponent } from 'src/app/breakoutgroups/group-selection/group-selection.component';
-import { GroupDiscussionComponent } from 'src/app/breakoutgroups/group-discussion/group-discussion.component';
 import { PointEditComponent } from 'src/app/public//point-edit/point-edit.component';
 import { PointsFilterComponent } from 'src/app/public/points-filter/points-filter.component';
 import { PointsListComponent } from 'src/app/public/points-list/points-list.component';
@@ -156,10 +154,6 @@ export class TagsAndPointsComponent
   @ViewChild('tagsTrending') tagsTrendingComponent!: TagCloudComponent;
   @ViewChild('tagsRecent') tagsRecentComponent!: TagCloudComponent;
   @ViewChild('tagSearch') tagSearchComponent!: TagSearchComponent;
-
-  // BOG
-  @ViewChild('bogSelection') bogSelectionComponent!: GroupSelectionComponent;
-  @ViewChild('bogDiscussion') bogDiscussionComponent!: GroupDiscussionComponent;
 
   //Points
   @ViewChild('appQuestionsList')
@@ -329,10 +323,6 @@ export class TagsAndPointsComponent
         case 'questions':
           this.tabIndex = Tabs.questionList;
           this.qp = 'question';
-          break;
-        case 'groups':
-          this.tabIndex = Tabs.groups;
-          this.previousTabIndex = Tabs.groups;
           break;
         case 'points':
           this.tabIndex = Tabs.tagPoints;
@@ -611,18 +601,6 @@ export class TagsAndPointsComponent
         newRoute = this.filter.slashTag;
         break;
 
-      case Tabs.groups:
-        this.bogSelectionComponent.breakoutGroupsJoined(true);
-        newRoute = this.filter.slashTag + '/break-out-groups';
-        break;
-
-      case Tabs.groupDiscussion:
-        newRoute =
-          this.filter.slashTag +
-          '/break-out-groups/' +
-          this.appData.kebabUri(this.bogSelected.breakoutRoom);
-        break;
-
       case Tabs.tagPoints:
         this.qp = 'point';
         // Don't remove filter
@@ -840,16 +818,6 @@ export class TagsAndPointsComponent
 
   FeedbackChange(feedbackOn: boolean) {
     this.feedbackOn = feedbackOn;
-  }
-
-  BogSelected(bog: BreakoutGroup): void {
-    this.bogSelected = bog;
-    this.ChangeTab(Tabs.groupDiscussion);
-  }
-
-  SelectAnotherBoG(): void {
-    this.bogSelectionComponent.viewMyGroups();
-    this.ChangeTab(Tabs.groups);
   }
 
   ngOnDestroy(): void {

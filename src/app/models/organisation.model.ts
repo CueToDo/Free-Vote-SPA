@@ -8,7 +8,6 @@ export class Organisation {
   description = '';
   image = '';
 
-  groups: string[] = [];
   active = false;
 
   geographicalExtentID = GeographicalExtentID.National.toString(); // for html binding use string
@@ -19,8 +18,6 @@ export class Organisation {
   cities: string[] = [];
 
   invitationOnly = false; // Only private groups can be invitation only
-  Groups: string[] = []; // database sorts
-  defaultGroup = '';
 
   members = 0;
   issues = 0; // Topics

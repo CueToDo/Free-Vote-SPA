@@ -77,23 +77,6 @@
             </span>
           </span>
         </p>
-
-        <!-- Discussion Groups -->
-        <p
-          *ngIf="
-            OrganisationDisplay.groups &&
-            (OrganisationDisplay.groups.length ?? 0 > 0)
-          "
-        >
-          Discussion groups:
-          <span *ngFor="let group of OrganisationDisplay.groups; let i = index">
-            <a [routerLink]="issuesLink(group)">{{ group }}</a>
-            <ng-container
-              *ngIf="i !== OrganisationDisplay.groups.length ?? 0 - 1"
-              >,
-            </ng-container>
-          </span>
-        </p>
       </div>
 
       <!-- Group Edit -->
@@ -204,19 +187,7 @@
           <span>join</span>
           <mat-icon>group_add</mat-icon>
         </button>
-
-        <button mat-stroked-button (click)="newGroup()">
-          <mat-icon>add</mat-icon>Create new group
-        </button>
       </div>
-
-      <app-group-edit
-        *ngIf="creatingNewGroup"
-        [group]="newGroupTemplate"
-        (complete)="newGroupCreated()"
-        (cancelled)="creatingNewGroup = false"
-      >
-      </app-group-edit>
 
       <div *ngIf="error" class="alert alert-danger">
         {{ error }}

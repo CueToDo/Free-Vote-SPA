@@ -20,7 +20,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 // FreeVote Modules
 import { BaseModule } from '../base/base.module';
 import { CustomModule } from '../custommodule/custom.module';
-import { BreakOutGroupsModule } from '../breakoutgroups/break-out-groups.module';
 
 // FreeVote Components Declared here
 import { CardComponent } from './card/card.component';
@@ -68,7 +67,6 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     MatTooltipModule,
     // FreeVote
     BaseModule,
-    BreakOutGroupsModule,
     CustomModule
   ],
   declarations: [

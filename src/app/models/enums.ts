@@ -78,13 +78,9 @@ export enum Tabs {
   questionList = 3,
   questionAnswers = 4,
 
-  // Groups, Discussions
-  groups = 5,
-  groupDiscussion = 6,
-
   // Points
-  tagPoints = 7,
-  newPoint = 8
+  tagPoints = 5,
+  newPoint = 6
 }
 
 export enum TagCloudTypes {

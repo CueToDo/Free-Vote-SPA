@@ -7,7 +7,6 @@ import { map, tap } from 'rxjs/operators';
 
 // Model
 import { Organisation } from '../models/organisation.model';
-import { Group, GroupUpdate } from '../models/group.model';
 import { PagePreviewMetaData } from '../models/pagePreviewMetaData.model';
 
 // Base Services
@@ -122,54 +121,7 @@ export class OrganisationsService {
       .pipe(map(result => result as PagePreviewMetaData));
   }
 
-  Delete(groupID: number): Observable<boolean> {
-    return this.httpClientService.get(`organisation/delete/${groupID}`);
-  }
-
-  Groups(groupID: number): Observable<Group[]> {
-    return this.httpClientService.get(`organisation/groups/${groupID}`);
-  }
-
-  Group(subGroupID: number): Observable<Group> {
-    return this.httpClientService.get(`organisation/group/${subGroupID}`);
-  }
-
-  GroupByName(organisationName: string, groupName: string): Observable<Group> {
-    return this.httpClientService.get(
-      `organisation/groupByName/${organisationName}/${groupName}`
-    );
-  }
-
-  GroupID(groupName: string): number {
-    // if (!this.groupsSelected || this.groupsSelected.length === 0) {
-    //     return 0;
-    // }
-
-    const groupChosen = this.organisationsSelected.filter(
-      group => group.organisationName === groupName
-    );
-
-    if (!!groupChosen && groupChosen.length === 1) {
-      const groupID = groupChosen[0].organisationID;
-      return groupID;
-    } else {
-      return 0;
-    }
-  }
-
-  GroupUpdate(subGroup: GroupUpdate): Observable<Group> {
-    return this.httpClientService.post('organisation/group/update', subGroup);
-  }
-
-  GroupStartDiscussionNow(subGroupID: number): Observable<boolean> {
-    return this.httpClientService.get(
-      `organisation/group/${subGroupID}/startDiscussion`
-    );
-  }
-
-  GroupDelete(groupID: number, subGroupID: number): Observable<boolean> {
-    return this.httpClientService.get(
-      `organisation/${groupID}/group/${subGroupID}/delete`
-    );
+  Delete(organisationID: number): Observable<boolean> {
+    return this.httpClientService.get(`organisation/delete/${organisationID}`);
   }
 }
