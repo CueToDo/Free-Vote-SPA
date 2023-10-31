@@ -13,6 +13,7 @@ import { CustomModule } from '../custommodule/custom.module';
 
 // Free Vote
 import { ByComponent } from 'src/app/base/by/by.component';
+import { CountriesComponent } from './countries/countries.component';
 import { ListComponent } from 'src/app/base/list/list.component';
 import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
 import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
@@ -31,10 +32,17 @@ import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
   ],
   declarations: [
     ByComponent,
+    CountriesComponent,
     ListComponent,
     TagCloudComponent,
     TagsEditComponent
   ],
-  exports: [ByComponent, ListComponent, TagCloudComponent, TagsEditComponent]
+  exports: [
+    ByComponent,
+    CountriesComponent,
+    ListComponent,
+    TagCloudComponent,
+    TagsEditComponent
+  ]
 })
 export class BaseModule {}

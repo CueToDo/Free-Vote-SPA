@@ -1,4 +1,6 @@
-import { GeographicalExtentID } from './enums';
+// Models, enums
+import { Country } from 'src/app/models/country.model';
+import { GeographicalExtentID } from 'src/app/models/enums';
 
 export class Organisation {
   organisationID = 0;
@@ -13,7 +15,7 @@ export class Organisation {
   geographicalExtentID = GeographicalExtentID.National.toString(); // for html binding use string
   // AND API must return string otherwise javascript overrides specified type making it a number
   geographicalExtent = '';
-  countries: string[] = []; // database sorts
+  countries: Country[] = [];
   regions: string[] = [];
   cities: string[] = [];
 
@@ -28,4 +30,8 @@ export class Organisation {
   canInviteMembers = false;
 
   row = 0;
+
+  get countryList(): string[] {
+    return this.countries.map(country => country.country);
+  }
 }

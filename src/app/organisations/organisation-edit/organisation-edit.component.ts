@@ -15,9 +15,13 @@ import { MatSelect } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 
 // Model
-import { Kvp } from 'src/app/models/kvp.model';
+import { Country } from 'src/app/models/country.model';
 import { GeographicalExtent, GeographicalExtentID } from 'src/app/models/enums';
+import { Kvp } from 'src/app/models/kvp.model';
 import { Organisation } from 'src/app/models/organisation.model';
+
+// Components
+import { CountriesComponent } from 'src/app/base/countries/countries.component';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -44,6 +48,9 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
     | ElementRef
     | undefined;
   @ViewChild('geoExtent', { static: true }) elGeoExtent: MatSelect | undefined;
+  @ViewChild('geoCountries', { static: false }) elGeoCountries:
+    | CountriesComponent
+    | undefined;
 
   updatingPreview = false;
   disableWebsiteRefresh = true;
@@ -56,6 +63,7 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
   public GeographicalExtent = GeographicalExtent;
 
   extents: Kvp[] = [];
+  countries: Country[] = [];
 
   get showCountries(): boolean {
     if (!this.organisation) {
@@ -102,6 +110,23 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
     });
     this.checkWebsite();
     this.isNew = this.organisation.organisationID < 1;
+
+    // Get list of all countries
+    this.lookupsService.GetCountries().subscribe({
+      next: countries => {
+        this.countries = countries; // All countries
+
+        // Organisation country names:
+        const countryNames = this.organisation.countryList;
+
+        // Select countries in the full list, if it's in the organisation list
+        this.countries.forEach(country => {
+          if (countryNames.indexOf(country.country) > -1)
+            country.selected = true;
+        });
+      },
+      error: serverError => (this.error = serverError.error.detail)
+    });
   }
 
   public ClearError(): void {
@@ -155,6 +180,8 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
 
       this.error = '';
       const newGroup = this.organisation.organisationID < 1;
+
+      this.organisation.countries = this.elGeoCountries?.Selected!;
 
       this.groups$ = this.organisationsService
         .Update(this.organisation)

@@ -1,4 +1,4 @@
-<div fxLayout="row wrap">
+<div class="flexRow wrap">
   <div
     *ngFor="let tag of Tags"
     class="topic"
@@ -26,7 +26,6 @@
 
 <div>
   <input
-    fxFlex
     placeholder="type new slash tag and press enter"
     (keydown.shift.enter)="$event.preventDefault()"
     (keyup)="check()"

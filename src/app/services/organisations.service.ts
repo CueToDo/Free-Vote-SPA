@@ -26,7 +26,7 @@ export class OrganisationsService {
     return this.httpClientService
       .post('organisations/membership', postData)
       .pipe(
-        // save copy to look up groupID in group-issues.component
+        // save copy to look up organisationID in group-issues.component
         tap(
           returnData =>
             (this.organisationsSelected = returnData as Organisation[])
@@ -43,7 +43,7 @@ export class OrganisationsService {
     return this.httpClientService
       .post('organisations/available', postData)
       .pipe(
-        // save copy to look up groupID in group-issues.component
+        // save copy to look up organisationID in group-issues.component
         tap(
           returnData =>
             (this.organisationsSelected = returnData as Organisation[])
@@ -92,22 +92,22 @@ export class OrganisationsService {
     return this.OrganisationSearchByName(organisationName);
   }
 
-  Join(groupID: number): Observable<number> {
-    return this.httpClientService.get(`organisation/join/${groupID}`);
+  Join(organisationID: number): Observable<number> {
+    return this.httpClientService.get(`organisation/join/${organisationID}`);
   }
 
-  Leave(groupID: number): Observable<number> {
-    return this.httpClientService.get(`organisation/leave/${groupID}`);
+  Leave(organisationID: number): Observable<number> {
+    return this.httpClientService.get(`organisation/leave/${organisationID}`);
   }
 
-  Activate(groupID: number, active: boolean): Observable<boolean> {
+  Activate(organisationID: number, active: boolean): Observable<boolean> {
     return this.httpClientService.get(
-      `organisation/activate/${groupID}/${active ? 'Y' : 'N'}`
+      `organisation/activate/${organisationID}/${active ? 'Y' : 'N'}`
     );
   }
 
-  Update(group: Organisation): Observable<Organisation> {
-    return this.httpClientService.post('organisation/update', group);
+  Update(organisation: Organisation): Observable<Organisation> {
+    return this.httpClientService.post('organisation/update', organisation);
   }
 
   OrganisationWebsiteMetaDataFetch(

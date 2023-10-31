@@ -35,7 +35,7 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.StartNewGroup(); // For GroupEdit, do this early
+    this.StartNewOrganisation(); // For OrganisationEdit, do this early
 
     // tab is not a route parameter, but a route segment
     // this.tabSelected = this.activatedRoute.snapshot.params['tab'];
@@ -77,7 +77,7 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
         this.appDataService.RouteParamChange$.next('/organisations/available');
         break;
       case 2:
-        this.StartNewGroup();
+        this.StartNewOrganisation();
         this.newGroupComponent?.ClearError();
         this.appDataService.RouteParamChange$.next('/organisations/new');
         break;
@@ -92,8 +92,10 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/organisations', group.organisationName]);
   }
 
-  StartNewGroup(): void {
+  StartNewOrganisation(): void {
     this.NewOrganisation = new Organisation();
-    this.NewOrganisation.countries = ['UK'];
+    this.NewOrganisation.countries = [
+      { country: 'UK (inc NI)', countryID: 25, priority: 1, selected: true }
+    ];
   }
 }

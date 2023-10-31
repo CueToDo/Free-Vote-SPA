@@ -1,0 +1,19 @@
+<div class="flexRow wrap">
+  <div
+    *ngFor="let country of Countries"
+    class="px-3 py-2 pill"
+    [ngClass]="{ tagByOther: country.selected, tagDelete: !country.selected }"
+  >
+    {{ country.country }}
+    <mat-icon *ngIf="country.selected" (click)="select(country.country, false)"
+      >remove_circle</mat-icon
+    >
+    <mat-icon *ngIf="!country.selected" (click)="select(country.country, true)"
+      >add_circle</mat-icon
+    >
+  </div>
+</div>
+
+<div class="alert alert-danger m-2" *ngIf="!!error">
+  {{ error }}
+</div>

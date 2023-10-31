@@ -6,12 +6,9 @@ import { Injectable } from '@angular/core';
 import { map, Observable, of, tap } from 'rxjs';
 
 // Models, enums
+import { Country } from 'src/app/models/country.model';
 import { Kvp } from 'src/app/models/kvp.model';
-import {
-  GeographicalExtentID,
-  PointTypesEnum,
-  PorQTypes
-} from 'src/app/models/enums';
+import { GeographicalExtentID, PointTypesEnum } from 'src/app/models/enums';
 import { VotingArea } from 'src/app/models/FreeVoteProfile';
 
 // Services
@@ -90,11 +87,6 @@ export class LookupsService {
     }
   }
 
-  PorQType(porQTypeID: PorQTypes): string {
-    return this.porQTypes.filter(pt => pt.value === (porQTypeID as number))[0]
-      .key;
-  }
-
   // Database returns a List of Lookup values - a mumerical database ID and a string display Value
   GeographicalExtents(): Observable<Kvp[]> {
     if (!!this.extents && this.extents.length > 0) {
@@ -109,10 +101,10 @@ export class LookupsService {
     }
   }
 
-  GetCountries(): Observable<Kvp[]> {
+  GetCountries(): Observable<Country[]> {
     return this.httpService
       .get('lookups/countries')
-      .pipe(map(value => value as Kvp[]));
+      .pipe(map(value => value as Country[]));
   }
 
   GetCities(countryID: string): Observable<Kvp[]> {
@@ -155,12 +147,11 @@ export class LookupsService {
 
   ShowCountries(geographicalExtentID: string): boolean {
     switch (geographicalExtentID) {
-      // Don't Show Countries if:
-      case GeographicalExtentID.GlobalOrganisation.toString():
-      case GeographicalExtentID.PrivateOrganisation.toString():
-        return false;
-      default:
+      // Show Countries if region is National:
+      case GeographicalExtentID.National.toString():
         return true;
+      default:
+        return false;
     }
   }
 

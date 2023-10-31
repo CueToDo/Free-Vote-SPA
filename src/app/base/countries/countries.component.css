@@ -1,0 +1,19 @@
+.pill {
+  display: flex;
+  font-weight: bold;
+  border-radius: 10px;
+  white-space: nowrap;
+  /* Keep icon on same line as text on small screens */
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.item {
+  background-color: #ffd700;
+}
+
+mat-icon {
+  margin-left: 5px;
+  vertical-align: middle;
+  cursor: pointer;
+}

@@ -34,7 +34,7 @@
         </p>
 
         <p>
-          Group Type:
+          Organisation Type:
           <strong>{{ OrganisationDisplay.geographicalExtent }}</strong>
           <span
             *ngIf="
@@ -46,16 +46,15 @@
           >
 
           <span *ngIf="showCountries">
-            Countries:
+            Country(s):
             <span
               *ngFor="
                 let country of OrganisationDisplay.countries;
                 let i = index
               "
               class="data"
-              >{{ country
-              }}<span
-                *ngIf="i !== OrganisationDisplay.countries.length ?? 0 - 1"
+              >{{ country.country
+              }}<span *ngIf="i !== OrganisationDisplay.countries.length - 1"
                 >,
               </span></span
             >

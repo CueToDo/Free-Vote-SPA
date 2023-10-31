@@ -115,6 +115,16 @@
       </mat-select>
     </mat-form-field>
 
+    <div *ngIf="showCountries">
+      Country or Countries
+      <app-countries [Countries]="countries" #geoCountries></app-countries>
+    </div>
+
+    <div *ngIf="showCities">
+      City or Cities
+      <app-list [(Items)]="organisation.cities" [ItemName]="'city'"></app-list>
+    </div>
+
     <div
       *ngIf="
         organisation.geographicalExtentID ===
@@ -129,19 +139,6 @@
           >accept requests
         </mat-radio-button>
       </mat-radio-group>
-    </div>
-
-    <div *ngIf="showCountries">
-      Country or Countries
-      <app-list
-        [(Items)]="organisation.countries"
-        [ItemName]="'country'"
-      ></app-list>
-    </div>
-
-    <div *ngIf="showCities">
-      City or Cities
-      <app-list [(Items)]="organisation.cities" [ItemName]="'city'"></app-list>
     </div>
   </div>
 
