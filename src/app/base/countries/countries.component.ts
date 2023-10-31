@@ -1,5 +1,5 @@
 // Angular
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 // Models
 import { Country } from 'src/app/models/country.model';
@@ -9,7 +9,7 @@ import { Country } from 'src/app/models/country.model';
   templateUrl: './countries.component.html',
   styleUrls: ['./countries.component.css']
 })
-export class CountriesComponent implements OnInit {
+export class CountriesComponent {
   @Input() Countries: Country[] = [];
 
   public get Selected(): Country[] {
@@ -18,8 +18,6 @@ export class CountriesComponent implements OnInit {
 
   error = '';
   selected: Country | undefined = undefined;
-
-  ngOnInit() {}
 
   select(country: string, selected: boolean): void {
     // effin js arrays

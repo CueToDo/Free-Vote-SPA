@@ -34,7 +34,7 @@ import { OrganisationsService } from 'src/app/services/organisations.service';
   styleUrls: ['./organisation-edit.component.css']
 })
 export class OrganisationEditComponent implements OnInit, OnDestroy {
-  @Input() organisation = new Organisation();
+  @Input() organisation!: Organisation;
   @Output() organisationChange = new EventEmitter();
 
   @Output() Cancel = new EventEmitter();
@@ -103,7 +103,6 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.extents$ = this.lookupsService.GeographicalExtents().subscribe({
       next: extents => {
-        console.log('EXTENTS', extents);
         this.extents = extents;
       },
       error: serverError => (this.error = serverError.error.detail)
@@ -117,7 +116,9 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
         this.countries = countries; // All countries
 
         // Organisation country names:
-        const countryNames = this.organisation.countryList;
+        var countryNames = this.organisation.countries.map(
+          country => country.country
+        );
 
         // Select countries in the full list, if it's in the organisation list
         this.countries.forEach(country => {
