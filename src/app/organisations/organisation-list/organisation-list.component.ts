@@ -53,57 +53,65 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
     private ngZone: NgZone
   ) {}
 
-  @Input() Refresh(): void {
+  FetchOrganisations() {
+    this.groupsService
+      .OrganisationMembership(this.organisationFilter)
+      .subscribe({
+        next: groups => {
+          this.organisations = groups;
+          this.organisationCount = groups.length;
+          if (this.organisationCount === 0) {
+            if (this.organisationFilter) {
+              this.message =
+                'You are not a member of any groups that match the search';
+            } else {
+              this.message = 'You are not a member of any groups';
+            }
+          }
+        },
+        error: serverError => (this.error = serverError.error.detail),
+        complete: () => {
+          // Change was triggered outside angular (input debounce)
+          // Force view refresh with ngZone.run
+          this.ngZone.run(_ => (this.waiting = false));
+        }
+      });
+  }
+
+  FetchOrganisationsAvailable() {
+    this.groupsService
+      .OrganisationsAvailable(this.organisationFilter)
+      .subscribe({
+        next: groups => {
+          this.organisations = groups;
+          this.organisationCount = groups.length;
+          if (this.organisationCount === 0) {
+            if (this.organisationFilter) {
+              this.message =
+                'No organisations are available to join that match the search';
+            } else {
+              this.message = 'No more organisations are available to join';
+            }
+          }
+        },
+        error: serverError => (this.error = serverError.error.detail),
+        complete: () => {
+          // Force view refresh with ngZone.run
+          this.ngZone.run(_ => (this.waiting = false));
+        }
+      });
+  }
+
+  Refresh(): void {
     this.organisations = [];
     this.waiting = true;
     this.message = '';
     this.error = '';
 
     if (this.CurrentMembership) {
-      this.groupsService
-        .OrganisationMembership(this.organisationFilter)
-        .subscribe({
-          next: groups => {
-            this.organisations = groups;
-            this.organisationCount = groups.length;
-            if (this.organisationCount === 0) {
-              if (this.organisationFilter) {
-                this.message =
-                  'You are not a member of any groups that match the search';
-              } else {
-                this.message = 'You are not a member of any groups';
-              }
-            }
-          },
-          error: serverError => (this.error = serverError.error.detail),
-          complete: () => {
-            // Change was triggered outside angular (input debounce)
-            // Force view refresh with ngZone.run
-            this.ngZone.run(_ => (this.waiting = false));
-          }
-        });
+      this.FetchOrganisations();
     } else {
-      this.groupsService
-        .OrganisationsAvailable(this.organisationFilter)
-        .subscribe({
-          next: groups => {
-            this.organisations = groups;
-            this.organisationCount = groups.length;
-            if (this.organisationCount === 0) {
-              if (this.organisationFilter) {
-                this.message =
-                  'No organisations are available to join that match the search';
-              } else {
-                this.message = 'No more organisations are available to join';
-              }
-            }
-          },
-          error: serverError => (this.error = serverError.error.detail),
-          complete: () => {
-            // Force view refresh with ngZone.run
-            this.ngZone.run(_ => (this.waiting = false));
-          }
-        });
+      this.FetchOrganisationsAvailable();
     }
   }
 
@@ -120,7 +128,6 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
         .subscribe({
           next: key => {
             if (!globals.KeyRestrictions.includes(key.key)) {
-              // Fuzzy search on userInput
               this.Refresh(); // "As-is"
             }
           }
