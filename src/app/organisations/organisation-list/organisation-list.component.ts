@@ -40,6 +40,8 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
   public message = '';
   public error = '';
 
+  fetchComplete = false;
+
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
   @ViewChild('trvOrgSearch', { static: false }) trvOrgSearch:
     | ElementRef
@@ -53,21 +55,24 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
     private ngZone: NgZone
   ) {}
 
-  FetchOrganisations() {
+  FetchOrganisations(): void {
+    if (this.fetchComplete) return;
+
     this.groupsService
       .OrganisationMembership(this.organisationFilter)
       .subscribe({
-        next: groups => {
-          this.organisations = groups;
-          this.organisationCount = groups.length;
+        next: organisations => {
+          this.organisations = organisations;
+          this.organisationCount = organisations.length;
           if (this.organisationCount === 0) {
             if (this.organisationFilter) {
               this.message =
-                'You are not a member of any groups that match the search';
+                'You are not a member of any organisations that match the search';
             } else {
-              this.message = 'You are not a member of any groups';
+              this.message = 'You are not a member of any organisations';
             }
           }
+          this.fetchComplete = true;
         },
         error: serverError => (this.error = serverError.error.detail),
         complete: () => {
@@ -78,13 +83,15 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
       });
   }
 
-  FetchOrganisationsAvailable() {
+  FetchOrganisationsAvailable(): void {
+    if (this.fetchComplete) return;
+
     this.groupsService
       .OrganisationsAvailable(this.organisationFilter)
       .subscribe({
-        next: groups => {
-          this.organisations = groups;
-          this.organisationCount = groups.length;
+        next: organisations => {
+          this.organisations = organisations;
+          this.organisationCount = organisations.length;
           if (this.organisationCount === 0) {
             if (this.organisationFilter) {
               this.message =
@@ -93,6 +100,7 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
               this.message = 'No more organisations are available to join';
             }
           }
+          this.fetchComplete = true;
         },
         error: serverError => (this.error = serverError.error.detail),
         complete: () => {
@@ -103,6 +111,7 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
   }
 
   Refresh(): void {
+    this.fetchComplete = false;
     this.organisations = [];
     this.waiting = true;
     this.message = '';

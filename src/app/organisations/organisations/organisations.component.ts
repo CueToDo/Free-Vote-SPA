@@ -20,8 +20,10 @@ import { OrganisationEditComponent } from 'src/app/organisations/organisation-ed
 export class OrganisationsComponent implements OnInit, AfterViewInit {
   @ViewChild('OrganisationMembership')
   organisationMembership!: OrganisationListComponent;
+
   @ViewChild('OrganisationsAvailable')
-  groupsAvailable!: OrganisationListComponent;
+  organisationsAvailable!: OrganisationListComponent;
+
   @ViewChild('NewGroupComponent') newGroupComponent!: OrganisationEditComponent;
 
   public tabIndex = 0;
@@ -61,8 +63,7 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.organisationMembership?.Refresh();
-    this.groupsAvailable?.Refresh();
+    this.organisationMembership?.FetchOrganisations();
     this.newGroupComponent?.ClearError();
   }
 
@@ -71,9 +72,11 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
 
     switch (tabIndex) {
       case 0:
+        this.organisationsAvailable?.FetchOrganisations();
         this.appDataService.RouteParamChange$.next('/organisations/membership');
         break;
       case 1:
+        this.organisationsAvailable?.FetchOrganisationsAvailable();
         this.appDataService.RouteParamChange$.next('/organisations/available');
         break;
       case 2:
