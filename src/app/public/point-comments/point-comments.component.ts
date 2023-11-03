@@ -116,7 +116,12 @@ export class PointCommentsComponent implements OnInit {
     // Manually pass the value just received and initialise the component
     this.parentPointComponent.AssignAndInitialise(point);
 
-    this.socialShareComponent.DisplayShareLinks();
+    this.socialShareComponent.DisplayShareLinks(
+      point.pointTitle,
+      point.pointHTML,
+      point.pointSlug,
+      point.pointID
+    );
 
     // SSR Initial page render
     const preview = {

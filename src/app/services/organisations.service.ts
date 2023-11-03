@@ -48,7 +48,12 @@ export class OrganisationsService {
           returnData =>
             (this.organisationsSelected = returnData as Organisation[])
         ),
-        map(returnData => returnData as Organisation[])
+        map(returnData => {
+          const parsedJson = JSON.parse(returnData);
+          const organisations = new Array();
+          Object.assign(organisations, parsedJson);
+          return organisations;
+        })
       );
   }
 

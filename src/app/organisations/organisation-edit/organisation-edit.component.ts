@@ -34,7 +34,7 @@ import { OrganisationsService } from 'src/app/services/organisations.service';
   styleUrls: ['./organisation-edit.component.css']
 })
 export class OrganisationEditComponent implements OnInit, OnDestroy {
-  @Input() organisation!: Organisation;
+  @Input() organisation = new Organisation();
   @Output() organisationChange = new EventEmitter();
 
   @Output() Cancel = new EventEmitter();
@@ -111,14 +111,11 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
     this.isNew = this.organisation.organisationID < 1;
 
     // Get list of all countries
+    // ToDo this could be cached rather than look up on each edit
     this.lookupsService.GetCountries().subscribe({
       next: countries => {
         this.countries = countries; // All countries
-
-        // Organisation country names:
-        var countryNames = this.organisation.countries.map(
-          country => country.country
-        );
+        const countryNames = this.organisation.countryNames;
 
         // Select countries in the full list, if it's in the organisation list
         this.countries.forEach(country => {

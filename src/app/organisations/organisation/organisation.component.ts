@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
 
 // Models
-import { GeographicalExtentID, MeetingIntervals } from 'src/app/models/enums';
+import { GeographicalExtentID } from 'src/app/models/enums';
 import { Organisation } from 'src/app/models/organisation.model';
 
 // Services
@@ -25,8 +25,8 @@ export class OrganisationComponent implements OnInit {
 
   public GeographicalExtentID = GeographicalExtentID;
 
-  groupCopy = new Organisation();
-  groupEdit = false;
+  organisationCopy = new Organisation();
+  organisationEdit = false;
   membershipMessage = '';
 
   creatingNewGroup = false;
@@ -78,17 +78,17 @@ export class OrganisationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getGroup();
+    this.getOrganisation();
   }
 
-  getGroup(): void {
+  getOrganisation(): void {
     let organisationName =
       this.activatedRoute.snapshot.params['organisationName'];
     organisationName = this.appData.unKebabUri(organisationName);
 
     this.organisationService.Organisation(organisationName, true).subscribe({
       next: (organisation: Organisation) => {
-        this.OrganisationDisplay = organisation;
+        Object.assign(this.OrganisationDisplay, organisation);
       },
       error: serverError => {
         this.error = serverError.error.detail;
@@ -179,8 +179,8 @@ export class OrganisationComponent implements OnInit {
   }
 
   Edit(): void {
-    this.groupCopy = cloneDeep(this.OrganisationDisplay) as Organisation; // If we decide to cancel
-    this.groupEdit = true;
+    this.organisationCopy = cloneDeep(this.OrganisationDisplay) as Organisation; // If we decide to cancel
+    this.organisationEdit = true;
   }
 
   Delete(): void {
@@ -203,12 +203,12 @@ This cannot be undone.`)
   }
 
   Cancel(): void {
-    this.OrganisationDisplay = cloneDeep(this.groupCopy) as Organisation;
-    this.groupEdit = false;
+    this.OrganisationDisplay = cloneDeep(this.organisationCopy) as Organisation;
+    this.organisationEdit = false;
   }
 
   Complete(organisation: Organisation): void {
     this.OrganisationDisplay = organisation;
-    this.groupEdit = false;
+    this.organisationEdit = false;
   }
 }

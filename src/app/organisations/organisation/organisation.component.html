@@ -2,7 +2,7 @@
   <div class="tabContent scroller">
     <div class="content">
       <!-- Group Display -->
-      <div *ngIf="!groupEdit && OrganisationDisplay">
+      <div *ngIf="!organisationEdit && OrganisationDisplay">
         <!-- Elvis Operator or ngIf: https://stackoverflow.com/questions/54536126/angular-cannot-read-property-of-undefined-but-still-displays-data -->
 
         <div>
@@ -78,10 +78,10 @@
         </p>
       </div>
 
-      <!-- Group Edit -->
+      <!-- Organisation Edit -->
       <div
         *ngIf="
-          groupEdit &&
+          organisationEdit &&
           (OrganisationDisplay.organisationAdministrator ||
             OrganisationDisplay.organisationOwner)
         "
@@ -95,7 +95,7 @@
       </div>
 
       <!-- Commands -->
-      <div *ngIf="!groupEdit && OrganisationDisplay">
+      <div *ngIf="!organisationEdit && OrganisationDisplay">
         <button
           mat-stroked-button
           *ngIf="OrganisationDisplay.organisationOwner"
@@ -137,7 +137,7 @@
         <button
           mat-stroked-button
           *ngIf="
-            !groupEdit &&
+            !organisationEdit &&
             (OrganisationDisplay.organisationAdministrator ||
               OrganisationDisplay.organisationOwner)
           "

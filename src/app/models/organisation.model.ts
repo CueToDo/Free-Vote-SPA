@@ -30,4 +30,9 @@ export class Organisation {
   canInviteMembers = false;
 
   row = 0;
+
+  // Organisation country names:
+  get countryNames() {
+    return this.countries.map(country => country.country);
+  }
 }

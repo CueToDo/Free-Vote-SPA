@@ -425,6 +425,16 @@ export class AppDataService {
     }
   }
 
+  htmlToText(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Extract the plain text content of the document body.
+    let text = doc.body.textContent + '';
+    text = text.replace('https://', ' https://');
+    return text;
+  }
+
   // https://blog.logrocket.com/4-different-techniques-for-copying-objects-in-javascript-511e422ceb1e/
   // We call the copy shallow because the properties in the target object
   // can still hold references to those in the source object. WTF
