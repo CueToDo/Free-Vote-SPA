@@ -431,7 +431,6 @@ export class PointComponent implements AfterViewInit {
         this.pointsService
           .PointLinkedWebsiteMetaDataUpdate(
             this.point.pointID,
-            this.point.pointHTML,
             this.point.linkAddress
           )
           .subscribe({
@@ -441,7 +440,6 @@ export class PointComponent implements AfterViewInit {
                 this.point.linkDescription = metaData.description;
                 this.point.linkImage = metaData.image;
                 this.point.showPreview = metaData.showPreview;
-                this.point.pointHTML = metaData.htmlWithLastAnchorHidden;
                 this.updatingPreview = false;
                 this.extractMediaEmbeds();
               }

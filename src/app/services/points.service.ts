@@ -319,10 +319,9 @@ export class PointsService {
 
   PointLinkedWebsiteMetaDataUpdate(
     pointID: number,
-    pointHTML: string,
     link: string
   ): Observable<PagePreviewMetaData> {
-    const postData = { ID: pointID, pointHTML: pointHTML, websiteUrl: link };
+    const postData = { pointID: pointID, websiteUrl: link };
 
     return this.httpClientService
       .post('points/pointLinkedWebsiteMetaDataUpdate', postData)

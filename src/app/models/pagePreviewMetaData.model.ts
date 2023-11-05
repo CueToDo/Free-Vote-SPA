@@ -5,5 +5,4 @@ export class PagePreviewMetaData {
   pagePath = '';
   url = '';
   showPreview = false;
-  htmlWithLastAnchorHidden = '';
 }
