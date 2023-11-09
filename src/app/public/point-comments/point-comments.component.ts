@@ -74,7 +74,7 @@ export class PointCommentsComponent implements OnInit {
     this.SelectSpecificPoint(slashTag, pointTitle);
   }
 
-  // Select point from title in route
+  // Select specific point from title in route
   public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
     this.alreadyFetchingPointFromDB = true;
 
@@ -92,7 +92,7 @@ export class PointCommentsComponent implements OnInit {
       }); // no need to do anything
   }
 
-  // Select Specific Point from pointID
+  // Select specific Point from pointID
   SelectComment(pointID: number): void {
     this.alreadyFetchingPointFromDB = true;
 
@@ -125,6 +125,7 @@ export class PointCommentsComponent implements OnInit {
 
     // SSR Initial page render
     const preview = {
+      debugInfo: 'AssignPoint',
       pagePath: this.router.url,
       title: point.pointTitle,
       description: point.preview,

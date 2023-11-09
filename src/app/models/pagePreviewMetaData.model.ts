@@ -1,4 +1,5 @@
 export class PagePreviewMetaData {
+  debugInfo = '';
   title = '';
   description = '';
   image = '';

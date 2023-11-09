@@ -159,7 +159,8 @@ export class AppComponent implements OnInit {
           metaData.description,
           'SSRInitialMetaData' /* additional keywords */,
           metaData.pagePath,
-          metaData.image
+          metaData.image,
+          metaData.debugInfo
         );
       }
     });
@@ -227,8 +228,10 @@ export class AppComponent implements OnInit {
     preview: string,
     csvAdditionalKeywords: string,
     pagePath: string,
-    previewImage: string
+    previewImage: string,
+    debugInfo: string
   ): void {
+    // Pointless updating meta data on client browser
     if (!isPlatformServer(this.platformId)) return;
 
     // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
@@ -250,7 +253,7 @@ export class AppComponent implements OnInit {
       property: `pass ${this.pass}`,
       content: `server ${isPlatformServer(
         this.platformId
-      )} Keywords: ${csvAdditionalKeywords} PagePath: ${pagePath} Title: ${title} Preview: ${preview} Image:${previewImage}`
+      )} debugInfo: ${debugInfo} Keywords: ${csvAdditionalKeywords} PagePath: ${pagePath} Title: ${title} Preview: ${preview} Image:${previewImage}`
     });
 
     // 1) Title: remove and conditionally add
@@ -416,9 +419,10 @@ export class AppComponent implements OnInit {
     this.setMetaData(
       metaTitle /* title */,
       'Free Vote anonymous voting platform' /* preview */,
-      'RouteOrParamsUpdated' /* additional keywords */,
+      '' /* additional keywords */,
       this.routeDisplay /* page path (home) */,
-      `${this.localData.websiteUrlWTS}/assets/vulcan-384.png` // previewImage
+      `${this.localData.websiteUrlWTS}/assets/vulcan-384.png`, // previewImage
+      'RouteOrParamsUpdated'
     );
   }
 
