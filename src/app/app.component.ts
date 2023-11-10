@@ -9,10 +9,9 @@ import {
   PLATFORM_ID,
   ViewChild
 } from '@angular/core';
-import { isPlatformServer } from '@angular/common';
-import { Title, Meta } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // rxjs
@@ -32,9 +31,6 @@ import { UpdateService } from 'src/app/services/update.service';
 // FreeVote Components
 import { NavBurgerComponent } from 'src/app/public/menus/nav-burger/nav-burger.component';
 import { NavMainComponent } from 'src/app/public/menus/nav-main/nav-main.component';
-
-// Other
-import { environment } from 'src/environments/environment';
 
 export enum NetworkStatus {
   ONLINE = 'online',
@@ -67,11 +63,8 @@ export class AppComponent implements OnInit {
   altVulcan = 'Vulcan';
   under500 = false;
 
-  pass = 0;
-
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
@@ -80,7 +73,6 @@ export class AppComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private location: Location,
     private titleService: Title,
-    private metaService: Meta,
     private sw: UpdateService,
     @Inject(DOCUMENT) private document: Document,
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
@@ -122,7 +114,6 @@ export class AppComponent implements OnInit {
     // Route and Route Parameters: Setup and subscribe to changes (SSR and CSR)
     // https://ultimatecourses.com/blog/dynamic-page-titles-angular-2-router-events
     // 1) ngOnInit initialisation for all pages (incl PointShare)
-    console.log('ngOnInit RouteOrParamsUpdated called');
     this.RouteOrParamsUpdated(this.router.url);
 
     // 2) Subscribe to router.events
@@ -206,139 +197,6 @@ export class AppComponent implements OnInit {
     this.titleService.setTitle(title);
   }
 
-  setMetaData(): void {
-    // Pointless updating meta data on client browser
-    if (!isPlatformServer(this.platformId)) return;
-
-    // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
-    // https://css-tricks.com/essential-meta-tags-social-media/
-
-    // Requires Angular Universal Server Side Rendering for Social media use
-    // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
-
-    const queryStringParameters = this.activatedRoute.snapshot.queryParams;
-    const title = queryStringParameters['get']('title');
-    const preview = queryStringParameters['get']('preview');
-    const image = queryStringParameters['get']('image');
-    const pagePath = this.routeDisplay; /* page path (home) */
-
-    // Don't overwrite existing meta with home meta
-    if (
-      title === this.localData.website &&
-      !!this.metaService.getTag(`property='og:title'`)
-    )
-      return;
-
-    //  Debugging info. ToDo: remove
-    this.pass++;
-    this.metaService.addTag({
-      property: `pass ${this.pass}`,
-      content: `server ${isPlatformServer(
-        this.platformId
-      )} PagePath: ${pagePath} Title: ${title} Preview: ${preview} Image:${image}`
-    });
-
-    // 1) Title: remove and conditionally add
-    this.metaService.removeTag(`property='og:title'`);
-    this.metaService.removeTag(`name='twitter:title'`);
-
-    if (title) {
-      this.metaService.addTags([
-        { property: 'og:title', content: title },
-        { name: 'twitter:title', content: title }
-      ]);
-    }
-
-    // 2) Description preview
-    this.metaService.updateTag({ name: 'description', content: preview });
-    this.metaService.updateTag({
-      property: 'og:description',
-      content: preview
-    });
-    this.metaService.updateTag({
-      name: 'twitter:description',
-      content: preview
-    });
-
-    // 4) og:url remove and conditionally add
-    this.metaService.removeTag(`property='og:url'`);
-
-    const websiteUrlWTS = this.localData.websiteUrlWTS;
-
-    const url = `${websiteUrlWTS}/${this.appData.removeBookEnds(
-      pagePath,
-      '/'
-    )}`;
-
-    if (url) {
-      this.metaService.addTags([{ property: 'og:url', content: url }]);
-    }
-
-    // 5) og:type
-    this.metaService.updateTag({ property: 'og:type', content: 'article' });
-
-    // 6) twitter:card
-    // card type: “summary”, “summary_large_image”, “app”, or “player”.
-    this.metaService.removeTag(`name='twitter:card'`);
-
-    if (preview && image) {
-      this.metaService.addTags([
-        { name: 'twitter:card', content: 'summary_large_image' }
-      ]);
-    } else if (preview) {
-      this.metaService.addTag({ name: 'twitter:card', content: 'summary' });
-    }
-
-    // 7) PreviewImage remove and conditionally add
-    this.metaService.removeTag(`property='og:image'`);
-    this.metaService.removeTag(`property='og:image:width'`);
-    this.metaService.removeTag(`property='og:image:height'`);
-    this.metaService.removeTag(`name='twitter:image'`);
-
-    if (!!image) {
-      this.metaService.addTags([
-        { property: 'og:image', content: image },
-        { name: 'twitter:image', content: image }
-      ]);
-    } else {
-      this.metaService.addTags([
-        {
-          property: 'og:image',
-          content: websiteUrlWTS + '/assets/vulcan-384.png'
-        },
-        { property: 'og:image:width', content: '384' },
-        { property: 'og:image:height', content: '384' },
-        {
-          name: 'twitter:image',
-          content: websiteUrlWTS + '/assets/vulcan-384.png'
-        }
-      ]);
-    }
-
-    // <meta
-    //   property="og:title"
-    //   content="Free Vote - Engage Direct with your representative"
-    // />
-    // <meta property="og:type" content="website" />
-    // <meta property="og:url" content="http://free.vote" />
-    // <meta property="og:site_name" content="Free Vote" />
-    // <meta property="og:description" content="Free Vote voting platform" />
-    // <meta
-    //   property="og:image"
-    //   content="https://free.vote/assets/vulcan-128x128.png"
-    // />
-    // <meta
-    //   property="og:image:secure"
-    //   content="https://free.vote/assets/vulcan-128x128.png"
-    // />
-
-    // 8) Facebook app_id
-    this.metaService.updateTag({
-      property: 'fb:app_id',
-      content: environment.facebookAppId
-    });
-  }
-
   public RouteOrParamsUpdated(route: string): void {
     // Change Page Title and meta data, show Vulcan
 
@@ -387,13 +245,6 @@ export class AppComponent implements OnInit {
 
       this.showVulcan = false;
     }
-
-    // Setting meta data on SSR app.component init
-    // will be of use to social media sites as well as Google
-
-    // Runs after app component init in SSR for FCP (First Contentful Paint)
-
-    this.setMetaData();
   }
 
   SetVPW(): void {

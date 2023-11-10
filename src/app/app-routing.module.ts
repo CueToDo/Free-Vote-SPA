@@ -87,6 +87,10 @@ const appRoutes: Routes = [
   // Needs to be separate - not sure why this can't be a child of :tag
   // despite fact this route is served by a different component
   { path: ':tag/:title', component: PointCommentsComponent },
+  {
+    path: ':tag/:title/:shareTitle/:sharePreview/:shareImage',
+    component: PointCommentsComponent
+  },
 
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64
   { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )

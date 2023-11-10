@@ -14,6 +14,7 @@ import { Point } from 'src/app/models/point.model';
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { ActivatedRoute } from '@angular/router';
+import { AppDataService } from 'src/app/services/app-data.service';
 
 @Component({
   selector: 'app-social-share',
@@ -40,6 +41,7 @@ export class SocialShareComponent implements OnInit {
 
   constructor(
     private localData: LocalDataService,
+    private appData: AppDataService,
     private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: object,
     private renderer2: Renderer2,
@@ -50,7 +52,31 @@ export class SocialShareComponent implements OnInit {
     this.linkToSharedPoint = `${this.localData.websiteUrlWTS}/${this.routeToSharedPoint}`;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.SetMetaData();
+  }
+
+  SetMetaData() {
+    // Route Parameter snapshot for SSR point meta data
+
+    const routeParams = this.activatedRoute.snapshot.params;
+
+    this.shareTitle = routeParams['shareTitle'] + '';
+    this.sharePreview = routeParams['sharePreview'] + '';
+    this.shareImage = routeParams['shareImage'] + '';
+
+    // Setting meta data on SSR app.component init
+    // will be of use to social media sites as well as Google
+
+    // Runs in app component init in SSR for FCP (First Contentful Paint)
+
+    this.appData.setMetaData(
+      this.localData.websiteUrlWTS,
+      this.shareTitle,
+      this.sharePreview,
+      this.shareImage
+    );
+  }
 
   DisplayShareLinks(point: Point): void {
     // Basic Title and Text
@@ -74,7 +100,7 @@ export class SocialShareComponent implements OnInit {
 
     // Add query parameters to linkShare to allow app component to build meta data on server
     // (SSR does not do any async ops like database access)
-    this.linkToSharedPointWithSSRQueryParams = `${this.linkToSharedPoint}?title=${pointTitleEncoded}&preview=${pointTextPreviewEncoded}&image=${imageEncoded}`;
+    this.linkToSharedPointWithSSRQueryParams = `${this.linkToSharedPoint}/${pointTitleEncoded}/${pointTextPreviewEncoded}/${imageEncoded}`;
 
     const linkToPointEncoded = encodeURIComponent(
       this.linkToSharedPointWithSSRQueryParams

@@ -11,7 +11,10 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import { ID } from 'src/app/models/common';
 import { PointSortTypes } from 'src/app/models/enums';
 import { Kvp } from 'src/app/models/kvp.model';
-import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
+import { Meta } from '@angular/platform-browser';
+
+// Other
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AppDataService {
@@ -60,6 +63,7 @@ export class AppDataService {
 
   constructor(
     private router: Router,
+    private metaService: Meta,
     @Inject(PLATFORM_ID) private platformId: object
   ) {
     // PWA installation - browser only
@@ -70,6 +74,112 @@ export class AppDataService {
         this.promptEvent = event as BeforeInstallPromptEvent;
       });
     }
+  }
+
+  public setMetaData(
+    websiteWTS: string,
+    shareTitle: string,
+    sharePreview: string,
+    shareImage: string
+  ): void {
+    // Pointless updating meta data on client browser
+    // if (!isPlatformServer(this.platformId)) return;
+
+    // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
+    // https://css-tricks.com/essential-meta-tags-social-media/
+
+    // Requires Angular Universal Server Side Rendering for Social media use
+    // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
+
+    const pagePath = this.router.url; /* page path (home) */
+
+    // Don't overwrite existing meta with home meta
+    if (
+      shareTitle === websiteWTS &&
+      !!this.metaService.getTag(`property='og:title'`)
+    )
+      return;
+
+    // 1) Title: remove and conditionally add
+    this.metaService.removeTag(`property='og:title'`);
+    this.metaService.removeTag(`name='twitter:title'`);
+
+    if (shareTitle) {
+      this.metaService.addTags([
+        { property: 'og:title', content: shareTitle },
+        { name: 'twitter:title', content: shareTitle }
+      ]);
+    }
+
+    // 2) Description preview
+    this.metaService.updateTag({
+      name: 'description',
+      content: sharePreview
+    });
+    this.metaService.updateTag({
+      property: 'og:description',
+      content: sharePreview
+    });
+    this.metaService.updateTag({
+      name: 'twitter:description',
+      content: sharePreview
+    });
+
+    // 4) og:url remove and conditionally add
+    this.metaService.removeTag(`property='og:url'`);
+
+    const url = `${websiteWTS}/${this.removeBookEnds(pagePath, '/')}`;
+
+    if (url) {
+      this.metaService.addTags([{ property: 'og:url', content: url }]);
+    }
+
+    // 5) og:type
+    this.metaService.updateTag({ property: 'og:type', content: 'article' });
+
+    // 6) twitter:card
+    // card type: “summary”, “summary_large_image”, “app”, or “player”.
+    this.metaService.removeTag(`name='twitter:card'`);
+
+    if (sharePreview && shareImage) {
+      this.metaService.addTags([
+        { name: 'twitter:card', content: 'summary_large_image' }
+      ]);
+    } else if (sharePreview) {
+      this.metaService.addTag({ name: 'twitter:card', content: 'summary' });
+    }
+
+    // 7) PreviewImage remove and conditionally add
+    this.metaService.removeTag(`property='og:image'`);
+    this.metaService.removeTag(`property='og:image:width'`);
+    this.metaService.removeTag(`property='og:image:height'`);
+    this.metaService.removeTag(`name='twitter:image'`);
+
+    if (!!shareImage) {
+      this.metaService.addTags([
+        { property: 'og:image', content: shareImage },
+        { name: 'twitter:image', content: shareImage }
+      ]);
+    } else {
+      this.metaService.addTags([
+        {
+          property: 'og:image',
+          content: websiteWTS + '/assets/vulcan-384.png'
+        },
+        { property: 'og:image:width', content: '384' },
+        { property: 'og:image:height', content: '384' },
+        {
+          name: 'twitter:image',
+          content: websiteWTS + '/assets/vulcan-384.png'
+        }
+      ]);
+    }
+
+    // 8) Facebook app_id
+    this.metaService.updateTag({
+      property: 'fb:app_id',
+      content: environment.facebookAppId
+    });
   }
 
   // Unambiguous Date Format
