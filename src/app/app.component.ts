@@ -12,7 +12,7 @@ import {
 import { isPlatformServer } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
 import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // rxjs
@@ -21,9 +21,6 @@ import { filter, debounceTime, map } from 'rxjs/operators';
 
 // Auth0
 import { Auth0Wrapper } from 'src/app/services/auth.service';
-
-// FreeVote Models
-import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 
 // FreeVote Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -74,6 +71,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     public appData: AppDataService,
@@ -150,21 +148,6 @@ export class AppComponent implements OnInit {
       this.RouteOrParamsUpdated(route);
     });
 
-    // 4) Special case for point share with dynamic PagePreviewMetaData
-    // SSR Meta Data
-    this.appData.SSRInitialMetaData$.subscribe({
-      next: (metaData: PagePreviewMetaData) => {
-        this.setMetaData(
-          metaData.title,
-          metaData.description,
-          'SSRInitialMetaData' /* additional keywords */,
-          metaData.pagePath,
-          metaData.image,
-          metaData.debugInfo
-        );
-      }
-    });
-
     // Viewport Width: Setup and subscribe to changes on browser only - not for Universla SSR
 
     if (isPlatformBrowser(this.platformId)) {
@@ -223,14 +206,7 @@ export class AppComponent implements OnInit {
     this.titleService.setTitle(title);
   }
 
-  setMetaData(
-    title: string,
-    preview: string,
-    csvAdditionalKeywords: string,
-    pagePath: string,
-    previewImage: string,
-    debugInfo: string
-  ): void {
+  setMetaData(): void {
     // Pointless updating meta data on client browser
     if (!isPlatformServer(this.platformId)) return;
 
@@ -239,6 +215,12 @@ export class AppComponent implements OnInit {
 
     // Requires Angular Universal Server Side Rendering for Social media use
     // https://stackoverflow.com/questions/45262719/angular-4-update-meta-tags-dynamically-for-facebook-open-graph
+
+    const queryStringParameters = this.activatedRoute.snapshot.queryParams;
+    const title = queryStringParameters['get']('title');
+    const preview = queryStringParameters['get']('preview');
+    const image = queryStringParameters['get']('image');
+    const pagePath = this.routeDisplay; /* page path (home) */
 
     // Don't overwrite existing meta with home meta
     if (
@@ -253,7 +235,7 @@ export class AppComponent implements OnInit {
       property: `pass ${this.pass}`,
       content: `server ${isPlatformServer(
         this.platformId
-      )} debugInfo: ${debugInfo} Keywords: ${csvAdditionalKeywords} PagePath: ${pagePath} Title: ${title} Preview: ${preview} Image:${previewImage}`
+      )} PagePath: ${pagePath} Title: ${title} Preview: ${preview} Image:${image}`
     });
 
     // 1) Title: remove and conditionally add
@@ -278,12 +260,6 @@ export class AppComponent implements OnInit {
       content: preview
     });
 
-    // 3) Keywords
-    this.metaService.updateTag({
-      name: 'keywords',
-      content: `${this.appData.keywords}, ${csvAdditionalKeywords}`
-    });
-
     // 4) og:url remove and conditionally add
     this.metaService.removeTag(`property='og:url'`);
 
@@ -305,7 +281,7 @@ export class AppComponent implements OnInit {
     // card type: “summary”, “summary_large_image”, “app”, or “player”.
     this.metaService.removeTag(`name='twitter:card'`);
 
-    if (preview && previewImage) {
+    if (preview && image) {
       this.metaService.addTags([
         { name: 'twitter:card', content: 'summary_large_image' }
       ]);
@@ -319,10 +295,10 @@ export class AppComponent implements OnInit {
     this.metaService.removeTag(`property='og:image:height'`);
     this.metaService.removeTag(`name='twitter:image'`);
 
-    if (!!previewImage) {
+    if (!!image) {
       this.metaService.addTags([
-        { property: 'og:image', content: previewImage },
-        { name: 'twitter:image', content: previewImage }
+        { property: 'og:image', content: image },
+        { name: 'twitter:image', content: image }
       ]);
     } else {
       this.metaService.addTags([
@@ -416,14 +392,8 @@ export class AppComponent implements OnInit {
     // will be of use to social media sites as well as Google
 
     // Runs after app component init in SSR for FCP (First Contentful Paint)
-    this.setMetaData(
-      metaTitle /* title */,
-      'Free Vote anonymous voting platform' /* preview */,
-      '' /* additional keywords */,
-      this.routeDisplay /* page path (home) */,
-      `${this.localData.websiteUrlWTS}/assets/vulcan-384.png`, // previewImage
-      'RouteOrParamsUpdated'
-    );
+
+    this.setMetaData();
   }
 
   SetVPW(): void {

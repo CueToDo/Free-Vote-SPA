@@ -1,4 +1,3 @@
-import { AppDataService } from 'src/app/services/app-data.service';
 // Angular
 import {
   Component,
@@ -10,9 +9,11 @@ import {
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 // Models
+import { Point } from 'src/app/models/point.model';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-social-share',
@@ -20,68 +21,68 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   styleUrls: ['./social-share.component.css']
 })
 export class SocialShareComponent implements OnInit {
+  url = '';
+
+  // used by ShareByEmail - not encoded
+  shareTitle = '';
+  sharePreview = '';
+  shareImage = '';
+  routeToSharedPoint = '';
+  linkToSharedPoint = '';
+  linkToSharedPointWithSSRQueryParams = '';
+
   // used in template
-  linkShare = '';
   facebookShare = '';
   twitterShare = '';
-  linkToAll = '';
-
-  pointTitle = '';
-  pointHtml = '';
-
-  get pointTitleEncoded(): string {
-    return encodeURIComponent(this.pointTitle);
-  }
-  get pointText(): string {
-    return this.appData.htmlToText(this.pointHtml);
-  }
-
-  get pointTextEncoded(): string {
-    return encodeURIComponent(this.pointText);
-  }
-
-  get linkShareEncoded(): string {
-    return encodeURIComponent(this.linkShare);
-  }
+  linkBackToAllPoints = '';
 
   error = '';
 
   constructor(
-    private appData: AppDataService,
     private localData: LocalDataService,
+    private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: object,
     private renderer2: Renderer2,
     @Inject(DOCUMENT) private htmlDocument: Document
-  ) {}
+  ) {
+    this.routeToSharedPoint = this.activatedRoute.snapshot.url.join('/');
+    this.linkBackToAllPoints = `/${this.activatedRoute.snapshot.url[0]}/points`;
+    this.linkToSharedPoint = `${this.localData.websiteUrlWTS}/${this.routeToSharedPoint}`;
+  }
 
   ngOnInit(): void {}
 
-  DisplayShareLinks(
-    pointTitle: string,
-    pointHtml: string,
-    slug: string,
-    pointID: number
-  ): void {
-    this.pointTitle = pointTitle;
-    this.pointHtml = pointHtml;
+  DisplayShareLinks(point: Point): void {
+    // Basic Title and Text
+    if (!!point.pointTitle)
+      this.shareTitle = point.pointTitle; // Required separately by ShareByEmail
+    else this.shareTitle = point.linkTitle;
 
-    // slug and pointID allow us to build social link back to free.vote post
-    this.linkShare =
-      this.localData.websiteUrlWTS +
-      this.localData.PreviousSlashTagSelected +
-      '/';
+    // Only add the preview if it does not contain a link to another website
+    if (point.preview.indexOf('http') == 0) this.sharePreview = point.preview;
+    // Is only text - not images or links, no need to sanitise further or strip to 160 characters
+    else this.sharePreview = point.linkDescription;
 
-    // Add slug or pointID to linkShare
-    if (!!slug) this.linkShare += slug;
-    else this.linkShare += pointID.toString();
+    if (!!point.previewImage) {
+      this.shareImage = `${this.localData.websiteUrlWTS}/${point.previewImage}`;
+    } else this.shareImage = point.linkImage;
 
-    const linkShareEncoded = encodeURIComponent(this.linkShare);
+    // Encode to build linkToSharedPoint
+    var pointTitleEncoded = encodeURIComponent(this.shareTitle);
+    var pointTextPreviewEncoded = encodeURIComponent(this.sharePreview);
+    var imageEncoded = encodeURIComponent(this.shareImage);
 
-    this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkShareEncoded}&amp;src=sdkpreparse`;
+    // Add query parameters to linkShare to allow app component to build meta data on server
+    // (SSR does not do any async ops like database access)
+    this.linkToSharedPointWithSSRQueryParams = `${this.linkToSharedPoint}?title=${pointTitleEncoded}&preview=${pointTextPreviewEncoded}&image=${imageEncoded}`;
 
-    this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${this.pointTextEncoded}&url=${linkShareEncoded}`;
+    const linkToPointEncoded = encodeURIComponent(
+      this.linkToSharedPointWithSSRQueryParams
+    );
 
-    this.linkToAll = this.localData.PreviousSlashTagSelected + '/points';
+    this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkToPointEncoded}&amp;src=sdkpreparse`;
+
+    this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${this.sharePreview}&url=${linkToPointEncoded}`;
 
     // Client side scripts
     if (isPlatformBrowser(this.platformId)) {
@@ -92,13 +93,13 @@ export class SocialShareComponent implements OnInit {
 
   ShareByEmail() {
     window.open(
-      `mailto:?subject=${this.pointTitle}&body=Hi,
+      `mailto:?subject=${this.shareTitle}&body=Hi,
 %0D%0A%0D%0A
 Take a look at this from the ${this.localData.website} website - what do you think?
 %0D%0A%0D%0A
-${this.pointText}
+${this.sharePreview}
 %0D%0A%0D%0A
-${this.linkShare}`,
+${this.linkToSharedPoint}`,
       '_blank'
     );
   }

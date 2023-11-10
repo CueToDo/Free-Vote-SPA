@@ -7,7 +7,6 @@ import { tap } from 'rxjs';
 
 // Models/Enums
 import { Point } from 'src/app/models/point.model';
-import { PagePreviewMetaData } from 'src/app/models/pagePreviewMetaData.model';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 import { PointSelectionTypes } from 'src/app/models/enums';
 
@@ -116,24 +115,7 @@ export class PointCommentsComponent implements OnInit {
     // Manually pass the value just received and initialise the component
     this.parentPointComponent.AssignAndInitialise(point);
 
-    this.socialShareComponent.DisplayShareLinks(
-      point.pointTitle,
-      point.pointHTML,
-      point.pointSlug,
-      point.pointID
-    );
-
-    // SSR Initial page render
-    const preview = {
-      debugInfo: 'AssignPoint',
-      pagePath: this.router.url,
-      title: point.pointTitle,
-      description: point.preview,
-      image: point.previewImage
-    } as PagePreviewMetaData;
-
-    // Notify app.component to set meta data for SEO & Social scraping
-    this.appData.SSRInitialMetaData$.next(preview);
+    this.socialShareComponent.DisplayShareLinks(point);
 
     // now we have pointID, select ancestors and comments
     this.SelectAncestors(); // doesn't return anything
