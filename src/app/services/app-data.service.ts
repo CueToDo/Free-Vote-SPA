@@ -83,7 +83,7 @@ export class AppDataService {
     shareImage: string
   ): void {
     // Pointless updating meta data on client browser
-    // if (!isPlatformServer(this.platformId)) return;
+    if (isPlatformBrowser(this.platformId)) return;
 
     // https://www.tektutorialshub.com/angular/meta-service-in-angular-add-update-meta-tags-example/
     // https://css-tricks.com/essential-meta-tags-social-media/

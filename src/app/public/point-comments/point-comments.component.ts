@@ -115,7 +115,7 @@ export class PointCommentsComponent implements OnInit {
     // Manually pass the value just received and initialise the component
     this.parentPointComponent.AssignAndInitialise(point);
 
-    this.socialShareComponent.DisplayShareLinks(point);
+    this.socialShareComponent.DisplayShareLinksInBrowserFromPoint(point);
 
     // now we have pointID, select ancestors and comments
     this.SelectAncestors(); // doesn't return anything

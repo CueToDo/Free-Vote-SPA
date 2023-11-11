@@ -6,7 +6,7 @@ import {
   PLATFORM_ID,
   Renderer2
 } from '@angular/core';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 // Models
 import { Point } from 'src/app/models/point.model';
@@ -30,7 +30,7 @@ export class SocialShareComponent implements OnInit {
   shareImage = '';
   routeToSharedPoint = '';
   linkToSharedPoint = '';
-  linkToSharedPointWithSSRQueryParams = '';
+  linkToSharedPointWithMetaRouteParams = '';
 
   // used in template
   facebookShare = '';
@@ -58,6 +58,7 @@ export class SocialShareComponent implements OnInit {
 
   SetMetaData() {
     // Route Parameter snapshot for SSR point meta data
+    if (isPlatformBrowser(this.platformId)) return;
 
     const routeParams = this.activatedRoute.snapshot.params;
 
@@ -78,7 +79,10 @@ export class SocialShareComponent implements OnInit {
     );
   }
 
-  DisplayShareLinks(point: Point): void {
+  DisplayShareLinksInBrowserFromPoint(point: Point): void {
+    // Not required on server (we won't have point anyway)
+    if (isPlatformServer(this.platformId)) return;
+
     // Basic Title and Text
     if (!!point.pointTitle)
       this.shareTitle = point.pointTitle; // Required separately by ShareByEmail
@@ -100,21 +104,19 @@ export class SocialShareComponent implements OnInit {
 
     // Add query parameters to linkShare to allow app component to build meta data on server
     // (SSR does not do any async ops like database access)
-    this.linkToSharedPointWithSSRQueryParams = `${this.linkToSharedPoint}/${pointTitleEncoded}/${pointTextPreviewEncoded}/${imageEncoded}`;
+    this.linkToSharedPointWithMetaRouteParams = `${this.linkToSharedPoint}/${pointTitleEncoded}/${pointTextPreviewEncoded}/${imageEncoded}`;
 
     const linkToPointEncoded = encodeURIComponent(
-      this.linkToSharedPointWithSSRQueryParams
+      this.linkToSharedPointWithMetaRouteParams
     );
 
     this.facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${linkToPointEncoded}&amp;src=sdkpreparse`;
 
     this.twitterShare = `https://twitter.com/share?ref_src=twsrc%5Etfw&text=${this.sharePreview}&url=${linkToPointEncoded}`;
 
-    // Client side scripts
-    if (isPlatformBrowser(this.platformId)) {
-      FB.XFBML.parse(); // now we can safely call parse method
-      this.loadTwitterScript();
-    }
+    // Client side scripts - ensure not run on Server above
+    FB.XFBML.parse(); // now we can safely call parse method
+    this.loadTwitterScript();
   }
 
   ShareByEmail() {

@@ -203,17 +203,13 @@ export class AppComponent implements OnInit {
     // called in ngOnInit and in subscriptions to router events
     // and route parameter change via subject RouteParamChange
 
-    var metaTitle = '';
-
     this.appData.Route = route;
 
     if (route === '/' || route === '' || route.indexOf('/callback') === 0) {
       // Home page
-      metaTitle = this.localData.website;
-      this.setDocTitle(metaTitle);
-      this.routeDisplay = '';
-
-      this.pageTitleToolTip = metaTitle;
+      this.routeDisplay = this.localData.website;
+      this.setDocTitle(this.routeDisplay);
+      this.pageTitleToolTip = this.routeDisplay;
 
       // Set ShowVulcan to true on route change to home page
       // If home page emits InputSlashTagOnMobile in ngOnInit, get error
@@ -225,16 +221,19 @@ export class AppComponent implements OnInit {
       if (route.indexOf('?') > 0) {
         route = route.split('?')[0]; // #176 discard query string for facebook shares
       }
-      metaTitle = route;
-      this.routeDisplay = route;
+
+      var routeParts = this.localData.SlashTagToTopic(route).split('/');
+
+      if (routeParts.length > 2) routeParts = routeParts.slice(0, 2);
+
+      this.routeDisplay = routeParts.join('/');
 
       this.pageTitleToolTip =
         route === this.localData.PreviousSlashTagSelected
           ? 'SlashTag/' + this.localData.PreviousTopicSelected
           : route.substring(1);
 
-      const topic = this.localData.SlashTagToTopic(this.routeDisplay);
-      this.setDocTitle(topic);
+      this.setDocTitle(this.routeDisplay);
 
       // Change url in browser's address bar
       // https://angular.io/api/common/Location#!#replaceState-anchor

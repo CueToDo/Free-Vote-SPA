@@ -8,9 +8,6 @@
 
   <!-- Big URL confirmation -->
   <h1 [title]="pageTitleToolTip" [ngClass]="{ under500: under500 }">
-    <span *ngIf="routeDisplay === ''">
-      {{ localData.website }}
-    </span>
     {{ routeDisplay }}
   </h1>
 
@@ -62,6 +59,6 @@
       {{ localData.strapline }}
     </div>
 
-    <div class="copyright">{{ localData.website }} 2023 v15.4.9</div>
+    <div class="copyright">{{ localData.website }} 2023 v15.4.10</div>
   </div>
 </div>
