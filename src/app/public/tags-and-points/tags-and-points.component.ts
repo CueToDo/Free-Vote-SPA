@@ -485,11 +485,8 @@ export class TagsAndPointsComponent
   }
 
   ChangeTrendingRecent() {
-    if (!this.auth0Wrapper.LoggedInToAuth0) {
-      if (this.trendingRecent != Tabs.trendingTags) {
-        this.trendingRecent = Tabs.trendingTags;
-      }
-    } else if (this.previousTabIndex === this.trendingRecent) {
+    // Anon can view recent by sessionID
+    if (this.previousTabIndex === this.trendingRecent) {
       // Toggle
       if (this.trendingRecent === Tabs.trendingTags) {
         this.trendingRecent = Tabs.recentTags;
