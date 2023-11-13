@@ -31,14 +31,17 @@ export class PointCommentsComponent implements OnInit {
   @ViewChild('trvParentPoint') parentPointComponent!: PointComponent;
   @ViewChild('socialShare') socialShareComponent!: SocialShareComponent;
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  @ViewChild('appPointsList') pointsListComponent!: PointsListComponent;
+  @ViewChild('appPointsList') childComments!: PointsListComponent;
 
   initialised = false;
   parentPoint = new Point();
   ancestors: Point[] = [];
 
   filter = new FilterCriteria();
-  fetchingComments = false;
+
+  gettingAncestors = false;
+  gettingMainPoint = false;
+  gettingChildren = false;
 
   // bind to point slashtags (not topic)
   slashTags: string[] = []; // = [<Tag>{ SlashTag: '/slash' }, <Tag>{ SlashTag: '/hash' }];
@@ -51,8 +54,6 @@ export class PointCommentsComponent implements OnInit {
   get constituencyID(): number {
     return this.localData.ConstituencyIDVoter;
   }
-
-  alreadyFetchingPointFromDB = false;
 
   error = '';
 
@@ -70,12 +71,12 @@ export class PointCommentsComponent implements OnInit {
     const slashTag = routeParams['tag'];
     const pointTitle = routeParams['title'];
 
-    this.SelectSpecificPoint(slashTag, pointTitle);
+    this.SelectMainPointByTag(slashTag, pointTitle);
   }
 
   // Select specific point from title in route
-  public SelectSpecificPoint(slashTag: string, pointTitle: string): void {
-    this.alreadyFetchingPointFromDB = true;
+  public SelectMainPointByTag(slashTag: string, pointTitle: string): void {
+    this.gettingMainPoint = true;
 
     this.pointsService
       .GetSpecificPoint(this.localData.ConstituencyID, slashTag, pointTitle) // Returns a PointSelectionResult
@@ -87,13 +88,13 @@ export class PointCommentsComponent implements OnInit {
       )
       .subscribe(_ => {
         this.initialised = true;
-        this.alreadyFetchingPointFromDB = false;
+        this.gettingMainPoint = false;
       }); // no need to do anything
   }
 
-  // Select specific Point from pointID
-  SelectComment(pointID: number): void {
-    this.alreadyFetchingPointFromDB = true;
+  // Select specific Point from pointID (make a parent point or a child comment the main point)
+  SelectMainPointByID(pointID: number): void {
+    this.gettingMainPoint = true;
 
     this.pointsService
       .GetComment(this.localData.ConstituencyIDVoter, pointID) // Returns a PointSelectionResult
@@ -105,7 +106,7 @@ export class PointCommentsComponent implements OnInit {
       )
       .subscribe(_ => {
         this.initialised = true;
-        this.alreadyFetchingPointFromDB = false;
+        this.gettingMainPoint = false;
       }); // no need to do anything
   }
 
@@ -121,10 +122,11 @@ export class PointCommentsComponent implements OnInit {
     this.SelectAncestors(); // doesn't return anything
     this.filter.pointSelectionType = PointSelectionTypes.Comments;
     this.filter.pointID = point.pointID;
-    this.pointsListComponent.SelectPoints();
+    this.childComments.SelectPoints();
   }
 
   SelectAncestors() {
+    this.gettingAncestors = true;
     this.pointsService
       .PointCommentAncestors(
         this.parentPoint.pointID,
@@ -135,7 +137,9 @@ export class PointCommentsComponent implements OnInit {
         error: err => {
           this.error = err.error.detail;
         },
-        complete: () => {}
+        complete: () => {
+          this.gettingAncestors = false;
+        }
       });
   }
 
@@ -151,7 +155,7 @@ export class PointCommentsComponent implements OnInit {
 
   NewCommentCreated() {
     this.newComment = false;
-    this.pointsListComponent.SelectPoints();
+    this.childComments.SelectPoints();
   }
 
   scrollToBottom(): void {

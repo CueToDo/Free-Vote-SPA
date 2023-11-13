@@ -69,13 +69,15 @@ const appRoutes: Routes = [
   { path: 'recent', component: TagsAndPointsComponent }, // TAGS personal - recent selection - works on anon?
   { path: 'search', component: TagsAndPointsComponent }, // Tag Search
 
+  // issue with fixed route part after parameter :tag/points - reversed to points/:tag
+  { path: 'points/:tag', component: TagsAndPointsComponent },
+  { path: 'questions/:tag', component: TagsAndPointsComponent },
+
   // Finally :tag routeparameter is last
   {
     path: ':tag',
     component: TagsAndPointsComponent,
     children: [
-      { path: 'points', component: TagsAndPointsComponent }, // Return from point share
-      { path: 'questions', component: TagsAndPointsComponent }, // Return from question answers
       { path: 'by/:alias', component: TagsAndPointsComponent },
       {
         path: 'question/:questionSlug',

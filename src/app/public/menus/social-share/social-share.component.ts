@@ -48,7 +48,7 @@ export class SocialShareComponent implements OnInit {
     @Inject(DOCUMENT) private htmlDocument: Document
   ) {
     this.routeToSharedPoint = this.activatedRoute.snapshot.url.join('/');
-    this.linkBackToAllPoints = `/${this.activatedRoute.snapshot.url[0]}/points`;
+    this.linkBackToAllPoints = `/points/${this.activatedRoute.snapshot.url[0]}`;
     this.linkToSharedPoint = `${this.localData.websiteUrlWTS}/${this.routeToSharedPoint}`;
   }
 

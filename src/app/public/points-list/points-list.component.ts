@@ -65,6 +65,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
   }
 
   public allPointsDisplayed = false;
+  viewAll = false;
 
   private fragment = '';
 
@@ -110,6 +111,11 @@ export class PointsListComponent implements OnDestroy, OnInit {
       }
     });
 
+    this.activatedRoute.url.subscribe(url => {
+      if (url.length == 2 && url[0].path == 'points') this.viewAll = true;
+    });
+
+    // For ScrollIntoView
     this.activatedRoute.fragment.subscribe(fragment => {
       this.fragment = '' + fragment;
     });
@@ -179,6 +185,11 @@ export class PointsListComponent implements OnDestroy, OnInit {
     this.possibleAnswers = false;
 
     if (!this.AlreadyFetchingPointsFromDB) {
+      if (this.viewAll)
+        this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
+
+      this.viewAll = false;
+
       this.AlreadyFetchingPointsFromDB = true;
       this.AlreadyFetchingPointsFromDBChange.emit(true);
       this.pointCount = 0;

@@ -317,9 +317,9 @@ export class TagsAndPointsComponent
     } else if (routeparts.length === 3) {
       // {0}/{slashTag}/points
 
-      this.filter.slashTag = '/' + routeparts[1];
+      this.filter.slashTag = '/' + routeparts[2];
 
-      switch (routeparts[2]) {
+      switch (routeparts[1]) {
         case 'questions':
           this.tabIndex = Tabs.questionList;
           this.qp = 'question';

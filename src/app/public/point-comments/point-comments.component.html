@@ -7,7 +7,7 @@
         <span
           class="spinner-grow text-primary"
           role="status"
-          *ngIf="alreadyFetchingPointFromDB || fetchingComments"
+          *ngIf="gettingAncestors || gettingMainPoint || gettingChildren"
         >
           <span class="visually-hidden">Loading...</span>
         </span>
@@ -23,7 +23,7 @@
           [point]="ancestor"
           [isComment]="true"
           [ancestor]="true"
-          (SelectComment)="SelectComment($event)"
+          (SelectComment)="SelectMainPointByID($event)"
         >
         </app-point>
       </ng-container>
@@ -47,8 +47,8 @@
       <app-points-list
         #appPointsList
         [filter]="filter"
-        [(AlreadyFetchingPointsFromDB)]="fetchingComments"
-        (SelectComment)="SelectComment($event)"
+        (AlreadyFetchingPointsFromDB)="(gettingChildren)"
+        (SelectComment)="SelectMainPointByID($event)"
       >
       </app-points-list>
 
