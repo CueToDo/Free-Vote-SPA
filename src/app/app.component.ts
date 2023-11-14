@@ -222,10 +222,11 @@ export class AppComponent implements OnInit {
         route = route.split('?')[0]; // #176 discard query string for facebook shares
       }
 
-      var routeParts = this.localData.SlashTagToTopic(route).split('/');
+      var routeParts = route.split('/');
 
       if (routeParts.length > 2) routeParts = routeParts.slice(0, 2);
 
+      // Display the SlashTag in the title
       this.routeDisplay = routeParts.join('/');
 
       this.pageTitleToolTip =
@@ -238,7 +239,7 @@ export class AppComponent implements OnInit {
       // Change url in browser's address bar
       // https://angular.io/api/common/Location#!#replaceState-anchor
       // When app is reloaded on callback, do not replaceState
-      if (route) {
+      if (!!route) {
         this.location.replaceState(route);
       }
 

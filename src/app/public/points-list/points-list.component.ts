@@ -119,6 +119,11 @@ export class PointsListComponent implements OnDestroy, OnInit {
     this.activatedRoute.fragment.subscribe(fragment => {
       this.fragment = '' + fragment;
     });
+
+    if (!this.localData.initialPointsSelected) {
+      this.localData.initialPointsSelected = true;
+      this.SelectPoints();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -195,6 +200,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
       this.pointCount = 0;
       this.points = [];
       this.error = '';
+
+      console.log('PST', this.filter?.pointSelectionType);
 
       switch (this.filter?.pointSelectionType) {
         case PointSelectionTypes.Filtered:

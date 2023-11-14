@@ -18,6 +18,8 @@ export class LocalDataService {
   public websiteUrlWTS = ''; // WTS: without trailing slash
   public apiUrl = '';
 
+  public initialPointsSelected = false;
+
   // jwt contains All claims
   // SessionID is baked into jwt for anon or signed-in users
   // jwt must be in-memory for server side rendering
