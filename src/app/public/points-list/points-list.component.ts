@@ -121,6 +121,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
     });
 
     if (!this.localData.initialPointsSelected) {
+      // External Share: Use tag in url
+      this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
       this.localData.initialPointsSelected = true;
       this.SelectPoints();
     }
