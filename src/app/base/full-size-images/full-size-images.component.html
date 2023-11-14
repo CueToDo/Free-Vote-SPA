@@ -1,0 +1,32 @@
+<div class="container flexCol right ap-3">
+  <div mat-dialog-title class="dialog-title">
+    <button mat-icon-button aria-label="close dialog" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div
+    class="flexRow w100 align-center"
+    [ngClass]="{
+      'justify-center': imageCount == 1,
+      'justify-space-between': imageCount > 1
+    }"
+  >
+    <img
+      *ngIf="imageCount > 1"
+      src="/assets/icons/left.png"
+      alt="left"
+      width="48px"
+      (click)="previous()"
+      [ngClass]="{ greyed: index == 0 }"
+    />
+    <img [src]="'https://api.free.vote/images/' + images[index]" alt="" />
+    <img
+      *ngIf="imageCount > 1"
+      src="/assets/icons/right.png"
+      alt="left"
+      width="48px"
+      (click)="next()"
+      [ngClass]="{ greyed: index == imageCount - 1 }"
+    />
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // Material
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -14,6 +15,7 @@ import { CustomModule } from '../custommodule/custom.module';
 // Free Vote
 import { ByComponent } from 'src/app/base/by/by.component';
 import { CountriesComponent } from './countries/countries.component';
+import { FullSizeImagesComponent } from './full-size-images/full-size-images.component';
 import { ListComponent } from 'src/app/base/list/list.component';
 import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
 import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
@@ -25,6 +27,7 @@ import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
     FormsModule,
     RouterModule,
     // Material
+    MatDialogModule,
     MatIconModule,
     MatTooltipModule,
     // Free Vote
@@ -33,6 +36,7 @@ import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
   declarations: [
     ByComponent,
     CountriesComponent,
+    FullSizeImagesComponent,
     ListComponent,
     TagCloudComponent,
     TagsEditComponent
@@ -40,6 +44,7 @@ import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
   exports: [
     ByComponent,
     CountriesComponent,
+    FullSizeImagesComponent,
     ListComponent,
     TagCloudComponent,
     TagsEditComponent

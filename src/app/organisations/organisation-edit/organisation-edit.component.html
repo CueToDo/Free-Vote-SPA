@@ -1,5 +1,5 @@
 <div [ngClass]="{ edit: organisation.organisationID || 0 > 0 }">
-  <div class="flexCol stretch">
+  <div class="flexCol align-stretch">
     <div class="flexRow">
       <mat-form-field>
         <mat-label>organisation website</mat-label>
@@ -149,7 +149,7 @@
     updating website preview
   </div>
 
-  <div class="flexRow" fxLayoutAlign="end">
+  <div class="flexRow justify-end">
     <button mat-stroked-button (click)="CancelEdit()" matTooltip="cancel edit">
       <span>cancel</span>
       <mat-icon>close</mat-icon>

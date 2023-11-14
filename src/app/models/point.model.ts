@@ -93,6 +93,7 @@ export class Point {
   pointTitle = '';
   pointSlug = '';
   pointHTML = '';
+  csvPointImages = '';
   preview = '';
   previewImage = '';
   csvImageIDs = '';

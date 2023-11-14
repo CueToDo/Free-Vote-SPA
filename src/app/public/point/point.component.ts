@@ -36,6 +36,7 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
 import { TagsService } from 'src/app/services/tags.service';
+import { FullSizeImagesComponent } from 'src/app/base/full-size-images/full-size-images.component';
 
 @Component({
   selector: 'app-point',
@@ -378,6 +379,17 @@ export class PointComponent implements AfterViewInit {
           tags.filter(tag => tag.tagByMe != tag.tagByMeNew)
         )
         .subscribe(); // To do confirmation
+    });
+  }
+
+  viewFullSizeImages() {
+    if (!this.point.csvPointImages) return;
+
+    this.dialog.open(FullSizeImagesComponent, {
+      // width: '480px',
+      data: {
+        csvPointImages: this.point.csvPointImages
+      }
     });
   }
 

@@ -31,55 +31,82 @@ router-outlet + *, /* All content injected after router-outlet */
   align-items: stretch; /* col width */
 }
 
-.col-stretch {
+.overflow-hidden {
   overflow: hidden;
 }
 
+// FlexBox
+
 .flexRow {
-  /* flex: 0 1 auto; */ /* Don't grow to fill vertical space, don't shrink smaller than content */
   display: flex;
   flex-flow: row;
-  align-items: center; /* center on cross-axis - vertical align middle*/
   gap: 10px;
 }
 
-.flexRow.center {
-  justify-content: center; /* center on the row */
+.flexCol {
+  display: flex;
+  flex-flow: column;
+  gap: 10px;
 }
 
-.flexRow.end {
-  justify-content: flex-end; /*  */
-}
-
-.flexRow.space-between {
-  justify-content: space-between; /*  */
-}
-
-.flexRow.reverse {
-  flex-flow: row-reverse; /* special case for tags and points slash tag button */
-}
-
-.flexRow.wrap {
+.wrap {
   flex-wrap: wrap;
+}
+
+.reverse {
+  flex-flow: row-reverse; /* special case for tags and points slash tag button */
 }
 
 .flexStretch {
   flex: 10 1;
 }
 
-.flexRow.stretch {
+// Main axis alignment
+
+.justify-start {
+  justify-content: flex-start; /*  */
+}
+
+.justify-end {
+  justify-content: flex-end; /*  */
+}
+
+.justify-center {
+  justify-content: center; /* center on the row */
+}
+
+.justify-space-between {
+  justify-content: space-between; /*  */
+}
+
+.justify-space-around {
+  justify-content: space-around; /*  */
+}
+
+.justify-space-evenly {
+  justify-content: space-evenly; /*  */
+}
+
+// Cross axis alignment
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-stretch {
   align-items: stretch;
 }
 
-.flexCol {
-  display: flex;
-  flex-flow: column;
-  align-items: center; /* center on cross-axis - vertical align middle*/
-  gap: 10px;
-}
-
-.flexCol.stretch {
-  align-items: stretch;
+.align-baseline {
+  align-items: baseline;
 }
 
 .primary {
@@ -441,6 +468,7 @@ a:hover {
   max-height: 320px;
   object-fit: cover;
   object-position: center center;
+  cursor: pointer;
 }
 
 .ugc.porQ p:last-of-type {

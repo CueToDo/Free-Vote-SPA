@@ -1,13 +1,13 @@
 <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
   <div class="content">
-    <div class="col-stretch">
+    <div class="overflow-hidden">
       <div *ngIf="error !== ''" class="text-danger mx-3">
         {{ error }}
       </div>
 
       <!-- Top Spinner for reselect -->
       <div *ngIf="AlreadyFetchingPointsFromDB && pointCount > 0">
-        <div class="flexRow end">
+        <div class="flexRow justify-end align-center">
           <div class="amr-2">reselecting points</div>
           <div class="spinner-grow text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -51,8 +51,8 @@
       </div>
 
       <!-- Count -->
-      <div class="pointCount">
-        <span *ngIf="!AlreadyFetchingPointsFromDB && !filter?.single">
+      <div class="pointCount flexRow justify-end align-center">
+        <div *ngIf="!AlreadyFetchingPointsFromDB && !filter?.single">
           {{ points.length }} point{{ appData.plural(points.length) }} displayed
           of {{ pointCount
           }}<span *ngIf="!allPointsDisplayed">
@@ -63,24 +63,24 @@
               >more</a
             ></span
           >
-        </span>
+        </div>
 
-        <span *ngIf="filter?.single">
+        <div *ngIf="filter?.single">
           <a [routerLink]="filter.slashTag">show all</a>
-        </span>
+        </div>
 
-        <span class="amr-2" *ngIf="AlreadyFetchingPointsFromDB">
+        <div class="amr-2" *ngIf="AlreadyFetchingPointsFromDB">
           ... fetching next batch of points
-        </span>
+        </div>
 
         <!-- Bottom spinner -->
-        <span
+        <div
           class="spinner-grow text-primary"
           role="status"
           *ngIf="AlreadyFetchingPointsFromDB"
         >
-          <span class="visually-hidden">Loading...</span>
-        </span>
+          <div class="visually-hidden">Loading...</div>
+        </div>
       </div>
     </div>
   </div>

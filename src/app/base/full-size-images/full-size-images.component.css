@@ -1,0 +1,32 @@
+.container {
+  min-width: 600px;
+}
+
+div {
+  background-color: #a4e7ff;
+}
+
+.dialog-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.w100 {
+  width: 100%;
+}
+img {
+  max-width: 100%;
+}
+
+img + img {
+  margin-left: 10px;
+}
+
+img.greyed {
+  opacity: 0.2;
+}
+
+.mdc-dialog__title {
+  margin: 0;
+}

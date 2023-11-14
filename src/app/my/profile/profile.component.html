@@ -14,7 +14,7 @@
             [(ngModel)]="localData.freeVoteProfile.profilePictureOptionID"
             (ngModelChange)="profilePictureOptionUpdate()"
           >
-            <div class="flexRow space-between">
+            <div class="flexRow justify-space-between">
               <mat-radio-button name="PPOID" value="1" labelPosition="before">
                 social media
               </mat-radio-button>
@@ -73,7 +73,7 @@
       <!-- Picture -->
 
       <div
-        class="flexRow center profilePicture"
+        class="flexRow align-center profilePicture"
         *ngIf="
           localData.freeVoteProfile.profilePictureOptionID === '1' ||
           (localData.freeVoteProfile.profilePictureOptionID === '2' &&

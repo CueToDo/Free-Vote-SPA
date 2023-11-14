@@ -110,6 +110,28 @@
   margin: 25px;
 }
 
+/* Alternative padding all */
+
+.ap-1 {
+  padding: 5px;
+}
+
+.ap-2 {
+  padding: 10px;
+}
+
+.ap-3 {
+  padding: 15px;
+}
+
+.ap-4 {
+  padding: 20px;
+}
+
+.ap-5 {
+  padding: 25px;
+}
+
 /* Alternative margin left and right */
 
 .amx-1 {

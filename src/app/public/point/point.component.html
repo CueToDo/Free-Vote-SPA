@@ -24,6 +24,7 @@
       <div
         #elPointHtml
         [innerHTML]="pointHTMLwithoutEmbed | SafeHtml"
+        (click)="viewFullSizeImages()"
         [ngClass]="{
           'line-clamp': !showFullText,
           parentPoint: isParentPoint
@@ -111,7 +112,7 @@
 
   <!-- Toolbar -->
 
-  <div *ngIf="feedbackOn" class="toolbar flexRow stretch">
+  <div *ngIf="feedbackOn" class="toolbar flexRow align-stretch">
     <div *ngIf="possibleAnswer">
       <button
         mat-button
