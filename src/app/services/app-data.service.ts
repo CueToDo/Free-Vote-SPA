@@ -182,6 +182,17 @@ export class AppDataService {
     });
   }
 
+  public unhideLinks(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const anchorElements = Array.from(doc.querySelectorAll('a'));
+    for (const anchor of anchorElements) {
+      const classes = anchor.classList;
+      classes.remove('hidden');
+    }
+    return doc.body.innerHTML;
+  }
+
   // Unambiguous Date Format
   // https://css-tricks.com/everything-you-need-to-know-about-date-in-javascript/
   public UDF(date: Date): string {

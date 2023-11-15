@@ -203,8 +203,6 @@ export class PointsListComponent implements OnDestroy, OnInit {
       this.points = [];
       this.error = '';
 
-      console.log('PST', this.filter?.pointSelectionType);
-
       switch (this.filter?.pointSelectionType) {
         case PointSelectionTypes.Filtered:
           let aliasFilter = this.filter.byAlias;

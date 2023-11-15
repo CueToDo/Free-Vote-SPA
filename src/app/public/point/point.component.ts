@@ -29,14 +29,15 @@ import {
 } from 'src/app/models/enums';
 
 // Components
+import { FullSizeImagesComponent } from 'src/app/base/full-size-images/full-size-images.component';
 import { LocalTagsComponent } from 'src/app/local/local-tags/local-tags.component';
 
 // Services
+import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
 import { TagsService } from 'src/app/services/tags.service';
-import { FullSizeImagesComponent } from 'src/app/base/full-size-images/full-size-images.component';
 
 @Component({
   selector: 'app-point',
@@ -106,12 +107,12 @@ export class PointComponent implements AfterViewInit {
 
   constructor(
     public localData: LocalDataService, // public - used in template
+    private appData: AppDataService,
     public auth0Service: AuthService,
     private lookupsService: LookupsService,
     private pointsService: PointsService,
     private tagsService: TagsService,
-    public dialog: MatDialog,
-    private elem: ElementRef
+    public dialog: MatDialog
   ) {}
 
   ngAfterViewInit() {
@@ -130,7 +131,7 @@ export class PointComponent implements AfterViewInit {
       this.FetchMetaData();
     }
 
-    this.extractMediaEmbeds();
+    this.extractMediaEmbedsAfterUpdatePointHtml();
   }
 
   public AssignAndInitialise(point: Point) {
@@ -166,7 +167,7 @@ export class PointComponent implements AfterViewInit {
     }
   }
 
-  extractMediaEmbeds(): void {
+  extractMediaEmbedsAfterUpdatePointHtml(): void {
     // https://ckeditor.com/docs/ckeditor5/latest/features/media-embed.html
 
     if (!this.point) {
@@ -402,7 +403,7 @@ export class PointComponent implements AfterViewInit {
       this.error = 'Missing: point';
     } else {
       this.AssignTags();
-      this.extractMediaEmbeds();
+      this.extractMediaEmbedsAfterUpdatePointHtml();
 
       if (this.point.pointFeedback.supportLevelID !== PointSupportLevels.None) {
         this.point.pointFeedback.pointModified = true;
@@ -453,7 +454,13 @@ export class PointComponent implements AfterViewInit {
                 this.point.linkImage = metaData.image;
                 this.point.showPreview = metaData.showPreview;
                 this.updatingPreview = false;
-                this.extractMediaEmbeds();
+
+                if (!metaData.showPreview) {
+                  this.point.pointHTML = this.appData.unhideLinks(
+                    this.point.pointHTML
+                  );
+                }
+                this.extractMediaEmbedsAfterUpdatePointHtml();
               }
             },
             error: err => {
