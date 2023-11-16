@@ -58,6 +58,8 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
   FetchOrganisations(): void {
     if (this.fetchComplete) return;
 
+    this.ngZone.run(_ => (this.waiting = true));
+
     this.groupsService
       .OrganisationMembership(this.organisationFilter)
       .subscribe({
@@ -86,6 +88,8 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
   FetchOrganisationsAvailable(): void {
     if (this.fetchComplete) return;
 
+    this.ngZone.run(_ => (this.waiting = true));
+
     this.groupsService
       .OrganisationsAvailable(this.organisationFilter)
       .subscribe({
@@ -113,7 +117,6 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
   Refresh(): void {
     this.fetchComplete = false;
     this.organisations = [];
-    this.waiting = true;
     this.message = '';
     this.error = '';
 
