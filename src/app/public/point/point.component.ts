@@ -384,12 +384,14 @@ export class PointComponent implements AfterViewInit {
   }
 
   viewFullSizeImages() {
-    if (!this.point.csvPointImages) return;
+    if (!this.point.csvPointImages && !this.point.csvPointImagesEmbedded)
+      return;
 
     this.dialog.open(FullSizeImagesComponent, {
       // width: '480px',
       data: {
-        csvPointImages: this.point.csvPointImages
+        csvPointImages: this.point.csvPointImages,
+        csvPointImagesEmbedded: this.point.csvPointImagesEmbedded
       }
     });
   }

@@ -19,7 +19,9 @@
       (click)="previous()"
       [ngClass]="{ greyed: index == 0 }"
     />
-    <img [src]="'https://api.free.vote/images/' + images[index]" alt="" />
+
+    <img [src]="imageSource" alt="" />
+
     <img
       *ngIf="imageCount > 1"
       src="/assets/icons/right.png"

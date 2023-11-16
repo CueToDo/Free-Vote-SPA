@@ -10,24 +10,35 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./full-size-images.component.css']
 })
 export class FullSizeImagesComponent {
-  csvPointImages = '';
+  csvImages = '';
   index = 0;
+
+  get images(): string[] {
+    return this.csvImages.split(',');
+  }
 
   get imageCount(): number {
     return this.images.length;
   }
 
-  get images(): string[] {
-    return this.csvPointImages.split(',');
+  get imageSource(): string {
+    if (this.images[this.index].startsWith('http'))
+      return this.images[this.index];
+
+    return 'https://api.free.vote/images/' + this.images[this.index];
   }
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
       csvPointImages: string;
+      csvPointImagesEmbedded: string;
     }
   ) {
-    this.csvPointImages = data.csvPointImages;
+    this.csvImages = data.csvPointImages;
+    if (!!data.csvPointImages && !!data.csvPointImagesEmbedded)
+      this.csvImages += ',';
+    this.csvImages += data.csvPointImagesEmbedded;
   }
 
   next() {

@@ -94,6 +94,7 @@ export class Point {
   pointSlug = '';
   pointHTML = '';
   csvPointImages = '';
+  csvPointImagesEmbedded = '';
   preview = '';
   previewImage = '';
   csvImageIDs = '';
