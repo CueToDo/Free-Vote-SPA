@@ -71,6 +71,9 @@ export class PointCommentsComponent implements OnInit {
     const slashTag = routeParams['tag'];
     const pointTitle = routeParams['title'];
 
+    // Prevent default select in Points-List
+    this.filter.pointSelectionType = PointSelectionTypes.Comments;
+
     this.SelectMainPointByTag(slashTag, pointTitle);
   }
 
@@ -120,7 +123,6 @@ export class PointCommentsComponent implements OnInit {
 
     // now we have pointID, select ancestors and comments
     this.SelectAncestors(); // doesn't return anything
-    this.filter.pointSelectionType = PointSelectionTypes.Comments;
     this.filter.pointID = point.pointID;
     this.childComments.SelectPoints();
   }

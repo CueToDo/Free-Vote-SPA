@@ -120,7 +120,10 @@ export class PointsListComponent implements OnDestroy, OnInit {
       this.fragment = '' + fragment;
     });
 
-    if (!this.localData.initialPointsSelected) {
+    if (
+      !this.localData.initialPointsSelected &&
+      !(this.filter.pointSelectionType === PointSelectionTypes.Comments)
+    ) {
       // External Share: Use tag in url
       this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
       this.localData.initialPointsSelected = true;
