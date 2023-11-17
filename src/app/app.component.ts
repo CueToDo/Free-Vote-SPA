@@ -224,7 +224,11 @@ export class AppComponent implements OnInit {
 
       var routeParts = route.split('/');
 
-      if (routeParts.length > 2) routeParts = routeParts.slice(0, 2);
+      if (routeParts.length > 3) routeParts = routeParts.slice(0, 3); // end index is not included
+
+      // No simple remove - create new array with empty first value for leading slash in the join
+      if (routeParts[1] == 'points')
+        routeParts = [routeParts[0], routeParts[2]];
 
       // Display the SlashTag in the title
       this.routeDisplay = routeParts.join('/');
