@@ -250,8 +250,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
             )
             .subscribe({
               next: psr => this.DisplayPoints(psr),
-              error: err => {
-                this.error = err.error.detail;
+              error: err => (this.error = err.error.detail),
+              complete: () => {
                 this.AlreadyFetchingPointsFromDB = false;
                 this.AlreadyFetchingPointsFromDBChange.emit(false);
               }
@@ -274,9 +274,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
               )
               .subscribe({
                 next: psr => this.DisplayPoints(psr),
-                error: err => {
-                  console.log(err);
-                  this.error = err.error.detail;
+                error: err => (this.error = err.error.detail),
+                complete: () => {
                   this.AlreadyFetchingPointsFromDB = false;
                   this.AlreadyFetchingPointsFromDBChange.emit(false);
                 }
@@ -297,9 +296,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
             )
             .subscribe({
               next: psr => this.DisplayPoints(psr),
-              error: err => {
-                this.error = err.error.detail;
-              },
+              error: err => (this.error = err.error.detail),
               complete: () => {
                 this.AlreadyFetchingPointsFromDB = false;
                 this.AlreadyFetchingPointsFromDBChange.emit(false);
@@ -323,8 +320,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
                 )
                 .subscribe({
                   next: psr => this.DisplayPoints(psr),
-                  error: err => {
-                    this.error = err.error.detail;
+                  error: err => (this.error = err.error.detail),
+                  complete: () => {
                     this.AlreadyFetchingPointsFromDB = false;
                     this.AlreadyFetchingPointsFromDBChange.emit(false);
                   }
