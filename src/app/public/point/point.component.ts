@@ -131,7 +131,8 @@ export class PointComponent implements AfterViewInit {
       this.FetchMetaData();
     }
 
-    this.extractMediaEmbedsAfterUpdatePointHtml();
+    this.ExtractMediaEmbeds();
+    this.HighlightSearchTerm();
   }
 
   public AssignAndInitialise(point: Point) {
@@ -167,76 +168,71 @@ export class PointComponent implements AfterViewInit {
     }
   }
 
-  extractMediaEmbedsAfterUpdatePointHtml(): void {
+  ExtractMediaEmbeds(): void {
     // https://ckeditor.com/docs/ckeditor5/latest/features/media-embed.html
+    const pointParser = new DOMParser();
 
-    if (!this.point) {
-      this.error = 'Missing: point';
-    } else {
-      this.youTubeIDs = [];
+    const pointDoc = pointParser.parseFromString(
+      this.point.pointHTML,
+      'text/html'
+    );
 
-      this.soundCloudTrackIDs = [];
-      if (this.point.soundCloudTrackID) {
-        this.soundCloudTrackIDs.push(this.point.soundCloudTrackID);
-      }
+    const figureElements = Array.from(pointDoc.querySelectorAll('figure'));
 
-      this.vimeoIDs = [];
-
-      const split = this.point.pointHTML.split('<figure class="media">');
-
-      if (split.length > 0) {
-        let i: number;
-        let oembedPlus: string[];
-        let url: string;
-        let id = '';
-        let urlParts = [];
-        let lastPart = '';
-        let timeSplit = [];
-        let start = '';
-
-        for (i = 1; i < split.length; i++) {
-          oembedPlus = split[i].split('</figure>');
-          url = oembedPlus[0].split('"')[1];
-          urlParts = url.split('/');
-          lastPart = urlParts[urlParts.length - 1]; // watch?v=Ef9QnZVpVd8&amp;t=49s
-
-          if (url.includes('youtu.be')) {
-            id = lastPart;
-            this.youTubeIDs.push(id);
-          } else if (url.includes('youtube.com')) {
-            id = lastPart.split('v=')[1]; // Ef9QnZVpVd8 &amp;t= 49s
-
-            timeSplit = id.split('&amp;t='); // Ef9QnZVpVd8 49s
-            if (timeSplit.length > 1) {
-              start = timeSplit[1].replace('s', ''); // 49
-              id = `${timeSplit[0]}?start=${start}`; // Ef9QnZVpVd8?start=49
-            }
-            this.youTubeIDs.push(id);
-          } else if (url.includes('vimeo.com')) {
-            id = lastPart;
-            this.vimeoIDs.push(id);
-          } else if (url.includes('soundcloud')) {
-          }
-
-          split[i] = oembedPlus[1]; // Use only what's after the figure element
-        }
-      }
-
-      this.pointHTMLwithoutEmbed = split.join(''); // pointHTML stripped of <figure> elements added by ckEditor for media embed
-
-      // Highlight search term
-      // https://stackoverflow.com/questions/7313395/case-insensitive-replace-all
-      if (!!this.searchTerm) {
-        var regEx = new RegExp(this.searchTerm, 'ig'); // search term is case insensitive and global - all occurrences replaced
-        const replace = `<span class="highlight">${this.searchTerm.toUpperCase()}</span>`;
-
-        this.point.pointTitle = this.point.pointTitle.replace(regEx, replace);
-
-        this.pointHTMLwithoutEmbed = this.pointHTMLwithoutEmbed.replace(
-          regEx,
-          replace
+    if (!!figureElements && figureElements.length > 0) {
+      figureElements.forEach(figureElement => {
+        const figureParser = new DOMParser();
+        const figureDoc = figureParser.parseFromString(
+          figureElement.innerHTML,
+          'text/html'
         );
+        const oembedElement = figureDoc.querySelector('oembed');
+        const url = oembedElement?.getAttribute('url') + '';
+        this.AddToMediaLists(url);
+        figureElement.remove();
+      });
+    }
+
+    this.pointHTMLwithoutEmbed = pointDoc.body.innerHTML;
+  }
+
+  AddToMediaLists(url: string): void {
+    if (!url) return;
+
+    const urlParts = url.split('/');
+    const route = urlParts[urlParts.length - 1]; // watch?v=Ef9QnZVpVd8&amp;t=49s
+
+    if (!route) return;
+
+    if (url.includes('youtu.be')) {
+      this.youTubeIDs.push(route);
+    } else if (url.includes('youtube.com')) {
+      let id = route.split('v=')[1]; // Ef9QnZVpVd8 &amp;t= 49s
+      let timeSplit = id.split('&start='); // Ef9QnZVpVd8 49s
+      if (timeSplit.length > 1) {
+        let start = timeSplit[1].replace('s', ''); // 49
+        id = `${timeSplit[0]}?start=${start}`; // Ef9QnZVpVd8?t=49
       }
+      this.youTubeIDs.push(id);
+    } else if (url.includes('vimeo.com')) {
+      this.vimeoIDs.push(route);
+    } else if (url.includes('soundcloud')) {
+    }
+  }
+
+  HighlightSearchTerm(): void {
+    // Highlight search term
+    // https://stackoverflow.com/questions/7313395/case-insensitive-replace-all
+    if (!!this.searchTerm) {
+      var regEx = new RegExp(this.searchTerm, 'ig'); // search term is case insensitive and global - all occurrences replaced
+      const replace = `<span class="highlight">${this.searchTerm.toUpperCase()}</span>`;
+
+      this.point.pointTitle = this.point.pointTitle.replace(regEx, replace);
+
+      this.pointHTMLwithoutEmbed = this.pointHTMLwithoutEmbed.replace(
+        regEx,
+        replace
+      );
     }
   }
 
@@ -405,7 +401,8 @@ export class PointComponent implements AfterViewInit {
       this.error = 'Missing: point';
     } else {
       this.AssignTags();
-      this.extractMediaEmbedsAfterUpdatePointHtml();
+      this.ExtractMediaEmbeds();
+      this.HighlightSearchTerm();
 
       if (this.point.pointFeedback.supportLevelID !== PointSupportLevels.None) {
         this.point.pointFeedback.pointModified = true;
@@ -462,7 +459,7 @@ export class PointComponent implements AfterViewInit {
                     this.point.pointHTML
                   );
                 }
-                this.extractMediaEmbedsAfterUpdatePointHtml();
+                this.ExtractMediaEmbeds();
               }
             },
             error: err => {
