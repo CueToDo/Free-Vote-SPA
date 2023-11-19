@@ -1,4 +1,4 @@
-<div fxFill fxLayout="column" fxLayoutAlign="start center">
+<div>
   <div class="content">
     <!-- Show Filtering Options, controlled from Tag-Points component -->
     <div [ngClass]="{ show: ShowFilters, hide: !ShowFilters }">
@@ -159,13 +159,7 @@
       <!-- Date Filter, animated by css controlled by checkbox -->
       <!-- <div [ngClass]="{'show':filter.applyDateFilter, 'hide':!filter.applyDateFilter}"> -->
       <div class="aml-3">
-        <div
-          fxLayout="row wrap"
-          fxLayoutAlign.xs="space-around"
-          fxLayoutAlign.gt-xs="start center"
-          fxLayoutGap.xs="5px grid"
-          fxLayoutGap.gt-xs="30px"
-        >
+        <div>
           <mat-checkbox
             labelPosition="before"
             #checkbox="matCheckbox"

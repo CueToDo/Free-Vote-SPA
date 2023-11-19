@@ -287,11 +287,11 @@
 
       <!-- To do -->
       <div hidden="true">
-        <div fxFlex="40">
+        <div>
           <span class="align-middle"> alias </span>
         </div>
 
-        <div fxFlex="60">
+        <div>
           <span class="align-middle" *ngIf="!editing">
             {{ localData.freeVoteProfile.alias }}
           </span>
@@ -310,11 +310,11 @@
 
         <!-- Groups -->
 
-        <div fxFlex="40" *ngIf="!editing">
+        <div *ngIf="!editing">
           <span class="align-middle"> groups </span>
         </div>
 
-        <div fxFlex="60" *ngIf="!editing">
+        <div *ngIf="!editing">
           <span class="align-middle"> List groups </span>
         </div>
 
@@ -322,10 +322,10 @@
           {{ localData.freeVoteProfile.profile }}
         </div>
 
-        <div fxFlex="40">
+        <div>
           <span class="align-middle"> Break-out groups </span>
         </div>
-        <div fxFlex="60">
+        <div>
           <span class="align-middle"> Preferred Room Size </span>
         </div>
 

@@ -5,10 +5,7 @@
     </div>
 
     <!-- Top Spinner for reselect -->
-    <div
-      *ngIf="alreadyFetchingFromDB && questionCount > 0"
-      fxLayoutAlign="center center"
-    >
+    <div *ngIf="alreadyFetchingFromDB && questionCount > 0">
       <span>reselecting questions</span>
       <span class="spinner-grow text-primary ms-3" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -35,7 +32,7 @@
     </div>
 
     <!-- Count -->
-    <div class="questionCount" fxLayoutAlign="end center">
+    <div class="questionCount">
       <span *ngIf="!alreadyFetchingFromDB">
         {{ questions.length }} question{{
           appData.plural(questions.length)

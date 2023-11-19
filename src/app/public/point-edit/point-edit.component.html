@@ -25,10 +25,10 @@
     class="px-3 pt-3 mediaLinks"
     *ngIf="imageFileForUpload || uploadingImage"
   >
-    <div fxLayout="column" fxLayoutAlign="space-around">
-      <div *ngIf="imageFileForUpload" fxLayoutAlign="space-between center">
+    <div>
+      <div *ngIf="imageFileForUpload">
         <!-- To Be Animated with css transition" -->
-        <mat-form-field fxFlex>
+        <mat-form-field>
           <input
             matInput
             placeholder="image to be uploaded"

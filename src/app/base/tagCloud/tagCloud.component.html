@@ -1,5 +1,5 @@
 <div class="linkCloud">
-  <div *ngIf="waiting" fxLayout="row" fxLayoutAlign="center center">
+  <div *ngIf="waiting">
     <div>fetching tags</div>
     <div class="spinner-grow text-info my-5 ms-3" role="status">
       <span class="visually-hidden">Loading...</span>
@@ -8,16 +8,24 @@
 
   <ng-container *ngFor="let slashTag of tags">
     <div id="container">
-      <a [innerHTML]="slashTag.tagDisplay | TagDisplay"
-        [ngStyle]="{'font-size':FontSize(slashTag.tagWeight),'padding-right':'10px'}"
-        (click)="setSlashTag(slashTag.slashTag)"></a>
-      <span *ngIf="slashTag.unseenPoints>0" class="mybadge" [ngStyle]="{'top':5*slashTag.tagWeight-12 + 'px'}">{{
-        slashTag.unseenPoints }}</span>
+      <a
+        [innerHTML]="slashTag.tagDisplay | TagDisplay"
+        [ngStyle]="{
+          'font-size': FontSize(slashTag.tagWeight),
+          'padding-right': '10px'
+        }"
+        (click)="setSlashTag(slashTag.slashTag)"
+      ></a>
+      <span
+        *ngIf="slashTag.unseenPoints > 0"
+        class="mybadge"
+        [ngStyle]="{ top: 5 * slashTag.tagWeight - 12 + 'px' }"
+        >{{ slashTag.unseenPoints }}</span
+      >
     </div>
   </ng-container>
 
   <div *ngIf="error" class="text-danger mx-3">
     {{ error }}
   </div>
-
 </div>
