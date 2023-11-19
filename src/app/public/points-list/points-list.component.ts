@@ -360,14 +360,19 @@ export class PointsListComponent implements OnDestroy, OnInit {
             reversalOnly,
             this.pointCount
           )
-          .subscribe(response => {
-            this.AlreadyFetchingPointsFromDB = false;
-            this.AlreadyFetchingPointsFromDBChange.emit(false);
+          .subscribe({
+            next: response => {
+              this.AlreadyFetchingPointsFromDB = false;
+              this.AlreadyFetchingPointsFromDBChange.emit(false);
 
-            // pointCount is not updated for re-ordering
-            this.IDs = response.pointIDs;
-            this.points = response.points;
-            this.NewPointsDisplayed();
+              // pointCount is not updated for re-ordering
+              this.IDs = response.pointIDs;
+              this.points = response.points;
+              this.NewPointsDisplayed();
+            },
+            error: err => {
+              this.error = err.error.detail;
+            }
           });
       }
     }
