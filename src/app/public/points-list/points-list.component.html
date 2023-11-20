@@ -53,8 +53,8 @@
       <!-- Count -->
       <div class="pointCount flexRow justify-end align-center">
         <div *ngIf="!AlreadyFetchingPointsFromDB && !filter?.single">
-          {{ points.length }} point{{ appData.plural(points.length) }} displayed
-          of {{ pointCount
+          {{ points.length }} {{ pointOrAnswer
+          }}{{ appData.plural(points.length) }} displayed of {{ pointCount
           }}<span *ngIf="!allPointsDisplayed">
             <a
               *ngIf="points.length < pointCount"

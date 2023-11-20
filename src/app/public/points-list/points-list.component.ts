@@ -90,6 +90,12 @@ export class PointsListComponent implements OnDestroy, OnInit {
     return lastRow;
   }
 
+  public get pointOrAnswer(): string {
+    if (this.filter.questionID > 0) return 'answer';
+
+    return 'point';
+  }
+
   public nextPagePointsCount(): number {
     return this.IDs.filter(val => val.rowNumber > this.lastPageRow).slice(0, 10)
       .length;

@@ -109,6 +109,11 @@ router-outlet + *, /* All content injected after router-outlet */
   align-items: baseline;
 }
 
+.align-stretch div {
+  display: flex;
+  align-items: center;
+}
+
 .primary {
   color: #3700b3;
 }
