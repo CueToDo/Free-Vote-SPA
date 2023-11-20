@@ -204,7 +204,7 @@ export class PointComponent implements AfterViewInit {
 
     if (!route) return;
 
-    if (url.includes('youtu.be')) {
+    if (url.includes('youtu.be') && !this.youTubeIDs.includes(route)) {
       this.youTubeIDs.push(route);
     } else if (url.includes('youtube.com')) {
       let id = route.split('v=')[1]; // Ef9QnZVpVd8 &amp;t= 49s
@@ -213,8 +213,10 @@ export class PointComponent implements AfterViewInit {
         let start = timeSplit[1].replace('s', ''); // 49
         id = `${timeSplit[0]}?start=${start}`; // Ef9QnZVpVd8?t=49
       }
-      this.youTubeIDs.push(id);
-    } else if (url.includes('vimeo.com')) {
+      if (!this.youTubeIDs.includes(id)) {
+        this.youTubeIDs.push(id);
+      }
+    } else if (url.includes('vimeo.com') && !this.vimeoIDs.includes(route)) {
       this.vimeoIDs.push(route);
     } else if (url.includes('soundcloud')) {
     }

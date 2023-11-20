@@ -286,8 +286,7 @@ export class PointEditComponent implements OnInit {
           !!this.imageSelect?.nativeElement.value
         )
       ) {
-        this.error =
-          'Point title and text OR url OR image OR media link must be provided';
+        this.error = 'Point text, url, image or media link must be provided';
       } else {
         this.waiting = true;
         const isNew = !this.pointClone.pointID || this.pointClone.pointID < 1;
