@@ -771,7 +771,7 @@ export class TagsAndPointsComponent
     this.externalTrigger = true;
 
     this.filter.slashTag = this.localData.PreviousSlashTagSelected;
-    alert(this.filter.slashTag);
+
     if (pointSortType !== PointSortTypes.NoChange) {
       this.filter.sortType = pointSortType;
     }
