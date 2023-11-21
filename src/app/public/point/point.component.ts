@@ -186,10 +186,13 @@ export class PointComponent implements AfterViewInit {
           figureElement.innerHTML,
           'text/html'
         );
-        const oembedElement = figureDoc.querySelector('oembed');
-        const url = oembedElement?.getAttribute('url') + '';
-        this.AddToMediaLists(url);
-        figureElement.remove();
+        const cssClass = figureElement.getAttribute('class');
+        if (cssClass != 'image') {
+          const oembedElement = figureDoc.querySelector('oembed');
+          const url = oembedElement?.getAttribute('url') + '';
+          this.AddToMediaLists(url);
+          figureElement.remove();
+        }
       });
     }
 
