@@ -73,7 +73,8 @@ export class PointComponent implements AfterViewInit {
   youTubeIDs: string[] = [];
   vimeoIDs: string[] = [];
   soundCloudTrackIDs: string[] = [];
-  pointHTMLwithoutEmbed = '';
+  pointDisplayHTMLwithoutEmbed = '';
+  pointTitleDisplay = '';
 
   editing = false;
   updatingPreview = false;
@@ -196,7 +197,8 @@ export class PointComponent implements AfterViewInit {
       });
     }
 
-    this.pointHTMLwithoutEmbed = pointDoc.body.innerHTML;
+    this.pointDisplayHTMLwithoutEmbed = pointDoc.body.innerHTML;
+    this.pointTitleDisplay = this.point.pointTitle;
   }
 
   AddToMediaLists(url: string): void {
@@ -232,12 +234,10 @@ export class PointComponent implements AfterViewInit {
       var regEx = new RegExp(this.searchTerm, 'ig'); // search term is case insensitive and global - all occurrences replaced
       const replace = `<span class="highlight">${this.searchTerm.toUpperCase()}</span>`;
 
-      this.point.pointTitle = this.point.pointTitle.replace(regEx, replace);
+      this.pointTitleDisplay = this.point.pointTitle.replace(regEx, replace);
 
-      this.pointHTMLwithoutEmbed = this.pointHTMLwithoutEmbed.replace(
-        regEx,
-        replace
-      );
+      this.pointDisplayHTMLwithoutEmbed =
+        this.pointDisplayHTMLwithoutEmbed.replace(regEx, replace);
     }
   }
 

@@ -4,7 +4,7 @@
     <div class="pointTitleRow">
       <div class="flexRow" [ngClass]="{ parentPoint: isParentPoint }">
         <div>
-          <h1 [innerHtml]="point.pointTitle"></h1>
+          <h1 [innerHtml]="pointTitleDisplay"></h1>
         </div>
         <div class="flexStretch"></div>
 
@@ -23,7 +23,7 @@
 
       <div
         #elPointHtml
-        [innerHTML]="pointHTMLwithoutEmbed | SafeHtml"
+        [innerHTML]="pointDisplayHTMLwithoutEmbed | SafeHtml"
         (click)="viewFullSizeImages()"
         [ngClass]="{
           'line-clamp': !showFullText,
