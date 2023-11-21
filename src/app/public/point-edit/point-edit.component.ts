@@ -61,7 +61,7 @@ export class PointEditComponent implements OnInit {
 
   @Output() CancelEdit = new EventEmitter();
   @Output() CompleteEdit = new EventEmitter();
-  @Output() ReselectForTagChange = new EventEmitter<PointSortTypes>();
+  @Output() ReselectForTagChange = new EventEmitter(); // Not necessarily new point
 
   // https://stackoverflow.com/questions/51193187/my-template-reference-variable-nativeelement-is-undefined
   // https://stackoverflow.com/questions/37450805/what-is-the-read-parameter-in-viewchild-for
@@ -263,12 +263,16 @@ export class PointEditComponent implements OnInit {
   onSubmit(): void {
     // if the full url has been pasted get the id after the "="
     // What about tiny urls without the = but with the id?
-    // console.log('SCTID: ', this.pointClone.soundCloudTrackID);
 
     if (!this.pointClone) {
       this.error = 'Missing: point to edit';
     } else {
       this.error = '';
+
+      // Filter on changed tags by me - don't update another persons tags
+      this.pointClone.tags = this.pointClone.tags.filter(
+        tag => tag.tagByMe != tag.tagByMeNew
+      );
 
       if (
         !this.isComment &&
@@ -276,6 +280,7 @@ export class PointEditComponent implements OnInit {
         !this.isPorQPoint &&
         (!this.pointClone.tags || this.pointClone.tags.length === 0)
       ) {
+        // Only owner can update point, so owner must provide at least one tag
         this.error = 'Points must have at least one slash tag';
       } else if (
         // Title is always optional
@@ -299,13 +304,13 @@ export class PointEditComponent implements OnInit {
         let returnToSlashTag = this.localData.PreviousSlashTagSelected;
         let tagChange = false;
 
-        let returnToTag = this.pointClone.tags.find(
-          tag => tag.slashTag == returnToSlashTag
-        );
+        let addDeleteTags = this.pointClone.tags.map(tag => tag.slashTag);
 
-        // return to slashTag required if not comment or questionAnswer
+        const currentTagIncluded = addDeleteTags.includes(returnToSlashTag);
+
+        // return to a new slashTag if current tag removed (not comment or questionAnswer)
         if (
-          !returnToTag &&
+          !currentTagIncluded &&
           !this.isComment &&
           this.questionID == 0 &&
           !!this.pointClone?.tags[0]?.slashTag
@@ -350,38 +355,35 @@ export class PointEditComponent implements OnInit {
             // but we will need to handle separately on new point and existing point edit
           )
           .subscribe({
-            next: (response: Point) => {
+            next: (pointReturned: Point) => {
               this.waiting = false;
               this.userTouched = false;
               // this.point.csvImageIDs = ''; // Only needed for upload, now complete??
 
-              if (isNew) {
-                this.NewPoint(
-                  returnToSlashTag,
-                  this.pointClone
-                    .parentPointID /* ((parentPointID re-assigned)) */
-                );
-              } else {
-                // pointID only needed for new points, but parent reselects - we're not dependent on 2 way binding
-                // save response to point not pointClone, and manually emit
-                this.point = cloneDeep(response);
-                this.pointChange.emit(this.point);
-              }
-
+              //May or may not be same:
               this.localData.PreviousSlashTagSelected = returnToSlashTag;
-
-              // Communicate the change to PointComponent (No subscriptions)
-              // Emit to TagsPoints component for sort descending indication only
-              // But don't get parent TagsPoints to trigger reselection in sibling points now
-              if (response) {
-                this.CompleteEdit.emit(response.pointID); // emit pointID for porq to attach
-              }
 
               // Communicate change to sibling PointsComponent
               // where Points ReSelection Takes place:
-              if (tagChange && !isNew) {
+              if (tagChange) {
                 this.tagsService.SetSlashTag(returnToSlashTag);
-                this.ReselectForTagChange.emit(PointSortTypes.DateDescend);
+                this.ReselectForTagChange.emit();
+              } else if (!isNew) {
+                //   this.NewPoint(
+                //     returnToSlashTag,
+                //     this.pointClone
+                //       .parentPointID /* ((parentPointID re-assigned)) */
+                //   );
+                // } else {
+                // pointID only needed for new points, but parent reselects - we're not dependent on 2 way binding
+                // save response to point not pointClone, and manually emit
+                this.point = cloneDeep(pointReturned);
+                this.pointChange.emit(this.point);
+              } else if (!!pointReturned) {
+                // Communicate the change to PointComponent (No subscriptions)
+                // Emit to TagsPoints component for sort descending indication only
+                // But don't get parent TagsPoints to trigger reselection in sibling points now
+                this.CompleteEdit.emit(pointReturned.pointID); // emit pointID for porq to attach
               }
             },
             error: serverError => {
@@ -420,6 +422,7 @@ export class PointEditComponent implements OnInit {
     this.error = '';
     this.userTouched = false;
 
+    // Put cursor in TitleInput
     setTimeout(() => {
       console.log('focusing ' + !!this.tvPointTitle?.nativeElement);
       this.tvPointTitle?.nativeElement.focus();

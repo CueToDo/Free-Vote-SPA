@@ -464,11 +464,11 @@ export class TagsAndPointsComponent
     this.questionsListComponent.SelectQuestions(false);
   }
 
-  ReselectForNewPoint() {
+  ReselectForTagChange() {
     this.ReselectPoints(PointSortTypes.DateDescend);
   }
 
-  // Reselect Points on new tag selected
+  // Reselect Points on new sort
   ReselectPoints(pointSortType: PointSortTypes) {
     this.externalTrigger = true;
 

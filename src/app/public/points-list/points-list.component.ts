@@ -159,15 +159,9 @@ export class PointsListComponent implements OnDestroy, OnInit {
   ReselectPoints(pointSortType: PointSortTypes) {
     this.filter.slashTag = this.localData.PreviousSlashTagSelected; // Set by the Point-Edit Component
 
-    if (pointSortType !== PointSortTypes.NoChange) {
-      if (pointSortType === PointSortTypes.DateDescend) {
-        // Ensure new point at top
-        this.filter.sortType = PointSortTypes.DateUpdated;
-        this.filter.sortDescending = true;
-      } else {
-        this.filter.sortType = pointSortType;
-      }
-    }
+    if (pointSortType !== PointSortTypes.NoChange)
+      this.filter.sortType = pointSortType;
+
     // We have a new point or tag
     this.filter.updateTopicViewCount = true; // ToDo S/B new tag only
     this.SelectPoints();
@@ -203,6 +197,12 @@ export class PointsListComponent implements OnDestroy, OnInit {
     if (!this.AlreadyFetchingPointsFromDB) {
       if (this.viewAll)
         this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
+
+      if (this.filter.sortType === PointSortTypes.DateDescend) {
+        // Ensure new point at top
+        this.filter.sortType = PointSortTypes.DateUpdated;
+        this.filter.sortDescending = true;
+      }
 
       this.viewAll = false;
 
@@ -312,7 +312,6 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
         default:
           // Infinite Scroll: Get points in batches
-
           if (this.filter) {
             this.filter.slashTag = this.localData.PreviousSlashTagSelected; // how does this relate to getting from route param?
             if (this.filter.slashTag) {
