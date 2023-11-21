@@ -300,7 +300,7 @@ export class PointEditComponent implements OnInit {
 
         // Has voter removed SlashTagSelected?
         let returnToSlashTag = this.localData.PreviousSlashTagSelected;
-        let tagChange = false;
+        this.localData.TagChange = false;
 
         let myTags = this.pointClone.tags.map(tag => tag.slashTag);
 
@@ -314,7 +314,7 @@ export class PointEditComponent implements OnInit {
           !!this.pointClone?.tags[0]?.slashTag
         ) {
           returnToSlashTag = this.pointClone.tags[0].slashTag;
-          tagChange = true;
+          this.localData.TagChange = true;
         }
 
         // Must always initialise before subscribing - may be nothing to upload
@@ -357,7 +357,8 @@ export class PointEditComponent implements OnInit {
               this.waiting = false;
               this.userTouched = false;
 
-              if (tagChange) this.tagsService.SetSlashTag(returnToSlashTag);
+              if (this.localData.TagChange)
+                this.tagsService.SetSlashTag(returnToSlashTag);
 
               if (!!pointReturned)
                 // save response to point not pointClone

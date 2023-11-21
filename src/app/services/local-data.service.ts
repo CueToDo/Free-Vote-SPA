@@ -19,6 +19,7 @@ export class LocalDataService {
   public apiUrl = '';
 
   public initialPointsSelected = false;
+  public TagChange = false; // use gloablly for comms from point-edit to point to points-list
 
   // jwt contains All claims
   // SessionID is baked into jwt for anon or signed-in users

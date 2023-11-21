@@ -169,7 +169,12 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
   public CompleteEdit(pointID: string): void {
     this.fragment = pointID;
-    this.ScrollIntoView();
+    if (this.localData.TagChange) {
+      this.SelectPoints();
+      this.appData.RouteParamChange$.next(
+        this.localData.PreviousSlashTagSelected
+      );
+    } else this.ScrollIntoView();
   }
 
   OnTopicSearch(): string {
@@ -258,8 +263,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
               next: psr => this.DisplayPoints(psr),
               error: err => (this.error = err.error.detail),
               complete: () => {
-                this.AlreadyFetchingPointsFromDB = false;
-                this.AlreadyFetchingPointsFromDBChange.emit(false);
+                this.SelectComplete();
               }
             });
           break;
@@ -282,8 +286,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
                 next: psr => this.DisplayPoints(psr),
                 error: err => (this.error = err.error.detail),
                 complete: () => {
-                  this.AlreadyFetchingPointsFromDB = false;
-                  this.AlreadyFetchingPointsFromDBChange.emit(false);
+                  this.SelectComplete();
                 }
               });
           }
@@ -304,8 +307,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
               next: psr => this.DisplayPoints(psr),
               error: err => (this.error = err.error.detail),
               complete: () => {
-                this.AlreadyFetchingPointsFromDB = false;
-                this.AlreadyFetchingPointsFromDBChange.emit(false);
+                this.SelectComplete();
               }
             });
           break;
@@ -327,8 +329,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
                   next: psr => this.DisplayPoints(psr),
                   error: err => (this.error = err.error.detail),
                   complete: () => {
-                    this.AlreadyFetchingPointsFromDB = false;
-                    this.AlreadyFetchingPointsFromDBChange.emit(false);
+                    this.SelectComplete();
                   }
                 });
             }
@@ -336,6 +337,13 @@ export class PointsListComponent implements OnDestroy, OnInit {
           break;
       }
     }
+  }
+
+  public SelectComplete() {
+    this.AlreadyFetchingPointsFromDB = false;
+    this.AlreadyFetchingPointsFromDBChange.emit(false);
+    if (!!this.fragment) this.ScrollIntoView();
+    this.fragment = '';
   }
 
   public NewSortOrder() {
