@@ -20,7 +20,7 @@ import { cloneDeep } from 'lodash-es';
 // Models
 import { Point } from 'src/app/models/point.model';
 import { PointEdit } from 'src/app/models/point.model';
-import { PointTypesEnum, PointSortTypes } from 'src/app/models/enums';
+import { PointTypesEnum } from 'src/app/models/enums';
 import { Kvp } from 'src/app/models/kvp.model';
 import { Image } from 'src/app/models/Image.model';
 
@@ -42,10 +42,11 @@ import { Tag } from 'src/app/models/tag.model';
 export class PointEditComponent implements OnInit {
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent
   @Input() point: Point | undefined;
+  @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
+
   @Input() parentPointID = 0;
   @Input() questionID = 0;
   @Input() constituencyID = 0;
-  @Output() pointChange = new EventEmitter(); // But manually controlling 2 way binding
 
   @Input() isPorQPoint = false;
   @Input() isMyAnswer = false;
@@ -60,8 +61,7 @@ export class PointEditComponent implements OnInit {
   // Update: manual clone to save to databse then manual emit of updates from server
 
   @Output() CancelEdit = new EventEmitter();
-  @Output() CompleteEdit = new EventEmitter();
-  @Output() ReselectForTagChange = new EventEmitter(); // Not necessarily new point
+  @Output() CompleteEdit = new EventEmitter(); // reselect for tag change
 
   // https://stackoverflow.com/questions/51193187/my-template-reference-variable-nativeelement-is-undefined
   // https://stackoverflow.com/questions/37450805/what-is-the-read-parameter-in-viewchild-for
@@ -270,9 +270,7 @@ export class PointEditComponent implements OnInit {
       this.error = '';
 
       // Filter on changed tags by me - don't update another persons tags
-      this.pointClone.tags = this.pointClone.tags.filter(
-        tag => tag.tagByMe != tag.tagByMeNew
-      );
+      this.pointClone.tags = this.pointClone.tags.filter(tag => tag.tagByMeNew);
 
       if (
         !this.isComment &&
@@ -304,9 +302,9 @@ export class PointEditComponent implements OnInit {
         let returnToSlashTag = this.localData.PreviousSlashTagSelected;
         let tagChange = false;
 
-        let addDeleteTags = this.pointClone.tags.map(tag => tag.slashTag);
+        let myTags = this.pointClone.tags.map(tag => tag.slashTag);
 
-        const currentTagIncluded = addDeleteTags.includes(returnToSlashTag);
+        const currentTagIncluded = myTags.includes(returnToSlashTag);
 
         // return to a new slashTag if current tag removed (not comment or questionAnswer)
         if (
@@ -358,33 +356,22 @@ export class PointEditComponent implements OnInit {
             next: (pointReturned: Point) => {
               this.waiting = false;
               this.userTouched = false;
-              // this.point.csvImageIDs = ''; // Only needed for upload, now complete??
 
-              //May or may not be same:
-              this.localData.PreviousSlashTagSelected = returnToSlashTag;
+              if (tagChange) this.tagsService.SetSlashTag(returnToSlashTag);
 
-              // Communicate change to sibling PointsComponent
-              // where Points ReSelection Takes place:
-              if (tagChange) {
-                this.tagsService.SetSlashTag(returnToSlashTag);
-                this.ReselectForTagChange.emit();
-              } else if (!isNew) {
-                //   this.NewPoint(
-                //     returnToSlashTag,
-                //     this.pointClone
-                //       .parentPointID /* ((parentPointID re-assigned)) */
-                //   );
-                // } else {
-                // pointID only needed for new points, but parent reselects - we're not dependent on 2 way binding
-                // save response to point not pointClone, and manually emit
+              if (!!pointReturned)
+                // save response to point not pointClone
                 this.point = cloneDeep(pointReturned);
-                this.pointChange.emit(this.point);
-              } else if (!!pointReturned) {
-                // Communicate the change to PointComponent (No subscriptions)
-                // Emit to TagsPoints component for sort descending indication only
-                // But don't get parent TagsPoints to trigger reselection in sibling points now
-                this.CompleteEdit.emit(pointReturned.pointID); // emit pointID for porq to attach
-              }
+
+              if (isNew)
+                this.PrepareNewPoint(
+                  returnToSlashTag,
+                  this.pointClone.parentPointID
+                );
+              else this.pointChange.emit(this.point); // Update bound parent
+
+              // Communicate the change to all parents
+              this.CompleteEdit.emit();
             },
             error: serverError => {
               this.waiting = false;
@@ -398,7 +385,7 @@ export class PointEditComponent implements OnInit {
     }
   }
 
-  NewPoint(slashTag: string, parentPointID: number): void {
+  PrepareNewPoint(slashTag: string, parentPointID: number): void {
     // Clear old Values when edit complete
     this.pointClone = new Point();
     this.pointClone.pointID = -1;

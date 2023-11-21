@@ -123,7 +123,6 @@ export class TagsAndPointsComponent
   // Point Select
   externalTrigger = false; // Set on subscriptions
   refreshRecentTags = false;
-  newPointRefresh = false;
   pointsSelected = false;
 
   bogSelected: BreakoutGroup = {
@@ -464,26 +463,6 @@ export class TagsAndPointsComponent
     this.questionsListComponent.SelectQuestions(false);
   }
 
-  ReselectForTagChange() {
-    this.ReselectPoints(PointSortTypes.DateDescend);
-  }
-
-  // Reselect Points on new sort
-  ReselectPoints(pointSortType: PointSortTypes) {
-    this.externalTrigger = true;
-
-    this.filter.slashTag = this.localData.PreviousSlashTagSelected;
-
-    if (pointSortType !== PointSortTypes.NoChange) {
-      this.filter.sortType = pointSortType;
-    }
-
-    this.pointsSelected = false;
-    this.ChangeTab(Tabs.tagPoints); // will select points
-
-    this.externalTrigger = false;
-  }
-
   ChangeTrendingRecent() {
     // Anon can view recent by sessionID
     if (this.previousTabIndex === this.trendingRecent) {
@@ -618,7 +597,6 @@ export class TagsAndPointsComponent
           if (!this.applyingFilter) this.ShowPointFilterCriteria(true);
         }
 
-        this.newPointRefresh = false;
         this.refreshRecentTags = true; // Refresh Recent Tags when switch back from Point Selection
 
         if (!this.pointsSelected && !!this.pointsListComponent) {
@@ -632,7 +610,7 @@ export class TagsAndPointsComponent
         if (this.qp === 'question') {
           this.newQuestionComponent.NewQuestion(this.filter.slashTag);
         } else {
-          this.newPointComponent.NewPoint(this.filter.slashTag, 0);
+          this.newPointComponent.PrepareNewPoint(this.filter.slashTag, 0);
         }
         newRoute = `${this.filter.slashTag}/new-${this.qp}`;
         break;
@@ -783,17 +761,23 @@ export class TagsAndPointsComponent
   }
 
   NewPointCreated(): void {
-    // Do nothing, this component also handles subscriptions
+    // Ensure new point at top
+    this.filter.sortDescending = true;
+    this.ReselectPoints(PointSortTypes.DateUpdated);
+  }
 
+  // Reselect Points on new sort
+  ReselectPoints(pointSortType: PointSortTypes) {
     this.externalTrigger = true;
 
-    // Ensure new point at top
-    this.newPointRefresh = true;
-    this.filter.sortType = PointSortTypes.DateDescend;
-    this.SetSortDescending(true);
+    this.filter.slashTag = this.localData.PreviousSlashTagSelected;
+    alert(this.filter.slashTag);
+    if (pointSortType !== PointSortTypes.NoChange) {
+      this.filter.sortType = pointSortType;
+    }
 
-    this.pointsListComponent.ReselectForNewPoint();
-    this.ChangeTab(Tabs.tagPoints); // Causes reselection, but already selecting detected
+    this.pointsSelected = false;
+    this.ChangeTab(Tabs.tagPoints); // will select points
 
     this.externalTrigger = false;
   }
