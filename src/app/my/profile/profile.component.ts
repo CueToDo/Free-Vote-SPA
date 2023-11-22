@@ -192,7 +192,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editing = false;
   }
 
-  deleteProfilePictue(): void {
+  deleteProfilePicture(): void {
     this.Saving();
 
     this.httpService.profilePictureDelete().subscribe({
