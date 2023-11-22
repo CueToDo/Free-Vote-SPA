@@ -161,8 +161,6 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deleteAccount(): void {
-    this.ShowError('Warning');
-
     this.dialogRef = this.dialog.open(DeleteAccountComponent, {
       width: '320px',
       data: {
