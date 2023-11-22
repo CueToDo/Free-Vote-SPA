@@ -269,14 +269,15 @@ export class PointEditComponent implements OnInit {
     } else {
       this.error = '';
 
-      // Filter on changed tags by me - don't update another persons tags
-      this.pointClone.tags = this.pointClone.tags.filter(tag => tag.tagByMeNew);
+      let newOrRetainedTags = this.pointClone.tags
+        .filter(tag => tag.tagByMeNew)
+        .map(tag => tag.slashTag);
 
       if (
         !this.isComment &&
         !this.isMyAnswer &&
         !this.isPorQPoint &&
-        (!this.pointClone.tags || this.pointClone.tags.length === 0)
+        (!newOrRetainedTags || newOrRetainedTags.length === 0)
       ) {
         // Only owner can update point, so owner must provide at least one tag
         this.error = 'Points must have at least one slash tag';
@@ -300,11 +301,9 @@ export class PointEditComponent implements OnInit {
 
         // Has voter removed SlashTagSelected?
         let returnToSlashTag = this.localData.PreviousSlashTagSelected;
+        let currentTagIncluded = newOrRetainedTags.includes(returnToSlashTag);
+
         this.localData.TagChange = false;
-
-        let myTags = this.pointClone.tags.map(tag => tag.slashTag);
-
-        const currentTagIncluded = myTags.includes(returnToSlashTag);
 
         // return to a new slashTag if current tag removed (not comment or questionAnswer)
         if (
@@ -316,6 +315,13 @@ export class PointEditComponent implements OnInit {
           returnToSlashTag = this.pointClone.tags[0].slashTag;
           this.localData.TagChange = true;
         }
+
+        // Only send tags to add/delete for update (will only be add for new point)
+        // Filter on tags added or removed by me - don't update another persons tags
+        // tagByMe != tagByMeNew means we need to add or remove this tag
+        this.pointClone.tags = this.pointClone.tags.filter(
+          tag => tag.tagByMe != tag.tagByMeNew // belt & braces: same filter in PointUpdate
+        );
 
         // Must always initialise before subscribing - may be nothing to upload
         this.imageUploadObservable = this.ImageUploadObservable();

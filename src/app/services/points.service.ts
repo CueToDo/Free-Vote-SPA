@@ -275,6 +275,9 @@ export class PointsService {
   ): Observable<Point> {
     // Input parameter is PointEditFormData not PointEdit
 
+    // When retrieving tags from database tagByMe = tagByMeNew
+    // This equality means no change and no need to Add/Remove tag from existing point
+    // When updating a point we only submit new tags to add and old tags to remove (ie tagByMe != tagByMeNew)
     const postData = {
       ConstituencyID: pointEdit.constituencyID,
       PointID: pointEdit.pointID,
