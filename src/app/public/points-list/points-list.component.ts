@@ -170,6 +170,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
   public CompleteEdit(pointID: string): void {
     this.fragment = pointID;
     if (this.localData.TagChange) {
+      this.filter.sortType = PointSortTypes.DateUpdated;
+      this.filter.sortDescending = true;
       this.SelectPoints();
       this.appData.RouteParamChange$.next(
         this.localData.PreviousSlashTagSelected

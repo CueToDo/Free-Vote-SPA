@@ -306,13 +306,8 @@ export class PointEditComponent implements OnInit {
         this.localData.TagChange = false;
 
         // return to a new slashTag if current tag removed (not comment or questionAnswer)
-        if (
-          !currentTagIncluded &&
-          !this.isComment &&
-          this.questionID == 0 &&
-          !!this.pointClone?.tags[0]?.slashTag
-        ) {
-          returnToSlashTag = this.pointClone.tags[0].slashTag;
+        if (!currentTagIncluded && !this.isComment && this.questionID == 0) {
+          returnToSlashTag = newOrRetainedTags[0];
           this.localData.TagChange = true;
         }
 
