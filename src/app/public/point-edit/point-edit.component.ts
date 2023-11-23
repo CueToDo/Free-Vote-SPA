@@ -269,6 +269,18 @@ export class PointEditComponent implements OnInit {
     } else {
       this.error = '';
 
+      if (this.appData.SpanHasStyle(this.pointClone.pointHTML)) {
+        if (
+          confirm(
+            'Remove styling (eg colour/background colour?\nClick cancel to keep style.'
+          )
+        ) {
+          this.pointClone.pointHTML = this.appData.RemoveSpansWithStyle(
+            this.pointClone.pointHTML
+          );
+        }
+      }
+
       let newOrRetainedTags = this.pointClone.tags
         .filter(tag => tag.tagByMeNew)
         .map(tag => tag.slashTag);

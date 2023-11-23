@@ -193,6 +193,37 @@ export class AppDataService {
     return doc.body.innerHTML;
   }
 
+  SpanHasStyle(html: string): boolean {
+    let hasStyle = false;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    const spans = Array.from(doc.querySelectorAll('span'));
+
+    for (const span of spans) {
+      if (span.hasAttribute('style')) {
+        hasStyle = true;
+        break;
+      }
+    }
+
+    return hasStyle;
+  }
+
+  RemoveSpansWithStyle(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    const spans = Array.from(doc.querySelectorAll('span'));
+
+    for (const span of spans) {
+      span.outerHTML = span.innerHTML;
+    }
+
+    return doc.body.innerHTML;
+  }
+
   // Unambiguous Date Format
   // https://css-tricks.com/everything-you-need-to-know-about-date-in-javascript/
   public UDF(date: Date): string {
