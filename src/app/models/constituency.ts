@@ -4,6 +4,7 @@ export class Constituency {
   mapItConstituencyID = '';
   politicianID = 0;
   politician = '';
+  party = '';
   politicianImage = '';
   politicianTwfyUrl = '';
   politicianTwfyMemberID = '';

@@ -129,7 +129,7 @@ export class LookupsService {
   // No longer used - now use postcode lookup
   ConstituencySearch(like: string): Observable<Kvp[]> {
     return this.httpService
-      .get(`lookups/constituencysearch/${like}/N`)
+      .get(`lookups/constituencysearch/${like}`)
       .pipe(map(value => value as Kvp[]));
   }
 

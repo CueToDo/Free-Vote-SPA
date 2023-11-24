@@ -16,7 +16,11 @@ import { ActivatedRoute } from '@angular/router';
 import { ID } from 'src/app/models/common';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 import { Point, PointSelectionResult } from 'src/app/models/point.model';
-import { PointSelectionTypes, PointSortTypes } from 'src/app/models/enums';
+import {
+  PointSelectionTypes,
+  PointSortTypes,
+  PointTypesEnum
+} from 'src/app/models/enums';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -221,10 +225,6 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
       switch (this.filter?.pointSelectionType) {
         case PointSelectionTypes.Filtered:
-          let aliasFilter = this.filter.byAlias;
-          let textFilter = this.filter.text;
-          let pointTypeID = this.filter.pointTypeID;
-
           let dateFrom = new Date('1 Jan 2000');
           let dateTo = new Date();
 
@@ -249,13 +249,13 @@ export class PointsListComponent implements OnDestroy, OnInit {
           this.pointsService
             .GetFirstBatchFiltered(
               this.filter.constituencyID,
-              aliasFilter,
+              this.filter.byAlias,
               this.OnTopicSearch(),
               this.filter.myPointFilter,
               this.filter.feedbackFilter,
               this.filter.pointFlag,
-              textFilter,
-              pointTypeID,
+              this.filter.text,
+              PointTypesEnum.NotSelected,
               dateFrom,
               dateTo,
               this.filter.sortType,

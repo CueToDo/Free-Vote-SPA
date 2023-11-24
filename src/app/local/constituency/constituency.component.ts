@@ -27,6 +27,10 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return this.constituencyDetails.politician;
   }
 
+  get party(): string {
+    return this.constituencyDetails.party;
+  }
+
   get mpImageUrl(): string {
     return `https://www.theyworkforyou.com${this.constituencyDetails.politicianImage}`;
   }
