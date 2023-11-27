@@ -101,6 +101,7 @@ export class PointComponent implements AfterViewInit {
   }
 
   error = '';
+  metaDataError = '';
 
   // https://stackoverflow.com/questions/37277527/how-to-use-enum-in-angular-2-templates
   // https://stackoverflow.com/questions/35923744/pass-enums-in-angular2-view-templates
@@ -303,6 +304,7 @@ export class PointComponent implements AfterViewInit {
 
   edit(): void {
     this.error = '';
+    this.metaDataError = '';
     this.editing = true;
   }
 
@@ -464,16 +466,18 @@ export class PointComponent implements AfterViewInit {
                     this.point.pointHTML
                   );
                 }
+                this.error = metaData.updateMessage;
                 this.ExtractMediaEmbeds();
               }
             },
             error: err => {
-              this.error = err.error.detail;
               console.log('ERROR', err.error.detail);
               this.point.linkTitle = '';
               this.point.linkDescription = '';
               this.point.linkImage = '';
               this.updatingPreview = false;
+              this.editing = true;
+              this.metaDataError = err.error.detail; // Pass back to point edit component
             }
           });
       }

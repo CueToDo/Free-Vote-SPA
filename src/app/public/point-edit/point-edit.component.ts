@@ -51,6 +51,7 @@ export class PointEditComponent implements OnInit {
   @Input() isPorQPoint = false;
   @Input() isMyAnswer = false;
   @Input() isComment = false;
+  @Input() error = '';
 
   @ViewChild('CKEfudge', { static: true }) ckeFudge: any;
 
@@ -90,7 +91,6 @@ export class PointEditComponent implements OnInit {
   uploadingImage = false;
   imageUploadProgress = 0;
   allowTags = true;
-  error = '';
 
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
   // pointKeys: IterableIterator<number>;
