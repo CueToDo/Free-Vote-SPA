@@ -29,29 +29,15 @@
   <!-- Content injected AFTER, not within -->
 </main>
 
-<div [ngClass]="{ footerShow: showVulcan, footerHide: !showVulcan }">
-  <div [hidden]="!showVulcan">
-    <div class="content">
-      <img
-        [src]="imgVulcan"
-        [alt]="altVulcan"
-        class="ms-3"
-        height="143"
-        (click)="vulcan()"
-      />
-      <span *ngIf="localData.website === 'break-out.group'" class="imgCredit"
-        >Image by
-        <a
-          href="https://www.flaticon.com/authors/freepik"
-          title="Freepik"
-          target="_blank"
-          >Freepik</a
-        >
-        from<a href="https://www.flaticon.com/" title="Flaticon"
-          >www.flaticon.com</a
-        ></span
-      >
-    </div>
+<div [hidden]="!showVulcan">
+  <div class="content">
+    <img
+      [src]="imgVulcan"
+      [alt]="altVulcan"
+      class="ms-3"
+      height="143"
+      (click)="vulcan()"
+    />
   </div>
 
   <div class="footer">
@@ -59,6 +45,6 @@
       {{ localData.strapline }}
     </div>
 
-    <div class="copyright">{{ localData.website }} 2023 v15.4.34</div>
+    <div class="copyright">{{ localData.website }} 2023 v15.4.35</div>
   </div>
 </div>
