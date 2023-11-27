@@ -139,6 +139,7 @@ div.toolbar {
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 div.toolbar mat-form-field {
