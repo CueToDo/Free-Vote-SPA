@@ -92,7 +92,7 @@ export class TagCloudComponent implements OnInit, OnDestroy {
       Weight = 5;
     }
 
-    return 100 + Weight * 50 + '%'; // perCent
+    return 100 + Weight * 25 + '%'; // perCent
   }
 
   setSlashTag(slashTag: string): void {
