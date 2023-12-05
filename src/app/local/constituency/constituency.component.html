@@ -28,6 +28,15 @@
     </tr>
 
     <tr>
+      <td>Parliamentary Record</td>
+      <td>
+        <a [href]="parliamentaryRecordSearch" target="_blank">{{
+          constituencyDetails.politician
+        }}</a>
+      </td>
+    </tr>
+
+    <tr>
       <td>Write to</td>
       <td>
         <a [href]="writeToThem" target="_blank">{{ mp }} MP</a>
@@ -46,6 +55,12 @@
         <a [href]="constituencyUrl" target="_blank">{{
           constituencyDetails.constituency
         }}</a>
+      </td>
+    </tr>
+    <tr>
+      <td>Next Election</td>
+      <td>
+        <a [href]="nextElection" target="_blank">whocanivotefor.co.uk</a>
       </td>
     </tr>
   </table>

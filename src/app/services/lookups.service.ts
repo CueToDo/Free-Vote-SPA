@@ -115,7 +115,7 @@ export class LookupsService {
 
   PostCodeSearch(postcode: string): Observable<VotingArea> {
     return this.httpService
-      .get(`lookups/mapIt/${postcode}`)
+      .get(`democracyClub/mapIt/${postcode}`)
       .pipe(map(value => value as VotingArea));
   }
 

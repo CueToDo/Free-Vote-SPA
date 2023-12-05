@@ -32,11 +32,16 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   }
 
   get mpImageUrl(): string {
-    return `https://www.theyworkforyou.com${this.constituencyDetails.politicianImage}`;
+    return this.constituencyDetails.politicianImage;
   }
 
   get mpUrl(): string {
     return `https://www.theyworkforyou.com${this.constituencyDetails.politicianTwfyUrl}`;
+  }
+
+  get parliamentaryRecordSearch(): string {
+    var searchText = this.constituencyDetails.politician;
+    return `https://members.parliament.uk/members/Commons?SearchText=${searchText}&ForParliament=Current`;
   }
 
   get constituencyUrl(): string {
@@ -61,6 +66,11 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
 
   get postcode(): string {
     return this.localData.freeVoteProfile.postcode;
+  }
+
+  get nextElection(): string {
+    const postcode = encodeURIComponent(this.postcode);
+    return `https://whocanivotefor.co.uk/elections/${postcode}`;
   }
 
   constructor(
