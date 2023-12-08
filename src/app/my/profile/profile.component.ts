@@ -64,7 +64,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // For Routerlink to local
   public get constituencyLink(): string {
-    return `/local/${this.appData.kebabUri(
+    return `/constituency/${this.appData.kebabUri(
       this.localData.freeVoteProfile.constituency
     )}`;
   }

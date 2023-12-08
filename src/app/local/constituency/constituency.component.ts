@@ -5,11 +5,15 @@ import { ActivatedRoute } from '@angular/router';
 // rxjs
 import { Subscription } from 'rxjs';
 
+// Models
+import { Candidate } from 'src/app/models/candidate';
+import { Constituency } from 'src/app/models/constituency';
+
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
-import { Constituency } from 'src/app/models/constituency';
+import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 
 @Component({
   selector: 'app-constituency',
@@ -20,8 +24,10 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   public error = '';
 
   private constituencyDetails$: Subscription | undefined;
+  private candidates$: Subscription | undefined;
 
   public constituencyDetails = new Constituency();
+  public candidates: Candidate[] = [];
 
   get mp(): string {
     return this.constituencyDetails.politician;
@@ -77,7 +83,8 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     public localData: LocalDataService,
     private appData: AppDataService,
-    private lookupsService: LookupsService
+    private lookupsService: LookupsService,
+    private democracyClubService: DemocracyClubService
   ) {}
 
   ngOnInit(): void {
@@ -88,7 +95,16 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     this.constituencyDetails$ = this.lookupsService
       .Constituency(constituency)
       .subscribe({
-        next: constituency => (this.constituencyDetails = constituency),
+        next: constituency => {
+          this.constituencyDetails = constituency;
+        },
+        error: serverError => (this.error = serverError.error.detail)
+      });
+
+    this.candidates$ = this.democracyClubService
+      .Candidates(this.localData.freeVoteProfile.constituencyID, false)
+      .subscribe({
+        next: candidates => (this.candidates = candidates),
         error: serverError => (this.error = serverError.error.detail)
       });
   }
@@ -103,6 +119,9 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.constituencyDetails$) {
       this.constituencyDetails$.unsubscribe();
+    }
+    if (this.candidates$) {
+      this.candidates$.unsubscribe();
     }
   }
 }

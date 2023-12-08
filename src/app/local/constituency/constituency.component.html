@@ -1,76 +1,97 @@
-<div class="mp">
-  <h1>{{ constituencyDetails.constituency }}</h1>
+<div class="tabContainer">
+  <div class="tabContent scroller">
+    <div class="content">
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
 
-  <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-  </div>
+      <table>
+        <tr>
+          <th colspan="2">
+            <h1>{{ constituencyDetails.constituency }}</h1>
+          </th>
+        </tr>
+        <tr>
+          <td>Constituency Map</td>
+          <td>
+            <a [href]="constituencyUrl" target="_blank">{{
+              constituencyDetails.constituency
+            }}</a>
+          </td>
+        </tr>
+        <tr>
+          <td>Next Election</td>
+          <td>
+            <a [href]="nextElection" target="_blank">whocanivotefor.co.uk</a>
+          </td>
+        </tr>
 
-  <table>
-    <tr>
-      <td></td>
-      <td>
-        <a [href]="mpUrl" target="_blank">
-          <img [src]="mpImageUrl" alt="" class="mpImage" />
-        </a>
-      </td>
-    </tr>
+        <tr>
+          <th colspan="2">
+            <h1>MP</h1>
+          </th>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <a [href]="mpUrl" target="_blank">
+              <img [src]="mpImageUrl" alt="" class="mpImage" />
+            </a>
+          </td>
+        </tr>
 
-    <tr>
-      <td>They Work For You</td>
-      <td>
-        <a [href]="mpUrl" target="_blank">{{ mp }}</a>
-      </td>
-    </tr>
+        <tr>
+          <td>They Work For You</td>
+          <td>
+            <a [href]="mpUrl" target="_blank">{{ mp }}</a>
+          </td>
+        </tr>
 
-    <tr>
-      <td>Party</td>
-      <td>{{ party }}</td>
-    </tr>
+        <tr>
+          <td>Party</td>
+          <td>{{ party }}</td>
+        </tr>
 
-    <tr>
-      <td>Parliamentary Record</td>
-      <td>
-        <a [href]="parliamentaryRecordSearch" target="_blank">{{
-          constituencyDetails.politician
-        }}</a>
-      </td>
-    </tr>
+        <tr>
+          <td>Parliamentary Record</td>
+          <td>
+            <a [href]="parliamentaryRecordSearch" target="_blank">{{
+              constituencyDetails.politician
+            }}</a>
+          </td>
+        </tr>
 
-    <tr>
-      <td>Write to</td>
-      <td>
-        <a [href]="writeToThem" target="_blank">{{ mp }} MP</a>
-      </td>
-    </tr>
+        <tr>
+          <td>Write to</td>
+          <td>
+            <a [href]="writeToThem" target="_blank">{{ mp }} MP</a>
+          </td>
+        </tr>
 
-    <tr *ngIf="!!mpWebsite">
-      <td>Website</td>
-      <td>
-        <a [href]="mpWebsite" target="_blank">{{ mpWebsite }}</a>
-      </td>
-    </tr>
-    <tr>
-      <td>Constituency Map</td>
-      <td>
-        <a [href]="constituencyUrl" target="_blank">{{
-          constituencyDetails.constituency
-        }}</a>
-      </td>
-    </tr>
-    <tr>
-      <td>Next Election</td>
-      <td>
-        <a [href]="nextElection" target="_blank">whocanivotefor.co.uk</a>
-      </td>
-    </tr>
-  </table>
+        <tr *ngIf="!!mpWebsite">
+          <td>Website</td>
+          <td>
+            <a [href]="mpWebsite" target="_blank">{{ mpWebsite }}</a>
+          </td>
+        </tr>
 
-  <div hidden>
-    <div>constituencyUrl: {{ constituencyUrl }}</div>
-    <div>mp: {{ mp }}</div>
-    <div>mpImageUrl: {{ mpImageUrl }}</div>
-    <div>mpUrl: {{ mpUrl }}</div>
-    <div>writeToThem: {{ writeToThem }}</div>
-    <div>postcode: {{ postcode }}</div>
+        <tr>
+          <th colspan="2"><h1>Candidates</h1></th>
+        </tr>
+
+        <ng-container *ngFor="let candidate of candidates">
+          <app-candidate [candidate]="candidate"></app-candidate>
+        </ng-container>
+      </table>
+
+      <div hidden>
+        <div>constituencyUrl: {{ constituencyUrl }}</div>
+        <div>mp: {{ mp }}</div>
+        <div>mpImageUrl: {{ mpImageUrl }}</div>
+        <div>mpUrl: {{ mpUrl }}</div>
+        <div>writeToThem: {{ writeToThem }}</div>
+        <div>postcode: {{ postcode }}</div>
+      </div>
+    </div>
   </div>
 </div>

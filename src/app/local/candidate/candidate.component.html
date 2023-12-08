@@ -1,0 +1,18 @@
+<tr>
+  <td></td>
+  <td><img [src]="candidate.image" alt="" class="mpImage" /></td>
+</tr>
+<tr>
+  <td>Name</td>
+  <td>
+    {{ candidate.name }}
+  </td>
+</tr>
+<tr>
+  <td>Party</td>
+  <td>{{ candidate.party }}</td>
+</tr>
+<tr *ngIf="!!candidate.laterConstituency">
+  <td>Has stood since in</td>
+  <td>{{ candidate.laterConstituency }}</td>
+</tr>

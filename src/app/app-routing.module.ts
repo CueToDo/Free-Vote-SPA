@@ -46,7 +46,7 @@ const appRoutes: Routes = [
     loadChildren: () => import('./local/local.module').then(m => m.LocalModule)
   },
 
-  { path: 'local/:constituency', component: ConstituencyComponent },
+  { path: 'constituency/:constituency', component: ConstituencyComponent },
   // organisations, groups
   {
     path: 'organisations',

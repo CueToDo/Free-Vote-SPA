@@ -275,12 +275,13 @@
       </div>
 
       <!-- Update message -->
-      <div
-        class="flexRow"
-        [ngClass]="{ alert: error, 'alert-danger': error, success: success }"
-      >
+      <div class="flexRow">
         <div style="flex: 4"></div>
-        <div style="flex: 6">
+        <div
+          style="flex: 6"
+          class="mt-3"
+          [ngClass]="{ alert: error, 'alert-danger': error, success: success }"
+        >
           <div *ngIf="!!updateMessage">{{ updateMessage }}</div>
         </div>
       </div>

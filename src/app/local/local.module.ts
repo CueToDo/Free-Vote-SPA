@@ -20,8 +20,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 // FreeVote Modules
 import { BaseModule } from '../base/base.module';
 
-// FreeVote
+// FreeVote Components
 import { ConstituencyComponent } from './constituency/constituency.component';
+import { CandidateComponent } from './candidate/candidate.component';
 import { LocalMenuComponent } from './local-menu/local-menu.component';
 import { LocalTagsComponent } from './local-tags/local-tags.component';
 
@@ -45,7 +46,12 @@ const localRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ConstituencyComponent, LocalMenuComponent, LocalTagsComponent],
+  declarations: [
+    ConstituencyComponent,
+    LocalMenuComponent,
+    LocalTagsComponent,
+    CandidateComponent
+  ],
   imports: [
     // Angular
     CommonModule,

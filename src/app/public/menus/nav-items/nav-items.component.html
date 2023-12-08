@@ -93,17 +93,18 @@
 
     <button
       mat-menu-item
-      [routerLink]="'/local/' + constituencyKebab"
+      [routerLink]="'/constituency/' + constituencyKebab"
       (click)="appData.MenuItemSelected = 'MP'"
       [class.selected]="appData.MenuItemSelected === 'MP'"
-      matTooltip="Constituency MP"
+      [matTooltip]="localData.freeVoteProfile.constituency"
       matTooltipPosition="right"
     >
       <mat-icon>mp</mat-icon>
-      MP
+      constituency
     </button>
 
     <button
+      *ngIf="false"
       mat-menu-item
       [routerLink]="'/local/' + constituencyKebab"
       (click)="appData.MenuItemSelected = 'Council'"
@@ -112,7 +113,7 @@
       matTooltipPosition="right"
     >
       <mat-icon>mp</mat-icon>
-      Council
+      council
     </button>
 
     <button
