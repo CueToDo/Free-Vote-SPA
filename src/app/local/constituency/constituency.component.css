@@ -7,6 +7,6 @@ td {
   padding: 3px 20px;
 }
 
-app-candidate {
-  display: table-row-group;
+.candidates {
+  margin-left: 20px;
 }

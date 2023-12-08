@@ -1,18 +1,19 @@
-<tr>
-  <td></td>
-  <td><img [src]="candidate.image" alt="" class="mpImage" /></td>
-</tr>
-<tr>
-  <td>Name</td>
-  <td>
+<div class="flexCol justify-start candidate">
+  <div>
+    <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
+    <img
+      *ngIf="!candidate.image"
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/108px-Unknown_person.jpg"
+      alt=""
+    />
+  </div>
+  <div>
     {{ candidate.name }}
-  </td>
-</tr>
-<tr>
-  <td>Party</td>
-  <td>{{ candidate.party }}</td>
-</tr>
-<tr *ngIf="!!candidate.laterConstituency">
-  <td>Has stood since in</td>
-  <td>{{ candidate.laterConstituency }}</td>
-</tr>
+  </div>
+  <div>
+    {{ candidate.party }}
+  </div>
+  <div *ngIf="!!candidate.laterConstituency">
+    Has stood since in {{ candidate.laterConstituency }}
+  </div>
+</div>

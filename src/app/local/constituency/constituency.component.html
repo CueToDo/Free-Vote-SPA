@@ -20,6 +20,10 @@
           </td>
         </tr>
         <tr>
+          <td>Last Election</td>
+          <td>{{ constituencyDetails.electionDate }}</td>
+        </tr>
+        <tr>
           <td>Next Election</td>
           <td>
             <a [href]="nextElection" target="_blank">whocanivotefor.co.uk</a>
@@ -78,11 +82,13 @@
         <tr>
           <th colspan="2"><h1>Candidates</h1></th>
         </tr>
+      </table>
 
+      <div class="flexRow wrap align-stretch candidates">
         <ng-container *ngFor="let candidate of candidates">
           <app-candidate [candidate]="candidate"></app-candidate>
         </ng-container>
-      </table>
+      </div>
 
       <div hidden>
         <div>constituencyUrl: {{ constituencyUrl }}</div>

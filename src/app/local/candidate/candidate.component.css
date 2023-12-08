@@ -1,4 +1,20 @@
-/* Matches that in parent constituency component */
-td {
-  padding: 3px 20px;
+.candidate {
+  display: flex;
+  border: solid 1px black;
+  border-radius: 12px;
+  color: black;
+  overflow: hidden;
+  background-color: #f0f4ff;
+  padding: 5px;
+}
+
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit */
+/* https://stackoverflow.com/questions/37127384/why-isnt-object-fit-working-in-flexbox */
+
+.candidate img {
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: center center;
+  max-width: 120px;
+  max-height: 120px;
 }
