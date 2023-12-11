@@ -1,5 +1,5 @@
-<div class="flexCol justify-start candidate">
-  <div>
+<div class="flexRow candidate">
+  <div *ngIf="!!candidate.twfyUrl">
     <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
     <img
       *ngIf="!candidate.image"
@@ -7,13 +7,41 @@
       alt=""
     />
   </div>
-  <div>
-    {{ candidate.name }}
-  </div>
-  <div>
-    {{ candidate.party }}
-  </div>
-  <div *ngIf="!!candidate.laterConstituency">
-    Has stood since in {{ candidate.laterConstituency }}
+
+  <div class="flexCol" [ngClass]="{ candidateOnly: !candidate.twfyUrl }">
+    <div *ngIf="!candidate.twfyUrl">
+      <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
+      <img
+        *ngIf="!candidate.image"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/108px-Unknown_person.jpg"
+        alt=""
+      />
+    </div>
+
+    <div *ngIf="!candidate.twfyUrl">
+      {{ candidate.name }}
+    </div>
+    <div *ngIf="!!candidate.twfyUrl">
+      <a [href]="candidate.twfyUrl" target="_blank">{{ candidate.name }}</a>
+    </div>
+    <div>
+      {{ candidate.party }}
+    </div>
+
+    <div *ngIf="!!candidate.ukParliamentUrl">
+      <a [href]="candidate.ukParliamentUrl" target="_blank">In Parliament</a>
+    </div>
+
+    <div *ngIf="!!candidate.writeToThemUrl">
+      <a [href]="candidate.writeToThemUrl" target="_blank">"Write to Them"</a>
+    </div>
+
+    <div *ngIf="!!candidate.personalUrl">
+      <a [href]="candidate.personalUrl" target="_blank">website</a>
+    </div>
+
+    <div *ngIf="!!candidate.laterConstituency">
+      Has stood since in {{ candidate.laterConstituency }}
+    </div>
   </div>
 </div>

@@ -5,4 +5,10 @@ export class Candidate {
   image = '';
   publicEmailAddress = '';
   laterConstituency = '';
+
+  // Sitting MP only
+  twfyUrl = '';
+  ukParliamentUrl = '';
+  writeToThemUrl = '';
+  personalUrl = '';
 }

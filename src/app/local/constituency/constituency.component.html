@@ -20,69 +20,19 @@
           </td>
         </tr>
         <tr>
-          <td>Last Election</td>
-          <td>{{ constituencyDetails.electionDate }}</td>
-        </tr>
-        <tr>
           <td>Next Election</td>
           <td>
             <a [href]="nextElection" target="_blank">whocanivotefor.co.uk</a>
           </td>
         </tr>
-
-        <tr>
-          <th colspan="2">
-            <h1>MP</h1>
-          </th>
-        </tr>
-        <tr>
-          <td></td>
-          <td>
-            <a [href]="mpUrl" target="_blank">
-              <img [src]="mpImageUrl" alt="" class="mpImage" />
-            </a>
-          </td>
-        </tr>
-
-        <tr>
-          <td>They Work For You</td>
-          <td>
-            <a [href]="mpUrl" target="_blank">{{ mp }}</a>
-          </td>
-        </tr>
-
-        <tr>
-          <td>Party</td>
-          <td>{{ party }}</td>
-        </tr>
-
-        <tr>
-          <td>Parliamentary Record</td>
-          <td>
-            <a [href]="parliamentaryRecordSearch" target="_blank">{{
-              constituencyDetails.politician
-            }}</a>
-          </td>
-        </tr>
-
-        <tr>
-          <td>Write to</td>
-          <td>
-            <a [href]="writeToThem" target="_blank">{{ mp }} MP</a>
-          </td>
-        </tr>
-
-        <tr *ngIf="!!mpWebsite">
-          <td>Website</td>
-          <td>
-            <a [href]="mpWebsite" target="_blank">{{ mpWebsite }}</a>
-          </td>
-        </tr>
-
-        <tr>
-          <th colspan="2"><h1>Candidates</h1></th>
-        </tr>
       </table>
+      <h1>MP</h1>
+
+      <div class="mp">
+        <app-candidate [candidate]="currentMP"></app-candidate>
+      </div>
+
+      <h1>Candidates - {{ constituencyDetails.electionDate }}</h1>
 
       <div class="flexRow wrap align-stretch candidates">
         <ng-container *ngFor="let candidate of candidates">
@@ -90,14 +40,10 @@
         </ng-container>
       </div>
 
-      <div hidden>
-        <div>constituencyUrl: {{ constituencyUrl }}</div>
-        <div>mp: {{ mp }}</div>
-        <div>mpImageUrl: {{ mpImageUrl }}</div>
-        <div>mpUrl: {{ mpUrl }}</div>
-        <div>writeToThem: {{ writeToThem }}</div>
-        <div>postcode: {{ postcode }}</div>
+      <div class="center mt-3">
+        <a routerLink="/constituency/search">View another constituency</a>
       </div>
     </div>
   </div>
 </div>
+y

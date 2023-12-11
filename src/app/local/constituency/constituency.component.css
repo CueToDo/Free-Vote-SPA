@@ -7,6 +7,19 @@ td {
   padding: 3px 20px;
 }
 
-.candidates {
+td.mpImage {
+  object-fit: cover;
+}
+
+td.mpImage img {
+  border-radius: 12px;
+}
+
+.mp {
+  display: inline-block;
+}
+
+.candidates,
+.mp {
   margin-left: 20px;
 }

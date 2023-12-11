@@ -1,11 +1,14 @@
 .candidate {
-  display: flex;
   border: solid 1px black;
   border-radius: 12px;
   color: black;
   overflow: hidden;
   background-color: #f0f4ff;
   padding: 5px;
+}
+
+div.candidateOnly {
+  width: 150px;
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit */
@@ -17,4 +20,8 @@
   object-position: center center;
   max-width: 120px;
   max-height: 120px;
+}
+
+.candidate div {
+  text-align: center;
 }

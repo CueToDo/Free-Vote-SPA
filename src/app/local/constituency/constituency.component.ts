@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // rxjs
-import { Subscription } from 'rxjs';
+import { Subscription, concatMap, map } from 'rxjs';
 
 // Models
 import { Candidate } from 'src/app/models/candidate';
@@ -23,35 +23,34 @@ import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 export class ConstituencyComponent implements OnInit, OnDestroy {
   public error = '';
 
-  private constituencyDetails$: Subscription | undefined;
   private candidates$: Subscription | undefined;
 
   public constituencyDetails = new Constituency();
   public candidates: Candidate[] = [];
 
-  get mp(): string {
-    return this.constituencyDetails.politician;
-  }
-
-  get party(): string {
-    return this.constituencyDetails.party;
-  }
-
-  get mpImageUrl(): string {
-    return this.constituencyDetails.politicianImage;
-  }
-
-  get mpUrl(): string {
-    return `https://www.theyworkforyou.com${this.constituencyDetails.politicianTwfyUrl}`;
-  }
-
-  get parliamentaryRecordSearch(): string {
-    var searchText = this.constituencyDetails.politician;
-    return `https://members.parliament.uk/members/Commons?SearchText=${searchText}&ForParliament=Current`;
-  }
-
   get constituencyUrl(): string {
     return `https://mapit.mysociety.org/area/${this.constituencyDetails.mapItConstituencyID}.html`;
+  }
+
+  get currentMP(): Candidate {
+    var mp = new Candidate();
+    mp.name = this.constituencyDetails.politician;
+    mp.party = this.constituencyDetails.party;
+    mp.image = this.constituencyDetails.politicianImage;
+    mp.twfyUrl = `https://www.theyworkforyou.com${this.constituencyDetails.politicianTwfyUrl}`;
+
+    var searchText = this.constituencyDetails.politician;
+    mp.ukParliamentUrl = `https://members.parliament.uk/members/Commons?SearchText=${searchText}&ForParliament=Current`;
+
+    if (
+      this.constituencyDetails.constituencyID ==
+      this.localData.ConstituencyIDVoter
+    ) {
+      mp.writeToThemUrl = this.writeToThem;
+    }
+
+    mp.personalUrl = this.constituencyDetails.politicianWebsite;
+    return mp;
   }
 
   get writeToThem(): string {
@@ -60,14 +59,6 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     // mapit MemberID does not match They Work For You ID
     // who=${this.twfyMemberID}&
     return `https://www.writetothem.com/write?a=westminstermp&pc=${pc}&fyr_extref=${referrer}`;
-  }
-
-  get twfyMemberID(): string {
-    return this.constituencyDetails.politicianTwfyMemberID;
-  }
-
-  get mpWebsite(): string {
-    return this.constituencyDetails.politicianWebsite;
   }
 
   get postcode(): string {
@@ -92,21 +83,27 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
 
     var constituency = this.appData.unKebabUri(routeParams['constituency']);
 
-    this.constituencyDetails$ = this.lookupsService
+    var constituencyLookup = this.lookupsService
       .Constituency(constituency)
-      .subscribe({
-        next: constituency => {
+      .pipe(
+        map((constituency: Constituency) => {
           this.constituencyDetails = constituency;
-        },
-        error: serverError => (this.error = serverError.error.detail)
-      });
+          return constituency.constituencyID; // This is a mapped observable
+        })
+      );
 
-    this.candidates$ = this.democracyClubService
-      .Candidates(this.localData.freeVoteProfile.constituencyID, false)
-      .subscribe({
-        next: candidates => (this.candidates = candidates),
-        error: serverError => (this.error = serverError.error.detail)
-      });
+    const candidatesLookup = constituencyLookup.pipe(
+      concatMap(
+        constituencyID =>
+          this.democracyClubService.Candidates(constituencyID.toString(), false) // another observable
+      )
+    );
+
+    // Subscribe to the Observable<Candidate[]>
+    this.candidates$ = candidatesLookup.subscribe({
+      next: candidates => (this.candidates = candidates),
+      error: serverError => (this.error = serverError.error.detail)
+    });
   }
 
   clearDefault(el: any): void {
@@ -117,9 +114,6 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.constituencyDetails$) {
-      this.constituencyDetails$.unsubscribe();
-    }
     if (this.candidates$) {
       this.candidates$.unsubscribe();
     }

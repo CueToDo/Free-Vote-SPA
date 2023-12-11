@@ -1,0 +1,24 @@
+<div class="tabContainer">
+  <div class="tabContent scroller">
+    <div class="search">
+      <h1>Constituency search</h1>
+
+      <div class="flexRow justify-start">
+        <input
+          class="form-control"
+          type="text"
+          [(ngModel)]="constituencySearch"
+          (keyup.enter)="ConstituencySearch()"
+        />
+        <button mat-stroked-button (click)="ConstituencySearch()">
+          <mat-icon>search</mat-icon>
+          lookup
+        </button>
+      </div>
+
+      <p *ngFor="let constituency of constituencies">
+        <a [routerLink]="RL(constituency.key)">{{ constituency.key }}</a>
+      </p>
+    </div>
+  </div>
+</div>

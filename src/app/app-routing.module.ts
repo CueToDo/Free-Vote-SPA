@@ -3,16 +3,17 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, ExtraOptions } from '@angular/router';
 
 // Components
-import { HomeComponent } from './public/home/home.component';
 import { CardComponent } from './public/card/card.component';
+import { ConstituencyComponent } from './local/constituency/constituency.component';
+import { ConstituencySearchComponent } from './local/constituency-search/constituency-search.component';
+import { HomeComponent } from './public/home/home.component';
+import { PointCommentsComponent } from './public/point-comments/point-comments.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
 import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points.component';
-import { PointCommentsComponent } from './public/point-comments/point-comments.component';
 
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from './services/login-route-guard.service';
-import { ConstituencyComponent } from './local/constituency/constituency.component';
 
 const appRoutes: Routes = [
   // Refresh in browser fails - when route is specified
@@ -46,6 +47,7 @@ const appRoutes: Routes = [
     loadChildren: () => import('./local/local.module').then(m => m.LocalModule)
   },
 
+  { path: 'constituency/search', component: ConstituencySearchComponent },
   { path: 'constituency/:constituency', component: ConstituencyComponent },
   // organisations, groups
   {

@@ -3,8 +3,6 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  NgZone,
-  OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
@@ -14,7 +12,6 @@ import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 
 // rxjs
-import { Subscription } from 'rxjs';
 import { tap, map, filter } from 'rxjs/operators';
 
 // Models
@@ -41,9 +38,7 @@ import { DeleteAccountComponent } from 'src/app/my/delete-account/delete-account
   styleUrls: ['./profile.component.css'],
   preserveWhitespaces: true
 })
-export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
-  constituencySearch$: Subscription | undefined;
-
+export class ProfileComponent implements OnInit, AfterViewInit {
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
   // Use static false when element has *ngIf
   // use hidden on any conditionally inserted parent NOT ngIf
@@ -52,15 +47,8 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     | ElementRef
     | undefined;
 
-  fetchingConstituencies = false;
-
   countries: Kvp[] = [];
   cities: Kvp[] = [];
-  constituencies: Kvp[] = [];
-  constituencyCount = 0;
-  constituenciesFetched = false;
-  constituencySearch = '';
-  constituencySearchOld = '';
 
   // For Routerlink to local
   public get constituencyLink(): string {
@@ -95,8 +83,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     private httpService: HttpService,
     private lookupsService: LookupsService,
     private profileService: ProfileService,
-    public dialog: MatDialog,
-    private ngZone: NgZone
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -129,8 +116,6 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editing = true;
 
     this.oldProfile = Object.assign({}, this.localData.freeVoteProfile);
-
-    this.constituencySearch = this.localData.freeVoteProfile.constituency;
   }
 
   save(): void {
@@ -298,63 +283,8 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  clearConstituency() {
-    if (
-      this.constituencySearch === this.localData.freeVoteProfile.constituency
-    ) {
-      this.constituencySearch = this.constituencySearchOld;
-    } else {
-      this.constituencySearch = '';
-      this.constituencies = [];
-      this.constituencyCount = 0;
-    }
-  }
-
   onConstituencySelect(constituency: Kvp) {
     this.localData.freeVoteProfile.constituency = constituency.key;
-    this.constituencySearch = constituency.key; // Save the selected value as the search term
-    this.constituencyCount = 0;
-  }
-
-  // Search by name - no longer used
-  ConstituencySearch(like: string): void {
-    if (!like || like.length < 3) {
-      this.constituencies = [];
-      this.constituencyCount = 0;
-      return;
-    }
-
-    this.ngZone.run(_ => {
-      this.fetchingConstituencies = true;
-      this.constituenciesFetched = false;
-      this.constituencySearchOld = like;
-    });
-
-    this.lookupsService.ConstituencySearch(like).subscribe({
-      next: value => {
-        this.ngZone.run(_ => {
-          this.constituencies = value; // new filtered list
-          this.constituenciesFetched = true;
-
-          this.constituencyCount = value.length;
-
-          if (this.constituencyCount === 1) {
-            this.constituencySearch = this.constituencies[0].key;
-
-            this.localData.freeVoteProfile.constituency =
-              this.constituencySearch;
-
-            this.constituencyCount = 0;
-          }
-        });
-      },
-      error: err => {
-        this.ShowError(err);
-      },
-      complete: () => {
-        this.ngZone.run(_ => (this.fetchingConstituencies = false));
-      }
-    });
   }
 
   lookupPostCode() {
@@ -421,9 +351,5 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       this.updateMessage = err;
     }
     this.error = true;
-  }
-
-  ngOnDestroy() {
-    this.constituencySearch$?.unsubscribe();
   }
 }
