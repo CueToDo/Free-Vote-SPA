@@ -7,6 +7,10 @@
   padding: 5px;
 }
 
+.candidate.elected {
+  background-color: #ffffe0;
+}
+
 div.candidateOnly {
   width: 150px;
 }

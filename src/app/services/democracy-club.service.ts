@@ -18,14 +18,23 @@ export class DemocracyClubService {
 
   Candidates(
     constituencyID: string,
-    nextElection: boolean
+    electionDate: string
   ): Observable<Candidate[]> {
     return this.httpService
-      .get(`democracyClub/candidates/${constituencyID}/${nextElection}`)
+      .get(`democracyClub/candidates/${constituencyID}/${electionDate}`)
       .pipe(
         map(value => {
-          console.log(value);
           return value as Candidate[];
+        })
+      );
+  }
+
+  ConstituencyElectionDates(constituency: string): Observable<string[]> {
+    return this.httpService
+      .get(`democracyClub/electiondates/${constituency}`)
+      .pipe(
+        map(value => {
+          return value as string[];
         })
       );
   }

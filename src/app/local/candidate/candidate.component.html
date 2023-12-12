@@ -1,4 +1,4 @@
-<div class="flexRow candidate">
+<div class="flexRow candidate" [ngClass]="{ elected: candidate.elected }">
   <div *ngIf="!!candidate.twfyUrl">
     <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
     <img

@@ -120,10 +120,9 @@ export class LookupsService {
   }
 
   Constituency(constituency: string): Observable<Constituency> {
-    return this.httpService.get(`lookups/constituency/${constituency}`).pipe(
-      tap(value => console.log(value)),
-      map(value => value as Constituency)
-    );
+    return this.httpService
+      .get(`lookups/constituency/${constituency}`)
+      .pipe(map(value => value as Constituency));
   }
 
   ConstituencySearch(like: string): Observable<Kvp[]> {

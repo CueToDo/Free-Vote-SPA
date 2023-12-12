@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // rxjs
-import { Subscription, concatMap, map } from 'rxjs';
+import { Subscription, concatMap, map, of, switchMap } from 'rxjs';
 
 // Models
 import { Candidate } from 'src/app/models/candidate';
@@ -34,6 +34,9 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     if (this.constituencyDetails.mapItConstituencyID == '0') return '';
     return `https://mapit.mysociety.org/area/${this.constituencyDetails.mapItConstituencyID}.html`;
   }
+
+  electionDate = '';
+  ElectionDates: string[] = [];
 
   get currentMP(): Candidate {
     var mp = new Candidate();
@@ -84,26 +87,31 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const routeParams = this.activatedRoute.snapshot.params;
 
-    var constituency = this.appData.unKebabUri(routeParams['constituency']);
+    var constituencyName = this.appData.unKebabUri(routeParams['constituency']);
 
     var constituencyLookup = this.lookupsService
-      .Constituency(constituency)
+      .Constituency(constituencyName) // from this observable
       .pipe(
-        map((constituency: Constituency) => {
-          this.constituencyDetails = constituency;
-          return constituency.constituencyID; // This is a mapped observable
+        switchMap(constituency => {
+          this.constituencyDetails = constituency; // map
+          // and switch to another observable
+          return this.democracyClubService.ConstituencyElectionDates(
+            constituency.constituency
+          );
+        }),
+        switchMap(dates => {
+          this.ElectionDates = dates; // map
+          // and switch to another observable
+          this.electionDate = dates[dates.length - 1];
+          return this.democracyClubService.Candidates(
+            this.constituencyDetails.constituencyID.toString(),
+            this.electionDate
+          );
         })
       );
 
-    const candidatesLookup = constituencyLookup.pipe(
-      concatMap(
-        constituencyID =>
-          this.democracyClubService.Candidates(constituencyID.toString(), false) // another observable
-      )
-    );
-
     // Subscribe to the Observable<Candidate[]>
-    this.candidates$ = candidatesLookup.subscribe({
+    this.candidates$ = constituencyLookup.subscribe({
       next: candidates => (this.candidates = candidates),
       error: serverError => (this.error = serverError.error.detail)
     });
@@ -114,6 +122,18 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   }
   fillDefault(el: any): void {
     if (el.value == '') el.value = this.postcode;
+  }
+
+  onDateChange() {
+    this.candidates$ = this.democracyClubService
+      .Candidates(
+        this.constituencyDetails.constituencyID.toString(),
+        this.electionDate
+      )
+      .subscribe({
+        next: candidates => (this.candidates = candidates),
+        error: serverError => (this.error = serverError.error.detail)
+      });
   }
 
   ngOnDestroy(): void {
