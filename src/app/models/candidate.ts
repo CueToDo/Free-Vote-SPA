@@ -2,6 +2,7 @@ export class Candidate {
   politicianID = 0;
   name = '';
   party = '';
+  partyWebsite = '';
   elected = false;
   image = '';
   publicEmailAddress = '';

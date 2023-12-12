@@ -6,6 +6,7 @@ export class Constituency {
   politicianID = 0;
   politician = '';
   party = '';
+  partyWebsite = '';
   politicianImage = '';
   politicianTwfyUrl = '';
   politicianTwfyMemberID = '';

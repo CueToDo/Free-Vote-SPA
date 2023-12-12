@@ -42,6 +42,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     var mp = new Candidate();
     mp.name = this.constituencyDetails.politician;
     mp.party = this.constituencyDetails.party;
+    mp.partyWebsite = this.constituencyDetails.partyWebsite;
     mp.image = this.constituencyDetails.politicianImage;
     mp.twfyUrl = `https://www.theyworkforyou.com${this.constituencyDetails.politicianTwfyUrl}`;
 

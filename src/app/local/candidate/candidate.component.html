@@ -25,7 +25,13 @@
       <a [href]="candidate.twfyUrl" target="_blank">{{ candidate.name }}</a>
     </div>
     <div>
-      {{ candidate.party }}
+      <a
+        *ngIf="!!candidate.partyWebsite"
+        [href]="candidate.partyWebsite"
+        target="_blank"
+        >{{ candidate.party }}</a
+      >
+      <span *ngIf="!candidate.partyWebsite">{{ candidate.party }}</span>
     </div>
 
     <div *ngIf="!!candidate.ukParliamentUrl">
