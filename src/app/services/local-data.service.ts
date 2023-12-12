@@ -6,6 +6,7 @@ import { Request } from 'express';
 
 // Models
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
+import { Kvp } from '../models/kvp.model';
 
 // Other
 import { environment as env } from 'src/environments/environment';
@@ -82,6 +83,9 @@ export class LocalDataService {
     }
     return 0;
   }
+
+  // Constituency Search Component - preserve results
+  constituencies: Kvp[] = [];
 
   private localLogging = '';
 

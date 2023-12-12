@@ -29,6 +29,9 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   public candidates: Candidate[] = [];
 
   get constituencyUrl(): string {
+    // We only have mapItConstituencyIDs where these have been retrieved by PostCode
+    // No known way to do this by constituency name
+    if (this.constituencyDetails.mapItConstituencyID == '0') return '';
     return `https://mapit.mysociety.org/area/${this.constituencyDetails.mapItConstituencyID}.html`;
   }
 

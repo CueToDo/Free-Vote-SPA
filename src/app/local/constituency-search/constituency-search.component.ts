@@ -1,3 +1,4 @@
+import { Constituency } from 'src/app/models/constituency';
 // Angular
 import { Component } from '@angular/core';
 
@@ -16,13 +17,13 @@ import { LookupsService } from 'src/app/services/lookups.service';
 })
 export class ConstituencySearchComponent {
   constituencySearch = '';
+  postcodeSearch = '';
   fetchingConstituencies = false;
   constituenciesFetched = false;
-  constituencies: Kvp[] = [];
 
   get constituencyCount(): number {
-    if (!this.constituencies) return 0;
-    return this.constituencies.length;
+    if (!this.localData.constituencies) return 0;
+    return this.localData.constituencies.length;
   }
 
   public error = '';
@@ -35,13 +36,21 @@ export class ConstituencySearchComponent {
 
   clearConstituencySearch() {
     this.constituencySearch = '';
-    this.constituencies = [];
+    this.localData.constituencies = [];
+  }
+
+  clearPostcodeSearch() {
+    this.postcodeSearch = '';
+    this.localData.constituencies = [];
   }
 
   // Search by name - no longer used
   ConstituencySearch(): void {
+    this.error = '';
+    this.localData.constituencies = [];
+
     if (!this.constituencySearch || this.constituencySearch.length < 3) {
-      this.constituencies = [];
+      this.error = 'Please enter at least 3 characters for the search';
       return;
     }
     this.fetchingConstituencies = true;
@@ -49,13 +58,40 @@ export class ConstituencySearchComponent {
 
     this.lookupsService.ConstituencySearch(this.constituencySearch).subscribe({
       next: value => {
-        this.constituencies = value; // new filtered list
+        this.localData.constituencies = value; // new filtered list
         this.constituenciesFetched = true;
 
-        if (this.constituencyCount === 1) {
-          this.constituencySearch = this.constituencies[0].key;
+        if (this.constituencyCount === 0) {
+          this.error = 'No constituencies found';
+        }
+      },
+      error: err => {
+        this.ShowError(err);
+      },
+      complete: () => {
+        this.fetchingConstituencies = false;
+      }
+    });
+  }
 
-          this.localData.freeVoteProfile.constituency = this.constituencySearch;
+  PostcodeSearch(): void {
+    this.error = '';
+    this.localData.constituencies = [];
+
+    if (!this.postcodeSearch || this.postcodeSearch.length < 5) {
+      this.error = 'Please enter the full post code';
+      return;
+    }
+    this.fetchingConstituencies = true;
+    this.constituenciesFetched = false;
+
+    this.lookupsService.ConstituencyForPostcode(this.postcodeSearch).subscribe({
+      next: (value: Kvp) => {
+        this.localData.constituencies.push(value);
+        this.constituenciesFetched = true;
+
+        if (this.constituencyCount === 0) {
+          this.error = 'Constituency not found for this postcode';
         }
       },
       error: err => {

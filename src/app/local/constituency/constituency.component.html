@@ -14,9 +14,17 @@
         <tr>
           <td>Constituency Map</td>
           <td>
-            <a [href]="constituencyUrl" target="_blank">{{
-              constituencyDetails.constituency
-            }}</a>
+            <a
+              *ngIf="!!constituencyUrl"
+              [href]="constituencyUrl"
+              target="_blank"
+              >mapIt</a
+            >
+            <a
+              href="https://maproom.net/demo/election-map/0.html"
+              target="_blank"
+              >mapRoom search</a
+            >
           </td>
         </tr>
         <tr>

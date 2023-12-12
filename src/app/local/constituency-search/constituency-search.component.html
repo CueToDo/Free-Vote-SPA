@@ -7,6 +7,7 @@
         <input
           class="form-control"
           type="text"
+          placeholder="constituency name"
           [(ngModel)]="constituencySearch"
           (keyup.enter)="ConstituencySearch()"
         />
@@ -14,10 +15,36 @@
           <mat-icon>search</mat-icon>
           lookup
         </button>
+        <button mat-stroked-button (click)="clearConstituencySearch()">
+          <mat-icon>cancel</mat-icon>
+          clear
+        </button>
       </div>
 
-      <p *ngFor="let constituency of constituencies">
+      <div class="flexRow justify-start">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="post code"
+          [(ngModel)]="postcodeSearch"
+          (keyup.enter)="PostcodeSearch()"
+        />
+        <button mat-stroked-button (click)="PostcodeSearch()">
+          <mat-icon>search</mat-icon>
+          lookup
+        </button>
+        <button mat-stroked-button (click)="clearPostcodeSearch()">
+          <mat-icon>cancel</mat-icon>
+          clear
+        </button>
+      </div>
+
+      <p *ngFor="let constituency of localData.constituencies">
         <a [routerLink]="RL(constituency.key)">{{ constituency.key }}</a>
+      </p>
+
+      <p *ngIf="!!error" class="alert alert-danger">
+        {{ error }}
       </p>
     </div>
   </div>

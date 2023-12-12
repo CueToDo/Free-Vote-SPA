@@ -126,11 +126,16 @@ export class LookupsService {
     );
   }
 
-  // No longer used - now use postcode lookup
   ConstituencySearch(like: string): Observable<Kvp[]> {
     return this.httpService
       .get(`lookups/constituencysearch/${like}`)
       .pipe(map(value => value as Kvp[]));
+  }
+
+  ConstituencyForPostcode(postcode: string): Observable<Kvp> {
+    return this.httpService
+      .get(`democracyClub/constituencyforpostcode/${postcode}`)
+      .pipe(map(value => value as Kvp));
   }
 
   CountrySave(country: string): Observable<number> {
