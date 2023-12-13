@@ -3,6 +3,11 @@ h1 {
   margin-bottom: 10px;
 }
 
+select {
+  border-radius: 5px;
+  padding: 5px;
+}
+
 td {
   padding: 3px 20px;
 }

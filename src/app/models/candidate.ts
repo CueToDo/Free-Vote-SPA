@@ -14,3 +14,10 @@ export class Candidate {
   writeToThemUrl = '';
   personalUrl = '';
 }
+
+export class CandidateSearchResult {
+  name = '';
+  party = '';
+  constituency = '';
+  lastElectionDate = '';
+}

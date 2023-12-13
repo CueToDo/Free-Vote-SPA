@@ -5,6 +5,7 @@ import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Request } from 'express';
 
 // Models
+import { CandidateSearchResult } from '../models/candidate';
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
 import { Kvp } from '../models/kvp.model';
 
@@ -84,8 +85,9 @@ export class LocalDataService {
     return 0;
   }
 
-  // Constituency Search Component - preserve results
+  // Constituency and Candidate Search Component - preserve results
   constituencies: Kvp[] = [];
+  candidateSearchResults: CandidateSearchResult[] = [];
 
   private localLogging = '';
 

@@ -89,6 +89,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     const routeParams = this.activatedRoute.snapshot.params;
 
     var constituencyName = this.appData.unKebabUri(routeParams['constituency']);
+    var electionDate = this.appData.unKebabUri(routeParams['electionDate']);
 
     var constituencyLookup = this.lookupsService
       .Constituency(constituencyName) // from this observable
@@ -103,7 +104,9 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
         switchMap(dates => {
           this.ElectionDates = dates; // map
           // and switch to another observable
-          this.electionDate = dates[dates.length - 1];
+          if (!!electionDate) this.electionDate = electionDate;
+          else this.electionDate = dates[dates.length - 1];
+
           return this.democracyClubService.Candidates(
             this.constituencyDetails.constituencyID.toString(),
             this.electionDate

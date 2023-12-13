@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
 // Models
-import { Candidate } from '../models/candidate';
+import { Candidate, CandidateSearchResult } from '../models/candidate';
 
 // Services
 import { HttpService } from './http.service';
@@ -35,6 +35,18 @@ export class DemocracyClubService {
       .pipe(
         map(value => {
           return value as string[];
+        })
+      );
+  }
+
+  ElectionCandidateSearch(
+    candidateName: string
+  ): Observable<CandidateSearchResult[]> {
+    return this.httpService
+      .get(`democracyClub/electionCandidateSearch/${candidateName}`)
+      .pipe(
+        map(value => {
+          return value as CandidateSearchResult[];
         })
       );
   }

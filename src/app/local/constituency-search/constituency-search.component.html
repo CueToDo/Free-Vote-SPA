@@ -15,7 +15,7 @@
           <mat-icon>search</mat-icon>
           lookup
         </button>
-        <button mat-stroked-button (click)="clearConstituencySearch()">
+        <button mat-stroked-button (click)="clearSearch()">
           <mat-icon>cancel</mat-icon>
           clear
         </button>
@@ -33,15 +33,50 @@
           <mat-icon>search</mat-icon>
           lookup
         </button>
-        <button mat-stroked-button (click)="clearPostcodeSearch()">
+        <button mat-stroked-button (click)="clearSearch()">
+          <mat-icon>cancel</mat-icon>
+          clear
+        </button>
+      </div>
+
+      <div class="flexRow justify-start">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="candidate name"
+          [(ngModel)]="candidateSearch"
+          (keyup.enter)="CandidateSearch()"
+        />
+        <button mat-stroked-button (click)="CandidateSearch()">
+          <mat-icon>search</mat-icon>
+          lookup
+        </button>
+        <button mat-stroked-button (click)="clearSearch()">
           <mat-icon>cancel</mat-icon>
           clear
         </button>
       </div>
 
       <p *ngFor="let constituency of localData.constituencies">
-        <a [routerLink]="RL(constituency.key)">{{ constituency.key }}</a>
+        <a [routerLink]="constituencyLink(constituency.key)">{{
+          constituency.key
+        }}</a>
       </p>
+
+      <div *ngFor="let candidate of localData.candidateSearchResults">
+        <p>{{ candidate.name }}, {{ candidate.party }}</p>
+        <p class="aml-2">
+          <a
+            [routerLink]="
+              constituencyDateLink(
+                candidate.constituency,
+                candidate.lastElectionDate
+              )
+            "
+            >{{ candidate.constituency }}, {{ candidate.lastElectionDate }}</a
+          >
+        </p>
+      </div>
 
       <p *ngIf="!!error" class="alert alert-danger">
         {{ error }}
