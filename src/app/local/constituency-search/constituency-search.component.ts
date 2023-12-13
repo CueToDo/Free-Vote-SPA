@@ -115,6 +115,8 @@ export class ConstituencySearchComponent {
     this.localData.constituencies = [];
     this.localData.candidateSearchResults = [];
 
+    this.candidateSearch = this.candidateSearch.replace('%', '');
+
     if (!this.candidateSearch || this.candidateSearch.length < 4) {
       this.error = 'Please enter at least 4 characters of the candidates name';
       return;

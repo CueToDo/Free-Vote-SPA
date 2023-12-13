@@ -12,21 +12,6 @@
           </th>
         </tr>
         <tr>
-          <td>Election Date</td>
-          <td>
-            <select
-              name="ElectionDate"
-              id="ElectionDate"
-              [(ngModel)]="electionDate"
-              (ngModelChange)="onDateChange()"
-            >
-              <option *ngFor="let date of ElectionDates" [value]="date">
-                {{ date }}
-              </option>
-            </select>
-          </td>
-        </tr>
-        <tr>
           <td>Next Election</td>
           <td>
             <a [href]="nextElection" target="_blank">whocanivotefor.co.uk</a>
@@ -55,7 +40,20 @@
         <app-candidate [candidate]="currentMP"></app-candidate>
       </div>
 
-      <h1>Candidates - {{ electionDate }}</h1>
+      <div class="flexRow align-center">
+        <h1>Candidates</h1>
+        election date:
+        <select
+          name="ElectionDate"
+          id="ElectionDate"
+          [(ngModel)]="electionDate"
+          (ngModelChange)="onDateChange()"
+        >
+          <option *ngFor="let date of ElectionDates" [value]="date">
+            {{ date }}
+          </option>
+        </select>
+      </div>
 
       <div class="flexRow wrap align-stretch candidates">
         <ng-container *ngFor="let candidate of candidates">
