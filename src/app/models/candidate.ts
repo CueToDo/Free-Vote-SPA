@@ -4,6 +4,7 @@ export class Candidate {
   party = '';
   partyWebsite = '';
   elected = false;
+  electedOnOrBefore = '';
   image = '';
   publicEmailAddress = '';
   laterConstituency = '';

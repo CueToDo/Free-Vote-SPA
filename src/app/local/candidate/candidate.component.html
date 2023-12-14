@@ -1,11 +1,12 @@
 <div
-  class="flexRow candidate"
+  class="flexCol candidate"
   [ngClass]="{
     elected: candidate.elected,
-    selected: selected && !candidate.elected
+    selected: selected && !candidate.elected,
+    candidateOnly: !candidate.twfyUrl
   }"
 >
-  <div *ngIf="!!candidate.twfyUrl">
+  <div>
     <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
     <img
       *ngIf="!candidate.image"
@@ -14,46 +15,38 @@
     />
   </div>
 
-  <div class="flexCol" [ngClass]="{ candidateOnly: !candidate.twfyUrl }">
-    <div *ngIf="!candidate.twfyUrl">
-      <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
-      <img
-        *ngIf="!candidate.image"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/108px-Unknown_person.jpg"
-        alt=""
-      />
-    </div>
+  <div>
+    <span *ngIf="!candidate.twfyUrl">{{ candidate.name }}</span>
+    <a *ngIf="!!candidate.twfyUrl" [href]="candidate.twfyUrl" target="_blank">{{
+      candidate.name
+    }}</a>
+    <span *ngIf="!!candidate.electedOnOrBefore">
+      ({{ candidate.electedOnOrBefore }})
+    </span>
+  </div>
+  <div>
+    <a
+      *ngIf="!!candidate.partyWebsite"
+      [href]="candidate.partyWebsite"
+      target="_blank"
+      >{{ candidate.party }}</a
+    >
+    <span *ngIf="!candidate.partyWebsite">{{ candidate.party }}</span>
+  </div>
 
-    <div *ngIf="!candidate.twfyUrl">
-      {{ candidate.name }}
-    </div>
-    <div *ngIf="!!candidate.twfyUrl">
-      <a [href]="candidate.twfyUrl" target="_blank">{{ candidate.name }}</a>
-    </div>
-    <div>
-      <a
-        *ngIf="!!candidate.partyWebsite"
-        [href]="candidate.partyWebsite"
-        target="_blank"
-        >{{ candidate.party }}</a
-      >
-      <span *ngIf="!candidate.partyWebsite">{{ candidate.party }}</span>
-    </div>
+  <div *ngIf="!!candidate.ukParliamentUrl">
+    <a [href]="candidate.ukParliamentUrl" target="_blank">In Parliament</a>
+  </div>
 
-    <div *ngIf="!!candidate.ukParliamentUrl">
-      <a [href]="candidate.ukParliamentUrl" target="_blank">In Parliament</a>
-    </div>
+  <div *ngIf="!!candidate.writeToThemUrl">
+    <a [href]="candidate.writeToThemUrl" target="_blank">"Write to Them"</a>
+  </div>
 
-    <div *ngIf="!!candidate.writeToThemUrl">
-      <a [href]="candidate.writeToThemUrl" target="_blank">"Write to Them"</a>
-    </div>
+  <div *ngIf="!!candidate.personalUrl">
+    <a [href]="candidate.personalUrl" target="_blank">website</a>
+  </div>
 
-    <div *ngIf="!!candidate.personalUrl">
-      <a [href]="candidate.personalUrl" target="_blank">website</a>
-    </div>
-
-    <div *ngIf="!!candidate.laterConstituency">
-      Has stood since in {{ candidate.laterConstituency }}
-    </div>
+  <div *ngIf="!!candidate.laterConstituency">
+    Has stood since in {{ candidate.laterConstituency }}
   </div>
 </div>

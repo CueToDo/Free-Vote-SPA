@@ -20,10 +20,6 @@ td.mpImage img {
   border-radius: 12px;
 }
 
-.mp {
-  display: inline-block;
-}
-
 .candidates,
 .mp {
   margin-left: 20px;

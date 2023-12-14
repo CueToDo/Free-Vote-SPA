@@ -5,6 +5,7 @@ export class Constituency {
   electionDate = '';
   politicianID = 0;
   politician = '';
+  electedOnOrBefore = '';
   party = '';
   partyWebsite = '';
   politicianImage = '';

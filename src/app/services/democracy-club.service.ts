@@ -50,4 +50,17 @@ export class DemocracyClubService {
         })
       );
   }
+
+  ElectedPreviously(
+    constituencyID: number,
+    currentMPid: number
+  ): Observable<Candidate[]> {
+    return this.httpService
+      .get(`democracyClub/electedPreviously/${constituencyID}/${currentMPid}`)
+      .pipe(
+        map(value => {
+          return value as Candidate[];
+        })
+      );
+  }
 }

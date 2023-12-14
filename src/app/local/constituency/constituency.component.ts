@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, concatMap, map, of, switchMap } from 'rxjs';
 
 // Models
-import { Candidate } from 'src/app/models/candidate';
+import { Candidate, CandidateSearchResult } from 'src/app/models/candidate';
 import { Constituency } from 'src/app/models/constituency';
 
 // Services
@@ -29,6 +29,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
 
   constituencyDetails = new Constituency();
   candidates: Candidate[] = [];
+  exMPs: Candidate[] = [];
   candidateSelected = '';
 
   get constituencyUrl(): string {
@@ -44,6 +45,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   get currentMP(): Candidate {
     var mp = new Candidate();
     mp.name = this.constituencyDetails.politician;
+    mp.electedOnOrBefore = this.constituencyDetails.electedOnOrBefore;
     mp.party = this.constituencyDetails.party;
     mp.partyWebsite = this.constituencyDetails.partyWebsite;
     mp.image = this.constituencyDetails.politicianImage;
@@ -104,9 +106,17 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(constituency => {
           this.constituencyDetails = constituency; // map
-          // and switch to another observable
+
+          return this.democracyClubService.ElectedPreviously(
+            constituency.constituencyID,
+            constituency.politicianID
+          );
+        }),
+        switchMap(exMPs => {
+          this.exMPs = exMPs;
+          // switch to another observable
           return this.democracyClubService.ConstituencyElectionDates(
-            constituency.constituency
+            this.constituencyDetails.constituency
           );
         }),
         switchMap(dates => {

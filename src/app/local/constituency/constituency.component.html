@@ -54,8 +54,11 @@
       </table>
       <h1>MP</h1>
 
-      <div class="mp">
+      <div class="mp flexRow wrap">
         <app-candidate [candidate]="currentMP"></app-candidate>
+        <ng-container *ngFor="let exMP of exMPs">
+          <app-candidate [candidate]="exMP"></app-candidate>
+        </ng-container>
       </div>
 
       <div class="flexRow align-center">
