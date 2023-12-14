@@ -9,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 
-// GLobals
+// Globals
 import * as globals from 'src/app/globals';
 
 // Model

@@ -11,6 +11,10 @@
   background-color: #ffffe0;
 }
 
+.candidate.selected {
+  background-color: #ccffff;
+}
+
 div.candidateOnly {
   width: 150px;
 }

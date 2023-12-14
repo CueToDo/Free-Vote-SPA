@@ -21,12 +21,15 @@ import { DemocracyClubService } from 'src/app/services/democracy-club.service';
   styleUrls: ['./constituency.component.css']
 })
 export class ConstituencyComponent implements OnInit, OnDestroy {
-  public error = '';
+  searching = false;
+  dateChange = false;
+  error = '';
 
   private candidates$: Subscription | undefined;
 
-  public constituencyDetails = new Constituency();
-  public candidates: Candidate[] = [];
+  constituencyDetails = new Constituency();
+  candidates: Candidate[] = [];
+  candidateSelected = '';
 
   get constituencyUrl(): string {
     // We only have mapItConstituencyIDs where these have been retrieved by PostCode
@@ -86,10 +89,15 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.searching = true;
+
     const routeParams = this.activatedRoute.snapshot.params;
 
     var constituencyName = this.appData.unKebabUri(routeParams['constituency']);
     var electionDate = this.appData.unKebabUri(routeParams['electionDate']);
+    this.candidateSelected = decodeURIComponent(
+      this.appData.unKebabUri(routeParams['candidateName'])
+    );
 
     var constituencyLookup = this.lookupsService
       .Constituency(constituencyName) // from this observable
@@ -116,8 +124,14 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
 
     // Subscribe to the Observable<Candidate[]>
     this.candidates$ = constituencyLookup.subscribe({
-      next: candidates => (this.candidates = candidates),
-      error: serverError => (this.error = serverError.error.detail)
+      next: candidates => {
+        this.candidates = candidates;
+        this.searching = false;
+      },
+      error: serverError => {
+        this.error = serverError.error.detail;
+        this.searching = false;
+      }
     });
   }
 
@@ -129,6 +143,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   }
 
   onDateChange() {
+    this.dateChange = true;
     this.candidates$ = this.democracyClubService
       .Candidates(
         this.constituencyDetails.constituencyID.toString(),
@@ -136,7 +151,8 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: candidates => (this.candidates = candidates),
-        error: serverError => (this.error = serverError.error.detail)
+        error: serverError => (this.error = serverError.error.detail),
+        complete: () => (this.dateChange = false)
       });
   }
 

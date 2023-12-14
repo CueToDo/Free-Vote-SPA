@@ -1,6 +1,10 @@
 <div class="tabContainer">
   <div class="tabContent scroller">
     <div class="content">
+      <div class="spinner-grow text-primary" role="status" *ngIf="searching">
+        <div class="visually-hidden">Loading...</div>
+      </div>
+
       <div *ngIf="error" class="alert alert-danger">
         {{ error }}
       </div>
@@ -33,6 +37,20 @@
             >
           </td>
         </tr>
+        <tr>
+          <td>Search for more</td>
+          <td>
+            <a
+              [href]="
+                'https://www.google.com/search?q=' +
+                constituencyDetails.constituency +
+                'uk parliament constituency'
+              "
+              target="_blank"
+              >{{ constituencyDetails.constituency }} constituency</a
+            >
+          </td>
+        </tr>
       </table>
       <h1>MP</h1>
 
@@ -53,11 +71,17 @@
             {{ date }}
           </option>
         </select>
+        <div class="spinner-grow text-primary" role="status" *ngIf="dateChange">
+          <div class="visually-hidden">Loading...</div>
+        </div>
       </div>
 
       <div class="flexRow wrap align-stretch candidates">
         <ng-container *ngFor="let candidate of candidates">
-          <app-candidate [candidate]="candidate"></app-candidate>
+          <app-candidate
+            [candidate]="candidate"
+            [candidateSelected]="candidateSelected"
+          ></app-candidate>
         </ng-container>
       </div>
 

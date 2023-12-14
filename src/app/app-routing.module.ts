@@ -50,7 +50,7 @@ const appRoutes: Routes = [
   { path: 'constituency/search', component: ConstituencySearchComponent },
   { path: 'constituency/:constituency', component: ConstituencyComponent },
   {
-    path: 'constituency/:constituency/:electionDate',
+    path: 'constituency/:constituency/:electionDate/:candidateName',
     component: ConstituencyComponent
   },
 

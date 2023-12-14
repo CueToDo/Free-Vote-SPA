@@ -5,6 +5,7 @@
 
       <div class="flexRow justify-start">
         <input
+          #trvConstituencySearch
           class="form-control"
           type="text"
           placeholder="constituency name"
@@ -23,6 +24,7 @@
 
       <div class="flexRow justify-start">
         <input
+          #trvPostcodeSearch
           class="form-control"
           type="text"
           placeholder="post code"
@@ -41,6 +43,7 @@
 
       <div class="flexRow justify-start">
         <input
+          #trvCandidateSearch
           class="form-control"
           type="text"
           placeholder="candidate name"
@@ -57,6 +60,14 @@
         </button>
       </div>
 
+      <p *ngIf="!!error" class="alert alert-danger">
+        {{ error }}
+      </p>
+
+      <div class="spinner-grow text-primary" role="status" *ngIf="searching">
+        <div class="visually-hidden">Loading...</div>
+      </div>
+
       <p *ngFor="let constituency of localData.constituencies">
         <a [routerLink]="constituencyLink(constituency.key)">{{
           constituency.key
@@ -70,17 +81,14 @@
             [routerLink]="
               constituencyDateLink(
                 candidate.constituency,
-                candidate.lastElectionDate
+                candidate.lastElectionDate,
+                candidate.name
               )
             "
             >{{ candidate.constituency }}, {{ candidate.lastElectionDate }}</a
           >
         </p>
       </div>
-
-      <p *ngIf="!!error" class="alert alert-danger">
-        {{ error }}
-      </p>
     </div>
   </div>
 </div>

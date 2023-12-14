@@ -11,4 +11,9 @@ import { Candidate } from 'src/app/models/candidate';
 })
 export class CandidateComponent {
   @Input() candidate = new Candidate();
+  @Input() candidateSelected = '';
+
+  get selected(): boolean {
+    return this.candidate.name == this.candidateSelected;
+  }
 }
