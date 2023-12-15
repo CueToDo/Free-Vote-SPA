@@ -45,7 +45,12 @@
         <tr>
           <td>Next Election</td>
           <td>
-            <a [href]="nextElection" target="_blank">whocanivotefor.co.uk</a>
+            <a [href]="whoCanIVoteFor" target="_blank" *ngIf="!!whoCanIVoteFor"
+              >whocanivotefor.co.uk</a
+            >
+            <a [href]="electoralCalculus" target="_blank"
+              >electoralcalculus.co.uk</a
+            >
           </td>
         </tr>
         <tr>
@@ -71,7 +76,7 @@
               [href]="
                 'https://www.google.com/search?q=' +
                 constituencyDetails.constituency +
-                'uk parliament constituency'
+                ' uk parliament constituency'
               "
               target="_blank"
               >{{ constituencyDetails.constituency }} constituency</a
@@ -118,10 +123,14 @@
         </ng-container>
       </div>
 
-      <div class="center mt-3">
+      <div class="center mt-3 mb-5">
         <a routerLink="/constituency/search">View another constituency</a>
+        <a
+          href="https://commonslibrary.parliament.uk/boundary-review-2023-which-seats-will-change/"
+          target="_blank"
+          >Parliament.uk boundary review 2023</a
+        >
       </div>
     </div>
   </div>
 </div>
-y

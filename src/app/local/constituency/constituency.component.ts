@@ -96,14 +96,20 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return `https://www.writetothem.com/write?a=westminstermp&pc=${pc}&fyr_extref=${referrer}`;
   }
 
-  get postcode(): string {
-    return this.localData.freeVoteProfile.postcode;
+  get whoCanIVoteFor(): string {
+    const postcode = encodeURIComponent(this.samplePostCode);
+    if (!!postcode) return `https://whocanivotefor.co.uk/elections/${postcode}`;
+    return '';
   }
 
-  get nextElection(): string {
-    const postcode = encodeURIComponent(this.postcode);
-    return `https://whocanivotefor.co.uk/elections/${postcode}`;
+  get electoralCalculus(): string {
+    var constituency = this.constituencyDetails.constituency;
+    if (!!this.constituencyDetails.newName)
+      constituency = this.constituencyDetails.newName;
+    return `https://www.electoralcalculus.co.uk/fcgi-bin/calcwork23.py?seat=${constituency}`;
   }
+
+  private samplePostCode = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -130,21 +136,37 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
         switchMap(constituency => {
           this.constituencyDetails = constituency; // map
 
+          // switch to another observable (which depends on previous)
           return this.democracyClubService.ElectedPreviously(
             constituency.constituencyID,
             constituency.politicianID
           );
         }),
         switchMap(exMPs => {
-          this.exMPs = exMPs;
-          // switch to another observable
+          this.exMPs = exMPs; // map
+
+          // switch to another (unrelated) observable
+          if (
+            this.constituencyDetails.constituency ==
+            this.localData.freeVoteProfile.constituency
+          )
+            return of(this.localData.freeVoteProfile.postcode);
+
+          return this.democracyClubService.ConstituencySamplePostCode(
+            this.constituencyDetails.constituencyID
+          );
+        }),
+        switchMap(samplePostCode => {
+          this.samplePostCode = samplePostCode; // map
+
+          // switch to another (unrelated) observable
           return this.democracyClubService.ConstituencyElectionDates(
             this.constituencyDetails.constituency
           );
         }),
         switchMap(dates => {
           this.ElectionDates = dates; // map
-          // and switch to another observable
+          // and switch to another observable (which depends on previous)
           if (!!electionDate) this.electionDate = electionDate;
           else this.electionDate = dates[dates.length - 1];
 
@@ -166,13 +188,6 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
         this.searching = false;
       }
     });
-  }
-
-  clearDefault(el: any): void {
-    if (el.defaultValue == el.value) el.value = '';
-  }
-  fillDefault(el: any): void {
-    if (el.value == '') el.value = this.postcode;
   }
 
   onDateChange() {

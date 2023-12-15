@@ -63,4 +63,10 @@ export class DemocracyClubService {
         })
       );
   }
+
+  ConstituencySamplePostCode(constituencyID: number): Observable<string> {
+    return this.httpService
+      .get(`democracyClub/constituencySamplePostCode/${constituencyID}`)
+      .pipe(map(postcode => postcode.value));
+  }
 }
