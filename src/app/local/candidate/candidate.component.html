@@ -16,10 +16,20 @@
   </div>
 
   <div>
-    <span *ngIf="!candidate.twfyUrl">{{ candidate.name }}</span>
-    <a *ngIf="!!candidate.twfyUrl" [href]="candidate.twfyUrl" target="_blank">{{
-      candidate.name
-    }}</a>
+    <span *ngIf="!!candidate.twfyUrl">
+      <!-- Link to TWFY -->
+      <a [href]="candidate.twfyUrl" target="_blank">{{ candidate.name }}</a>
+    </span>
+
+    <span *ngIf="!candidate.twfyUrl">
+      <!-- Name only if past election or we don't have email -->
+      <span *ngIf="!isFutureElection || !mailto">{{ candidate.name }}</span>
+      <!-- MailTo if we have email for future election -->
+      <a *ngIf="isFutureElection && !!mailto" [href]="mailto">{{
+        candidate.name
+      }}</a>
+    </span>
+
     <span *ngIf="!!candidate.electedOnOrBefore">
       ({{ candidate.electedOnOrBefore }})
     </span>

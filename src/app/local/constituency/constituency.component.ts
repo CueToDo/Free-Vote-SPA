@@ -64,6 +64,17 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
 
   electionDate = '';
   ElectionDates: string[] = [];
+  get isFutureElection(): boolean {
+    if (
+      !this.electionDate ||
+      !this.ElectionDates ||
+      this.ElectionDates.length == 0
+    )
+      return false;
+    const electionDateSelected = new Date(this.electionDate);
+    const now = new Date();
+    return electionDateSelected.getTime() > now.getTime();
+  }
 
   get currentMP(): Candidate {
     var mp = new Candidate();
@@ -77,6 +88,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     var searchText = this.constituencyDetails.politician;
     mp.ukParliamentUrl = `https://members.parliament.uk/members/Commons?SearchText=${searchText}&ForParliament=Current`;
 
+    // Should only write to your own MP
     if (
       this.constituencyDetails.constituencyID ==
       this.localData.ConstituencyIDVoter

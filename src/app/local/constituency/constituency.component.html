@@ -84,12 +84,16 @@
           </td>
         </tr>
       </table>
+
       <h1>MP</h1>
 
       <div class="mp flexRow wrap">
         <div *ngIf="!currentMP.name">No MP elected for this constituency</div>
         <div *ngIf="!!currentMP.name">
-          <app-candidate [candidate]="currentMP"></app-candidate>
+          <app-candidate
+            [candidate]="currentMP"
+            [isFutureElection]="false"
+          ></app-candidate>
         </div>
         <ng-container *ngFor="let exMP of exMPs">
           <app-candidate [candidate]="exMP"></app-candidate>
@@ -119,17 +123,13 @@
           <app-candidate
             [candidate]="candidate"
             [candidateSelected]="candidateSelected"
+            [isFutureElection]="isFutureElection"
           ></app-candidate>
         </ng-container>
       </div>
 
       <div class="center mt-3 mb-5">
         <a routerLink="/constituency/search">View another constituency</a>
-        <a
-          href="https://commonslibrary.parliament.uk/boundary-review-2023-which-seats-will-change/"
-          target="_blank"
-          >Parliament.uk boundary review 2023</a
-        >
       </div>
     </div>
   </div>

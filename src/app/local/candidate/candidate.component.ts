@@ -13,8 +13,16 @@ import { AppDataService } from 'src/app/services/app-data.service';
 export class CandidateComponent {
   @Input() candidate = new Candidate();
   @Input() candidateSelected = '';
+  @Input() isFutureElection = false;
+
+  get mailto(): string {
+    if (!!this.candidate.publicEmailAddress)
+      return `mailto:${this.candidate.publicEmailAddress}`;
+    return '';
+  }
 
   constructor(private appData: AppDataService) {}
+
   get selected(): boolean {
     // match on hyphenated surnames when full name is kebabed in url
     return (
