@@ -125,16 +125,16 @@ export class LookupsService {
       .pipe(map(value => value as Constituency));
   }
 
-  ConstituencySearch(like: string): Observable<Kvp[]> {
+  ConstituencySearch(like: string): Observable<Constituency[]> {
     return this.httpService
       .get(`lookups/constituencysearch/${like}`)
-      .pipe(map(value => value as Kvp[]));
+      .pipe(map(value => value as Constituency[]));
   }
 
-  ConstituencyForPostcode(postcode: string): Observable<Kvp> {
+  ConstituencyForPostcode(postcode: string): Observable<Constituency> {
     return this.httpService
       .get(`democracyClub/constituencyforpostcode/${postcode}`)
-      .pipe(map(value => value as Kvp));
+      .pipe(map(value => value as Constituency));
   }
 
   CountrySave(country: string): Observable<number> {

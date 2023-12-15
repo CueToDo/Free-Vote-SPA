@@ -15,6 +15,33 @@
             <h1>{{ constituencyDetails.constituency }}</h1>
           </th>
         </tr>
+        <tr
+          *ngIf="
+            !constituencyDetails.pre2023 ||
+            !constituencyDetails.post2023 ||
+            nameChange
+          "
+        >
+          <td>2023 boundary changes</td>
+          <td>
+            <span *ngIf="nameChange">
+              <span *ngIf="isNew">Old name: </span>
+              <span *ngIf="!isNew">New name: </span>
+            </span>
+            <a
+              href="https://en.wikipedia.org/wiki/2023_Periodic_Review_of_Westminster_constituencies"
+              target="_blank"
+            >
+              <span *ngIf="newConstituency">New constituency</span>
+              <span *ngIf="discontinuedConstituency">Discontinued</span>
+              <span *ngIf="nameChange">{{ otherName }}</span>
+            </a>
+          </td>
+        </tr>
+        <tr *ngIf="!!constituencyDetails.change">
+          <td>Extent of boundary change</td>
+          <td>{{ constituencyDetails.change }}</td>
+        </tr>
         <tr>
           <td>Next Election</td>
           <td>
@@ -55,13 +82,16 @@
       <h1>MP</h1>
 
       <div class="mp flexRow wrap">
-        <app-candidate [candidate]="currentMP"></app-candidate>
+        <div *ngIf="!currentMP.name">No MP elected for this constituency</div>
+        <div *ngIf="!!currentMP.name">
+          <app-candidate [candidate]="currentMP"></app-candidate>
+        </div>
         <ng-container *ngFor="let exMP of exMPs">
           <app-candidate [candidate]="exMP"></app-candidate>
         </ng-container>
       </div>
 
-      <div class="flexRow align-center">
+      <div class="flexRow align-center" *ngIf="ElectionDates.length > 0">
         <h1>Candidates</h1>
         election date:
         <select

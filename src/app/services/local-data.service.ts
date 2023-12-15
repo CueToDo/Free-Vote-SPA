@@ -11,6 +11,7 @@ import { Kvp } from '../models/kvp.model';
 
 // Other
 import { environment as env } from 'src/environments/environment';
+import { Constituency } from '../models/constituency';
 
 // Mainly intended for client side, but has server side only code
 @Injectable({ providedIn: 'root' })
@@ -86,7 +87,7 @@ export class LocalDataService {
   }
 
   // Constituency and Candidate Search Component - preserve results
-  constituencies: Kvp[] = [];
+  constituencies: Constituency[] = [];
   candidateSearchResults: CandidateSearchResult[] = [];
 
   private localLogging = '';

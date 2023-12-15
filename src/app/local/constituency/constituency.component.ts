@@ -28,6 +28,29 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   private candidates$: Subscription | undefined;
 
   constituencyDetails = new Constituency();
+  get newConstituency(): boolean {
+    return (
+      this.constituencyDetails.post2023 && !this.constituencyDetails.pre2023
+    );
+  }
+  get discontinuedConstituency(): boolean {
+    return (
+      !this.constituencyDetails.post2023 && this.constituencyDetails.pre2023
+    );
+  }
+  get nameChange(): boolean {
+    return this.constituencyDetails.oldName != this.constituencyDetails.newName;
+  }
+  get isNew(): boolean {
+    return (
+      this.constituencyDetails.constituency == this.constituencyDetails.newName
+    );
+  }
+  get otherName(): string {
+    if (this.isNew) return this.constituencyDetails.oldName;
+    return this.constituencyDetails.newName;
+  }
+
   candidates: Candidate[] = [];
   exMPs: Candidate[] = [];
   candidateSelected = '';

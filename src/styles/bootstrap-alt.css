@@ -2,6 +2,10 @@
 
 /* Alternative margin left */
 
+.aml-0 {
+  margin-left: 0px;
+}
+
 .aml-1 {
   margin-left: 5px;
 }
@@ -24,6 +28,10 @@
 
 /* Alternative margin right */
 
+.amr-0 {
+  margin-right: 0px;
+}
+
 .amr-1 {
   margin-right: 5px;
 }
@@ -45,6 +53,9 @@
 }
 
 /* Alternative margin top */
+.amt-0 {
+  margin-top: 0px;
+}
 
 .amt-1 {
   margin-top: 5px;
@@ -67,6 +78,10 @@
 }
 
 /* Alternative margin bottom */
+
+.amb-0 {
+  margin-bottom: 0px;
+}
 
 .amb-1 {
   margin-bottom: 5px;

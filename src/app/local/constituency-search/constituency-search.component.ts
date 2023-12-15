@@ -29,6 +29,7 @@ import { AppDataService } from 'src/app/services/app-data.service';
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { unsubscribe } from 'diagnostics_channel';
+import { Constituency } from 'src/app/models/constituency';
 
 @Component({
   selector: 'app-constituency-search',
@@ -190,7 +191,7 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
     this.searching = true;
 
     this.lookupsService.ConstituencyForPostcode(this.postcodeSearch).subscribe({
-      next: (value: Kvp) => {
+      next: (value: Constituency) => {
         this.localData.constituencies.push(value);
 
         if (this.constituencyCount === 0) {

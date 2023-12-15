@@ -3,7 +3,7 @@
     <div class="search">
       <h1>Constituency search</h1>
 
-      <div class="flexRow justify-start">
+      <div class="flexRow justify-start amb-3">
         <input
           #trvConstituencySearch
           class="form-control"
@@ -22,7 +22,7 @@
         </button>
       </div>
 
-      <div class="flexRow justify-start">
+      <div class="flexRow justify-start amb-3">
         <input
           #trvPostcodeSearch
           class="form-control"
@@ -41,7 +41,7 @@
         </button>
       </div>
 
-      <div class="flexRow justify-start">
+      <div class="flexRow justify-start amb-5">
         <input
           #trvCandidateSearch
           class="form-control"
@@ -60,21 +60,42 @@
         </button>
       </div>
 
-      <p *ngIf="!!error" class="alert alert-danger">
+      <p *ngIf="!!error" class="alert alert-danger amb-2">
         {{ error }}
       </p>
 
-      <div class="spinner-grow text-primary" role="status" *ngIf="searching">
+      <div
+        class="spinner-grow text-primary amb-2"
+        role="status"
+        *ngIf="searching"
+      >
         <div class="visually-hidden">Loading...</div>
       </div>
 
-      <p *ngFor="let constituency of localData.constituencies">
-        <a [routerLink]="constituencyLink(constituency.key)">{{
-          constituency.key
-        }}</a>
-      </p>
+      <div *ngFor="let constituency of localData.constituencies" class="amb-2">
+        <a [routerLink]="constituencyLink(constituency.constituency)">
+          <div class="flexRow">
+            <div>
+              {{ constituency.constituency }}
+            </div>
+            <div *ngIf="!!constituency.newName">
+              <span>(</span>
+              <span *ngIf="constituency.constituency == constituency.oldName">{{
+                constituency.newName
+              }}</span>
+              <span *ngIf="constituency.constituency == constituency.newName">{{
+                constituency.oldName
+              }}</span>
+              <span>)</span>
+            </div>
+          </div>
+        </a>
+      </div>
 
-      <div *ngFor="let candidate of localData.candidateSearchResults">
+      <div
+        *ngFor="let candidate of localData.candidateSearchResults"
+        class="amb-2"
+      >
         <p>{{ candidate.name }}, {{ candidate.party }}</p>
         <p class="aml-2">
           <a
