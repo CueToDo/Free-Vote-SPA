@@ -109,6 +109,12 @@ export enum PointFeedbackFilter {
   Confirmation = 3
 }
 
+export enum OrganisationTypes {
+  Any = 22,
+  PoliticalGroup = 1,
+  Party = 2
+}
+
 // Numeric enum
 export enum GeographicalExtentID {
   GlobalOrganisation = 1,

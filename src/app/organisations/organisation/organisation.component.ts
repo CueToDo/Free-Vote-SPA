@@ -20,12 +20,12 @@ import { OrganisationsService } from 'src/app/services/organisations.service';
   styleUrls: ['organisation.component.css']
 })
 export class OrganisationComponent implements OnInit {
-  public OrganisationDisplay = new Organisation();
+  public organisation = new Organisation();
+  public organisationCopyForEdit = new Organisation();
   @Output() Refresh = new EventEmitter();
 
   public GeographicalExtentID = GeographicalExtentID;
 
-  organisationCopy = new Organisation();
   organisationEdit = false;
   membershipMessage = '';
 
@@ -34,38 +34,38 @@ export class OrganisationComponent implements OnInit {
   error = '';
 
   get showCountries(): boolean {
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       return false;
     }
     return this.lookupsService.ShowCountries(
-      this.OrganisationDisplay.geographicalExtentID
+      this.organisation.geographicalExtentID
     );
   }
 
   get showRegions(): boolean {
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       return false;
     }
     return this.lookupsService.ShowRegions(
-      this.OrganisationDisplay.geographicalExtentID
+      this.organisation.geographicalExtentID
     );
   }
 
   get showCities(): boolean {
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       return false;
     }
     return this.lookupsService.ShowCities(
-      this.OrganisationDisplay.geographicalExtentID
+      this.organisation.geographicalExtentID
     );
   }
 
   issuesLink(group: string): string {
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       return '';
     }
     return `/organisations/${this.appData.kebabUri(
-      this.OrganisationDisplay.organisationName
+      this.organisation.organisationName
     )}/${this.appData.kebabUri(group)}`;
   }
 
@@ -82,34 +82,39 @@ export class OrganisationComponent implements OnInit {
   }
 
   getOrganisation(): void {
-    let organisationName =
-      this.activatedRoute.snapshot.params['organisationName'];
-    organisationName = this.appData.unKebabUri(organisationName);
+    let organisationSlug =
+      this.activatedRoute.snapshot.params['organisationSlug'];
 
-    this.organisationService.Organisation(organisationName, true).subscribe({
-      next: (organisation: Organisation) => {
-        Object.assign(this.OrganisationDisplay, organisation);
-      },
-      error: serverError => {
-        this.error = serverError.error.detail;
-      }
-    });
+    organisationSlug = this.appData.unKebabUri(organisationSlug);
+    let dc_id = this.activatedRoute.snapshot.params['dc_id'];
+
+    this.organisationService
+      .Organisation(organisationSlug, dc_id, true)
+      .subscribe({
+        next: (organisation: Organisation) => {
+          Object.assign(this.organisation, organisation);
+          Object.assign(this.organisationCopyForEdit, organisation);
+        },
+        error: serverError => {
+          this.error = serverError.error.detail;
+        }
+      });
   }
 
   Join(): void {
     this.error = '';
     this.membershipMessage = '';
 
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       this.error = 'No organisation to display';
     } else {
       this.organisationService
-        .Join(this.OrganisationDisplay.organisationID)
+        .Join(this.organisation.organisationID)
         .subscribe({
           next: members => {
-            if (this.OrganisationDisplay) {
-              this.OrganisationDisplay.organisationMember = true;
-              this.OrganisationDisplay.members = members;
+            if (this.organisation) {
+              this.organisation.organisationMember = true;
+              this.organisation.members = members;
               this.membershipMessage = 'you have joined the group';
             }
           },
@@ -119,19 +124,19 @@ export class OrganisationComponent implements OnInit {
   }
 
   Leave(): void {
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       this.error = 'No organisation to display';
     } else {
       this.error = '';
       this.membershipMessage = '';
 
       this.organisationService
-        .Leave(this.OrganisationDisplay.organisationID)
+        .Leave(this.organisation.organisationID)
         .subscribe({
           next: members => {
-            if (this.OrganisationDisplay) {
-              this.OrganisationDisplay.organisationMember = false;
-              this.OrganisationDisplay.members = members;
+            if (this.organisation) {
+              this.organisation.organisationMember = false;
+              this.organisation.members = members;
               this.membershipMessage = 'you have left the group';
             }
           },
@@ -141,17 +146,17 @@ export class OrganisationComponent implements OnInit {
   }
 
   Activate(): void {
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       this.error = 'No organisation to display';
     } else {
       this.error = '';
 
       this.organisationService
-        .Activate(this.OrganisationDisplay.organisationID, true)
+        .Activate(this.organisation.organisationID, true)
         .subscribe({
           next: _ => {
-            if (this.OrganisationDisplay) {
-              this.OrganisationDisplay.active = true;
+            if (this.organisation) {
+              this.organisation.active = true;
             }
           },
           error: serverError => (this.error = serverError.error.detail)
@@ -160,17 +165,17 @@ export class OrganisationComponent implements OnInit {
   }
 
   DeActivate(): void {
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       this.error = 'No organisation to display';
     } else {
       this.error = '';
 
       this.organisationService
-        .Activate(this.OrganisationDisplay.organisationID, false)
+        .Activate(this.organisation.organisationID, false)
         .subscribe({
           next: _ => {
-            if (this.OrganisationDisplay) {
-              this.OrganisationDisplay.active = false;
+            if (this.organisation) {
+              this.organisation.active = false;
             }
           },
           error: serverError => (this.error = serverError.error.detail)
@@ -179,12 +184,12 @@ export class OrganisationComponent implements OnInit {
   }
 
   Edit(): void {
-    this.organisationCopy = cloneDeep(this.OrganisationDisplay) as Organisation; // If we decide to cancel
+    // this.organisationCopy = cloneDeep(this.OrganisationDisplay) as Organisation; // If we decide to cancel
     this.organisationEdit = true;
   }
 
   Delete(): void {
-    if (!this.OrganisationDisplay) {
+    if (!this.organisation) {
       this.error = 'No organisation to display';
     } else {
       this.error = '';
@@ -193,7 +198,7 @@ export class OrganisationComponent implements OnInit {
 This cannot be undone.`)
       ) {
         this.organisationService
-          .Delete(this.OrganisationDisplay.organisationID)
+          .Delete(this.organisation.organisationID)
           .subscribe({
             next: _ => this.router.navigate(['/organisations', 'membership']), // this.Refresh.emit(),
             error: serverError => (this.error = serverError.error.detail)
@@ -203,12 +208,11 @@ This cannot be undone.`)
   }
 
   Cancel(): void {
-    this.OrganisationDisplay = cloneDeep(this.organisationCopy) as Organisation;
     this.organisationEdit = false;
   }
 
-  Complete(organisation: Organisation): void {
-    this.OrganisationDisplay = organisation;
+  Complete(): void {
+    this.organisation = cloneDeep(this.organisationCopyForEdit) as Organisation;
     this.organisationEdit = false;
   }
 }

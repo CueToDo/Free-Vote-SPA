@@ -13,6 +13,7 @@ export class WebsitePreviewComponent implements OnInit {
   @Input() public ShowPreview = true;
   @Input() public Title = '';
   @Input() public Description = '';
+  @Input() public DescriptionLineClamp = 2;
   @Input() public Image = '';
 
   constructor() {}

@@ -1,5 +1,5 @@
 <div [ngClass]="{ edit: organisation.organisationID || 0 > 0 }">
-  <div class="flexCol align-stretch">
+  <div class="flexCol">
     <div class="flexRow">
       <mat-form-field>
         <mat-label>organisation website</mat-label>
@@ -105,7 +105,7 @@
         (ngModelChange)="extentSelected($event)"
         name="selectExtent"
         [(ngModel)]="organisation.geographicalExtentID"
-        placeholder="organisation type/geographical extent"
+        placeholder="geographical extent"
       >
         <mat-option
           *ngFor="let extent of extents"
@@ -115,9 +115,24 @@
       </mat-select>
     </mat-form-field>
 
-    <div *ngIf="showCountries">
-      Country or Countries
-      <app-countries [Countries]="countries" #geoCountries></app-countries>
+    <mat-form-field>
+      <mat-label>organisation type</mat-label>
+      <mat-select
+        name="selectOrganisationType"
+        [(ngModel)]="organisation.organisationTypeID"
+        placeholder="organisation type"
+      >
+        <mat-option
+          *ngFor="let organisationType of organisationTypes"
+          [value]="organisationType.value.toString()"
+          >{{ organisationType.key }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="showCountries" class="flexRow align-start">
+      <div>Country or Countries</div>
+      <app-countries [Countries]="allCountries" #geoCountries></app-countries>
     </div>
 
     <div *ngIf="showCities">

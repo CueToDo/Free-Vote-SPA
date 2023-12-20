@@ -3,6 +3,7 @@ export class Candidate {
   name = '';
   party = '';
   partyWebsite = '';
+  organisationSlug = '';
   elected = false;
   electedOnOrBefore = '';
   image = '';

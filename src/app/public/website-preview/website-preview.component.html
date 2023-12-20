@@ -9,7 +9,11 @@
       <div class="linkTitle">
         {{ Title }}
       </div>
-      <div class="linkDescription" [innerHTML]="Description"></div>
+      <div
+        class="linkDescription"
+        [innerHTML]="Description"
+        [style]="'--lineClamp: ' + DescriptionLineClamp"
+      ></div>
     </div>
   </div>
 </a>

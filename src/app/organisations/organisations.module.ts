@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // FreeVote Modules
 import { BaseModule } from '../base/base.module';
@@ -29,7 +30,7 @@ const orgRoutes: Routes = [
   { path: 'membership', component: OrganisationsComponent },
   { path: 'available', component: OrganisationsComponent },
   { path: 'new', component: OrganisationsComponent },
-  { path: ':organisationName', component: OrganisationComponent }
+  { path: ':organisationSlug', component: OrganisationComponent }
 ];
 
 @NgModule({
@@ -46,6 +47,7 @@ const orgRoutes: Routes = [
     MatInputModule,
     MatRadioModule,
     MatSelectModule,
+    MatTooltipModule,
 
     // FreeVote
     BaseModule,

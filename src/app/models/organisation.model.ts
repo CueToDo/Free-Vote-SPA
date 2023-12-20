@@ -1,13 +1,16 @@
 // Models, enums
 import { Country } from 'src/app/models/country.model';
-import { GeographicalExtentID } from 'src/app/models/enums';
+import { GeographicalExtentID, OrganisationTypes } from 'src/app/models/enums';
 
 export class Organisation {
   organisationID = 0;
+  dc_id = '';
 
   organisationWebsite = '';
   organisationName = '';
+  slug = '';
   description = '';
+  organisationTypeID = OrganisationTypes.PoliticalGroup.toString();
   image = '';
 
   active = false;
@@ -30,9 +33,4 @@ export class Organisation {
   canInviteMembers = false;
 
   row = 0;
-
-  // Organisation country names:
-  get countryNames() {
-    return this.countries.map(country => country.country);
-  }
 }

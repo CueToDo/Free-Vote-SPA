@@ -7,7 +7,7 @@ import { Request } from 'express';
 // Models
 import { CandidateSearchResult } from '../models/candidate';
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
-import { Kvp } from '../models/kvp.model';
+import { OrganisationTypes } from '../models/enums';
 
 // Other
 import { environment as env } from 'src/environments/environment';
@@ -89,6 +89,9 @@ export class LocalDataService {
   // Constituency and Candidate Search Component - preserve results
   constituencies: Constituency[] = [];
   candidateSearchResults: CandidateSearchResult[] = [];
+
+  public organisationFilter = '';
+  public organisationTypeID = OrganisationTypes.PoliticalGroup;
 
   private localLogging = '';
 

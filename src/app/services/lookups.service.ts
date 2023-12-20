@@ -19,9 +19,11 @@ import { HttpService } from './http.service';
   providedIn: 'root'
 })
 export class LookupsService {
-  // Lookup - could add more
+  // Cached lookups - could add more
   private pointTypes: Kvp[] = [];
+  private organisationTypes: Kvp[] = [];
   private extents: Kvp[] = []; // GeographicalExtent of group
+  private countries: Country[] = [];
 
   // Not looked up in database - static types
   public porQTypes = [
@@ -61,6 +63,17 @@ export class LookupsService {
     }
   }
 
+  public OrganisationTypes(): Observable<Kvp[]> {
+    if (!!this.organisationTypes && this.organisationTypes.length > 0) {
+      return of(this.organisationTypes);
+    } else {
+      return this.httpService.get('lookups/organisation-types').pipe(
+        map(types => types as Kvp[]),
+        tap(types => (this.organisationTypes = types))
+      );
+    }
+  }
+
   PointType(pointTypeID: number): Observable<string> {
     // Don't subscribe, just return map within pipe
     return this.PointTypes().pipe(
@@ -89,19 +102,18 @@ export class LookupsService {
 
   // Database returns a List of Lookup values - a mumerical database ID and a string display Value
   GeographicalExtents(): Observable<Kvp[]> {
-    if (!!this.extents && this.extents.length > 0) {
-      console.log('RETURNING', this.extents);
-      return of(this.extents);
-    } else {
-      console.log('GETTING');
-      return this.httpService.get('lookups/geographicalExtents').pipe(
-        map(value => value as Kvp[]),
-        tap(extents => (this.extents = extents))
-      );
-    }
+    if (!!this.extents && this.extents.length > 0) return of(this.extents);
+
+    return this.httpService.get('lookups/geographicalExtents').pipe(
+      map(value => value as Kvp[]),
+      tap(extents => (this.extents = extents))
+    );
   }
 
   GetCountries(): Observable<Country[]> {
+    if (!!this.countries && this.countries.length > 0)
+      return of(this.countries);
+
     return this.httpService
       .get('lookups/countries')
       .pipe(map(value => value as Country[]));

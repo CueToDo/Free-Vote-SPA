@@ -1,3 +1,4 @@
+import { LookupsService } from 'src/app/services/lookups.service';
 // Angular
 import {
   AfterViewInit,
@@ -6,6 +7,7 @@ import {
   Input,
   NgZone,
   OnDestroy,
+  OnInit,
   ViewChild
 } from '@angular/core';
 
@@ -24,18 +26,20 @@ import {
   fromEvent,
   Subscription
 } from 'rxjs';
+import { LocalDataService } from 'src/app/services/local-data.service';
+import { Kvp } from 'src/app/models/kvp.model';
+import { OrganisationTypes } from 'src/app/models/enums';
 
 @Component({
   selector: 'app-organisation-list',
   templateUrl: './organisation-list.component.html',
   styleUrls: ['./organisation-list.component.css']
 })
-export class OrganisationListComponent implements AfterViewInit, OnDestroy {
+export class OrganisationListComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @Input() CurrentMembership = false;
 
-  public organisations: Organisation[] = [];
-  public organisationCount = 0;
-  public organisationFilter = '';
   public waiting = false;
   public message = '';
   public error = '';
@@ -49,24 +53,79 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
 
   orgSearch$: Subscription | undefined;
 
+  organisationTypes: Kvp[] = [];
+  organisations: Organisation[] = [];
+
+  get organisationFilter(): string {
+    return this.localData.organisationFilter;
+  }
+
+  set organisationFilter(value: string) {
+    this.localData.organisationFilter = value;
+  }
+
+  get organisationTypeID(): OrganisationTypes {
+    return this.localData.organisationTypeID;
+  }
+
+  set organisationTypeID(value: OrganisationTypes) {
+    this.localData.organisationTypeID = value;
+  }
+
   constructor(
     public appData: AppDataService,
+    private localData: LocalDataService,
+    private lookupsService: LookupsService,
     private groupsService: OrganisationsService,
     private ngZone: NgZone
   ) {}
 
-  FetchOrganisations(): void {
+  ngOnInit(): void {
+    this.lookupsService.OrganisationTypes().subscribe({
+      next: organisationTypes => (this.organisationTypes = organisationTypes)
+    });
+  }
+
+  get MinFilterLength(): boolean {
+    if (this.organisationFilter.length == 0) return false; // Don't search, but don't show error
+    if (this.organisationFilter.length < 3) {
+      this.error = 'Minimum 3 characters required for search';
+      return false;
+    }
+    return true;
+  }
+
+  ngAfterViewInit() {
+    // Debounce the keyup outside of angular zone
+    // This is just for delayed search
+    this.ngZone.runOutsideAngular(() => {
+      this.orgSearch$ = fromEvent<KeyboardEvent>(
+        this.trvOrgSearch?.nativeElement,
+        'keyup'
+      )
+        .pipe(debounceTime(600), distinctUntilChanged())
+        .subscribe({
+          next: key => {
+            if (!globals.KeyRestrictions.includes(key.key)) {
+              if (this.organisationFilter.length >= 3) this.Refresh(); // "As-is"
+            }
+          }
+        });
+    });
+  }
+
+  FetchMemberOrganisations(): void {
+    this.error = '';
     if (this.fetchComplete) return;
 
     this.ngZone.run(_ => (this.waiting = true));
 
     this.groupsService
-      .OrganisationMembership(this.organisationFilter)
+      .OrganisationMembership(this.organisationFilter, this.organisationTypeID)
       .subscribe({
         next: organisations => {
           this.organisations = organisations;
-          this.organisationCount = organisations.length;
-          if (this.organisationCount === 0) {
+          if (organisations.length === 0) {
             if (this.organisationFilter) {
               this.message =
                 'You are not a member of any organisations that match the search';
@@ -85,8 +144,16 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
       });
   }
 
+  AutoFetchMemberOrganisations(): void {
+    if (!this.MinFilterLength) return;
+
+    this.FetchMemberOrganisations();
+  }
+
   FetchOrganisationsAvailable(): void {
+    this.error = '';
     if (this.fetchComplete) return;
+    if (!this.MinFilterLength) return;
 
     this.ngZone.run(_ => (this.waiting = true));
 
@@ -95,8 +162,7 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
       .subscribe({
         next: organisations => {
           this.organisations = organisations;
-          this.organisationCount = organisations.length;
-          if (this.organisationCount === 0) {
+          if (organisations.length === 0) {
             if (this.organisationFilter) {
               this.message =
                 'No organisations are available to join that match the search';
@@ -114,6 +180,14 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
       });
   }
 
+  ClearFilter() {
+    this.localData.organisationFilter = '';
+    this.fetchComplete = false;
+    this.organisations = [];
+    this.message = '';
+    this.error = '';
+  }
+
   Refresh(): void {
     this.fetchComplete = false;
     this.organisations = [];
@@ -121,30 +195,10 @@ export class OrganisationListComponent implements AfterViewInit, OnDestroy {
     this.error = '';
 
     if (this.CurrentMembership) {
-      this.FetchOrganisations();
+      this.AutoFetchMemberOrganisations();
     } else {
       this.FetchOrganisationsAvailable();
     }
-  }
-
-  ngAfterViewInit() {
-    // Debounce the keyup outside of angular zone
-    // 2-way databinding already cleans up the slashtag
-    // This is just for delayed search
-    this.ngZone.runOutsideAngular(() => {
-      this.orgSearch$ = fromEvent<KeyboardEvent>(
-        this.trvOrgSearch?.nativeElement,
-        'keyup'
-      )
-        .pipe(debounceTime(600), distinctUntilChanged())
-        .subscribe({
-          next: key => {
-            if (!globals.KeyRestrictions.includes(key.key)) {
-              this.Refresh(); // "As-is"
-            }
-          }
-        });
-    });
   }
 
   ngOnDestroy() {

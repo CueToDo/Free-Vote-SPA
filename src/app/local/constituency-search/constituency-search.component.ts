@@ -21,15 +21,13 @@ import * as globals from 'src/app/globals';
 
 // Models
 import { CandidateSearchResult } from 'src/app/models/candidate';
-import { Kvp } from 'src/app/models/kvp.model';
+import { Constituency } from 'src/app/models/constituency';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 import { LookupsService } from 'src/app/services/lookups.service';
-import { unsubscribe } from 'diagnostics_channel';
-import { Constituency } from 'src/app/models/constituency';
 
 @Component({
   selector: 'app-constituency-search',
@@ -52,6 +50,7 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
   constituencySearch$: Subscription | undefined;
   postCodeKeyUp$: Subscription | undefined;
   candidateSearch$: Subscription | undefined;
+  auto = false;
 
   // Search values
   constituencySearch = '';
@@ -82,7 +81,6 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     // Debounce the keyup outside of angular zone
-    // 2-way databinding already cleans up the slashtag
     // This is just for delayed search
     this.ngZone.runOutsideAngular(() => {
       this.constituencySearch$ = fromEvent<KeyboardEvent>(
@@ -92,9 +90,8 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
         .pipe(debounceTime(600), distinctUntilChanged())
         .subscribe({
           next: key => {
-            this.error = '';
             if (!globals.KeyRestrictions.includes(key.key)) {
-              this.ConstituencySearch();
+              this.ConstituencySearch(true);
             }
           }
         });
@@ -122,9 +119,8 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
         .pipe(debounceTime(600), distinctUntilChanged())
         .subscribe({
           next: key => {
-            this.error = '';
             if (!globals.KeyRestrictions.includes(key.key)) {
-              this.CandidateSearch();
+              this.CandidateSearch(true);
             }
           }
         });
@@ -140,19 +136,22 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
     this.localData.candidateSearchResults = [];
   }
 
-  ConstituencySearch(): void {
+  ConstituencySearch(auto: boolean): void {
+    if (this.searching) return;
+
     this.ngZone.run(_ => {
-      this.error = '';
       this.postcodeSearch = '';
       this.candidateSearch = '';
       this.localData.constituencies = [];
       this.localData.candidateSearchResults = [];
 
       if (!this.constituencySearch || this.constituencySearch.length < 3) {
+        if (auto) return;
         this.error = 'Please enter at least 3 characters for the search';
         return;
       }
 
+      this.error = '';
       this.searching = true;
 
       this.lookupsService
@@ -178,7 +177,6 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
   }
 
   PostcodeSearch(): void {
-    this.error = '';
     this.constituencySearch = '';
     this.candidateSearch = '';
     this.localData.constituencies = [];
@@ -188,6 +186,8 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
       this.error = 'Please enter the full post code';
       return;
     }
+
+    this.error = '';
     this.searching = true;
 
     this.lookupsService.ConstituencyForPostcode(this.postcodeSearch).subscribe({
@@ -207,9 +207,8 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  CandidateSearch() {
+  CandidateSearch(auto: boolean) {
     this.ngZone.run(_ => {
-      this.error = '';
       this.constituencySearch = '';
       this.postcodeSearch = '';
       this.localData.constituencies = [];
@@ -218,10 +217,13 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
       this.candidateSearch = this.candidateSearch.replace('%', '');
 
       if (!this.candidateSearch || this.candidateSearch.length < 3) {
+        if (auto) return;
         this.error =
           'Please enter at least 3 characters of the candidates name';
         return;
       }
+
+      this.error = '';
       this.searching = true;
 
       this.democracyClubService

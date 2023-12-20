@@ -8,11 +8,10 @@
           #trvConstituencySearch
           class="form-control"
           type="text"
-          placeholder="constituency name"
+          placeholder="constituency name (min 3 letters)"
           [(ngModel)]="constituencySearch"
-          (keyup.enter)="ConstituencySearch()"
         />
-        <button mat-stroked-button (click)="ConstituencySearch()">
+        <button mat-stroked-button (click)="ConstituencySearch(false)">
           <mat-icon>search</mat-icon>
           lookup
         </button>
@@ -27,7 +26,7 @@
           #trvPostcodeSearch
           class="form-control"
           type="text"
-          placeholder="post code"
+          placeholder="post code (in full)"
           [(ngModel)]="postcodeSearch"
           (keyup.enter)="PostcodeSearch()"
         />
@@ -46,11 +45,10 @@
           #trvCandidateSearch
           class="form-control"
           type="text"
-          placeholder="candidate name"
+          placeholder="candidate name (min 3 letters)"
           [(ngModel)]="candidateSearch"
-          (keyup.enter)="CandidateSearch()"
         />
-        <button mat-stroked-button (click)="CandidateSearch()">
+        <button mat-stroked-button (click)="CandidateSearch(false)">
           <mat-icon>search</mat-icon>
           lookup
         </button>
@@ -111,7 +109,7 @@
         </p>
       </div>
 
-      <div class="center mt-3 mb-5">
+      <div class="center mt-5 mb-5">
         <a
           href="https://www.ordnancesurvey.co.uk/election-maps/gb/"
           target="_blank"

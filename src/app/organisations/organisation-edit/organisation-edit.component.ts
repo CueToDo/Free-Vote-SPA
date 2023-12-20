@@ -35,10 +35,9 @@ import { OrganisationsService } from 'src/app/services/organisations.service';
 })
 export class OrganisationEditComponent implements OnInit, OnDestroy {
   @Input() organisation = new Organisation();
-  @Output() organisationChange = new EventEmitter();
-
+  @Output() organisationChange = new EventEmitter<Organisation>();
+  @Output() Complete = new EventEmitter();
   @Output() Cancel = new EventEmitter();
-  @Output() Complete = new EventEmitter<Organisation>();
 
   @ViewChild('groupName', { static: true }) elGroupName: ElementRef | undefined;
   @ViewChild('groupDescription', { static: true }) elGroupDescription:
@@ -56,14 +55,16 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
   disableWebsiteRefresh = true;
   isNew = false;
 
-  private groups$: Subscription | undefined;
+  private organisation$: Subscription | undefined;
+  private organisationTypes$: Subscription | undefined;
   private extents$: Subscription | undefined;
 
   public GeographicalExtentID = GeographicalExtentID;
   public GeographicalExtent = GeographicalExtent;
 
   extents: Kvp[] = [];
-  countries: Country[] = [];
+  organisationTypes: Kvp[] = [];
+  allCountries: Country[] = [];
 
   get showCountries(): boolean {
     if (!this.organisation) {
@@ -107,6 +108,16 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
       },
       error: serverError => (this.error = serverError.error.detail)
     });
+
+    this.organisationTypes$ = this.lookupsService
+      .OrganisationTypes()
+      .subscribe({
+        next: organisationTypes => {
+          this.organisationTypes = organisationTypes;
+        },
+        error: serverError => (this.error = serverError.error.detail)
+      });
+
     this.checkWebsite();
     this.isNew = this.organisation.organisationID < 1;
 
@@ -114,16 +125,21 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
     // ToDo this could be cached rather than look up on each edit
     this.lookupsService.GetCountries().subscribe({
       next: countries => {
-        this.countries = countries; // All countries
-        const countryNames = this.organisation.countryNames;
-
-        // Select countries in the full list, if it's in the organisation list
-        this.countries.forEach(country => {
-          if (countryNames.indexOf(country.country) > -1)
-            country.selected = true;
-        });
+        this.allCountries = countries; // All countries
+        this.SelectCountries();
       },
       error: serverError => (this.error = serverError.error.detail)
+    });
+  }
+
+  SelectCountries() {
+    const countryNames = this.organisation.countries.map(
+      country => country.country
+    );
+
+    // Select countries in the full list, if it's in the organisation list
+    this.allCountries.forEach(country => {
+      if (countryNames.indexOf(country.country) > -1) country.selected = true;
     });
   }
 
@@ -177,16 +193,17 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
       }
 
       this.error = '';
-      const newGroup = this.organisation.organisationID < 1;
+      const newOrganisation = this.organisation.organisationID < 1;
 
       this.organisation.countries = this.elGeoCountries?.Selected!;
 
-      this.groups$ = this.organisationsService
+      this.organisation$ = this.organisationsService
         .Update(this.organisation)
         .subscribe({
           next: organisation => {
-            this.Complete.emit(organisation);
-            if (newGroup) {
+            this.organisationChange.emit(organisation); // Pass value back to parent
+            this.Complete.emit(); // Tell parent the edit is complete
+            if (newOrganisation) {
               this.organisation = new Organisation();
               this.organisation.geographicalExtentID =
                 GeographicalExtentID.National.toString();
@@ -213,7 +230,8 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: metaData => {
-            this.organisation.organisationName = metaData.title;
+            if (!this.organisation.organisationName)
+              this.organisation.organisationName = metaData.title;
             this.organisation.description = metaData.description;
             this.organisation.image = metaData.image;
             this.updatingPreview = false;
@@ -232,11 +250,8 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.groups$) {
-      this.groups$.unsubscribe();
-    }
-    if (this.extents$) {
-      this.extents$.unsubscribe();
-    }
+    if (this.organisation$) this.organisation$.unsubscribe();
+    if (this.organisationTypes$) this.organisationTypes$.unsubscribe();
+    if (this.extents$) this.extents$.unsubscribe();
   }
 }

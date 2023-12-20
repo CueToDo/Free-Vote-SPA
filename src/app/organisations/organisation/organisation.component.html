@@ -1,12 +1,12 @@
 <div class="tabContainer mt-3">
   <div class="tabContent scroller">
     <div class="content">
-      <!-- Group Display -->
-      <div *ngIf="!organisationEdit && OrganisationDisplay">
+      <!-- Organisation Display -->
+      <div *ngIf="!organisationEdit && organisation">
         <!-- Elvis Operator or ngIf: https://stackoverflow.com/questions/54536126/angular-cannot-read-property-of-undefined-but-still-displays-data -->
 
         <div>
-          <a routerLink="/organisations/membership">List all organisations</a>
+          <a routerLink="/organisations/membership">Search again</a>
           > Selected organisation
         </div>
 
@@ -14,18 +14,19 @@
         <div class="pagePreview mt-4 ltmd">
           <app-website-preview
             [ShowPreview]="true"
-            [LinkAddress]="OrganisationDisplay.organisationWebsite"
-            [Title]="OrganisationDisplay.organisationName"
-            [Description]="OrganisationDisplay.description"
-            [Image]="OrganisationDisplay.image"
+            [LinkAddress]="organisation.organisationWebsite"
+            [Title]="organisation.organisationName"
+            [Description]="organisation.description"
+            [DescriptionLineClamp]="3"
+            [Image]="organisation.image"
           >
           </app-website-preview>
         </div>
 
         <p>
-          members <span class="data">{{ OrganisationDisplay.members }}</span
+          members <span class="data">{{ organisation.members }}</span
           >, discussions
-          <span class="data">{{ OrganisationDisplay.issues }}</span>
+          <span class="data">{{ organisation.issues }}</span>
           <span
             class="primary aml-2"
             [ngClass]="{ success: !!membershipMessage }"
@@ -35,12 +36,12 @@
 
         <p>
           Organisation Type:
-          <strong>{{ OrganisationDisplay.geographicalExtent }}</strong>
+          <strong>{{ organisation.geographicalExtent }}</strong>
           <span
             *ngIf="
-              OrganisationDisplay.geographicalExtentID ===
+              organisation.geographicalExtentID ===
                 GeographicalExtentID.PrivateOrganisation.toString() &&
-              OrganisationDisplay.invitationOnly
+              organisation.invitationOnly
             "
             >(invitation only)</span
           >
@@ -48,13 +49,10 @@
           <span *ngIf="showCountries">
             Country(s):
             <span
-              *ngFor="
-                let country of OrganisationDisplay.countries;
-                let i = index
-              "
+              *ngFor="let country of organisation.countries; let i = index"
               class="data"
               >{{ country.country
-              }}<span *ngIf="i !== OrganisationDisplay.countries.length - 1"
+              }}<span *ngIf="i !== organisation.countries.length - 1"
                 >,
               </span></span
             >
@@ -62,16 +60,14 @@
 
           <span *ngIf="showRegions">
             Regions:
-            <span
-              *ngFor="let region of OrganisationDisplay.regions"
-              class="data"
-              >{{ region }}</span
-            >
+            <span *ngFor="let region of organisation.regions" class="data">{{
+              region
+            }}</span>
           </span>
 
           <span *ngIf="showCities">
             Cities:
-            <span *ngFor="let city of OrganisationDisplay.cities" class="data"
+            <span *ngFor="let city of organisation.cities" class="data"
               >{{ city }}
             </span>
           </span>
@@ -82,25 +78,25 @@
       <div
         *ngIf="
           organisationEdit &&
-          (OrganisationDisplay.organisationAdministrator ||
-            OrganisationDisplay.organisationOwner)
+          (organisation.organisationAdministrator ||
+            organisation.organisationOwner)
         "
       >
         <app-organisation-edit
+          [(organisation)]="organisationCopyForEdit"
           (Cancel)="Cancel()"
-          (Complete)="Complete($event)"
-          [(organisation)]="OrganisationDisplay"
+          (Complete)="Complete()"
         >
         </app-organisation-edit>
       </div>
 
       <!-- Commands -->
-      <div *ngIf="!organisationEdit && OrganisationDisplay">
+      <div *ngIf="!organisationEdit && organisation">
         <button
           mat-stroked-button
-          *ngIf="OrganisationDisplay.organisationOwner"
+          *ngIf="organisation.organisationOwner"
           (click)="Delete()"
-          matTooltip="permanently delete the group"
+          matTooltip="permanently delete the organisation"
         >
           <span>delete</span>
           <mat-icon>clear</mat-icon>
@@ -109,12 +105,12 @@
         <button
           mat-stroked-button
           *ngIf="
-            OrganisationDisplay.active &&
-            (OrganisationDisplay.organisationAdministrator ||
-              OrganisationDisplay.organisationOwner)
+            organisation.active &&
+            (organisation.organisationAdministrator ||
+              organisation.organisationOwner)
           "
           (click)="DeActivate()"
-          matTooltip="de-activate group"
+          matTooltip="de-activate organisation"
         >
           <span>de-activate</span>
           <mat-icon>block</mat-icon>
@@ -123,12 +119,12 @@
         <button
           mat-stroked-button
           *ngIf="
-            !OrganisationDisplay.active &&
-            (OrganisationDisplay.organisationAdministrator ||
-              OrganisationDisplay.organisationOwner)
+            !organisation.active &&
+            (organisation.organisationAdministrator ||
+              organisation.organisationOwner)
           "
           (click)="Activate()"
-          matTooltip="activate group"
+          matTooltip="activate organisation"
         >
           <span>activate</span>
           <mat-icon>accessibility_new</mat-icon>
@@ -138,11 +134,11 @@
           mat-stroked-button
           *ngIf="
             !organisationEdit &&
-            (OrganisationDisplay.organisationAdministrator ||
-              OrganisationDisplay.organisationOwner)
+            (organisation.organisationAdministrator ||
+              organisation.organisationOwner)
           "
           (click)="Edit()"
-          matTooltip="edit group details"
+          matTooltip="edit organisation details"
         >
           <span>edit</span>
           <mat-icon>create</mat-icon>
@@ -151,12 +147,12 @@
         <button
           mat-stroked-button
           *ngIf="
-            OrganisationDisplay.active &&
-            OrganisationDisplay.organisationMember &&
-            !OrganisationDisplay.organisationOwner
+            organisation.active &&
+            organisation.organisationMember &&
+            !organisation.organisationOwner
           "
           (click)="Leave()"
-          matTooltip="leave this group"
+          matTooltip="leave this organisation"
         >
           <span>leave</span>
           <mat-icon>directions_walk</mat-icon>
@@ -164,11 +160,9 @@
 
         <button
           mat-stroked-button
-          *ngIf="
-            OrganisationDisplay.active && OrganisationDisplay.organisationMember
-          "
-          matTooltip="invite others to join the group"
-          [disabled]="!OrganisationDisplay.canInviteMembers"
+          *ngIf="organisation.active && organisation.organisationMember"
+          matTooltip="invite others to join the organisation"
+          [disabled]="!organisation.canInviteMembers"
         >
           <span>invite</span>
           <mat-icon>person_add</mat-icon>
@@ -176,12 +170,9 @@
 
         <button
           mat-stroked-button
-          *ngIf="
-            OrganisationDisplay.active &&
-            !OrganisationDisplay.organisationMember
-          "
+          *ngIf="organisation.active && !organisation.organisationMember"
           (click)="Join()"
-          matTooltip="join group"
+          matTooltip="join organisation"
         >
           <span>join</span>
           <mat-icon>group_add</mat-icon>

@@ -1,27 +1,34 @@
-<div class="flexRow">
-  <mat-form-field>
-    <mat-label>search for organisation</mat-label>
-    <input
-      matInput
-      placeholder="search for organisation"
-      [(ngModel)]="organisationFilter"
-      (keyup.enter)="Refresh()"
-      #trvOrgSearch
-    />
-    <button
-      *ngIf="!!organisationFilter"
-      matSuffix
-      mat-icon-button
-      aria-label="clear"
-      (click)="organisationFilter = ''; Refresh()"
+<div class="flexRow align-center mt-4">
+  <input
+    class="form-control"
+    placeholder="search for organisation"
+    [(ngModel)]="organisationFilter"
+    #trvOrgSearch
+  />
+
+  <select [(ngModel)]="organisationTypeID">
+    <option
+      *ngFor="let organisationType of organisationTypes"
+      [value]="organisationType.value"
     >
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-form-field>
+      {{ organisationType.key }}
+    </option>
+  </select>
+
+  <button mat-stroked-button (click)="Refresh()">
+    <mat-icon>search</mat-icon>
+    search
+  </button>
+  <button mat-stroked-button (click)="ClearFilter()">
+    <mat-icon>cancel</mat-icon>
+    clear
+  </button>
 </div>
 
-<div class="flexRow align-center">
-  <h1>Select an organisation</h1>
+<div class="flexRow align-center mt-4">
+  <h1 *ngIf="organisations && organisations.length > 0">
+    Select an organisation
+  </h1>
 
   <div *ngIf="waiting">
     <span class="spinner-grow text-primary ms-3" role="status">
@@ -33,12 +40,7 @@
 <div *ngFor="let organisation of organisations" class="groupDiv">
   <!-- router link to organisation -->
   <div class="pagePreview ltmd">
-    <a
-      [routerLink]="[
-        '/organisations',
-        appData.kebabUri(organisation.organisationName)
-      ]"
-    >
+    <a [routerLink]="['/organisations', organisation.slug]">
       <app-website-preview
         [ShowPreview]="true"
         [LinkAddress]="'#'"
@@ -47,6 +49,7 @@
           (organisation.active ? '' : ' (Inactive)')
         "
         [Description]="organisation.description"
+        [DescriptionLineClamp]="3"
         [Image]="organisation.image"
       >
       </app-website-preview>

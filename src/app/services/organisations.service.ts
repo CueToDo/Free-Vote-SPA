@@ -9,6 +9,9 @@ import { map, tap } from 'rxjs/operators';
 import { Organisation } from '../models/organisation.model';
 import { PagePreviewMetaData } from '../models/pagePreviewMetaData.model';
 
+// Enums
+import { OrganisationTypes } from '../models/enums';
+
 // Base Services
 import { HttpService } from './http.service';
 
@@ -18,9 +21,13 @@ export class OrganisationsService {
 
   organisationsSelected: Organisation[] = [];
 
-  OrganisationMembership(searchTerms: string): Observable<Organisation[]> {
+  OrganisationMembership(
+    searchTerms: string,
+    organisationTypeID: OrganisationTypes
+  ): Observable<Organisation[]> {
     const postData = {
-      SearchTerms: searchTerms
+      SearchTerms: searchTerms,
+      OrganisationTypeID: organisationTypeID
     };
 
     return this.httpClientService
@@ -52,12 +59,16 @@ export class OrganisationsService {
       );
   }
 
-  OrganisationSearchByName(organisationName: string): Observable<Organisation> {
+  OrganisationByName(
+    organisationName: string,
+    dc_id: string
+  ): Observable<Organisation> {
     const postData = {
-      SearchTerms: organisationName
+      SearchTerms: organisationName,
+      dc_id: dc_id
     };
 
-    return this.httpClientService.post('organisations/search', postData).pipe(
+    return this.httpClientService.post('organisations/bySlug', postData).pipe(
       // add organisation to saved organisations
       tap(returnData => {
         if (!this.organisationsSelected) {
@@ -74,6 +85,7 @@ export class OrganisationsService {
 
   Organisation(
     organisationName: string,
+    dc_id: string,
     refresh: boolean
   ): Observable<Organisation> {
     let organisationsFiltered: Organisation[];
@@ -89,7 +101,7 @@ export class OrganisationsService {
       }
     }
 
-    return this.OrganisationSearchByName(organisationName);
+    return this.OrganisationByName(organisationName, dc_id);
   }
 
   Join(organisationID: number): Observable<number> {

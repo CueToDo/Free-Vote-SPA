@@ -305,9 +305,9 @@ export class AppDataService {
   isUrlNameUnSafe(input: string): boolean {
     return (
       input.includes('\\') ||
-      input.includes(
-        '-'
-      ) /* hyphen not allowed as spaces will be represented by hyphens */ ||
+      // input.includes(
+      //   '-'
+      // ) /* hyphen not allowed as spaces will be represented by hyphens */ ||
       input.includes('?') ||
       input.includes('!') ||
       input.includes(`'`) ||
