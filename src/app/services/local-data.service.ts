@@ -91,7 +91,7 @@ export class LocalDataService {
   candidateSearchResults: CandidateSearchResult[] = [];
 
   public organisationFilter = '';
-  public organisationTypeID = OrganisationTypes.PoliticalGroup;
+  public organisationTypeID = OrganisationTypes.CampaignGroup;
 
   private localLogging = '';
 

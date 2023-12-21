@@ -63,7 +63,7 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.organisationMembership?.FetchMemberOrganisations();
+    this.organisationMembership?.FetchOrganisations();
     this.newGroupComponent?.ClearError();
   }
 
@@ -72,14 +72,10 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
 
     switch (tabIndex) {
       case 0:
-        this.organisationsAvailable?.AutoFetchMemberOrganisations();
+        this.organisationsAvailable?.AutoFetchOrganisations();
         this.appDataService.RouteParamChange$.next('/organisations/membership');
         break;
       case 1:
-        this.organisationsAvailable?.FetchOrganisationsAvailable();
-        this.appDataService.RouteParamChange$.next('/organisations/available');
-        break;
-      case 2:
         this.StartNewOrganisation();
         this.newGroupComponent?.ClearError();
         this.appDataService.RouteParamChange$.next('/organisations/new');

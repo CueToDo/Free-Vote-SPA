@@ -15,16 +15,6 @@
     mat-button
     (click)="ChangeTab(1)"
     [class.selected]="tabIndex === 1"
-    matTooltip="groups available to join"
-  >
-    <span>available</span>
-    <mat-icon>emoji_people</mat-icon>
-  </button>
-
-  <button
-    mat-button
-    (click)="ChangeTab(2)"
-    [class.selected]="tabIndex === 2"
     matTooltip="create new organisation"
   >
     <span>create new</span>
@@ -46,7 +36,6 @@
         <div class="content">
           <app-organisation-list
             #OrganisationMembership
-            [CurrentMembership]="true"
           ></app-organisation-list>
         </div>
       </div>
@@ -59,25 +48,6 @@
         centerStage: tabIndex === 1,
         stageLeft: tabIndex > 1,
         stageRight: tabIndex < 1
-      }"
-    >
-      <div class="scroller">
-        <div class="content">
-          <app-organisation-list
-            #OrganisationsAvailable
-            [CurrentMembership]="false"
-          ></app-organisation-list>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="tabContent" [ngClass]="{ topZ: tabIndex === 2 }">
-    <div
-      [ngClass]="{
-        centerStage: tabIndex === 2,
-        stageLeft: tabIndex > 2,
-        stageRight: tabIndex < 2
       }"
     >
       <div class="scroller">

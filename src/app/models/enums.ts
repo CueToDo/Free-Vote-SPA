@@ -111,7 +111,7 @@ export enum PointFeedbackFilter {
 
 export enum OrganisationTypes {
   Any = 22,
-  PoliticalGroup = 1,
+  CampaignGroup = 1,
   Party = 2
 }
 

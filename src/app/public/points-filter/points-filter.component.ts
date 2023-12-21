@@ -12,6 +12,9 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+// Material
+import { MatCheckbox } from '@angular/material/checkbox';
+
 // rxjs
 import { Subscription } from 'rxjs';
 
@@ -31,9 +34,6 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-
-// Components
-import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-points-filter', // is router-outlet

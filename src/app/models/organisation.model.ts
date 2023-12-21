@@ -10,7 +10,7 @@ export class Organisation {
   organisationName = '';
   slug = '';
   description = '';
-  organisationTypeID = OrganisationTypes.PoliticalGroup.toString();
+  organisationTypeID = OrganisationTypes.CampaignGroup.toString();
   image = '';
 
   active = false;

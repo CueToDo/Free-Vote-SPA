@@ -21,45 +21,28 @@ export class OrganisationsService {
 
   organisationsSelected: Organisation[] = [];
 
-  OrganisationMembership(
+  OrganisationSearch(
+    organisationTypeID: OrganisationTypes,
     searchTerms: string,
-    organisationTypeID: OrganisationTypes
+    alreadyMember: boolean
   ): Observable<Organisation[]> {
     const postData = {
       SearchTerms: searchTerms,
-      OrganisationTypeID: organisationTypeID
+      OrganisationTypeID: organisationTypeID,
+      AlreadyMember: alreadyMember
     };
 
-    return this.httpClientService
-      .post('organisations/membership', postData)
-      .pipe(
-        // save copy to look up organisationID in group-issues.component
-        tap(
-          returnData =>
-            (this.organisationsSelected = returnData as Organisation[])
-        ),
-        map(returnData => returnData as Organisation[])
-      );
+    return this.httpClientService.post('organisations/search', postData).pipe(
+      // save copy to look up organisationID in group-issues.component
+      tap(
+        returnData =>
+          (this.organisationsSelected = returnData as Organisation[])
+      ),
+      map(returnData => returnData as Organisation[])
+    );
   }
 
-  OrganisationsAvailable(searchTerms: string): Observable<Organisation[]> {
-    const postData = {
-      SearchTerms: searchTerms
-    };
-
-    return this.httpClientService
-      .post('organisations/available', postData)
-      .pipe(
-        // save copy to look up organisationID in group-issues.component
-        tap(
-          returnData =>
-            (this.organisationsSelected = returnData as Organisation[])
-        ),
-        map(returnData => returnData as Organisation[])
-      );
-  }
-
-  OrganisationByName(
+  OrganisationBySlug(
     organisationName: string,
     dc_id: string
   ): Observable<Organisation> {
@@ -101,7 +84,7 @@ export class OrganisationsService {
       }
     }
 
-    return this.OrganisationByName(organisationName, dc_id);
+    return this.OrganisationBySlug(organisationName, dc_id);
   }
 
   Join(organisationID: number): Observable<number> {

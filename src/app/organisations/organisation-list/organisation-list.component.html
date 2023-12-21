@@ -1,12 +1,5 @@
 <div class="flexRow align-center mt-4">
-  <input
-    class="form-control"
-    placeholder="search for organisation"
-    [(ngModel)]="organisationFilter"
-    #trvOrgSearch
-  />
-
-  <select [(ngModel)]="organisationTypeID">
+  <select [(ngModel)]="organisationTypeID" (ngModelChange)="Refresh()">
     <option
       *ngFor="let organisationType of organisationTypes"
       [value]="organisationType.value"
@@ -15,13 +8,28 @@
     </option>
   </select>
 
-  <button mat-stroked-button (click)="Refresh()">
-    <mat-icon>search</mat-icon>
-    search
-  </button>
+  <mat-checkbox
+    labelPosition="before"
+    [(ngModel)]="alreadyMember"
+    (change)="Refresh()"
+  >
+    member</mat-checkbox
+  >
+
+  <input
+    class="form-control"
+    placeholder="search for organisation"
+    [(ngModel)]="organisationFilter"
+    #trvOrgSearch
+  />
+
   <button mat-stroked-button (click)="ClearFilter()">
     <mat-icon>cancel</mat-icon>
     clear
+  </button>
+  <button mat-stroked-button (click)="Refresh()">
+    <mat-icon>search</mat-icon>
+    search
   </button>
 </div>
 

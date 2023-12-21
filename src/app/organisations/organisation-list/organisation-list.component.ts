@@ -38,8 +38,6 @@ import { OrganisationTypes } from 'src/app/models/enums';
 export class OrganisationListComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @Input() CurrentMembership = false;
-
   public waiting = false;
   public message = '';
   public error = '';
@@ -56,6 +54,7 @@ export class OrganisationListComponent
   organisationTypes: Kvp[] = [];
   organisations: Organisation[] = [];
 
+  // Properties to save to local data
   get organisationFilter(): string {
     return this.localData.organisationFilter;
   }
@@ -72,6 +71,8 @@ export class OrganisationListComponent
     this.localData.organisationTypeID = value;
   }
 
+  alreadyMember = true;
+
   constructor(
     public appData: AppDataService,
     private localData: LocalDataService,
@@ -84,15 +85,6 @@ export class OrganisationListComponent
     this.lookupsService.OrganisationTypes().subscribe({
       next: organisationTypes => (this.organisationTypes = organisationTypes)
     });
-  }
-
-  get MinFilterLength(): boolean {
-    if (this.organisationFilter.length == 0) return false; // Don't search, but don't show error
-    if (this.organisationFilter.length < 3) {
-      this.error = 'Minimum 3 characters required for search';
-      return false;
-    }
-    return true;
   }
 
   ngAfterViewInit() {
@@ -114,23 +106,33 @@ export class OrganisationListComponent
     });
   }
 
-  FetchMemberOrganisations(): void {
+  FetchOrganisations(): void {
     this.error = '';
     if (this.fetchComplete) return;
 
     this.ngZone.run(_ => (this.waiting = true));
 
     this.groupsService
-      .OrganisationMembership(this.organisationFilter, this.organisationTypeID)
+      .OrganisationSearch(
+        this.organisationTypeID,
+        this.organisationFilter,
+        this.alreadyMember
+      )
       .subscribe({
         next: organisations => {
           this.organisations = organisations;
           if (organisations.length === 0) {
             if (this.organisationFilter) {
-              this.message =
-                'You are not a member of any organisations that match the search';
+              if (this.alreadyMember)
+                this.message =
+                  'You are not a member of any organisations that match the search';
+              else
+                this.message =
+                  'No organisations are available to join that match the search';
             } else {
-              this.message = 'You are not a member of any organisations';
+              if (this.alreadyMember)
+                this.message = 'You are not a member of any organisations';
+              else this.message = 'No more organisations are available to join';
             }
           }
           this.fetchComplete = true;
@@ -144,40 +146,25 @@ export class OrganisationListComponent
       });
   }
 
-  AutoFetchMemberOrganisations(): void {
-    if (!this.MinFilterLength) return;
-
-    this.FetchMemberOrganisations();
-  }
-
-  FetchOrganisationsAvailable(): void {
-    this.error = '';
-    if (this.fetchComplete) return;
-    if (!this.MinFilterLength) return;
-
-    this.ngZone.run(_ => (this.waiting = true));
-
-    this.groupsService
-      .OrganisationsAvailable(this.organisationFilter)
-      .subscribe({
-        next: organisations => {
-          this.organisations = organisations;
-          if (organisations.length === 0) {
-            if (this.organisationFilter) {
-              this.message =
-                'No organisations are available to join that match the search';
-            } else {
-              this.message = 'No more organisations are available to join';
-            }
-          }
-          this.fetchComplete = true;
-        },
-        error: serverError => (this.error = serverError.error.detail),
-        complete: () => {
-          // Force view refresh with ngZone.run
-          this.ngZone.run(_ => (this.waiting = false));
-        }
-      });
+  AutoFetchOrganisations(): void {
+    if (
+      this.organisationFilter.length < 3 &&
+      this.organisationTypeID != OrganisationTypes.CampaignGroup
+    ) {
+      // https://stackoverflow.com/questions/27747437/typescript-enum-switch-not-working
+      switch (+this.organisationTypeID) {
+        case OrganisationTypes.Any:
+          this.message =
+            'minimum 3 characters required to filter on any organisation';
+          break;
+        case OrganisationTypes.Party:
+          this.message =
+            'minimum 3 characters required to filter on political parties';
+          break;
+      }
+      return;
+    }
+    this.FetchOrganisations();
   }
 
   ClearFilter() {
@@ -194,11 +181,7 @@ export class OrganisationListComponent
     this.message = '';
     this.error = '';
 
-    if (this.CurrentMembership) {
-      this.AutoFetchMemberOrganisations();
-    } else {
-      this.FetchOrganisationsAvailable();
-    }
+    this.AutoFetchOrganisations();
   }
 
   ngOnDestroy() {
