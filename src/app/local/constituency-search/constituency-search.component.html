@@ -1,7 +1,7 @@
 <div class="tabContainer">
   <div class="tabContent scroller">
     <div class="search">
-      <h1>Constituency search</h1>
+      <h2>Constituency and Candidate Search</h2>
 
       <div class="flexRow justify-start amb-3">
         <input
@@ -48,6 +48,12 @@
           placeholder="candidate name (min 3 letters)"
           [(ngModel)]="candidateSearch"
         />
+        <mat-checkbox
+          [(ngModel)]="electedOnly"
+          (ngModelChange)="CandidateSearch(true)"
+          name="electedOnly"
+          >Elected only</mat-checkbox
+        >
         <button mat-stroked-button (click)="CandidateSearch(false)">
           <mat-icon>search</mat-icon>
           lookup

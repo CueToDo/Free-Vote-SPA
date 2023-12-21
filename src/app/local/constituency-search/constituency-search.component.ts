@@ -52,10 +52,37 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
   candidateSearch$: Subscription | undefined;
   auto = false;
 
-  // Search values
-  constituencySearch = '';
-  postcodeSearch = '';
-  candidateSearch = '';
+  // Search values - preserved in locaData
+  get constituencySearch(): string {
+    return this.localData.constituencySearch;
+  }
+
+  set constituencySearch(value: string) {
+    this.localData.constituencySearch = value;
+  }
+
+  get postcodeSearch(): string {
+    return this.localData.postcodeSearch;
+  }
+
+  set postcodeSearch(value: string) {
+    this.localData.postcodeSearch = value;
+  }
+
+  get candidateSearch(): string {
+    return this.localData.candidateSearch;
+  }
+
+  set candidateSearch(value: string) {
+    this.localData.candidateSearch = value;
+  }
+
+  get electedOnly(): boolean {
+    return this.localData.electedOnly;
+  }
+  set electedOnly(value: boolean) {
+    this.localData.electedOnly = value;
+  }
 
   searching = false;
 
@@ -227,7 +254,7 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
       this.searching = true;
 
       this.democracyClubService
-        .ElectionCandidateSearch(this.candidateSearch)
+        .ElectionCandidateSearch(this.candidateSearch, this.electedOnly)
         .subscribe({
           next: (value: CandidateSearchResult[]) => {
             this.localData.candidateSearchResults = value;

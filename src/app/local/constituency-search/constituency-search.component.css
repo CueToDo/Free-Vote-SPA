@@ -1,11 +1,11 @@
 .search {
   width: 100%;
-  max-width: 560px;
+  max-width: 600px;
   margin: 30px auto;
 }
 
-h1 {
-  margin-bottom: 20px;
+h2 {
+  margin-bottom: 30px;
 }
 
 p {

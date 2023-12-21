@@ -40,10 +40,13 @@ export class DemocracyClubService {
   }
 
   ElectionCandidateSearch(
-    candidateName: string
+    candidateName: string,
+    electedOnly: boolean
   ): Observable<CandidateSearchResult[]> {
     return this.httpService
-      .get(`democracyClub/electionCandidateSearch/${candidateName}`)
+      .get(
+        `democracyClub/electionCandidateSearch/${candidateName}/${electedOnly}`
+      )
       .pipe(
         map(value => {
           return value as CandidateSearchResult[];

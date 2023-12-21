@@ -86,7 +86,12 @@ export class LocalDataService {
     return 0;
   }
 
-  // Constituency and Candidate Search Component - preserve results
+  // Constituency and Candidate Search Component - preserve search criteria and results
+  constituencySearch = '';
+  postcodeSearch = '';
+  candidateSearch = '';
+  electedOnly = false;
+
   constituencies: Constituency[] = [];
   candidateSearchResults: CandidateSearchResult[] = [];
 
