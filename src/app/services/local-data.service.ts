@@ -95,8 +95,9 @@ export class LocalDataService {
   constituencies: Constituency[] = [];
   candidateSearchResults: CandidateSearchResult[] = [];
 
-  public organisationFilter = '';
-  public organisationTypeID = OrganisationTypes.CampaignGroup;
+  organisationSearchAlreadyMember = true;
+  organisationFilter = '';
+  organisationTypeID = OrganisationTypes.CampaignGroup;
 
   private localLogging = '';
 

@@ -71,7 +71,13 @@ export class OrganisationListComponent
     this.localData.organisationTypeID = value;
   }
 
-  alreadyMember = true;
+  get alreadyMember(): boolean {
+    return this.localData.organisationSearchAlreadyMember;
+  }
+
+  set alreadyMember(value: boolean) {
+    this.localData.organisationSearchAlreadyMember = value;
+  }
 
   constructor(
     public appData: AppDataService,
