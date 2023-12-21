@@ -92,40 +92,39 @@
       <i class="arrow left"></i>
     </div>
 
-    <app-points-and-questions-menu
+    <app-select-menu
       [tabIndex]="tabIndex"
+      [showFilters]="showFilters"
       [qp]="qp"
-      (ShowQuestions)="ShowQuestions()"
+      (showFiltersChange)="ShowPointFilterCriteria($event)"
+      (feedbackChange)="FeedbackChange($event)"
+      (ChangeLocalSelection)="ChangeLocalSelection()"
       (ChangeTab)="ChangeTab($event)"
-    ></app-points-and-questions-menu>
+    ></app-select-menu>
 
     <!-- Begin Sort Menu -->
-    <app-search-and-sort
+    <app-sort-menu
       *ngIf="tabIndex === Tabs.tagPoints"
-      [showFilters]="showFilters"
       [pointSortType]="filter.sortType"
       [sortDescending]="filter.sortDescending"
-      (showFiltersChange)="ShowPointFilterCriteria($event)"
       (pointSortTypeChange)="SetSortType($event)"
       (sortDescendingChange)="SetSortDescending($event)"
       (changeLocalSelection)="ChangeLocalSelection()"
-      (feedbackChange)="FeedbackChange($event)"
       (refresh)="refresh()"
-    ></app-search-and-sort>
+    ></app-sort-menu>
     <!-- End Sort Menu -->
 
-    <!-- Local Topics -->
+    <!-- 5. New question answer or tag point  -->
     <button
       mat-button
       *ngIf="auth0Service.isAuthenticated$ | async"
-      class="localButton"
-      [class.selected]="localData.forConstituency"
-      (click)="ChangeLocalSelection()"
-      matTooltip="local interest"
+      [class.selected]="tabIndex === Tabs.newPoint"
+      (click)="ChangeTab(Tabs.newPoint)"
+      [matTooltip]="'create new ' + qp"
       matTooltipPosition="right"
     >
-      local
-      <mat-icon>mp</mat-icon>
+      new {{ qp }}
+      <mat-icon>library_add</mat-icon>
     </button>
   </div>
 

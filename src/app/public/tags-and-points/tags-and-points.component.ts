@@ -451,10 +451,6 @@ export class TagsAndPointsComponent
     this.ReselectPoints(PointSortTypes.NoChange);
   }
 
-  ShowQuestions(): void {
-    this.ChangeTab(Tabs.questionList);
-  }
-
   ReselectQuestions() {
     this.questionsSelected = false;
     this.pointsSelected = false;

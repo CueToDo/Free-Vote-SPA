@@ -1,0 +1,94 @@
+<!-- Menu Trigger -->
+
+<button
+  mat-button
+  [matMenuTriggerFor]="pointsAndQuestionsMenu"
+  [class.selected]="
+    tabIndex === Tabs.questionList ||
+    tabIndex === Tabs.questionAnswers ||
+    tabIndex === Tabs.tagPoints ||
+    tabIndex === Tabs.newPoint
+  "
+  matTooltip="show points or questions"
+>
+  select
+  <mat-icon>search</mat-icon>
+</button>
+
+<!-- Search and Sort menu -->
+
+<mat-menu #pointsAndQuestionsMenu="matMenu">
+  <!-- 1. Select questions -->
+  <button
+    mat-menu-item
+    [class.selected]="
+      tabIndex === Tabs.questionList || tabIndex === Tabs.questionAnswers
+    "
+    (click)="showQuestions()"
+    matTooltip="show questions"
+    matTooltipPosition="right"
+  >
+    questions
+    <mat-icon>help</mat-icon>
+  </button>
+
+  <!-- 2. Select points -->
+  <button
+    mat-menu-item
+    (click)="showPoints()"
+    [class.selected]="tabIndex === Tabs.tagPoints"
+    matTooltip="show points"
+    matTooltipPosition="right"
+  >
+    points
+    <mat-icon>comment</mat-icon>
+  </button>
+
+  <hr />
+
+  <!-- 3. Local Topics -->
+  <button
+    mat-menu-item
+    *ngIf="auth0Service.isAuthenticated$ | async"
+    [class.selected]="localData.forConstituency"
+    (click)="ChangeLocal()"
+    matTooltip="local interest"
+    matTooltipPosition="right"
+  >
+    filter local
+    <mat-icon>mp</mat-icon>
+  </button>
+
+  <!-- 4. Show Search (Point Filter) Options -->
+  <button
+    mat-menu-item
+    (click)="toggleShowPointFilterCriteria()"
+    [matTooltip]="filterToolTip"
+    matTooltipPosition="right"
+  >
+    <mat-icon>{{ filterIcon }}</mat-icon>
+    {{ filterText }}
+  </button>
+
+  <!-- 5. Feedback Switch -->
+  <button
+    mat-menu-item
+    (click)="toggleFeedback()"
+    matTooltip="toggle feedback"
+    matTooltipPosition="right"
+  >
+    <mat-icon>{{ feedbackIcon }}</mat-icon>
+    {{ feedbackText }}
+  </button>
+
+  <!-- 6. Refresh -->
+  <button
+    mat-menu-item
+    (click)="refreshSelection()"
+    matTooltip="refresh"
+    matTooltipPosition="right"
+  >
+    <mat-icon>refresh</mat-icon>
+    refresh
+  </button>
+</mat-menu>

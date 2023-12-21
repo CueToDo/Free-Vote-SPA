@@ -1,3 +1,4 @@
+import { SelectMenuComponent } from '../select-menu/select-menu.component';
 // Angular
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
@@ -12,56 +13,24 @@ import { PointSortTypes, Tabs } from 'src/app/models/enums';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
-  selector: 'app-search-and-sort',
-  templateUrl: './search-and-sort.component.html',
-  styleUrls: ['./search-and-sort.component.css']
+  selector: 'app-sort-menu',
+  templateUrl: './sort-menu.component.html',
+  styleUrls: ['./sort-menu.component.css']
 })
-export class SearchAndSortComponent implements OnInit {
-  // 2 way bindings with parent
-
-  // 1. Point search/filter criteria
-  @Input() showFilters!: boolean;
-  @Output() showFiltersChange = new EventEmitter<boolean>();
-
-  // 2. Sort Type
+export class SortMenuComponent implements OnInit {
+  // 1. Sort Type
   @Input() pointSortType!: PointSortTypes;
   @Output() pointSortTypeChange = new EventEmitter<PointSortTypes>();
 
-  // 3. Sort Order
+  public PointSortTypes = PointSortTypes; // enum - template
+
+  // 2. Sort Order
   @Input() sortDescending!: boolean;
   @Output() sortDescendingChange = new EventEmitter<boolean>();
 
-  // 4. Feedback
-  @Output() feedbackChange = new EventEmitter<boolean>();
-
-  // 5. Refresh
-  @Output() refresh = new EventEmitter();
   public Tabs = Tabs;
 
   isMobile = false;
-  get searchAndSortText(): string {
-    if (this.isMobile) return 'search';
-    return 'search & sort';
-  }
-
-  // 1. Point Search (Filter) button
-  public get filterText() {
-    if (this.showFilters) return 'searching';
-    return 'search';
-  }
-
-  public get filterToolTip() {
-    if (this.showFilters) return 'hide search criteria';
-    return 'show point search criteria';
-  }
-
-  public get filterIcon() {
-    if (this.showFilters) return 'manage_search';
-    return 'search';
-  }
-
-  // 2. Point Sort
-  public PointSortTypes = PointSortTypes; // enum - template
 
   public get sortToolTip(): string {
     let tooltip = `showing points for\n"${this.localData.PreviousTopicSelected}"\n`;
@@ -105,13 +74,7 @@ export class SearchAndSortComponent implements OnInit {
       });
   }
 
-  // 1. Filters
-  toggleShowPointFilterCriteria(): void {
-    this.showFilters = !this.showFilters;
-    this.showFiltersChange.emit(this.showFilters);
-  }
-
-  // 2. Sort Type
+  // 1. Sort Type
   setSortType(pointSortType: PointSortTypes) {
     // Default to descending if order was random
     if (this.pointSortType === PointSortTypes.Random)
@@ -120,7 +83,7 @@ export class SearchAndSortComponent implements OnInit {
     this.pointSortTypeChange.emit(pointSortType);
   }
 
-  // 3. Sort Order
+  // 2. Sort Order
   setSortDescending(descending: boolean) {
     this.sortDescending = descending;
 
@@ -129,26 +92,5 @@ export class SearchAndSortComponent implements OnInit {
       this.pointSortType = PointSortTypes.TrendingActivity;
     }
     this.sortDescendingChange.emit(descending);
-  }
-
-  // 4. Feedback
-  feedbackOn = true;
-  get feedbackIcon(): string {
-    if (this.feedbackOn) return 'speaker_notes_off';
-    return 'view_list';
-  }
-  get feedbackText(): string {
-    if (this.feedbackOn) return 'turn feedback OFF';
-    return 'turn feedback ON';
-  }
-
-  toggleFeedback() {
-    this.feedbackOn = !this.feedbackOn;
-    this.feedbackChange.emit(this.feedbackOn);
-  }
-
-  // 5. Refresh
-  refreshSelection() {
-    this.refresh.emit();
   }
 }

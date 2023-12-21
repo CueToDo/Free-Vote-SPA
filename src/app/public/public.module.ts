@@ -33,7 +33,6 @@ import { PointCommentsComponent } from './point-comments/point-comments.componen
 import { PointComponent } from './point/point.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
-import { PointsAndQuestionsMenuComponent } from './menus/points-and-questions-menu/points-and-questions-menu.component';
 import { PointsFilterComponent } from './points-filter/points-filter.component';
 import { PointsListComponent } from './points-list/points-list.component';
 import { PointTypesComponent } from './menus/point-types/point-types.component';
@@ -41,7 +40,8 @@ import { QuestionComponent } from './question/question.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionAnswersComponent } from './question-answers/question-answers.component';
-import { SearchAndSortComponent } from './menus/search-and-sort/search-and-sort.component';
+import { SelectMenuComponent } from './menus/select-menu/select-menu.component';
+import { SortMenuComponent } from './menus/sort-menu/sort-menu.component';
 import { SocialShareComponent } from './menus/social-share/social-share.component';
 import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
 import { TagSearchComponent } from './tag-search/tag-search.component';
@@ -80,7 +80,6 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     PointCommentsComponent,
     PointComponent,
     PointEditComponent,
-    PointsAndQuestionsMenuComponent,
     PointsFilterComponent,
     PointsListComponent,
     PointOfTheWeekComponent,
@@ -89,7 +88,8 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     QuestionComponent,
     QuestionEditComponent,
     QuestionsListComponent,
-    SearchAndSortComponent,
+    SelectMenuComponent,
+    SortMenuComponent,
     SocialShareComponent,
     TagsAndPointsComponent,
     TagSearchComponent,

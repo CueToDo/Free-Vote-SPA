@@ -75,11 +75,6 @@ hr {
   padding: 0 8px;
 }
 
-.localButton {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
 button + i.arrow {
   border: solid lightgray;
   border-width: 0px 3px 3px 0px;

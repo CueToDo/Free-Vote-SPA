@@ -6,26 +6,13 @@
   [matTooltip]="sortToolTip"
   matTooltipClass="multiLine"
 >
-  {{ searchAndSortText }}
+  sort
   <mat-icon>{{ sortTypeIcon }}</mat-icon>
 </button>
 
 <!-- Search and Sort menu -->
 
 <mat-menu #sortOrderMenu="matMenu">
-  <!-- Show Search (Point Filter) Options -->
-  <button
-    mat-menu-item
-    (click)="toggleShowPointFilterCriteria()"
-    [matTooltip]="filterToolTip"
-    matTooltipPosition="right"
-  >
-    <mat-icon>{{ filterIcon }}</mat-icon>
-    {{ filterText }}
-  </button>
-
-  <hr />
-
   <!-- Sort Type -->
   <button
     mat-menu-item
@@ -96,31 +83,5 @@
   >
     <mat-icon>arrow_upward</mat-icon>
     ascending
-  </button>
-
-  <hr />
-
-  <!-- Feedback Switch -->
-  <button
-    mat-menu-item
-    (click)="toggleFeedback()"
-    matTooltip="toggle feedback"
-    matTooltipPosition="right"
-  >
-    <mat-icon>{{ feedbackIcon }}</mat-icon>
-    {{ feedbackText }}
-  </button>
-
-  <hr />
-
-  <!-- Refresh -->
-  <button
-    mat-menu-item
-    (click)="refreshSelection()"
-    matTooltip="refresh"
-    matTooltipPosition="right"
-  >
-    <mat-icon>refresh</mat-icon>
-    refresh
   </button>
 </mat-menu>
