@@ -301,7 +301,7 @@ export class AppDataService {
     return consonants.length;
   }
 
-  // Name cannot include reserved characters
+  // Do not use: Name can now include reserved characters (these will be removed from the "slug" for route parameter use)
   isUrlNameUnSafe(input: string): boolean {
     return (
       input.includes('\\') ||
@@ -325,6 +325,7 @@ export class AppDataService {
     );
   }
 
+  // Not required - names will be "slugged in API"
   urlSafeName(input: string): string {
     let output = input
       .split('\\')

@@ -178,19 +178,7 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
 
   Update(): void {
     if (this.organisation) {
-      if (this.appData.isUrlNameUnSafe(this.organisation.organisationName)) {
-        if (
-          confirm(
-            'Organiation name contains invalid characters. Remove them now?'
-          )
-        ) {
-          this.organisation.organisationName = this.appData.urlSafeName(
-            this.organisation.organisationName
-          );
-        } else {
-          return;
-        }
-      }
+      // Organisation name will be validated and "slugged" in API
 
       this.error = '';
       const newOrganisation = this.organisation.organisationID < 1;
