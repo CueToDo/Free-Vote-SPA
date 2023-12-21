@@ -16,7 +16,11 @@ import { Subscription } from 'rxjs';
 
 // Model
 import { Country } from 'src/app/models/country.model';
-import { GeographicalExtent, GeographicalExtentID } from 'src/app/models/enums';
+import {
+  GeographicalExtent,
+  GeographicalExtentID,
+  OrganisationTypes
+} from 'src/app/models/enums';
 import { Kvp } from 'src/app/models/kvp.model';
 import { Organisation } from 'src/app/models/organisation.model';
 
@@ -96,7 +100,6 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
   error = '';
 
   constructor(
-    private appData: AppDataService,
     private lookupsService: LookupsService,
     private organisationsService: OrganisationsService
   ) {}
@@ -113,7 +116,9 @@ export class OrganisationEditComponent implements OnInit, OnDestroy {
       .OrganisationTypes()
       .subscribe({
         next: organisationTypes => {
-          this.organisationTypes = organisationTypes;
+          this.organisationTypes = organisationTypes.filter(
+            type => type.value != +OrganisationTypes.Any
+          );
         },
         error: serverError => (this.error = serverError.error.detail)
       });
