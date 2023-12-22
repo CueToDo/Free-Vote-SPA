@@ -133,12 +133,13 @@ export class Auth0Wrapper {
   }
 
   logout(): void {
+    this.localData.SignedOut(); // And Communicate
+
     // Call method to log out
     this.auth0Service.logout();
 
     this.LoggedInToAuth0 = false;
     this.auth0Profile = null;
-    this.localData.SignedOut(); // And Communicate
   }
 
   // Where an anon user selects items by sessionID, so does signed in user

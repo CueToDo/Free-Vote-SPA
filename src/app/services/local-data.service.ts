@@ -21,6 +21,15 @@ export class LocalDataService {
   public websiteUrlWTS = ''; // WTS: without trailing slash
   public apiUrl = '';
 
+  // Don't mess with in memory values loaded and saved at app start and close - write straight to local storage
+  public get cookieConsent(): boolean {
+    return this.GetItem('cookieConsent') == 'true';
+  }
+
+  public set cookieConsent(value: boolean) {
+    this.SetItem('cookieConsent', value.toString());
+  }
+
   public initialPointsSelected = false;
   public TagChange = false; // use gloablly for comms from point-edit to point to points-list
 
@@ -479,6 +488,8 @@ export class LocalDataService {
     this.ClearExistingJwt();
 
     // client side values - user may update and post to API
+    this.freeVoteProfile.givenName = '';
+    this.freeVoteProfile.familyName = '';
     this.freeVoteProfile.alias = '';
     this.freeVoteProfile.countryId = '0';
     this.freeVoteProfile.country = '';

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // Material
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -19,6 +20,7 @@ import { FullSizeImagesComponent } from './full-size-images/full-size-images.com
 import { ListComponent } from 'src/app/base/list/list.component';
 import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
 import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
+import { CookieConsentComponent } from './cookie-consent/cookie-consent.component';
 
 @NgModule({
   imports: [
@@ -27,6 +29,7 @@ import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
     FormsModule,
     RouterModule,
     // Material
+    MatButtonModule,
     MatDialogModule,
     MatIconModule,
     MatTooltipModule,
@@ -39,7 +42,8 @@ import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
     FullSizeImagesComponent,
     ListComponent,
     TagCloudComponent,
-    TagsEditComponent
+    TagsEditComponent,
+    CookieConsentComponent
   ],
   exports: [
     ByComponent,

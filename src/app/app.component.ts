@@ -33,6 +33,8 @@ import { UpdateService } from 'src/app/services/update.service';
 // FreeVote Components
 import { NavBurgerComponent } from 'src/app/public/menus/nav-burger/nav-burger.component';
 import { NavMainComponent } from 'src/app/public/menus/nav-main/nav-main.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CookieConsentComponent } from './base/cookie-consent/cookie-consent.component';
 
 export enum NetworkStatus {
   ONLINE = 'online',
@@ -78,7 +80,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private sw: UpdateService,
     @Inject(DOCUMENT) private document: Document,
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
-    @Inject(PLATFORM_ID) private platformId: object
+    @Inject(PLATFORM_ID) private platformId: object,
+    private dialog: MatDialog
   ) {
     // Set up the subscription to version changes.
     // Service constructor sets up periodic checks
@@ -88,6 +91,8 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.localData.Log(`<br><br>APP Initialising`);
     this.localData.LoadClientValues();
+
+    this.cookieConsent();
 
     // Do this before any API calls
     this.auth0Wrapper.SetUpAuth0Subscriptions();
@@ -175,6 +180,15 @@ export class AppComponent implements OnInit, OnDestroy {
       // Triggered by HomeComponent (only) on begin or end input
       this.showVulcan = !istom;
     });
+  }
+
+  cookieConsent() {
+    if (!this.localData.cookieConsent) {
+      this.dialog.open(CookieConsentComponent, {
+        disableClose: true,
+        data: {}
+      });
+    }
   }
 
   // https://www.inoaspect.com.au/creating-a-progressive-web-app-pwa-service-to-include-all-features-angular/
