@@ -46,7 +46,7 @@
     <!-- Local Topics -->
     <button
       mat-button
-      (click)="ChangeLocal()"
+      (click)="ChangeLocalTags()"
       class="localButton"
       [class.selected]="localData.forConstituency"
       matTooltip="local interest"
@@ -99,7 +99,6 @@
       [qp]="qp"
       (showFiltersChange)="ShowPointFilterCriteria($event)"
       (feedbackChange)="FeedbackChange($event)"
-      (ChangeLocalSelection)="ChangeLocalSelection()"
       (ChangeTab)="ChangeTab($event)"
     ></app-select-menu>
 
@@ -110,16 +109,15 @@
       [sortDescending]="filter.sortDescending"
       (pointSortTypeChange)="SetSortType($event)"
       (sortDescendingChange)="SetSortDescending($event)"
-      (changeLocalSelection)="ChangeLocalSelection()"
       (refresh)="refresh()"
     ></app-sort-menu>
 
-    <!-- Local Topics -->
+    <!-- Local Points or Questions -->
     <button
       mat-button
       *ngIf="auth0Service.isAuthenticated$ | async"
       [class.selected]="localData.forConstituency"
-      (click)="ChangeLocal()"
+      (click)="ChangeLocalPointsOrQuestionsSelection()"
       matTooltip="local interest"
       matTooltipPosition="right"
     >

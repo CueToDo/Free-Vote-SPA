@@ -1,4 +1,4 @@
-<div class="flexRow align-center mt-4">
+<div class="flexRow wrap align-center mt-4">
   <select [(ngModel)]="organisationTypeID" (ngModelChange)="Refresh()">
     <option
       *ngFor="let organisationType of organisationTypes"
@@ -17,7 +17,7 @@
   >
 
   <input
-    class="form-control"
+    class="form-control organisationFilter"
     placeholder="search for organisation"
     [(ngModel)]="organisationFilter"
     #trvOrgSearch

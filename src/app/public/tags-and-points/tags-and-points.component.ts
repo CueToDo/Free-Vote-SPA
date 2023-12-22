@@ -360,7 +360,7 @@ export class TagsAndPointsComponent
     }
   }
 
-  ChangeLocal(): void {
+  ChangeLocalTags(): void {
     // Change constituency filter
     this.localData.forConstituency = !this.localData.forConstituency;
     this.SetConstituency();
@@ -410,7 +410,7 @@ export class TagsAndPointsComponent
     }
   }
 
-  ChangeLocalSelection() {
+  ChangeLocalPointsOrQuestionsSelection() {
     // Change constituency filter
     this.localData.forConstituency = !this.localData.forConstituency;
     this.SetConstituency();
