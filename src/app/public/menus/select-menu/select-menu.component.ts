@@ -24,10 +24,7 @@ export class SelectMenuComponent {
   // 1,2 Questions or points
   @Input() qp = '';
 
-  // 3. Local selection
-  @Output() ChangeLocalSelection = new EventEmitter();
-
-  // 4. Search filter criteria
+  // 3. Search filter criteria
   @Input() showFilters = false;
   @Output() showFiltersChange = new EventEmitter<boolean>();
 
@@ -46,7 +43,7 @@ export class SelectMenuComponent {
     return 'search';
   }
 
-  // 5. Feedback
+  // 4. Feedback
   @Output() feedbackChange = new EventEmitter<boolean>();
 
   feedbackOn = true;
@@ -60,7 +57,7 @@ export class SelectMenuComponent {
     return 'turn feedback ON';
   }
 
-  // 6. Refresh
+  // 5. Refresh
   @Output() refresh = new EventEmitter();
 
   constructor(
@@ -80,24 +77,19 @@ export class SelectMenuComponent {
     this.ChangeTab.emit(Tabs.tagPoints);
   }
 
-  // 3. Local
-  ChangeLocal(): void {
-    this.ChangeLocalSelection.emit();
-  }
-
-  // 4. Search Filters
+  // 3. Search Filters
   toggleShowPointFilterCriteria(): void {
     this.showFilters = !this.showFilters;
     this.showFiltersChange.emit(this.showFilters);
   }
 
-  // 5. Feedback switch
+  // 4. Feedback switch
   toggleFeedback() {
     this.feedbackOn = !this.feedbackOn;
     this.feedbackChange.emit(this.feedbackOn);
   }
 
-  // 6. Refresh
+  // 5. Refresh
   refreshSelection() {
     this.refresh.emit();
   }

@@ -46,20 +46,7 @@
 
   <hr />
 
-  <!-- 3. Local Topics -->
-  <button
-    mat-menu-item
-    *ngIf="auth0Service.isAuthenticated$ | async"
-    [class.selected]="localData.forConstituency"
-    (click)="ChangeLocal()"
-    matTooltip="local interest"
-    matTooltipPosition="right"
-  >
-    filter local
-    <mat-icon>mp</mat-icon>
-  </button>
-
-  <!-- 4. Show Search (Point Filter) Options -->
+  <!-- 3. Show Search (Point Filter) Options -->
   <button
     mat-menu-item
     (click)="toggleShowPointFilterCriteria()"
@@ -70,7 +57,7 @@
     {{ filterText }}
   </button>
 
-  <!-- 5. Feedback Switch -->
+  <!-- 4. Feedback Switch -->
   <button
     mat-menu-item
     (click)="toggleFeedback()"
@@ -81,7 +68,7 @@
     {{ feedbackText }}
   </button>
 
-  <!-- 6. Refresh -->
+  <!-- 5. Refresh -->
   <button
     mat-menu-item
     (click)="refreshSelection()"

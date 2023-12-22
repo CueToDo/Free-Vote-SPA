@@ -7,7 +7,7 @@
   }"
   class="amy-2"
 >
-  <div *ngIf="tabIndex < Tabs.questionList" class="flexRow justify-center">
+  <div *ngIf="tabIndex < Tabs.questionList" class="flexRow wrap justify-center">
     <!-- Trending/Recently selected tags -->
     <button
       mat-button
@@ -76,7 +76,7 @@
     </div>
   </div>
 
-  <div *ngIf="tabIndex > Tabs.tagSearch" class="flexRow justify-center">
+  <div *ngIf="tabIndex > Tabs.tagSearch" class="flexRow wrap justify-center">
     <!-- Show tag clouds and tag search -->
     <div class="flexRow align-center reverse">
       <button
@@ -92,6 +92,7 @@
       <i class="arrow left"></i>
     </div>
 
+    <!-- Select menu -->
     <app-select-menu
       [tabIndex]="tabIndex"
       [showFilters]="showFilters"
@@ -102,7 +103,7 @@
       (ChangeTab)="ChangeTab($event)"
     ></app-select-menu>
 
-    <!-- Begin Sort Menu -->
+    <!-- Sort Menu -->
     <app-sort-menu
       *ngIf="tabIndex === Tabs.tagPoints"
       [pointSortType]="filter.sortType"
@@ -112,9 +113,21 @@
       (changeLocalSelection)="ChangeLocalSelection()"
       (refresh)="refresh()"
     ></app-sort-menu>
-    <!-- End Sort Menu -->
 
-    <!-- 5. New question answer or tag point  -->
+    <!-- Local Topics -->
+    <button
+      mat-button
+      *ngIf="auth0Service.isAuthenticated$ | async"
+      [class.selected]="localData.forConstituency"
+      (click)="ChangeLocal()"
+      matTooltip="local interest"
+      matTooltipPosition="right"
+    >
+      local
+      <mat-icon>mp</mat-icon>
+    </button>
+
+    <!-- New question answer or tag point  -->
     <button
       mat-button
       *ngIf="auth0Service.isAuthenticated$ | async"
