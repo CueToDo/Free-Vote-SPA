@@ -43,7 +43,8 @@ export class TagCloudComponent implements OnInit, OnDestroy {
 
   constructor(
     private appData: AppDataService,
-    private tagsService: TagsService
+    private tagsService: TagsService,
+    public localData: LocalDataService
   ) {}
 
   ngOnInit(): void {

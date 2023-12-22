@@ -260,6 +260,7 @@ export class LocalDataService {
       // Local Politics
       this.freeVoteProfile.ward = this.GetItem('ward');
       this.freeVoteProfile.council = this.GetItem('council');
+      this.forConstituency = this.GetItem('forConstituency') == 'true';
 
       // Personal
       this.freeVoteProfile.profilePictureOptionID = this.GetItem(
@@ -326,6 +327,8 @@ export class LocalDataService {
       if (this.freeVoteProfile.council) {
         this.SetItem('council', this.freeVoteProfile.council);
       }
+
+      this.SetItem('forConstituency', this.forConstituency.toString());
 
       // Personal
       if (this.freeVoteProfile.profilePictureOptionID) {
@@ -487,6 +490,7 @@ export class LocalDataService {
     this.freeVoteProfile.constituencyID = '0';
     this.freeVoteProfile.ward = '';
     this.freeVoteProfile.council = '';
+    this.forConstituency = false;
 
     this.freeVoteProfile.profilePictureOptionID = '';
     this.freeVoteProfile.profilePicture = '';
@@ -506,9 +510,5 @@ export class LocalDataService {
       'Log:',
       this.LocalLog
     );
-  }
-
-  onDestroy(): void {
-    this.SaveValues();
   }
 }

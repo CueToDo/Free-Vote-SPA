@@ -1,4 +1,8 @@
 <div class="linkCloud">
+  <h1 *ngIf="localData.forConstituency">
+    {{ localData.freeVoteProfile.constituency }}
+  </h1>
+
   <div *ngIf="waiting">
     <div>fetching tags</div>
     <div class="spinner-grow text-info my-5 ms-3" role="status">

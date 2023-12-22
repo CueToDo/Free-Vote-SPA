@@ -1,5 +1,8 @@
 <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMoreQuestions()">
   <div class="content">
+    <h1 *ngIf="localData.forConstituency">
+      {{ localData.freeVoteProfile.constituency }}
+    </h1>
     <div *ngIf="error !== ''" class="text-danger mx-3">
       {{ error }}
     </div>

@@ -1,6 +1,10 @@
 <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
   <div class="content">
     <div class="overflow-hidden">
+      <h1 *ngIf="localData.forConstituency">
+        {{ localData.freeVoteProfile.constituency }}
+      </h1>
+
       <div *ngIf="error !== ''" class="text-danger mx-3">
         {{ error }}
       </div>

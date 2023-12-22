@@ -7,7 +7,9 @@ import {
   OnInit,
   Inject,
   PLATFORM_ID,
-  ViewChild
+  ViewChild,
+  OnDestroy,
+  HostListener
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
@@ -42,7 +44,7 @@ export enum NetworkStatus {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
   // https://medium.com/angular-in-depth/the-best-way-to-unsubscribe-rxjs-observable-in-the-angular-applications-d8f9aa42f6a0
 
@@ -85,6 +87,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.localData.Log(`<br><br>APP Initialising`);
+    this.localData.LoadClientValues();
 
     // Do this before any API calls
     this.auth0Wrapper.SetUpAuth0Subscriptions();
@@ -300,7 +303,12 @@ export class AppComponent implements OnInit {
     console.log('vulcan logging updated');
     this.auth0Wrapper.logout();
   }
-  // ngOnDestroy(): void {
-  // No need to create subscriptions to unsubscribe in app.component
-  // }
+
+  // https://stackoverflow.com/questions/75106202/ngondestroy-not-working-if-close-multiple-browser-tabs-at-once
+  // Add the HostListener decorator and the async await
+  @HostListener('window:beforeunload')
+  async ngOnDestroy() {
+    // No need to create subscriptions to unsubscribe in app.component
+    await this.localData.SaveValues();
+  }
 }
