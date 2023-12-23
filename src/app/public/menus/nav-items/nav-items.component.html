@@ -11,6 +11,7 @@
     [class.selected]="appData.MenuItemSelected === ''"
     (click)="appData.MenuItemSelected = ''"
     matTooltip="home"
+    matTooltipPosition="above"
   >
     <mat-icon>search</mat-icon>
     home
@@ -25,6 +26,7 @@
     [class.selected]="appData.MenuItemSelected === 'slashTags'"
     (click)="appData.MenuItemSelected = 'slashTags'"
     matTooltip="slash tags"
+    matTooltipPosition="above"
   >
     <mat-icon>bookmark_border</mat-icon>
     slash tags
@@ -37,7 +39,8 @@
     routerLinkActive="active"
     [class.selected]="appData.MenuItemSelected === 'organisations'"
     (click)="appData.MenuItemSelected = 'organisations'"
-    matTooltip="groups"
+    matTooltip="organisations - campaign groups and political parties"
+    matTooltipPosition="above"
   >
     <mat-icon>people</mat-icon>
     organisations
@@ -53,6 +56,7 @@
       appData.MenuItemSelected === 'MP'
     "
     matTooltip="profile menu"
+    matTooltipPosition="above"
   >
     <img
       *ngIf="

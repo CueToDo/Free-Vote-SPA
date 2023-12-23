@@ -20,6 +20,7 @@
           ? 'showing trending slash-tags'
           : 'showing recent slash-tags'
       "
+      matTooltipPosition="above"
     >
       <span *ngIf="trendingRecent === Tabs.trendingTags">trending</span>
       <span *ngIf="trendingRecent === Tabs.recentTags">recent</span>
@@ -37,7 +38,7 @@
       (click)="ChangeTab(Tabs.tagSearch)"
       [class.selected]="tabIndex === Tabs.tagSearch"
       matTooltip="slash tag search"
-      matTooltipPosition="right"
+      matTooltipPosition="above"
     >
       search
       <mat-icon>search</mat-icon>
@@ -50,7 +51,7 @@
       class="localButton"
       [class.selected]="localData.forConstituency"
       matTooltip="local interest"
-      matTooltipPosition="right"
+      matTooltipPosition="above"
       *ngIf="auth0Service.isAuthenticated$ | async"
     >
       local
@@ -64,6 +65,7 @@
         (click)="BackToSelectedTag()"
         *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
         [matTooltip]="slashTagButtonToolTip"
+        matTooltipPosition="above"
         matTooltipClass="multiLine"
       >
         <div class="flexRow align-center smallGap">
@@ -83,6 +85,7 @@
         mat-button
         (click)="ChangeTab(previousTabIndex)"
         [matTooltip]="slashTagsButtonToolTip"
+        matTooltipPosition="above"
       >
         <div class="flexRow align-center smallGap">
           <div class="slash">/</div>
@@ -119,7 +122,7 @@
       [class.selected]="localData.forConstituency"
       (click)="ChangeLocalPointsOrQuestionsSelection()"
       matTooltip="local interest"
-      matTooltipPosition="right"
+      matTooltipPosition="above"
     >
       local
       <mat-icon>mp</mat-icon>
@@ -132,7 +135,7 @@
       [class.selected]="tabIndex === Tabs.newPoint"
       (click)="ChangeTab(Tabs.newPoint)"
       [matTooltip]="'create new ' + qp"
-      matTooltipPosition="right"
+      matTooltipPosition="above"
     >
       new {{ qp }}
       <mat-icon>library_add</mat-icon>

@@ -21,7 +21,7 @@ import { fromEvent } from 'rxjs';
 import { filter, debounceTime, map } from 'rxjs/operators';
 
 // Auth0
-import { Auth0Wrapper } from 'src/app/services/auth.service';
+import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 
 // FreeVote Services
 import { AppDataService } from 'src/app/services/app-data.service';

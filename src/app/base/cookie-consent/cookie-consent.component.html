@@ -1,16 +1,31 @@
 <div class="my-5 mx-5 main">
   <h1>Cookies</h1>
-  <p>
-    {{ name }}
-  </p>
 
   <p>Cookies are used for identification purposes only.</p>
+
   <p>
     Other cookies may relate to user embedded content such as youtube videos
     over which free.vote has no control.
   </p>
+  <p>
+    Your data is not sold or shared with any third parties, other than that
+    which can be seen directly on the site - your comments and questions.
+  </p>
+
+  <p *ngIf="loggedIn">
+    You are logged in as <strong>{{ name }}</strong>
+  </p>
+
+  <p *ngIf="!loggedIn">
+    <strong>{{ name }}</strong> - you may view, but not contribute to the site.
+  </p>
 
   <button type="button" mat-raised-button (click)="OK()">
-    I'm OK with that
+    <span *ngIf="loggedIn">I'm OK with identification cookies</span>
+    <span *ngIf="!loggedIn">OK</span>
+  </button>
+
+  <button type="button" mat-raised-button *ngIf="loggedIn" (click)="Logout()">
+    Logout
   </button>
 </div>

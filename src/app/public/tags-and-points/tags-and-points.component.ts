@@ -28,7 +28,7 @@ import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { Auth0Wrapper } from 'src/app/services/auth.service';
+import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { TagsService } from 'src/app/services/tags.service';
 
 // Components

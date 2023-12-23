@@ -3,13 +3,8 @@
 <button
   mat-button
   [matMenuTriggerFor]="pointsAndQuestionsMenu"
-  [class.selected]="
-    tabIndex === Tabs.questionList ||
-    tabIndex === Tabs.questionAnswers ||
-    tabIndex === Tabs.tagPoints ||
-    tabIndex === Tabs.newPoint
-  "
   matTooltip="show points or questions"
+  matTooltipPosition="above"
 >
   select
   <mat-icon>search</mat-icon>

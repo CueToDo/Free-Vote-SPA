@@ -9,7 +9,7 @@ import { AuthService } from '@auth0/auth0-angular';
 
 // FreeVote Services
 import { AppDataService } from 'src/app/services/app-data.service';
-import { Auth0Wrapper } from 'src/app/services/auth.service';
+import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({

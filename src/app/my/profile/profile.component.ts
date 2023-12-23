@@ -23,7 +23,7 @@ import {
 import { ProfilePicture } from 'src/app/models/Image.model';
 
 // Services
-import { Auth0Wrapper } from 'src/app/services/auth.service';
+import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { HttpService } from 'src/app/services/http.service';

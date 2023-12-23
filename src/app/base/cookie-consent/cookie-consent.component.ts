@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 // Services
-import { AuthService } from '@auth0/auth0-angular';
+import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
@@ -16,9 +16,13 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 export class CookieConsentComponent {
   constructor(
     private dialogRef: MatDialogRef<CookieConsentComponent>,
-    public auth0Service: AuthService,
+    public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService
   ) {}
+
+  get loggedIn(): boolean {
+    return this.auth0Wrapper.LoggedInToAuth0;
+  }
 
   get name(): string {
     var displayName = '';
@@ -52,7 +56,8 @@ export class CookieConsentComponent {
     this.dialogRef.close();
   }
 
-  NotOK(): void {
+  Logout(): void {
+    this.auth0Wrapper.logout();
     this.localData.cookieConsent = false;
     this.dialogRef.disableClose = false;
     this.dialogRef.close();

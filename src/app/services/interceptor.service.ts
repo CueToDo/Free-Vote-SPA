@@ -24,7 +24,7 @@ import { AuthService } from '@auth0/auth0-angular';
 
 // FreeVote Services
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { Auth0Wrapper } from './auth.service';
+import { Auth0Wrapper } from './auth-wrapper.service';
 
 // Injects the Auth0 Access Token into headers
 // Freevote jwt injected separately in http.service

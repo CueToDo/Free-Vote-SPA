@@ -1,3 +1,7 @@
 .main {
   max-width: 400px;
 }
+
+button + button {
+  margin-left: 10px;
+}

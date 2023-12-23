@@ -13,7 +13,7 @@ import { Image, ProfilePicture } from 'src/app/models/Image.model';
 
 // Services
 import { LocalDataService } from './local-data.service';
-import { Auth0Wrapper } from './auth.service';
+import { Auth0Wrapper } from './auth-wrapper.service';
 
 @Injectable({ providedIn: 'root' })
 export class HttpService {
