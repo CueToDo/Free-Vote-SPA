@@ -1,6 +1,8 @@
 <div *ngIf="!editing" class="ugc point">
   <!-- Point Display -->
   <a [id]="'id' + point.pointID">
+    <hr class="hr hrTitle" />
+
     <div class="pointTitleRow">
       <div class="flexRow" [ngClass]="{ parentPoint: isParentPoint }">
         <div>
@@ -8,18 +10,10 @@
         </div>
         <div class="flexStretch"></div>
 
-        <!-- PointNumber/Count -->
-
-        <div *ngIf="!sharing && !ancestor" class="aml-2 amr-2 text">
-          {{ point.rowNumber }}/{{ pointCount }}
-        </div>
-
         <!-- DateTimeUpdated -->
 
         <div class="text" [innerHtml]="point.dateTimeUpdated | nbsp"></div>
       </div>
-
-      <hr *ngIf="!!point.pointTitle && !!point.pointHTML" class="hr hrTitle" />
 
       <div
         #elPointHtml
@@ -198,6 +192,12 @@
           {{ point.totalFeedback }}
         </span>
       </button>
+
+      <!-- PointNumber/Count -->
+
+      <div *ngIf="!sharing && !ancestor" class="aml-2 amr-2 text">
+        {{ point.rowNumber }}/{{ pointCount }}
+      </div>
     </div>
     <!-- End Toolbar Remainder -->
   </div>

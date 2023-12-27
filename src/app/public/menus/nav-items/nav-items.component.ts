@@ -11,6 +11,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-nav-items',
@@ -28,6 +29,10 @@ export class NavItemsComponent implements OnInit, OnDestroy {
 
   @Input() MenuType: string = 'main';
 
+  get matTooltipPosition(): TooltipPosition {
+    if (this.MenuType == 'main') return 'above';
+    return 'right';
+  }
   constructor(
     public appData: AppDataService,
     public auth0Service: AuthService,

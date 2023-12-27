@@ -11,7 +11,7 @@
     [class.selected]="appData.MenuItemSelected === ''"
     (click)="appData.MenuItemSelected = ''"
     matTooltip="home"
-    matTooltipPosition="above"
+    [matTooltipPosition]="matTooltipPosition"
   >
     <mat-icon>search</mat-icon>
     home
@@ -26,7 +26,7 @@
     [class.selected]="appData.MenuItemSelected === 'slashTags'"
     (click)="appData.MenuItemSelected = 'slashTags'"
     matTooltip="slash tags"
-    matTooltipPosition="above"
+    [matTooltipPosition]="matTooltipPosition"
   >
     <mat-icon>bookmark_border</mat-icon>
     slash tags
@@ -40,7 +40,7 @@
     [class.selected]="appData.MenuItemSelected === 'organisations'"
     (click)="appData.MenuItemSelected = 'organisations'"
     matTooltip="organisations - campaign groups and political parties"
-    matTooltipPosition="above"
+    [matTooltipPosition]="matTooltipPosition"
   >
     <mat-icon>people</mat-icon>
     organisations
@@ -56,7 +56,7 @@
       appData.MenuItemSelected === 'MP'
     "
     matTooltip="profile menu"
-    matTooltipPosition="above"
+    [matTooltipPosition]="matTooltipPosition"
   >
     <img
       *ngIf="
@@ -137,6 +137,7 @@
     *ngIf="(auth0Service.isAuthenticated$ | async) == false"
     (click)="auth0Wrapper.login()"
     matTooltip="sign in"
+    [matTooltipPosition]="matTooltipPosition"
   >
     <mat-icon>person</mat-icon>
     sign in

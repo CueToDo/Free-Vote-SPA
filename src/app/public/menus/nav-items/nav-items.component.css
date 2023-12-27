@@ -25,7 +25,7 @@ div.burger {
 div.burger button {
   width: 100% !important;
   min-width: unset !important;
-  text-align: left;
+  justify-content: start;
   color: black;
 }
 
