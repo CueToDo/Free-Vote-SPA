@@ -69,23 +69,22 @@ export enum PointTypesEnum {
 }
 
 export enum Tabs {
+  notSelected = 0,
   // Tags
-  trendingTags = 0,
-  recentTags = 1,
-  tagSearch = 2,
+  slashTags = 1,
 
   // Questions, Answers
-  questionList = 3,
-  questionAnswers = 4,
+  questionList = 2,
+  questionAnswers = 3,
 
   // Points
-  tagPoints = 5,
-  newPoint = 6
+  tagPoints = 4,
+  newPoint = 5
 }
 
 export enum TagCloudTypes {
-  Trending,
-  Recent
+  Trending /* Stick to the one "order" */,
+  Recent /* Personally viewed whether national or local */
 }
 
 export enum PointFlags {

@@ -7,128 +7,48 @@
   }"
   class="amy-2"
 >
-  <div *ngIf="tabIndex < Tabs.questionList" class="flexRow wrap justify-center">
-    <!-- Trending/Recently selected tags -->
+  <div class="flexRow wrap justify-center">
+    <!-- 1. Show tag clouds and tag search -->
     <button
       mat-button
-      (click)="ChangeTrendingRecent()"
+      [class.selected]="tabIndex === Tabs.slashTags"
+      (click)="SelectSlashTags()"
+      matTooltip="slash-tags"
+      matTooltipPosition="above"
+    >
+      <div class="flexRow align-center smallGap">
+        <div class="slash">/</div>
+        <div>{{ slashTagsButtonText }}</div>
+      </div>
+    </button>
+
+    <!-- 2. Select questions -->
+    <button
+      mat-button
       [class.selected]="
-        tabIndex === Tabs.trendingTags || tabIndex === Tabs.recentTags
+        tabIndex === Tabs.questionList || tabIndex === Tabs.questionAnswers
       "
-      [matTooltip]="
-        tabIndex === Tabs.trendingTags
-          ? 'showing trending slash-tags'
-          : 'showing recent slash-tags'
-      "
+      (click)="ShowQuestions()"
+      matTooltip="show questions"
       matTooltipPosition="above"
     >
-      <span *ngIf="trendingRecent === Tabs.trendingTags">trending</span>
-      <span *ngIf="trendingRecent === Tabs.recentTags">recent</span>
-      <mat-icon *ngIf="trendingRecent === Tabs.trendingTags"
-        >trending_up</mat-icon
-      >
-      <mat-icon *ngIf="trendingRecent === Tabs.recentTags"
-        >notifications</mat-icon
-      >
+      questions
+      <mat-icon>help</mat-icon>
     </button>
 
-    <!-- Tag Search -->
+    <!-- 4. Select points -->
     <button
       mat-button
-      (click)="ChangeTab(Tabs.tagSearch)"
-      [class.selected]="tabIndex === Tabs.tagSearch"
-      matTooltip="slash tag search"
+      (click)="ShowPoints()"
+      [class.selected]="tabIndex === Tabs.tagPoints"
+      matTooltip="show points"
       matTooltipPosition="above"
     >
-      search
-      <mat-icon>search</mat-icon>
+      points
+      <mat-icon>comment</mat-icon>
     </button>
 
-    <!-- Local Topics -->
-    <button
-      mat-button
-      (click)="ChangeLocalTags()"
-      class="localButton"
-      [class.selected]="localData.forConstituency"
-      matTooltip="local interest"
-      matTooltipPosition="above"
-      *ngIf="auth0Service.isAuthenticated$ | async"
-    >
-      local
-      <mat-icon>mp</mat-icon>
-    </button>
-
-    <!-- Show previously selected tag results -->
-    <div class="flexRow align-center">
-      <button
-        mat-button
-        (click)="BackToSelectedTag()"
-        *ngIf="!!topicSelected && topicSelected !== 'SignedOut'"
-        [matTooltip]="slashTagButtonToolTip"
-        matTooltipPosition="above"
-        matTooltipClass="multiLine"
-      >
-        <div class="flexRow align-center smallGap">
-          <div class="slash">/</div>
-          <div>{{ slashTagButtonText }}</div>
-        </div>
-      </button>
-
-      <i class="arrow right"></i>
-    </div>
-  </div>
-
-  <div *ngIf="tabIndex > Tabs.tagSearch" class="flexRow wrap justify-center">
-    <!-- Show tag clouds and tag search -->
-    <div class="flexRow align-center reverse">
-      <button
-        mat-button
-        (click)="ChangeTab(previousTabIndex)"
-        [matTooltip]="slashTagsButtonToolTip"
-        matTooltipPosition="above"
-      >
-        <div class="flexRow align-center smallGap">
-          <div class="slash">/</div>
-          <div>{{ slashTagsButtonText }}</div>
-        </div>
-      </button>
-      <i class="arrow left"></i>
-    </div>
-
-    <!-- Select menu -->
-    <app-select-menu
-      [tabIndex]="tabIndex"
-      [showFilters]="showFilters"
-      [qp]="qp"
-      (showFiltersChange)="ShowPointFilterCriteria($event)"
-      (feedbackChange)="FeedbackChange($event)"
-      (ChangeTab)="ChangeTab($event)"
-    ></app-select-menu>
-
-    <!-- Sort Menu -->
-    <app-sort-menu
-      *ngIf="tabIndex === Tabs.tagPoints"
-      [pointSortType]="filter.sortType"
-      [sortDescending]="filter.sortDescending"
-      (pointSortTypeChange)="SetSortType($event)"
-      (sortDescendingChange)="SetSortDescending($event)"
-      (refresh)="refresh()"
-    ></app-sort-menu>
-
-    <!-- Local Points or Questions -->
-    <button
-      mat-button
-      *ngIf="auth0Service.isAuthenticated$ | async"
-      [class.selected]="localData.forConstituency"
-      (click)="ChangeLocalPointsOrQuestionsSelection()"
-      matTooltip="local interest"
-      matTooltipPosition="above"
-    >
-      local
-      <mat-icon>mp</mat-icon>
-    </button>
-
-    <!-- New question answer or tag point  -->
+    <!-- 5. New question answer or tag point  -->
     <button
       mat-button
       *ngIf="auth0Service.isAuthenticated$ | async"
@@ -139,6 +59,38 @@
     >
       new {{ qp }}
       <mat-icon>library_add</mat-icon>
+    </button>
+
+    <!-- Select menu -->
+    <app-select-menu
+      [tabIndex]="tabIndex"
+      [showFilters]="showFilters"
+      [qp]="qp"
+      (showFiltersChange)="ShowPointFilterCriteria($event)"
+      (feedbackChange)="FeedbackChange($event)"
+    ></app-select-menu>
+
+    <!-- Sort Menu -->
+    <app-sort-menu
+      [pointSortType]="filter.sortType"
+      [sortDescending]="filter.sortDescending"
+      (pointSortTypeChange)="SetSortType($event)"
+      (sortDescendingChange)="SetSortDescending($event)"
+      (refresh)="refresh()"
+    ></app-sort-menu>
+
+    <!-- Local Topics -->
+    <button
+      mat-button
+      (click)="ChangeLocalTags()"
+      class="localButton"
+      [class.selected]="localData.ConstituencyID > 0"
+      matTooltip="local interest"
+      matTooltipPosition="above"
+      *ngIf="auth0Service.isAuthenticated$ | async"
+    >
+      local
+      <mat-icon>mp</mat-icon>
     </button>
   </div>
 
@@ -164,19 +116,20 @@
 <!-- Begin Tab Content -->
 
 <div class="tabContainer">
-  <!-- 0 Tag Cloud Trending -->
-  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.trendingTags }">
+  <!-- 1 Tag Cloud -->
+  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.slashTags }">
     <div
       [ngClass]="{
-        centerStage: tabIndex === Tabs.trendingTags,
-        stageLeft: tabIndex > Tabs.trendingTags
+        centerStage: tabIndex === Tabs.slashTags,
+        stageLeft: tabIndex > Tabs.slashTags
       }"
     >
       <div class="scroller">
         <div class="content">
           <app-tag-cloud
-            [tagCloudType]="TagCloudTypes.Trending"
-            #tagsTrending
+            [HasFocus]="tabIndex === Tabs.slashTags"
+            [forConstituency]="localData.ConstituencyID > 0"
+            #slashTagsComponent
             (NewSlashTagSelected)="NewSlashTagSelected($event)"
           >
           </app-tag-cloud>
@@ -185,50 +138,7 @@
     </div>
   </div>
 
-  <!-- 1 Tag Cloud Recent -->
-  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.recentTags }">
-    <div
-      [ngClass]="{
-        centerStage: tabIndex === Tabs.recentTags,
-        stageLeft: tabIndex > Tabs.recentTags,
-        stageRight: tabIndex < Tabs.recentTags
-      }"
-    >
-      <div class="scroller">
-        <div class="content">
-          <app-tag-cloud
-            [tagCloudType]="TagCloudTypes.Recent"
-            #tagsRecent
-            (NewSlashTagSelected)="NewSlashTagSelected($event)"
-          >
-          </app-tag-cloud>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2 SlashTag Search -->
-  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagSearch }">
-    <div
-      [ngClass]="{
-        centerStage: tabIndex === Tabs.tagSearch,
-        stageLeft: tabIndex > Tabs.tagSearch,
-        stageRight: tabIndex < Tabs.tagSearch
-      }"
-    >
-      <div class="scroller">
-        <div class="content">
-          <app-tag-search
-            (NewSlashTagSelected)="NewSlashTagSelected($event)"
-            #tagSearch
-          >
-          </app-tag-search>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3 Question List -->
+  <!-- 2 Question List -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.questionList }">
     <div
       [ngClass]="{
@@ -249,7 +159,7 @@
     </div>
   </div>
 
-  <!-- 4 Question Answers -->
+  <!-- 3 Question Answers -->
   <div
     class="tabContent"
     [ngClass]="{ topZ: tabIndex === Tabs.questionAnswers }"
@@ -273,7 +183,7 @@
     </div>
   </div>
 
-  <!-- 5 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
+  <!-- 4 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagPoints }">
     <div
       [ngClass]="{
@@ -293,7 +203,7 @@
     </div>
   </div>
 
-  <!-- 6 new question or point -->
+  <!-- 5 new question or point -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.newPoint }">
     <div
       [ngClass]="{

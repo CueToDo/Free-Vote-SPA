@@ -1,7 +1,57 @@
 <div class="linkCloud">
-  <h1 *ngIf="localData.forConstituency">
-    {{ localData.freeVoteProfile.constituency }}
-  </h1>
+  <div class="header flexRow wrap justify-space-between align-center">
+    <h1 *ngIf="forConstituency">
+      {{ localData.freeVoteProfile.constituency }}
+    </h1>
+    <div></div>
+    <div>
+      <!-- Trending -->
+      <button
+        mat-raised-button
+        matTooltip="slash-tags"
+        matTooltipPosition="above"
+        [class.selected]="
+          !tagSearch && localData.tagCloudType === TagCloudTypes.Trending
+        "
+        (click)="FetchTrendingTags()"
+      >
+        trending
+      </button>
+
+      <!-- Recent -->
+      <button
+        mat-raised-button
+        matTooltip="slash-tags"
+        matTooltipPosition="above"
+        [class.selected]="
+          !tagSearch && localData.tagCloudType === TagCloudTypes.Recent
+        "
+        (click)="FetchRecentTags()"
+      >
+        recent
+      </button>
+
+      <!-- Tag Search -->
+      <button
+        mat-raised-button
+        matTooltip="slash tag search"
+        matTooltipPosition="above"
+        [class.selected]="tagSearch"
+        (click)="TagSearch()"
+      >
+        search
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <app-tag-search
+    *ngIf="tagSearch"
+    #tagSearch
+    (Cancel)="CancelTagSearch()"
+    (Tags)="TagSearchResult($event)"
+  >
+  </app-tag-search>
 
   <div *ngIf="waiting">
     <div>fetching tags</div>
@@ -10,6 +60,7 @@
     </div>
   </div>
 
+  <!-- Tag List/Search Results -->
   <ng-container *ngFor="let slashTag of tags">
     <div id="container">
       <a

@@ -17,7 +17,6 @@ import { Subscription } from 'rxjs';
 
 // Model/Enums
 import {
-  TagCloudTypes,
   PointSortTypes,
   PointSelectionTypes,
   Tabs
@@ -39,7 +38,6 @@ import { QuestionAnswersComponent } from './../question-answers/question-answers
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
 import { QuestionsListComponent } from 'src/app/public/questions-list/questions-list.component';
 import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
-import { TagSearchComponent } from './../tag-search/tag-search.component';
 
 @Component({
   templateUrl: './tags-and-points.component.html',
@@ -71,30 +69,9 @@ export class TagsAndPointsComponent
     return `show points for\n"${this.topicSelected}"`;
   }
 
-  public get slashTagsButtonToolTip(): string {
-    return (
-      'show ' +
-      (this.previousTabIndex === Tabs.recentTags ? 'recent' : 'trending') +
-      ' slash-tags'
-    );
-  }
   // Public variables for use in template
   public Tabs = Tabs;
-  public tabIndex = Tabs.trendingTags;
-  public previousTabIndex = Tabs.trendingTags;
-  public trendingRecent = Tabs.trendingTags;
-
-  // Topic - Tag Cloud
-  public TagCloudTypes = TagCloudTypes;
-  public haveRecentSlashTags = false;
-
-  // Tag fetch for tab switching after local setting change
-  fetchedTagsTrending = false;
-  fetchedTagsTrendingLocal = false;
-  fetchedTagsRecent = false;
-  fetchedTagsRecentLocal = false;
-  fetchedTagsSearch = false;
-  fetchedTagsSearchLocal = false;
+  public tabIndex = Tabs.notSelected;
 
   // Point fetch for tab switching after local setting change
   fetchedPoints = false;
@@ -150,9 +127,7 @@ export class TagsAndPointsComponent
   @ViewChild('pointsFilter') pointsFilterComponent!: PointsFilterComponent;
 
   // Tags
-  @ViewChild('tagsTrending') tagsTrendingComponent!: TagCloudComponent;
-  @ViewChild('tagsRecent') tagsRecentComponent!: TagCloudComponent;
-  @ViewChild('tagSearch') tagSearchComponent!: TagSearchComponent;
+  @ViewChild('slashTagsComponent') slashTagsComponent!: TagCloudComponent;
 
   //Points
   @ViewChild('appQuestionsList')
@@ -170,7 +145,6 @@ export class TagsAndPointsComponent
     private appData: AppDataService,
     public localData: LocalDataService,
     public auth0Service: AuthService,
-    private auth0Wrapper: Auth0Wrapper,
     private tagsService: TagsService,
     private breakpointObserver: BreakpointObserver
   ) {}
@@ -274,39 +248,17 @@ export class TagsAndPointsComponent
 
       switch (routeparts[1]) {
         // may have separate tab for following
+        case 'slash-tags':
         case 'trending':
-          this.tabIndex = Tabs.trendingTags;
-          this.previousTabIndex = Tabs.trendingTags;
-          this.trendingRecent = Tabs.trendingTags;
-          this.appData.defaultSort = PointSortTypes.TrendingActivity;
-          this.tagsTrendingComponent.FetchTagsForConstituency(
-            this.filter.constituencyID
-          );
-          if (this.filter.constituencyID > 0) {
-            this.fetchedTagsTrendingLocal = true;
-          } else {
-            this.fetchedTagsTrending = true;
-          }
-          break;
         case 'recent':
-          this.tabIndex = Tabs.recentTags;
-          this.previousTabIndex = Tabs.recentTags;
-          this.trendingRecent = Tabs.recentTags;
-          this.appData.defaultSort = PointSortTypes.DateUpdated;
-          this.tagsRecentComponent.FetchTagsForConstituency(
-            this.filter.constituencyID
-          );
-          if (this.filter.constituencyID > 0) {
-            this.fetchedTagsRecentLocal = true;
-          } else {
-            this.fetchedTagsRecent = true;
-          }
-
-          break;
-        case 'search':
-          this.tabIndex = Tabs.tagSearch;
-          this.previousTabIndex = Tabs.tagSearch;
+          this.tabIndex = Tabs.slashTags;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
+          this.slashTagsComponent.FetchTags();
+          break;
+        case 'tag-search':
+          this.tabIndex = Tabs.slashTags;
+          this.appData.defaultSort = PointSortTypes.TrendingActivity;
+          this.slashTagsComponent.TagSearch();
           break;
         default:
           this.tabIndex = Tabs.tagPoints;
@@ -340,14 +292,12 @@ export class TagsAndPointsComponent
           break;
         case 'by':
           this.tabIndex = Tabs.tagPoints;
-          this.previousTabIndex = Tabs.tagPoints;
           this.ShowPointFilterCriteria(true);
           break;
       }
     } else {
-      // Default to trending - shouldn't be needed
-      this.tabIndex = Tabs.trendingTags;
-      this.previousTabIndex = Tabs.trendingTags;
+      // Default to slashTags - shouldn't be needed
+      this.tabIndex = Tabs.slashTags;
       this.appData.defaultSort = PointSortTypes.TrendingActivity;
     }
   }
@@ -363,68 +313,25 @@ export class TagsAndPointsComponent
   ChangeLocalTags(): void {
     // Change constituency filter
     this.localData.forConstituency = !this.localData.forConstituency;
+
     this.SetConstituency();
 
     // Default switch off one half of "fetches"
     if (this.filter.constituencyID > 0) {
-      this.fetchedTagsTrendingLocal = false;
-      this.fetchedTagsRecentLocal = false;
-      this.fetchedTagsSearchLocal = false;
       this.fetchedPointsLocal = false;
     } else {
-      this.fetchedTagsTrending = false;
-      this.fetchedTagsRecent = false;
-      this.fetchedTagsSearch = false;
       this.fetchedPoints = false;
     }
 
     // Switch on specific "fetch"
-    if (this.tabIndex === Tabs.trendingTags) {
-      this.tagsTrendingComponent.FetchTagsForConstituency(
-        this.filter.constituencyID
-      );
-      if (this.filter.constituencyID > 0) {
-        this.fetchedTagsTrendingLocal = true;
-      } else {
-        this.fetchedTagsTrending = true;
-      }
-    } else if (this.tabIndex === Tabs.recentTags) {
-      this.tagsRecentComponent.FetchTagsForConstituency(
-        this.filter.constituencyID
-      );
-      if (this.filter.constituencyID > 0) {
-        this.fetchedTagsRecentLocal = true;
-      } else {
-        this.fetchedTagsRecent = true;
-      }
-    } else if (this.tabIndex === Tabs.tagSearch) {
-      this.tagSearchComponent.SetConstituencyID(
-        this.filter.constituencyID,
-        true
-      );
-      if (this.filter.constituencyID > 0) {
-        this.fetchedTagsSearchLocal = true;
-      } else {
-        this.fetchedTagsSearch = true;
-      }
-    }
+    if (this.tabIndex === Tabs.slashTags) this.slashTagsComponent.FetchTags();
   }
 
   ChangeLocalPointsOrQuestionsSelection() {
     // Change constituency filter
     this.localData.forConstituency = !this.localData.forConstituency;
+
     this.SetConstituency();
-    if (this.localData.forConstituency) {
-      // switched to local - reselect local tags on tab switch
-      this.fetchedTagsTrendingLocal = false;
-      this.fetchedTagsRecentLocal = false;
-      this.fetchedTagsSearchLocal = false;
-    } else {
-      // switched to national - reselect national tags on tab switch
-      this.fetchedTagsTrending = false;
-      this.fetchedTagsRecent = false;
-      this.fetchedTagsSearch = false;
-    }
 
     if (this.tabIndex == Tabs.tagPoints) {
       this.ReselectPoints(PointSortTypes.NoChange);
@@ -445,10 +352,21 @@ export class TagsAndPointsComponent
     this.filter.slashTag = slashTag;
     this.filter.updateTopicViewCount = true;
     this.pointsFilterComponent.ClearPointFilters();
-    this.haveRecentSlashTags = true;
     this.questionsSelected = false;
 
     this.ReselectPoints(PointSortTypes.NoChange);
+  }
+
+  // 1. Questions
+  ShowQuestions(): void {
+    this.qp = 'question';
+    this.ChangeTab(Tabs.questionList);
+  }
+
+  // 2. Points
+  ShowPoints(): void {
+    this.qp = 'point';
+    this.ChangeTab(Tabs.tagPoints);
   }
 
   ReselectQuestions() {
@@ -459,21 +377,8 @@ export class TagsAndPointsComponent
     this.questionsListComponent.SelectQuestions(false);
   }
 
-  ChangeTrendingRecent() {
-    // Anon can view recent by sessionID
-    if (this.previousTabIndex === this.trendingRecent) {
-      // Toggle
-      if (this.trendingRecent === Tabs.trendingTags) {
-        this.trendingRecent = Tabs.recentTags;
-      } else {
-        this.trendingRecent = Tabs.trendingTags;
-      }
-    }
-
-    if (this.previousTabIndex != this.trendingRecent) {
-      this.previousTabIndex = this.trendingRecent;
-      this.ChangeTab(this.previousTabIndex);
-    }
+  ShowTags() {
+    this.ChangeTab(Tabs.slashTags);
   }
 
   /// Change Tab and notify app component in TabChangeComplete
@@ -489,68 +394,16 @@ export class TagsAndPointsComponent
     // }
 
     switch (tabIndex) {
-      case Tabs.trendingTags:
-        this.previousTabIndex = tabIndex;
+      case Tabs.slashTags:
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         newRoute = '/trending';
-        if (!this.fetchedTagsTrending || !this.fetchedTagsTrendingLocal) {
-          // Fetch something for constituencyID (may be 0)
-          this.tagsTrendingComponent.FetchTagsForConstituency(
-            this.filter.constituencyID
-          );
-          if (this.filter.constituencyID > 0) {
-            this.fetchedTagsTrendingLocal = true;
-          } else {
-            this.fetchedTagsTrending = true;
-          }
-        }
-        break;
 
-      case Tabs.recentTags:
-        this.previousTabIndex = tabIndex;
-
-        this.appData.defaultSort = PointSortTypes.DateUpdated;
-        newRoute = '/recent';
-        let fetched = false;
-        // Check if we need to fetch tags for local setting (on/off)
-        if (!this.fetchedTagsRecent || !this.fetchedTagsRecentLocal) {
-          // Fetch something for constituencyID (may be 0)
-          this.tagsRecentComponent.FetchTagsForConstituency(
-            this.filter.constituencyID
-          );
-          fetched = true;
-        } else if (this.refreshRecentTags) {
+        if (this.refreshRecentTags) {
           // Voter had selected a new tag
-          this.tagsRecentComponent.FetchTags();
-          fetched = true;
+          this.slashTagsComponent.FetchTags();
         }
-        // Remember what was fetched
-        if (fetched) {
-          if (this.filter.constituencyID > 0) {
-            this.fetchedTagsRecentLocal = true;
-          } else {
-            this.fetchedTagsRecent = true;
-          }
-        }
-        this.refreshRecentTags = false;
-        break;
 
-      case Tabs.tagSearch:
-        this.previousTabIndex = tabIndex;
-        this.appData.defaultSort = PointSortTypes.TrendingActivity;
-        newRoute = '/search';
-        if (!this.fetchedTagsSearch || !this.fetchedTagsSearchLocal) {
-          this.tagSearchComponent.SetConstituencyID(
-            this.filter.constituencyID,
-            false
-          );
-          if (this.filter.constituencyID > 0) {
-            this.fetchedTagsSearchLocal = true;
-          } else {
-            this.fetchedTagsSearch = true;
-          }
-        }
-        this.tagSearchComponent.continueSearch();
+        this.refreshRecentTags = false;
         break;
 
       case Tabs.questionList:
@@ -615,10 +468,16 @@ export class TagsAndPointsComponent
     this.RouteParameterChanged(tabChanged, newRoute);
   }
 
+  SelectSlashTags() {
+    this.ChangeTab(Tabs.slashTags);
+  }
+
   // Tell the App Component that the route has changed
   RouteParameterChanged(hasChanged: boolean, newRoute: string): void {
-    newRoute = this.localData.TopicToSlashTag(newRoute);
-    if (hasChanged) this.appData.RouteParamChange$.next(newRoute);
+    if (hasChanged) {
+      newRoute = this.localData.TopicToSlashTag(newRoute);
+      this.appData.RouteParamChange$.next(newRoute);
+    }
   }
 
   // From child PointsFilter Component

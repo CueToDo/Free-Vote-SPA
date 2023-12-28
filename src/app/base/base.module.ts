@@ -15,12 +15,13 @@ import { CustomModule } from '../custommodule/custom.module';
 
 // Free Vote
 import { ByComponent } from 'src/app/base/by/by.component';
+import { CookieConsentComponent } from './cookie-consent/cookie-consent.component';
 import { CountriesComponent } from './countries/countries.component';
 import { FullSizeImagesComponent } from './full-size-images/full-size-images.component';
 import { ListComponent } from 'src/app/base/list/list.component';
 import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
 import { TagsEditComponent } from 'src/app/base/tags-edit/tags-edit.component';
-import { CookieConsentComponent } from './cookie-consent/cookie-consent.component';
+import { TagSearchComponent } from 'src/app//base/tag-search/tag-search.component';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { CookieConsentComponent } from './cookie-consent/cookie-consent.componen
     ListComponent,
     TagCloudComponent,
     TagsEditComponent,
+    TagSearchComponent,
     CookieConsentComponent
   ],
   exports: [

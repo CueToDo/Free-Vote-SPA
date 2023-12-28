@@ -7,7 +7,7 @@ import { Request } from 'express';
 // Models
 import { CandidateSearchResult } from '../models/candidate';
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
-import { OrganisationTypes } from '../models/enums';
+import { OrganisationTypes, TagCloudTypes } from '../models/enums';
 
 // Other
 import { environment as env } from 'src/environments/environment';
@@ -31,6 +31,7 @@ export class LocalDataService {
   }
 
   public initialPointsSelected = false;
+  public tagCloudType = TagCloudTypes.Trending;
   public TagChange = false; // use gloablly for comms from point-edit to point to points-list
 
   // jwt contains All claims
@@ -89,9 +90,7 @@ export class LocalDataService {
   }
 
   public get ConstituencyID(): number {
-    if (this.forConstituency) {
-      return +this.freeVoteProfile.constituencyID;
-    }
+    if (this.forConstituency) return +this.freeVoteProfile.constituencyID;
     return 0;
   }
 

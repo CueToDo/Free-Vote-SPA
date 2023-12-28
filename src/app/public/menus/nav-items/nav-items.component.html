@@ -20,9 +20,7 @@
   <!-- https://github.com/angular/angular/issues/22588 -->
   <button
     mat-button
-    [routerLink]="
-      (auth0Service.isAuthenticated$ | async) ? '/recent' : '/trending'
-    "
+    routerLink="/slash-tags"
     [class.selected]="appData.MenuItemSelected === 'slashTags'"
     (click)="appData.MenuItemSelected = 'slashTags'"
     matTooltip="slash tags"

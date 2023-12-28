@@ -18,14 +18,16 @@ import { isPlatformBrowser } from '@angular/common';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+// Models
+import { Tag } from 'src/app/models/tag.model';
+
 // FreeVote Services
 import { AppDataService } from 'src/app/services/app-data.service';
-import { LocalDataService } from './../../services/local-data.service';
+import { LocalDataService } from '../../services/local-data.service';
 import { TagsService } from 'src/app/services/tags.service';
 
 // Other
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { Tag } from 'src/app/models/tag.model';
 
 @Component({
   selector: 'app-tag-search',
@@ -33,7 +35,9 @@ import { Tag } from 'src/app/models/tag.model';
   styleUrls: ['./tag-search.component.css']
 })
 export class TagSearchComponent implements OnInit, AfterViewInit {
-  @Output() NewSlashTagSelected = new EventEmitter<string>();
+  @Output() CreateNewSlashTag = new EventEmitter<string>();
+  @Output() Tags = new EventEmitter<Tag[]>();
+  @Output() Cancel = new EventEmitter();
 
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
   @ViewChild('tvSlashTag', { static: false }) tvSlashTag:
@@ -44,7 +48,6 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
   constituencyID = 0;
   tagSearch$: Subscription | undefined;
   tagResults$: Subscription | undefined;
-  tags: Tag[] = [];
   searching = false;
 
   isMobile = false;
@@ -99,7 +102,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     // Client side only
     if (isPlatformBrowser(this.platformId)) {
       this.slashTag = '/';
-      this.tags = [];
+      this.Tags.emit([]);
       this.searching = false;
 
       window.setTimeout(() => {
@@ -172,7 +175,8 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
         .TagSearch(this.slashTag, this.constituencyID)
         .subscribe({
           next: slashTags => {
-            this.tags = slashTags;
+            // this.tags = slashTags;
+            this.Tags.emit(slashTags);
             this.searching = false;
           },
           error: serverError => {
@@ -194,38 +198,17 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
       }
       this.slashTag = value;
 
-      this.setSlashTag(this.slashTag);
+      // Get appDataService to broadcast (method shared by PointEditComponent)
+      this.tagsService.SetSlashTag(this.slashTag);
+
+      this.restartSearch();
+
+      this.CreateNewSlashTag.emit(this.slashTag);
     }
   }
 
-  // from click on tag in search results
-  setSlashTag(slashTag: string): void {
-    // Get appDataService to broadcast (method shared by PointEditComponent)
-    this.tagsService.SetSlashTag(slashTag);
-
-    this.restartSearch();
-
-    this.NewSlashTagSelected.emit(slashTag);
-  }
-
-  FontSize(Weight: number): string {
-    // Restict Weight and font-size for smaller screens
-
-    if (this.widthBand < 1 && Weight > 0) {
-      Weight = 0;
-    } else if (this.widthBand < 2 && Weight > 1) {
-      Weight = 1;
-    } else if (this.widthBand < 3 && Weight > 2) {
-      Weight = 2;
-    } else if (this.widthBand < 4 && Weight > 3) {
-      Weight = 3;
-    } else if (this.widthBand < 5 && Weight > 4) {
-      Weight = 4;
-    } else if (Weight > 5) {
-      Weight = 5;
-    }
-
-    return 100 + Weight * 50 + '%'; // perCent
+  cancel(): void {
+    this.Cancel.emit();
   }
 
   ngOnDestroy() {

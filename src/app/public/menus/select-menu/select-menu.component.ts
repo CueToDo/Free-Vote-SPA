@@ -14,10 +14,6 @@ import { Tabs } from 'src/app/models/enums';
   styleUrls: ['./select-menu.component.css']
 })
 export class SelectMenuComponent {
-  @Input() tabIndex = Tabs.trendingTags;
-
-  @Output() ChangeTab = new EventEmitter<Tabs>();
-
   // Template enum
   public Tabs = Tabs;
 
@@ -64,18 +60,6 @@ export class SelectMenuComponent {
     public auth0Service: AuthService,
     public localData: LocalDataService
   ) {}
-
-  // 1. Questions
-  showQuestions(): void {
-    this.qp = 'question';
-    this.ChangeTab.emit(Tabs.questionList);
-  }
-
-  // 2. Points
-  showPoints(): void {
-    this.qp = 'point';
-    this.ChangeTab.emit(Tabs.tagPoints);
-  }
 
   // 3. Search Filters
   toggleShowPointFilterCriteria(): void {

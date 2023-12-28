@@ -72,9 +72,10 @@ const appRoutes: Routes = [
   },
 
   // following are "external" links - need to be tested from url, not tab links
-  { path: 'trending', component: TagsAndPointsComponent }, // TAGS
-  { path: 'recent', component: TagsAndPointsComponent }, // TAGS personal - recent selection - works on anon?
-  { path: 'search', component: TagsAndPointsComponent }, // Tag Search
+  { path: 'slash-tags', component: TagsAndPointsComponent },
+  { path: 'trending', component: TagsAndPointsComponent }, // Tags
+  { path: 'recent', component: TagsAndPointsComponent }, // Tags personal - recent selection - works on anon?
+  { path: 'tag-search', component: TagsAndPointsComponent }, // Tag Search
 
   // issue with fixed route part after parameter :tag/points - reversed to points/:tag
   { path: 'points/:tag', component: TagsAndPointsComponent },

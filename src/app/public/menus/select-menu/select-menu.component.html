@@ -13,35 +13,7 @@
 <!-- Search and Sort menu -->
 
 <mat-menu #pointsAndQuestionsMenu="matMenu">
-  <!-- 1. Select questions -->
-  <button
-    mat-menu-item
-    [class.selected]="
-      tabIndex === Tabs.questionList || tabIndex === Tabs.questionAnswers
-    "
-    (click)="showQuestions()"
-    matTooltip="show questions"
-    matTooltipPosition="right"
-  >
-    questions
-    <mat-icon>help</mat-icon>
-  </button>
-
-  <!-- 2. Select points -->
-  <button
-    mat-menu-item
-    (click)="showPoints()"
-    [class.selected]="tabIndex === Tabs.tagPoints"
-    matTooltip="show points"
-    matTooltipPosition="right"
-  >
-    points
-    <mat-icon>comment</mat-icon>
-  </button>
-
-  <hr />
-
-  <!-- 3. Show Search (Point Filter) Options -->
+  <!-- 1. Show Search (Point Filter) Options -->
   <button
     mat-menu-item
     (click)="toggleShowPointFilterCriteria()"
@@ -52,7 +24,7 @@
     {{ filterText }}
   </button>
 
-  <!-- 4. Feedback Switch -->
+  <!-- 2. Feedback Switch -->
   <button
     mat-menu-item
     (click)="toggleFeedback()"
@@ -63,7 +35,7 @@
     {{ feedbackText }}
   </button>
 
-  <!-- 5. Refresh -->
+  <!-- 3. Refresh -->
   <button
     mat-menu-item
     (click)="refreshSelection()"
