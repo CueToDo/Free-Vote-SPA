@@ -73,10 +73,6 @@ export class TagsAndPointsComponent
   public Tabs = Tabs;
   public tabIndex = Tabs.notSelected;
 
-  // Point fetch for tab switching after local setting change
-  fetchedPoints = false;
-  fetchedPointsLocal = false;
-
   public get topicSelected() {
     return this.localData.SlashTagToTopic(this.filter.slashTag);
   }
@@ -302,6 +298,7 @@ export class TagsAndPointsComponent
     }
   }
 
+  // Local constituency or national selection
   SetConstituency() {
     if (this.localData.forConstituency) {
       this.filter.constituencyID = this.localData.ConstituencyIDVoter;
@@ -310,20 +307,14 @@ export class TagsAndPointsComponent
     }
   }
 
-  ChangeLocalTags(): void {
+  ChangeConstituency(): void {
     // Change constituency filter
     this.localData.forConstituency = !this.localData.forConstituency;
 
     this.SetConstituency();
 
-    // Default switch off one half of "fetches"
-    if (this.filter.constituencyID > 0) {
-      this.fetchedPointsLocal = false;
-    } else {
-      this.fetchedPoints = false;
-    }
-
     // Switch on specific "fetch"
+    // ToDo - activate focused tab
     if (this.tabIndex === Tabs.slashTags) this.slashTagsComponent.FetchTags();
   }
 
@@ -357,16 +348,15 @@ export class TagsAndPointsComponent
     this.ReselectPoints(PointSortTypes.NoChange);
   }
 
-  // 1. Questions
+  // 1. Tags
+  ShowTags() {
+    this.ChangeTab(Tabs.slashTags);
+  }
+
+  // 2. Questions
   ShowQuestions(): void {
     this.qp = 'question';
     this.ChangeTab(Tabs.questionList);
-  }
-
-  // 2. Points
-  ShowPoints(): void {
-    this.qp = 'point';
-    this.ChangeTab(Tabs.tagPoints);
   }
 
   ReselectQuestions() {
@@ -377,8 +367,10 @@ export class TagsAndPointsComponent
     this.questionsListComponent.SelectQuestions(false);
   }
 
-  ShowTags() {
-    this.ChangeTab(Tabs.slashTags);
+  // 3. Points
+  ShowPoints(): void {
+    this.qp = 'point';
+    this.ChangeTab(Tabs.tagPoints);
   }
 
   /// Change Tab and notify app component in TabChangeComplete
@@ -468,10 +460,6 @@ export class TagsAndPointsComponent
     this.RouteParameterChanged(tabChanged, newRoute);
   }
 
-  SelectSlashTags() {
-    this.ChangeTab(Tabs.slashTags);
-  }
-
   // Tell the App Component that the route has changed
   RouteParameterChanged(hasChanged: boolean, newRoute: string): void {
     if (hasChanged) {
@@ -498,21 +486,6 @@ export class TagsAndPointsComponent
   // QuestionsList emits the question count, which may cause switch to points
   QuestionCount(count: number): void {
     this.questionCount = count;
-  }
-
-  BackToSelectedTag() {
-    if (this.questionCount == 0) {
-      // If local setting has changed on tags screen, may need to reselect points
-      if (
-        (this.localData.forConstituency && !this.fetchedPointsLocal) ||
-        (!this.localData.forConstituency && !this.fetchedPoints)
-      )
-        this.ReselectPoints(PointSortTypes.NoChange);
-
-      this.ChangeTab(Tabs.tagPoints);
-    } else {
-      this.ChangeTab(Tabs.questionList);
-    }
   }
 
   QuestionSelected(questionID: number): void {

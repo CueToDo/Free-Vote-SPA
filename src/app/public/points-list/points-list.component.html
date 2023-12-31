@@ -1,7 +1,7 @@
 <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
   <div class="content">
     <div class="overflow-hidden">
-      <h1 *ngIf="localData.forConstituency">
+      <h1 *ngIf="localData.forConstituency" class="h1Constituency">
         {{ localData.freeVoteProfile.constituency }}
       </h1>
 

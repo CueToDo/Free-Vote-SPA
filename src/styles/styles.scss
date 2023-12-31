@@ -237,6 +237,18 @@ div.toolbar mat-form-field {
   transition: left 0.25s ease-out, opacity 0.25s ease-out, height 0.25s ease-out;
 }
 
+.h1Constituency {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: right;
+}
+
+@media (max-width: 540px) {
+  .h1Constituency {
+    font-size: 1.25rem;
+  }
+}
+
 .linkCloud {
   text-align: center;
   margin-left: 10px;

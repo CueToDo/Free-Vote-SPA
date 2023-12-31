@@ -12,7 +12,7 @@
     <button
       mat-button
       [class.selected]="tabIndex === Tabs.slashTags"
-      (click)="SelectSlashTags()"
+      (click)="ShowTags()"
       matTooltip="slash-tags"
       matTooltipPosition="above"
     >
@@ -82,7 +82,7 @@
     <!-- Local Topics -->
     <button
       mat-button
-      (click)="ChangeLocalTags()"
+      (click)="ChangeConstituency()"
       class="localButton"
       [class.selected]="localData.ConstituencyID > 0"
       matTooltip="local interest"
@@ -212,7 +212,10 @@
       }"
     >
       <div class="scroller">
-        <div class="content mt-5 mb-3">
+        <div class="content mb-3">
+          <h1 *ngIf="localData.forConstituency" class="h1Constituency">
+            {{ localData.freeVoteProfile.constituency }}
+          </h1>
           <app-question-edit
             #newQuestion
             *ngIf="showQuestions"

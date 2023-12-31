@@ -1,9 +1,8 @@
 <div class="linkCloud">
-  <div class="header flexRow wrap justify-space-between align-center">
-    <h1 *ngIf="forConstituency">
-      {{ localData.freeVoteProfile.constituency }}
-    </h1>
-    <div></div>
+  <h1 *ngIf="localData.forConstituency" class="h1Constituency">
+    {{ localData.freeVoteProfile.constituency }}
+  </h1>
+  <div class="header flexRow wrap justify-center align-center">
     <div>
       <!-- Trending -->
       <button

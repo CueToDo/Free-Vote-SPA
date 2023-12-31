@@ -45,7 +45,6 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     | undefined;
 
   slashTag = '';
-  constituencyID = 0;
   tagSearch$: Subscription | undefined;
   tagResults$: Subscription | undefined;
   searching = false;
@@ -159,8 +158,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     // This does not get communicated back to view until no cleanup is required
   }
 
-  SetConstituencyID(constituencyID: number, search: boolean) {
-    this.constituencyID = constituencyID;
+  SetConstituencyID(search: boolean) {
     if (search) {
       this.tagSearch();
     }
@@ -172,7 +170,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     if (this.slashTag.length > 2) {
       this.searching = true;
       this.tagResults$ = this.tagsService
-        .TagSearch(this.slashTag, this.constituencyID)
+        .TagSearch(this.slashTag, this.localData.ConstituencyID)
         .subscribe({
           next: slashTags => {
             // this.tags = slashTags;
