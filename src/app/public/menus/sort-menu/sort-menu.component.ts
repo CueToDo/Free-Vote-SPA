@@ -1,4 +1,3 @@
-import { SelectMenuComponent } from '../select-menu/select-menu.component';
 // Angular
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
@@ -33,7 +32,7 @@ export class SortMenuComponent implements OnInit {
   isMobile = false;
 
   public get sortToolTip(): string {
-    let tooltip = `showing points for\n"${this.localData.PreviousTopicSelected}"\n`;
+    let tooltip = `showing points for\n"${this.localData.TopicSelected}"\n`;
     switch (this.pointSortType) {
       case PointSortTypes.TrendingActivity:
         return tooltip + `in trending order`;

@@ -251,8 +251,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.routeDisplay = routeParts.join('/');
 
       this.pageTitleToolTip =
-        route === this.localData.PreviousSlashTagSelected
-          ? 'SlashTag/' + this.localData.PreviousTopicSelected
+        route === this.localData.SlashTagSelected
+          ? 'SlashTag/' + this.localData.TopicSelected
           : route.substring(1);
 
       this.setDocTitle(this.routeDisplay);

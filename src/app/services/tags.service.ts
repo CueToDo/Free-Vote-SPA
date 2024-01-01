@@ -30,16 +30,16 @@ export class TagsService {
     // LocalData LoadValues (called from its constructor) handles initial set up
     const constituencyID = 0;
 
-    if (!this.localData.PreviousSlashTagSelected) {
+    if (!this.localData.SlashTagSelected) {
       this.TagLatestActivity(constituencyID).subscribe({
         next: previousSlashTagSelected => {
-          this.localData.PreviousSlashTagSelected = previousSlashTagSelected;
+          this.localData.SlashTagSelected = previousSlashTagSelected;
         },
         error: error =>
           console.log('Server Error on getting trending topics', error)
       });
-    } else if (this.localData.PreviousTopicSelected === 'SignedOut') {
-      this.localData.PreviousSlashTagSelected = '';
+    } else if (this.localData.TopicSelected === 'SignedOut') {
+      this.localData.SlashTagSelected = '';
     }
   }
 
@@ -53,7 +53,7 @@ export class TagsService {
 
   // New SlashTag selected in tags component, tag search and new point
   SetSlashTag(slashTag: string): void {
-    this.localData.PreviousSlashTagSelected = slashTag;
+    this.localData.SlashTagSelected = slashTag;
     this.localData.ActiveAliasForFilter = '';
   }
 

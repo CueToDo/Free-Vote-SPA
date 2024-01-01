@@ -1,89 +1,148 @@
-<div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
+<div class="flexCol scroller">
   <div class="content">
-    <div class="overflow-hidden">
-      <h1 *ngIf="localData.forConstituency" class="h1Constituency">
-        {{ localData.freeVoteProfile.constituency }}
-      </h1>
+    <h1 *ngIf="localData.forConstituency" class="h1Constituency">
+      {{ localData.freeVoteProfile.constituency }}
+    </h1>
 
-      <div *ngIf="error !== ''" class="text-danger mx-3">
-        {{ error }}
-      </div>
+    <div class="header flexRow wrap justify-center align-center">
+      <!-- Sort Menu -->
+      <app-sort-menu
+        [pointSortType]="sortType"
+        [sortDescending]="sortDescending"
+        (pointSortTypeChange)="SetSortType($event)"
+        (sortDescendingChange)="SetSortDescending($event)"
+        (refresh)="refresh()"
+      ></app-sort-menu>
 
-      <!-- Top Spinner for reselect -->
-      <div *ngIf="AlreadyFetchingPointsFromDB && pointCount > 0">
-        <div class="flexRow justify-end align-center">
-          <div class="amr-2">reselecting points</div>
-          <div class="spinner-grow text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+      <!-- 1. Show Search (Point Filter) Options -->
+      <button
+        mat-raised-button
+        (click)="PointSearch()"
+        matTooltip="search"
+        matTooltipPosition="above"
+      >
+        <mat-icon>search</mat-icon>
+        search
+      </button>
+
+      <!-- 5. New question answer or tag point  -->
+      <button
+        mat-raised-button
+        *ngIf="auth0Service.isAuthenticated$ | async"
+        matTooltip="create new point"
+        matTooltipPosition="above"
+      >
+        new point
+        <mat-icon>library_add</mat-icon>
+      </button>
+
+      <!-- 2. Feedback Switch -->
+      <button
+        mat-raised-button
+        (click)="toggleFeedback()"
+        matTooltip="toggle feedback"
+        matTooltipPosition="right"
+      >
+        <mat-icon>{{ feedbackIcon }}</mat-icon>
+        {{ feedbackText }}
+      </button>
+
+      <!-- 3. Refresh -->
+      <button
+        mat-raised-button
+        (click)="ReselectPoints(PointSortTypes.NoChange)"
+        matTooltip="refresh"
+        matTooltipPosition="right"
+      >
+        <mat-icon>refresh</mat-icon>
+        refresh
+      </button>
+    </div>
+
+    <div *ngIf="error !== ''" class="text-danger mx-3">
+      {{ error }}
+    </div>
+  </div>
+
+  <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
+    <div class="content">
+      <div class="overflow-hidden">
+        <!-- Top Spinner for reselect -->
+        <div *ngIf="AlreadyFetchingPointsFromDB && pointCount > 0">
+          <div class="flexRow justify-end align-center">
+            <div class="amr-2">reselecting points</div>
+            <div class="spinner-grow text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Points List -->
-      <!-- Constituency - if we're showing as local interest 
+        <!-- Points List -->
+        <!-- Constituency - if we're showing as local interest 
           then allow voter to add to national interest and vice versa -->
-      <div *ngFor="let point of points">
-        <app-point
-          [point]="point"
-          [pointCount]="pointCount"
-          [isParentPoint]="false"
-          [searchTerm]="filter.text"
-          [possibleAnswer]="possibleAnswers"
-          [isComment]="pointComments"
-          [isMyAnswer]="attachedToQuestion && point.isPointOwner"
-          [feedbackOn]="feedbackOn"
-          (AddPointToAnswers)="AddToAnswers($event)"
-          (RemovePointFromAnswers)="RemoveFromAnswers($event)"
-          (CompleteEdit)="CompleteEdit($event)"
-          (PointDeleted)="onPointDeleted($event)"
-          (AltSlashTagSelected)="setSlashTag($event)"
-          (SelectComment)="SelectComment.emit($event)"
-        >
-        </app-point>
-      </div>
-
-      <!-- Prompt New Point or Answer to Question -->
-      <div
-        *ngIf="
-          !AlreadyFetchingPointsFromDB &&
-          pointCount === 0 &&
-          !this.pointComments
-        "
-        class="alert alert-warning"
-      >
-        {{ firstResponse }}
-      </div>
-
-      <!-- Count -->
-      <div class="pointCount flexRow justify-end align-center">
-        <div *ngIf="!AlreadyFetchingPointsFromDB && !filter?.single">
-          {{ points.length }} {{ pointOrAnswer
-          }}{{ appData.plural(points.length) }} displayed of {{ pointCount
-          }}<span *ngIf="!allPointsDisplayed">
-            <a
-              *ngIf="points.length < pointCount"
-              routerLink="."
-              (click)="fetchMorePoints()"
-              >more</a
-            ></span
+        <div *ngFor="let point of points">
+          <app-point
+            [point]="point"
+            [pointCount]="pointCount"
+            [isParentPoint]="false"
+            [searchTerm]="filter.text"
+            [possibleAnswer]="possibleAnswers"
+            [isComment]="pointComments"
+            [isMyAnswer]="attachedToQuestion && point.isPointOwner"
+            [feedbackOn]="feedbackOn"
+            (AddPointToAnswers)="AddToAnswers($event)"
+            (RemovePointFromAnswers)="RemoveFromAnswers($event)"
+            (CompleteEdit)="CompleteEdit($event)"
+            (PointDeleted)="onPointDeleted($event)"
+            (AltSlashTagSelected)="setSlashTag($event)"
+            (SelectComment)="SelectComment.emit($event)"
           >
+          </app-point>
         </div>
 
-        <div *ngIf="filter?.single">
-          <a [routerLink]="filter.slashTag">show all</a>
-        </div>
-
-        <div class="amr-2" *ngIf="AlreadyFetchingPointsFromDB">
-          ... fetching next batch of points
-        </div>
-
-        <!-- Bottom spinner -->
+        <!-- Prompt New Point or Answer to Question -->
         <div
-          class="spinner-grow text-primary"
-          role="status"
-          *ngIf="AlreadyFetchingPointsFromDB"
+          *ngIf="
+            !AlreadyFetchingPointsFromDB &&
+            pointCount === 0 &&
+            !this.pointComments
+          "
+          class="alert alert-warning"
         >
-          <div class="visually-hidden">Loading...</div>
+          {{ firstResponse }}
+        </div>
+
+        <!-- Count -->
+        <div class="pointCount flexRow justify-end align-center">
+          <div *ngIf="!AlreadyFetchingPointsFromDB && !single">
+            {{ points.length }} {{ pointOrAnswer
+            }}{{ appData.plural(points.length) }} displayed of {{ pointCount
+            }}<span *ngIf="!allPointsDisplayed">
+              <a
+                *ngIf="points.length < pointCount"
+                routerLink="."
+                (click)="fetchMorePoints()"
+                >more</a
+              ></span
+            >
+          </div>
+
+          <div *ngIf="single">
+            <a [routerLink]="localData.SlashTagSelected">show all</a>
+          </div>
+
+          <div class="amr-2" *ngIf="AlreadyFetchingPointsFromDB">
+            ... fetching next batch of points
+          </div>
+
+          <!-- Bottom spinner -->
+          <div
+            class="spinner-grow text-primary"
+            role="status"
+            *ngIf="AlreadyFetchingPointsFromDB"
+          >
+            <div class="visually-hidden">Loading...</div>
+          </div>
         </div>
       </div>
     </div>

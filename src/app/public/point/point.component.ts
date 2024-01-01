@@ -86,9 +86,7 @@ export class PointComponent implements AfterViewInit {
   public PointSupportLevels = PointSupportLevels;
 
   get linkShare(): string {
-    return (
-      this.localData.PreviousSlashTagSelected + '/' + this.SelectSingleTitle
-    );
+    return this.localData.SlashTagSelected + '/' + this.SelectSingleTitle;
   }
 
   get showLink(): boolean {
@@ -151,7 +149,7 @@ export class PointComponent implements AfterViewInit {
       this.tags = this.point.tags.filter(
         tag =>
           tag.slashTag.toLowerCase() !==
-          this.localData.PreviousSlashTagSelected.toLowerCase()
+          this.localData.SlashTagSelected.toLowerCase()
       );
     }
   }

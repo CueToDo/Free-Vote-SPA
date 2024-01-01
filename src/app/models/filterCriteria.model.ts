@@ -1,5 +1,4 @@
 import {
-  PointSelectionTypes,
   PointTypesEnum,
   PointSortTypes,
   MyPointFilter,
@@ -8,25 +7,9 @@ import {
 } from './enums';
 
 export class FilterCriteria {
-  updateTopicViewCount = false;
-
   constituencyID = 0;
 
-  // SelectionType
-  single = false;
-  pointSelectionType = PointSelectionTypes.TagPoints;
-
-  // Comments on a Point
-  pointID = 0;
-
-  // Answers to Questions
-  questionID = 0;
-
-  // QuestionPoints
-  sharesTagButNotAttached = false;
-
   // SlashTag
-  slashTag = '';
   anyTag = false;
 
   // Text Filter
@@ -54,12 +37,6 @@ export class FilterCriteria {
 
   // Whether Feedback Given
   feedbackFilter = PointFeedbackFilter.Any;
-
-  // Sort Type
-  sortType = PointSortTypes.TrendingActivity;
-
-  // Sort Order
-  sortDescending = true;
 }
 
 export class PointsFilterFormData {

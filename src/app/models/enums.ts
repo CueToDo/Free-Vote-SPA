@@ -73,13 +73,12 @@ export enum Tabs {
   // Tags
   slashTags = 1,
 
-  // Questions, Answers
-  questionList = 2,
-  questionAnswers = 3,
-
   // Points
-  tagPoints = 4,
-  newPoint = 5
+  tagPoints = 2,
+
+  // Questions, Answers
+  questionList = 3,
+  questionAnswers = 4
 }
 
 export enum TagCloudTypes {

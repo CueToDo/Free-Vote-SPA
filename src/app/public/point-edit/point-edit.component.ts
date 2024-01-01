@@ -312,7 +312,7 @@ export class PointEditComponent implements OnInit {
           this.pointClone.questionID = this.questionID;
 
         // Has voter removed SlashTagSelected?
-        let returnToSlashTag = this.localData.PreviousSlashTagSelected;
+        let returnToSlashTag = this.localData.SlashTagSelected;
         let currentTagIncluded = newOrRetainedTags.includes(returnToSlashTag);
 
         this.localData.TagChange = false;

@@ -1,4 +1,4 @@
-<!-- Begin tab selection and point sort order -->
+<!-- Begin Tab Selection and point sort order -->
 
 <div
   [ngClass]="{
@@ -22,7 +22,19 @@
       </div>
     </button>
 
-    <!-- 2. Select questions -->
+    <!-- 2. Select points -->
+    <button
+      mat-button
+      (click)="ShowPoints()"
+      [class.selected]="tabIndex === Tabs.tagPoints"
+      matTooltip="show points"
+      matTooltipPosition="above"
+    >
+      points
+      <mat-icon>comment</mat-icon>
+    </button>
+
+    <!-- 3. Select questions -->
     <button
       mat-button
       [class.selected]="
@@ -35,49 +47,6 @@
       questions
       <mat-icon>help</mat-icon>
     </button>
-
-    <!-- 4. Select points -->
-    <button
-      mat-button
-      (click)="ShowPoints()"
-      [class.selected]="tabIndex === Tabs.tagPoints"
-      matTooltip="show points"
-      matTooltipPosition="above"
-    >
-      points
-      <mat-icon>comment</mat-icon>
-    </button>
-
-    <!-- 5. New question answer or tag point  -->
-    <button
-      mat-button
-      *ngIf="auth0Service.isAuthenticated$ | async"
-      [class.selected]="tabIndex === Tabs.newPoint"
-      (click)="ChangeTab(Tabs.newPoint)"
-      [matTooltip]="'create new ' + qp"
-      matTooltipPosition="above"
-    >
-      new {{ qp }}
-      <mat-icon>library_add</mat-icon>
-    </button>
-
-    <!-- Select menu -->
-    <app-select-menu
-      [tabIndex]="tabIndex"
-      [showFilters]="showFilters"
-      [qp]="qp"
-      (showFiltersChange)="ShowPointFilterCriteria($event)"
-      (feedbackChange)="FeedbackChange($event)"
-    ></app-select-menu>
-
-    <!-- Sort Menu -->
-    <app-sort-menu
-      [pointSortType]="filter.sortType"
-      [sortDescending]="filter.sortDescending"
-      (pointSortTypeChange)="SetSortType($event)"
-      (sortDescendingChange)="SetSortDescending($event)"
-      (refresh)="refresh()"
-    ></app-sort-menu>
 
     <!-- Local Topics -->
     <button
@@ -97,21 +66,7 @@
   <hr />
 </div>
 
-<!-- End tab selection and point sort order -->
-
-<!-- Points filter for tagPoints list or questionAnswers -->
-
-<app-points-filter
-  #pointsFilter
-  [ShowFilters]="showFilters"
-  [filter]="filter"
-  (filterChange)="applyFilter()"
-  (pointSortTypeChanged)="pointSortTypeChanged($event)"
-  (cancelSearch)="cancelSearch()"
->
-</app-points-filter>
-
-<!-- End points filter -->
+<!-- End Tab Selection -->
 
 <!-- Begin Tab Content -->
 
@@ -138,7 +93,25 @@
     </div>
   </div>
 
-  <!-- 2 Question List -->
+  <!-- 2 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
+  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagPoints }">
+    <div
+      [ngClass]="{
+        centerStage: tabIndex === Tabs.tagPoints,
+        stageLeft: tabIndex > Tabs.tagPoints,
+        stageRight: tabIndex < Tabs.tagPoints
+      }"
+    >
+      <!-- "Fetch more" component must apply scroller and content classes internally -->
+      <app-points-list
+        #appPointsList
+        (AltSlashTagSelected)="AltSlashTagSelected($event)"
+      >
+      </app-points-list>
+    </div>
+  </div>
+
+  <!-- 3 Question List -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.questionList }">
     <div
       [ngClass]="{
@@ -148,10 +121,10 @@
       }"
     >
       <!-- "Fetch more" component must apply scroller and content classes internally -->
+      <!-- [filter]="filter" -->
+      <!-- [SortDescending]="filter.sortDescending" -->
       <app-questions-list
         #appQuestionsList
-        [filter]="filter"
-        [SortDescending]="filter.sortDescending"
         (QuestionCount)="QuestionCount($event)"
         (QuestionSelected)="QuestionSelected($event)"
       >
@@ -159,7 +132,7 @@
     </div>
   </div>
 
-  <!-- 3 Question Answers -->
+  <!-- 4 Question Answers -->
   <div
     class="tabContent"
     [ngClass]="{ topZ: tabIndex === Tabs.questionAnswers }"
@@ -172,69 +145,15 @@
       }"
     >
       <!-- "Fetch more" component must apply scroller and content classes internally -->
+      <!-- [filter]="filter" -->
       <app-question-answers
-        [filter]="filter"
+        [QuestionID]="specificQuestionIDSelected"
         (ViewAllQuestions)="ViewAllQuestions()"
         #appQuestionAnswers
         (AnswerAdded)="AnswerAdded($event)"
         (AnswerRemoved)="AnswerRemoved($event)"
       >
       </app-question-answers>
-    </div>
-  </div>
-
-  <!-- 4 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
-  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagPoints }">
-    <div
-      [ngClass]="{
-        centerStage: tabIndex === Tabs.tagPoints,
-        stageLeft: tabIndex > Tabs.tagPoints,
-        stageRight: tabIndex < Tabs.tagPoints
-      }"
-    >
-      <!-- "Fetch more" component must apply scroller and content classes internally -->
-      <app-points-list
-        #appPointsList
-        [filter]="filter"
-        [feedbackOn]="feedbackOn"
-        (AltSlashTagSelected)="AltSlashTagSelected($event)"
-      >
-      </app-points-list>
-    </div>
-  </div>
-
-  <!-- 5 new question or point -->
-  <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.newPoint }">
-    <div
-      [ngClass]="{
-        centerStage: tabIndex === Tabs.newPoint,
-        stageRight: tabIndex < Tabs.newPoint
-      }"
-    >
-      <div class="scroller">
-        <div class="content mb-3">
-          <h1 *ngIf="localData.forConstituency" class="h1Constituency">
-            {{ localData.freeVoteProfile.constituency }}
-          </h1>
-          <app-question-edit
-            #newQuestion
-            *ngIf="showQuestions"
-            [constituencyID]="filter.constituencyID"
-            (CancelEdit)="CancelNewQuestion()"
-            (CompleteEdit)="NewQuestion()"
-          >
-          </app-question-edit>
-
-          <app-point-edit
-            #newPoint
-            *ngIf="!showQuestions"
-            [constituencyID]="filter.constituencyID"
-            (CancelEdit)="CancelNewPoint()"
-            (CompleteEdit)="NewPointCreated()"
-          >
-          </app-point-edit>
-        </div>
-      </div>
     </div>
   </div>
 

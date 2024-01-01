@@ -426,16 +426,16 @@ export class LocalDataService {
       // (Don't save Last Alias Selected to database)
 
       if (values.lastTag) {
-        this.PreviousTopicSelected = this.SlashTagToTopic(values.lastTag);
+        this.TopicSelected = this.SlashTagToTopic(values.lastTag);
       }
     }
   }
 
-  public get PreviousTopicSelected(): string {
+  public get TopicSelected(): string {
     return this.GetItem('previousTopicSelected');
   }
 
-  public set PreviousTopicSelected(topic: string) {
+  public set TopicSelected(topic: string) {
     let previousTopicSelected = '';
     if (topic.charAt(0) === '/') {
       // Expecting a slash, but we got a topic - no need to convert slashTag to topic - it is a topic
@@ -447,16 +447,16 @@ export class LocalDataService {
     this.SetItem('previousTopicSelected', previousTopicSelected);
   }
 
-  public get PreviousSlashTagSelected(): string {
-    return this.TopicToSlashTag(this.PreviousTopicSelected);
+  public get SlashTagSelected(): string {
+    return this.TopicToSlashTag(this.TopicSelected);
   }
-  public set PreviousSlashTagSelected(slashTag: string) {
+  public set SlashTagSelected(slashTag: string) {
     if (!!slashTag) {
       if (slashTag.charAt(0) !== '/') {
         // Expecting a slash, but we got a topic - no need to convert slashTag to topic - it is a topic
-        this.PreviousTopicSelected = slashTag;
+        this.TopicSelected = slashTag;
       } else {
-        this.PreviousTopicSelected = this.SlashTagToTopic(slashTag);
+        this.TopicSelected = this.SlashTagToTopic(slashTag);
       }
     }
   }

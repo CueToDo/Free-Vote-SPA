@@ -108,6 +108,12 @@
   <!-- Toolbar -->
 
   <div *ngIf="feedbackOn" class="toolbar flexRow align-stretch">
+    <!-- PointNumber/Count -->
+
+    <div *ngIf="!sharing && !ancestor" class="aml-2 amr-2 text">
+      {{ point.rowNumber }}/{{ pointCount }}
+    </div>
+
     <div *ngIf="possibleAnswer">
       <button
         mat-button
@@ -192,12 +198,6 @@
           {{ point.totalFeedback }}
         </span>
       </button>
-
-      <!-- PointNumber/Count -->
-
-      <div *ngIf="!sharing && !ancestor" class="aml-2 amr-2 text">
-        {{ point.rowNumber }}/{{ pointCount }}
-      </div>
     </div>
     <!-- End Toolbar Remainder -->
   </div>

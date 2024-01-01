@@ -20,7 +20,6 @@ import { Subscription } from 'rxjs';
 
 // Models, enums
 import {
-  PointSelectionTypes,
   PointTypesEnum,
   PointFlags,
   PointSortTypes,
@@ -46,19 +45,6 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('pointTextFilter', { static: true }) pointTextFilter:
     | ElementRef
     | undefined;
-
-  // Point selection filters
-  private showFilters = false;
-  @Input() set ShowFilters(showFilters: boolean) {
-    this.showFilters = showFilters;
-    if (showFilters) {
-      // https://stackoverflow.com/questions/52143052/how-to-manually-set-focus-on-mat-form-field-in-angular-6
-      setTimeout(() => this.pointTextFilter?.nativeElement.focus());
-    }
-  }
-  get ShowFilters(): boolean {
-    return this.showFilters;
-  }
 
   // 2-way bind filter criteria
   @Input() public filter = new FilterCriteria();
@@ -89,7 +75,6 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.filter.byAlias = this.localData.ActiveAliasForFilter;
-    this.filter.pointSelectionType = PointSelectionTypes.Filtered;
 
     this.lookupsService
       .PointTypes()
@@ -114,57 +99,28 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
     // The ActivatedRoute dies with the routed component and so
     // the subscription dies with it.
     this.activatedRoute.paramMap.subscribe(params => {
-      let tag = false;
-      let alias = false;
-
-      let titleParam = params.get('title');
       let tagParam = params.get('tag');
       let aliasParam = params.get('alias');
 
-      if (!titleParam) {
-        titleParam = '';
-      }
-
       if (tagParam) {
         this.filter.anyTag = false;
-        this.filter.slashTag = tagParam;
-        tag = true;
-      } else {
-        tagParam = '';
+        this.localData.SlashTagSelected = tagParam;
       }
 
       if (aliasParam) {
         this.filter.byAlias = aliasParam;
-        if (!this.filter.slashTag) {
-          this.filter.anyTag = true;
+        if (!this.localData.SlashTagSelected) {
+          this.filter.anyTag = true; // ToDo needs work
         }
-        aliasParam = '';
-        this.showFilters = true;
-        alias = true;
       }
-
-      if (tag || alias) {
-        this.filter.single = false;
-        this.filter.updateTopicViewCount = true; // We have a new tag
-      }
-
-      // Todo Really here?
-      // this.SetAppComponentRoute();
-
-      // Pass to parent tags-and-points component
-      // tags-and-points component could also suscribe to paramMap,
-      // but only need child or parent to do this, not both
     });
   }
 
   // Communicated from TagsPoints - filter criteria
   // Communicated from Tags Component - hide filters
   ClearPointFilters() {
-    this.showFilters = false;
-
     this.filter.myPointFilter = MyPointFilter.AllVoters;
     this.filter.pointTypeID = PointTypesEnum.NotSelected;
-    this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
     this.filter.anyTag = false;
     this.filter.text = '';
     this.filterChange.emit(this.filter);
@@ -198,31 +154,8 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   SelectPoints(): void {
-    // Nah
     this.localData.ActiveAliasForFilter = this.filter?.byAlias || '';
-
-    // Same Topic - move elsewhere
-    this.filter.updateTopicViewCount = false;
-
     this.filterChange.emit();
-  }
-
-  // Filter by Type from Tags-And-Points (Select Questions)
-  // public FilterPointsOrQuestions(selectPQ: SelectPQ): void {
-  //   this.filter.selectPQ = selectPQ;
-
-  //   this.Select();
-  // }
-
-  // Allow mat-checkbox click event to read checked value
-  // https://github.com/angular/components/issues/13156
-  FilterOnDates(checkbox: MatCheckbox): void {
-    if (checkbox.checked) {
-      if (this.filter.sortType !== PointSortTypes.DateUpdated) {
-        this.filter.sortType = PointSortTypes.DateUpdated;
-        this.pointSortTypeChanged.emit(this.filter.sortType);
-      }
-    }
   }
 
   // From Template

@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // rxjs
@@ -34,10 +34,14 @@ export class PointCommentsComponent implements OnInit {
   @ViewChild('appPointsList') childComments!: PointsListComponent;
 
   initialised = false;
-  parentPoint = new Point();
-  ancestors: Point[] = [];
 
-  filter = new FilterCriteria();
+  parentPoint = new Point();
+
+  get ParentPointID(): number {
+    return this.parentPoint.pointID;
+  }
+
+  ancestors: Point[] = [];
 
   gettingAncestors = false;
   gettingMainPoint = false;
@@ -70,9 +74,6 @@ export class PointCommentsComponent implements OnInit {
 
     const slashTag = routeParams['tag'];
     const pointTitle = routeParams['title'];
-
-    // Prevent default select in Points-List
-    this.filter.pointSelectionType = PointSelectionTypes.Comments;
 
     this.SelectMainPointByTag(slashTag, pointTitle);
   }
@@ -123,7 +124,6 @@ export class PointCommentsComponent implements OnInit {
 
     // now we have pointID, select ancestors and comments
     this.SelectAncestors(); // doesn't return anything
-    this.filter.pointID = point.pointID;
     this.childComments.SelectPoints();
   }
 

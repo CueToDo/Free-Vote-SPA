@@ -83,7 +83,7 @@ export class QuestionsListComponent {
       this.questionsService
         .GetFirstBatchForTag(
           this.filter.constituencyID,
-          this.filter.slashTag,
+          this.localData.SlashTagSelected,
           this.SortType,
           this.SortDescending,
           updateTopicViewCount

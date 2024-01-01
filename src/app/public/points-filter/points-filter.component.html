@@ -1,7 +1,8 @@
 <div>
   <div class="content">
     <!-- Show Filtering Options, controlled from Tag-Points component -->
-    <div [ngClass]="{ show: ShowFilters, hide: !ShowFilters }">
+
+    <div>
       <div class="mt-3">
         <div class="filters">
           <!-- Text search -->
@@ -154,25 +155,6 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
-
-      <!-- Date Filter, animated by css controlled by checkbox -->
-      <!-- <div [ngClass]="{'show':filter.applyDateFilter, 'hide':!filter.applyDateFilter}"> -->
-      <div class="aml-3">
-        <div>
-          <mat-checkbox
-            labelPosition="before"
-            #checkbox="matCheckbox"
-            (change)="FilterOnDates(checkbox)"
-          >
-            date range
-          </mat-checkbox>
-
-          <app-datepicker [(Date)]="filter.dateFrom" [UserPrompt]="'from date'">
-          </app-datepicker>
-          <app-datepicker [(Date)]="filter.dateTo" [UserPrompt]="'to date'">
-          </app-datepicker>
-        </div>
       </div>
     </div>
   </div>

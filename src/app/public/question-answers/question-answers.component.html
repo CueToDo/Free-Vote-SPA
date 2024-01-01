@@ -68,7 +68,7 @@
       <div class="mt-5" *ngIf="mode === 'newAnswer'">
         <app-point-edit
           [isMyAnswer]="true"
-          [questionID]="filter.questionID"
+          [questionID]="QuestionID"
           (CancelEdit)="cancelNewAnswer()"
           (CompleteEdit)="newAnswerSaved()"
         >
@@ -79,7 +79,8 @@
       <app-points-list
         #PointsList
         [hidden]="mode === 'newAnswer'"
-        [filter]="filter"
+        [PointSelectionType]="PointSelectionTypes.QuestionPoints"
+        [sharesTagButNotAttached]="sharesTagButNotAttached"
         [attachedToQuestion]="attachedToQuestion"
         (AddPointToAnswers)="AddRemovePointFromAnswers(true, $event)"
         (RemovePointFromAnswers)="AddRemovePointFromAnswers(false, $event)"

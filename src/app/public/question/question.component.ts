@@ -121,7 +121,7 @@ export class QuestionComponent {
   }
 
   QuestionLink(): string {
-    return `${this.localData.PreviousSlashTagSelected}/question/${this.question?.slug}`;
+    return `${this.localData.SlashTagSelected}/question/${this.question?.slug}`;
   }
 
   SelectQuestion(): void {

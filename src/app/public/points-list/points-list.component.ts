@@ -7,7 +7,9 @@ import {
   OnDestroy,
   OnInit,
   Inject,
-  PLATFORM_ID
+  PLATFORM_ID,
+  SimpleChanges,
+  OnChanges
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -27,16 +29,24 @@ import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
 import { Subscription } from 'rxjs';
+import { TagsService } from 'src/app/services/tags.service';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-points-list',
   templateUrl: './points-list.component.html',
   styleUrls: ['./points-list.component.css']
 })
-export class PointsListComponent implements OnDestroy, OnInit {
-  @Input() public filter = new FilterCriteria();
+export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() HasFocus = false;
+
+  @Input() PointSelectionType = PointSelectionTypes.TagPoints;
+  @Input() single = false;
+  @Input() ParentPointID = 0;
+  @Input() ParentQuestionID = 0;
+
+  @Input() sharesTagButNotAttached = false;
   @Input() public attachedToQuestion = false;
-  @Input() feedbackOn = true; // Passed to points in list
   @Input() AlreadyFetchingPointsFromDB = false;
 
   @Output() AddPointToAnswers = new EventEmitter();
@@ -49,13 +59,27 @@ export class PointsListComponent implements OnDestroy, OnInit {
   // Subscriptions
   private pointSelection$: Subscription | undefined;
   private pointSortType$: Subscription | undefined;
+  private tagLatestActivity$: Subscription | undefined;
+
+  updateTopicViewCount = false;
+
+  forConstituency = false;
+  wasForConstituency = false;
 
   public pointCount = 0;
   public IDs: ID[] = [];
   public points: Point[] = [];
+
+  get noTopic(): boolean {
+    return (
+      !this.localData.TopicSelected || this.localData.TopicSelected === 'null'
+    );
+  }
+
   public possibleAnswers = false;
+
   public get pointComments(): boolean {
-    return this.filter.pointSelectionType == PointSelectionTypes.Comments;
+    return this.PointSelectionType == PointSelectionTypes.Comments;
   }
 
   // Prompt to be first to create point for tag or answer to question
@@ -66,6 +90,28 @@ export class PointsListComponent implements OnDestroy, OnInit {
       return 'Click "new answer" to create the first response to this question.';
 
     return 'Click "new point" to create the first point for this tag.';
+  }
+
+  // Sort
+  public PointSortTypes = PointSortTypes;
+  sortType = PointSortTypes.TrendingActivity;
+  sortDescending = true;
+
+  // Filter
+  filter = new FilterCriteria();
+  showFilters = false;
+  applyingFilter = false; // prevent cascading burgerMenuTrigger
+
+  // View
+  feedbackOn = true; // ToDo - managed internally Passed to points in list
+
+  get feedbackIcon(): string {
+    if (this.feedbackOn) return 'speaker_notes_off';
+    return 'view_list';
+  }
+  get feedbackText(): string {
+    if (this.feedbackOn) return 'turn feedback OFF';
+    return 'turn feedback ON';
   }
 
   public allPointsDisplayed = false;
@@ -95,29 +141,49 @@ export class PointsListComponent implements OnDestroy, OnInit {
   }
 
   public get pointOrAnswer(): string {
-    if (this.filter.questionID > 0) return 'answer';
+    // ToDo
+    if (this.ParentQuestionID > 0) return 'answer';
 
     return 'point';
   }
 
-  public nextPagePointsCount(): number {
+  public get nextPagePointsCount(): number {
     return this.IDs.filter(val => val.rowNumber > this.lastPageRow).slice(0, 10)
       .length;
   }
 
   constructor(
+    public auth0Service: AuthService,
     public appData: AppDataService,
     public localData: LocalDataService,
     private pointsService: PointsService,
+    private tagsService: TagsService,
     private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   ngOnInit(): void {
+    // EXTERNAL ROUTECHANGE (not tab change): Need to subscribe to route change to get route params
+    // https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
+
+    // No tag selected? Go to API to get latest
+
+    if (this.noTopic) {
+      this.tagLatestActivity$ = this.tagsService
+        .TagLatestActivity(this.filter.constituencyID)
+        .subscribe({
+          next: slashTag => {
+            this.localData.SlashTagSelected = slashTag;
+          },
+          error: error =>
+            console.log('Server Error on getting last slash tag', error)
+        });
+    }
+
     this.activatedRoute.paramMap.subscribe(params => {
-      const tag = params.get('tag');
-      if (tag && tag != this.filter.slashTag) {
-        this.localData.PreviousSlashTagSelected = tag;
+      const slashTag = `/${params.get('tag')}`;
+      if (!!slashTag) {
+        this.localData.SlashTagSelected = slashTag;
       }
     });
 
@@ -132,10 +198,10 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
     if (
       !this.localData.initialPointsSelected &&
-      !(this.filter.pointSelectionType === PointSelectionTypes.Comments)
+      !(this.PointSelectionType === PointSelectionTypes.Comments)
     ) {
       // External Share: Use tag in url
-      this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
+      this.PointSelectionType = PointSelectionTypes.TagPoints;
       this.localData.initialPointsSelected = true;
       this.SelectPoints();
     }
@@ -143,6 +209,25 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
   ngAfterViewInit(): void {
     this.ScrollIntoView();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.AlreadyFetchingPointsFromDB) return;
+
+    const newFocus = changes['HasFocus']?.currentValue;
+    if (!this.HasFocus && !newFocus) return; // Do nothing if we don't have and not acquiring focus
+
+    const newForConstituency = changes['forConstituency']?.currentValue;
+
+    // If new focus on this component and we haven't fetched points
+    // or change to local constituency, then fetch points
+    if (
+      (newFocus && (!this.points || this.points.length == 0)) ||
+      newForConstituency != null ||
+      this.wasForConstituency != this.forConstituency
+    ) {
+      this.SelectPoints();
+    }
   }
 
   ScrollIntoView(): void {
@@ -159,46 +244,32 @@ export class PointsListComponent implements OnDestroy, OnInit {
     }
   }
 
-  // Reselect for new point - new point to be first in date descending order
-  ReselectPoints(pointSortType: PointSortTypes) {
-    this.filter.slashTag = this.localData.PreviousSlashTagSelected; // Set by the Point-Edit Component
-
-    if (pointSortType !== PointSortTypes.NoChange)
-      this.filter.sortType = pointSortType;
-
-    // We have a new point or tag
-    this.filter.updateTopicViewCount = true; // ToDo S/B new tag only
-    this.SelectPoints();
-  }
-
   public CompleteEdit(pointID: string): void {
     this.fragment = pointID;
     if (this.localData.TagChange) {
-      this.filter.sortType = PointSortTypes.DateUpdated;
-      this.filter.sortDescending = true;
+      this.sortType = PointSortTypes.DateUpdated;
+      this.sortDescending = true;
       this.SelectPoints();
-      this.appData.RouteParamChange$.next(
-        this.localData.PreviousSlashTagSelected
-      );
+      this.appData.RouteParamChange$.next(this.localData.SlashTagSelected);
     } else this.ScrollIntoView();
   }
 
   OnTopicSearch(): string {
     let onTopic = '';
     if (!this.filter?.anyTag) {
-      if (this.filter?.slashTag) {
-        this.filter.slashTag = this.localData.PreviousSlashTagSelected;
-        onTopic = this.localData.SlashTagToTopic(this.filter.slashTag);
-      }
+      onTopic = this.localData.TopicSelected;
     }
     return onTopic;
   }
 
+  PointSearch() {
+    alert('ToDo');
+  }
+
   // New point will be selected first in date descsend order
   public ReselectForNewPoint(): void {
-    this.filter.updateTopicViewCount = false;
-    this.filter.sortType = PointSortTypes.DateUpdated;
-    this.filter.sortDescending = true;
+    this.sortType = PointSortTypes.DateUpdated;
+    this.sortDescending = true;
     this.SelectPoints();
   }
 
@@ -206,13 +277,12 @@ export class PointsListComponent implements OnDestroy, OnInit {
     this.possibleAnswers = false;
 
     if (!this.AlreadyFetchingPointsFromDB) {
-      if (this.viewAll)
-        this.filter.pointSelectionType = PointSelectionTypes.TagPoints;
+      if (this.viewAll) this.PointSelectionType = PointSelectionTypes.TagPoints;
 
-      if (this.filter.sortType === PointSortTypes.DateDescend) {
+      if (this.sortType === PointSortTypes.DateDescend) {
         // Ensure new point at top
-        this.filter.sortType = PointSortTypes.DateUpdated;
-        this.filter.sortDescending = true;
+        this.sortType = PointSortTypes.DateUpdated;
+        this.sortDescending = true;
       }
 
       this.viewAll = false;
@@ -223,7 +293,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
       this.points = [];
       this.error = '';
 
-      switch (this.filter?.pointSelectionType) {
+      switch (this.PointSelectionType) {
         case PointSelectionTypes.Filtered:
           let dateFrom = new Date('1 Jan 2000');
           let dateTo = new Date();
@@ -258,8 +328,8 @@ export class PointsListComponent implements OnDestroy, OnInit {
               PointTypesEnum.NotSelected,
               dateFrom,
               dateTo,
-              this.filter.sortType,
-              this.filter.sortDescending
+              this.sortType,
+              this.sortDescending
             )
             .subscribe({
               next: psr => this.DisplayPoints(psr),
@@ -271,18 +341,18 @@ export class PointsListComponent implements OnDestroy, OnInit {
           break;
 
         case PointSelectionTypes.QuestionPoints:
-          this.possibleAnswers = this.filter.sharesTagButNotAttached;
+          this.possibleAnswers = this.sharesTagButNotAttached;
 
-          if (this.filter.questionID) {
+          if (this.ParentQuestionID) {
             this.pointsService
               .GetFirstBatchQuestionPoints(
                 this.filter.constituencyID,
-                this.filter.slashTag,
-                this.filter.questionID,
+                this.localData.SlashTagSelected,
+                this.ParentQuestionID,
                 this.filter.myPointFilter,
-                this.filter.sharesTagButNotAttached,
-                this.filter.sortType,
-                this.filter.sortDescending
+                this.sharesTagButNotAttached,
+                this.sortType,
+                this.sortDescending
               )
               .subscribe({
                 next: psr => this.DisplayPoints(psr),
@@ -295,14 +365,14 @@ export class PointsListComponent implements OnDestroy, OnInit {
           break;
 
         case PointSelectionTypes.Comments:
-          if (this.filter.pointID == 0) {
+          if (this.ParentPointID == 0) {
             this.error = 'No point selected to show comments';
             return;
           }
 
           this.pointsService
             .PointsSelectComments(
-              this.filter.pointID,
+              this.ParentPointID,
               this.localData.ConstituencyIDVoter
             )
             .subscribe({
@@ -317,15 +387,14 @@ export class PointsListComponent implements OnDestroy, OnInit {
         default:
           // Infinite Scroll: Get points in batches
           if (this.filter) {
-            this.filter.slashTag = this.localData.PreviousSlashTagSelected; // how does this relate to getting from route param?
-            if (this.filter.slashTag) {
+            if (this.localData.SlashTagSelected) {
               this.pointsService
                 .GetFirstBatchForTag(
                   this.filter.constituencyID,
-                  this.filter.slashTag,
-                  this.filter.sortType,
-                  this.filter.sortDescending,
-                  this.filter.updateTopicViewCount
+                  this.localData.SlashTagSelected,
+                  this.sortType,
+                  this.sortDescending,
+                  this.updateTopicViewCount
                 )
                 .subscribe({
                   next: psr => this.DisplayPoints(psr),
@@ -350,7 +419,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
   public NewSortOrder() {
     // Sort Type hasn't changed - reversal only will be detected
-    this.NewSortType(this.filter.sortType);
+    this.NewSortType(this.sortType);
   }
 
   public NewSortType(pointSortType: PointSortTypes): void {
@@ -359,10 +428,10 @@ export class PointsListComponent implements OnDestroy, OnInit {
 
       // ReversalOnly means we can allow the database to update rownumbers on previously selected points
       if (this.filter) {
-        const reversalOnly = this.filter.sortType === pointSortType;
+        const reversalOnly = this.sortType === pointSortType;
 
         // No need to check need to change
-        this.filter.sortType = pointSortType;
+        this.sortType = pointSortType;
 
         this.AlreadyFetchingPointsFromDB = true;
         this.AlreadyFetchingPointsFromDBChange.emit(true);
@@ -391,6 +460,52 @@ export class PointsListComponent implements OnDestroy, OnInit {
           });
       }
     }
+  }
+
+  // From child Points Component
+  pointSortTypeChanged(pointSortType: PointSortTypes): void {
+    // this.externalTrigger = true;
+    this.sortType = pointSortType; // Pass update to sort menu
+    // this.externalTrigger = false;
+  }
+
+  SetSortDescending(descending: boolean): void {
+    this.sortDescending = descending;
+
+    // Can't reverse random, so default to TrendingActivity
+    if (this.sortType === PointSortTypes.Random) {
+      this.sortType = PointSortTypes.TrendingActivity;
+    }
+
+    // if (!this.externalTrigger) {
+    this.NewSortOrder();
+    // }
+  }
+
+  // If sort type is random, order (ascending/descending) is irrelevant
+  SetSortType(pointSortType: PointSortTypes): void {
+    if (
+      this.sortType !== pointSortType ||
+      pointSortType === PointSortTypes.Random // new random order
+    ) {
+      // New sort order or user clicked random again
+
+      // Communicate to PointsComponent - is a child could/should use Input?
+      // if (!this.externalTrigger) {
+      this.NewSortType(pointSortType); // New random order or sort type
+      // }
+
+      // this.tabIndex = Tabs.tagPoints;
+      // this.ChangeTab(this.tabIndex);
+
+      this.sortType = pointSortType;
+    }
+  }
+
+  refresh(): void {
+    // this.externalTrigger = true; // prevent further communication to points component
+    this.NewSortOrder(); // This communicates to points component
+    // this.externalTrigger = false;
   }
 
   DisplayPoints(psr: PointSelectionResult): void {
@@ -436,6 +551,34 @@ export class PointsListComponent implements OnDestroy, OnInit {
     this.NewPointsDisplayed();
   }
 
+  NewPointCreated(): void {
+    // Ensure new point at top
+    this.sortDescending = true;
+    this.ReselectPoints(PointSortTypes.DateUpdated);
+  }
+
+  // Reselect for new point - new point to be first in date descending order
+  ReselectPoints(pointSortType: PointSortTypes) {
+    if (pointSortType !== PointSortTypes.NoChange)
+      this.sortType = pointSortType;
+
+    // We have a new point or tag
+    this.updateTopicViewCount = true; // ToDo S/B new tag only
+    this.SelectPoints();
+  }
+
+  // init, subscription, ChangeTab, applyFilter
+  ShowPointFilterCriteria(show: boolean): void {
+    this.PointSelectionType = PointSelectionTypes.Filtered;
+
+    if (!show) this.PointSelectionType = PointSelectionTypes.TagPoints;
+
+    if (show != this.showFilters) {
+      this.ReselectPoints(PointSortTypes.NoChange);
+    }
+    this.showFilters = show;
+  }
+
   // https://stackblitz.com/edit/free-vote-infinite-scroll
   fetchMorePoints(): void {
     if (!this.AlreadyFetchingPointsFromDB) {
@@ -477,7 +620,7 @@ export class PointsListComponent implements OnDestroy, OnInit {
           this.pointsService
             .GetNextBatch(
               this.localData.ConstituencyID,
-              this.filter.sortType,
+              this.sortType,
               this.lastBatchRow + 1,
               this.pointCount
             )
@@ -545,8 +688,27 @@ export class PointsListComponent implements OnDestroy, OnInit {
     this.AltSlashTagSelected.emit(slashTag);
   }
 
+  // From child PointsFilter Component
+  // It's not banana in a box, but filter gets updated
+  applyFilter(): void {
+    this.applyingFilter = true;
+    this.SelectPoints();
+    this.applyingFilter = false;
+  }
+
+  cancelSearch(): void {
+    this.showFilters = false;
+    this.SelectPoints();
+  }
+
+  // 4. Feedback switch
+  toggleFeedback() {
+    this.feedbackOn = !this.feedbackOn;
+  }
+
   ngOnDestroy(): void {
     this.pointSelection$?.unsubscribe();
     this.pointSortType$?.unsubscribe();
+    this.tagLatestActivity$?.unsubscribe();
   }
 }

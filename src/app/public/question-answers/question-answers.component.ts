@@ -15,7 +15,11 @@ import { AuthService } from '@auth0/auth0-angular';
 
 // Models, Enums
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-import { MyPointFilter, PointSortTypes } from 'src/app/models/enums';
+import {
+  MyPointFilter,
+  PointSelectionTypes,
+  PointSortTypes
+} from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -30,18 +34,22 @@ import { PointsListComponent } from '../points-list/points-list.component';
   styleUrls: ['./question-answers.component.css']
 })
 export class QuestionAnswersComponent {
-  @Input() public filter = new FilterCriteria();
+  @Input() QuestionID = 0;
+
   @Output() ViewAllQuestions = new EventEmitter<boolean>();
   @Output() AnswerAdded = new EventEmitter<number>();
   @Output() AnswerRemoved = new EventEmitter<number>();
 
   @ViewChild('PointsList') pointsList!: PointsListComponent;
 
+  public PointSelectionTypes = PointSelectionTypes;
+
   private questionPointAddRemove$: Subscription | undefined;
 
   public mode = 'answers'; // myPoints, newAnswer
   private savedMode = '';
 
+  public sharesTagButNotAttached = false;
   public attachedToQuestion = false;
 
   public error = '';
@@ -74,15 +82,11 @@ export class QuestionAnswersComponent {
     this.error = '';
     this.mode = 'answers';
     this.attachedToQuestion = true;
-    this.filter.myPointFilter = MyPointFilter.AllVoters;
-    this.filter.sharesTagButNotAttached = false;
-    this.filter.updateTopicViewCount = false;
+    this.sharesTagButNotAttached = false;
     this.pointsList.SelectPoints();
   }
 
   public ReselectForNewAnswer(): void {
-    this.filter.sortType = PointSortTypes.DateUpdated;
-    this.filter.sortDescending = true;
     this.viewAllAnswers();
   }
 
@@ -90,9 +94,7 @@ export class QuestionAnswersComponent {
     this.error = '';
     this.mode = 'myPoints';
     this.attachedToQuestion = true;
-    this.filter.myPointFilter = MyPointFilter.AllMine;
-    this.filter.sharesTagButNotAttached = false;
-    this.filter.updateTopicViewCount = false;
+    this.sharesTagButNotAttached = false;
     this.pointsList.SelectPoints();
   }
 
@@ -101,10 +103,9 @@ export class QuestionAnswersComponent {
     this.savedMode = this.mode;
     this.mode = 'addAnswer';
     this.attachedToQuestion = false;
-    this.filter.sharesTagButNotAttached = true;
-    this.filter.updateTopicViewCount = false;
+    this.sharesTagButNotAttached = true;
     this.pointsList.SelectPoints();
-    this.AnswerAdded.emit(this.filter.questionID);
+    this.AnswerAdded.emit(this.QuestionID);
   }
 
   newAnswer(): void {
@@ -122,19 +123,19 @@ export class QuestionAnswersComponent {
     this.error = '';
     this.mode = this.savedMode;
     this.pointsList.SelectPoints();
-    this.AnswerAdded.emit(this.filter.questionID);
+    this.AnswerAdded.emit(this.QuestionID);
   }
 
   AddRemovePointFromAnswers(add: boolean, pointID: number): void {
     this.error = '';
 
     this.questionPointAddRemove$ = this.questionsService
-      .QuestionPointAddRemove(add, this.filter.questionID, pointID)
+      .QuestionPointAddRemove(add, this.QuestionID, pointID)
       .subscribe({
         next: _ => {
           this.viewMyPoints();
-          if (add) this.AnswerAdded.emit(this.filter.questionID);
-          else this.AnswerRemoved.emit(this.filter.questionID);
+          if (add) this.AnswerAdded.emit(this.QuestionID);
+          else this.AnswerRemoved.emit(this.QuestionID);
         },
         error: err => (this.error = err.error.detail)
       });

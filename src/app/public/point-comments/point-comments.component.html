@@ -46,7 +46,7 @@
       <!-- Children -->
       <app-points-list
         #appPointsList
-        [filter]="filter"
+        [ParentPointID]="ParentPointID"
         (AlreadyFetchingPointsFromDB)="(gettingChildren)"
         (SelectComment)="SelectMainPointByID($event)"
       >
