@@ -35,7 +35,7 @@
     <button
       mat-raised-button
       (click)="toggleFeedback()"
-      matTooltip="toggle feedback"
+      [matTooltip]="feedbackTooltip"
       matTooltipPosition="below"
     >
       <mat-icon>{{ feedbackIcon }}</mat-icon>

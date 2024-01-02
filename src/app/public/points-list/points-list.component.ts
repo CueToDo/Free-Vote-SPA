@@ -101,15 +101,20 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   applyingFilter = false; // prevent cascading burgerMenuTrigger
 
   // View
-  feedbackOn = true; // ToDo - managed internally Passed to points in list
+  feedbackOn = true;
 
   get feedbackIcon(): string {
-    if (this.feedbackOn) return 'speaker_notes_off';
-    return 'view_list';
+    if (this.feedbackOn) return 'view_list';
+    return 'speaker_notes_off';
   }
   get feedbackText(): string {
-    if (this.feedbackOn) return 'turn feedback OFF';
-    return 'turn feedback ON';
+    if (this.feedbackOn) return 'feedback on';
+    return 'feedback off';
+  }
+
+  get feedbackTooltip(): string {
+    if (this.feedbackOn) return 'turn feedback off';
+    return 'turn feedback on';
   }
 
   public allPointsDisplayed = false;
