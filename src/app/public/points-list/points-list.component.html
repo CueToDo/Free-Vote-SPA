@@ -1,9 +1,5 @@
-<div class="flexCol scroller">
+<div class="scroller">
   <div class="content">
-    <h1 *ngIf="localData.forConstituency" class="h1Constituency">
-      {{ localData.freeVoteProfile.constituency }}
-    </h1>
-
     <div class="header flexRow wrap justify-center align-center">
       <!-- Sort Menu -->
       <app-sort-menu
@@ -58,6 +54,10 @@
         refresh
       </button>
     </div>
+
+    <h1 *ngIf="localData.forConstituency" class="h1Constituency">
+      {{ localData.freeVoteProfile.constituency }}
+    </h1>
 
     <div *ngIf="error !== ''" class="text-danger mx-3">
       {{ error }}

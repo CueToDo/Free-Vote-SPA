@@ -238,9 +238,10 @@ div.toolbar mat-form-field {
 }
 
 .h1Constituency {
-  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 0px;
   font-size: 1.5rem;
-  text-align: right;
+  text-align: center;
 }
 
 @media (max-width: 540px) {
@@ -256,8 +257,8 @@ div.toolbar mat-form-field {
 }
 
 .point {
-  margin-top: 20px;
-  padding-top: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 @media (max-width: 960px) {

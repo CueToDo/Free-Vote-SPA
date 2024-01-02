@@ -63,12 +63,6 @@ export class TagsAndPointsComponent
 
   // Questions Select
   questionCount = 0;
-  questionsSelected = false;
-
-  // Point Select
-  // externalTrigger = false; // Set on subscriptions
-  refreshRecentTags = false;
-  // pointsSelected = false;
 
   bogSelected: BreakoutGroup = {
     tagDisplay: '',
@@ -174,7 +168,6 @@ export class TagsAndPointsComponent
         case 'recent':
           this.tabIndex = Tabs.slashTags;
           this.appData.defaultSort = PointSortTypes.TrendingActivity;
-          this.slashTagsComponent.FetchTags();
           break;
         case 'tag-search':
           this.tabIndex = Tabs.slashTags;
@@ -212,7 +205,6 @@ export class TagsAndPointsComponent
           break;
         case 'by':
           this.tabIndex = Tabs.tagPoints;
-          this.pointsListComponent.ShowPointFilterCriteria(true);
           break;
       }
     } else {
@@ -225,10 +217,6 @@ export class TagsAndPointsComponent
   ChangeConstituency(): void {
     // Change constituency filter
     this.localData.forConstituency = !this.localData.forConstituency;
-
-    // Switch on specific "fetch"
-    // ToDo - activate focused tab
-    if (this.tabIndex === Tabs.slashTags) this.slashTagsComponent.FetchTags();
   }
 
   ChangeLocalPointsOrQuestionsSelection() {
@@ -238,7 +226,6 @@ export class TagsAndPointsComponent
     if (this.tabIndex == Tabs.tagPoints) {
       this.pointsListComponent.ReselectPoints(PointSortTypes.NoChange);
     } else {
-      this.questionsSelected = false;
       this.ReselectQuestions();
     }
   }
@@ -252,7 +239,6 @@ export class TagsAndPointsComponent
   NewSlashTagSelected(slashTag: string): void {
     // Direct communication from tags components
     this.localData.SlashTagSelected = slashTag;
-    this.questionsSelected = false;
 
     this.ChangeTab(Tabs.tagPoints); // will select points
     this.pointsListComponent.ReselectPoints(PointSortTypes.NoChange);
@@ -269,8 +255,6 @@ export class TagsAndPointsComponent
   }
 
   ReselectQuestions() {
-    this.questionsSelected = false;
-
     this.ChangeTab(Tabs.questionList);
     this.questionsListComponent.SelectQuestions(false);
   }
@@ -288,34 +272,15 @@ export class TagsAndPointsComponent
     this.tabIndex = tabIndex;
     var newRoute = '';
 
-    // if (tabIndex != Tabs.tagPoints) {
-    //   this.ShowPointFilterCriteria(false);
-    // }
-
     switch (tabIndex) {
       case Tabs.slashTags:
         this.appData.defaultSort = PointSortTypes.TrendingActivity;
         newRoute = '/trending';
-
-        if (this.refreshRecentTags) {
-          // Voter had selected a new tag
-          this.slashTagsComponent.FetchTags();
-        }
-
-        this.refreshRecentTags = false;
         break;
 
       case Tabs.questionList:
-        // Select questions for tag?
-        if (!this.questionsSelected) {
-          this.refreshRecentTags = true; // Refresh Recent Tags when switch back from Point Selection
-          this.questionsListComponent.SelectQuestions(true);
-        }
-
-        this.questionsSelected = true;
-
+        // Select questions for tag
         newRoute = this.localData.SlashTagSelected;
-
         break;
 
       case Tabs.questionAnswers:
@@ -332,12 +297,7 @@ export class TagsAndPointsComponent
           newRoute = this.localData.SlashTagSelected; // Tell the app component
         } else {
           newRoute = `${this.localData.SlashTagSelected}/by/${alias}`;
-
-          // ShowFilter for alias
-          this.pointsListComponent.ShowPointFilterCriteria(true);
         }
-
-        this.refreshRecentTags = true; // Refresh Recent Tags when switch back from Point Selection
 
         break;
     }

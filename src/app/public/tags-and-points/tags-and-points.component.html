@@ -83,7 +83,7 @@
         <div class="content">
           <app-tag-cloud
             [HasFocus]="tabIndex === Tabs.slashTags"
-            [forConstituency]="localData.ConstituencyID > 0"
+            [ForConstituency]="localData.forConstituency"
             #slashTagsComponent
             (NewSlashTagSelected)="NewSlashTagSelected($event)"
           >
@@ -105,6 +105,8 @@
       <!-- "Fetch more" component must apply scroller and content classes internally -->
       <app-points-list
         #appPointsList
+        [HasFocus]="this.tabIndex === Tabs.tagPoints"
+        [ForConstituency]="localData.forConstituency"
         (AltSlashTagSelected)="AltSlashTagSelected($event)"
       >
       </app-points-list>
@@ -125,6 +127,8 @@
       <!-- [SortDescending]="filter.sortDescending" -->
       <app-questions-list
         #appQuestionsList
+        [HasFocus]="this.tabIndex === Tabs.questionList"
+        [ForConstituency]="localData.forConstituency"
         (QuestionCount)="QuestionCount($event)"
         (QuestionSelected)="QuestionSelected($event)"
       >

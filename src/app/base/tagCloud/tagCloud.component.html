@@ -1,17 +1,12 @@
 <div class="linkCloud">
-  <h1 *ngIf="localData.forConstituency" class="h1Constituency">
-    {{ localData.freeVoteProfile.constituency }}
-  </h1>
-  <div class="header flexRow wrap justify-center align-center">
-    <div>
+  <div class="header">
+    <div class="flexRow wrap justify-center align-center">
       <!-- Trending -->
       <button
         mat-raised-button
         matTooltip="slash-tags"
         matTooltipPosition="above"
-        [class.selected]="
-          !tagSearch && localData.tagCloudType === TagCloudTypes.Trending
-        "
+        [class.selected]="!tagSearch && tagCloudType === TagCloudTypes.Trending"
         (click)="FetchTrendingTags()"
       >
         trending
@@ -22,9 +17,7 @@
         mat-raised-button
         matTooltip="slash-tags"
         matTooltipPosition="above"
-        [class.selected]="
-          !tagSearch && localData.tagCloudType === TagCloudTypes.Recent
-        "
+        [class.selected]="!tagSearch && tagCloudType === TagCloudTypes.Recent"
         (click)="FetchRecentTags()"
       >
         recent
@@ -42,11 +35,16 @@
         <mat-icon>search</mat-icon>
       </button>
     </div>
+
+    <h1 *ngIf="localData.forConstituency" class="h1Constituency">
+      {{ localData.freeVoteProfile.constituency }}
+    </h1>
   </div>
 
   <app-tag-search
     *ngIf="tagSearch"
     #tagSearch
+    [ForConstituency]="localData.forConstituency"
     (Cancel)="CancelTagSearch()"
     (Tags)="TagSearchResult($event)"
   >

@@ -9,7 +9,8 @@ import {
   PLATFORM_ID,
   Inject,
   EventEmitter,
-  Output
+  Output,
+  Input
 } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
@@ -35,6 +36,8 @@ import { DeviceDetectorService } from 'ngx-device-detector';
   styleUrls: ['./tag-search.component.css']
 })
 export class TagSearchComponent implements OnInit, AfterViewInit {
+  @Input() ForConstituency = false;
+
   @Output() CreateNewSlashTag = new EventEmitter<string>();
   @Output() Tags = new EventEmitter<Tag[]>();
   @Output() Cancel = new EventEmitter();

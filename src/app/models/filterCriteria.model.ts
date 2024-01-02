@@ -7,8 +7,6 @@ import {
 } from './enums';
 
 export class FilterCriteria {
-  constituencyID = 0;
-
   // SlashTag
   anyTag = false;
 

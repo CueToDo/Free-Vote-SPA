@@ -39,6 +39,7 @@ import { AuthService } from '@auth0/auth0-angular';
 })
 export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() HasFocus = false;
+  @Input() ForConstituency = false;
 
   @Input() PointSelectionType = PointSelectionTypes.TagPoints;
   @Input() single = false;
@@ -53,7 +54,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() RemovePointFromAnswers = new EventEmitter();
   @Output() PointCount = new EventEmitter<number>();
   @Output() AltSlashTagSelected = new EventEmitter<string>();
-  @Output() AlreadyFetchingPointsFromDBChange = new EventEmitter<boolean>();
   @Output() SelectComment = new EventEmitter<number>();
 
   // Subscriptions
@@ -63,7 +63,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
   updateTopicViewCount = false;
 
-  forConstituency = false;
   wasForConstituency = false;
 
   public pointCount = 0;
@@ -170,7 +169,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
     if (this.noTopic) {
       this.tagLatestActivity$ = this.tagsService
-        .TagLatestActivity(this.filter.constituencyID)
+        .TagLatestActivity(this.localData.ConstituencyID)
         .subscribe({
           next: slashTag => {
             this.localData.SlashTagSelected = slashTag;
@@ -195,16 +194,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
     this.activatedRoute.fragment.subscribe(fragment => {
       this.fragment = '' + fragment;
     });
-
-    if (
-      !this.localData.initialPointsSelected &&
-      !(this.PointSelectionType === PointSelectionTypes.Comments)
-    ) {
-      // External Share: Use tag in url
-      this.PointSelectionType = PointSelectionTypes.TagPoints;
-      this.localData.initialPointsSelected = true;
-      this.SelectPoints();
-    }
   }
 
   ngAfterViewInit(): void {
@@ -212,20 +201,20 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.AlreadyFetchingPointsFromDB) return;
-
     const newFocus = changes['HasFocus']?.currentValue;
     if (!this.HasFocus && !newFocus) return; // Do nothing if we don't have and not acquiring focus
 
-    const newForConstituency = changes['forConstituency']?.currentValue;
+    // If forConstituency has not changed set to wasForConstituency
+    const forConstituency =
+      changes['ForConstituency']?.currentValue ?? this.wasForConstituency;
 
     // If new focus on this component and we haven't fetched points
     // or change to local constituency, then fetch points
     if (
-      (newFocus && (!this.points || this.points.length == 0)) ||
-      newForConstituency != null ||
-      this.wasForConstituency != this.forConstituency
+      (newFocus && this.points.length === 0) ||
+      this.wasForConstituency != forConstituency
     ) {
+      this.wasForConstituency = forConstituency;
       this.SelectPoints();
     }
   }
@@ -276,58 +265,80 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   public SelectPoints(): void {
     this.possibleAnswers = false;
 
-    if (!this.AlreadyFetchingPointsFromDB) {
-      if (this.viewAll) this.PointSelectionType = PointSelectionTypes.TagPoints;
+    if (this.AlreadyFetchingPointsFromDB) return;
+    if (this.viewAll) this.PointSelectionType = PointSelectionTypes.TagPoints;
 
-      if (this.sortType === PointSortTypes.DateDescend) {
-        // Ensure new point at top
-        this.sortType = PointSortTypes.DateUpdated;
-        this.sortDescending = true;
-      }
+    if (this.sortType === PointSortTypes.DateDescend) {
+      // Ensure new point at top
+      this.sortType = PointSortTypes.DateUpdated;
+      this.sortDescending = true;
+    }
 
-      this.viewAll = false;
+    this.viewAll = false;
 
-      this.AlreadyFetchingPointsFromDB = true;
-      this.AlreadyFetchingPointsFromDBChange.emit(true);
-      this.pointCount = 0;
-      this.points = [];
-      this.error = '';
+    this.AlreadyFetchingPointsFromDB = true;
+    this.pointCount = 0;
+    this.points = [];
+    this.error = '';
 
-      switch (this.PointSelectionType) {
-        case PointSelectionTypes.Filtered:
-          let dateFrom = new Date('1 Jan 2000');
-          let dateTo = new Date();
+    switch (this.PointSelectionType) {
+      case PointSelectionTypes.Filtered:
+        let dateFrom = new Date('1 Jan 2000');
+        let dateTo = new Date();
 
-          // Switch dates if dateFrom > dateTo
-          if (this.filter.applyDateFilter) {
-            dateFrom = this.filter.dateFrom;
-            dateTo = this.filter.dateTo;
-            if (
-              this.appData.Date1IsLessThanDate2(
-                dateTo.toString(),
-                dateFrom.toString()
-              )
-            ) {
-              const dateSwitch = dateFrom;
-              dateFrom = dateTo;
-              dateTo = dateSwitch;
-              this.filter.dateFrom = dateFrom;
-              this.filter.dateTo = dateTo;
-            }
+        // Switch dates if dateFrom > dateTo
+        if (this.filter.applyDateFilter) {
+          dateFrom = this.filter.dateFrom;
+          dateTo = this.filter.dateTo;
+          if (
+            this.appData.Date1IsLessThanDate2(
+              dateTo.toString(),
+              dateFrom.toString()
+            )
+          ) {
+            const dateSwitch = dateFrom;
+            dateFrom = dateTo;
+            dateTo = dateSwitch;
+            this.filter.dateFrom = dateFrom;
+            this.filter.dateTo = dateTo;
           }
+        }
 
+        this.pointsService
+          .GetFirstBatchFiltered(
+            this.localData.ConstituencyID,
+            this.filter.byAlias,
+            this.OnTopicSearch(),
+            this.filter.myPointFilter,
+            this.filter.feedbackFilter,
+            this.filter.pointFlag,
+            this.filter.text,
+            PointTypesEnum.NotSelected,
+            dateFrom,
+            dateTo,
+            this.sortType,
+            this.sortDescending
+          )
+          .subscribe({
+            next: psr => this.DisplayPoints(psr),
+            error: err => (this.error = err.error.detail),
+            complete: () => {
+              this.SelectComplete();
+            }
+          });
+        break;
+
+      case PointSelectionTypes.QuestionPoints:
+        this.possibleAnswers = this.sharesTagButNotAttached;
+
+        if (this.ParentQuestionID) {
           this.pointsService
-            .GetFirstBatchFiltered(
-              this.filter.constituencyID,
-              this.filter.byAlias,
-              this.OnTopicSearch(),
+            .GetFirstBatchQuestionPoints(
+              this.localData.ConstituencyID,
+              this.localData.SlashTagSelected,
+              this.ParentQuestionID,
               this.filter.myPointFilter,
-              this.filter.feedbackFilter,
-              this.filter.pointFlag,
-              this.filter.text,
-              PointTypesEnum.NotSelected,
-              dateFrom,
-              dateTo,
+              this.sharesTagButNotAttached,
               this.sortType,
               this.sortDescending
             )
@@ -338,21 +349,40 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
                 this.SelectComplete();
               }
             });
-          break;
+        }
+        break;
 
-        case PointSelectionTypes.QuestionPoints:
-          this.possibleAnswers = this.sharesTagButNotAttached;
+      case PointSelectionTypes.Comments:
+        if (this.ParentPointID == 0) {
+          this.error = 'No point selected to show comments';
+          return;
+        }
 
-          if (this.ParentQuestionID) {
+        this.pointsService
+          .PointsSelectComments(
+            this.ParentPointID,
+            this.localData.ConstituencyIDVoter
+          )
+          .subscribe({
+            next: psr => this.DisplayPoints(psr),
+            error: err => (this.error = err.error.detail),
+            complete: () => {
+              this.SelectComplete();
+            }
+          });
+        break;
+
+      default:
+        // Infinite Scroll: Get points in batches
+        if (this.filter) {
+          if (this.localData.SlashTagSelected) {
             this.pointsService
-              .GetFirstBatchQuestionPoints(
-                this.filter.constituencyID,
+              .GetFirstBatchForTag(
+                this.localData.ConstituencyID,
                 this.localData.SlashTagSelected,
-                this.ParentQuestionID,
-                this.filter.myPointFilter,
-                this.sharesTagButNotAttached,
                 this.sortType,
-                this.sortDescending
+                this.sortDescending,
+                this.updateTopicViewCount
               )
               .subscribe({
                 next: psr => this.DisplayPoints(psr),
@@ -362,57 +392,13 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
                 }
               });
           }
-          break;
-
-        case PointSelectionTypes.Comments:
-          if (this.ParentPointID == 0) {
-            this.error = 'No point selected to show comments';
-            return;
-          }
-
-          this.pointsService
-            .PointsSelectComments(
-              this.ParentPointID,
-              this.localData.ConstituencyIDVoter
-            )
-            .subscribe({
-              next: psr => this.DisplayPoints(psr),
-              error: err => (this.error = err.error.detail),
-              complete: () => {
-                this.SelectComplete();
-              }
-            });
-          break;
-
-        default:
-          // Infinite Scroll: Get points in batches
-          if (this.filter) {
-            if (this.localData.SlashTagSelected) {
-              this.pointsService
-                .GetFirstBatchForTag(
-                  this.filter.constituencyID,
-                  this.localData.SlashTagSelected,
-                  this.sortType,
-                  this.sortDescending,
-                  this.updateTopicViewCount
-                )
-                .subscribe({
-                  next: psr => this.DisplayPoints(psr),
-                  error: err => (this.error = err.error.detail),
-                  complete: () => {
-                    this.SelectComplete();
-                  }
-                });
-            }
-          }
-          break;
-      }
+        }
+        break;
     }
   }
 
   public SelectComplete() {
     this.AlreadyFetchingPointsFromDB = false;
-    this.AlreadyFetchingPointsFromDBChange.emit(false);
     if (!!this.fragment) this.ScrollIntoView();
     this.fragment = '';
   }
@@ -434,12 +420,11 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
         this.sortType = pointSortType;
 
         this.AlreadyFetchingPointsFromDB = true;
-        this.AlreadyFetchingPointsFromDBChange.emit(true);
 
         this.pointsService
           // pass pointCount for the cast to PSR
           .NewPointSelectionOrder(
-            this.filter.constituencyID,
+            this.localData.ConstituencyID,
             pointSortType,
             reversalOnly,
             this.pointCount
@@ -447,7 +432,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
           .subscribe({
             next: response => {
               this.AlreadyFetchingPointsFromDB = false;
-              this.AlreadyFetchingPointsFromDBChange.emit(false);
 
               // pointCount is not updated for re-ordering
               this.IDs = response.pointIDs;
@@ -510,7 +494,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
   DisplayPoints(psr: PointSelectionResult): void {
     this.AlreadyFetchingPointsFromDB = false;
-    this.AlreadyFetchingPointsFromDBChange.emit(false);
 
     this.PointCount.emit(psr.pointCount);
 
@@ -595,7 +578,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
       if (pids && pids.length > 0) {
         // Get new PAGE of points
         this.AlreadyFetchingPointsFromDB = true;
-        this.AlreadyFetchingPointsFromDBChange.emit(true);
         this.allPointsDisplayed = false;
 
         this.pointsService
@@ -613,7 +595,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
         // Get another BATCH of points
 
         this.AlreadyFetchingPointsFromDB = true;
-        this.AlreadyFetchingPointsFromDBChange.emit(true);
         this.allPointsDisplayed = false;
 
         if (this.filter) {
@@ -637,7 +618,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
   NewPointsDisplayed(): void {
     this.AlreadyFetchingPointsFromDB = false;
-    this.AlreadyFetchingPointsFromDBChange.emit(false);
     this.allPointsDisplayed = this.points.length >= this.pointCount;
   }
 

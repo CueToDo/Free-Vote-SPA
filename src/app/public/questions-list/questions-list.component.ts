@@ -1,5 +1,12 @@
 // Angular
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 
 // Models, enums
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
@@ -20,9 +27,11 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   templateUrl: './questions-list.component.html',
   styleUrls: ['./questions-list.component.css']
 })
-export class QuestionsListComponent {
+export class QuestionsListComponent implements OnChanges {
+  @Input() HasFocus = false;
+  @Input() ForConstituency = false;
+
   // Questions are filtered by Constituency and SlashTag only
-  @Input() public filter = new FilterCriteria();
 
   // SortType and direction
   @Input() SortType = PointSortTypes.DateUpdated;
@@ -34,6 +43,8 @@ export class QuestionsListComponent {
   public questions: Question[] = [];
   public IDs: ID[] = [];
   public questionCount = 0;
+
+  wasForConstituency = false;
 
   public error = '';
   public alreadyFetchingFromDB = false;
@@ -72,6 +83,25 @@ export class QuestionsListComponent {
     public localData: LocalDataService
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const newFocus = changes['HasFocus']?.currentValue;
+    if (!this.HasFocus && !newFocus) return; // Do nothing if we don't have and not acquiring focus
+
+    // If forConstituency has not changed set to wasForConstituency
+    const forConstituency =
+      changes['ForConstituency']?.currentValue ?? this.wasForConstituency;
+
+    // If new focus on this component and we haven't fetched points
+    // or change to local constituency, then fetch points
+    if (
+      (newFocus && (!this.questions || this.questions.length == 0)) ||
+      this.wasForConstituency != forConstituency
+    ) {
+      this.wasForConstituency = forConstituency;
+      this.SelectQuestions(false);
+    }
+  }
+
   SelectQuestions(updateTopicViewCount: boolean): void {
     if (!this.alreadyFetchingFromDB) {
       this.alreadyFetchingFromDB = true;
@@ -82,7 +112,7 @@ export class QuestionsListComponent {
       // Infinite Scroll: Get questions in batches
       this.questionsService
         .GetFirstBatchForTag(
-          this.filter.constituencyID,
+          this.localData.ConstituencyID,
           this.localData.SlashTagSelected,
           this.SortType,
           this.SortDescending,
@@ -109,7 +139,7 @@ export class QuestionsListComponent {
 
       this.questionsService
         .NewQuestionSelectionOrder(
-          this.filter.constituencyID,
+          this.localData.ConstituencyID,
           pointSortType,
           reversalOnly
         )
@@ -183,7 +213,7 @@ export class QuestionsListComponent {
 
         this.questionsService
           .GetNextBatch(
-            this.filter.constituencyID,
+            this.localData.ConstituencyID,
             this.SortType,
             this.lastBatchRow + 1
           )

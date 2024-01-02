@@ -30,8 +30,6 @@ export class LocalDataService {
     this.SetItem('cookieConsent', value.toString());
   }
 
-  public initialPointsSelected = false;
-  public tagCloudType = TagCloudTypes.Trending;
   public TagChange = false; // use gloablly for comms from point-edit to point to points-list
 
   // jwt contains All claims
@@ -245,6 +243,8 @@ export class LocalDataService {
   public LoadClientValues(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.JWT = this.GetItem('jwt');
+
+      // Logging
       this.localLogging = this.GetItem('localLogging');
       this.localLog = this.GetItem('localLog');
 
@@ -276,6 +276,7 @@ export class LocalDataService {
       );
       this.freeVoteProfile.profilePicture = this.GetItem('profilePicture');
 
+      this.TopicSelected = this.GetItem('TopicSelected');
       this.ActiveAliasForFilter = this.PreviousAliasSelected; // may be ''
     }
   }
@@ -347,6 +348,10 @@ export class LocalDataService {
       }
       if (this.freeVoteProfile.profilePicture) {
         this.SetItem('profilePicture', this.freeVoteProfile.profilePicture);
+      }
+
+      if (this.TopicSelected) {
+        this.SetItem('TopicSelected', this.TopicSelected);
       }
     }
   }
@@ -431,25 +436,27 @@ export class LocalDataService {
     }
   }
 
+  // Topic/SlashTagSelected
   public get TopicSelected(): string {
-    return this.GetItem('previousTopicSelected');
+    return this.GetItem('TopicSelected');
   }
 
   public set TopicSelected(topic: string) {
-    let previousTopicSelected = '';
+    let topicSelected = '';
     if (topic.charAt(0) === '/') {
       // Expecting a slash, but we got a topic - no need to convert slashTag to topic - it is a topic
-      previousTopicSelected = this.SlashTagToTopic(topic);
+      topicSelected = this.SlashTagToTopic(topic);
     } else {
-      previousTopicSelected = topic;
+      topicSelected = topic;
     }
 
-    this.SetItem('previousTopicSelected', previousTopicSelected);
+    this.SetItem('TopicSelected', topicSelected);
   }
 
   public get SlashTagSelected(): string {
     return this.TopicToSlashTag(this.TopicSelected);
   }
+
   public set SlashTagSelected(slashTag: string) {
     if (!!slashTag) {
       if (slashTag.charAt(0) !== '/') {

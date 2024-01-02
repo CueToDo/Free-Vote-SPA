@@ -22,17 +22,28 @@ import { TagsService } from '../../services/tags.service';
 })
 export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   @Input() HasFocus = false;
-  @Input() forConstituency = false;
+  @Input() ForConstituency = false;
 
   private wasForConstituency = false;
 
-  @Output() haveTags = new EventEmitter<boolean>();
   @Output() NewSlashTagSelected = new EventEmitter<string>();
 
   TagCloudTypes = TagCloudTypes;
+  tagCloudType = TagCloudTypes.Trending;
 
-  tags: Tag[] = [];
-  tagsSave: Tag[] = [];
+  tagsRecent: Tag[] = []; // Saved - won't necessarily be refreshed
+  tagsTrending: Tag[] = []; // Will always be refreshed
+
+  public get tags(): Tag[] {
+    if (this.tagCloudType === TagCloudTypes.Recent) return this.tagsRecent;
+    return this.tagsTrending;
+  }
+
+  private set tags(value: Tag[]) {
+    if (this.tagCloudType === TagCloudTypes.Recent) this.tagsRecent = value;
+    else this.tagsTrending = value;
+  }
+
   tagSearch = false;
 
   waiting = false;
@@ -61,39 +72,53 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.waiting) return;
-
+    // Do nothing if we don't have and are not acquiring focus
     const newFocus = changes['HasFocus']?.currentValue;
-    if (!this.HasFocus && !newFocus) return; // Do nothing if we don't have and not acquiring focus
 
-    const newForConstituency = changes['forConstituency']?.currentValue;
+    if (!this.HasFocus && !newFocus) return;
+
+    // If forConstituency has not changed set to wasForConstituency
+    const forConstituency =
+      changes['ForConstituency']?.currentValue ?? this.wasForConstituency;
 
     // If new focus on this component and we haven't fetched tags
     // or change to local constituency, then fetch tags
     if (
-      (newFocus && (!this.tags || this.tags.length == 0)) ||
-      newForConstituency != null ||
-      this.wasForConstituency != this.forConstituency
+      (newFocus && this.tags.length == 0) ||
+      this.wasForConstituency != forConstituency ||
+      this.ReselectRecent
     ) {
+      this.wasForConstituency = forConstituency;
       this.FetchTags();
     }
+  }
+
+  // Do we need to go to database to reselect voter's recent tag list?
+  get ReselectRecent(): boolean {
+    if (this.tagCloudType !== TagCloudTypes.Recent) return false;
+
+    if (
+      this.tagsRecent.length == 0 ||
+      this.tagsRecent[0].slashTag != this.localData.SlashTagSelected
+    )
+      return true;
+
+    return false;
   }
 
   // Do we already have the tags requested?
   public FetchTags(): void {
     if (this.tagSearch) return;
+
     this.waiting = true;
     this.tags = [];
 
     this.tags$ = this.tagsService
-      .TagCloud(this.localData.tagCloudType, this.localData.ConstituencyID)
+      .TagCloud(this.tagCloudType, this.localData.ConstituencyID)
       .subscribe({
         next: response => {
           this.tags = response;
-          this.tagsSave = response;
           this.waiting = false;
-          this.wasForConstituency = this.forConstituency;
-          this.haveTags.emit(response && response.length > 0);
         },
         error: serverError => {
           this.error = serverError.error.detail;
@@ -102,17 +127,21 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   FetchTrendingTags() {
-    this.localData.tagCloudType = TagCloudTypes.Trending;
+    this.tagCloudType = TagCloudTypes.Trending;
     this.appData.RouteParamChange$.next('/trending');
     this.tagSearch = false;
+
+    // Always reselect Trending
     this.FetchTags();
   }
 
   FetchRecentTags() {
-    this.localData.tagCloudType = TagCloudTypes.Recent;
+    this.tagCloudType = TagCloudTypes.Recent;
     this.appData.RouteParamChange$.next('/recent');
     this.tagSearch = false;
-    this.FetchTags();
+
+    // Check if we need to reselect recent
+    if (this.ReselectRecent) this.FetchTags();
   }
 
   FontSize(Weight: number): string {
@@ -156,7 +185,6 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
   CancelTagSearch(): void {
     this.tagSearch = false;
-    this.tags = this.tagsSave;
   }
 
   ngOnDestroy(): void {
