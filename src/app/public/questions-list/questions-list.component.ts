@@ -37,7 +37,6 @@ export class QuestionsListComponent implements OnChanges {
   @Input() SortType = PointSortTypes.DateUpdated;
   @Input() SortDescending = false;
 
-  @Output() QuestionCount = new EventEmitter<number>();
   @Output() QuestionSelected = new EventEmitter<number>();
 
   public questions: Question[] = [];
@@ -45,6 +44,7 @@ export class QuestionsListComponent implements OnChanges {
   public questionCount = 0;
 
   wasForConstituency = false;
+  forSlashTag = '';
 
   public error = '';
   public alreadyFetchingFromDB = false;
@@ -91,7 +91,8 @@ export class QuestionsListComponent implements OnChanges {
     // or change to local constituency, then fetch points
     if (
       (newFocus && (!this.questions || this.questions.length == 0)) ||
-      this.wasForConstituency != this.ForConstituency
+      this.wasForConstituency != this.ForConstituency ||
+      this.forSlashTag != this.localData.SlashTagSelected
     ) {
       this.SelectQuestions(false);
     }
@@ -157,7 +158,7 @@ export class QuestionsListComponent implements OnChanges {
 
   DisplayQuestions(qsr: QuestionSelectionResult): void {
     this.alreadyFetchingFromDB = false;
-    this.QuestionCount.emit(qsr.questionCount);
+    this.forSlashTag = this.localData.SlashTagSelected;
 
     // Batch
     this.questionCount = qsr.questionCount;

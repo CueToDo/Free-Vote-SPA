@@ -61,9 +61,6 @@ export class TagsAndPointsComponent
   specificQuestionIDSelected = 0;
   specificPointIDSelected = 0;
 
-  // Questions Select
-  questionCount = 0;
-
   bogSelected: BreakoutGroup = {
     tagDisplay: '',
     breakoutGroupID: 0,
@@ -311,11 +308,6 @@ export class TagsAndPointsComponent
       newRoute = this.localData.TopicToSlashTag(newRoute);
       this.appData.RouteParamChange$.next(newRoute);
     }
-  }
-
-  // QuestionsList emits the question count, which may cause switch to points
-  QuestionCount(count: number): void {
-    this.questionCount = count;
   }
 
   QuestionSelected(questionID: number): void {

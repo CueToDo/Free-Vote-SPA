@@ -1,67 +1,65 @@
-<div class="scroller">
-  <div class="content">
-    <div class="header flexRow wrap justify-center align-center">
-      <!-- Sort Menu -->
-      <app-sort-menu
-        [pointSortType]="sortType"
-        [sortDescending]="sortDescending"
-        (pointSortTypeChange)="SetSortType($event)"
-        (sortDescendingChange)="SetSortDescending($event)"
-        (refresh)="refresh()"
-      ></app-sort-menu>
+<div class="flexCol">
+  <div class="header flexRow wrap justify-center align-center">
+    <!-- Sort Menu -->
+    <app-sort-menu
+      [pointSortType]="sortType"
+      [sortDescending]="sortDescending"
+      (pointSortTypeChange)="SetSortType($event)"
+      (sortDescendingChange)="SetSortDescending($event)"
+      (refresh)="refresh()"
+    ></app-sort-menu>
 
-      <!-- 1. Show Search (Point Filter) Options -->
-      <button
-        mat-raised-button
-        (click)="PointSearch()"
-        matTooltip="search"
-        matTooltipPosition="above"
-      >
-        <mat-icon>search</mat-icon>
-        search
-      </button>
+    <!-- 1. Show Search (Point Filter) Options -->
+    <button
+      mat-raised-button
+      (click)="PointSearch()"
+      matTooltip="search"
+      matTooltipPosition="below"
+    >
+      <mat-icon>search</mat-icon>
+      search
+    </button>
 
-      <!-- 5. New question answer or tag point  -->
-      <button
-        mat-raised-button
-        *ngIf="auth0Service.isAuthenticated$ | async"
-        matTooltip="create new point"
-        matTooltipPosition="above"
-      >
-        new point
-        <mat-icon>library_add</mat-icon>
-      </button>
+    <!-- 5. New question answer or tag point  -->
+    <button
+      mat-raised-button
+      *ngIf="auth0Service.isAuthenticated$ | async"
+      matTooltip="create new point"
+      matTooltipPosition="below"
+    >
+      new point
+      <mat-icon>library_add</mat-icon>
+    </button>
 
-      <!-- 2. Feedback Switch -->
-      <button
-        mat-raised-button
-        (click)="toggleFeedback()"
-        matTooltip="toggle feedback"
-        matTooltipPosition="right"
-      >
-        <mat-icon>{{ feedbackIcon }}</mat-icon>
-        {{ feedbackText }}
-      </button>
+    <!-- 2. Feedback Switch -->
+    <button
+      mat-raised-button
+      (click)="toggleFeedback()"
+      matTooltip="toggle feedback"
+      matTooltipPosition="below"
+    >
+      <mat-icon>{{ feedbackIcon }}</mat-icon>
+      {{ feedbackText }}
+    </button>
 
-      <!-- 3. Refresh -->
-      <button
-        mat-raised-button
-        (click)="ReselectPoints(PointSortTypes.NoChange)"
-        matTooltip="refresh"
-        matTooltipPosition="right"
-      >
-        <mat-icon>refresh</mat-icon>
-        refresh
-      </button>
-    </div>
+    <!-- 3. Refresh -->
+    <button
+      mat-raised-button
+      (click)="ReselectPoints(PointSortTypes.NoChange)"
+      matTooltip="refresh"
+      matTooltipPosition="below"
+    >
+      <mat-icon>refresh</mat-icon>
+      refresh
+    </button>
+  </div>
 
-    <h1 *ngIf="localData.forConstituency" class="h1Constituency">
-      {{ localData.freeVoteProfile.constituency }}
-    </h1>
+  <h1 *ngIf="localData.forConstituency" class="h1Constituency">
+    {{ localData.freeVoteProfile.constituency }}
+  </h1>
 
-    <div *ngIf="error !== ''" class="text-danger mx-3">
-      {{ error }}
-    </div>
+  <div *ngIf="error !== ''" class="text-danger mx-3">
+    {{ error }}
   </div>
 
   <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">

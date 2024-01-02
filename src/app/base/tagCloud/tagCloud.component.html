@@ -1,11 +1,11 @@
-<div class="linkCloud">
+<div class="flexCol">
   <div class="header">
     <div class="flexRow wrap justify-center align-center">
       <!-- Trending -->
       <button
         mat-raised-button
         matTooltip="slash-tags"
-        matTooltipPosition="above"
+        matTooltipPosition="below"
         [class.selected]="!tagSearch && tagCloudType === TagCloudTypes.Trending"
         (click)="FetchTrendingTags()"
       >
@@ -16,7 +16,7 @@
       <button
         mat-raised-button
         matTooltip="slash-tags"
-        matTooltipPosition="above"
+        matTooltipPosition="below"
         [class.selected]="!tagSearch && tagCloudType === TagCloudTypes.Recent"
         (click)="FetchRecentTags()"
       >
@@ -27,7 +27,7 @@
       <button
         mat-raised-button
         matTooltip="slash tag search"
-        matTooltipPosition="above"
+        matTooltipPosition="below"
         [class.selected]="tagSearch"
         (click)="TagSearch()"
       >
@@ -41,43 +41,49 @@
     </h1>
   </div>
 
-  <app-tag-search
-    *ngIf="tagSearch"
-    #tagSearch
-    [ForConstituency]="localData.forConstituency"
-    (Cancel)="CancelTagSearch()"
-    (Tags)="TagSearchResult($event)"
-  >
-  </app-tag-search>
+  <div class="scroller">
+    <div class="content">
+      <div class="linkCloud">
+        <app-tag-search
+          *ngIf="tagSearch"
+          #tagSearch
+          [ForConstituency]="localData.forConstituency"
+          (Cancel)="CancelTagSearch()"
+          (Tags)="TagSearchResult($event)"
+        >
+        </app-tag-search>
 
-  <div *ngIf="waiting">
-    <div>fetching tags</div>
-    <div class="spinner-grow text-info my-5 ms-3" role="status">
-      <span class="visually-hidden">Loading...</span>
+        <div *ngIf="waiting">
+          <div>fetching tags</div>
+          <div class="spinner-grow text-info my-5 ms-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <!-- Tag List/Search Results -->
+        <ng-container *ngFor="let slashTag of tags">
+          <div id="container">
+            <a
+              [innerHTML]="slashTag.tagDisplay | TagDisplay"
+              [ngStyle]="{
+                'font-size': FontSize(slashTag.tagWeight),
+                'padding-right': '10px'
+              }"
+              (click)="setSlashTag(slashTag.slashTag)"
+            ></a>
+            <span
+              *ngIf="slashTag.unseenPoints > 0"
+              class="mybadge"
+              [ngStyle]="{ top: 5 * slashTag.tagWeight - 12 + 'px' }"
+              >{{ slashTag.unseenPoints }}</span
+            >
+          </div>
+        </ng-container>
+
+        <div *ngIf="error" class="text-danger mx-3">
+          {{ error }}
+        </div>
+      </div>
     </div>
-  </div>
-
-  <!-- Tag List/Search Results -->
-  <ng-container *ngFor="let slashTag of tags">
-    <div id="container">
-      <a
-        [innerHTML]="slashTag.tagDisplay | TagDisplay"
-        [ngStyle]="{
-          'font-size': FontSize(slashTag.tagWeight),
-          'padding-right': '10px'
-        }"
-        (click)="setSlashTag(slashTag.slashTag)"
-      ></a>
-      <span
-        *ngIf="slashTag.unseenPoints > 0"
-        class="mybadge"
-        [ngStyle]="{ top: 5 * slashTag.tagWeight - 12 + 'px' }"
-        >{{ slashTag.unseenPoints }}</span
-      >
-    </div>
-  </ng-container>
-
-  <div *ngIf="error" class="text-danger mx-3">
-    {{ error }}
   </div>
 </div>

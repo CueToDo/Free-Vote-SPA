@@ -35,14 +35,25 @@ export class SortMenuComponent implements OnInit {
     let tooltip = `showing points for\n"${this.localData.TopicSelected}"\n`;
     switch (this.pointSortType) {
       case PointSortTypes.TrendingActivity:
-        return tooltip + `in trending order`;
+        tooltip += 'in trending order';
+        if (this.sortDescending) tooltip += '\n(descending)';
+        else tooltip += '\n(ascending)';
+        break;
       case PointSortTypes.AllTimePopularity:
-        return tooltip + `ordered by all time popularity`;
+        tooltip += 'ordered by all time popularity';
+        if (this.sortDescending) tooltip += '\n(most popular first)';
+        else tooltip += '\n(least popular first)';
+        break;
       case PointSortTypes.Random:
-        return tooltip + `in random order`;
+        tooltip += 'in random order';
+        return tooltip;
       default: // Date
-        return tooltip + `ordered by date updated`;
+        tooltip += `ordered by date updated`;
+        if (this.sortDescending) tooltip += '\n(most recent first)';
+        else tooltip += '\n(oldest first)';
     }
+
+    return tooltip;
   }
 
   public get sortTypeIcon(): string {

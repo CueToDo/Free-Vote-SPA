@@ -1,16 +1,10 @@
 <!-- Begin Tab Selection and point sort order -->
 
-<div
-  [ngClass]="{
-    show: tabIndex !== Tabs.questionAnswers,
-    hide: tabIndex === Tabs.questionAnswers
-  }"
-  class="amy-2"
->
+<div *ngIf="tabIndex !== Tabs.questionAnswers" class="amy-2">
   <div class="flexRow wrap justify-center">
     <!-- 1. Show tag clouds and tag search -->
     <button
-      mat-button
+      mat-raised-button
       [class.selected]="tabIndex === Tabs.slashTags"
       (click)="ShowTags()"
       matTooltip="slash-tags"
@@ -24,7 +18,7 @@
 
     <!-- 2. Select points -->
     <button
-      mat-button
+      mat-raised-button
       (click)="ShowPoints()"
       [class.selected]="tabIndex === Tabs.tagPoints"
       matTooltip="show points"
@@ -36,10 +30,8 @@
 
     <!-- 3. Select questions -->
     <button
-      mat-button
-      [class.selected]="
-        tabIndex === Tabs.questionList || tabIndex === Tabs.questionAnswers
-      "
+      mat-raised-button
+      [class.selected]="tabIndex === Tabs.questionList"
       (click)="ShowQuestions()"
       matTooltip="show questions"
       matTooltipPosition="above"
@@ -50,7 +42,7 @@
 
     <!-- Local Topics -->
     <button
-      mat-button
+      mat-raised-button
       (click)="ChangeConstituency()"
       class="localButton"
       [class.selected]="localData.ConstituencyID > 0"
@@ -62,8 +54,6 @@
       <mat-icon>mp</mat-icon>
     </button>
   </div>
-
-  <hr />
 </div>
 
 <!-- End Tab Selection -->
@@ -79,20 +69,15 @@
         stageLeft: tabIndex > Tabs.slashTags
       }"
     >
-      <div class="scroller">
-        <div class="content">
-          <app-tag-cloud
-            [HasFocus]="tabIndex === Tabs.slashTags"
-            [ForConstituency]="localData.forConstituency"
-            #slashTagsComponent
-            (NewSlashTagSelected)="NewSlashTagSelected($event)"
-          >
-          </app-tag-cloud>
-        </div>
-      </div>
+      <app-tag-cloud
+        [HasFocus]="tabIndex === Tabs.slashTags"
+        [ForConstituency]="localData.forConstituency"
+        #slashTagsComponent
+        (NewSlashTagSelected)="NewSlashTagSelected($event)"
+      >
+      </app-tag-cloud>
     </div>
   </div>
-
   <!-- 2 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagPoints }">
     <div
@@ -129,7 +114,6 @@
         #appQuestionsList
         [HasFocus]="this.tabIndex === Tabs.questionList"
         [ForConstituency]="localData.forConstituency"
-        (QuestionCount)="QuestionCount($event)"
         (QuestionSelected)="QuestionSelected($event)"
       >
       </app-questions-list>

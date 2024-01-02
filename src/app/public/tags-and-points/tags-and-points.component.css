@@ -27,6 +27,7 @@ mat-radio-button + mat-radio-button {
 }
 
 /* Important! */
+app-tag-cloud,
 app-questions-list,
 app-question-answers,
 app-points-list {
@@ -47,24 +48,6 @@ hr {
   margin-right: 0px;
   font-weight: medium;
   font-size: 1.8em;
-}
-
-.hide {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-}
-
-.show {
-  max-height: 120px;
-  /* When datepicker filters wrap on mobile */
-  overflow: hidden;
-  opacity: 1;
-}
-
-.show,
-.hide {
-  transition: max-height 0.6s ease-out, opacity 0.6s ease-out;
 }
 
 ::ng-deep .mat-button {
