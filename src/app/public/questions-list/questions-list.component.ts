@@ -87,17 +87,12 @@ export class QuestionsListComponent implements OnChanges {
     const newFocus = changes['HasFocus']?.currentValue;
     if (!this.HasFocus && !newFocus) return; // Do nothing if we don't have and not acquiring focus
 
-    // If forConstituency has not changed set to wasForConstituency
-    const forConstituency =
-      changes['ForConstituency']?.currentValue ?? this.wasForConstituency;
-
     // If new focus on this component and we haven't fetched points
     // or change to local constituency, then fetch points
     if (
       (newFocus && (!this.questions || this.questions.length == 0)) ||
-      this.wasForConstituency != forConstituency
+      this.wasForConstituency != this.ForConstituency
     ) {
-      this.wasForConstituency = forConstituency;
       this.SelectQuestions(false);
     }
   }
@@ -242,6 +237,7 @@ export class QuestionsListComponent implements OnChanges {
   NewQuestionsDisplayed(): void {
     this.alreadyFetchingFromDB = false;
     this.allQuestionsDisplayed = this.questions.length >= this.questionCount;
+    this.wasForConstituency = this.ForConstituency;
   }
 
   onQuestionDeleted(id: number): void {

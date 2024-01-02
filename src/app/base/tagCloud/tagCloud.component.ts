@@ -77,20 +77,20 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
     if (!this.HasFocus && !newFocus) return;
 
-    // If forConstituency has not changed set to wasForConstituency
-    const forConstituency =
-      changes['ForConstituency']?.currentValue ?? this.wasForConstituency;
-
     // If new focus on this component and we haven't fetched tags
     // or change to local constituency, then fetch tags
+
+    this.FetchTags();
+  }
+
+  get ReselectTrending(): boolean {
+    if (this.tagCloudType !== TagCloudTypes.Trending) return false;
     if (
-      (newFocus && this.tags.length == 0) ||
-      this.wasForConstituency != forConstituency ||
-      this.ReselectRecent
-    ) {
-      this.wasForConstituency = forConstituency;
-      this.FetchTags();
-    }
+      this.wasForConstituency === this.ForConstituency &&
+      this.tagsTrending.length != 0
+    )
+      return false;
+    return true;
   }
 
   // Do we need to go to database to reselect voter's recent tag list?
@@ -99,6 +99,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
     if (
       this.tagsRecent.length == 0 ||
+      this.wasForConstituency != this.ForConstituency ||
       this.tagsRecent[0].slashTag != this.localData.SlashTagSelected
     )
       return true;
@@ -109,6 +110,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   // Do we already have the tags requested?
   public FetchTags(): void {
     if (this.tagSearch) return;
+    if (!this.ReselectTrending && !this.ReselectRecent) return;
 
     this.waiting = true;
     this.tags = [];
@@ -119,6 +121,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
         next: response => {
           this.tags = response;
           this.waiting = false;
+          this.wasForConstituency = this.ForConstituency;
         },
         error: serverError => {
           this.error = serverError.error.detail;

@@ -52,7 +52,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() AddPointToAnswers = new EventEmitter();
   @Output() RemovePointFromAnswers = new EventEmitter();
-  @Output() PointCount = new EventEmitter<number>();
   @Output() AltSlashTagSelected = new EventEmitter<string>();
   @Output() SelectComment = new EventEmitter<number>();
 
@@ -204,19 +203,13 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
     const newFocus = changes['HasFocus']?.currentValue;
     if (!this.HasFocus && !newFocus) return; // Do nothing if we don't have and not acquiring focus
 
-    // If forConstituency has not changed set to wasForConstituency
-    const forConstituency =
-      changes['ForConstituency']?.currentValue ?? this.wasForConstituency;
-
     // If new focus on this component and we haven't fetched points
     // or change to local constituency, then fetch points
     if (
       (newFocus && this.points.length === 0) ||
-      this.wasForConstituency != forConstituency
-    ) {
-      this.wasForConstituency = forConstituency;
+      this.wasForConstituency != this.ForConstituency
+    )
       this.SelectPoints();
-    }
   }
 
   ScrollIntoView(): void {
@@ -494,8 +487,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
   DisplayPoints(psr: PointSelectionResult): void {
     this.AlreadyFetchingPointsFromDB = false;
-
-    this.PointCount.emit(psr.pointCount);
+    this.wasForConstituency = this.ForConstituency;
 
     if (psr.pointCount > 0) {
       // If we don't have dateFrom and fromDate is returned, OR
