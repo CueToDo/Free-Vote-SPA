@@ -8,14 +8,22 @@ import {
   SimpleChanges
 } from '@angular/core';
 
+// Material
+import { MatDialog } from '@angular/material/dialog';
+
+// Auth0
+import { AuthService } from '@auth0/auth0-angular';
+
 // Models, enums
-import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 import { PointSortTypes } from 'src/app/models/enums';
 import { ID } from 'src/app/models/common';
 import {
   Question,
   QuestionSelectionResult
 } from 'src/app/models/question.model';
+
+// Components
+import { QuestionCreateNewComponent } from '../question-create-new/question-create-new.component';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -34,8 +42,8 @@ export class QuestionsListComponent implements OnChanges {
   // Questions are filtered by Constituency and SlashTag only
 
   // SortType and direction
-  @Input() SortType = PointSortTypes.DateUpdated;
-  @Input() SortDescending = false;
+  sortType = PointSortTypes.DateUpdated;
+  sortDescending = false;
 
   @Output() QuestionSelected = new EventEmitter<number>();
 
@@ -78,9 +86,11 @@ export class QuestionsListComponent implements OnChanges {
   }
 
   constructor(
+    public auth0Service: AuthService,
     private questionsService: QuestionsService,
     public appData: AppDataService,
-    public localData: LocalDataService
+    public localData: LocalDataService,
+    public dialog: MatDialog
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -110,8 +120,8 @@ export class QuestionsListComponent implements OnChanges {
         .GetFirstBatchForTag(
           this.localData.ConstituencyID,
           this.localData.SlashTagSelected,
-          this.SortType,
-          this.SortDescending,
+          this.sortType,
+          this.sortDescending,
           updateTopicViewCount
         )
         .subscribe({
@@ -124,13 +134,14 @@ export class QuestionsListComponent implements OnChanges {
     }
   }
 
-  newSortType(pointSortType: PointSortTypes): void {
+  SetSortType(pointSortType: PointSortTypes): void {
+    alert('ToDo');
     if (this.questionCount > 1) {
       // Don't go to server to re-sort if only 1 point selected
 
       // ReversalOnly means we can allow the database to update rownumbers on previously selected points
-      const reversalOnly = this.SortType === pointSortType;
-      this.SortType = pointSortType;
+      const reversalOnly = this.sortType === pointSortType;
+      this.sortType = pointSortType;
       this.alreadyFetchingFromDB = true;
 
       this.questionsService
@@ -154,6 +165,17 @@ export class QuestionsListComponent implements OnChanges {
           }
         });
     }
+  }
+
+  SetSortDescending(descending: boolean): void {
+    alert('ToDo');
+    this.sortDescending = descending;
+
+    // Can't reverse random, so default to TrendingActivity
+    if (this.sortType === PointSortTypes.Random) {
+      this.sortType = PointSortTypes.TrendingActivity;
+    }
+    this.SetSortType(this.sortType);
   }
 
   DisplayQuestions(qsr: QuestionSelectionResult): void {
@@ -210,7 +232,7 @@ export class QuestionsListComponent implements OnChanges {
         this.questionsService
           .GetNextBatch(
             this.localData.ConstituencyID,
-            this.SortType,
+            this.sortType,
             this.lastBatchRow + 1
           )
           .subscribe({
@@ -231,7 +253,28 @@ export class QuestionsListComponent implements OnChanges {
     }
   }
 
-  ReselectForNewQuestion() {
+  QuestionSearch(): void {
+    alert('ToDo');
+  }
+
+  NewQuestion(): void {
+    const dialogRef = this.dialog.open(QuestionCreateNewComponent, {
+      data: {
+        tag: this.localData.SlashTagSelected
+      }
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (saved: boolean) => {
+        if (!!saved) {
+          this.sortDescending = true;
+          this.ReselectForSameSlashTag();
+        }
+      }
+    });
+  }
+
+  ReselectForSameSlashTag() {
     this.SelectQuestions(false);
   }
 

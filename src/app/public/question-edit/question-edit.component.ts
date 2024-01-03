@@ -28,7 +28,6 @@ import { TagsService } from 'src/app/services/tags.service';
 })
 export class QuestionEditComponent implements OnInit {
   @Input() public question = new Question();
-  @Input() constituencyID = 0;
   questionClone!: QuestionEdit;
 
   @Output() CancelEdit = new EventEmitter();
@@ -65,6 +64,8 @@ export class QuestionEditComponent implements OnInit {
   }
 
   GetQuestionTagsEdit(): void {
+    if (this.questionClone.questionID <= 0) return;
+
     // Get all national and constituency tags for the point
     this.waiting = true;
     this.tagsService
@@ -86,7 +87,7 @@ export class QuestionEditComponent implements OnInit {
     this.ClearQuestion();
 
     if (!!slashTag) {
-      let newTag = new Tag(slashTag, this.constituencyID);
+      let newTag = new Tag(slashTag, this.localData.ConstituencyID);
       newTag.tagByMeNew = true;
       this.questionClone.tags = [newTag];
     } else {

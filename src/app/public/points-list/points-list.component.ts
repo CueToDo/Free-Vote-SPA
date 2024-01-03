@@ -453,9 +453,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
   // From child Points Component
   pointSortTypeChanged(pointSortType: PointSortTypes): void {
-    // this.externalTrigger = true;
     this.sortType = pointSortType; // Pass update to sort menu
-    // this.externalTrigger = false;
   }
 
   SetSortDescending(descending: boolean): void {
@@ -466,9 +464,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
       this.sortType = PointSortTypes.TrendingActivity;
     }
 
-    // if (!this.externalTrigger) {
     this.NewSortOrder();
-    // }
   }
 
   // If sort type is random, order (ascending/descending) is irrelevant
@@ -541,7 +537,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   NewPoint(): void {
     const dialogRef = this.dialog.open(PointCreateNewComponent, {
       data: {
-        constituencyID: this.localData.ConstituencyID,
         tag: this.localData.SlashTagSelected
       }
     });

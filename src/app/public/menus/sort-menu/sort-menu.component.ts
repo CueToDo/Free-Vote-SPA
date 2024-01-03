@@ -17,13 +17,16 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   styleUrls: ['./sort-menu.component.css']
 })
 export class SortMenuComponent implements OnInit {
-  // 1. Sort Type
+  // 1. For points or questions
+  @Input() qp = 'points';
+
+  // 2. Sort Type
   @Input() pointSortType!: PointSortTypes;
   @Output() pointSortTypeChange = new EventEmitter<PointSortTypes>();
 
   public PointSortTypes = PointSortTypes; // enum - template
 
-  // 2. Sort Order
+  // 3. Sort Order
   @Input() sortDescending!: boolean;
   @Output() sortDescendingChange = new EventEmitter<boolean>();
 
@@ -32,7 +35,7 @@ export class SortMenuComponent implements OnInit {
   isMobile = false;
 
   public get sortToolTip(): string {
-    let tooltip = `showing points for\n"${this.localData.TopicSelected}"\n`;
+    let tooltip = `showing ${this.qp} for\n"${this.localData.TopicSelected}"\n`;
     switch (this.pointSortType) {
       case PointSortTypes.TrendingActivity:
         tooltip += 'in trending order';

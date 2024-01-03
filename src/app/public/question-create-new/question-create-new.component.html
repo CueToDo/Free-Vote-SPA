@@ -1,8 +1,9 @@
 <div class="container">
-  <h1>New point</h1>
-  <app-point-edit
-    #pointEdit
+  <h1>New question</h1>
+
+  <app-question-edit
+    #questionEdit
     (CompleteEdit)="SaveComplete()"
     (CancelEdit)="Cancel()"
-  ></app-point-edit>
+  ></app-question-edit>
 </div>

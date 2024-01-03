@@ -38,6 +38,7 @@ import { PointsFilterComponent } from './points-filter/points-filter.component';
 import { PointsListComponent } from './points-list/points-list.component';
 import { PointTypesComponent } from './menus/point-types/point-types.component';
 import { QuestionComponent } from './question/question.component';
+import { QuestionCreateNewComponent } from './question-create-new/question-create-new.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionAnswersComponent } from './question-answers/question-answers.component';
@@ -86,6 +87,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     PointTypesComponent,
     QuestionAnswersComponent,
     QuestionComponent,
+    QuestionCreateNewComponent,
     QuestionEditComponent,
     QuestionsListComponent,
     SortMenuComponent,

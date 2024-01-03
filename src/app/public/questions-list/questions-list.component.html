@@ -1,68 +1,118 @@
-<div class="scroller" appElementScrollEnd (scrollEnd)="fetchMoreQuestions()">
-  <div class="content">
-    <h1 *ngIf="localData.forConstituency" class="h1Constituency">
-      {{ localData.freeVoteProfile.constituency }}
-    </h1>
-    <div *ngIf="error !== ''" class="text-danger mx-3">
-      {{ error }}
-    </div>
+<div class="flexCol">
+  <div class="header flexRow wrap justify-center align-center">
+    <!-- 1. Sort Menu -->
+    <app-sort-menu
+      [qp]="'questions'"
+      [pointSortType]="sortType"
+      [sortDescending]="sortDescending"
+      (pointSortTypeChange)="SetSortType($event)"
+      (sortDescendingChange)="SetSortDescending($event)"
+      (refresh)="ReselectForSameSlashTag()"
+    ></app-sort-menu>
 
-    <!-- Top Spinner for reselect -->
-    <div *ngIf="alreadyFetchingFromDB && questionCount > 0">
-      <span>reselecting questions</span>
-      <span class="spinner-grow text-primary ms-3" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </span>
-    </div>
-
-    <!-- Questions List -->
-    <div *ngFor="let question of questions">
-      <app-question
-        [question]="question"
-        [questionCount]="questionCount"
-        (QuestionDeleted)="onQuestionDeleted($event)"
-        (QuestionSelected)="questionSelected(question.questionID)"
-      >
-      </app-question>
-    </div>
-
-    <!-- Prompt New Question -->
-    <div
-      *ngIf="!alreadyFetchingFromDB && questionCount === 0"
-      class="alert alert-warning"
+    <!-- 2. Show Search (Question Filter) Options -->
+    <button
+      mat-raised-button
+      (click)="QuestionSearch()"
+      matTooltip="search"
+      matTooltipPosition="below"
     >
-      Click "new question" to create the first question for this slash tag
-    </div>
+      <mat-icon>search</mat-icon>
+      search
+    </button>
 
-    <!-- Count -->
-    <div class="questionCount">
-      <span *ngIf="!alreadyFetchingFromDB">
-        {{ questions.length }} question{{
-          appData.plural(questions.length)
-        }}
-        displayed of {{ questionCount
-        }}<span *ngIf="!allQuestionsDisplayed">
-          <a
-            *ngIf="questions.length < questionCount"
-            routerLink="."
-            (click)="fetchMoreQuestions()"
-            >more</a
-          ></span
+    <!-- 3. New question  -->
+    <button
+      mat-raised-button
+      *ngIf="auth0Service.isAuthenticated$ | async"
+      matTooltip="create new point"
+      matTooltipPosition="below"
+      (click)="NewQuestion()"
+    >
+      new question
+      <mat-icon>library_add</mat-icon>
+    </button>
+
+    <!-- 4. Refresh -->
+    <button
+      mat-raised-button
+      (click)="ReselectForSameSlashTag()"
+      matTooltip="refresh"
+      matTooltipPosition="below"
+    >
+      <mat-icon>refresh</mat-icon>
+      refresh
+    </button>
+  </div>
+
+  <h1 *ngIf="localData.forConstituency" class="h1Constituency">
+    {{ localData.freeVoteProfile.constituency }}
+  </h1>
+  <div *ngIf="error !== ''" class="text-danger mx-3">
+    {{ error }}
+  </div>
+
+  <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMoreQuestions()">
+    <div class="content">
+      <!-- Top Spinner for reselect -->
+      <div *ngIf="alreadyFetchingFromDB && questionCount > 0">
+        <div class="flexRow justify-end align-center">
+          <div class="amr-2">reselecting questions</div>
+          <div class="spinner-grow text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questions List -->
+      <div *ngFor="let question of questions">
+        <app-question
+          [question]="question"
+          [questionCount]="questionCount"
+          (QuestionDeleted)="onQuestionDeleted($event)"
+          (QuestionSelected)="questionSelected(question.questionID)"
         >
-      </span>
+        </app-question>
+      </div>
 
-      <span *ngIf="alreadyFetchingFromDB" class="amr-3">
-        ... fetching next batch of questions
-      </span>
-
-      <!-- Bottom spinner -->
-      <span
-        class="spinner-grow text-primary"
-        role="status"
-        *ngIf="alreadyFetchingFromDB"
+      <!-- Prompt New Question -->
+      <div
+        *ngIf="!alreadyFetchingFromDB && questionCount === 0"
+        class="alert alert-warning"
       >
-        <span class="visually-hidden">Loading...</span>
-      </span>
+        Click "new question" to create the first question for this slash tag
+      </div>
+
+      <!-- Count -->
+      <div class="questionCount">
+        <span *ngIf="!alreadyFetchingFromDB">
+          {{ questions.length }} question{{
+            appData.plural(questions.length)
+          }}
+          displayed of {{ questionCount
+          }}<span *ngIf="!allQuestionsDisplayed">
+            <a
+              *ngIf="questions.length < questionCount"
+              routerLink="."
+              (click)="fetchMoreQuestions()"
+              >more</a
+            ></span
+          >
+        </span>
+
+        <span *ngIf="alreadyFetchingFromDB" class="amr-3">
+          ... fetching next batch of questions
+        </span>
+
+        <!-- Bottom spinner -->
+        <div
+          class="spinner-grow text-primary"
+          role="status"
+          *ngIf="alreadyFetchingFromDB"
+        >
+          <div class="visually-hidden">Loading...</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

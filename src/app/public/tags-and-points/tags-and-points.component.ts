@@ -321,25 +321,6 @@ export class TagsAndPointsComponent
     this.ChangeTab(Tabs.questionList);
   }
 
-  AnswerAdded(questionID: number) {
-    this.questionsListComponent.AnswerAdded(questionID);
-  }
-
-  AnswerRemoved(questionID: number) {
-    this.questionsListComponent.AnswerRemoved(questionID);
-  }
-
-  NewQuestion() {
-    this.questionsListComponent.ReselectForNewQuestion();
-
-    this.questionAnswersComponent.ReselectForNewAnswer();
-    this.ChangeTab(Tabs.questionList); // Causes reselection, but already selecting detected
-  }
-
-  CancelNewQuestion(): void {
-    this.ChangeTab(Tabs.questionList);
-  }
-
   ngOnDestroy(): void {
     this.pointsFilterRemove$?.unsubscribe();
     this.width$?.unsubscribe();

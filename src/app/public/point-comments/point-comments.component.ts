@@ -147,7 +147,7 @@ export class PointCommentsComponent implements OnInit {
 
   NewComment() {
     this.newComment = true;
-    this.newPointComponent.PrepareNewPoint('', this.parentPoint.pointID);
+    this.newPointComponent.PrepareNewPoint(this.parentPoint.pointID, '');
     setTimeout(() => this.scrollToBottom(), 100);
   }
 

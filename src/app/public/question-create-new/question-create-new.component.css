@@ -1,0 +1,8 @@
+.container {
+  overflow: hidden; /* Unexpected scrollbars despite experimentation with width and height */
+  padding: 20px;
+}
+
+h1 {
+  font-size: 1.5rem;
+}

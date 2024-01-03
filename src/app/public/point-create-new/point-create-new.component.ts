@@ -20,15 +20,12 @@ import { PointEditComponent } from '../point-edit/point-edit.component';
   styleUrls: ['./point-create-new.component.css']
 })
 export class PointCreateNewComponent implements OnInit, AfterViewInit {
-  constituencyID = 0;
-
   @ViewChild('pointEdit') pointEditComponent!: PointEditComponent;
 
   constructor(
     private dialogRef: MatDialogRef<PointCreateNewComponent>,
     @Inject(MAT_DIALOG_DATA)
     private data: {
-      constituencyID: number;
       tag: string;
     }
   ) {}
@@ -37,8 +34,7 @@ export class PointCreateNewComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dialogRef.disableClose = true;
-    this.constituencyID = this.data.constituencyID;
-    this.pointEditComponent.PrepareNewPoint(this.data.tag, 0);
+    this.pointEditComponent.PrepareNewPoint(0, this.data.tag);
   }
 
   SaveComplete() {
