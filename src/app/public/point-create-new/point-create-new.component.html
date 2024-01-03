@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>New point</h1>
+  <app-point-edit
+    #pointEdit
+    [constituencyID]="constituencyID"
+    (CompleteEdit)="SaveComplete()"
+    (CancelEdit)="Cancel()"
+  ></app-point-edit>
+</div>
