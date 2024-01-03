@@ -1,6 +1,14 @@
-import { OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 // Angular
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 
 // RxJs
 import { Subscription } from 'rxjs';
@@ -24,7 +32,15 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   @Input() HasFocus = false;
   @Input() ForConstituency = false;
 
-  private wasForConstituency = false;
+  private wasForConstituencyTrending = false;
+  private wasForConstituencyRecent = false;
+
+  private set wasForConstituency(value: boolean) {
+    if (this.tagCloudType === TagCloudTypes.Trending)
+      this.wasForConstituencyTrending = value;
+    else if (this.tagCloudType === TagCloudTypes.Recent)
+      this.wasForConstituencyRecent = value;
+  }
 
   @Output() NewSlashTagSelected = new EventEmitter<string>();
 
@@ -86,7 +102,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   get ReselectTrending(): boolean {
     if (this.tagCloudType !== TagCloudTypes.Trending) return false;
     if (
-      this.wasForConstituency === this.ForConstituency &&
+      this.wasForConstituencyTrending === this.ForConstituency &&
       this.tagsTrending.length != 0
     )
       return false;
@@ -99,7 +115,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
     if (
       this.tagsRecent.length == 0 ||
-      this.wasForConstituency != this.ForConstituency ||
+      this.wasForConstituencyRecent != this.ForConstituency ||
       this.tagsRecent[0].slashTag != this.localData.SlashTagSelected
     )
       return true;
