@@ -1,6 +1,6 @@
 <div class="flexCol">
   <div class="header flexRow wrap justify-center align-center">
-    <!-- Sort Menu -->
+    <!-- 1. Sort Menu -->
     <app-sort-menu
       [pointSortType]="sortType"
       [sortDescending]="sortDescending"
@@ -9,7 +9,7 @@
       (refresh)="refresh()"
     ></app-sort-menu>
 
-    <!-- 1. Show Search (Point Filter) Options -->
+    <!-- 2. Show Search (Point Filter) Options -->
     <button
       mat-raised-button
       (click)="PointSearch()"
@@ -20,18 +20,19 @@
       search
     </button>
 
-    <!-- 5. New question answer or tag point  -->
+    <!-- 3. New point  -->
     <button
       mat-raised-button
       *ngIf="auth0Service.isAuthenticated$ | async"
       matTooltip="create new point"
       matTooltipPosition="below"
+      (click)="NewPoint()"
     >
       new point
       <mat-icon>library_add</mat-icon>
     </button>
 
-    <!-- 2. Feedback Switch -->
+    <!-- 4. Feedback Switch -->
     <button
       mat-raised-button
       (click)="toggleFeedback()"
@@ -42,7 +43,7 @@
       {{ feedbackText }}
     </button>
 
-    <!-- 3. Refresh -->
+    <!-- 5. Refresh -->
     <button
       mat-raised-button
       (click)="ReselectPoints(PointSortTypes.NoChange)"

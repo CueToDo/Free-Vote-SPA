@@ -2,35 +2,32 @@
   <!-- Point Display -->
   <a [id]="'id' + point.pointID">
     <hr class="hr hrTitle" />
-
-    <div class="pointTitleRow">
-      <div class="flexRow" [ngClass]="{ parentPoint: isParentPoint }">
-        <div>
-          <h1 [innerHtml]="pointTitleDisplay"></h1>
-        </div>
-        <div class="flexStretch"></div>
-
-        <!-- DateTimeUpdated -->
-
-        <div class="text" [innerHtml]="point.dateTimeUpdated | nbsp"></div>
-      </div>
-
-      <div
-        #elPointHtml
-        [innerHTML]="pointDisplayHTMLwithoutEmbed | SafeHtml"
-        (click)="viewFullSizeImages()"
-        [ngClass]="{
-          'line-clamp': !showFullText,
-          parentPoint: isParentPoint
-        }"
-      ></div>
-
-      <div class="moreorless" [ngClass]="{ parentPoint: isParentPoint }">
-        <a *ngIf="elementTruncated()" (click)="showMore(true)">show more</a>
-        <a *ngIf="showFullText" (click)="showMore(false)">show less</a>
-      </div>
-    </div>
   </a>
+  <div class="flexRow pointTitleRow" [ngClass]="{ parentPoint: isParentPoint }">
+    <div>
+      <h1 [innerHtml]="pointTitleDisplay"></h1>
+    </div>
+    <div class="flexStretch"></div>
+
+    <!-- DateTimeUpdated -->
+
+    <div class="text" [innerHtml]="point.dateTimeUpdated | nbsp"></div>
+  </div>
+
+  <div
+    #elPointHtml
+    [innerHTML]="pointDisplayHTMLwithoutEmbed | SafeHtml"
+    (click)="viewFullSizeImages()"
+    [ngClass]="{
+      'line-clamp': !showFullText,
+      parentPoint: isParentPoint
+    }"
+  ></div>
+
+  <div class="moreorless" [ngClass]="{ parentPoint: isParentPoint }">
+    <a *ngIf="elementTruncated()" (click)="showMore(true)">show more</a>
+    <a *ngIf="showFullText" (click)="showMore(false)">show less</a>
+  </div>
 
   <!-- YouTube video -->
 

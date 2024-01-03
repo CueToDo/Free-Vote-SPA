@@ -20,6 +20,10 @@
   margin-bottom: 0;
 }
 
+.pointTitleRow {
+  margin-bottom: 10px;
+}
+
 @media screen and (max-width: 599px) {
   .text {
     font-size: 0.7em;

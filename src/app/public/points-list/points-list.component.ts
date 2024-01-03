@@ -14,6 +14,9 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
+// Material
+import { MatDialog } from '@angular/material/dialog';
+
 // Models, enums
 import { ID } from 'src/app/models/common';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
@@ -23,6 +26,9 @@ import {
   PointSortTypes,
   PointTypesEnum
 } from 'src/app/models/enums';
+
+// Components
+import { PointCreateNewComponent } from 'src/app/public/point-create-new/point-create-new.component';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -162,6 +168,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
     private pointsService: PointsService,
     private tagsService: TagsService,
     private activatedRoute: ActivatedRoute,
+    public dialog: MatDialog,
     @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
@@ -529,6 +536,23 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
     this.points = psr.points;
 
     this.NewPointsDisplayed();
+  }
+
+  NewPoint(): void {
+    const dialogRef = this.dialog.open(PointCreateNewComponent, {
+      data: {
+        constituencyID: this.localData.ConstituencyID,
+        tag: this.localData.SlashTagSelected
+      }
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (saved: boolean) => {
+        if (!!saved) {
+          this.ReselectPoints(PointSortTypes.DateDescend);
+        }
+      }
+    });
   }
 
   NewPointCreated(): void {

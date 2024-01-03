@@ -425,7 +425,6 @@ export class PointEditComponent implements OnInit {
 
     // Put cursor in TitleInput
     setTimeout(() => {
-      console.log('focusing ' + !!this.tvPointTitle?.nativeElement);
       this.tvPointTitle?.nativeElement.focus();
     }, 500);
   }

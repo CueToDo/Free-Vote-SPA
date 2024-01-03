@@ -31,6 +31,7 @@ import { NavMainComponent } from './menus/nav-main/nav-main.component';
 import { PointCommandsComponent } from './menus/point-commands/point-commands.component';
 import { PointCommentsComponent } from './point-comments/point-comments.component';
 import { PointComponent } from './point/point.component';
+import { PointCreateNewComponent } from './point-create-new/point-create-new.component';
 import { PointEditComponent } from './point-edit/point-edit.component';
 import { PointOfTheWeekComponent } from './point-of-the-week/point-of-the-week.component';
 import { PointsFilterComponent } from './points-filter/points-filter.component';
@@ -77,6 +78,7 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     PointCommandsComponent,
     PointCommentsComponent,
     PointComponent,
+    PointCreateNewComponent,
     PointEditComponent,
     PointsFilterComponent,
     PointsListComponent,
