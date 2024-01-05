@@ -4,12 +4,14 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges
 } from '@angular/core';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // Material
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 // Auth0
 import { AuthService } from '@auth0/auth0-angular';
@@ -35,7 +37,7 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   templateUrl: './questions-list.component.html',
   styleUrls: ['./questions-list.component.css']
 })
-export class QuestionsListComponent implements OnChanges {
+export class QuestionsListComponent implements OnInit, OnChanges {
   @Input() HasFocus = false;
   @Input() ForConstituency = false;
 
@@ -54,7 +56,6 @@ export class QuestionsListComponent implements OnChanges {
   wasForConstituency = false;
   forSlashTag = '';
 
-  public error = '';
   public alreadyFetchingFromDB = false;
   public allQuestionsDisplayed = false;
 
@@ -80,18 +81,27 @@ export class QuestionsListComponent implements OnChanges {
     return lastRow;
   }
 
-  public nextPageQuestionsCount(): number {
-    return this.IDs.filter(val => val.rowNumber > this.lastPageRow).slice(0, 10)
-      .length;
-  }
+  isMobile = false;
+  public error = '';
 
   constructor(
     public auth0Service: AuthService,
     private questionsService: QuestionsService,
     public appData: AppDataService,
     public localData: LocalDataService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver
   ) {}
+
+  ngOnInit(): void {
+    // https://alligator.io/angular/breakpoints-angular-cdk/
+    // 520px for buttons on same line
+    this.breakpointObserver
+      .observe(['(max-width: 520px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isMobile = state.matches;
+      });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const newFocus = changes['HasFocus']?.currentValue;
@@ -258,11 +268,19 @@ export class QuestionsListComponent implements OnChanges {
   }
 
   NewQuestion(): void {
-    const dialogRef = this.dialog.open(QuestionCreateNewComponent, {
-      data: {
-        tag: this.localData.SlashTagSelected
-      }
-    });
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      tag: this.localData.SlashTagSelected
+    };
+    if (this.isMobile) {
+      dialogConfig.width = '100vw';
+      dialogConfig.maxWidth = '100vw';
+    }
+
+    const dialogRef = this.dialog.open(
+      QuestionCreateNewComponent,
+      dialogConfig
+    );
 
     dialogRef.afterClosed().subscribe({
       next: (saved: boolean) => {
