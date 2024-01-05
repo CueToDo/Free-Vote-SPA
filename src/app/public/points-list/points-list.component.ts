@@ -13,9 +13,10 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // Material
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 // Models, enums
 import { ID } from 'src/app/models/common';
@@ -127,6 +128,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   viewAll = false;
 
   private fragment = '';
+  isMobile = false;
 
   public error = '';
 
@@ -169,6 +171,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
     private tagsService: TagsService,
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver,
     @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
@@ -205,6 +208,14 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
     this.activatedRoute.fragment.subscribe(fragment => {
       this.fragment = '' + fragment;
     });
+
+    // https://alligator.io/angular/breakpoints-angular-cdk/
+    // 520px for buttons on same line
+    this.breakpointObserver
+      .observe(['(max-width: 520px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isMobile = state.matches;
+      });
   }
 
   ngAfterViewInit(): void {
@@ -535,11 +546,15 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   NewPoint(): void {
-    const dialogRef = this.dialog.open(PointCreateNewComponent, {
-      data: {
-        tag: this.localData.SlashTagSelected
-      }
-    });
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      tag: this.localData.SlashTagSelected
+    };
+    if (this.isMobile) {
+      dialogConfig.width = '100vw';
+      dialogConfig.maxWidth = '100vw';
+    }
+    const dialogRef = this.dialog.open(PointCreateNewComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe({
       next: (saved: boolean) => {
