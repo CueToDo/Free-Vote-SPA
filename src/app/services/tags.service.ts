@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 // rxjs
 import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 // Models
 import { TagCloudTypes } from '../models/enums';
@@ -57,12 +57,11 @@ export class TagsService {
     this.localData.ActiveAliasForFilter = '';
   }
 
-  TagSearch(tagsearch: string, constituencyID: number): Observable<Tag[]> {
-    // get rid of slash and dash
-    tagsearch = tagsearch.split('/').join('');
-    tagsearch = tagsearch.split('-').join('');
+  TagSearch(tagSearch: string, constituencyID: number): Observable<Tag[]> {
+    // get rid of slash but not dash
+    tagSearch = tagSearch.split('/').join('');
 
-    let WebAPIUrl = `tags/search/${tagsearch}/${constituencyID}`;
+    let WebAPIUrl = `tags/search/${tagSearch}/${constituencyID}`;
 
     return this.httpService.get(WebAPIUrl).pipe(map(data => data as Tag[]));
   }

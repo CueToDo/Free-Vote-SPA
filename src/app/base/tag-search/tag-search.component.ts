@@ -51,6 +51,8 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
   tagSearch$: Subscription | undefined;
   tagResults$: Subscription | undefined;
   searching = false;
+  haveSearched = false;
+  haveTags = false;
 
   isMobile = false;
   error = '';
@@ -89,8 +91,9 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
         .pipe(debounceTime(600), distinctUntilChanged())
         .subscribe({
           next: _ => {
-            // Fuzzy search on userInput
-            this.tagSearch(); // "As-is"
+            this.ngZone.run(() => {
+              this.tagSearch();
+            });
           }
         });
     });
@@ -100,7 +103,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     this.isMobile = this.deviceService.isMobile();
   }
 
-  public restartSearch(): void {
+  public clearSearchText(): void {
     // Client side only
     if (isPlatformBrowser(this.platformId)) {
       this.slashTag = '/';
@@ -172,11 +175,13 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
     //min '/' plus 2 characters to search api
     if (this.slashTag.length > 2) {
       this.searching = true;
+      this.haveSearched = true;
+
       this.tagResults$ = this.tagsService
         .TagSearch(this.slashTag, this.localData.ConstituencyID)
         .subscribe({
           next: slashTags => {
-            // this.tags = slashTags;
+            this.haveTags = slashTags?.length > 0;
             this.Tags.emit(slashTags);
             this.searching = false;
           },
@@ -190,7 +195,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
 
   newTag(): void {
     if (!this.slashTag || this.slashTag === '/') {
-      this.restartSearch();
+      this.clearSearchText();
     } else {
       // Remove trailing dash after user finished typing
       let value = this.slashTag;
@@ -201,8 +206,6 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
 
       // Get appDataService to broadcast (method shared by PointEditComponent)
       this.tagsService.SetSlashTag(this.slashTag);
-
-      this.restartSearch();
 
       this.CreateNewSlashTag.emit(this.slashTag);
     }

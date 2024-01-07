@@ -50,6 +50,7 @@
           [ForConstituency]="localData.forConstituency"
           (Cancel)="CancelTagSearch()"
           (Tags)="TagSearchResult($event)"
+          (CreateNewSlashTag)="setSlashTag($event)"
         >
         </app-tag-search>
 

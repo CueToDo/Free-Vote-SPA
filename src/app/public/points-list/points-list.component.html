@@ -60,10 +60,6 @@
     {{ localData.freeVoteProfile.constituency }}
   </h1>
 
-  <div *ngIf="error !== ''" class="text-danger mx-3">
-    {{ error }}
-  </div>
-
   <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
     <div class="content">
       <div class="overflow-hidden">
@@ -105,11 +101,16 @@
           *ngIf="
             !AlreadyFetchingPointsFromDB &&
             pointCount === 0 &&
-            !this.pointComments
+            !this.pointComments &&
+            !this.error
           "
-          class="alert alert-warning"
+          class="alert alert-warning my-3"
         >
-          {{ firstResponse }}
+          {{ promptNewPointOrAnswer }}
+        </div>
+
+        <div *ngIf="!!error" class="alert alert-danger my-3">
+          {{ error }}
         </div>
 
         <!-- Count -->

@@ -18,7 +18,7 @@
       create
     </button>
 
-    <button mat-stroked-button aria-label="Clear" (click)="restartSearch()">
+    <button mat-stroked-button aria-label="Clear" (click)="clearSearchText()">
       <mat-icon>close</mat-icon>
       clear
     </button>
@@ -36,6 +36,13 @@
       <span class="visually-hidden">Loading...</span>
     </span>
   </div>
+</div>
+
+<div
+  class="alert alert-warning"
+  *ngIf="slashTag.length > 1 && haveSearched && !haveTags"
+>
+  No matching slash tag found
 </div>
 
 <div class="fv-error" *ngIf="!!error">

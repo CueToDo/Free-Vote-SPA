@@ -227,18 +227,11 @@ export class TagsAndPointsComponent
     }
   }
 
-  AltSlashTagSelected(slashTag: string) {
-    this.NewSlashTagSelected(slashTag);
-    this.RouteParameterChanged(true, slashTag);
-  }
-
   // TagCloud and PointsList Components emits NewSlashTagSelected
   NewSlashTagSelected(slashTag: string): void {
     // Direct communication from tags components
     this.localData.SlashTagSelected = slashTag;
-
-    this.ChangeTab(Tabs.tagPoints); // will select points
-    this.pointsListComponent.ReselectPoints(PointSortTypes.NoChange);
+    this.ChangeTab(Tabs.tagPoints); // will select points and call RouteParameterChanged
   }
 
   // 1. Tags

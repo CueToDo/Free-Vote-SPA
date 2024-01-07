@@ -78,6 +78,7 @@
       </app-tag-cloud>
     </div>
   </div>
+
   <!-- 2 app points for tag points. Scroller class NOT applied to tabContent. Scrollend has to fetch more points -->
   <div class="tabContent" [ngClass]="{ topZ: tabIndex === Tabs.tagPoints }">
     <div
@@ -92,7 +93,7 @@
         #appPointsList
         [HasFocus]="this.tabIndex === Tabs.tagPoints"
         [ForConstituency]="localData.forConstituency"
-        (AltSlashTagSelected)="AltSlashTagSelected($event)"
+        (AltSlashTagSelected)="NewSlashTagSelected($event)"
       >
       </app-points-list>
     </div>

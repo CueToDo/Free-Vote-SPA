@@ -88,7 +88,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   // Prompt to be first to create point for tag or answer to question
-  public get firstResponse() {
+  public get promptNewPointOrAnswer() {
     if (this.pointCount > 0 || this.pointComments) return '';
 
     if (this.attachedToQuestion)
@@ -390,6 +390,11 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
       default:
         // Infinite Scroll: Get points in batches
+        if (!this.localData.SlashTagSelected) {
+          this.error = 'No slash tag selected';
+          this.AlreadyFetchingPointsFromDB = false;
+          return;
+        }
         if (this.filter) {
           if (this.localData.SlashTagSelected) {
             this.pointsService

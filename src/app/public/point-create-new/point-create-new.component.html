@@ -1,8 +1,12 @@
 <div class="container">
-  <h1>New point</h1>
-  <app-point-edit
-    #pointEdit
-    (CompleteEdit)="SaveComplete()"
-    (CancelEdit)="Cancel()"
-  ></app-point-edit>
+  <div class="scroller">
+    <div class="content">
+      <h1>New point</h1>
+      <app-point-edit
+        #pointEdit
+        (CompleteEdit)="SaveComplete()"
+        (CancelEdit)="Cancel()"
+      ></app-point-edit>
+    </div>
+  </div>
 </div>
