@@ -276,7 +276,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
       dialogConfig.width = '100vw';
       dialogConfig.maxWidth = '100vw';
     }
-
+    dialogConfig.maxHeight = '80vw';
     const dialogRef = this.dialog.open(
       QuestionCreateNewComponent,
       dialogConfig

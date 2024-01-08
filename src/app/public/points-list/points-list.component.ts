@@ -559,6 +559,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
       dialogConfig.width = '100vw';
       dialogConfig.maxWidth = '100vw';
     }
+    dialogConfig.maxHeight = '80vw';
     const dialogRef = this.dialog.open(PointCreateNewComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe({

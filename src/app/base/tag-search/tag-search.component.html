@@ -40,7 +40,7 @@
 
 <div
   class="alert alert-warning"
-  *ngIf="slashTag.length > 1 && haveSearched && !haveTags"
+  *ngIf="slashTag.length > 1 && haveSearched && !searching && !haveTags"
 >
   No matching slash tag found
 </div>
