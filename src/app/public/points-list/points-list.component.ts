@@ -70,6 +70,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   updateTopicViewCount = false;
 
   wasForConstituency = false;
+  wasForSlashTag = '';
 
   public pointCount = 0;
   public IDs: ID[] = [];
@@ -230,7 +231,8 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
     // or change to local constituency, then fetch points
     if (
       (newFocus && this.points.length === 0) ||
-      this.wasForConstituency != this.ForConstituency
+      this.wasForConstituency != this.ForConstituency ||
+      this.wasForSlashTag != this.localData.SlashTagSelected
     )
       this.SelectPoints();
   }
@@ -512,6 +514,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   DisplayPoints(psr: PointSelectionResult): void {
     this.AlreadyFetchingPointsFromDB = false;
     this.wasForConstituency = this.ForConstituency;
+    this.wasForSlashTag = this.localData.SlashTagSelected;
 
     if (psr.pointCount > 0) {
       // If we don't have dateFrom and fromDate is returned, OR
