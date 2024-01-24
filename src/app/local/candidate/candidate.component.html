@@ -1,7 +1,7 @@
 <div
   class="flexCol candidate"
   [ngClass]="{
-    elected: candidate.elected,
+    elected: (isMPs && candidate.isCurrentMP) || (!isMPs && candidate.elected),
     selected: selected && !candidate.elected,
     candidateOnly: !candidate.twfyUrl
   }"
@@ -18,7 +18,11 @@
   <div>
     <span *ngIf="!!candidate.twfyUrl">
       <!-- Link to TWFY -->
-      <a [href]="candidate.twfyUrl" target="_blank">{{ candidate.name }}</a>
+      <a
+        [href]="'https://www.theyworkforyou.com' + candidate.twfyUrl"
+        target="_blank"
+        >{{ candidate.name }}</a
+      >
     </span>
 
     <span *ngIf="!candidate.twfyUrl">

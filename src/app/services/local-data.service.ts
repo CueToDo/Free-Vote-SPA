@@ -263,7 +263,7 @@ export class LocalDataService {
 
       // National Politics
       this.freeVoteProfile.constituency = this.GetItem('constituency');
-      this.freeVoteProfile.constituencyID = this.GetItem('constituencyID');
+      this.freeVoteProfile.constituencyID = +this.GetItem('constituencyID');
 
       // Local Politics
       this.freeVoteProfile.ward = this.GetItem('ward');
@@ -326,7 +326,10 @@ export class LocalDataService {
         this.SetItem('constituency', this.freeVoteProfile.constituency);
       }
       if (this.freeVoteProfile.constituencyID) {
-        this.SetItem('constituencyID', this.freeVoteProfile.constituencyID);
+        this.SetItem(
+          'constituencyID',
+          this.freeVoteProfile.constituencyID.toString()
+        );
       }
 
       // Local Politics
@@ -504,7 +507,7 @@ export class LocalDataService {
 
     // National and Local Politics
     this.freeVoteProfile.constituency = '';
-    this.freeVoteProfile.constituencyID = '0';
+    this.freeVoteProfile.constituencyID = 0;
     this.freeVoteProfile.ward = '';
     this.freeVoteProfile.council = '';
     this.forConstituency = false;

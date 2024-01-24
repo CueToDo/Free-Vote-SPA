@@ -9,7 +9,6 @@ import { map, Observable, of, tap } from 'rxjs';
 import { Country } from 'src/app/models/country.model';
 import { Kvp } from 'src/app/models/kvp.model';
 import { GeographicalExtentID, PointTypesEnum } from 'src/app/models/enums';
-import { VotingArea } from 'src/app/models/FreeVoteProfile';
 
 // Services
 import { LocalDataService } from './local-data.service';
@@ -125,12 +124,6 @@ export class LookupsService {
       .pipe(map(value => value as Kvp[]));
   }
 
-  PostCodeSearch(postcode: string): Observable<VotingArea> {
-    return this.httpService
-      .get(`democracyClub/mapIt/${postcode}`)
-      .pipe(map(value => value as VotingArea));
-  }
-
   Constituency(constituency: string): Observable<Constituency> {
     return this.httpService
       .get(`lookups/constituency/${constituency}`)
@@ -145,7 +138,7 @@ export class LookupsService {
 
   ConstituencyForPostcode(postcode: string): Observable<Constituency> {
     return this.httpService
-      .get(`democracyClub/constituencyforpostcode/${postcode}`)
+      .get(`democracyClub/constituencyForPostcode/${postcode}`)
       .pipe(map(value => value as Constituency));
   }
 

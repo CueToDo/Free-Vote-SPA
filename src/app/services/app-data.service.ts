@@ -404,7 +404,11 @@ export class AppDataService {
     let output = '';
 
     if (input) {
-      output = input
+      // While it's definitely possible to use commas in URLs, it's not a widely used practice, nor is it recommended
+      // https://www.searchenginenews.com/sample/content/are-you-using-commas-in-your-urls-heres-what-you-need-to-know
+      output = input.replace(',', '');
+
+      output = output
         .split(' ')
         .filter(item => item)
         .join('-'); // remove double spaces, replace spaces with dash

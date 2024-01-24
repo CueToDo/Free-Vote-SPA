@@ -5,6 +5,7 @@
   overflow: hidden;
   background-color: #f0f4ff;
   padding: 5px;
+  max-width: 160px;
 }
 
 .candidate.elected {

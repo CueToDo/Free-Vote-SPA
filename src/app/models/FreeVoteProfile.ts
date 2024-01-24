@@ -17,7 +17,7 @@ export class FreeVoteProfile {
 
   // National Politics
   public constituency = '';
-  public constituencyID = ''; // Not saved to localData
+  public constituencyID = 0; // Not saved to localData
 
   // Local Politics
   public ward = '';
@@ -46,27 +46,4 @@ export class ProfileEditFormData {
 export class ProfilePictureOption {
   public profilePictureOptionID = '';
   public socialMediaProfilePicture = '';
-}
-
-export class VotingArea {
-  postcode = '';
-  countryID = '';
-  country = '';
-  cityID = '';
-  city = '';
-
-  constituencyID = '';
-  constituency = '';
-  mapItConstituencyID = '';
-
-  politician = '';
-  politicianImage = '';
-  politicianTwfyUrl = '';
-  politicianTwfyMemberID = '';
-
-  wardID = '';
-  ward = '';
-  mapItWardID = '';
-  councilID = '';
-  council = '';
 }

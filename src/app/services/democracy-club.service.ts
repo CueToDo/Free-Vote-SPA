@@ -6,6 +6,7 @@ import { Observable, map } from 'rxjs';
 
 // Models
 import { Candidate, CandidateSearchResult } from '../models/candidate';
+import { ElectionDate } from '../models/electionDate';
 
 // Services
 import { HttpService } from './http.service';
@@ -16,12 +17,12 @@ import { HttpService } from './http.service';
 export class DemocracyClubService {
   constructor(private httpService: HttpService) {}
 
-  Candidates(
-    constituencyID: string,
+  ElectionCandidates(
+    constituencyID: number,
     electionDate: string
   ): Observable<Candidate[]> {
     return this.httpService
-      .get(`democracyClub/candidates/${constituencyID}/${electionDate}`)
+      .get(`democracyClub/electionCandidates/${constituencyID}/${electionDate}`)
       .pipe(
         map(value => {
           return value as Candidate[];
@@ -29,12 +30,12 @@ export class DemocracyClubService {
       );
   }
 
-  ConstituencyElectionDates(constituency: string): Observable<string[]> {
+  ConstituencyElectionDates(constituency: string): Observable<ElectionDate[]> {
     return this.httpService
       .get(`democracyClub/electiondates/${constituency}`)
       .pipe(
         map(value => {
-          return value as string[];
+          return value as ElectionDate[];
         })
       );
   }
@@ -54,12 +55,9 @@ export class DemocracyClubService {
       );
   }
 
-  ElectedPreviously(
-    constituencyID: number,
-    currentMPid: number
-  ): Observable<Candidate[]> {
+  ElectedPreviously(constituencyID: number): Observable<Candidate[]> {
     return this.httpService
-      .get(`democracyClub/electedPreviously/${constituencyID}/${currentMPid}`)
+      .get(`democracyClub/electedPreviously/${constituencyID}`)
       .pipe(
         map(value => {
           return value as Candidate[];

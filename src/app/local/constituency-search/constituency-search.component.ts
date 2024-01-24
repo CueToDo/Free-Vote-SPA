@@ -287,7 +287,6 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
 
   constituencyLink(constituency: string) {
     var kebabConstituency = this.appData.kebabUri(constituency);
-    kebabConstituency = kebabConstituency.replace('%2C', ','); // commas acceptable in routerlink
     return `/constituency/${kebabConstituency}`;
   }
 

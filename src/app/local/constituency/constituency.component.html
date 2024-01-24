@@ -1,10 +1,6 @@
 <div class="tabContainer">
   <div class="tabContent scroller">
     <div class="content">
-      <div class="spinner-grow text-primary" role="status" *ngIf="searching">
-        <div class="visually-hidden">Loading...</div>
-      </div>
-
       <div *ngIf="error" class="alert alert-danger">
         {{ error }}
       </div>
@@ -12,37 +8,57 @@
       <table>
         <tr>
           <th colspan="2">
-            <h1>{{ constituencyDetails.constituency }}</h1>
+            <div class="flexRow align-center">
+              <h1>
+                {{ constituencyDetails.constituency }}
+                <span *ngIf="constituencyDetails.newThisReview">(New)</span>
+                <span *ngIf="constituencyDetails.defunctNextReview"
+                  >(Defunct)</span
+                >
+              </h1>
+              <div
+                class="spinner-grow text-primary"
+                role="status"
+                *ngIf="searching"
+              >
+                <div class="visually-hidden">Loading...</div>
+              </div>
+            </div>
           </th>
         </tr>
+
         <tr
           *ngIf="
-            !constituencyDetails.pre2023 ||
-            !constituencyDetails.post2023 ||
-            nameChange
+            (constituencyDetails.boundaryReview == 1 &&
+              constituencyDetails.nameChangeThisReview) ||
+            constituencyDetails.newThisReview
           "
         >
           <td>2023 boundary changes</td>
           <td>
-            <span *ngIf="nameChange">
-              <span *ngIf="isNew">Old name: </span>
-              <span *ngIf="!isNew">New name: </span>
+            <span *ngIf="constituencyDetails.nameChangeThisReview">
+              Previously
+              {{ constituencyDetails.constituencyPrevGen }}
+              <a [href]="wikiLinkToBoundaryChanges" target="_blank"
+                >{{ constituencyDetails.changeFromPrevGen }}
+              </a>
             </span>
             <a
-              href="https://en.wikipedia.org/wiki/2023_Periodic_Review_of_Westminster_constituencies"
+              *ngIf="constituencyDetails.newThisReview"
+              [href]="wikiLinkToBoundaryChanges"
               target="_blank"
+              >New constituency</a
             >
-              <span *ngIf="newConstituency">New constituency</span>
-              <span *ngIf="discontinuedConstituency">Discontinued</span>
-              <span *ngIf="nameChange">{{ otherName }}</span>
-            </a>
           </td>
         </tr>
-        <tr *ngIf="!!constituencyDetails.change">
-          <td>Extent of boundary change</td>
-          <td>{{ constituencyDetails.change }}</td>
+
+        <tr *ngIf="!!compasswinAsOne">
+          <td>Win as One</td>
+          <td>
+            <a [href]="compasswinAsOne" target="_blank">Win As One</a>
+          </td>
         </tr>
-        <tr>
+        <tr *ngIf="!constituencyDetails.defunctNextReview">
           <td>Next Election</td>
           <td>
             <a [href]="whoCanIVoteFor" target="_blank" *ngIf="!!whoCanIVoteFor"
@@ -52,6 +68,7 @@
             <a [href]="electoralCalculus" target="_blank">Electoral Calculus</a>
           </td>
         </tr>
+
         <tr>
           <td>Constituency Map</td>
           <td>
@@ -78,7 +95,7 @@
                 ' uk parliament constituency'
               "
               target="_blank"
-              >{{ constituencyDetails.constituency }} constituency</a
+              >{{ constituencyDetails.constituency }}</a
             >
           </td>
         </tr>
@@ -87,15 +104,15 @@
       <h1>MP</h1>
 
       <div class="mp flexRow wrap">
-        <div *ngIf="!currentMP.name">No MP elected for this constituency</div>
-        <div *ngIf="!!currentMP.name">
-          <app-candidate
-            [candidate]="currentMP"
-            [isFutureElection]="false"
-          ></app-candidate>
+        <div *ngIf="!MPs || MPs.length == 0">
+          No MP elected for this constituency
         </div>
-        <ng-container *ngFor="let exMP of exMPs">
-          <app-candidate [candidate]="exMP"></app-candidate>
+        <ng-container *ngFor="let MP of MPs">
+          <app-candidate
+            [isMPs]="true"
+            [candidate]="MP"
+            [constituencyID]="constituencyDetails.constituencyID"
+          ></app-candidate>
         </ng-container>
       </div>
 
@@ -108,10 +125,14 @@
           [(ngModel)]="electionDate"
           (ngModelChange)="onDateChange()"
         >
-          <option *ngFor="let date of ElectionDates" [value]="date">
-            {{ date }}
+          <option
+            *ngFor="let date of ElectionDates"
+            [value]="date.electionDate"
+          >
+            {{ date.electionDate }}
           </option>
         </select>
+        <span *ngIf="!!constituencySelected">({{ constituencySelected }})</span>
         <div class="spinner-grow text-primary" role="status" *ngIf="dateChange">
           <div class="visually-hidden">Loading...</div>
         </div>
@@ -120,6 +141,7 @@
       <div class="flexRow wrap align-stretch candidates">
         <ng-container *ngFor="let candidate of candidates">
           <app-candidate
+            [constituencyID]="constituencyIDSelected"
             [candidate]="candidate"
             [candidateSelected]="candidateSelected"
             [isFutureElection]="isFutureElection"

@@ -80,17 +80,7 @@
         <a [routerLink]="constituencyLink(constituency.constituency)">
           <div class="flexRow">
             <div>
-              {{ constituency.constituency }}
-            </div>
-            <div *ngIf="!!constituency.newName">
-              <span>(</span>
-              <span *ngIf="constituency.constituency == constituency.oldName">{{
-                constituency.newName
-              }}</span>
-              <span *ngIf="constituency.constituency == constituency.newName">{{
-                constituency.oldName
-              }}</span>
-              <span>)</span>
+              {{ constituency.constituencyDisplay }}
             </div>
           </div>
         </a>
@@ -105,7 +95,9 @@
           <a
             [routerLink]="
               constituencyDateLink(
-                candidate.constituency,
+                candidate.constituencyNewName
+                  ? candidate.constituencyNewName
+                  : candidate.constituency,
                 candidate.lastElectionDate,
                 candidate.name
               )

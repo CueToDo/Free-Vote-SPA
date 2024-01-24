@@ -58,7 +58,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   postcode = '';
-  constituencyID = '';
+  constituencyID = 0;
   wardID = '';
 
   // Save old values when begin edit
@@ -292,23 +292,24 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.updateMessage = '';
     if (!!this.postcode) {
       this.lookingUpPostcode = true;
-      this.lookupsService.PostCodeSearch(this.postcode).subscribe({
-        next: votingArea => {
+      this.lookupsService.ConstituencyForPostcode(this.postcode).subscribe({
+        next: constituency => {
           // Geographical
-          this.localData.freeVoteProfile.postcode = votingArea.postcode;
-          this.localData.freeVoteProfile.countryId = votingArea.countryID;
-          this.localData.freeVoteProfile.cityId = votingArea.cityID;
-          this.localData.freeVoteProfile.country = votingArea.country;
-          this.localData.freeVoteProfile.city = votingArea.city;
+          this.localData.freeVoteProfile.postcode = constituency.postcode;
+          this.localData.freeVoteProfile.countryId = constituency.countryID;
+          this.localData.freeVoteProfile.cityId = constituency.cityID;
+          this.localData.freeVoteProfile.country = constituency.country;
+          this.localData.freeVoteProfile.city = constituency.city;
 
           // National Politics
-          this.localData.freeVoteProfile.constituency = votingArea.constituency;
-          this.constituencyID = votingArea.constituencyID;
+          this.localData.freeVoteProfile.constituency =
+            constituency.constituency;
+          this.constituencyID = constituency.constituencyID;
 
           // Local Politics
-          this.localData.freeVoteProfile.ward = votingArea.ward;
-          this.localData.freeVoteProfile.council = votingArea.council;
-          this.wardID = votingArea.wardID;
+          this.localData.freeVoteProfile.ward = constituency.ward;
+          this.localData.freeVoteProfile.council = constituency.council;
+          this.wardID = constituency.wardID;
           this.lookingUpPostcode = false;
         },
         error: err => {

@@ -3,11 +3,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // rxjs
-import { Subscription, concatMap, map, of, switchMap } from 'rxjs';
+import { Subscription, of, switchMap } from 'rxjs';
 
 // Models
-import { Candidate, CandidateSearchResult } from 'src/app/models/candidate';
+import { Candidate } from 'src/app/models/candidate';
 import { Constituency } from 'src/app/models/constituency';
+import { ElectionDate } from 'src/app/models/electionDate';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -28,42 +29,20 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   private candidates$: Subscription | undefined;
 
   constituencyDetails = new Constituency();
-  get newConstituency(): boolean {
-    return (
-      this.constituencyDetails.post2023 && !this.constituencyDetails.pre2023
-    );
-  }
-  get discontinuedConstituency(): boolean {
-    return (
-      !this.constituencyDetails.post2023 && this.constituencyDetails.pre2023
-    );
-  }
-  get nameChange(): boolean {
-    return this.constituencyDetails.oldName != this.constituencyDetails.newName;
-  }
-  get isNew(): boolean {
-    return (
-      this.constituencyDetails.constituency == this.constituencyDetails.newName
-    );
-  }
-  get otherName(): string {
-    if (this.isNew) return this.constituencyDetails.oldName;
-    return this.constituencyDetails.newName;
-  }
 
   candidates: Candidate[] = [];
-  exMPs: Candidate[] = [];
+  MPs: Candidate[] = [];
   candidateSelected = '';
 
   get constituencyUrl(): string {
     // We only have mapItConstituencyIDs where these have been retrieved by PostCode
     // No known way to do this by constituency name
-    if (this.constituencyDetails.mapItConstituencyID == '0') return '';
+    if (this.constituencyDetails.mapItConstituencyID == 0) return '';
     return `https://mapit.mysociety.org/area/${this.constituencyDetails.mapItConstituencyID}.html`;
   }
 
   electionDate = '';
-  ElectionDates: string[] = [];
+  ElectionDates: ElectionDate[] = [];
   get isFutureElection(): boolean {
     if (
       !this.electionDate ||
@@ -76,36 +55,39 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return electionDateSelected.getTime() > now.getTime();
   }
 
-  get currentMP(): Candidate {
-    var mp = new Candidate();
-    mp.name = this.constituencyDetails.politician;
-    mp.electedOnOrBefore = this.constituencyDetails.electedOnOrBefore;
-    mp.party = this.constituencyDetails.party;
-    mp.partyWebsite = this.constituencyDetails.partyWebsite;
-    mp.image = this.constituencyDetails.politicianImage;
-    mp.twfyUrl = `https://www.theyworkforyou.com${this.constituencyDetails.politicianTwfyUrl}`;
-
-    var searchText = this.constituencyDetails.politician;
-    mp.ukParliamentUrl = `https://members.parliament.uk/members/Commons?SearchText=${searchText}&ForParliament=Current`;
-
-    // Should only write to your own MP
-    if (
-      this.constituencyDetails.constituencyID ==
-      this.localData.ConstituencyIDVoter
-    ) {
-      mp.writeToThemUrl = this.writeToThem;
-    }
-
-    mp.personalUrl = this.constituencyDetails.politicianWebsite;
-    return mp;
+  get constituencyIDSelected(): number {
+    return this.ElectionDates.filter(
+      s => s.electionDate == this.electionDate
+    )[0].constituencyID;
   }
 
-  get writeToThem(): string {
-    var pc = this.localData.freeVoteProfile.postcode.replace(' ', '+');
-    var referrer = encodeURIComponent(this.localData.websiteUrlWTS);
-    // mapit MemberID does not match They Work For You ID
-    // who=${this.twfyMemberID}&
-    return `https://www.writetothem.com/write?a=westminstermp&pc=${pc}&fyr_extref=${referrer}`;
+  get constituencySelected(): string {
+    if (!this.ElectionDates || this.ElectionDates.length == 0) return '';
+
+    var selected = this.ElectionDates.filter(
+      s => s.electionDate == this.electionDate
+    )[0]?.constituency;
+
+    if (selected == this.constituencyDetails.constituency) return '';
+
+    return selected;
+  }
+
+  // Was this constituency subject to a name/boundary chnage in 2023 review?
+  get boundaryChange2023(): boolean {
+    return (
+      this.constituencyDetails.boundaryReview == 1 &&
+      this.constituencyDetails.nameChangeThisReview
+    );
+  }
+
+  wikiLinkToBoundaryChanges =
+    'https://en.wikipedia.org/wiki/2023_Periodic_Review_of_Westminster_constituencies';
+
+  get compasswinAsOne(): string {
+    if (!!this.constituencyDetails.wa1gss)
+      return `https://winasone.org.uk/constituency/${this.constituencyDetails.wa1gss}`;
+    return '';
   }
 
   get whoCanIVoteFor(): string {
@@ -114,10 +96,12 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  // ElectoralCalculus predicts result of 2024 election and can be shown in following cases:
+  // Only using new constituencies after boundary change
+
+  // Link to the ElectoralCalculus website - won't necessarily be shown
   get electoralCalculus(): string {
     var constituency = this.constituencyDetails.constituency;
-    if (!!this.constituencyDetails.newName)
-      constituency = this.constituencyDetails.newName;
     return `https://www.electoralcalculus.co.uk/fcgi-bin/calcwork23.py?seat=${constituency}`;
   }
 
@@ -137,7 +121,8 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     const routeParams = this.activatedRoute.snapshot.params;
 
     var constituencyName = this.appData.unKebabUri(routeParams['constituency']);
-    var electionDate = this.appData.unKebabUri(routeParams['electionDate']);
+    this.electionDate = this.appData.unKebabUri(routeParams['electionDate']);
+
     this.candidateSelected = decodeURIComponent(
       this.appData.unKebabUri(routeParams['candidateName'])
     );
@@ -147,16 +132,13 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(constituency => {
           this.constituencyDetails = constituency; // map
-
           // switch to another observable (which depends on previous)
           return this.democracyClubService.ElectedPreviously(
-            constituency.constituencyID,
-            constituency.politicianID
+            constituency.constituencyID
           );
         }),
-        switchMap(exMPs => {
-          this.exMPs = exMPs; // map
-
+        switchMap(MPs => {
+          this.MPs = MPs; // map
           // switch to another (unrelated) observable
           if (
             this.constituencyDetails.constituency ==
@@ -170,20 +152,25 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
         }),
         switchMap(samplePostCode => {
           this.samplePostCode = samplePostCode; // map
-
           // switch to another (unrelated) observable
           return this.democracyClubService.ConstituencyElectionDates(
             this.constituencyDetails.constituency
           );
         }),
-        switchMap(dates => {
+        switchMap((dates: ElectionDate[]) => {
           this.ElectionDates = dates; // map
-          // and switch to another observable (which depends on previous)
-          if (!!electionDate) this.electionDate = electionDate;
-          else this.electionDate = dates[dates.length - 1];
 
-          return this.democracyClubService.Candidates(
-            this.constituencyDetails.constituencyID.toString(),
+          // and switch to another observable (which depends on previous)
+          if (!dates || dates.length == 0) {
+            return of([]); // return empty candidates array for new constituencies
+          }
+
+          if (!this.electionDate) {
+            this.electionDate = dates[0].electionDate;
+          }
+
+          return this.democracyClubService.ElectionCandidates(
+            this.constituencyIDSelected,
             this.electionDate
           );
         })
@@ -195,8 +182,11 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
         this.candidates = candidates;
         this.searching = false;
       },
+      complete: () => {
+        this.searching = false;
+      },
       error: serverError => {
-        this.error = serverError.error.detail;
+        this.error = serverError?.error?.detail;
         this.searching = false;
       }
     });
@@ -204,11 +194,9 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
 
   onDateChange() {
     this.dateChange = true;
+
     this.candidates$ = this.democracyClubService
-      .Candidates(
-        this.constituencyDetails.constituencyID.toString(),
-        this.electionDate
-      )
+      .ElectionCandidates(this.constituencyIDSelected, this.electionDate)
       .subscribe({
         next: candidates => (this.candidates = candidates),
         error: serverError => (this.error = serverError.error.detail),
