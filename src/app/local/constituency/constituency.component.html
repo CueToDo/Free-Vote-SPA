@@ -52,20 +52,30 @@
           </td>
         </tr>
 
-        <tr *ngIf="!!compasswinAsOne">
-          <td>Win as One</td>
-          <td>
-            <a [href]="compasswinAsOne" target="_blank">Win As One</a>
-          </td>
-        </tr>
-        <tr *ngIf="!constituencyDetails.defunctNextReview">
+        <tr *ngIf="!constituencyDetails.defunctNextReview && !!whoCanIVoteFor">
           <td>Next Election</td>
           <td>
             <a [href]="whoCanIVoteFor" target="_blank" *ngIf="!!whoCanIVoteFor"
               >Who Can I Vote For</a
             >
+          </td>
+        </tr>
 
+        <tr
+          *ngIf="!!pollingReportLink && !constituencyDetails.defunctNextReview"
+        >
+          <td>Election Predictions</td>
+          <td>
+            <a [href]="pollingReportLink" target="_blank">Polling Report</a>
             <a [href]="electoralCalculus" target="_blank">Electoral Calculus</a>
+          </td>
+        </tr>
+
+        <tr *ngIf="!!compassWA1Link">
+          <td>Compass</td>
+          <td>
+            <a [href]="compassWA1Link" target="_blank">Win As One</a>
+            (Progressive Alliance campaign)
           </td>
         </tr>
 
@@ -97,6 +107,7 @@
               target="_blank"
               >{{ constituencyDetails.constituency }}</a
             >
+            (Google)
           </td>
         </tr>
       </table>

@@ -84,9 +84,15 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   wikiLinkToBoundaryChanges =
     'https://en.wikipedia.org/wiki/2023_Periodic_Review_of_Westminster_constituencies';
 
-  get compasswinAsOne(): string {
-    if (!!this.constituencyDetails.wa1gss)
-      return `https://winasone.org.uk/constituency/${this.constituencyDetails.wa1gss}`;
+  get compassWA1Link(): string {
+    if (!!this.constituencyDetails.gen0GSS)
+      return `https://winasone.org.uk/constituency/${this.constituencyDetails.gen0GSS}`;
+    return '';
+  }
+
+  get pollingReportLink(): string {
+    if (!!this.constituencyDetails.gen0GSS)
+      return `https://pollingreport.uk/seats/${this.constituencyDetails.gen0GSS}`;
     return '';
   }
 
@@ -147,7 +153,8 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
             return of(this.localData.freeVoteProfile.postcode);
 
           return this.democracyClubService.ConstituencySamplePostCode(
-            this.constituencyDetails.constituencyID
+            this.constituencyDetails.constituencyID,
+            this.constituencyDetails.constituency
           );
         }),
         switchMap(samplePostCode => {

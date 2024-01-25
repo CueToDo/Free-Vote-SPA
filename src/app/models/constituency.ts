@@ -9,7 +9,7 @@ export class Constituency {
   // Constituency ID and Name
   constituencyID = 0; // Parent ConstituencyID for election dates
   gss = ''; // Returns latest GSS, not any historical
-  wa1gss = '';
+  gen0GSS = '';
   mapItConstituencyID = 0;
   constituency = ''; // Constituency Name after any boundary changes
   constituencyPrevGen = '';
