@@ -76,15 +76,29 @@
         <div class="visually-hidden">Loading...</div>
       </div>
 
-      <div *ngFor="let constituency of localData.constituencies" class="amb-2">
-        <a [routerLink]="constituencyLink(constituency.constituency)">
+      <ng-container *ngFor="let constituency of localData.constituencies">
+        <div class="amb-2 amr-2 ilb">
           <div class="flexRow">
-            <div>
-              {{ constituency.constituencyDisplay }}
-            </div>
+            <a [routerLink]="constituencyLink(constituency.constituency)">
+              <div>
+                {{ constituency.constituencyDisplay }}
+              </div>
+            </a>
+            <a
+              *ngIf="
+                !constituency.mapItConstituencyID &&
+                localData.freeVoteProfile.email == 'alex@q2do.com'
+              "
+              [href]="
+                'https://www.doogal.co.uk/ElectoralConstituencies?constituency=' +
+                constituency.gss
+              "
+              target="_blank"
+              >Get Sample</a
+            >
           </div>
-        </a>
-      </div>
+        </div>
+      </ng-container>
 
       <div
         *ngFor="let candidate of localData.candidateSearchResults"

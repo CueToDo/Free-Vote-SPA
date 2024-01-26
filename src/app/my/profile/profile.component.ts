@@ -25,6 +25,7 @@ import { ProfilePicture } from 'src/app/models/Image.model';
 // Services
 import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { AppDataService } from 'src/app/services/app-data.service';
+import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { HttpService } from 'src/app/services/http.service';
 import { LookupsService } from 'src/app/services/lookups.service';
@@ -82,6 +83,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private appData: AppDataService,
     private httpService: HttpService,
     private lookupsService: LookupsService,
+    private democracyClubService: DemocracyClubService,
     private profileService: ProfileService,
     public dialog: MatDialog
   ) {}
@@ -292,33 +294,35 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.updateMessage = '';
     if (!!this.postcode) {
       this.lookingUpPostcode = true;
-      this.lookupsService.ConstituencyForPostcode(this.postcode).subscribe({
-        next: constituency => {
-          // Geographical
-          this.localData.freeVoteProfile.postcode = constituency.postcode;
-          this.localData.freeVoteProfile.countryId = constituency.countryID;
-          this.localData.freeVoteProfile.cityId = constituency.cityID;
-          this.localData.freeVoteProfile.country = constituency.country;
-          this.localData.freeVoteProfile.city = constituency.city;
+      this.democracyClubService
+        .ConstituencyForPostcode(this.postcode)
+        .subscribe({
+          next: constituency => {
+            // Geographical
+            this.localData.freeVoteProfile.postcode = constituency.postcode;
+            this.localData.freeVoteProfile.countryId = constituency.countryID;
+            this.localData.freeVoteProfile.cityId = constituency.cityID;
+            this.localData.freeVoteProfile.country = constituency.country;
+            this.localData.freeVoteProfile.city = constituency.city;
 
-          // National Politics
-          this.localData.freeVoteProfile.constituency =
-            constituency.constituency;
-          this.constituencyID = constituency.constituencyID;
+            // National Politics
+            this.localData.freeVoteProfile.constituency =
+              constituency.constituency;
+            this.constituencyID = constituency.constituencyID;
 
-          // Local Politics
-          this.localData.freeVoteProfile.ward = constituency.ward;
-          this.localData.freeVoteProfile.council = constituency.council;
-          this.wardID = constituency.wardID;
-          this.lookingUpPostcode = false;
-        },
-        error: err => {
-          this.error = true;
-          this.updateMessage = err.error.detail;
-          console.log(this.updateMessage);
-          this.lookingUpPostcode = false;
-        }
-      });
+            // Local Politics
+            this.localData.freeVoteProfile.ward = constituency.ward;
+            this.localData.freeVoteProfile.council = constituency.council;
+            this.wardID = constituency.wardID;
+            this.lookingUpPostcode = false;
+          },
+          error: err => {
+            this.error = true;
+            this.updateMessage = err.error.detail;
+            console.log(this.updateMessage);
+            this.lookingUpPostcode = false;
+          }
+        });
     }
   }
 

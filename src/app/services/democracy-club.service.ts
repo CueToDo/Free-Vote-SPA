@@ -6,6 +6,7 @@ import { Observable, map } from 'rxjs';
 
 // Models
 import { Candidate, CandidateSearchResult } from '../models/candidate';
+import { Constituency } from '../models/constituency';
 import { ElectionDate } from '../models/electionDate';
 
 // Services
@@ -16,6 +17,24 @@ import { HttpService } from './http.service';
 })
 export class DemocracyClubService {
   constructor(private httpService: HttpService) {}
+
+  Constituency(constituency: string): Observable<Constituency> {
+    return this.httpService
+      .get(`democracyClub/constituency/${constituency}`)
+      .pipe(map(value => value as Constituency));
+  }
+
+  ConstituencySearch(like: string): Observable<Constituency[]> {
+    return this.httpService
+      .get(`democracyClub/constituencysearch/${like}`)
+      .pipe(map(value => value as Constituency[]));
+  }
+
+  ConstituencyForPostcode(postcode: string): Observable<Constituency> {
+    return this.httpService
+      .get(`democracyClub/constituencyForPostcode/${postcode}`)
+      .pipe(map(value => value as Constituency));
+  }
 
   ElectionCandidates(
     constituencyID: number,

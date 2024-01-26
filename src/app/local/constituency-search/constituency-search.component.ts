@@ -181,7 +181,7 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
       this.error = '';
       this.searching = true;
 
-      this.lookupsService
+      this.democracyClubService
         .ConstituencySearch(this.constituencySearch)
         .subscribe({
           next: value => {
@@ -217,21 +217,23 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
     this.error = '';
     this.searching = true;
 
-    this.lookupsService.ConstituencyForPostcode(this.postcodeSearch).subscribe({
-      next: (value: Constituency) => {
-        this.localData.constituencies.push(value);
+    this.democracyClubService
+      .ConstituencyForPostcode(this.postcodeSearch)
+      .subscribe({
+        next: (value: Constituency) => {
+          this.localData.constituencies.push(value);
 
-        if (this.constituencyCount === 0) {
-          this.error = 'Constituency not found for this postcode';
+          if (this.constituencyCount === 0) {
+            this.error = 'Constituency not found for this postcode';
+          }
+        },
+        error: err => {
+          this.ShowError(err);
+        },
+        complete: () => {
+          this.searching = false;
         }
-      },
-      error: err => {
-        this.ShowError(err);
-      },
-      complete: () => {
-        this.searching = false;
-      }
-    });
+      });
   }
 
   CandidateSearch(auto: boolean) {

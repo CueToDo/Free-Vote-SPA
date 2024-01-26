@@ -13,7 +13,6 @@ import { ElectionDate } from 'src/app/models/electionDate';
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { AppDataService } from 'src/app/services/app-data.service';
-import { LookupsService } from 'src/app/services/lookups.service';
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 
 @Component({
@@ -96,10 +95,13 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  private whoCanIVoteForSamplePostCode = '';
+
   get whoCanIVoteFor(): string {
-    const postcode = encodeURIComponent(this.samplePostCode);
-    if (!!postcode) return `https://whocanivotefor.co.uk/elections/${postcode}`;
-    return '';
+    if (!this.whoCanIVoteForSamplePostCode) return '';
+
+    const postcode = encodeURIComponent(this.whoCanIVoteForSamplePostCode);
+    return `https://whocanivotefor.co.uk/elections/${postcode}`;
   }
 
   // ElectoralCalculus predicts result of 2024 election and can be shown in following cases:
@@ -111,13 +113,10 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return `https://www.electoralcalculus.co.uk/fcgi-bin/calcwork23.py?seat=${constituency}`;
   }
 
-  private samplePostCode = '';
-
   constructor(
     private activatedRoute: ActivatedRoute,
     public localData: LocalDataService,
     private appData: AppDataService,
-    private lookupsService: LookupsService,
     private democracyClubService: DemocracyClubService
   ) {}
 
@@ -133,7 +132,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
       this.appData.unKebabUri(routeParams['candidateName'])
     );
 
-    var constituencyLookup = this.lookupsService
+    var constituencyLookup = this.democracyClubService
       .Constituency(constituencyName) // from this observable
       .pipe(
         switchMap(constituency => {
@@ -158,7 +157,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
           );
         }),
         switchMap(samplePostCode => {
-          this.samplePostCode = samplePostCode; // map
+          this.whoCanIVoteForSamplePostCode = samplePostCode; // map
           // switch to another (unrelated) observable
           return this.democracyClubService.ConstituencyElectionDates(
             this.constituencyDetails.constituency

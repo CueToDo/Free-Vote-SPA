@@ -124,24 +124,6 @@ export class LookupsService {
       .pipe(map(value => value as Kvp[]));
   }
 
-  Constituency(constituency: string): Observable<Constituency> {
-    return this.httpService
-      .get(`lookups/constituency/${constituency}`)
-      .pipe(map(value => value as Constituency));
-  }
-
-  ConstituencySearch(like: string): Observable<Constituency[]> {
-    return this.httpService
-      .get(`lookups/constituencysearch/${like}`)
-      .pipe(map(value => value as Constituency[]));
-  }
-
-  ConstituencyForPostcode(postcode: string): Observable<Constituency> {
-    return this.httpService
-      .get(`democracyClub/constituencyForPostcode/${postcode}`)
-      .pipe(map(value => value as Constituency));
-  }
-
   CountrySave(country: string): Observable<number> {
     return this.httpService
       .get(`lookups/countrySave/${country}`)
