@@ -6,13 +6,26 @@
     candidateOnly: !candidate.twfyUrl
   }"
 >
-  <div>
+  <!-- Where we don't have WhoCanIVoteForUrl -->
+  <div *ngIf="!candidate.whoCanIVoteForUrl">
     <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
     <img
       *ngIf="!candidate.image"
       src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/108px-Unknown_person.jpg"
       alt=""
     />
+  </div>
+
+  <!-- Repeat block where we do have WhoCanIVoteForUrl -->
+  <div *ngIf="!!candidate.whoCanIVoteForUrl">
+    <a [href]="candidate.whoCanIVoteForUrl" target="_blank">
+      <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
+      <img
+        *ngIf="!candidate.image"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/108px-Unknown_person.jpg"
+        alt=""
+      />
+    </a>
   </div>
 
   <div>
@@ -38,6 +51,7 @@
       ({{ candidate.electedOnOrBefore }})
     </span>
   </div>
+
   <div>
     <a
       *ngIf="!!candidate.partyWebsite"

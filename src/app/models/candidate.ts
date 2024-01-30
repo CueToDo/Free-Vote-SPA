@@ -16,6 +16,7 @@ export class Candidate {
   // Contact/More Info
   publicEmailAddress = '';
   twfyUrl = '';
+  whoCanIVoteForUrl = '';
   politicianWebsite = '';
   personalUrl = '';
 

@@ -249,6 +249,7 @@ export class LocalDataService {
       this.localLog = this.GetItem('localLog');
 
       // client side values - user may update and post to API
+      this.freeVoteProfile.email = this.GetItem('email');
       this.freeVoteProfile.givenName = this.GetItem('givenName');
       this.freeVoteProfile.familyName = this.GetItem('familyName');
       this.freeVoteProfile.alias = this.GetItem('alias');
@@ -291,6 +292,9 @@ export class LocalDataService {
     this.SetItem('localLog', this.localLog);
 
     if (this.freeVoteProfile) {
+      if (this.freeVoteProfile.email) {
+        this.SetItem('email', this.freeVoteProfile.email);
+      }
       if (this.freeVoteProfile.givenName) {
         this.SetItem('givenName', this.freeVoteProfile.givenName);
       }
@@ -376,6 +380,9 @@ export class LocalDataService {
         this.roles = values.roles.toString().split(',');
       }
 
+      if (values.email) {
+        this.freeVoteProfile.email = values.email;
+      }
       if (values.givenName) {
         this.freeVoteProfile.givenName = values.givenName;
       }
@@ -497,6 +504,7 @@ export class LocalDataService {
     this.ClearExistingJwt();
 
     // client side values - user may update and post to API
+    this.freeVoteProfile.email = '';
     this.freeVoteProfile.givenName = '';
     this.freeVoteProfile.familyName = '';
     this.freeVoteProfile.alias = '';
