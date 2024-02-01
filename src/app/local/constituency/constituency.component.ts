@@ -70,6 +70,13 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return electionDateSelected.getTime() > now.getTime();
   }
 
+  get showAddButton(): boolean {
+    return (
+      this.isFutureElection &&
+      this.localData.freeVoteProfile.email == 'alex@q2do.com'
+    );
+  }
+
   get showRemoveButton(): boolean {
     return (
       this.isFutureElection &&

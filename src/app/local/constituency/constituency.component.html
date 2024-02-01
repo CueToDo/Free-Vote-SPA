@@ -149,7 +149,7 @@
         <span *ngIf="!!constituencySelected">({{ constituencySelected }})</span>
         <button
           mat-stroked-button
-          *ngIf="isFutureElection"
+          *ngIf="showAddButton"
           (click)="AddCandidate()"
         >
           Add Candidate
