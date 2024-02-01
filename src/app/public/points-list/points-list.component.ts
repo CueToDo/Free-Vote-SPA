@@ -63,8 +63,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() SelectComment = new EventEmitter<number>();
 
   // Subscriptions
-  private pointSelection$: Subscription | undefined;
-  private pointSortType$: Subscription | undefined;
   private tagLatestActivity$: Subscription | undefined;
 
   updateTopicViewCount = false;
@@ -727,8 +725,6 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.pointSelection$?.unsubscribe();
-    this.pointSortType$?.unsubscribe();
     this.tagLatestActivity$?.unsubscribe();
   }
 }

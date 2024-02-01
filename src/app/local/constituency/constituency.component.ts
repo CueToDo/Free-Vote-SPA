@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // rxjs
-import { Subscription, of, switchMap } from 'rxjs';
+import { Subscription, of, switchMap, take } from 'rxjs';
 
 // Models
 import { Candidate } from 'src/app/models/candidate';
@@ -14,6 +14,8 @@ import { ElectionDate } from 'src/app/models/electionDate';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { AppDataService } from 'src/app/services/app-data.service';
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { CandidateAddComponent } from '../candidate-add/candidate-add.component';
 
 @Component({
   selector: 'app-constituency',
@@ -24,6 +26,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   searching = false;
   dateChange = false;
   error = '';
+  candidateRemoveError = '';
 
   private candidates$: Subscription | undefined;
 
@@ -42,6 +45,19 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
 
   electionDate = '';
   ElectionDates: ElectionDate[] = [];
+
+  get electionSelected(): ElectionDate | null {
+    if (!this.ElectionDates || this.ElectionDates.length == 0) return null;
+    return this.ElectionDates.filter(
+      s => s.electionDate == this.electionDate
+    )[0];
+  }
+
+  get electionIDSelected(): number {
+    if (!this.electionSelected) return 0;
+    return this.electionSelected.electionID;
+  }
+
   get isFutureElection(): boolean {
     if (
       !this.electionDate ||
@@ -54,22 +70,34 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return electionDateSelected.getTime() > now.getTime();
   }
 
+  get showRemoveButton(): boolean {
+    return (
+      this.isFutureElection &&
+      this.localData.freeVoteProfile.email == 'alex@q2do.com'
+    );
+  }
+
   get constituencyIDSelected(): number {
-    return this.ElectionDates.filter(
-      s => s.electionDate == this.electionDate
-    )[0].constituencyID;
+    if (!this.electionSelected) return 0;
+    return this.electionSelected.constituencyID;
   }
 
   get constituencySelected(): string {
-    if (!this.ElectionDates || this.ElectionDates.length == 0) return '';
+    if (!this.electionSelected) return '';
 
-    var selected = this.ElectionDates.filter(
-      s => s.electionDate == this.electionDate
-    )[0]?.constituency;
+    var selected = this.electionSelected?.constituency;
 
     if (selected == this.constituencyDetails.constituency) return '';
 
     return selected;
+  }
+
+  politician(politicianID: number): string {
+    const candidate = this.candidates.filter(
+      c => c.politicianID == politicianID
+    )[0];
+    if (!candidate) return '';
+    return candidate.name;
   }
 
   // Was this constituency subject to a name/boundary chnage in 2023 review?
@@ -117,7 +145,8 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     public localData: LocalDataService,
     private appData: AppDataService,
-    private democracyClubService: DemocracyClubService
+    private democracyClubService: DemocracyClubService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -198,16 +227,78 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDateChange() {
+  ReselectCandidates() {
     this.dateChange = true;
 
     this.candidates$ = this.democracyClubService
       .ElectionCandidates(this.constituencyIDSelected, this.electionDate)
+      .pipe(take(1))
       .subscribe({
         next: candidates => (this.candidates = candidates),
         error: serverError => (this.error = serverError.error.detail),
         complete: () => (this.dateChange = false)
       });
+  }
+
+  AddCandidate(): void {
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.data = {
+      constituency: this.constituencyDetails.constituency,
+      constituencyID: this.constituencyDetails.constituencyID
+    };
+    dialogConfig.minWidth = '600px';
+    dialogConfig.maxWidth = '90vw';
+    dialogConfig.maxHeight = '90vh';
+
+    const dialogRef = this.dialog.open(CandidateAddComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe({
+      next: (added: boolean) => {
+        if (!!added) {
+          this.ReselectCandidates();
+        }
+      }
+    });
+  }
+
+  ElectionCandidateRemove(politicianID: number): void {
+    this.candidateRemoveError = '';
+
+    if (
+      !confirm(
+        `Are you sure you wish to remove ${this.politician(
+          politicianID
+        )} from the election on ${this.electionDate} in ${
+          this.constituencyDetails.constituency
+        }?`
+      )
+    )
+      return;
+
+    this.democracyClubService
+      .ElectionCandidateRemove(
+        this.electionIDSelected,
+        this.constituencyDetails.constituencyID,
+        politicianID
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: () => this.ReselectCandidates(),
+        error: serverError => this.ShowCandidateRemoveError(serverError)
+      });
+  }
+
+  ShowCandidateRemoveError(err: any) {
+    this.searching = false;
+
+    if (err?.error?.detail) {
+      this.candidateRemoveError = err.error.detail;
+    } else if (err?.error) {
+      this.candidateRemoveError = err.error;
+    } else if (err) {
+      this.candidateRemoveError = err;
+    }
   }
 
   ngOnDestroy(): void {

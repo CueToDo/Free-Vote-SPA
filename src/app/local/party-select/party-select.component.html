@@ -1,0 +1,37 @@
+<div class="m-3">
+  <h1>{{ data.name }}</h1>
+  <h3>Select party</h3>
+  <div class="flexRow space-between">
+    <select name="PolitaclParty" id="PolitaclParty" [(ngModel)]="partyID">
+      <option *ngFor="let party of partiesMajor" [value]="party.value">
+        {{ party.key }}
+      </option>
+    </select>
+    <button mat-stroked-button (click)="partySelected()">OK</button>
+    <button mat-stroked-button (click)="cancel()">Cancel</button>
+  </div>
+
+  <div class="amt-3">
+    <h3>Smaller parties</h3>
+    <div class="flexRow amb-3">
+      <input
+        #trvMinorPartySearch
+        type="text"
+        class="form-control"
+        placeholder="search for party name"
+        [(ngModel)]="searchPartyName"
+      />
+      <button mat-stroked-button (click)="searchMinorParty(false)">
+        search
+      </button>
+    </div>
+    <div *ngIf="error" class="alert alert-warning">
+      {{ error }}
+    </div>
+    <div *ngFor="let party of partiesMinor">
+      <a class="override-reboot" (click)="minorPartySelected(party.value)">{{
+        party.key
+      }}</a>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 // Angular
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 // Models
 import { Candidate } from 'src/app/models/candidate';
@@ -19,6 +19,11 @@ export class CandidateComponent {
   @Input() candidate = new Candidate();
   @Input() candidateSelected = '';
   @Input() isFutureElection = false;
+  @Input() showAddButton = false;
+  @Input() showRemoveButton = false;
+
+  @Output() ElectionCandidateAdd = new EventEmitter<number>();
+  @Output() ElectionCandidateRemove = new EventEmitter<number>();
 
   get mailto(): string {
     if (!!this.candidate.publicEmailAddress)
@@ -57,5 +62,13 @@ export class CandidateComponent {
         this.candidate.writeToThemUrl = this.writeToThem;
       }
     }
+  }
+
+  AddCandidate(): void {
+    this.ElectionCandidateAdd.emit(this.candidate.politicianID);
+  }
+
+  RemoveCandidate(): void {
+    this.ElectionCandidateRemove.emit(this.candidate.politicianID);
   }
 }

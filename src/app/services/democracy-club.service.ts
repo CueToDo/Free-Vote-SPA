@@ -2,12 +2,13 @@
 import { Injectable } from '@angular/core';
 
 // rxjs
-import { Observable, map } from 'rxjs';
+import { Observable, map, take } from 'rxjs';
 
 // Models
-import { Candidate, CandidateSearchResult } from '../models/candidate';
+import { Candidate } from '../models/candidate';
 import { Constituency } from '../models/constituency';
 import { ElectionDate } from '../models/electionDate';
+import { Kvp } from '../models/kvp.model';
 
 // Services
 import { HttpService } from './http.service';
@@ -21,66 +22,27 @@ export class DemocracyClubService {
   Constituency(constituency: string): Observable<Constituency> {
     return this.httpService
       .get(`democracyClub/constituency/${constituency}`)
-      .pipe(map(value => value as Constituency));
+      .pipe(
+        take(1),
+        map(value => value as Constituency)
+      );
   }
 
   ConstituencySearch(like: string): Observable<Constituency[]> {
     return this.httpService
       .get(`democracyClub/constituencysearch/${like}`)
-      .pipe(map(value => value as Constituency[]));
+      .pipe(
+        take(1),
+        map(value => value as Constituency[])
+      );
   }
 
   ConstituencyForPostcode(postcode: string): Observable<Constituency> {
     return this.httpService
       .get(`democracyClub/constituencyForPostcode/${postcode}`)
-      .pipe(map(value => value as Constituency));
-  }
-
-  ElectionCandidates(
-    constituencyID: number,
-    electionDate: string
-  ): Observable<Candidate[]> {
-    return this.httpService
-      .get(`democracyClub/electionCandidates/${constituencyID}/${electionDate}`)
       .pipe(
-        map(value => {
-          return value as Candidate[];
-        })
-      );
-  }
-
-  ConstituencyElectionDates(constituency: string): Observable<ElectionDate[]> {
-    return this.httpService
-      .get(`democracyClub/electiondates/${constituency}`)
-      .pipe(
-        map(value => {
-          return value as ElectionDate[];
-        })
-      );
-  }
-
-  ElectionCandidateSearch(
-    candidateName: string,
-    electedOnly: boolean
-  ): Observable<CandidateSearchResult[]> {
-    return this.httpService
-      .get(
-        `democracyClub/electionCandidateSearch/${candidateName}/${electedOnly}`
-      )
-      .pipe(
-        map(value => {
-          return value as CandidateSearchResult[];
-        })
-      );
-  }
-
-  ElectedPreviously(constituencyID: number): Observable<Candidate[]> {
-    return this.httpService
-      .get(`democracyClub/electedPreviously/${constituencyID}`)
-      .pipe(
-        map(value => {
-          return value as Candidate[];
-        })
+        take(1),
+        map(value => value as Constituency)
       );
   }
 
@@ -92,6 +54,98 @@ export class DemocracyClubService {
       .get(
         `democracyClub/constituencySamplePostCode/${constituencyID}/${constituencyName}`
       )
-      .pipe(map(postcode => postcode.value));
+      .pipe(
+        take(1),
+        map(postcode => postcode.value)
+      );
+  }
+
+  ConstituencyElectionDates(constituency: string): Observable<ElectionDate[]> {
+    return this.httpService
+      .get(`democracyClub/electiondates/${constituency}`)
+      .pipe(map(value => value as ElectionDate[]));
+  }
+
+  PartiesMajor(): Observable<Kvp[]> {
+    return this.httpService.get('democracyClub/partiesMajor').pipe(
+      take(1),
+      map(value => value as Kvp[])
+    );
+  }
+
+  PartiesMinor(partyNameLike: string): Observable<Kvp[]> {
+    return this.httpService
+      .get(`democracyClub/partiesMinor/${partyNameLike}`)
+      .pipe(
+        take(1),
+        map(value => value as Kvp[])
+      );
+  }
+
+  ElectionCandidates(
+    constituencyID: number,
+    electionDate: string
+  ): Observable<Candidate[]> {
+    return this.httpService
+      .get(`democracyClub/electionCandidates/${constituencyID}/${electionDate}`)
+      .pipe(
+        take(1),
+        map(value => {
+          return value as Candidate[];
+        })
+      );
+  }
+
+  ElectionCandidateSearch(
+    candidateName: string,
+    westminsterOnly: boolean,
+    electedOnly: boolean
+  ): Observable<Candidate[]> {
+    return this.httpService
+      .get(
+        `democracyClub/electionCandidateSearch/${candidateName}/${westminsterOnly}/${electedOnly}`
+      )
+      .pipe(
+        take(1),
+        map(value => {
+          return value as Candidate[];
+        })
+      );
+  }
+
+  ElectionCandidateAdd(
+    electionID: number,
+    constituencyID: number,
+    politicianID: number,
+    organisationID: number
+  ): Observable<boolean> {
+    return this.httpService
+      .get(
+        `democracyClub/electionCandidateAdd/${electionID}/${constituencyID}/${politicianID}/${organisationID}`
+      )
+      .pipe(take(1));
+  }
+
+  ElectionCandidateRemove(
+    electionID: number,
+    constituencyID: number,
+    politicianID: number
+  ): Observable<boolean> {
+    return this.httpService
+      .get(
+        `democracyClub/electionCandidateRemove/${electionID}/${constituencyID}/${politicianID}`
+      )
+      .pipe(take(1));
+  }
+
+  ElectedPreviously(constituencyID: number): Observable<Candidate[]> {
+    return this.httpService
+      .get(`democracyClub/electedPreviously/${constituencyID}`)
+      .pipe(
+        take(1),
+        map(value => {
+          return value as Candidate[];
+        })
+      );
   }
 }

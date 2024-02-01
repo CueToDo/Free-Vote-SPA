@@ -1,0 +1,12 @@
+select {
+  text-indent: 6px;
+}
+
+a.override-reboot {
+  /* need class name only to override reboot.scss */
+  font-size: 1em;
+}
+
+a:hover {
+  cursor: pointer;
+}

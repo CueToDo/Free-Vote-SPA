@@ -127,14 +127,17 @@
         </ng-container>
       </div>
 
-      <div class="flexRow align-center" *ngIf="ElectionDates.length > 0">
+      <div
+        class="flexRow wrap align-center mb-2"
+        *ngIf="ElectionDates.length > 0"
+      >
         <h1>Candidates</h1>
         election date:
         <select
           name="ElectionDate"
           id="ElectionDate"
           [(ngModel)]="electionDate"
-          (ngModelChange)="onDateChange()"
+          (ngModelChange)="ReselectCandidates()"
         >
           <option
             *ngFor="let date of ElectionDates"
@@ -144,9 +147,20 @@
           </option>
         </select>
         <span *ngIf="!!constituencySelected">({{ constituencySelected }})</span>
+        <button
+          mat-stroked-button
+          *ngIf="isFutureElection"
+          (click)="AddCandidate()"
+        >
+          Add Candidate
+        </button>
         <div class="spinner-grow text-primary" role="status" *ngIf="dateChange">
           <div class="visually-hidden">Loading...</div>
         </div>
+      </div>
+
+      <div *ngIf="candidateRemoveError" class="alert alert-danger">
+        {{ candidateRemoveError }}
       </div>
 
       <div class="flexRow wrap align-stretch candidates">
@@ -155,7 +169,8 @@
             [constituencyID]="constituencyIDSelected"
             [candidate]="candidate"
             [candidateSelected]="candidateSelected"
-            [isFutureElection]="isFutureElection"
+            [showRemoveButton]="showRemoveButton"
+            (ElectionCandidateRemove)="ElectionCandidateRemove($event)"
           ></app-candidate>
         </ng-container>
       </div>

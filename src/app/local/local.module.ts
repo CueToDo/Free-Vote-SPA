@@ -21,11 +21,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { BaseModule } from '../base/base.module';
 
 // FreeVote Components
+import { CandidateAddComponent } from './candidate-add/candidate-add.component';
 import { CandidateComponent } from './candidate/candidate.component';
 import { ConstituencyComponent } from './constituency/constituency.component';
 import { ConstituencySearchComponent } from './constituency-search/constituency-search.component';
 import { LocalMenuComponent } from './local-menu/local-menu.component';
 import { LocalTagsComponent } from './local-tags/local-tags.component';
+import { PartySelectComponent } from './party-select/party-select.component';
 
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
@@ -48,11 +50,13 @@ const localRoutes: Routes = [
 
 @NgModule({
   declarations: [
+    CandidateAddComponent,
     CandidateComponent,
     ConstituencyComponent,
     ConstituencySearchComponent,
     LocalMenuComponent,
-    LocalTagsComponent
+    LocalTagsComponent,
+    PartySelectComponent
   ],
   imports: [
     // Angular

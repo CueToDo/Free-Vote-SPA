@@ -5,9 +5,9 @@ import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Request } from 'express';
 
 // Models
-import { CandidateSearchResult } from '../models/candidate';
+import { Candidate } from '../models/candidate';
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
-import { OrganisationTypes, TagCloudTypes } from '../models/enums';
+import { OrganisationTypes } from '../models/enums';
 
 // Other
 import { environment as env } from 'src/environments/environment';
@@ -99,7 +99,7 @@ export class LocalDataService {
   electedOnly = false;
 
   constituencies: Constituency[] = [];
-  candidateSearchResults: CandidateSearchResult[] = [];
+  candidateSearchResults: Candidate[] = [];
 
   organisationSearchAlreadyMember = true;
   organisationFilter = '';

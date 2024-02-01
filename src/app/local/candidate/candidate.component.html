@@ -77,4 +77,17 @@
   <div *ngIf="!!candidate.laterConstituency">
     Has stood since in {{ candidate.laterConstituency }}
   </div>
+
+  <div>
+    <button mat-stroked-button *ngIf="showAddButton" (click)="AddCandidate()">
+      add
+    </button>
+    <button
+      mat-stroked-button
+      *ngIf="showRemoveButton"
+      (click)="RemoveCandidate()"
+    >
+      remove
+    </button>
+  </div>
 </div>

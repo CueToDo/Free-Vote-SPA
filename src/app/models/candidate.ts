@@ -8,9 +8,15 @@ export class Candidate {
   name = '';
   image = '';
 
+  // Election
   isCurrentMP = false;
   elected = false;
   electedOnOrBefore = '';
+  lastElectionDate = '';
+
+  // Constituency
+  constituency = '';
+  constituencyNewName = '';
   laterConstituency = '';
 
   // Contact/More Info
@@ -21,6 +27,7 @@ export class Candidate {
   personalUrl = '';
 
   // Party
+  partyID = 0;
   party = '';
   partyWebsite = '';
   organisationSlug = '';
@@ -29,13 +36,4 @@ export class Candidate {
   // twfyUrl = '';
   ukParliamentUrl = '';
   writeToThemUrl = '';
-}
-
-// Used to search for Westminster Election candidates by name
-export class CandidateSearchResult {
-  name = '';
-  party = '';
-  constituency = '';
-  constituencyNewName = '';
-  lastElectionDate = '';
 }

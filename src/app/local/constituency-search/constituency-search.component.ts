@@ -20,7 +20,7 @@ import {
 import * as globals from 'src/app/globals';
 
 // Models
-import { CandidateSearchResult } from 'src/app/models/candidate';
+import { Candidate } from 'src/app/models/candidate';
 import { Constituency } from 'src/app/models/constituency';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
@@ -101,7 +101,6 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
   constructor(
     public localData: LocalDataService,
     private appData: AppDataService,
-    private lookupsService: LookupsService,
     private democracyClubService: DemocracyClubService,
     private ngZone: NgZone
   ) {}
@@ -243,8 +242,6 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
       this.localData.constituencies = [];
       this.localData.candidateSearchResults = [];
 
-      this.candidateSearch = this.candidateSearch.replace('%', '');
-
       if (!this.candidateSearch || this.candidateSearch.length < 3) {
         if (auto) return;
         this.error =
@@ -256,9 +253,9 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
       this.searching = true;
 
       this.democracyClubService
-        .ElectionCandidateSearch(this.candidateSearch, this.electedOnly)
+        .ElectionCandidateSearch(this.candidateSearch, true, this.electedOnly)
         .subscribe({
-          next: (value: CandidateSearchResult[]) => {
+          next: (value: Candidate[]) => {
             this.localData.candidateSearchResults = value;
 
             if (this.candidateCount === 0) {

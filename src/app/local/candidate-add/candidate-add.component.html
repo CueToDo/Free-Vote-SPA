@@ -1,0 +1,44 @@
+<div class="my-5 mx-4">
+  <div mat-dialog-title class="dialog-title">
+    <h1>
+      {{ data.constituency }}
+    </h1>
+    <button mat-icon-button aria-label="close dialog" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="flexRow justify-start amb-3">
+    <input
+      #trvPoliticianSearch
+      class="form-control"
+      type="text"
+      placeholder="candidate name (min 3 letters)"
+      [(ngModel)]="politicianNameLike"
+    />
+
+    <button mat-stroked-button (click)="politicianSearch(false)">
+      <mat-icon>search</mat-icon>
+      lookup
+    </button>
+    <button mat-stroked-button (click)="politicianNameLike = ''">
+      <mat-icon>cancel</mat-icon>
+      clear
+    </button>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="flexRow wrap align-stretch candidates">
+    <ng-container *ngFor="let candidate of candidates">
+      <app-candidate
+        [constituencyID]="data.constituencyID"
+        [candidate]="candidate"
+        [showAddButton]="true"
+        (ElectionCandidateAdd)="ElectionCandidateAdd($event)"
+      ></app-candidate>
+    </ng-container>
+  </div>
+</div>
