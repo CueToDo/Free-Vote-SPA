@@ -82,6 +82,18 @@ export class DemocracyClubService {
       );
   }
 
+  PoliticianUpdate(
+    politicianID: number,
+    politician: string,
+    partyID: number
+  ): Observable<string> {
+    return this.httpService
+      .get(
+        `democracyClub/politicianUpdate/${politicianID}/${politician}/${partyID}`
+      )
+      .pipe(take(1));
+  }
+
   ElectionCandidates(
     constituencyID: number,
     electionDate: string

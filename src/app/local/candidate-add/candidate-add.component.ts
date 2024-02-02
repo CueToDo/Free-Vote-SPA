@@ -96,6 +96,15 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // Courtesy Bard!
+  toTitleCase(input: string): string {
+    return input
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
   politicianSearch(auto: boolean) {
     this.ngZone.run(_ => {
       if (!this.politicianNameLike || this.politicianNameLike.length < 3) {
@@ -129,6 +138,22 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ElectionCandidateAdd(politicianID: number): void {
+    if (politicianID == 0) {
+      this.politicianNameLike = this.toTitleCase(this.politicianNameLike);
+      if (
+        confirm(`Create new politician with name "${this.politicianNameLike}"?`)
+      ) {
+        this.democracyClubService
+          .PoliticianUpdate(0, this.politicianNameLike, 0)
+          .subscribe({
+            next: () => {
+              this.politicianSearch(true);
+            },
+            error: error => this.ShowError(error)
+          });
+      }
+      return;
+    }
     const politician = this.candidates.filter(
       c => c.politicianID == politicianID
     )[0];

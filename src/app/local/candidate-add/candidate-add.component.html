@@ -25,6 +25,10 @@
       <mat-icon>cancel</mat-icon>
       clear
     </button>
+    <button mat-stroked-button (click)="ElectionCandidateAdd(0)">
+      <mat-icon>add_circle</mat-icon>
+      add
+    </button>
   </div>
 
   <div *ngIf="error" class="alert alert-danger">
