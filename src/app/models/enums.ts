@@ -188,3 +188,25 @@ export enum MeetingIntervals {
   Variable = 3,
   MonthlyByWeekNumber = 4
 }
+
+export enum PoliticalParties {
+  AlliancePartyOfNorthernIreland = 222,
+  BritainFirst = 292,
+  BritishNationalParty = 223,
+  ConservativeAndUnionistParty = 627,
+  DemocraticUnionistParty = 738,
+  GreenParty = 2012,
+  Independent = 354,
+  LabourAndCooperativeParty = 1304,
+  LabourParty = 641,
+  LiberalDemocrats = 140,
+  PlaidCymru = 1269,
+  ReformUK = 2018,
+  ScottishGreenParty = 836,
+  ScottishNationalParty = 884,
+  SocialDemocraticAndLabourParty = 989,
+  SinnFein = 529,
+  TheOfficialMonsterRavingLoonyParty = 709,
+  UKIndependenceParty = 2036,
+  UlsterUnionistParty = 1088
+}

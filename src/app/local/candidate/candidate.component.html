@@ -6,88 +6,127 @@
     candidateOnly: !candidate.twfyUrl
   }"
 >
-  <!-- Where we don't have WhoCanIVoteForUrl -->
-  <div *ngIf="!candidate.whoCanIVoteForUrl">
-    <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
-    <img
-      *ngIf="!candidate.image"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/108px-Unknown_person.jpg"
-      alt=""
-    />
-  </div>
+  <div
+    [ngClass]="{
+      Party: true,
+      AlliancePartyOfNorthernIreland:
+        candidate.partyID == PoliticalParties.AlliancePartyOfNorthernIreland,
+      BritainFirst: candidate.partyID == PoliticalParties.BritainFirst,
+      BritishNationalParty:
+        candidate.partyID == PoliticalParties.BritishNationalParty,
+      Conservative:
+        candidate.partyID == PoliticalParties.ConservativeAndUnionistParty,
+      DemocraticUnionistParty:
+        candidate.partyID == PoliticalParties.DemocraticUnionistParty,
+      Green: candidate.partyID == PoliticalParties.GreenParty,
+      Independent: candidate.partyID == PoliticalParties.Independent,
+      LabourAndCooperativeParty:
+        candidate.partyID == PoliticalParties.LabourAndCooperativeParty,
+      Labour: candidate.partyID == PoliticalParties.LabourParty,
+      LiberalDemocrats: candidate.partyID == PoliticalParties.LiberalDemocrats,
+      PlaidCymru: candidate.partyID == PoliticalParties.PlaidCymru,
+      ReformUK: candidate.partyID == PoliticalParties.ReformUK,
+      ScottishGreenParty:
+        candidate.partyID == PoliticalParties.ScottishGreenParty,
+      ScottishNationalParty:
+        candidate.partyID == PoliticalParties.ScottishNationalParty,
+      SocialDemocraticAndLabourParty:
+        candidate.partyID == PoliticalParties.SocialDemocraticAndLabourParty,
+      SinnFein: candidate.partyID == PoliticalParties.SinnFein,
+      TheOfficialMonsterRavingLoonyParty:
+        candidate.partyID ==
+        PoliticalParties.TheOfficialMonsterRavingLoonyParty,
+      UKIndependenceParty:
+        candidate.partyID == PoliticalParties.UKIndependenceParty,
+      UlsterUnionistParty:
+        candidate.partyID == PoliticalParties.UlsterUnionistParty
+    }"
+  ></div>
 
-  <!-- Repeat block where we do have WhoCanIVoteForUrl -->
-  <div *ngIf="!!candidate.whoCanIVoteForUrl">
-    <a [href]="candidate.whoCanIVoteForUrl" target="_blank">
+  <div class="flexCol candidateData">
+    <!-- Where we don't have WhoCanIVoteForUrl -->
+    <div *ngIf="!candidate.whoCanIVoteForUrl" class="mb-2">
       <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
       <img
         *ngIf="!candidate.image"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/108px-Unknown_person.jpg"
         alt=""
       />
-    </a>
-  </div>
+    </div>
 
-  <div>
-    <span *ngIf="!!candidate.twfyUrl">
-      <!-- Link to TWFY -->
+    <!-- Repeat block where we do have WhoCanIVoteForUrl -->
+    <div *ngIf="!!candidate.whoCanIVoteForUrl">
+      <a [href]="candidate.whoCanIVoteForUrl" target="_blank">
+        <img *ngIf="!!candidate.image" [src]="candidate.image" alt="" />
+        <img
+          *ngIf="!candidate.image"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/108px-Unknown_person.jpg"
+          alt=""
+        />
+      </a>
+    </div>
+
+    <div>
+      <span *ngIf="!!candidate.twfyUrl">
+        <!-- Link to TWFY -->
+        <a
+          [href]="'https://www.theyworkforyou.com' + candidate.twfyUrl"
+          target="_blank"
+          >{{ candidate.name }}</a
+        >
+      </span>
+
+      <span *ngIf="!candidate.twfyUrl">
+        <!-- Name only if past election or we don't have email -->
+        <span *ngIf="!isFutureElection || !mailto">{{ candidate.name }}</span>
+        <!-- MailTo if we have email for future election -->
+        <a *ngIf="isFutureElection && !!mailto" [href]="mailto">{{
+          candidate.name
+        }}</a>
+      </span>
+
+      <span *ngIf="!!candidate.electedOnOrBefore">
+        ({{ candidate.electedOnOrBefore }})
+      </span>
+    </div>
+
+    <div>
       <a
-        [href]="'https://www.theyworkforyou.com' + candidate.twfyUrl"
+        *ngIf="!!candidate.partyWebsite"
+        [href]="candidate.partyWebsite"
         target="_blank"
-        >{{ candidate.name }}</a
+        >{{ candidate.party }}</a
       >
-    </span>
+      <span *ngIf="!candidate.partyWebsite">{{ candidate.party }}</span>
+    </div>
 
-    <span *ngIf="!candidate.twfyUrl">
-      <!-- Name only if past election or we don't have email -->
-      <span *ngIf="!isFutureElection || !mailto">{{ candidate.name }}</span>
-      <!-- MailTo if we have email for future election -->
-      <a *ngIf="isFutureElection && !!mailto" [href]="mailto">{{
-        candidate.name
-      }}</a>
-    </span>
+    <div *ngIf="!!candidate.ukParliamentUrl">
+      <a [href]="candidate.ukParliamentUrl" target="_blank">In Parliament</a>
+    </div>
 
-    <span *ngIf="!!candidate.electedOnOrBefore">
-      ({{ candidate.electedOnOrBefore }})
-    </span>
-  </div>
+    <div *ngIf="!!candidate.writeToThemUrl">
+      <a [href]="candidate.writeToThemUrl" target="_blank">"Write to Them"</a>
+    </div>
 
-  <div>
-    <a
-      *ngIf="!!candidate.partyWebsite"
-      [href]="candidate.partyWebsite"
-      target="_blank"
-      >{{ candidate.party }}</a
-    >
-    <span *ngIf="!candidate.partyWebsite">{{ candidate.party }}</span>
-  </div>
+    <div *ngIf="!!candidate.personalUrl">
+      <a [href]="candidate.personalUrl" target="_blank">website</a>
+    </div>
 
-  <div *ngIf="!!candidate.ukParliamentUrl">
-    <a [href]="candidate.ukParliamentUrl" target="_blank">In Parliament</a>
-  </div>
+    <div *ngIf="!!candidate.laterConstituency">
+      Has stood since in {{ candidate.laterConstituency }}
+    </div>
 
-  <div *ngIf="!!candidate.writeToThemUrl">
-    <a [href]="candidate.writeToThemUrl" target="_blank">"Write to Them"</a>
-  </div>
-
-  <div *ngIf="!!candidate.personalUrl">
-    <a [href]="candidate.personalUrl" target="_blank">website</a>
-  </div>
-
-  <div *ngIf="!!candidate.laterConstituency">
-    Has stood since in {{ candidate.laterConstituency }}
-  </div>
-
-  <div>
-    <button mat-stroked-button *ngIf="showAddButton" (click)="AddCandidate()">
-      add
-    </button>
-    <button
-      mat-stroked-button
-      *ngIf="showRemoveButton"
-      (click)="RemoveCandidate()"
-    >
-      remove
-    </button>
+    <div>
+      <button mat-stroked-button *ngIf="showAddButton" (click)="AddCandidate()">
+        add
+      </button>
+      <button
+        mat-stroked-button
+        *ngIf="showRemoveButton"
+        (click)="RemoveCandidate()"
+      >
+        remove
+      </button>
+    </div>
   </div>
 </div>

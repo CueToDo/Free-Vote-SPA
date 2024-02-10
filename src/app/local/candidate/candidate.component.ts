@@ -1,8 +1,9 @@
 // Angular
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-// Models
+// Models, Enums
 import { Candidate } from 'src/app/models/candidate';
+import { PoliticalParties } from 'src/app/models/enums';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -24,6 +25,8 @@ export class CandidateComponent {
 
   @Output() ElectionCandidateAdd = new EventEmitter<number>();
   @Output() ElectionCandidateRemove = new EventEmitter<number>();
+
+  public PoliticalParties = PoliticalParties;
 
   get mailto(): string {
     if (!!this.candidate.publicEmailAddress)
