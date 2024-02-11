@@ -23,22 +23,13 @@ export class Constituency {
   newThisReview = false;
   changeFromPrevGen = '';
 
-  // Elected Westminster Politician
-  electionDate = '';
-  politicianID = 0;
-  politician = '';
-  electedOnOrBefore = '';
-  party = '';
-  partyWebsite = '';
-  politicianImage = '';
-  politicianTwfyUrl = '';
-  politicianTwfyMemberID = '';
-  politicianWebsite = '';
-
   // Local Politics - Placeholders only - not reflected in API after removal of VotingArea class
   councilID = '';
   council = '';
   wardID = '';
   ward = '';
   mapItWardID = '';
+
+  // Next Election
+  nextElectionDateKnown = false;
 }
