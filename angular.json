@@ -30,7 +30,8 @@
             ],
             "styles": [
               "src/styles/styles.scss",
-              "src/styles/bootstrap-alt.css"
+              "src/styles/bootstrap-alt.css",
+              "src/styles/political-parties.css"
             ],
             "scripts": [],
             "serviceWorker": true,

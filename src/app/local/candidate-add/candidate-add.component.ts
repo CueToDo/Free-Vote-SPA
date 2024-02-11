@@ -30,7 +30,7 @@ import {
 } from 'rxjs';
 
 // Models
-import { Candidate } from 'src/app/models/candidate';
+import { Candidate } from 'src/app/models/candidate.model';
 
 // Services
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
@@ -72,7 +72,7 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
       constituency: string;
       constituencyID: number;
     },
-    public dialog: MatDialog
+    public matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {}
@@ -144,7 +144,7 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
         confirm(`Create new politician with name "${this.politicianNameLike}"?`)
       ) {
         this.democracyClubService
-          .PoliticianUpdate(0, this.politicianNameLike, 0)
+          .PoliticianAdd(0, this.politicianNameLike, 0)
           .subscribe({
             next: () => {
               this.politicianSearch(true);
@@ -160,15 +160,18 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (politician.partyID == 0) {
       // Must get user to select party before adding candidate to election
-      let dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = true;
-      dialogConfig.maxWidth = '90vw';
-      dialogConfig.maxHeight = '90vh';
-      dialogConfig.data = { name: politician.name };
+      let partySelectDialogConfig = new MatDialogConfig();
+      partySelectDialogConfig.disableClose = true;
+      partySelectDialogConfig.maxWidth = '90vw';
+      partySelectDialogConfig.maxHeight = '90vh';
+      partySelectDialogConfig.data = { name: politician.name };
 
-      const dialogRef = this.dialog.open(PartySelectComponent, dialogConfig);
+      const partySelectDialogRef = this.matDialog.open(
+        PartySelectComponent,
+        partySelectDialogConfig
+      );
 
-      dialogRef
+      partySelectDialogRef
         .afterClosed()
         .pipe(
           switchMap((partyID: number) => {

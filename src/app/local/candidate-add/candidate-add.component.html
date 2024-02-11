@@ -21,7 +21,10 @@
       <mat-icon>search</mat-icon>
       lookup
     </button>
-    <button mat-stroked-button (click)="politicianNameLike = ''">
+    <button
+      mat-stroked-button
+      (click)="politicianNameLike = ''; candidates = []"
+    >
       <mat-icon>cancel</mat-icon>
       clear
     </button>
@@ -35,7 +38,7 @@
     {{ error }}
   </div>
 
-  <div class="flexRow wrap align-stretch candidates">
+  <div class="flexRow wrap candidates">
     <ng-container *ngFor="let candidate of candidates">
       <app-candidate
         [constituencyID]="data.constituencyID"

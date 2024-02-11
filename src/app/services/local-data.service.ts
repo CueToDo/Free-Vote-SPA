@@ -5,13 +5,13 @@ import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Request } from 'express';
 
 // Models
-import { Candidate } from '../models/candidate';
+import { Candidate } from '../models/candidate.model';
+import { Constituency } from '../models/constituency.model';
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
 import { OrganisationTypes } from '../models/enums';
 
 // Other
 import { environment as env } from 'src/environments/environment';
-import { Constituency } from '../models/constituency';
 
 // Mainly intended for client side, but has server side only code
 @Injectable({ providedIn: 'root' })

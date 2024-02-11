@@ -1,4 +1,3 @@
-import { Constituency } from './../models/constituency';
 // Angular
 import { Injectable } from '@angular/core';
 

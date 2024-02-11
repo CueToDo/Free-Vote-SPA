@@ -3,8 +3,12 @@ export class Candidate {
   electionID = 0;
   electionDate = '';
 
-  // Person
+  // IDs
   politicianID = 0;
+  dc_person_id = 0;
+  twfy_memberid = 0;
+
+  // Person
   name = '';
   image = '';
 
@@ -20,11 +24,10 @@ export class Candidate {
   laterConstituency = '';
 
   // Contact/More Info
+  personalWebsite = '';
   publicEmailAddress = '';
   twfyUrl = '';
   whoCanIVoteForUrl = '';
-  politicianWebsite = '';
-  personalUrl = '';
 
   // Party
   partyID = 0;
@@ -36,4 +39,7 @@ export class Candidate {
   // twfyUrl = '';
   ukParliamentUrl = '';
   writeToThemUrl = '';
+
+  // Edit
+  updated = false;
 }

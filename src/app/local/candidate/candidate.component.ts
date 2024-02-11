@@ -1,9 +1,15 @@
 // Angular
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+// Material
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+
 // Models, Enums
-import { Candidate } from 'src/app/models/candidate';
+import { Candidate } from 'src/app/models/candidate.model';
 import { PoliticalParties } from 'src/app/models/enums';
+
+// Componments
+import { CandidateEditComponent } from '../candidate-edit/candidate-edit.component';
 
 // Services
 import { AppDataService } from 'src/app/services/app-data.service';
@@ -44,7 +50,8 @@ export class CandidateComponent {
 
   constructor(
     private appData: AppDataService,
-    private localData: LocalDataService
+    private localData: LocalDataService,
+    public matDialog: MatDialog
   ) {}
 
   get selected(): boolean {
@@ -73,5 +80,24 @@ export class CandidateComponent {
 
   RemoveCandidate(): void {
     this.ElectionCandidateRemove.emit(this.candidate.politicianID);
+  }
+
+  EditCandidate() {
+    let candidateEditDialogConfig = new MatDialogConfig();
+    candidateEditDialogConfig.disableClose = true;
+    // candidateEditDialogConfig.maxWidth = '90vw';
+    candidateEditDialogConfig.maxHeight = '95vh';
+    candidateEditDialogConfig.data = { candidate: this.candidate };
+
+    const candidateEditDialogRef = this.matDialog.open(
+      CandidateEditComponent,
+      candidateEditDialogConfig
+    );
+
+    candidateEditDialogRef.afterClosed().subscribe({
+      next: (candidateEdit: Candidate) => {
+        if (candidateEdit.updated) this.candidate = candidateEdit;
+      }
+    });
   }
 }

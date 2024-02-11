@@ -1,0 +1,145 @@
+<div class="flexCol candidate m-3">
+  <div
+    [ngClass]="{
+      Party: true,
+      AlliancePartyOfNorthernIreland:
+        candidate.partyID == PoliticalParties.AlliancePartyOfNorthernIreland,
+      BritainFirst: candidate.partyID == PoliticalParties.BritainFirst,
+      BritishNationalParty:
+        candidate.partyID == PoliticalParties.BritishNationalParty,
+      Conservative:
+        candidate.partyID == PoliticalParties.ConservativeAndUnionistParty,
+      DemocraticUnionistParty:
+        candidate.partyID == PoliticalParties.DemocraticUnionistParty,
+      Green: candidate.partyID == PoliticalParties.GreenParty,
+      Independent: candidate.partyID == PoliticalParties.Independent,
+      LabourAndCooperativeParty:
+        candidate.partyID == PoliticalParties.LabourAndCooperativeParty,
+      Labour: candidate.partyID == PoliticalParties.LabourParty,
+      LiberalDemocrats: candidate.partyID == PoliticalParties.LiberalDemocrats,
+      PlaidCymru: candidate.partyID == PoliticalParties.PlaidCymru,
+      ReformUK: candidate.partyID == PoliticalParties.ReformUK,
+      ScottishGreenParty:
+        candidate.partyID == PoliticalParties.ScottishGreenParty,
+      ScottishNationalParty:
+        candidate.partyID == PoliticalParties.ScottishNationalParty,
+      SocialDemocraticAndLabourParty:
+        candidate.partyID == PoliticalParties.SocialDemocraticAndLabourParty,
+      SinnFein: candidate.partyID == PoliticalParties.SinnFein,
+      TheOfficialMonsterRavingLoonyParty:
+        candidate.partyID ==
+        PoliticalParties.TheOfficialMonsterRavingLoonyParty,
+      UKIndependenceParty:
+        candidate.partyID == PoliticalParties.UKIndependenceParty,
+      UlsterUnionistParty:
+        candidate.partyID == PoliticalParties.UlsterUnionistParty
+    }"
+  ></div>
+  <div>
+    <table>
+      <tr>
+        <td>Name</td>
+        <td>
+          <div>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="candidate.name"
+            />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><img [src]="candidate.image" alt="" /></td>
+      </tr>
+      <tr>
+        <td>Image</td>
+        <td>
+          <div>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="candidate.image"
+            />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Party</td>
+        <td>
+          {{ candidate.party }}
+        </td>
+      </tr>
+      <tr>
+        <td>Personal website</td>
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="candidate.personalWebsite"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>Public email address</td>
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="candidate.publicEmailAddress"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>DC person ID</td>
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="candidate.dc_person_id"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>TWFY member ID</td>
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="candidate.twfy_memberid"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>TWFY URL</td>
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="candidate.twfyUrl"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>Who Can I Vote For URL</td>
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="candidate.whoCanIVoteForUrl"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <button mat-stroked-button (click)="SelectParty()">
+            Select party</button
+          ><button mat-stroked-button (click)="Save()">Save</button>
+          <button mat-stroked-button (click)="Close()">Cancel</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

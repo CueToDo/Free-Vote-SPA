@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 import { Observable, map, take } from 'rxjs';
 
 // Models
-import { Candidate } from '../models/candidate';
-import { Constituency } from '../models/constituency';
+import { Candidate } from '../models/candidate.model';
+import { Constituency } from '../models/constituency.model';
 import { ElectionDate } from '../models/electionDate';
 import { Kvp } from '../models/kvp.model';
 
@@ -82,15 +82,21 @@ export class DemocracyClubService {
       );
   }
 
-  PoliticianUpdate(
+  PoliticianAdd(
     politicianID: number,
     politician: string,
     partyID: number
   ): Observable<string> {
     return this.httpService
       .get(
-        `democracyClub/politicianUpdate/${politicianID}/${politician}/${partyID}`
+        `democracyClub/politicianAdd/${politicianID}/${politician}/${partyID}`
       )
+      .pipe(take(1));
+  }
+
+  PoliticianUpdate(politician: Candidate): Observable<string> {
+    return this.httpService
+      .post('democracyClub/politicianUpdate', politician)
       .pipe(take(1));
   }
 

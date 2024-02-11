@@ -23,6 +23,7 @@ import { BaseModule } from '../base/base.module';
 // FreeVote Components
 import { CandidateAddComponent } from './candidate-add/candidate-add.component';
 import { CandidateComponent } from './candidate/candidate.component';
+import { CandidateEditComponent } from './candidate-edit/candidate-edit.component';
 import { ConstituencyComponent } from './constituency/constituency.component';
 import { ConstituencySearchComponent } from './constituency-search/constituency-search.component';
 import { LocalMenuComponent } from './local-menu/local-menu.component';
@@ -52,6 +53,7 @@ const localRoutes: Routes = [
   declarations: [
     CandidateAddComponent,
     CandidateComponent,
+    CandidateEditComponent,
     ConstituencyComponent,
     ConstituencySearchComponent,
     LocalMenuComponent,

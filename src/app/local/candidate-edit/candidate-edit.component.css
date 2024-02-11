@@ -1,0 +1,30 @@
+.Party {
+  height: 20px;
+}
+
+table {
+  margin: 0px 10px 10px 10px;
+}
+
+.candidate {
+  border: solid 1px black;
+  border-radius: 12px;
+  color: black;
+  overflow: hidden;
+  background-color: #f0f4ff;
+}
+
+img {
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: center center;
+  width: 320px;
+}
+
+td {
+  padding: 4px 6px;
+}
+
+button + button {
+  margin-left: 5px;
+}

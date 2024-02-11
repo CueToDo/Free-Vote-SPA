@@ -6,8 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, of, switchMap, take } from 'rxjs';
 
 // Models
-import { Candidate } from 'src/app/models/candidate';
-import { Constituency } from 'src/app/models/constituency';
+import { Candidate } from 'src/app/models/candidate.model';
+import { Constituency } from 'src/app/models/constituency.model';
 import { ElectionDate } from 'src/app/models/electionDate';
 
 // Services

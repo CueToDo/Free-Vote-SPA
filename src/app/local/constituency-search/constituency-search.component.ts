@@ -20,8 +20,8 @@ import {
 import * as globals from 'src/app/globals';
 
 // Models
-import { Candidate } from 'src/app/models/candidate';
-import { Constituency } from 'src/app/models/constituency';
+import { Candidate } from 'src/app/models/candidate.model';
+import { Constituency } from 'src/app/models/constituency.model';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 // Services
