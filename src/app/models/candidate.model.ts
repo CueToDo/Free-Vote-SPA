@@ -13,12 +13,14 @@ export class Candidate {
   image = '';
 
   // Election
+  voteShare = 0;
   isCurrentMP = false;
   elected = false;
   electedOnOrBefore = '';
   lastElectionDate = '';
 
   // Constituency
+  constituencyID = 0;
   constituency = '';
   constituencyNewName = '';
   laterConstituency = '';

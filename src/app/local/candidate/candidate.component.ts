@@ -83,6 +83,8 @@ export class CandidateComponent {
   }
 
   EditCandidate() {
+    if (this.isMPs) return;
+
     let candidateEditDialogConfig = new MatDialogConfig();
     candidateEditDialogConfig.disableClose = true;
     // candidateEditDialogConfig.maxWidth = '90vw';

@@ -2,8 +2,7 @@
   class="flexCol candidate"
   [ngClass]="{
     elected: (isMPs && candidate.isCurrentMP) || (!isMPs && candidate.elected),
-    selected: selected && !candidate.elected,
-    candidateOnly: !candidate.twfyUrl
+    selected: selected && !candidate.elected
   }"
 >
   <div
@@ -33,6 +32,8 @@
         candidate.partyID == PoliticalParties.ScottishNationalParty,
       SocialDemocraticAndLabourParty:
         candidate.partyID == PoliticalParties.SocialDemocraticAndLabourParty,
+      SocialDemocraticParty:
+        candidate.partyID == PoliticalParties.SocialDemocraticParty,
       SinnFein: candidate.partyID == PoliticalParties.SinnFein,
       TheOfficialMonsterRavingLoonyParty:
         candidate.partyID ==
@@ -40,7 +41,9 @@
       UKIndependenceParty:
         candidate.partyID == PoliticalParties.UKIndependenceParty,
       UlsterUnionistParty:
-        candidate.partyID == PoliticalParties.UlsterUnionistParty
+        candidate.partyID == PoliticalParties.UlsterUnionistParty,
+      WorkersPartyOfBritain:
+        candidate.partyID == PoliticalParties.WorkersPartyOfBritain
     }"
   ></div>
 

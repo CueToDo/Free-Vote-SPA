@@ -56,15 +56,26 @@ export class CandidateEditComponent {
     )
       return;
 
-    if (!!this.candidate.name)
+    if (!!this.candidate.name) {
       this.democracyClubService.PoliticianUpdate(this.candidate).subscribe({
         next: () => {
           this.candidate.updated = true;
           this.Close();
-        }
+        },
+        error: error => this.ShowError(error)
       });
-    else {
+    } else {
       this.error = 'Politician name must be provided';
+    }
+  }
+
+  ShowError(err: any) {
+    if (err?.error?.detail) {
+      this.error = err.error.detail;
+    } else if (err?.error) {
+      this.error = err.error;
+    } else if (err) {
+      this.error = err;
     }
   }
 }

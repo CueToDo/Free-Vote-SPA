@@ -205,8 +205,10 @@ export enum PoliticalParties {
   ScottishGreenParty = 836,
   ScottishNationalParty = 884,
   SocialDemocraticAndLabourParty = 989,
+  SocialDemocraticParty = 960,
   SinnFein = 529,
   TheOfficialMonsterRavingLoonyParty = 709,
   UKIndependenceParty = 2036,
-  UlsterUnionistParty = 1088
+  UlsterUnionistParty = 1088,
+  WorkersPartyOfBritain = 2035
 }

@@ -25,6 +25,8 @@
         candidate.partyID == PoliticalParties.ScottishNationalParty,
       SocialDemocraticAndLabourParty:
         candidate.partyID == PoliticalParties.SocialDemocraticAndLabourParty,
+      SocialDemocraticParty:
+        candidate.partyID == PoliticalParties.SocialDemocraticParty,
       SinnFein: candidate.partyID == PoliticalParties.SinnFein,
       TheOfficialMonsterRavingLoonyParty:
         candidate.partyID ==
@@ -32,9 +34,16 @@
       UKIndependenceParty:
         candidate.partyID == PoliticalParties.UKIndependenceParty,
       UlsterUnionistParty:
-        candidate.partyID == PoliticalParties.UlsterUnionistParty
+        candidate.partyID == PoliticalParties.UlsterUnionistParty,
+      WorkersPartyOfBritain:
+        candidate.partyID == PoliticalParties.WorkersPartyOfBritain
     }"
   ></div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
   <div>
     <table>
       <tr>
@@ -69,6 +78,16 @@
         <td>Party</td>
         <td>
           {{ candidate.party }}
+        </td>
+      </tr>
+      <tr>
+        <td>Vote share</td>
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="candidate.voteShare"
+          />
         </td>
       </tr>
       <tr>
