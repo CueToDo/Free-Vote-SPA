@@ -11,6 +11,7 @@
       Party: true,
       AlliancePartyOfNorthernIreland:
         candidate.partyID == PoliticalParties.AlliancePartyOfNorthernIreland,
+      BrexitParty: candidate.partyID == PoliticalParties.BrexitParty,
       BritainFirst: candidate.partyID == PoliticalParties.BritainFirst,
       BritishNationalParty:
         candidate.partyID == PoliticalParties.BritishNationalParty,
@@ -102,6 +103,10 @@
         >{{ candidate.party }}</a
       >
       <span *ngIf="!candidate.partyWebsite">{{ candidate.party }}</span>
+    </div>
+
+    <div *ngIf="showVoteShare">
+      {{ candidate.voteShare }}
     </div>
 
     <div *ngIf="!!candidate.ukParliamentUrl">

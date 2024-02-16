@@ -191,6 +191,7 @@ export enum MeetingIntervals {
 
 export enum PoliticalParties {
   AlliancePartyOfNorthernIreland = 222,
+  BrexitParty = 2091,
   BritainFirst = 292,
   BritishNationalParty = 223,
   ConservativeAndUnionistParty = 627,

@@ -38,6 +38,7 @@ import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 // Globals
 import * as globals from 'src/app/globals';
 import { PartySelectComponent } from '../party-select/party-select.component';
+import { Kvp } from 'src/app/models/kvp.model';
 
 @Component({
   selector: 'app-candidate-add',
@@ -51,8 +52,6 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   politicianNameEntry$: Subscription | undefined;
   politicianSearch$: Subscription | undefined;
-
-  electionID = 2878; // GE 2024 - date is a guess
 
   politicianNameLike = '';
 
@@ -69,6 +68,7 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
     private candidateAddDialogRef: MatDialogRef<CandidateAddComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
+      electionID: number;
       constituency: string;
       constituencyID: number;
     },
@@ -174,11 +174,13 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
       partySelectDialogRef
         .afterClosed()
         .pipe(
-          switchMap((partyID: number) => {
-            if (partyID == 0) return of(false);
-            politician.partyID = partyID;
+          switchMap((party: Kvp) => {
+            if (party.value == 0) {
+              return of(false);
+            }
+            politician.partyID = party.value;
             return this.democracyClubService.ElectionCandidateAdd(
-              this.electionID,
+              this.data.electionID,
               this.data.constituencyID,
               politicianID,
               politician.partyID
@@ -190,8 +192,6 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
             if (added) {
               this.candidateAddDialogRef.disableClose = false;
               this.candidateAddDialogRef.close(added);
-            } else {
-              this.ShowError('Party must be selected');
             }
           },
           error: error => this.ShowError(error)
@@ -200,7 +200,7 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
       // No need to open dialog for party
       this.democracyClubService
         .ElectionCandidateAdd(
-          this.electionID,
+          this.data.electionID,
           this.data.constituencyID,
           politicianID,
           politician.partyID
@@ -213,6 +213,12 @@ export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
           error: error => this.ShowError(error)
         });
     }
+  }
+
+  Clear() {
+    this.politicianNameLike = '';
+    this.candidates = [];
+    this.error = '';
   }
 
   ShowError(err: any): void {

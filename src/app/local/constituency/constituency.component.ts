@@ -148,6 +148,14 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return `https://www.electoralcalculus.co.uk/fcgi-bin/calcwork23.py?seat=${constituency}`;
   }
 
+  get allowViewVoteShare(): boolean {
+    const parsedDate = new Date(this.electionDate);
+    const today = new Date();
+    return parsedDate < today;
+  }
+
+  showVoteShare = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     public localData: LocalDataService,
@@ -251,6 +259,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     let dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.data = {
+      electionID: this.electionIDSelected,
       constituency: this.constituencyDetails.constituency,
       constituencyID: this.constituencyDetails.constituencyID
     };
@@ -306,6 +315,10 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     } else if (err) {
       this.candidateRemoveError = err;
     }
+  }
+
+  ToggleShowVoteShare() {
+    this.showVoteShare = !this.showVoteShare;
   }
 
   ngOnDestroy(): void {

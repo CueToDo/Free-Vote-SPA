@@ -45,10 +45,9 @@ export class PartySelectComponent implements OnInit, AfterViewInit, OnDestroy {
     | ElementRef
     | undefined;
 
-  partyID = 0;
-
   partiesMajor: Kvp[] = [];
   partiesMinor: Kvp[] = [];
+  partyIDSelected = 0;
 
   partiesMinorSearch$: Subscription | undefined;
 
@@ -71,7 +70,7 @@ export class PartySelectComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe({
         next: value => {
           this.partiesMajor = value as Kvp[];
-          this.partyID = value[0].value;
+          this.partyIDSelected = value[0].value;
         }
       });
   }
@@ -117,17 +116,25 @@ export class PartySelectComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  partySelected(): void {
-    this.dialogRef.close(this.partyID);
+  majorPartySelected() {
+    const parties = this.partiesMajor.filter(
+      p => p.value == this.partyIDSelected
+    );
+    const party = parties[0];
+    this.partySelected(party);
   }
 
-  minorPartySelected(partyID: number): void {
-    this.partyID = partyID;
-    this.partySelected();
+  minorPartySelected(party: Kvp): void {
+    this.partySelected(party);
+  }
+
+  partySelected(party: Kvp): void {
+    this.dialogRef.close(party);
   }
 
   cancel(): void {
-    this.dialogRef.close(0);
+    const party: Kvp = { key: '', value: 0 };
+    this.dialogRef.close(party);
   }
 
   ngOnDestroy(): void {

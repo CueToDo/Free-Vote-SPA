@@ -1,3 +1,4 @@
+import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 // Angular
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
@@ -28,6 +29,7 @@ export class CandidateComponent {
   @Input() isFutureElection = false;
   @Input() showAddButton = false;
   @Input() showRemoveButton = false;
+  @Input() showVoteShare = false;
 
   @Output() ElectionCandidateAdd = new EventEmitter<number>();
   @Output() ElectionCandidateRemove = new EventEmitter<number>();
@@ -51,6 +53,7 @@ export class CandidateComponent {
   constructor(
     private appData: AppDataService,
     private localData: LocalDataService,
+    private auth0: Auth0Wrapper,
     public matDialog: MatDialog
   ) {}
 
@@ -84,6 +87,11 @@ export class CandidateComponent {
 
   EditCandidate() {
     if (this.isMPs) return;
+    if (this.localData.freeVoteProfile.email != 'alex@q2do.com') return;
+    if (!this.auth0.LoggedInToAuth0) {
+      alert('not logged in');
+      return;
+    }
 
     let candidateEditDialogConfig = new MatDialogConfig();
     candidateEditDialogConfig.disableClose = true;

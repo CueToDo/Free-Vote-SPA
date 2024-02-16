@@ -2,12 +2,16 @@
   <h1>{{ data.name }}</h1>
   <h3>Select party</h3>
   <div class="flexRow space-between">
-    <select name="PolitaclParty" id="PolitaclParty" [(ngModel)]="partyID">
+    <select
+      name="PoliticalParty"
+      id="PoliticalParty"
+      [(ngModel)]="partyIDSelected"
+    >
       <option *ngFor="let party of partiesMajor" [value]="party.value">
         {{ party.key }}
       </option>
     </select>
-    <button mat-stroked-button (click)="partySelected()">OK</button>
+    <button mat-stroked-button (click)="majorPartySelected()">OK</button>
     <button mat-stroked-button (click)="cancel()">Cancel</button>
   </div>
 
@@ -29,7 +33,7 @@
       {{ error }}
     </div>
     <div *ngFor="let party of partiesMinor">
-      <a class="override-reboot" (click)="minorPartySelected(party.value)">{{
+      <a class="override-reboot" (click)="minorPartySelected(party)">{{
         party.key
       }}</a>
     </div>

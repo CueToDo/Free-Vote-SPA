@@ -156,6 +156,14 @@
         >
           Add Candidate
         </button>
+        <button
+          mat-button
+          *ngIf="allowViewVoteShare"
+          (click)="ToggleShowVoteShare()"
+        >
+          <mat-icon *ngIf="!showVoteShare">visibility</mat-icon>
+          <mat-icon *ngIf="showVoteShare">visibility_off</mat-icon>
+        </button>
         <div class="spinner-grow text-primary" role="status" *ngIf="dateChange">
           <div class="visually-hidden">Loading...</div>
         </div>
@@ -173,6 +181,7 @@
             [candidateSelected]="candidateSelected"
             [showRemoveButton]="showRemoveButton"
             (ElectionCandidateRemove)="ElectionCandidateRemove($event)"
+            [showVoteShare]="allowViewVoteShare && showVoteShare"
           ></app-candidate>
         </ng-container>
       </div>

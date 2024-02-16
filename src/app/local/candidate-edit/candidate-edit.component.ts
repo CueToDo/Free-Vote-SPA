@@ -2,17 +2,24 @@
 import { Component, Inject } from '@angular/core';
 
 // Material
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogConfig,
+  MatDialogRef
+} from '@angular/material/dialog';
 
 // Models, enums
 import { Candidate } from 'src/app/models/candidate.model';
 import { PoliticalParties } from 'src/app/models/enums';
+import { Kvp } from 'src/app/models/kvp.model';
 
 // Services
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 
 // Other
 import { cloneDeep } from 'lodash-es';
+import { PartySelectComponent } from '../party-select/party-select.component';
 
 @Component({
   selector: 'app-candidate-edit',
@@ -32,7 +39,8 @@ export class CandidateEditComponent {
     public data: {
       candidate: Candidate;
     },
-    private democracyClubService: DemocracyClubService
+    private democracyClubService: DemocracyClubService,
+    public matDialogOpener: MatDialog
   ) {}
 
   ngOnInit() {
@@ -41,7 +49,27 @@ export class CandidateEditComponent {
       false; /* original candidate doesn't have "updated" */
   }
 
-  SelectParty() {}
+  SelectParty() {
+    // Must get user to select party before adding candidate to election
+    let partySelectDialogConfig = new MatDialogConfig();
+    partySelectDialogConfig.disableClose = true;
+    partySelectDialogConfig.maxWidth = '90vw';
+    partySelectDialogConfig.maxHeight = '90vh';
+    partySelectDialogConfig.data = { name: this.candidate.name };
+
+    const partySelectDialogRef = this.matDialogOpener.open(
+      PartySelectComponent,
+      partySelectDialogConfig
+    );
+
+    partySelectDialogRef.afterClosed().subscribe({
+      next: (party: Kvp) => {
+        this.candidate.party = party.key;
+        this.candidate.partyID = party.value;
+      },
+      error: error => this.ShowError(error)
+    });
+  }
 
   Close() {
     this.candidateEditDialogRef.disableClose = false;
@@ -57,6 +85,7 @@ export class CandidateEditComponent {
       return;
 
     if (!!this.candidate.name) {
+      this.error = '';
       this.democracyClubService.PoliticianUpdate(this.candidate).subscribe({
         next: () => {
           this.candidate.updated = true;
