@@ -33,6 +33,7 @@ export class CandidateComponent {
 
   @Output() ElectionCandidateAdd = new EventEmitter<number>();
   @Output() ElectionCandidateRemove = new EventEmitter<number>();
+  @Output() SomebodyElected = new EventEmitter<boolean>();
 
   public PoliticalParties = PoliticalParties;
 
@@ -107,6 +108,7 @@ export class CandidateComponent {
     candidateEditDialogRef.afterClosed().subscribe({
       next: (candidateEdit: Candidate) => {
         if (candidateEdit.updated) this.candidate = candidateEdit;
+        if (candidateEdit.somebodyElected) this.SomebodyElected.emit(true);
       }
     });
   }

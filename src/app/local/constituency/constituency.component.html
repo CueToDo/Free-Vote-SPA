@@ -180,8 +180,9 @@
             [candidate]="candidate"
             [candidateSelected]="candidateSelected"
             [showRemoveButton]="showRemoveButton"
-            (ElectionCandidateRemove)="ElectionCandidateRemove($event)"
             [showVoteShare]="allowViewVoteShare && showVoteShare"
+            (ElectionCandidateRemove)="ElectionCandidateRemove($event)"
+            (SomebodyElected)="ReselectMPs()"
           ></app-candidate>
         </ng-container>
       </div>

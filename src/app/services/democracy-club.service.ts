@@ -94,7 +94,8 @@ export class DemocracyClubService {
       .pipe(take(1));
   }
 
-  PoliticianUpdate(politician: Candidate): Observable<string> {
+  // Returns whether politician elected as a result of this update
+  PoliticianUpdate(politician: Candidate): Observable<boolean> {
     return this.httpService
       .post('democracyClub/politicianUpdate', politician)
       .pipe(take(1));

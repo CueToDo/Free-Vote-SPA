@@ -87,8 +87,9 @@ export class CandidateEditComponent {
     if (!!this.candidate.name) {
       this.error = '';
       this.democracyClubService.PoliticianUpdate(this.candidate).subscribe({
-        next: () => {
+        next: (somebodyElected: boolean) => {
           this.candidate.updated = true;
+          this.candidate.somebodyElected = somebodyElected;
           this.Close();
         },
         error: error => this.ShowError(error)

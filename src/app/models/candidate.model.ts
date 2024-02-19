@@ -44,4 +44,5 @@ export class Candidate {
 
   // Edit
   updated = false;
+  somebodyElected = false;
 }

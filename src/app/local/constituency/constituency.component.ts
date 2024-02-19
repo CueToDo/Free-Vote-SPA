@@ -242,6 +242,23 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     });
   }
 
+  ReselectMPs() {
+    this.searching = true;
+
+    this.democracyClubService
+      .ElectedPreviously(this.constituencyDetails.constituencyID)
+      .subscribe({
+        next: MPs => {
+          this.MPs = MPs;
+          this.searching = false;
+        },
+        error: serverError => {
+          this.error = serverError?.error?.detail;
+          this.searching = false;
+        }
+      });
+  }
+
   ReselectCandidates() {
     this.dateChange = true;
 
