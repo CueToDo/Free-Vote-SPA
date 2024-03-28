@@ -1,10 +1,6 @@
 <div class="p-3">
   <h1>
-    {{
-      data.constituencyTags
-        ? localData.freeVoteProfile.constituency
-        : 'National'
-    }}
+    {{ data.constituencyTags ? localData.Constituency : 'National' }}
   </h1>
 
   <app-tags-edit

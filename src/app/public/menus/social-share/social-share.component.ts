@@ -14,7 +14,7 @@ import { Point } from 'src/app/models/point.model';
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { ActivatedRoute } from '@angular/router';
-import { AppDataService } from 'src/app/services/app-data.service';
+import { HtmlService } from 'src/app/services/html.service';
 
 @Component({
   selector: 'app-social-share',
@@ -41,7 +41,7 @@ export class SocialShareComponent implements OnInit {
 
   constructor(
     private localData: LocalDataService,
-    private appData: AppDataService,
+    private htmlService: HtmlService,
     private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: object,
     private renderer2: Renderer2,
@@ -71,7 +71,7 @@ export class SocialShareComponent implements OnInit {
 
     // Runs in app component init in SSR for FCP (First Contentful Paint)
 
-    this.appData.setMetaData(
+    this.htmlService.setMetaData(
       this.localData.websiteUrlWTS,
       this.shareTitle,
       this.sharePreview,

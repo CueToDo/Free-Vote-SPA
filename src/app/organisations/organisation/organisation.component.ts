@@ -10,7 +10,7 @@ import { GeographicalExtentID } from 'src/app/models/enums';
 import { Organisation } from 'src/app/models/organisation.model';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { OrganisationsService } from 'src/app/services/organisations.service';
 
@@ -64,17 +64,17 @@ export class OrganisationComponent implements OnInit {
     if (!this.organisation) {
       return '';
     }
-    return `/organisations/${this.appData.kebabUri(
+    return `/organisations/${this.httpXS.kebabUri(
       this.organisation.organisationName
-    )}/${this.appData.kebabUri(group)}`;
+    )}/${this.httpXS.kebabUri(group)}`;
   }
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private appData: AppDataService,
     private lookupsService: LookupsService,
-    private organisationService: OrganisationsService
+    private organisationService: OrganisationsService,
+    private httpXS: HttpExtraService
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +85,7 @@ export class OrganisationComponent implements OnInit {
     let organisationSlug =
       this.activatedRoute.snapshot.params['organisationSlug'];
 
-    organisationSlug = this.appData.unKebabUri(organisationSlug);
+    organisationSlug = this.httpXS.unKebabUri(organisationSlug);
     let dc_id = this.activatedRoute.snapshot.params['dc_id'];
 
     this.organisationService

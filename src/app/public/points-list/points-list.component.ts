@@ -32,12 +32,14 @@ import {
 import { PointCreateNewComponent } from 'src/app/public/point-create-new/point-create-new.component';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { AppService } from 'src/app/services/app.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
 import { Subscription } from 'rxjs';
 import { TagsService } from 'src/app/services/tags.service';
 import { AuthService } from '@auth0/auth0-angular';
+import { DatetimeService } from 'src/app/services/datetime.service';
+import { BasicService } from 'src/app/services/basic.service';
 
 @Component({
   selector: 'app-points-list',
@@ -163,8 +165,10 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   constructor(
+    public appService: AppService,
     public auth0Service: AuthService,
-    public appData: AppDataService,
+    public basicService: BasicService,
+    private dateTimeService: DatetimeService,
     public localData: LocalDataService,
     private pointsService: PointsService,
     private tagsService: TagsService,
@@ -255,11 +259,11 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
       this.sortType = PointSortTypes.DateUpdated;
       this.sortDescending = true;
       this.SelectPoints();
-      this.appData.RouteParamChange$.next(this.localData.SlashTagSelected);
+      this.appService.RouteParamChange$.next(this.localData.SlashTagSelected);
     } else this.ScrollIntoView();
   }
 
-  OnTopicSearch(): string {
+  get onTopicSearch(): string {
     let onTopic = '';
     if (!this.filter?.anyTag) {
       onTopic = this.localData.TopicSelected;
@@ -307,7 +311,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
           dateFrom = this.filter.dateFrom;
           dateTo = this.filter.dateTo;
           if (
-            this.appData.Date1IsLessThanDate2(
+            this.dateTimeService.Date1IsLessThanDate2(
               dateTo.toString(),
               dateFrom.toString()
             )
@@ -324,7 +328,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
           .GetFirstBatchFiltered(
             this.localData.ConstituencyID,
             this.filter.byAlias,
-            this.OnTopicSearch(),
+            this.onTopicSearch,
             this.filter.myPointFilter,
             this.filter.feedbackFilter,
             this.filter.pointFlag,
@@ -521,7 +525,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
       if (this.filter) {
         if (
           (!this.filter.dateFrom && psr.fromDate) ||
-          this.appData.Date1IsLessThanDate2(
+          this.dateTimeService.Date1IsLessThanDate2(
             psr.fromDate,
             this.filter.dateFrom.toString()
           )
@@ -533,7 +537,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
         // returned date is GREATER than original, use returned date
         if (
           (!this.filter.dateTo && psr.toDate) ||
-          this.appData.Date1IsLessThanDate2(
+          this.dateTimeService.Date1IsLessThanDate2(
             this.filter.dateTo.toString(),
             psr.toDate
           )

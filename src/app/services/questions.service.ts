@@ -7,18 +7,18 @@ import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 // Models, enums
+import { ID } from '../models/common';
+import { Kvp } from '../models/kvp.model';
 import { PointSortTypes, PointSupportLevels } from '../models/enums';
 import {
   QuestionSelectionResult,
   QuestionEdit,
   QuestionEditFormData
 } from '../models/question.model';
-import { ID } from '../models/common';
 
 // Services
+import { BasicService } from './basic.service';
 import { HttpService } from './http.service';
-import { AppDataService } from './app-data.service';
-import { Kvp } from '../models/kvp.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionsService {
@@ -26,8 +26,8 @@ export class QuestionsService {
   private pageSize = 10;
 
   constructor(
-    private httpClientService: HttpService,
-    private appDataService: AppDataService
+    private basicService: BasicService,
+    private httpClientService: HttpService
   ) {
     // this.GetWoWWeekInfoVote();
   }
@@ -58,9 +58,7 @@ export class QuestionsService {
     QSR.questionCount = sourceData.questionCount;
 
     // construct an Array of objects from an object
-    QSR.questionIDs = this.appDataService.CastObjectToIDs(
-      sourceData.questionIDs
-    );
+    QSR.questionIDs = this.basicService.CastObjectToIDs(sourceData.questionIDs);
     QSR.questions = sourceData.questions;
     QSR.tagID = sourceData.tagID;
 

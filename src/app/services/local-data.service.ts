@@ -10,6 +10,9 @@ import { Constituency } from '../models/constituency.model';
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
 import { OrganisationTypes } from '../models/enums';
 
+// Services
+import { HttpExtraService } from './http-extra.service';
+
 // Other
 import { environment as env } from 'src/environments/environment';
 
@@ -92,6 +95,20 @@ export class LocalDataService {
     return 0;
   }
 
+  public get Constituency(): string {
+    return this.freeVoteProfile.constituency;
+  }
+
+  public get ConstituencyKebab(): string {
+    return this.httpXS.kebabUri(this.freeVoteProfile.constituency);
+  }
+
+  // Slash comes first
+  public get ConstituencyKebabSlash(): string {
+    if (this.forConstituency) return `/${this.ConstituencyKebab}`;
+    return '';
+  }
+
   // Constituency and Candidate Search Component - preserve search criteria and results
   constituencySearch = '';
   postcodeSearch = '';
@@ -169,6 +186,20 @@ export class LocalDataService {
     this.SetItem('roles', roleString);
   }
 
+  constructor(
+    private httpXS: HttpExtraService,
+    // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
+    @Inject(PLATFORM_ID) private platformId: object,
+    @Optional() @Inject(REQUEST) protected request: Request
+  ) {
+    // Lifecycle hooks, like OnInit() work with Directives and Components.
+    // They do not work with other types, like a service.
+
+    this.SetServiceURL();
+
+    this.LoadClientValues();
+  }
+
   // Depending on already being sanitised - straight conversion between values as would be saved in database
   TopicToSlashTag(topic: string): string {
     if (!topic) {
@@ -185,19 +216,6 @@ export class LocalDataService {
   SlashTagToTopic(slashTag: string): string {
     const topic = slashTag.replace('/', '').split('-').join(' ');
     return topic;
-  }
-
-  constructor(
-    // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
-    @Inject(PLATFORM_ID) private platformId: object,
-    @Optional() @Inject(REQUEST) protected request: Request
-  ) {
-    // Lifecycle hooks, like OnInit() work with Directives and Components.
-    // They do not work with other types, like a service.
-
-    this.SetServiceURL();
-
-    this.LoadClientValues();
   }
 
   SetItem(name: string, value: string): void {
@@ -468,6 +486,7 @@ export class LocalDataService {
   }
 
   public set SlashTagSelected(slashTag: string) {
+    // Update TopicSelected (SlashTagSelected is read only)
     if (!!slashTag) {
       if (slashTag.charAt(0) !== '/') {
         // Expecting a slash, but we got a topic - no need to convert slashTag to topic - it is a topic
@@ -527,7 +546,7 @@ export class LocalDataService {
     localStorage.clear();
 
     // Re-Save Values we wish to preserve after LocalStorage Clear
-    this.SetItem('previousTopicSelected', 'SignedOut'); // Used in AppDataService InitialisePreviousAliasAndTopic
+    this.SetItem('previousTopicSelected', 'SignedOut'); // Used in appServiceService InitialisePreviousAliasAndTopic
 
     this.SetItem('localLogging', this.localLogging); // Must set logging on before adding to log
     this.SetItem('localLog', this.localLog);

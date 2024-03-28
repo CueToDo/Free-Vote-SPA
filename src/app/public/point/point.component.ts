@@ -33,7 +33,7 @@ import { FullSizeImagesComponent } from 'src/app/base/full-size-images/full-size
 import { LocalTagsComponent } from 'src/app/local/local-tags/local-tags.component';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { HtmlService } from 'src/app/services/html.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
@@ -106,9 +106,9 @@ export class PointComponent implements AfterViewInit {
   public PointTypesEnum = PointTypesEnum;
 
   constructor(
-    public localData: LocalDataService, // public - used in template
-    private appData: AppDataService,
     public auth0Service: AuthService,
+    private htmlService: HtmlService,
+    public localData: LocalDataService, // public - used in template
     private lookupsService: LookupsService,
     private pointsService: PointsService,
     private tagsService: TagsService,
@@ -460,7 +460,7 @@ export class PointComponent implements AfterViewInit {
                 this.updatingPreview = false;
 
                 if (!metaData.showPreview) {
-                  this.point.pointHTML = this.appData.unhideLinks(
+                  this.point.pointHTML = this.htmlService.unhideLinks(
                     this.point.pointHTML
                   );
                 }

@@ -1,34 +1,34 @@
-import { LookupsService } from 'src/app/services/lookups.service';
 // Angular
 import {
   AfterViewInit,
   Component,
   ElementRef,
-  Input,
   NgZone,
   OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
 
-// Globals
-import * as globals from 'src/app/globals';
-
-// Model
-import { Organisation } from 'src/app/models/organisation.model';
-
-// Services
-import { AppDataService } from '../../services/app-data.service';
-import { OrganisationsService } from 'src/app/services/organisations.service';
+// rxjs
 import {
   debounceTime,
   distinctUntilChanged,
   fromEvent,
   Subscription
 } from 'rxjs';
-import { LocalDataService } from 'src/app/services/local-data.service';
+
+// Globals
+import * as globals from 'src/app/globals';
+
+// Models, enums
 import { Kvp } from 'src/app/models/kvp.model';
+import { Organisation } from 'src/app/models/organisation.model';
 import { OrganisationTypes } from 'src/app/models/enums';
+
+// Services
+import { OrganisationsService } from 'src/app/services/organisations.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
 
 @Component({
   selector: 'app-organisation-list',
@@ -80,10 +80,9 @@ export class OrganisationListComponent
   }
 
   constructor(
-    public appData: AppDataService,
+    private groupsService: OrganisationsService,
     private localData: LocalDataService,
     private lookupsService: LookupsService,
-    private groupsService: OrganisationsService,
     private ngZone: NgZone
   ) {}
 

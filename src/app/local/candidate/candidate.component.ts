@@ -13,8 +13,8 @@ import { PoliticalParties } from 'src/app/models/enums';
 import { CandidateEditComponent } from '../candidate-edit/candidate-edit.component';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { HttpExtraService } from 'src/app/services/http-extra.service';
 
 @Component({
   selector: 'app-candidate',
@@ -52,17 +52,17 @@ export class CandidateComponent {
   }
 
   constructor(
-    private appData: AppDataService,
-    private localData: LocalDataService,
     private auth0: Auth0Wrapper,
+    private httpXS: HttpExtraService,
+    private localData: LocalDataService,
     public matDialog: MatDialog
   ) {}
 
   get selected(): boolean {
     // match on hyphenated surnames when full name is kebabed in url
     return (
-      this.appData.kebabUri(this.candidate.name) ==
-      this.appData.kebabUri(this.candidateSelected)
+      this.httpXS.kebabUri(this.candidate.name) ==
+      this.httpXS.kebabUri(this.candidateSelected)
     );
   }
 

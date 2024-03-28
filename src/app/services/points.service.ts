@@ -30,8 +30,9 @@ import {
 } from 'src/app/models/enums';
 
 // Services
+import { BasicService } from './basic.service';
+import { DatetimeService } from './datetime.service';
 import { HttpService } from './http.service';
-import { AppDataService } from './app-data.service';
 
 @Injectable({ providedIn: 'root' })
 export class PointsService {
@@ -53,8 +54,9 @@ export class PointsService {
   public Anon = false;
 
   constructor(
-    private httpClientService: HttpService,
-    private appData: AppDataService
+    private basicService: BasicService,
+    private dateTimeService: DatetimeService,
+    private httpClientService: HttpService
   ) {
     // this.GetWoWWeekInfoVote();
   }
@@ -122,8 +124,8 @@ export class PointsService {
     pointSortOrder: PointSortTypes,
     sortDescending: boolean
   ): Observable<PointSelectionResult> {
-    const fromDate = this.appData.UDF(from);
-    const toDate = this.appData.UDF(to);
+    const fromDate = this.dateTimeService.UDF(from);
+    const toDate = this.dateTimeService.UDF(to);
 
     // myPoints is not an optional flag added by the user
     const apiUrl = 'points/getFirstBatchFiltered';
@@ -261,7 +263,7 @@ export class PointsService {
 
     // construct an Array of objects from an object
     if (PSR.pointCount > 0) {
-      PSR.pointIDs = this.appData.CastObjectToIDs(sourceData.pointIDs);
+      PSR.pointIDs = this.basicService.CastObjectToIDs(sourceData.pointIDs);
       PSR.points = sourceData.points;
     }
     return PSR;

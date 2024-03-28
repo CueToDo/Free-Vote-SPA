@@ -25,7 +25,6 @@ export class PorQ {
   adopted = false;
 
   // Cannot access this as property or function even on deep copy cast as PorQ - WHY?
-  // Use appData PorQType
   public get porQTypeDescription(): string {
     switch (this.porQTypeID) {
       case PorQTypes.Question:

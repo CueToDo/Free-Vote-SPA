@@ -9,8 +9,8 @@ import { Question } from 'src/app/models/question.model';
 import { PointSupportLevels } from 'src/app/models/enums';
 
 // Services
+import { BasicService } from 'src/app/services/basic.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { AppDataService } from 'src/app/services/app-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 
 @Component({
@@ -30,9 +30,9 @@ export class QuestionComponent {
   error = '';
 
   constructor(
-    public localData: LocalDataService, // public - used in template
     public auth0Service: AuthService,
-    public appData: AppDataService,
+    public basicService: BasicService,
+    public localData: LocalDataService, // public - used in template
     private questionsService: QuestionsService
   ) {}
 

@@ -30,21 +30,10 @@ const appRoutes: Routes = [
   { path: 'about', component: HomeComponent },
   { path: 'card', component: CardComponent },
 
-  { path: 'by/:alias', component: TagsAndPointsComponent },
   {
     path: 'point-of-the-week',
     component: PointOfTheWeekComponent,
     canActivate: [LoginRouteGuardService]
-  },
-
-  // Being used even when not included!!!
-
-  // lazy loaded feature modules:
-
-  // local constituency
-  {
-    path: '[suspended]',
-    loadChildren: () => import('./local/local.module').then(m => m.LocalModule)
   },
 
   { path: 'constituency/search', component: ConstituencySearchComponent },
@@ -52,6 +41,48 @@ const appRoutes: Routes = [
   {
     path: 'constituency/:constituency/:electionDate/:candidateName',
     component: ConstituencyComponent
+  },
+
+  // following are "external" links - need to be tested from url, not tab links
+  { path: 'slash-tags', component: TagsAndPointsComponent },
+  { path: 'trending', component: TagsAndPointsComponent }, // Tags
+  { path: 'recent', component: TagsAndPointsComponent }, // Tags personal - recent selection - works on anon?
+  { path: 'tag-search', component: TagsAndPointsComponent }, // Tag Search
+
+  { path: 'slash-tags/:constituency', component: TagsAndPointsComponent },
+  { path: 'trending/:constituency', component: TagsAndPointsComponent }, // Tags
+  { path: 'recent/:constituency', component: TagsAndPointsComponent }, // Tags personal - recent selection - works on anon?
+  { path: 'tag-search/:constituency', component: TagsAndPointsComponent }, // Tag Search
+
+  // In Angular routing, you cannot have a fixed route part directly following a route parameter
+  // issue with :tag/points - reversed to points/:tag
+  { path: 'points/:tag', component: TagsAndPointsComponent },
+  { path: 'questions/:tag', component: TagsAndPointsComponent },
+  { path: 'by/:alias', component: TagsAndPointsComponent },
+
+  // Single routeparameter :tag
+  { path: ':tag', component: TagsAndPointsComponent },
+  { path: ':tag/by/:alias', component: TagsAndPointsComponent },
+  { path: ':tag/question/:questionSlug', component: TagsAndPointsComponent },
+
+  // Double routeparameter
+  { path: ':tag/:title', component: PointCommentsComponent },
+  {
+    path: ':tag/:title/:shareTitle/:sharePreview/:shareImage',
+    component: PointCommentsComponent
+  },
+
+  {
+    path: ':constituency/:tag/:pointsorquestions',
+    component: TagsAndPointsComponent
+  },
+
+  // lazy loaded feature modules:
+  // profile
+  {
+    path: 'my',
+    loadChildren: () => import('./my/my.module').then(m => m.MyModule),
+    canActivate: [LoginRouteGuardService]
   },
 
   // organisations, groups
@@ -64,42 +95,10 @@ const appRoutes: Routes = [
     canActivate: [LoginRouteGuardService]
   },
 
-  // profile
+  // Suspended: local constituency
   {
-    path: 'my',
-    loadChildren: () => import('./my/my.module').then(m => m.MyModule),
-    canActivate: [LoginRouteGuardService]
-  },
-
-  // following are "external" links - need to be tested from url, not tab links
-  { path: 'slash-tags', component: TagsAndPointsComponent },
-  { path: 'trending', component: TagsAndPointsComponent }, // Tags
-  { path: 'recent', component: TagsAndPointsComponent }, // Tags personal - recent selection - works on anon?
-  { path: 'tag-search', component: TagsAndPointsComponent }, // Tag Search
-
-  // issue with fixed route part after parameter :tag/points - reversed to points/:tag
-  { path: 'points/:tag', component: TagsAndPointsComponent },
-  { path: 'questions/:tag', component: TagsAndPointsComponent },
-
-  // Finally :tag routeparameter is last
-  {
-    path: ':tag',
-    component: TagsAndPointsComponent,
-    children: [
-      { path: 'by/:alias', component: TagsAndPointsComponent },
-      {
-        path: 'question/:questionSlug',
-        component: TagsAndPointsComponent
-      }
-    ]
-  },
-
-  // Needs to be separate - not sure why this can't be a child of :tag
-  // despite fact this route is served by a different component
-  { path: ':tag/:title', component: PointCommentsComponent },
-  {
-    path: ':tag/:title/:shareTitle/:sharePreview/:shareImage',
-    component: PointCommentsComponent
+    path: '[suspended]',
+    loadChildren: () => import('./local/local.module').then(m => m.LocalModule)
   },
 
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64

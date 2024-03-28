@@ -17,7 +17,9 @@
 
     <div>
       <a (click)="SelectQuestion()"
-        >{{ question.points }} answer{{ appData.plural(question.points) }}</a
+        >{{ question.points }} answer{{
+          basicService.plural(question.points)
+        }}</a
       >
     </div>
 

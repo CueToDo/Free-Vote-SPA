@@ -198,15 +198,13 @@
       </div>
 
       <!-- Constituency -->
-      <div *ngIf="!!localData.freeVoteProfile.constituency" class="flexRow">
+      <div *ngIf="!!localData.Constituency" class="flexRow">
         <div style="flex: 4">
           <span class="align-middle"> constituency </span>
         </div>
         <div style="flex: 6">
           <span class="align-middle">
-            <a [routerLink]="constituencyLink">{{
-              localData.freeVoteProfile.constituency
-            }}</a>
+            <a [routerLink]="constituencyLink">{{ localData.Constituency }}</a>
           </span>
         </div>
       </div>

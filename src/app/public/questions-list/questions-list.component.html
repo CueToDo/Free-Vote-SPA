@@ -46,7 +46,7 @@
   </div>
 
   <h1 *ngIf="localData.forConstituency" class="h1Constituency">
-    {{ localData.freeVoteProfile.constituency }}
+    {{ localData.Constituency }}
   </h1>
   <div *ngIf="error !== ''" class="text-danger mx-3">
     {{ error }}
@@ -87,7 +87,7 @@
       <div class="questionCount">
         <span *ngIf="!alreadyFetchingFromDB">
           {{ questions.length }} question{{
-            appData.plural(questions.length)
+            basicService.plural(questions.length)
           }}
           displayed of {{ questionCount
           }}<span *ngIf="!allQuestionsDisplayed">

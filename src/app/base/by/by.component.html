@@ -36,7 +36,7 @@
         'font-size': FontSize(onTopic.weight),
         'padding-right': '10px'
       }"
-      [routerLink]="['/' + appData.kebabUri(onTopic.byOn), 'by', byAlias]"
+      [routerLink]="['/' + httpXS.kebabUri(onTopic.byOn), 'by', byAlias]"
     ></a>
   </ng-container>
 </div>

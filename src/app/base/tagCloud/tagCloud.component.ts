@@ -18,7 +18,7 @@ import { Tag } from '../../models/tag.model';
 import { TagCloudTypes } from '../../models/enums';
 
 // Services
-import { AppDataService } from '../../services/app-data.service';
+import { AppService } from '../../services/app.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { TagsService } from '../../services/tags.service';
 
@@ -75,23 +75,26 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   error = '';
 
   constructor(
-    private appData: AppDataService,
+    private appService: AppService,
     private tagsService: TagsService,
     public localData: LocalDataService
   ) {}
 
   ngOnInit(): void {
-    // appComponent monitors width and broadcasts via appDataService
-    this.width$ = this.appData.DisplayWidth$.subscribe((widthBand: number) => {
-      this.widthBand = widthBand;
-    });
+    // appComponent monitors width and broadcasts via appServiceService
+    this.width$ = this.appService.DisplayWidth$.subscribe(
+      (widthBand: number) => {
+        this.widthBand = widthBand;
+      }
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Do nothing if we don't have and are not acquiring focus
+    // Do nothing if we don't have and are not acquiring focus and constituency hasn't changed
     const newFocus = changes['HasFocus']?.currentValue;
+    const newConstituency = changes['ForConstituency']?.currentValue;
 
-    if (!this.HasFocus && !newFocus) return;
+    if (!this.HasFocus && !newFocus && !newConstituency == undefined) return;
 
     // If new focus on this component and we haven't fetched tags
     // or change to local constituency, then fetch tags
@@ -123,6 +126,12 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
     return false;
   }
 
+  RouteParameterChange(route: string) {
+    this.appService.RouteParamChange$.next(
+      route + this.localData.ConstituencyKebabSlash
+    );
+  }
+
   // Do we already have the tags requested?
   public FetchTags(): void {
     if (this.tagSearch) return;
@@ -147,7 +156,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
   FetchTrendingTags() {
     this.tagCloudType = TagCloudTypes.Trending;
-    this.appData.RouteParamChange$.next('/trending');
+    this.RouteParameterChange('/trending');
     this.tagSearch = false;
 
     // Always reselect Trending
@@ -156,7 +165,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
   FetchRecentTags() {
     this.tagCloudType = TagCloudTypes.Recent;
-    this.appData.RouteParamChange$.next('/recent');
+    this.RouteParameterChange('/recent');
     this.tagSearch = false;
 
     // Check if we need to reselect recent
@@ -184,7 +193,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   setSlashTag(slashTag: string): void {
-    // Get appDataService to broadcast (method shared by PointEditComponent)
+    // Get appServiceService to broadcast (method shared by PointEditComponent)
     this.tagsService.SetSlashTag(slashTag);
 
     // Direct communication to parent - is this needed if parent subscribes to above
@@ -193,7 +202,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
   TagSearch(): void {
     // Treat as route change - notify app component
-    this.appData.RouteParamChange$.next('/tag-search');
+    this.RouteParameterChange('/tag-search');
     this.tagSearch = true;
     this.tags = [];
   }

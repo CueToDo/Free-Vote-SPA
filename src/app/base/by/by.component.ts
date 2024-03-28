@@ -9,8 +9,9 @@ import { Subscription } from 'rxjs';
 import { ByOn } from '../../models/ByOn.model';
 
 // Services
+import { AppService } from '../../services/app.service';
+import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { AppDataService } from '../../services/app-data.service';
 import { TagsService } from '../../services/tags.service';
 
 @Component({
@@ -38,8 +39,9 @@ export class ByComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private localData: LocalDataService,
-    public appData: AppDataService,
-    private tagsService: TagsService
+    public appService: AppService,
+    private tagsService: TagsService,
+    public httpXS: HttpExtraService
   ) {}
 
   ngOnInit(): void {
@@ -88,7 +90,7 @@ export class ByComponent implements OnInit, OnDestroy {
       this.localData.PreviousAliasSelected = byAlias;
 
       // Communicate the change to app component
-      this.appData.RouteParamChange$.next(`/by/${byAlias}`);
+      this.appService.RouteParamChange$.next(`/by/${byAlias}`);
 
       this.waitingTopics = true;
 

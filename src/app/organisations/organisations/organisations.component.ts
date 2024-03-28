@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Organisation } from 'src/app/models/organisation.model';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { AppService } from 'src/app/services/app.service';
 
 // Components
 import { OrganisationListComponent } from 'src/app/organisations/organisation-list/organisation-list.component';
@@ -33,7 +33,7 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private appDataService: AppDataService
+    private appService: AppService
   ) {}
 
   ngOnInit(): void {
@@ -73,12 +73,12 @@ export class OrganisationsComponent implements OnInit, AfterViewInit {
     switch (tabIndex) {
       case 0:
         this.organisationsAvailable?.AutoFetchOrganisations();
-        this.appDataService.RouteParamChange$.next('/organisations/membership');
+        this.appService.RouteParamChange$.next('/organisations/membership');
         break;
       case 1:
         this.StartNewOrganisation();
         this.newGroupComponent?.ClearError();
-        this.appDataService.RouteParamChange$.next('/organisations/new');
+        this.appService.RouteParamChange$.next('/organisations/new');
         break;
     }
   }

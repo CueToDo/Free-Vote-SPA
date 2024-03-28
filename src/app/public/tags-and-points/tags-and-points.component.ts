@@ -20,13 +20,11 @@ import { PointSortTypes, Tabs } from 'src/app/models/enums';
 import { BreakoutGroup } from 'src/app/models/break-out-group.model';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { AppService } from 'src/app/services/app.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { TagsService } from 'src/app/services/tags.service';
 
 // Components
 import { PointEditComponent } from 'src/app/public//point-edit/point-edit.component';
-import { PointsFilterComponent } from 'src/app/public/points-filter/points-filter.component';
 import { PointsListComponent } from 'src/app/public/points-list/points-list.component';
 import { QuestionAnswersComponent } from './../question-answers/question-answers.component';
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
@@ -41,10 +39,11 @@ export class TagsAndPointsComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   // Subscriptions
-  pointsFilterRemove$: Subscription | undefined;
+  routeChange$: Subscription | undefined;
   width$: Subscription | undefined; // Viewport width monitoring
 
   // responsive variables
+  tagCloudTab = '/trending';
   widthBand = 4;
   isLargeMobile = false;
 
@@ -56,6 +55,10 @@ export class TagsAndPointsComponent
   // Public variables for use in template
   public Tabs = Tabs;
   public tabIndex = Tabs.notSelected;
+
+  forConstituency = false;
+
+  defaultPointSort = PointSortTypes.TrendingActivity;
 
   // Question Answers or Tag Points
   specificQuestionIDSelected = 0;
@@ -72,6 +75,10 @@ export class TagsAndPointsComponent
     member: false,
     characterName: ''
   };
+
+  // following tag routes can be followed by constituency route parameter
+  // which may be toggled on/off by local button
+  tagRoutes = new Array('slash-tags', 'trending', 'recent', 'tag-search');
 
   // use TRV in parent template https://stackblitz.com/edit/angular-vjbf4s?file=src%2Fapp%2Fcart-table-modal.component.ts
   // use child component type in parent component https://stackoverflow.com/questions/31013461/call-a-method-of-the-child-component
@@ -91,23 +98,31 @@ export class TagsAndPointsComponent
   @ViewChild('newQuestion') newQuestionComponent!: QuestionEditComponent;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private appData: AppDataService,
-    public localData: LocalDataService,
+    private appService: AppService,
     public auth0Service: AuthService,
+    public localData: LocalDataService,
+    private activatedRoute: ActivatedRoute,
     private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
     // Initialise only - subscriptions follow
-    this.appData.TagsPointsActive$.next(true);
+    this.appService.TagsPointsActive$.next(true);
 
     // ==========   Subscriptions   ==========
 
-    // appComponent monitors width and broadcasts via appDataService
-    this.width$ = this.appData.DisplayWidth$.subscribe((widthBand: number) => {
-      this.widthBand = widthBand;
+    this.routeChange$ = this.appService.RouteParamChange$.subscribe(route => {
+      if (route.includes('/trending')) this.tagCloudTab = '/trending';
+      else if (route.includes('/recent')) this.tagCloudTab = '/recent';
+      else if (route.includes('/tag-search')) this.tagCloudTab = '/tag-search';
     });
+
+    // appComponent monitors width and broadcasts via appServiceService
+    this.width$ = this.appService.DisplayWidth$.subscribe(
+      (widthBand: number) => {
+        this.widthBand = widthBand;
+      }
+    );
 
     // Route does not change if link clicked in tag cloud
     // So need to detect route parameter change
@@ -132,7 +147,7 @@ export class TagsAndPointsComponent
         // QuestionAnswers
         if (questionSlug) {
           if (this.tabIndex !== Tabs.questionAnswers) {
-            this.ChangeTab(Tabs.questionAnswers);
+            this.ChangeRouteDisplay(Tabs.questionAnswers);
           } else {
             this.questionsListComponent.SelectQuestions(true);
           }
@@ -150,7 +165,8 @@ export class TagsAndPointsComponent
 
   ngAfterViewInit() {
     // Process Initial Route
-    const routeparts = this.appData.Route.split('/');
+    let initialRoute = this.activatedRoute.snapshot.url[0].path;
+    const routeparts = initialRoute.split('/');
     if (routeparts) this.InitialRoute(routeparts);
   }
 
@@ -164,11 +180,11 @@ export class TagsAndPointsComponent
         case 'trending':
         case 'recent':
           this.tabIndex = Tabs.slashTags;
-          this.appData.defaultSort = PointSortTypes.TrendingActivity;
+          this.defaultPointSort = PointSortTypes.TrendingActivity; // POINT sort
           break;
         case 'tag-search':
           this.tabIndex = Tabs.slashTags;
-          this.appData.defaultSort = PointSortTypes.TrendingActivity;
+          this.defaultPointSort = PointSortTypes.TrendingActivity;
           this.slashTagsComponent.TagSearch();
           break;
         default:
@@ -207,13 +223,15 @@ export class TagsAndPointsComponent
     } else {
       // Default to slashTags - shouldn't be needed
       this.tabIndex = Tabs.slashTags;
-      this.appData.defaultSort = PointSortTypes.TrendingActivity;
+      this.defaultPointSort = PointSortTypes.TrendingActivity;
     }
   }
 
-  ChangeConstituency(): void {
-    // Change constituency filter
+  ChangeForConstituency(): void {
+    // Change forConstituency filter
     this.localData.forConstituency = !this.localData.forConstituency;
+
+    this.ChangeRouteDisplay(this.tabIndex);
   }
 
   ChangeLocalPointsOrQuestionsSelection() {
@@ -231,91 +249,98 @@ export class TagsAndPointsComponent
   NewSlashTagSelected(slashTag: string): void {
     // Direct communication from tags components
     this.localData.SlashTagSelected = slashTag;
-    this.ChangeTab(Tabs.tagPoints); // will select points and call RouteParameterChanged
+    this.ChangeRouteDisplay(Tabs.tagPoints); // will select points and call RouteParameterChanged
   }
 
   // 1. Tags
   ShowTags() {
-    this.ChangeTab(Tabs.slashTags);
+    this.ChangeRouteDisplay(Tabs.slashTags);
   }
 
   // 2. Questions
   ShowQuestions(): void {
-    this.ChangeTab(Tabs.questionList);
+    console.log('ShowQuestions');
+    this.ChangeRouteDisplay(Tabs.questionList);
   }
 
   ReselectQuestions() {
-    this.ChangeTab(Tabs.questionList);
+    this.ChangeRouteDisplay(Tabs.questionList);
     this.questionsListComponent.SelectQuestions(false);
   }
 
   // 3. Points
   ShowPoints(): void {
-    this.ChangeTab(Tabs.tagPoints);
+    console.log('ShowPoints');
+    this.ChangeRouteDisplay(Tabs.tagPoints);
   }
 
   /// Change Tab and notify app component in TabChangeComplete
-  ChangeTab(tabIndex: Tabs): void {
+  ChangeRouteDisplay(tabIndex: Tabs): void {
     // Actual tab change, or just title change (due to voter filters)
+
     const tabChanged = this.tabIndex !== tabIndex;
+    const constituencyChanged =
+      this.forConstituency !== this.localData.forConstituency;
+
+    const routeChanged = tabChanged || constituencyChanged;
 
     this.tabIndex = tabIndex;
-    var newRoute = '';
+    this.forConstituency = this.localData.forConstituency;
 
-    switch (tabIndex) {
-      case Tabs.slashTags:
-        this.appData.defaultSort = PointSortTypes.TrendingActivity;
-        newRoute = '/trending';
-        break;
+    if (routeChanged) {
+      const constituency = this.localData.ConstituencyKebabSlash;
+      const slashTagSelected = this.localData.SlashTagSelected;
+      var newRoute = '';
 
-      case Tabs.questionList:
-        // Select questions for tag
-        newRoute = this.localData.SlashTagSelected;
-        break;
+      switch (tabIndex) {
+        case Tabs.slashTags:
+          this.defaultPointSort = PointSortTypes.TrendingActivity;
+          newRoute = `${this.tagCloudTab}${constituency}`;
+          break;
 
-      case Tabs.questionAnswers:
-        newRoute = this.localData.SlashTagSelected;
-        break;
+        case Tabs.questionList:
+          // Select questions for tag - use querystring parameter
+          newRoute = `${constituency}${slashTagSelected}/questions`;
+          break;
 
-      case Tabs.tagPoints:
-        // Don't save previous
-        // ActiveAliasForFilter update by the "By" Component (sibling),
-        // AND child Tags and Points Components
-        const alias = this.localData.ActiveAliasForFilter;
-        if (!alias) {
-          // Unfiltered TagPoints
-          newRoute = this.localData.SlashTagSelected; // Tell the app component
-        } else {
-          newRoute = `${this.localData.SlashTagSelected}/by/${alias}`;
-        }
+        case Tabs.questionAnswers:
+          // ToDo
+          newRoute = slashTagSelected + constituency;
+          break;
 
-        break;
-    }
+        case Tabs.tagPoints:
+          // Don't save previous
+          // ActiveAliasForFilter update by the "By" Component (sibling),
+          // AND child Tags and Points Components
+          const alias = this.localData.ActiveAliasForFilter;
+          if (!alias) {
+            // Unfiltered TagPoints
+            newRoute = constituency + slashTagSelected;
+          } else {
+            newRoute = `${slashTagSelected}/by/${alias}`;
+          }
 
-    this.RouteParameterChanged(tabChanged, newRoute);
-  }
+          break;
+      }
 
-  // Tell the App Component that the route has changed
-  RouteParameterChanged(hasChanged: boolean, newRoute: string): void {
-    if (hasChanged) {
-      newRoute = this.localData.TopicToSlashTag(newRoute);
-      this.appData.RouteParamChange$.next(newRoute);
+      // Tell the App Component that the route has changed
+      this.appService.RouteParamChange$.next(newRoute);
     }
   }
 
   QuestionSelected(questionID: number): void {
     this.specificQuestionIDSelected = questionID;
     this.questionAnswersComponent.initialSelection();
-    this.ChangeTab(Tabs.questionAnswers);
+    this.ChangeRouteDisplay(Tabs.questionAnswers);
   }
 
   ViewAllQuestions(): void {
     // From QuestionAnswers
-    this.ChangeTab(Tabs.questionList);
+    this.ChangeRouteDisplay(Tabs.questionList);
   }
 
   ngOnDestroy(): void {
-    this.pointsFilterRemove$?.unsubscribe();
+    this.routeChange$?.unsubscribe();
     this.width$?.unsubscribe();
   }
 }

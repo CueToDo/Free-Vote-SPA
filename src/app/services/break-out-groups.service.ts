@@ -14,7 +14,6 @@ import { Kvp } from 'src/app/models/kvp.model';
 
 // Services
 import { HttpService } from 'src/app/services/http.service';
-import { AppDataService } from 'src/app/services/app-data.service';
 
 @Injectable({
   providedIn: 'root'

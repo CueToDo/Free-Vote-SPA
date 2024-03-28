@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // rxjs
@@ -7,12 +7,9 @@ import { tap } from 'rxjs';
 
 // Models/Enums
 import { Point } from 'src/app/models/point.model';
-import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-import { PointSelectionTypes } from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { AppDataService } from 'src/app/services/app-data.service';
 import { PointsService } from 'src/app/services/points.service';
 
 // Components
@@ -65,8 +62,7 @@ export class PointCommentsComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private pointsService: PointsService,
-    public localData: LocalDataService, // public - used in template)
-    public appData: AppDataService
+    public localData: LocalDataService // public - used in template)
   ) {}
 
   ngOnInit(): void {

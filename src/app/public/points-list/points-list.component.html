@@ -57,7 +57,7 @@
   </div>
 
   <h1 *ngIf="localData.forConstituency" class="h1Constituency">
-    {{ localData.freeVoteProfile.constituency }}
+    {{ localData.Constituency }}
   </h1>
 
   <div class="scroller" appElementScrollEnd (scrollEnd)="fetchMorePoints()">
@@ -117,7 +117,8 @@
         <div class="pointCount flexRow justify-end align-center">
           <div *ngIf="!AlreadyFetchingPointsFromDB && !single">
             {{ points.length }} {{ pointOrAnswer
-            }}{{ appData.plural(points.length) }} displayed of {{ pointCount
+            }}{{ basicService.plural(points.length) }} displayed of
+            {{ pointCount
             }}<span *ngIf="!allPointsDisplayed">
               <a
                 *ngIf="points.length < pointCount"

@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-
-import { AppDataService } from '../../services/app-data.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-point-of-the-week-vote',
@@ -8,5 +6,5 @@ import { AppDataService } from '../../services/app-data.service';
   styleUrls: ['./point-of-the-week-vote.component.css']
 })
 export class PointOfTheWeekVoteComponent {
-  constructor(private appDataService: AppDataService) {}
+  constructor() {}
 }

@@ -43,12 +43,12 @@
     <!-- Local Topics -->
     <button
       mat-raised-button
-      (click)="ChangeConstituency()"
-      class="localButton"
+      *ngIf="auth0Service.isAuthenticated$ | async"
       [class.selected]="localData.ConstituencyID > 0"
+      (click)="ChangeForConstituency()"
+      class="localButton"
       matTooltip="local interest"
       matTooltipPosition="above"
-      *ngIf="auth0Service.isAuthenticated$ | async"
     >
       local
       <mat-icon>mp</mat-icon>
@@ -70,9 +70,9 @@
       }"
     >
       <app-tag-cloud
+        #slashTagsComponent
         [HasFocus]="tabIndex === Tabs.slashTags"
         [ForConstituency]="localData.forConstituency"
-        #slashTagsComponent
         (NewSlashTagSelected)="NewSlashTagSelected($event)"
       >
       </app-tag-cloud>

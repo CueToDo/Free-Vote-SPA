@@ -23,7 +23,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Tag } from 'src/app/models/tag.model';
 
 // FreeVote Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { AppService } from 'src/app/services/app.service';
 import { LocalDataService } from '../../services/local-data.service';
 import { TagsService } from 'src/app/services/tags.service';
 
@@ -63,7 +63,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
 
   constructor(
     private ngZone: NgZone,
-    public appData: AppDataService,
+    public appService: AppService,
     public localData: LocalDataService,
     private tagsService: TagsService,
     private deviceService: DeviceDetectorService,
@@ -71,10 +71,12 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
   ) {
     this.epicFunction();
 
-    // appComponent monitors width and broadcasts via appDataService
-    this.width$ = this.appData.DisplayWidth$.subscribe((widthBand: number) => {
-      this.widthBand = widthBand;
-    });
+    // appComponent monitors width and broadcasts via appServiceService
+    this.width$ = this.appService.DisplayWidth$.subscribe(
+      (widthBand: number) => {
+        this.widthBand = widthBand;
+      }
+    );
   }
 
   ngOnInit(): void {}
@@ -204,7 +206,7 @@ export class TagSearchComponent implements OnInit, AfterViewInit {
       }
       this.slashTag = value;
 
-      // Get appDataService to broadcast (method shared by PointEditComponent)
+      // Get appServiceService to broadcast (method shared by PointEditComponent)
       this.tagsService.SetSlashTag(this.slashTag);
 
       this.CreateNewSlashTag.emit(this.slashTag);

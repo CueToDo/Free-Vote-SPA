@@ -29,10 +29,10 @@ import {
 import { Kvp } from 'src/app/models/kvp.model';
 
 // FreeVote Services
-import { LocalDataService } from 'src/app/services/local-data.service';
-import { AppDataService } from 'src/app/services/app-data.service';
-import { LookupsService } from 'src/app/services/lookups.service';
+import { AppService } from 'src/app/services/app.service';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
+import { LocalDataService } from 'src/app/services/local-data.service';
+import { LookupsService } from 'src/app/services/lookups.service';
 
 @Component({
   selector: 'app-points-filter', // is router-outlet
@@ -67,10 +67,10 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public PointFeedbackFilter = PointFeedbackFilter;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
+    public appService: AppService,
     public localData: LocalDataService,
-    public appData: AppDataService,
-    private lookupsService: LookupsService
+    private lookupsService: LookupsService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +80,7 @@ export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
       .PointTypes()
       .subscribe(pointTypes => (this.pointTypes = pointTypes));
 
-    this.widthSubject$ = this.appData.DisplayWidth$.subscribe(width => {
+    this.widthSubject$ = this.appService.DisplayWidth$.subscribe(width => {
       if (width === 0) {
         this.favouritesText = 'favs';
       } else {

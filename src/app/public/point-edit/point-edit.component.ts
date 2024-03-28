@@ -18,20 +18,20 @@ import { tap, map, filter, concatMap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash-es';
 
 // Models
+import { Image } from 'src/app/models/Image.model';
+import { Kvp } from 'src/app/models/kvp.model';
 import { Point } from 'src/app/models/point.model';
 import { PointEdit } from 'src/app/models/point.model';
 import { PointTypesEnum } from 'src/app/models/enums';
-import { Kvp } from 'src/app/models/kvp.model';
-import { Image } from 'src/app/models/Image.model';
+import { Tag } from 'src/app/models/tag.model';
 
 // Services
+import { HtmlService } from 'src/app/services/html.service';
+import { HttpService } from 'src/app/services/http.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { AppDataService } from 'src/app/services/app-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
-import { HttpService } from 'src/app/services/http.service';
 import { TagsService } from 'src/app/services/tags.service';
-import { Tag } from 'src/app/models/tag.model';
 
 @Component({
   selector: 'app-point-edit',
@@ -97,11 +97,11 @@ export class PointEditComponent implements OnInit {
   imageUploadObservable: Observable<string> | undefined;
 
   constructor(
+    private htmlService: HtmlService,
+    private httpService: HttpService,
     private localData: LocalDataService,
-    public appData: AppDataService,
     private lookupsService: LookupsService,
     private pointsService: PointsService,
-    private httpService: HttpService,
     private tagsService: TagsService
   ) {
     // Must provide default values to bind before ngOnOnit
@@ -268,13 +268,13 @@ export class PointEditComponent implements OnInit {
     } else {
       this.error = '';
 
-      if (this.appData.SpanHasStyle(this.pointClone.pointHTML)) {
+      if (this.htmlService.SpanHasStyle(this.pointClone.pointHTML)) {
         if (
           confirm(
             'Remove styling (eg colour/background colour?\nClick cancel to keep style.'
           )
         ) {
-          this.pointClone.pointHTML = this.appData.RemoveSpansWithStyle(
+          this.pointClone.pointHTML = this.htmlService.RemoveSpansWithStyle(
             this.pointClone.pointHTML
           );
         }

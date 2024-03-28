@@ -24,11 +24,10 @@ import { ProfilePicture } from 'src/app/models/Image.model';
 
 // Services
 import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
-import { AppDataService } from 'src/app/services/app-data.service';
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
-import { LocalDataService } from 'src/app/services/local-data.service';
 import { HttpService } from 'src/app/services/http.service';
-import { LookupsService } from 'src/app/services/lookups.service';
+import { HttpExtraService } from 'src/app/services/http-extra.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
 // Components
@@ -53,9 +52,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   // For Routerlink to local
   public get constituencyLink(): string {
-    return `/constituency/${this.appData.kebabUri(
-      this.localData.freeVoteProfile.constituency
-    )}`;
+    return `/constituency/${this.httpXS.kebabUri(this.localData.Constituency)}`;
   }
 
   postcode = '';
@@ -79,11 +76,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   constructor(
     public auth0Wrapper: Auth0Wrapper,
-    public localData: LocalDataService,
-    private appData: AppDataService,
-    private httpService: HttpService,
-    private lookupsService: LookupsService,
     private democracyClubService: DemocracyClubService,
+    public localData: LocalDataService,
+    private httpService: HttpService,
+    private httpXS: HttpExtraService,
     private profileService: ProfileService,
     public dialog: MatDialog
   ) {}

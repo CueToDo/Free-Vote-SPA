@@ -1,19 +1,18 @@
-import { ProposalStatuses } from './../models/enums';
-
 // Angular
 import { Injectable } from '@angular/core';
 
 // rxjs
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 // Models, Enums
-import { PorQTypes } from '../models/enums';
 import { PorQSelectionResult, PorQEdit } from '../models/porq.model';
+import { PorQTypes } from '../models/enums';
+import { ProposalStatuses } from './../models/enums';
 
 // Services
+import { BasicService } from './basic.service';
 import { HttpService } from './http.service';
-import { AppDataService } from './app-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +23,7 @@ export class PsandQsService {
 
   constructor(
     private httpClientService: HttpService,
-    private appDataService: AppDataService
+    private basicService: BasicService
   ) {}
 
   PorQDescription(porQTypeID: PorQTypes): string {
@@ -96,7 +95,7 @@ export class PsandQsService {
     PQSR.toDate = sourceData.toDate;
 
     // construct an Array of objects from an object
-    PQSR.porQIDs = this.appDataService.CastObjectToIDs(sourceData.porQIDs);
+    PQSR.porQIDs = this.basicService.CastObjectToIDs(sourceData.porQIDs);
 
     PQSR.psOrQs = sourceData.psOrQs;
 

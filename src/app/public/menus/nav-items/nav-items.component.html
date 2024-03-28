@@ -8,8 +8,8 @@
     routerLink="/"
     routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: true }"
-    [class.selected]="appData.MenuItemSelected === ''"
-    (click)="appData.MenuItemSelected = ''"
+    [class.selected]="MenuItemSelected === ''"
+    (click)="MenuItemSelected = ''"
     matTooltip="home"
     [matTooltipPosition]="matTooltipPosition"
   >
@@ -21,8 +21,8 @@
   <button
     mat-button
     routerLink="/slash-tags"
-    [class.selected]="appData.MenuItemSelected === 'slashTags'"
-    (click)="appData.MenuItemSelected = 'slashTags'"
+    [class.selected]="MenuItemSelected === 'slashTags'"
+    (click)="MenuItemSelected = 'slashTags'"
     matTooltip="slash tags"
     [matTooltipPosition]="matTooltipPosition"
   >
@@ -35,8 +35,8 @@
     *ngIf="auth0Service.isAuthenticated$ | async"
     routerLink="/organisations/membership"
     routerLinkActive="active"
-    [class.selected]="appData.MenuItemSelected === 'organisations'"
-    (click)="appData.MenuItemSelected = 'organisations'"
+    [class.selected]="MenuItemSelected === 'organisations'"
+    (click)="MenuItemSelected = 'organisations'"
     matTooltip="organisations - campaign groups and political parties"
     [matTooltipPosition]="matTooltipPosition"
   >
@@ -50,8 +50,7 @@
     *ngIf="auth0Service.isAuthenticated$ | async"
     [matMenuTriggerFor]="profileMenu"
     [class.selected]="
-      appData.MenuItemSelected === 'profile' ||
-      appData.MenuItemSelected === 'MP'
+      MenuItemSelected === 'profile' || MenuItemSelected === 'MP'
     "
     matTooltip="profile menu"
     [matTooltipPosition]="matTooltipPosition"
@@ -84,8 +83,8 @@
       mat-menu-item
       routerLink="/my/profile"
       routerLinkActive="active"
-      [class.selected]="appData.MenuItemSelected === 'profile'"
-      (click)="appData.MenuItemSelected = 'profile'"
+      [class.selected]="MenuItemSelected === 'profile'"
+      (click)="MenuItemSelected = 'profile'"
       matTooltip="your profile"
       matTooltipPosition="right"
     >
@@ -96,9 +95,9 @@
     <button
       mat-menu-item
       [routerLink]="'/constituency/' + constituencyKebab"
-      (click)="appData.MenuItemSelected = 'MP'"
-      [class.selected]="appData.MenuItemSelected === 'MP'"
-      [matTooltip]="localData.freeVoteProfile.constituency"
+      (click)="MenuItemSelected = 'MP'"
+      [class.selected]="MenuItemSelected === 'MP'"
+      [matTooltip]="localData.Constituency"
       matTooltipPosition="right"
     >
       <mat-icon>mp</mat-icon>
@@ -109,8 +108,8 @@
       *ngIf="false"
       mat-menu-item
       [routerLink]="'/local/' + constituencyKebab"
-      (click)="appData.MenuItemSelected = 'Council'"
-      [class.selected]="appData.MenuItemSelected === 'Council'"
+      (click)="MenuItemSelected = 'Council'"
+      [class.selected]="MenuItemSelected === 'Council'"
       matTooltip="Local Council"
       matTooltipPosition="right"
     >

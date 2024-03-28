@@ -24,7 +24,7 @@ import { filter, debounceTime, map } from 'rxjs/operators';
 import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 
 // FreeVote Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { AppService } from 'src/app/services/app.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { TagsService } from 'src/app/services/tags.service';
@@ -71,7 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
-    public appData: AppDataService,
+    public appService: AppService,
     private lookupsService: LookupsService,
     private tagsService: TagsService,
     private breakpointObserver: BreakpointObserver,
@@ -122,7 +122,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // Route and Route Parameters: Setup and subscribe to changes (SSR and CSR)
     // https://ultimatecourses.com/blog/dynamic-page-titles-angular-2-router-events
     // 1) ngOnInit initialisation for all pages (incl PointShare)
-    this.RouteOrParamsUpdated(this.router.url);
+    this.SetTitle(this.router.url);
 
     // 2) Subscribe to router.events
     // Angular Workshop https://stackoverflow.com/questions/33520043/how-to-detect-a-route-change-in-angular
@@ -137,14 +137,14 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe(url => {
         // broadcast showing tags
-        this.RouteOrParamsUpdated(url);
+        this.SetTitle(url);
         this.closeBurgerMenu();
       });
 
     // 3) Subscribe to parameter changes raised by child components
     // Parameter change is not a router event (handled by same child component)
-    this.appData.RouteParamChange$.subscribe((route: string) => {
-      this.RouteOrParamsUpdated(route);
+    this.appService.RouteParamChange$.subscribe((route: string) => {
+      this.SetTitle(route);
     });
 
     // Viewport Width: Setup and subscribe to changes on browser only - not for Universla SSR
@@ -152,7 +152,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.SetVPW();
 
-      // app component monitors width and broadcasts changes via appDataService
+      // app component monitors width and broadcasts changes via appServiceService
       fromEvent(window, 'resize')
         .pipe(debounceTime(200))
         .subscribe(() => {
@@ -175,7 +175,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.under500 = state.matches;
       });
 
-    this.appData.InputSlashTagOnMobile$.subscribe(istom => {
+    this.appService.InputSlashTagOnMobile$.subscribe(istom => {
       // InputSlashTagOnMobile
       // Triggered by HomeComponent (only) on begin or end input
       this.showVulcan = !istom;
@@ -209,23 +209,19 @@ export class AppComponent implements OnInit, OnDestroy {
     this.offline = !navigator.onLine;
   }
 
-  setDocTitle(title: string): void {
-    // https://blog.bitsrc.io/dynamic-page-titles-in-angular-98ce20b5c334
-    this.titleService.setTitle(title);
-  }
-
-  public RouteOrParamsUpdated(route: string): void {
-    // Change Page Title and meta data, show Vulcan
+  public SetTitle(route: string): void {
+    // Change Page Title, show Vulcan
 
     // called in ngOnInit and in subscriptions to router events
     // and route parameter change via subject RouteParamChange
 
-    this.appData.Route = route;
-
     if (route === '/' || route === '' || route.indexOf('/callback') === 0) {
       // Home page
       this.routeDisplay = this.localData.website;
-      this.setDocTitle(this.routeDisplay);
+
+      // https://blog.bitsrc.io/dynamic-page-titles-in-angular-98ce20b5c334
+      this.titleService.setTitle(this.routeDisplay);
+
       this.pageTitleToolTip = this.routeDisplay;
 
       // Set ShowVulcan to true on route change to home page
@@ -236,7 +232,8 @@ export class AppComponent implements OnInit, OnDestroy {
       // Anything other than home page
 
       if (route.indexOf('?') > 0) {
-        route = route.split('?')[0]; // #176 discard query string for facebook shares
+        const raqs = route.split('?'); // Route and QueryString
+        route = raqs[0]; // #176 discard query string for facebook shares
       }
 
       var routeParts = route.split('/');
@@ -255,7 +252,8 @@ export class AppComponent implements OnInit, OnDestroy {
           ? 'SlashTag/' + this.localData.TopicSelected
           : route.substring(1);
 
-      this.setDocTitle(this.routeDisplay);
+      // https://blog.bitsrc.io/dynamic-page-titles-in-angular-98ce20b5c334
+      this.titleService.setTitle(this.routeDisplay);
 
       // Change url in browser's address bar
       // https://angular.io/api/common/Location#!#replaceState-anchor
@@ -296,7 +294,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
       if (this.widthBand !== band) {
         this.widthBand = band;
-        this.appData.DisplayWidth$.next(band);
+        this.appService.DisplayWidth$.next(band);
       }
     }
   }

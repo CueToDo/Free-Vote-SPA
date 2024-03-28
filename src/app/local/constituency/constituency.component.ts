@@ -2,6 +2,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+// Material
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+
 // rxjs
 import { Subscription, of, switchMap, take } from 'rxjs';
 
@@ -11,11 +14,10 @@ import { Constituency } from 'src/app/models/constituency.model';
 import { ElectionDate } from 'src/app/models/electionDate';
 
 // Services
-import { LocalDataService } from 'src/app/services/local-data.service';
-import { AppDataService } from 'src/app/services/app-data.service';
-import { DemocracyClubService } from 'src/app/services/democracy-club.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CandidateAddComponent } from '../candidate-add/candidate-add.component';
+import { DemocracyClubService } from 'src/app/services/democracy-club.service';
+import { HttpExtraService } from 'src/app/services/http-extra.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
   selector: 'app-constituency',
@@ -159,9 +161,9 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     public localData: LocalDataService,
-    private appData: AppDataService,
     private democracyClubService: DemocracyClubService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private httpXS: HttpExtraService
   ) {}
 
   ngOnInit(): void {
@@ -169,11 +171,11 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
 
     const routeParams = this.activatedRoute.snapshot.params;
 
-    var constituencyName = this.appData.unKebabUri(routeParams['constituency']);
-    this.electionDate = this.appData.unKebabUri(routeParams['electionDate']);
+    var constituencyName = this.httpXS.unKebabUri(routeParams['constituency']);
+    this.electionDate = this.httpXS.unKebabUri(routeParams['electionDate']);
 
     this.candidateSelected = decodeURIComponent(
-      this.appData.unKebabUri(routeParams['candidateName'])
+      this.httpXS.unKebabUri(routeParams['candidateName'])
     );
 
     var constituencyLookup = this.democracyClubService
@@ -190,8 +192,7 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
           this.MPs = MPs; // map
           // switch to another (unrelated) observable
           if (
-            this.constituencyDetails.constituency ==
-            this.localData.freeVoteProfile.constituency
+            this.constituencyDetails.constituency == this.localData.Constituency
           )
             return of(this.localData.freeVoteProfile.postcode);
 

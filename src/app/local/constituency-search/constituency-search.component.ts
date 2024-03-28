@@ -25,9 +25,8 @@ import { Constituency } from 'src/app/models/constituency.model';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 // Services
-import { AppDataService } from 'src/app/services/app-data.service';
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
-import { LookupsService } from 'src/app/services/lookups.service';
+import { HttpExtraService } from 'src/app/services/http-extra.service';
 
 @Component({
   selector: 'app-constituency-search',
@@ -100,9 +99,9 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     public localData: LocalDataService,
-    private appData: AppDataService,
     private democracyClubService: DemocracyClubService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private httpXS: HttpExtraService
   ) {}
 
   ngAfterViewInit() {
@@ -285,7 +284,7 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
   }
 
   constituencyLink(constituency: string) {
-    var kebabConstituency = this.appData.kebabUri(constituency);
+    var kebabConstituency = this.httpXS.kebabUri(constituency);
     return `/constituency/${kebabConstituency}`;
   }
 
@@ -294,8 +293,8 @@ export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
     electionDate: string,
     candidateName: string
   ) {
-    const kebabDate = this.appData.kebabUri(electionDate);
-    const kebabName = this.appData.kebabUri(candidateName);
+    const kebabDate = this.httpXS.kebabUri(electionDate);
+    const kebabName = this.httpXS.kebabUri(candidateName);
     return `${this.constituencyLink(constituency)}/${kebabDate}/${kebabName}`;
   }
 

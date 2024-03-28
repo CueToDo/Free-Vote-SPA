@@ -8,8 +8,9 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { AuthService } from '@auth0/auth0-angular';
 
 // FreeVote Services
-import { AppDataService } from 'src/app/services/app-data.service';
+import { AppService } from 'src/app/services/app.service';
 import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
+import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { TooltipPosition } from '@angular/material/tooltip';
 
@@ -22,8 +23,10 @@ export class NavItemsComponent implements OnInit, OnDestroy {
   tagsPointsActive$: Subscription | undefined;
 
   get constituencyKebab(): string {
-    return this.appData.kebabUri(this.localData.freeVoteProfile.constituency);
+    return this.httpXS.kebabUri(this.localData.Constituency);
   }
+
+  public MenuItemSelected = '';
 
   error = '';
 
@@ -34,10 +37,11 @@ export class NavItemsComponent implements OnInit, OnDestroy {
     return 'right';
   }
   constructor(
-    public appData: AppDataService,
+    public appService: AppService,
     public auth0Service: AuthService,
     public auth0Wrapper: Auth0Wrapper,
-    public localData: LocalDataService
+    public localData: LocalDataService,
+    private httpXS: HttpExtraService
   ) {}
 
   ngOnInit(): void {
@@ -47,10 +51,10 @@ export class NavItemsComponent implements OnInit, OnDestroy {
     // Use injected service to communicate between components
 
     // Following used to highlight slash tags menu item when clicking on tag in voter tag cloud
-    this.tagsPointsActive$ = this.appData.TagsPointsActive$.subscribe(
+    this.tagsPointsActive$ = this.appService.TagsPointsActive$.subscribe(
       tagsPointsActive => {
         if (tagsPointsActive) {
-          this.appData.MenuItemSelected = 'slashTags';
+          this.MenuItemSelected = 'slashTags';
         }
       } // simply return boolean value to template
     );
