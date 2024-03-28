@@ -22,7 +22,7 @@ export class UpdateService {
         // interval is milliseconds
         () =>
           interval(1000 * 60).subscribe(val => {
-            // console.log('Check', val);
+            console.log('Checking for application updates', val);
             swUpdate.checkForUpdate(); // that's all, just periodic check. Subscription will pick up detected changes
             //.then(_ => console.log('SW Checking for updates'));
           })
