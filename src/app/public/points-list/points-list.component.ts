@@ -67,7 +67,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   // Subscriptions
   private tagLatestActivity$: Subscription | undefined;
 
-  updateTopicViewCount = false;
+  updateTopicViewCount = true; // ToDo determine cases where we DON'T update
 
   wasForConstituency = false;
   wasForSlashTag = '';
