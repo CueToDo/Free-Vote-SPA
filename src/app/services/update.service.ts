@@ -24,7 +24,6 @@ export class UpdateService {
           interval(1000 * 60).subscribe(val => {
             console.log('Checking for application updates', val);
             swUpdate.checkForUpdate(); // that's all, just periodic check. Subscription will pick up detected changes
-            //.then(_ => console.log('SW Checking for updates'));
           })
       );
     }
@@ -35,7 +34,7 @@ export class UpdateService {
     // https://angular.io/guide/service-worker-communications
 
     this.swUpdate.versionUpdates.subscribe(evt => {
-      // console.log('Update:', evt.type);
+      console.log('versionUpdate Check:', evt.type);
 
       if (evt.type == 'VERSION_READY') {
         // Downloaded and ready to install
@@ -46,7 +45,7 @@ export class UpdateService {
 
   // No user prompt - JFDI
   private promptUser(): void {
-    // console.log('Updating to new version');
+    console.log('Updating to new version');
     this.swUpdate.activateUpdate().then(() => document.location.reload());
   }
 }
