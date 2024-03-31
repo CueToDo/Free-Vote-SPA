@@ -60,23 +60,6 @@ const appRoutes: Routes = [
   { path: 'questions/:tag', component: TagsAndPointsComponent },
   { path: 'by/:alias', component: TagsAndPointsComponent },
 
-  // Single routeparameter :tag
-  { path: ':tag', component: TagsAndPointsComponent },
-  { path: ':tag/by/:alias', component: TagsAndPointsComponent },
-  { path: ':tag/question/:questionSlug', component: TagsAndPointsComponent },
-
-  // Double routeparameter
-  { path: ':tag/:title', component: PointCommentsComponent },
-  {
-    path: ':tag/:title/:shareTitle/:sharePreview/:shareImage',
-    component: PointCommentsComponent
-  },
-
-  {
-    path: ':constituency/:tag/:pointsorquestions',
-    component: TagsAndPointsComponent
-  },
-
   // lazy loaded feature modules:
   // profile
   {
@@ -93,6 +76,25 @@ const appRoutes: Routes = [
         m => m.OrganisationsModule
       ),
     canActivate: [LoginRouteGuardService]
+  },
+
+  // All tags as first parameter must come after static routes
+
+  // Single routeparameter :tag
+  { path: ':tag', component: TagsAndPointsComponent },
+  { path: ':tag/by/:alias', component: TagsAndPointsComponent },
+  { path: ':tag/question/:questionSlug', component: TagsAndPointsComponent },
+
+  // Double routeparameter
+  { path: ':tag/:title', component: PointCommentsComponent },
+  {
+    path: ':tag/:title/:shareTitle/:sharePreview/:shareImage',
+    component: PointCommentsComponent
+  },
+
+  {
+    path: ':constituency/:tag/:pointsorquestions',
+    component: TagsAndPointsComponent
   },
 
   // Suspended: local constituency
