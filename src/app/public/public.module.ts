@@ -18,8 +18,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // FreeVote Modules
-import { BaseModule } from '../base/base.module';
-import { CustomModule } from '../custommodule/custom.module';
 
 // FreeVote Components Declared here
 import { CardComponent } from './card/card.component';
@@ -47,28 +45,13 @@ import { SocialShareComponent } from './menus/social-share/social-share.componen
 import { TagsAndPointsComponent } from './tags-and-points/tags-and-points.component';
 import { TakeActionComponent } from './take-action/take-action.component';
 import { WebsitePreviewComponent } from './website-preview/website-preview.component';
+import { NbspPipe } from '../custommodule/pipes/nbsp.pipe';
+import { SafeURLPipe } from '../custommodule/pipes/safe-url.pipe';
+import { SafeHtmlPipe } from '../custommodule/pipes/safe-html.pipe';
+import { TagCloudComponent } from '../base/tagCloud/tagCloud.component';
+import { TagsEditComponent } from '../base/tags-edit/tags-edit.component';
 
 @NgModule({
-  imports: [
-    ClipboardModule,
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    // Material
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatIconModule,
-    MatInputModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatTooltipModule,
-    // FreeVote
-    BaseModule,
-    CustomModule
-  ],
   declarations: [
     CardComponent,
     CkeUniversalComponent,
@@ -105,6 +88,28 @@ import { WebsitePreviewComponent } from './website-preview/website-preview.compo
     PointsFilterComponent,
     PointEditComponent,
     WebsitePreviewComponent
+  ],
+  imports: [
+    ClipboardModule,
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    // Material
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatTooltipModule,
+    NbspPipe,
+    SafeURLPipe,
+    SafeHtmlPipe,
+    TagCloudComponent,
+    TagsEditComponent
   ]
 })
 export class PublicModule {}

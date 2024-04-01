@@ -21,7 +21,7 @@ import { InterceptorService } from 'src/app/services/interceptor.service';
 
 // Modules
 import { AppRoutingModule } from 'src/app/app-routing.module';
-import { CustomModule } from 'src/app/custommodule/custom.module';
+
 import { PublicModule } from 'src/app/public/public.module';
 
 // Global Singleton Services imported from Services Module
@@ -43,31 +43,25 @@ import { AppComponent } from './app.component';
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-
     // Auth0
     AuthModule.forRoot({
-      ...env.auth,
-      httpInterceptor: {
-        ...env.httpInterceptor
-      }
+        ...env.auth,
+        httpInterceptor: {
+            ...env.httpInterceptor
+        }
     }),
-
     // PWA ServcieWorkerModule
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: env.production,
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+        enabled: env.production,
+        // Register the ServiceWorker as soon as the application is stable
+        // or after 30 seconds (whichever comes first).
+        registrationStrategy: 'registerWhenStable:30000'
     }),
-
     // Material
     MatButtonModule,
     MatIconModule,
-
-    // FreeVote main modules - not lazy loaded feature modules
-    CustomModule,
     PublicModule
-  ],
+],
   declarations: [AppComponent],
   // Singleton Services are provided in AppRoot
   providers: [

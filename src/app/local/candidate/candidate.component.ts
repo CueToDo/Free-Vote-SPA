@@ -15,11 +15,15 @@ import { CandidateEditComponent } from '../candidate-edit/candidate-edit.compone
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
+import { MatButtonModule } from '@angular/material/button';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-candidate',
-  templateUrl: './candidate.component.html',
-  styleUrls: ['./candidate.component.css']
+    selector: 'app-candidate',
+    templateUrl: './candidate.component.html',
+    styleUrls: ['./candidate.component.css'],
+    standalone: true,
+    imports: [NgClass, NgIf, MatButtonModule]
 })
 export class CandidateComponent {
   @Input() isMPs = false;

@@ -21,12 +21,20 @@ import { TagCloudTypes } from '../../models/enums';
 import { AppService } from '../../services/app.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { TagsService } from '../../services/tags.service';
+import { TagDisplayPipe } from '../../custommodule/pipes/tag-display.pipe';
+import { TagSearchComponent } from '../tag-search/tag-search.component';
+import { NgIf, NgFor, NgStyle } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-tag-cloud',
-  templateUrl: './tagCloud.component.html',
-  styleUrls: ['./tagCloud.component.css'],
-  preserveWhitespaces: true
+    selector: 'app-tag-cloud',
+    templateUrl: './tagCloud.component.html',
+    styleUrls: ['./tagCloud.component.css'],
+    preserveWhitespaces: true,
+    standalone: true,
+    imports: [MatButtonModule, MatTooltipModule, MatIconModule, NgIf, TagSearchComponent, NgFor, NgStyle, TagDisplayPipe]
 })
 export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   @Input() HasFocus = false;

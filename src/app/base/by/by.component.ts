@@ -1,6 +1,6 @@
 // Angular
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 
 // rxJs
 import { Subscription } from 'rxjs';
@@ -13,12 +13,16 @@ import { AppService } from '../../services/app.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { TagsService } from '../../services/tags.service';
+import { TagDisplayPipe } from '../../custommodule/pipes/tag-display.pipe';
+import { NgIf, NgFor, NgStyle } from '@angular/common';
 
 @Component({
-  selector: 'app-by',
-  templateUrl: './by.component.html',
-  styleUrls: ['./by.component.css'],
-  preserveWhitespaces: true
+    selector: 'app-by',
+    templateUrl: './by.component.html',
+    styleUrls: ['./by.component.css'],
+    preserveWhitespaces: true,
+    standalone: true,
+    imports: [NgIf, NgFor, NgStyle, RouterLink, TagDisplayPipe]
 })
 export class ByComponent implements OnInit, OnDestroy {
   // Subscriptions

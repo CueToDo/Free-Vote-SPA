@@ -15,8 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // FreeVote Modules
-import { BaseModule } from '../base/base.module';
-import { CustomModule } from 'src/app/custommodule/custom.module';
+
 import { PublicModule } from 'src/app/public/public.module';
 
 // Components not declared here - required in routes
@@ -26,6 +25,8 @@ import { OrganisationEditComponent } from './organisation-edit/organisation-edit
 import { OrganisationComponent } from './organisation/organisation.component';
 import { OrganisationListComponent } from './organisation-list/organisation-list.component';
 import { OrganisationsComponent } from './organisations/organisations.component';
+import { CountriesComponent } from '../base/countries/countries.component';
+import { ListComponent } from '../base/list/list.component';
 
 const orgRoutes: Routes = [
   { path: 'membership', component: OrganisationsComponent },
@@ -35,12 +36,17 @@ const orgRoutes: Routes = [
 ];
 
 @NgModule({
+  declarations: [
+    OrganisationEditComponent,
+    OrganisationComponent,
+    OrganisationListComponent,
+    OrganisationsComponent
+  ],
   imports: [
     // Angular
     CommonModule,
     FormsModule,
     RouterModule.forChild(orgRoutes),
-
     // Material
     MatButtonModule,
     MatCheckboxModule,
@@ -50,17 +56,9 @@ const orgRoutes: Routes = [
     MatRadioModule,
     MatSelectModule,
     MatTooltipModule,
-
-    // FreeVote
-    BaseModule,
-    CustomModule,
-    PublicModule
-  ],
-  declarations: [
-    OrganisationEditComponent,
-    OrganisationComponent,
-    OrganisationListComponent,
-    OrganisationsComponent
+    PublicModule,
+    CountriesComponent,
+    ListComponent
   ]
 })
 export class OrganisationsModule {}

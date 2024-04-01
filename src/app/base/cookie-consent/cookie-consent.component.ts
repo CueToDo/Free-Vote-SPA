@@ -7,11 +7,15 @@ import { MatDialogRef } from '@angular/material/dialog';
 // Services
 import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-cookie-consent',
-  templateUrl: './cookie-consent.component.html',
-  styleUrls: ['./cookie-consent.component.css']
+    selector: 'app-cookie-consent',
+    templateUrl: './cookie-consent.component.html',
+    styleUrls: ['./cookie-consent.component.css'],
+    standalone: true,
+    imports: [NgIf, MatButtonModule]
 })
 export class CookieConsentComponent {
   constructor(

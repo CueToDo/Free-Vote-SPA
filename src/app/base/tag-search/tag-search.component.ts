@@ -13,7 +13,7 @@ import {
   Input
 } from '@angular/core';
 
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgIf } from '@angular/common';
 
 // rxjs
 import { fromEvent, Subscription } from 'rxjs';
@@ -29,11 +29,16 @@ import { TagsService } from 'src/app/services/tags.service';
 
 // Other
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-tag-search',
-  templateUrl: './tag-search.component.html',
-  styleUrls: ['./tag-search.component.css']
+    selector: 'app-tag-search',
+    templateUrl: './tag-search.component.html',
+    styleUrls: ['./tag-search.component.css'],
+    standalone: true,
+    imports: [FormsModule, MatButtonModule, MatIconModule, NgIf]
 })
 export class TagSearchComponent implements OnInit, AfterViewInit {
   @Input() ForConstituency = false;

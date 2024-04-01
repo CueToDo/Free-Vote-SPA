@@ -1,9 +1,16 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  selector: 'app-datepicker',
-  templateUrl: './datepicker.component.html',
-  styleUrls: ['./datepicker.component.css']
+    selector: 'app-datepicker',
+    templateUrl: './datepicker.component.html',
+    styleUrls: ['./datepicker.component.css'],
+    standalone: true,
+    imports: [MatFormFieldModule, MatInputModule, FormsModule, MatDatepickerModule, DatePipe]
 })
 export class DatepickerComponent {
   public dateValue = new Date(); // bound to date input and display output

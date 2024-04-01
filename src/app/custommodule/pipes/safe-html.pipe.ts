@@ -6,7 +6,10 @@ import { PipeTransform, Pipe } from '@angular/core';
 // IF any script were to find its way into the HTML, it would be executed
 // "in most situations this method should not be used" https://angular.io/api/platform-browser/DomSanitizer
 // The CKEditor may also provide input sanitisation (tbc)
-@Pipe({ name: 'SafeHtml' })
+@Pipe({
+    name: 'SafeHtml',
+    standalone: true
+})
 export class SafeHtmlPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
   transform(value: string): SafeHtml {

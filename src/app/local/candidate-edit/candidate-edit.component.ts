@@ -20,11 +20,16 @@ import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 // Other
 import { cloneDeep } from 'lodash-es';
 import { PartySelectComponent } from '../party-select/party-select.component';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-candidate-edit',
-  templateUrl: './candidate-edit.component.html',
-  styleUrls: ['./candidate-edit.component.css']
+    selector: 'app-candidate-edit',
+    templateUrl: './candidate-edit.component.html',
+    styleUrls: ['./candidate-edit.component.css'],
+    standalone: true,
+    imports: [NgClass, NgIf, FormsModule, MatButtonModule]
 })
 export class CandidateEditComponent {
   public candidate = new Candidate();

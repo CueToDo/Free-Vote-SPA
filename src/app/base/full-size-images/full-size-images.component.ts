@@ -2,12 +2,17 @@
 import { Component, Inject } from '@angular/core';
 
 // Material
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { NgClass, NgIf } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-full-size-images',
-  templateUrl: './full-size-images.component.html',
-  styleUrls: ['./full-size-images.component.css']
+    selector: 'app-full-size-images',
+    templateUrl: './full-size-images.component.html',
+    styleUrls: ['./full-size-images.component.css'],
+    standalone: true,
+    imports: [MatDialogModule, MatButtonModule, MatIconModule, NgClass, NgIf]
 })
 export class FullSizeImagesComponent {
   csvImages = '';

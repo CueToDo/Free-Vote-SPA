@@ -1,6 +1,6 @@
 // Angular
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 // Material
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -18,11 +18,18 @@ import { CandidateAddComponent } from '../candidate-add/candidate-add.component'
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+import { CandidateComponent } from '../candidate/candidate.component';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-constituency',
-  templateUrl: './constituency.component.html',
-  styleUrls: ['./constituency.component.css']
+    selector: 'app-constituency',
+    templateUrl: './constituency.component.html',
+    styleUrls: ['./constituency.component.css'],
+    standalone: true,
+    imports: [RouterLink, NgIf, NgFor, CandidateComponent, FormsModule, MatButtonModule, MatIconModule]
 })
 export class ConstituencyComponent implements OnInit, OnDestroy {
   searching = false;

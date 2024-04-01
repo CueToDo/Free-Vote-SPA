@@ -4,11 +4,17 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 // Models
 import { Tag } from 'src/app/models/tag.model';
+import { FormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { NgFor, NgClass, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-tags-edit',
-  templateUrl: './tags-edit.component.html',
-  styleUrls: ['./tags-edit.component.css']
+    selector: 'app-tags-edit',
+    templateUrl: './tags-edit.component.html',
+    styleUrls: ['./tags-edit.component.css'],
+    standalone: true,
+    imports: [NgFor, NgClass, NgIf, MatIconModule, MatTooltipModule, FormsModule]
 })
 export class TagsEditComponent {
   // 2 way bound in point-edit and question-edit components

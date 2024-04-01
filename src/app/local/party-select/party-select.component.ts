@@ -30,15 +30,20 @@ import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 
 // Globals
 import * as globals from 'src/app/globals';
+import { MatButtonModule } from '@angular/material/button';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 export interface DialogData {
   name: string;
 }
 
 @Component({
-  selector: 'app-party-select',
-  templateUrl: './party-select.component.html',
-  styleUrls: ['./party-select.component.css']
+    selector: 'app-party-select',
+    templateUrl: './party-select.component.html',
+    styleUrls: ['./party-select.component.css'],
+    standalone: true,
+    imports: [FormsModule, NgFor, MatButtonModule, NgIf]
 })
 export class PartySelectComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('trvMinorPartySearch', { static: true }) trvMinorPartySearch:

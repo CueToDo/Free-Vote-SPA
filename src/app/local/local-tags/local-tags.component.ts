@@ -2,8 +2,8 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 
 // Material
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 
 // Models enums
 import { Tag } from 'src/app/models/tag.model';
@@ -11,11 +11,18 @@ import { Tag } from 'src/app/models/tag.model';
 // Services
 import { TagsService } from 'src/app/services/tags.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { NgIf } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+import { TagsEditComponent } from '../../base/tags-edit/tags-edit.component';
 
 @Component({
-  selector: 'app-local-tags',
-  templateUrl: './local-tags.component.html',
-  styleUrls: ['./local-tags.component.css']
+    selector: 'app-local-tags',
+    templateUrl: './local-tags.component.html',
+    styleUrls: ['./local-tags.component.css'],
+    standalone: true,
+    imports: [TagsEditComponent, MatCheckboxModule, FormsModule, MatDialogModule, MatButtonModule, MatIconModule, NgIf]
 })
 export class LocalTagsComponent implements OnInit {
   AllTags: Tag[] = [];

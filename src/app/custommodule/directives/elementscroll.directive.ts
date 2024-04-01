@@ -12,7 +12,8 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 
 @Directive({
-  selector: '[appElementScrollEnd]'
+    selector: '[appElementScrollEnd]',
+    standalone: true
 })
 export class ElementScrollDirective implements OnDestroy {
   @Output() scrollEnd = new EventEmitter();

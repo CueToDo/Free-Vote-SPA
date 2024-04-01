@@ -14,6 +14,7 @@ import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points
 // Services: if decorated with "providedIn", no need to import and must NOT add to providers
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from './services/login-route-guard.service';
+import { LocalMenuComponent } from './local/local-menu/local-menu.component';
 
 const appRoutes: Routes = [
   // Refresh in browser fails - when route is specified
@@ -78,6 +79,20 @@ const appRoutes: Routes = [
     canActivate: [LoginRouteGuardService]
   },
 
+  // Moved from local module on conversion to standalone
+  {
+    path: 'local/voters',
+    component: LocalMenuComponent,
+    canActivate: [LoginRouteGuardService],
+    children: [
+      {
+        path: 'local/:alias',
+        component: LocalMenuComponent
+      }
+    ]
+  },
+  { path: 'local:constituency', component: ConstituencyComponent },
+
   // All tags as first parameter must come after static routes
 
   // Single routeparameter :tag
@@ -95,12 +110,6 @@ const appRoutes: Routes = [
   {
     path: ':constituency/:tag/:pointsorquestions',
     component: TagsAndPointsComponent
-  },
-
-  // Suspended: local constituency
-  {
-    path: '[suspended]',
-    loadChildren: () => import('./local/local.module').then(m => m.LocalModule)
   },
 
   // Azure only:https://bossprogrammer.medium.com/how-to-deploy-an-angular-10-universal-app-with-server-side-rendering-to-azure-a2b90df9ca64

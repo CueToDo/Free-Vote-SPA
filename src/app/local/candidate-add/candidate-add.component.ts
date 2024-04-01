@@ -12,12 +12,7 @@ import {
 } from '@angular/core';
 
 // Material
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 
 // rxjs
 import {
@@ -39,11 +34,18 @@ import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 import * as globals from 'src/app/globals';
 import { PartySelectComponent } from '../party-select/party-select.component';
 import { Kvp } from 'src/app/models/kvp.model';
+import { CandidateComponent } from '../candidate/candidate.component';
+import { NgIf, NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-candidate-add',
-  templateUrl: './candidate-add.component.html',
-  styleUrls: ['./candidate-add.component.css']
+    selector: 'app-candidate-add',
+    templateUrl: './candidate-add.component.html',
+    styleUrls: ['./candidate-add.component.css'],
+    standalone: true,
+    imports: [MatDialogModule, MatButtonModule, MatIconModule, FormsModule, NgIf, NgFor, CandidateComponent]
 })
 export class CandidateAddComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('trvPoliticianSearch', { static: true }) trvPoliticianSearch:

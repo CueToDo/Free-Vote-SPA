@@ -27,11 +27,19 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 // Services
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
+import { RouterLink } from '@angular/router';
+import { NgIf, NgFor } from '@angular/common';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-constituency-search',
-  templateUrl: './constituency-search.component.html',
-  styleUrls: ['./constituency-search.component.css']
+    selector: 'app-constituency-search',
+    templateUrl: './constituency-search.component.html',
+    styleUrls: ['./constituency-search.component.css'],
+    standalone: true,
+    imports: [FormsModule, MatButtonModule, MatIconModule, MatCheckboxModule, NgIf, NgFor, RouterLink]
 })
 export class ConstituencySearchComponent implements AfterViewInit, OnDestroy {
   @ViewChild('trvConstituencySearch', { static: true }) trvConstituencySearch:
