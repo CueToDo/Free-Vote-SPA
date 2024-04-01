@@ -12,9 +12,19 @@ import {
   HostListener
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Location, DOCUMENT, isPlatformBrowser, NgIf, NgClass } from '@angular/common';
+import {
+  Location,
+  DOCUMENT,
+  isPlatformBrowser,
+  NgIf,
+  NgClass
+} from '@angular/common';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+
+// Material
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 // rxjs
 import { fromEvent } from 'rxjs';
@@ -28,16 +38,12 @@ import { AppService } from 'src/app/services/app.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { TagsService } from 'src/app/services/tags.service';
-import { UpdateService } from 'src/app/services/update.service';
 
 // FreeVote Components
+import { CookieConsentComponent } from './base/cookie-consent/cookie-consent.component';
 import { NavBurgerComponent } from 'src/app/public/menus/nav-burger/nav-burger.component';
 import { NavMainComponent } from 'src/app/public/menus/nav-main/nav-main.component';
-import { MatDialog } from '@angular/material/dialog';
-import { CookieConsentComponent } from './base/cookie-consent/cookie-consent.component';
-import { NavMainComponent as NavMainComponent_1 } from './public/menus/nav-main/nav-main.component';
-import { NavBurgerComponent as NavBurgerComponent_1 } from './public/menus/nav-burger/nav-burger.component';
-import { MatIconModule } from '@angular/material/icon';
+import { SwUpdate } from '@angular/service-worker';
 
 export enum NetworkStatus {
   ONLINE = 'online',
@@ -45,11 +51,18 @@ export enum NetworkStatus {
 }
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
-    standalone: true,
-    imports: [NgIf, MatIconModule, NgClass, NavBurgerComponent_1, NavMainComponent_1, RouterOutlet]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatIconModule,
+    NgClass,
+    NavBurgerComponent,
+    NavMainComponent,
+    RouterOutlet
+  ]
 })
 export class AppComponent implements OnInit, OnDestroy {
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
@@ -73,25 +86,23 @@ export class AppComponent implements OnInit, OnDestroy {
   under500 = false;
 
   constructor(
-    private router: Router,
+    public appService: AppService,
     public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
-    public appService: AppService,
     private lookupsService: LookupsService,
     private tagsService: TagsService,
+
     private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog,
     private location: Location,
-    private titleService: Title,
-    private sw: UpdateService,
+    private router: Router,
+    private swUpdate: SwUpdate,
+    private titleService: Title, // Angular
+
     @Inject(DOCUMENT) private document: Document,
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
-    @Inject(PLATFORM_ID) private platformId: object,
-    private dialog: MatDialog
-  ) {
-    // Set up the subscription to version changes.
-    // Service constructor sets up periodic checks
-    this.sw.subscribeToUpdates();
-  }
+    @Inject(PLATFORM_ID) private platformId: object
+  ) {}
 
   ngOnInit(): void {
     this.localData.Log(`<br><br>APP Initialising`);
@@ -185,6 +196,34 @@ export class AppComponent implements OnInit, OnDestroy {
       // Triggered by HomeComponent (only) on begin or end input
       this.showVulcan = !istom;
     });
+
+    // On navigation, service worker checks for updates - simply log to console
+    if (!this.swUpdate.isEnabled) {
+      console.log('Service worker not enabled!');
+    } else {
+      this.swUpdate.versionUpdates.subscribe(async evt => {
+        switch (evt.type) {
+          case 'VERSION_DETECTED':
+            console.log(`Downloading new app version: ${evt.version.hash}`);
+            break;
+          case 'VERSION_READY':
+            console.log(`Current version: ${evt.currentVersion.hash}`);
+            console.log(`Latest version: ${evt.latestVersion.hash}`);
+            console.log(
+              'Reload the page to update to the latest version after the new version is activated'
+            );
+            if (confirm('Load new version now?')) {
+              this.swUpdate
+                .activateUpdate()
+                .then(() => document.location.reload());
+            }
+            break;
+          case 'VERSION_INSTALLATION_FAILED':
+            console.log(`App update failed : ${evt.error}`);
+            break;
+        }
+      });
+    }
   }
 
   cookieConsent() {

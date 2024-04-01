@@ -7,7 +7,7 @@ GitBash in cert directory:
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365
 chrome://flags/#allow-insecure-localhost
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.3.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli)
 
 ## Development server
 

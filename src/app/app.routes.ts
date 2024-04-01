@@ -1,6 +1,5 @@
 // Angular
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule, ExtraOptions } from '@angular/router';
+import { Routes, ExtraOptions } from '@angular/router';
 
 // Components
 import { CardComponent } from './public/card/card.component';
@@ -19,7 +18,7 @@ import { OrganisationComponent } from './organisations/organisation/organisation
 import { OrganisationsComponent } from './organisations/organisations/organisations.component';
 import { ProfileComponent } from './my/profile/profile.component';
 
-const appRoutes: Routes = [
+export const routes: Routes = [
   // Refresh in browser fails - when route is specified
   // Make a web.config file in the root directory.
   // https://stackoverflow.com/questions/35284988/angular-2-404-error-occur-when-i-refresh-through-the-browser
@@ -116,13 +115,7 @@ const appRoutes: Routes = [
   { path: '**', redirectTo: '' } // Add a wildcard route to app-routing.module.ts )
 ];
 
-const routerSettings: ExtraOptions = {
+export const routerSettings: ExtraOptions = {
   initialNavigation: 'enabledBlocking'
   // enableTracing: true // <-- debugging route issues only
 };
-
-@NgModule({
-  imports: [RouterModule.forRoot(appRoutes, routerSettings)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule {}
