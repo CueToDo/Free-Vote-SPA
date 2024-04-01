@@ -17,6 +17,7 @@ import { LoginRouteGuardService } from './services/login-route-guard.service';
 import { LocalMenuComponent } from './local/local-menu/local-menu.component';
 import { OrganisationComponent } from './organisations/organisation/organisation.component';
 import { OrganisationsComponent } from './organisations/organisations/organisations.component';
+import { ProfileComponent } from './my/profile/profile.component';
 
 const appRoutes: Routes = [
   // Refresh in browser fails - when route is specified
@@ -67,9 +68,9 @@ const appRoutes: Routes = [
   // profile
   {
     path: 'my',
-    loadChildren: () => import('./my/my.module').then(m => m.MyModule),
-    canActivate: [LoginRouteGuardService]
+    component: ProfileComponent
   },
+  { path: 'my/:tab', component: ProfileComponent },
 
   // organisations
   // To Do after conversion to standalone - how are these routeguarded?
