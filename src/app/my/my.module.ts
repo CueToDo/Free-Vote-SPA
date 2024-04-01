@@ -20,7 +20,7 @@ import { PointOfTheWeekVoteComponent } from './point-of-the-week-vote/point-of-t
 
 // FreeVote
 
-import { PublicModule } from '../public/public.module';
+
 
 const myRoutes: Routes = [
   {
@@ -32,21 +32,20 @@ const myRoutes: Routes = [
 
 @NgModule({
     imports: [
-        CommonModule,
-        FormsModule,
-        RouterModule.forChild(myRoutes),
-        // Material
-        MatButtonModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatRadioModule,
-        MatSelectModule,
-        PublicModule,
-        ProfileComponent,
-        DeleteAccountComponent,
-        PointOfTheWeekVoteComponent
-    ]
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild(myRoutes),
+    // Material
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSelectModule,
+    ProfileComponent,
+    DeleteAccountComponent,
+    PointOfTheWeekVoteComponent
+]
 })
 export class MyModule {}

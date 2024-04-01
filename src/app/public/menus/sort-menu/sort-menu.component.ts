@@ -10,11 +10,17 @@ import { PointSortTypes, Tabs } from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-sort-menu',
-  templateUrl: './sort-menu.component.html',
-  styleUrls: ['./sort-menu.component.css']
+    selector: 'app-sort-menu',
+    templateUrl: './sort-menu.component.html',
+    styleUrls: ['./sort-menu.component.css'],
+    standalone: true,
+    imports: [MatButtonModule, MatMenuModule, MatTooltipModule, MatIconModule]
 })
 export class SortMenuComponent implements OnInit {
   // 1. For points or questions

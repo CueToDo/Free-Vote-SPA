@@ -30,10 +30,29 @@ import { OrganisationsService } from 'src/app/services/organisations.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 
+import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { WebsitePreviewComponent } from '../../public/website-preview/website-preview.component';
+
 @Component({
   selector: 'app-organisation-list',
   templateUrl: './organisation-list.component.html',
-  styleUrls: ['./organisation-list.component.css']
+  styleUrls: ['./organisation-list.component.css'],
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgFor,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIconModule,
+    NgIf,
+    RouterLink,
+    WebsitePreviewComponent
+  ]
 })
 export class OrganisationListComponent
   implements OnInit, AfterViewInit, OnDestroy

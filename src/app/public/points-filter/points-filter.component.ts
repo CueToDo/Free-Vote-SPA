@@ -13,7 +13,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 
 // Material
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -33,13 +33,25 @@ import { AppService } from 'src/app/services/app.service';
 import { FilterCriteria } from 'src/app/models/filterCriteria.model';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf, NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  selector: 'app-points-filter', // is router-outlet
-  templateUrl: './points-filter.component.html',
-  styleUrls: ['./points-filter.component.css'],
-  preserveWhitespaces: true // [DOESN'T WORK see component css - doesn't work in styles.css???]
-  // for space between buttons - https://github.com/angular/material2/issues/11397
+    selector: 'app-points-filter',
+    templateUrl: './points-filter.component.html',
+    styleUrls: ['./points-filter.component.css'],
+    preserveWhitespaces: true // [DOESN'T WORK see component css - doesn't work in styles.css???]
+    // for space between buttons - https://github.com/angular/material2/issues/11397
+    ,
+    standalone: true,
+    imports: [MatFormFieldModule, MatInputModule, FormsModule, NgIf, MatButtonModule, MatIconModule, MatCheckboxModule, MatRadioModule, MatSelectModule, NgFor, MatOptionModule]
 })
 export class PointsFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('pointTextFilter', { static: true }) pointTextFilter:

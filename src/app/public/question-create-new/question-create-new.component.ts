@@ -3,9 +3,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { QuestionEditComponent } from '../question-edit/question-edit.component';
 
 @Component({
-  selector: 'app-question-create-new',
-  templateUrl: './question-create-new.component.html',
-  styleUrls: ['./question-create-new.component.css']
+    selector: 'app-question-create-new',
+    templateUrl: './question-create-new.component.html',
+    styleUrls: ['./question-create-new.component.css'],
+    standalone: true,
+    imports: [QuestionEditComponent]
 })
 export class QuestionCreateNewComponent {
   @ViewChild('questionEdit') questionEditComponent!: QuestionEditComponent;

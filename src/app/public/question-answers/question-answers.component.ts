@@ -27,11 +27,18 @@ import { QuestionsService } from 'src/app/services/questions.service';
 
 // Components
 import { PointsListComponent } from '../points-list/points-list.component';
+import { PointEditComponent } from '../point-edit/point-edit.component';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-question-answers',
-  templateUrl: './question-answers.component.html',
-  styleUrls: ['./question-answers.component.css']
+    selector: 'app-question-answers',
+    templateUrl: './question-answers.component.html',
+    styleUrls: ['./question-answers.component.css'],
+    standalone: true,
+    imports: [MatButtonModule, MatTooltipModule, MatIconModule, NgIf, PointEditComponent, PointsListComponent, AsyncPipe]
 })
 export class QuestionAnswersComponent {
   @Input() QuestionID = 0;

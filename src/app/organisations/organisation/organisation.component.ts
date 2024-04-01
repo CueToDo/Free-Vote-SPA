@@ -1,6 +1,6 @@
 // Angular
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
 import { cloneDeep } from 'lodash-es';
@@ -13,11 +13,30 @@ import { Organisation } from 'src/app/models/organisation.model';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { OrganisationsService } from 'src/app/services/organisations.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { OrganisationEditComponent } from '../organisation-edit/organisation-edit.component';
+
+import { NgIf, NgClass, NgFor } from '@angular/common';
+import { WebsitePreviewComponent } from '../../public/website-preview/website-preview.component';
 
 @Component({
   selector: 'app-organisation',
   templateUrl: 'organisation.component.html',
-  styleUrls: ['organisation.component.css']
+  styleUrls: ['organisation.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    RouterLink,
+    NgClass,
+    NgFor,
+    OrganisationEditComponent,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    WebsitePreviewComponent
+  ]
 })
 export class OrganisationComponent implements OnInit {
   public organisation = new Organisation();

@@ -20,11 +20,20 @@ import { Question, QuestionEdit } from 'src/app/models/question.model';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { TagsService } from 'src/app/services/tags.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgIf } from '@angular/common';
+import { TagsEditComponent } from '../../base/tags-edit/tags-edit.component';
+import { CkeUniversalComponent } from '../cke-universal/cke-universal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-question-edit',
-  templateUrl: './question-edit.component.html',
-  styleUrls: ['./question-edit.component.css']
+    selector: 'app-question-edit',
+    templateUrl: './question-edit.component.html',
+    styleUrls: ['./question-edit.component.css'],
+    standalone: true,
+    imports: [FormsModule, CkeUniversalComponent, TagsEditComponent, NgIf, MatCheckboxModule, MatButtonModule, MatIconModule]
 })
 export class QuestionEditComponent implements OnInit {
   @Input() public question = new Question();

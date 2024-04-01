@@ -31,11 +31,20 @@ import { QuestionCreateNewComponent } from '../question-create-new/question-crea
 import { BasicService } from 'src/app/services/basic.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
+import { RouterLink } from '@angular/router';
+import { QuestionComponent } from '../question/question.component';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { SortMenuComponent } from '../menus/sort-menu/sort-menu.component';
 
 @Component({
-  selector: 'app-questions-list',
-  templateUrl: './questions-list.component.html',
-  styleUrls: ['./questions-list.component.css']
+    selector: 'app-questions-list',
+    templateUrl: './questions-list.component.html',
+    styleUrls: ['./questions-list.component.css'],
+    standalone: true,
+    imports: [SortMenuComponent, MatButtonModule, MatTooltipModule, MatIconModule, NgIf, NgFor, QuestionComponent, RouterLink, AsyncPipe]
 })
 export class QuestionsListComponent implements OnInit, OnChanges {
   @Input() HasFocus = false;

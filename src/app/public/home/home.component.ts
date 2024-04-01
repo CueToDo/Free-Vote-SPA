@@ -1,17 +1,21 @@
 // Angular
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgIf, NgClass } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 // FreeVote
 import { AppService } from 'src/app/services/app.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    standalone: true,
+    imports: [NgIf, MatButtonModule, MatIconModule, NgClass, RouterLink]
 })
 export class HomeComponent implements OnInit {
   // tslint:disable-next-line: deprecation

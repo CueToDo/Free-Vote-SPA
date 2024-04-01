@@ -32,12 +32,26 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
 import { TagsService } from 'src/app/services/tags.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { TagsEditComponent } from '../../base/tags-edit/tags-edit.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgIf, NgFor } from '@angular/common';
+import { CkeUniversalComponent } from '../cke-universal/cke-universal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-point-edit',
-  templateUrl: './point-edit.component.html',
-  styleUrls: ['./point-edit.component.css'],
-  preserveWhitespaces: true
+    selector: 'app-point-edit',
+    templateUrl: './point-edit.component.html',
+    styleUrls: ['./point-edit.component.css'],
+    preserveWhitespaces: true,
+    standalone: true,
+    imports: [FormsModule, CkeUniversalComponent, NgIf, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressBarModule, TagsEditComponent, MatSelectModule, NgFor, MatOptionModule, MatCheckboxModule]
 })
 export class PointEditComponent implements OnInit {
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent

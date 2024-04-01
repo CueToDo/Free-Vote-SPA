@@ -13,13 +13,18 @@ import { Point } from 'src/app/models/point.model';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HtmlService } from 'src/app/services/html.service';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-social-share',
-  templateUrl: './social-share.component.html',
-  styleUrls: ['./social-share.component.css']
+    selector: 'app-social-share',
+    templateUrl: './social-share.component.html',
+    styleUrls: ['./social-share.component.css'],
+    standalone: true,
+    imports: [MatButtonModule, RouterLink, MatIconModule, ClipboardModule]
 })
 export class SocialShareComponent implements OnInit {
   url = '';

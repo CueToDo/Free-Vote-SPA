@@ -9,7 +9,7 @@ import {
   ViewChild,
   ElementRef
 } from '@angular/core';
-import { MatSelect } from '@angular/material/select';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -30,11 +30,24 @@ import { CountriesComponent } from 'src/app/base/countries/countries.component';
 // Services
 import { LookupsService } from 'src/app/services/lookups.service';
 import { OrganisationsService } from 'src/app/services/organisations.service';
+import { MatRadioModule } from '@angular/material/radio';
+import { ListComponent } from '../../base/list/list.component';
+import { CountriesComponent as CountriesComponent_1 } from '../../base/countries/countries.component';
+import { MatOptionModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgClass, NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-organisation-edit',
-  templateUrl: './organisation-edit.component.html',
-  styleUrls: ['./organisation-edit.component.css']
+    selector: 'app-organisation-edit',
+    templateUrl: './organisation-edit.component.html',
+    styleUrls: ['./organisation-edit.component.css'],
+    standalone: true,
+    imports: [NgClass, MatFormFieldModule, MatInputModule, FormsModule, NgIf, MatButtonModule, MatIconModule, MatTooltipModule, MatSelectModule, NgFor, MatOptionModule, CountriesComponent_1, ListComponent, MatRadioModule]
 })
 export class OrganisationEditComponent implements OnInit, OnDestroy {
   @Input() organisation = new Organisation();

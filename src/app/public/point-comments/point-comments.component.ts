@@ -17,11 +17,15 @@ import { PointComponent } from '../point/point.component';
 import { PointEditComponent } from '../point-edit/point-edit.component';
 import { SocialShareComponent } from '../menus/social-share/social-share.component';
 import { PointsListComponent } from '../points-list/points-list.component';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf, NgFor, NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-point-comments',
-  templateUrl: './point-comments.component.html',
-  styleUrls: ['./point-comments.component.css']
+    selector: 'app-point-comments',
+    templateUrl: './point-comments.component.html',
+    styleUrls: ['./point-comments.component.css'],
+    standalone: true,
+    imports: [SocialShareComponent, NgIf, NgFor, PointComponent, NgClass, PointsListComponent, MatButtonModule, PointEditComponent]
 })
 export class PointCommentsComponent implements OnInit {
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;

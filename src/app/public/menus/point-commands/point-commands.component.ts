@@ -5,11 +5,19 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Point, PointFeedback } from 'src/app/models/point.model';
 import { PointSupportLevels } from 'src/app/models/enums';
 import { PointsService } from 'src/app/services/points.service';
+import { NbspPipe } from '../../../custommodule/pipes/nbsp.pipe';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { NgIf, NgClass } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-point-commands',
-  templateUrl: './point-commands.component.html',
-  styleUrls: ['./point-commands.component.css']
+    selector: 'app-point-commands',
+    templateUrl: './point-commands.component.html',
+    styleUrls: ['./point-commands.component.css'],
+    standalone: true,
+    imports: [MatButtonModule, MatMenuModule, NgIf, MatIconModule, MatTooltipModule, NgClass, NbspPipe]
 })
 export class PointCommandsComponent implements OnInit {
   @Input() point = new Point();

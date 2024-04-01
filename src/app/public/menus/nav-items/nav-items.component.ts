@@ -12,12 +12,19 @@ import { AppService } from 'src/app/services/app.service';
 import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { TooltipPosition } from '@angular/material/tooltip';
+import { TooltipPosition, MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-nav-items',
-  templateUrl: './nav-items.component.html',
-  styleUrls: ['./nav-items.component.css']
+    selector: 'app-nav-items',
+    templateUrl: './nav-items.component.html',
+    styleUrls: ['./nav-items.component.css'],
+    standalone: true,
+    imports: [NgIf, MatButtonModule, RouterLink, RouterLinkActive, MatTooltipModule, MatIconModule, MatMenuModule, AsyncPipe]
 })
 export class NavItemsComponent implements OnInit, OnDestroy {
   tagsPointsActive$: Subscription | undefined;

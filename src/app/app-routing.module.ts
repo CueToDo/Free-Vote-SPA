@@ -15,6 +15,8 @@ import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points
 // Only need to import LoginRouteGuardService as it's used in appRoots declaration
 import { LoginRouteGuardService } from './services/login-route-guard.service';
 import { LocalMenuComponent } from './local/local-menu/local-menu.component';
+import { OrganisationComponent } from './organisations/organisation/organisation.component';
+import { OrganisationsComponent } from './organisations/organisations/organisations.component';
 
 const appRoutes: Routes = [
   // Refresh in browser fails - when route is specified
@@ -69,15 +71,12 @@ const appRoutes: Routes = [
     canActivate: [LoginRouteGuardService]
   },
 
-  // organisations, groups
-  {
-    path: 'organisations',
-    loadChildren: () =>
-      import('./organisations/organisations.module').then(
-        m => m.OrganisationsModule
-      ),
-    canActivate: [LoginRouteGuardService]
-  },
+  // organisations
+  // To Do after conversion to standalone - how are these routeguarded?
+  { path: 'organisations/membership', component: OrganisationsComponent },
+  { path: 'organisations/available', component: OrganisationsComponent },
+  { path: 'organisations/new', component: OrganisationsComponent },
+  { path: 'organisations/:organisationSlug', component: OrganisationComponent },
 
   // Moved from local module on conversion to standalone
   {

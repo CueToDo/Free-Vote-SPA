@@ -11,8 +11,8 @@ import {
   SimpleChanges,
   OnChanges
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { isPlatformBrowser, NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // Material
@@ -40,11 +40,18 @@ import { TagsService } from 'src/app/services/tags.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { DatetimeService } from 'src/app/services/datetime.service';
 import { BasicService } from 'src/app/services/basic.service';
+import { PointComponent } from '../point/point.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { SortMenuComponent } from '../menus/sort-menu/sort-menu.component';
 
 @Component({
-  selector: 'app-points-list',
-  templateUrl: './points-list.component.html',
-  styleUrls: ['./points-list.component.css']
+    selector: 'app-points-list',
+    templateUrl: './points-list.component.html',
+    styleUrls: ['./points-list.component.css'],
+    standalone: true,
+    imports: [SortMenuComponent, MatButtonModule, MatTooltipModule, MatIconModule, NgIf, NgFor, PointComponent, RouterLink, AsyncPipe]
 })
 export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() HasFocus = false;

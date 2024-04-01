@@ -30,10 +30,20 @@ import { QuestionAnswersComponent } from './../question-answers/question-answers
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
 import { QuestionsListComponent } from 'src/app/public/questions-list/questions-list.component';
 import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
+import { QuestionAnswersComponent as QuestionAnswersComponent_1 } from '../question-answers/question-answers.component';
+import { QuestionsListComponent as QuestionsListComponent_1 } from '../questions-list/questions-list.component';
+import { PointsListComponent as PointsListComponent_1 } from '../points-list/points-list.component';
+import { TagCloudComponent as TagCloudComponent_1 } from '../../base/tagCloud/tagCloud.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf, NgClass, AsyncPipe } from '@angular/common';
 
 @Component({
-  templateUrl: './tags-and-points.component.html',
-  styleUrls: ['./tags-and-points.component.css']
+    templateUrl: './tags-and-points.component.html',
+    styleUrls: ['./tags-and-points.component.css'],
+    standalone: true,
+    imports: [NgIf, MatButtonModule, MatTooltipModule, MatIconModule, NgClass, TagCloudComponent_1, PointsListComponent_1, QuestionsListComponent_1, QuestionAnswersComponent_1, AsyncPipe]
 })
 export class TagsAndPointsComponent
   implements OnInit, AfterViewInit, OnDestroy

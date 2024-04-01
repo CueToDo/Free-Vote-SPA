@@ -11,11 +11,19 @@ import { AppService } from 'src/app/services/app.service';
 // Components
 import { OrganisationListComponent } from 'src/app/organisations/organisation-list/organisation-list.component';
 import { OrganisationEditComponent } from 'src/app/organisations/organisation-edit/organisation-edit.component';
+import { OrganisationEditComponent as OrganisationEditComponent_1 } from '../organisation-edit/organisation-edit.component';
+import { OrganisationListComponent as OrganisationListComponent_1 } from '../organisation-list/organisation-list.component';
+import { NgClass } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-organisations',
-  templateUrl: './organisations.component.html',
-  styleUrls: ['./organisations.component.css']
+    selector: 'app-organisations',
+    templateUrl: './organisations.component.html',
+    styleUrls: ['./organisations.component.css'],
+    standalone: true,
+    imports: [MatButtonModule, MatTooltipModule, MatIconModule, NgClass, OrganisationListComponent_1, OrganisationEditComponent_1]
 })
 export class OrganisationsComponent implements OnInit, AfterViewInit {
   @ViewChild('OrganisationMembership')

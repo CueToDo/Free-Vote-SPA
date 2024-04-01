@@ -1,10 +1,13 @@
 // Angular
 import { Component, Input, OnInit } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-website-preview',
-  templateUrl: './website-preview.component.html',
-  styleUrls: ['./website-preview.component.css']
+    selector: 'app-website-preview',
+    templateUrl: './website-preview.component.html',
+    styleUrls: ['./website-preview.component.css'],
+    standalone: true,
+    imports: [NgIf]
 })
 export class WebsitePreviewComponent implements OnInit {
   @Input() public LinkAddress = '';

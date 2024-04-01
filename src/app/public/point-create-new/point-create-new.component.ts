@@ -15,9 +15,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PointEditComponent } from '../point-edit/point-edit.component';
 
 @Component({
-  selector: 'app-point-create-new',
-  templateUrl: './point-create-new.component.html',
-  styleUrls: ['./point-create-new.component.css']
+    selector: 'app-point-create-new',
+    templateUrl: './point-create-new.component.html',
+    styleUrls: ['./point-create-new.component.css'],
+    standalone: true,
+    imports: [PointEditComponent]
 })
 export class PointCreateNewComponent implements OnInit, AfterViewInit {
   @ViewChild('pointEdit') pointEditComponent!: PointEditComponent;

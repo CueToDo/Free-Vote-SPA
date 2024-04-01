@@ -12,11 +12,20 @@ import { PointSupportLevels } from 'src/app/models/enums';
 import { BasicService } from 'src/app/services/basic.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
+import { NbspPipe } from '../../custommodule/pipes/nbsp.pipe';
+import { QuestionEditComponent } from '../question-edit/question-edit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf, NgClass, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-question',
-  templateUrl: './question.component.html',
-  styleUrls: ['./question.component.css']
+    selector: 'app-question',
+    templateUrl: './question.component.html',
+    styleUrls: ['./question.component.css'],
+    standalone: true,
+    imports: [NgIf, MatButtonModule, MatMenuModule, MatIconModule, MatTooltipModule, NgClass, QuestionEditComponent, AsyncPipe, NbspPipe]
 })
 export class QuestionComponent {
   @Input() public question = new Question();

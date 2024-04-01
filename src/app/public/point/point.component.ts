@@ -38,12 +38,26 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
 import { TagsService } from 'src/app/services/tags.service';
+import { SafeHtmlPipe } from '../../custommodule/pipes/safe-html.pipe';
+import { SafeURLPipe } from '../../custommodule/pipes/safe-url.pipe';
+import { NbspPipe } from '../../custommodule/pipes/nbsp.pipe';
+import { PointEditComponent } from '../point-edit/point-edit.component';
+import { RouterLink } from '@angular/router';
+import { PointCommandsComponent } from '../menus/point-commands/point-commands.component';
+import { PointTypesComponent } from '../menus/point-types/point-types.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { WebsitePreviewComponent } from '../website-preview/website-preview.component';
+import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-point',
-  templateUrl: './point.component.html',
-  styleUrls: ['./point.component.css'],
-  preserveWhitespaces: true
+    selector: 'app-point',
+    templateUrl: './point.component.html',
+    styleUrls: ['./point.component.css'],
+    preserveWhitespaces: true,
+    standalone: true,
+    imports: [NgIf, NgClass, NgFor, WebsitePreviewComponent, MatButtonModule, MatTooltipModule, MatIconModule, PointTypesComponent, PointCommandsComponent, RouterLink, PointEditComponent, AsyncPipe, NbspPipe, SafeURLPipe, SafeHtmlPipe]
 })
 export class PointComponent implements AfterViewInit {
   @Input() point = new Point();
