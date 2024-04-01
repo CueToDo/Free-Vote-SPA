@@ -32,11 +32,22 @@ import { ProfileService } from 'src/app/services/profile.service';
 
 // Components
 import { DeleteAccountComponent } from 'src/app/my/delete-account/delete-account.component';
+import { PublicModule } from '../../public/public.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
-  preserveWhitespaces: true
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.css'],
+    preserveWhitespaces: true,
+    standalone: true,
+    imports: [NgIf, MatRadioModule, FormsModule, MatButtonModule, MatIconModule, RouterLink, NgClass, MatFormFieldModule, MatInputModule, PublicModule]
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba

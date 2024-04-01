@@ -31,24 +31,22 @@ const myRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild(myRoutes),
-    // Material
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
-    MatSelectModule,
-    PublicModule
-],
-  declarations: [
-    ProfileComponent,
-    DeleteAccountComponent,
-    PointOfTheWeekVoteComponent
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild(myRoutes),
+        // Material
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatRadioModule,
+        MatSelectModule,
+        PublicModule,
+        ProfileComponent,
+        DeleteAccountComponent,
+        PointOfTheWeekVoteComponent
+    ]
 })
 export class MyModule {}
