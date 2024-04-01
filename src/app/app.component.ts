@@ -12,8 +12,8 @@ import {
   HostListener
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Location, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
+import { Location, DOCUMENT, isPlatformBrowser, NgIf, NgClass } from '@angular/common';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // rxjs
@@ -35,6 +35,9 @@ import { NavBurgerComponent } from 'src/app/public/menus/nav-burger/nav-burger.c
 import { NavMainComponent } from 'src/app/public/menus/nav-main/nav-main.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CookieConsentComponent } from './base/cookie-consent/cookie-consent.component';
+import { NavMainComponent as NavMainComponent_1 } from './public/menus/nav-main/nav-main.component';
+import { NavBurgerComponent as NavBurgerComponent_1 } from './public/menus/nav-burger/nav-burger.component';
+import { MatIconModule } from '@angular/material/icon';
 
 export enum NetworkStatus {
   ONLINE = 'online',
@@ -42,9 +45,11 @@ export enum NetworkStatus {
 }
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    standalone: true,
+    imports: [NgIf, MatIconModule, NgClass, NavBurgerComponent_1, NavMainComponent_1, RouterOutlet]
 })
 export class AppComponent implements OnInit, OnDestroy {
   // App Component is instantiated once only and we don't need to manage unsubscribe for Subscriptions
