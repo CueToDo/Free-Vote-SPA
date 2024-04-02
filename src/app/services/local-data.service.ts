@@ -1,8 +1,6 @@
 // Angular
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
-import { Request } from 'express';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 // Models
 import { Candidate } from '../models/candidate.model';
@@ -189,8 +187,7 @@ export class LocalDataService {
   constructor(
     private httpXS: HttpExtraService,
     // https://stackoverflow.com/questions/39085632/localstorage-is-not-defined-angular-universal
-    @Inject(PLATFORM_ID) private platformId: object,
-    @Optional() @Inject(REQUEST) protected request: Request
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
     // Lifecycle hooks, like OnInit() work with Directives and Components.
     // They do not work with other types, like a service.
