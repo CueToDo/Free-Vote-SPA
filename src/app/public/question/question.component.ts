@@ -1,31 +1,42 @@
 // Angular
 import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { NgIf, NgClass, AsyncPipe } from '@angular/common';
 
-// Auth0
-import { AuthService } from '@auth0/auth0-angular';
+// Material
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
 // Models, enums
 import { Question } from 'src/app/models/question.model';
 import { PointSupportLevels } from 'src/app/models/enums';
 
 // Services
+import { AuthService } from 'src/app/services/auth.service';
 import { BasicService } from 'src/app/services/basic.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
-import { NbspPipe } from '../../custommodule/pipes/nbsp.pipe';
 import { QuestionEditComponent } from '../question-edit/question-edit.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { NgIf, NgClass, AsyncPipe } from '@angular/common';
+
+import { NbspPipe } from '../../custommodule/pipes/nbsp.pipe';
 
 @Component({
-    selector: 'app-question',
-    templateUrl: './question.component.html',
-    styleUrls: ['./question.component.css'],
-    standalone: true,
-    imports: [NgIf, MatButtonModule, MatMenuModule, MatIconModule, MatTooltipModule, NgClass, QuestionEditComponent, AsyncPipe, NbspPipe]
+  selector: 'app-question',
+  templateUrl: './question.component.html',
+  styleUrls: ['./question.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
+    MatTooltipModule,
+    NgClass,
+    QuestionEditComponent,
+    AsyncPipe,
+    NbspPipe
+  ]
 })
 export class QuestionComponent {
   @Input() public question = new Question();
@@ -39,7 +50,7 @@ export class QuestionComponent {
   error = '';
 
   constructor(
-    public auth0Service: AuthService,
+    public authService: AuthService,
     public basicService: BasicService,
     public localData: LocalDataService, // public - used in template
     private questionsService: QuestionsService

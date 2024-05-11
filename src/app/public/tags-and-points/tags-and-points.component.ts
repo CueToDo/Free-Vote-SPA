@@ -6,11 +6,14 @@ import {
   OnDestroy,
   ViewChild
 } from '@angular/core';
+import { NgIf, NgClass, AsyncPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
-// Auth0
-import { AuthService } from '@auth0/auth0-angular';
+// Material
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -21,6 +24,7 @@ import { BreakoutGroup } from 'src/app/models/break-out-group.model';
 
 // Services
 import { AppService } from 'src/app/services/app.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 // Components
@@ -30,20 +34,23 @@ import { QuestionAnswersComponent } from './../question-answers/question-answers
 import { QuestionEditComponent } from 'src/app/public/question-edit/question-edit.component';
 import { QuestionsListComponent } from 'src/app/public/questions-list/questions-list.component';
 import { TagCloudComponent } from 'src/app/base/tagCloud/tagCloud.component';
-import { QuestionAnswersComponent as QuestionAnswersComponent_1 } from '../question-answers/question-answers.component';
-import { QuestionsListComponent as QuestionsListComponent_1 } from '../questions-list/questions-list.component';
-import { PointsListComponent as PointsListComponent_1 } from '../points-list/points-list.component';
-import { TagCloudComponent as TagCloudComponent_1 } from '../../base/tagCloud/tagCloud.component';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatButtonModule } from '@angular/material/button';
-import { NgIf, NgClass, AsyncPipe } from '@angular/common';
 
 @Component({
-    templateUrl: './tags-and-points.component.html',
-    styleUrls: ['./tags-and-points.component.css'],
-    standalone: true,
-    imports: [NgIf, MatButtonModule, MatTooltipModule, MatIconModule, NgClass, TagCloudComponent_1, PointsListComponent_1, QuestionsListComponent_1, QuestionAnswersComponent_1, AsyncPipe]
+  templateUrl: './tags-and-points.component.html',
+  styleUrls: ['./tags-and-points.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    NgClass,
+    TagCloudComponent,
+    PointsListComponent,
+    QuestionsListComponent,
+    QuestionAnswersComponent,
+    AsyncPipe
+  ]
 })
 export class TagsAndPointsComponent
   implements OnInit, AfterViewInit, OnDestroy
@@ -109,7 +116,7 @@ export class TagsAndPointsComponent
 
   constructor(
     private appService: AppService,
-    public auth0Service: AuthService,
+    public authService: AuthService,
     public localData: LocalDataService,
     private activatedRoute: ActivatedRoute,
     private breakpointObserver: BreakpointObserver

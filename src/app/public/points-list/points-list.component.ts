@@ -17,6 +17,12 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // Material
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+
+// rxjs
+import { Subscription } from 'rxjs';
 
 // Models, enums
 import { ID } from 'src/app/models/common';
@@ -30,28 +36,34 @@ import {
 
 // Components
 import { PointCreateNewComponent } from 'src/app/public/point-create-new/point-create-new.component';
+import { PointComponent } from '../point/point.component';
+import { SortMenuComponent } from '../menus/sort-menu/sort-menu.component';
 
 // Services
 import { AppService } from 'src/app/services/app.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { BasicService } from 'src/app/services/basic.service';
+import { DatetimeService } from 'src/app/services/datetime.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PointsService } from 'src/app/services/points.service';
-import { Subscription } from 'rxjs';
 import { TagsService } from 'src/app/services/tags.service';
-import { AuthService } from '@auth0/auth0-angular';
-import { DatetimeService } from 'src/app/services/datetime.service';
-import { BasicService } from 'src/app/services/basic.service';
-import { PointComponent } from '../point/point.component';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatButtonModule } from '@angular/material/button';
-import { SortMenuComponent } from '../menus/sort-menu/sort-menu.component';
 
 @Component({
-    selector: 'app-points-list',
-    templateUrl: './points-list.component.html',
-    styleUrls: ['./points-list.component.css'],
-    standalone: true,
-    imports: [SortMenuComponent, MatButtonModule, MatTooltipModule, MatIconModule, NgIf, NgFor, PointComponent, RouterLink, AsyncPipe]
+  selector: 'app-points-list',
+  templateUrl: './points-list.component.html',
+  styleUrls: ['./points-list.component.css'],
+  standalone: true,
+  imports: [
+    SortMenuComponent,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    NgIf,
+    NgFor,
+    PointComponent,
+    RouterLink,
+    AsyncPipe
+  ]
 })
 export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() HasFocus = false;
@@ -173,7 +185,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     public appService: AppService,
-    public auth0Service: AuthService,
+    public authService: AuthService,
     public basicService: BasicService,
     private dateTimeService: DatetimeService,
     public localData: LocalDataService,

@@ -158,7 +158,7 @@
 
       <!-- Point Owner and Feedback Menu -->
       <app-point-commands
-        *ngIf="auth0Service.isAuthenticated$ | async"
+        *ngIf="authService.SignedIn$ | async"
         [point]="point"
         (Edit)="edit()"
         (Delete)="delete()"

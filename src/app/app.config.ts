@@ -1,20 +1,80 @@
 // Angular
-import { ApplicationConfig, isDevMode } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  isDevMode
+} from '@angular/core';
+import {
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+  provideHttpClient,
+  withInterceptors
+} from '@angular/common/http';
+import { provideRouter, withHashLocation } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
-
-import { routes } from './app.routes';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { InterceptorService } from './services/interceptor.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
+
+// Firebase Auth
+import { getAuth, provideAuth } from '@angular/fire/auth';
+
+// FreeVote routes
+import { routes } from './app.routes';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+
+export const authenticationInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+) => {
+  const modifiedReq = req.clone({
+    headers: req.headers.set(
+      'Authorization',
+      `Bearer ${sessionStorage.getItem('token')}`
+    )
+  });
+
+  return next(modifiedReq);
+};
+
+// Base element in index.html
+// Base Url with Standalone components - https://g.co/gemini/share/162c224716d3
+function getBaseUrl(): string {
+  return document.getElementsByTagName('base')[0].href;
+}
+
+// Service Worker Registration (Optional Customization)
+// Import the service worker file (replace with your actual path)
+// For whatever reason, Angular sometimes does not register the service worker properly.
+// https://stackoverflow.com/questions/50968902/angular-service-worker-swupdate-available-not-triggered
+// https://free.vote/ngsw/state
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
+    provideRouter(routes, withHashLocation()),
+    // provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([authenticationInterceptor])),
     provideClientHydration(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    // https://stackoverflow.com/questions/72504142/how-to-add-browseranimationsmodule-or-noopanimationsmodule-to-standalone-compone
+    importProvidersFrom([BrowserAnimationsModule]),
+    importProvidersFrom(
+      provideFirebaseApp(() =>
+        initializeApp({
+          projectId: 'free-vote-auth',
+          appId: '1:946815947727:web:fadb235cce0919bba9b8ba',
+          storageBucket: 'free-vote-auth.appspot.com',
+          apiKey: 'AIzaSyD9cWwgcw-yMxK8FqI5Jz41pBKBP5KmAgo',
+          authDomain: 'free-vote-auth.firebaseapp.com',
+          messagingSenderId: '946815947727',
+          measurementId: 'G-S48NXDR4TZ'
+        })
+      )
+    ),
+    importProvidersFrom(provideAuth(() => getAuth()))
   ]
 };

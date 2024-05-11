@@ -5,27 +5,27 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 // Services
-import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-    selector: 'app-cookie-consent',
-    templateUrl: './cookie-consent.component.html',
-    styleUrls: ['./cookie-consent.component.css'],
-    standalone: true,
-    imports: [NgIf, MatButtonModule]
+  selector: 'app-cookie-consent',
+  templateUrl: './cookie-consent.component.html',
+  styleUrls: ['./cookie-consent.component.css'],
+  standalone: true,
+  imports: [NgIf, MatButtonModule]
 })
 export class CookieConsentComponent {
   constructor(
+    private authService: AuthService,
     private dialogRef: MatDialogRef<CookieConsentComponent>,
-    public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService
   ) {}
 
   get loggedIn(): boolean {
-    return this.auth0Wrapper.LoggedInToAuth0;
+    return this.authService.IsSignedIn;
   }
 
   get name(): string {
@@ -61,7 +61,7 @@ export class CookieConsentComponent {
   }
 
   Logout(): void {
-    this.auth0Wrapper.logout();
+    this.authService.signOut();
     this.localData.cookieConsent = false;
     this.dialogRef.disableClose = false;
     this.dialogRef.close();

@@ -37,11 +37,7 @@
 
     <!-- Question Owner Commands -->
 
-    <div
-      *ngIf="
-        (auth0Service.isAuthenticated$ | async) && question.isQuestionOwner
-      "
-    >
+    <div *ngIf="(authService.SignedIn$ | async) && question.isQuestionOwner">
       <button mat-icon-button [matMenuTriggerFor]="questionOwnerCommands">
         <mat-icon *ngIf="!question.draft" matTooltip="edit">edit</mat-icon>
         <mat-icon
@@ -66,7 +62,7 @@
 
     <!-- Voter Question Feedback Menu -->
 
-    <div *ngIf="auth0Service.isAuthenticated$ | async">
+    <div *ngIf="authService.SignedIn$ | async">
       <!-- type='button' https://stackoverflow.com/questions/12319758/clicking-a-button-within-a-form-causes-page-refresh -->
       <!-- https://stackblitz.com/angular/rllvqdkjedar -->
       <button

@@ -8,13 +8,15 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 // Material
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-
-// Auth0
-import { AuthService } from '@auth0/auth0-angular';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 // Models, enums
 import { PointSortTypes } from 'src/app/models/enums';
@@ -25,26 +27,32 @@ import {
 } from 'src/app/models/question.model';
 
 // Components
+import { QuestionComponent } from '../question/question.component';
 import { QuestionCreateNewComponent } from '../question-create-new/question-create-new.component';
+import { SortMenuComponent } from '../menus/sort-menu/sort-menu.component';
 
 // Services
+import { AuthService } from 'src/app/services/auth.service';
 import { BasicService } from 'src/app/services/basic.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
-import { RouterLink } from '@angular/router';
-import { QuestionComponent } from '../question/question.component';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatButtonModule } from '@angular/material/button';
-import { SortMenuComponent } from '../menus/sort-menu/sort-menu.component';
 
 @Component({
-    selector: 'app-questions-list',
-    templateUrl: './questions-list.component.html',
-    styleUrls: ['./questions-list.component.css'],
-    standalone: true,
-    imports: [SortMenuComponent, MatButtonModule, MatTooltipModule, MatIconModule, NgIf, NgFor, QuestionComponent, RouterLink, AsyncPipe]
+  selector: 'app-questions-list',
+  templateUrl: './questions-list.component.html',
+  styleUrls: ['./questions-list.component.css'],
+  standalone: true,
+  imports: [
+    SortMenuComponent,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    NgIf,
+    NgFor,
+    QuestionComponent,
+    RouterLink,
+    AsyncPipe
+  ]
 })
 export class QuestionsListComponent implements OnInit, OnChanges {
   @Input() HasFocus = false;
@@ -94,7 +102,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
   public error = '';
 
   constructor(
-    public auth0Service: AuthService,
+    public authService: AuthService,
     public basicService: BasicService,
     public localData: LocalDataService,
     private questionsService: QuestionsService,

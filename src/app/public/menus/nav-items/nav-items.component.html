@@ -32,7 +32,7 @@
 
   <button
     mat-button
-    *ngIf="auth0Service.isAuthenticated$ | async"
+    *ngIf="authService.SignedIn$ | async"
     routerLink="/organisations/membership"
     routerLinkActive="active"
     [class.selected]="MenuItemSelected === 'organisations'"
@@ -47,7 +47,7 @@
   <!-- Profile/Sign Out Menu Trigger -->
   <button
     mat-button
-    *ngIf="auth0Service.isAuthenticated$ | async"
+    *ngIf="authService.SignedIn$ | async"
     [matMenuTriggerFor]="profileMenu"
     [class.selected]="
       MenuItemSelected === 'profile' || MenuItemSelected === 'MP'
@@ -58,10 +58,9 @@
     <img
       *ngIf="
         localData.freeVoteProfile.profilePictureOptionID === '1' &&
-        auth0Wrapper.auth0Profile &&
-        auth0Wrapper.auth0Profile.picture
+        authService.PhotoUrl
       "
-      [src]="auth0Wrapper.auth0Profile.picture"
+      [src]="authService.PhotoUrl"
       class="rounded-circle img-fluid profilePic"
     />
 
@@ -119,7 +118,7 @@
 
     <button
       mat-menu-item
-      (click)="logout()"
+      (click)="signOut()"
       matTooltip="sign out"
       matTooltipPosition="right"
     >
@@ -131,8 +130,8 @@
   <!-- Sign In -->
   <button
     mat-button
-    *ngIf="(auth0Service.isAuthenticated$ | async) == false"
-    (click)="auth0Wrapper.login()"
+    *ngIf="(authService.SignedIn$ | async) == false"
+    (click)="authService.signInWithGoogle()"
     matTooltip="sign in"
     [matTooltipPosition]="matTooltipPosition"
   >

@@ -24,7 +24,7 @@
     <!-- 3. New question  -->
     <button
       mat-raised-button
-      *ngIf="auth0Service.isAuthenticated$ | async"
+      *ngIf="authService.SignedIn$ | async"
       matTooltip="create new point"
       matTooltipPosition="below"
       (click)="NewQuestion()"

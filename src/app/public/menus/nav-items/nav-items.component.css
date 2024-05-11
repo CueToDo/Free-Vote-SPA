@@ -23,6 +23,7 @@ div.burger {
 }
 
 div.burger button {
+  padding: 10px;
   width: 100% !important;
   min-width: unset !important;
   justify-content: start;

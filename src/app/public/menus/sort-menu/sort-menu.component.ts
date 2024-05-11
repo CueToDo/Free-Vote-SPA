@@ -2,25 +2,25 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
-// Auth0
-import { AuthService } from '@auth0/auth0-angular';
-
-// Model/Enums
-import { PointSortTypes, Tabs } from 'src/app/models/enums';
-
-// Services
-import { LocalDataService } from 'src/app/services/local-data.service';
+// Material
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 
+// Model/Enums
+import { PointSortTypes, Tabs } from 'src/app/models/enums';
+
+// Services
+import { AuthService } from 'src/app/services/auth.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
+
 @Component({
-    selector: 'app-sort-menu',
-    templateUrl: './sort-menu.component.html',
-    styleUrls: ['./sort-menu.component.css'],
-    standalone: true,
-    imports: [MatButtonModule, MatMenuModule, MatTooltipModule, MatIconModule]
+  selector: 'app-sort-menu',
+  templateUrl: './sort-menu.component.html',
+  styleUrls: ['./sort-menu.component.css'],
+  standalone: true,
+  imports: [MatButtonModule, MatMenuModule, MatTooltipModule, MatIconModule]
 })
 export class SortMenuComponent implements OnInit {
   // 1. For points or questions
@@ -80,7 +80,7 @@ export class SortMenuComponent implements OnInit {
 
   constructor(
     public localData: LocalDataService,
-    public auth0Service: AuthService,
+    public authService: AuthService,
     private breakpointObserver: BreakpointObserver
   ) {}
 

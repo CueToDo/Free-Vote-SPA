@@ -30,11 +30,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { fromEvent } from 'rxjs';
 import { filter, debounceTime, map } from 'rxjs/operators';
 
-// Auth0
-import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
-
 // FreeVote Services
 import { AppService } from 'src/app/services/app.service';
+import { AuthService } from './services/auth.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { TagsService } from 'src/app/services/tags.service';
@@ -87,7 +85,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     public appService: AppService,
-    public auth0Wrapper: Auth0Wrapper,
+    private auth: AuthService,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     private lookupsService: LookupsService,
     private tagsService: TagsService,
@@ -109,9 +107,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.localData.LoadClientValues();
 
     this.cookieConsent();
-
-    // Do this before any API calls
-    this.auth0Wrapper.SetUpAuth0Subscriptions();
 
     this.subscribeNetworkStatus();
 
@@ -357,7 +352,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.localData.LocalLogging = true;
     this.localData.Log('Logged out via vulcan');
     console.log('vulcan logging updated');
-    this.auth0Wrapper.logout();
+    this.auth.signOut();
   }
 
   // https://stackoverflow.com/questions/75106202/ngondestroy-not-working-if-close-multiple-browser-tabs-at-once

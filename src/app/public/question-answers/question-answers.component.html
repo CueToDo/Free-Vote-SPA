@@ -11,7 +11,7 @@
           <mat-icon>arrow_back</mat-icon>
         </button>
 
-        <span *ngIf="auth0Service.isAuthenticated$ | async">
+        <span *ngIf="authService.SignedIn$ | async">
           <button
             mat-button
             (click)="viewAllAnswers()"

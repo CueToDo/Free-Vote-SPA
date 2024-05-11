@@ -7,38 +7,41 @@ import {
   EventEmitter
 } from '@angular/core';
 
+// Material
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+
 // rxjs
 import { Subscription } from 'rxjs';
 
-// Auth0
-import { AuthService } from '@auth0/auth0-angular';
-
 // Models, Enums
-import { FilterCriteria } from 'src/app/models/filterCriteria.model';
-import {
-  MyPointFilter,
-  PointSelectionTypes,
-  PointSortTypes
-} from 'src/app/models/enums';
+import { PointSelectionTypes } from 'src/app/models/enums';
 
 // Services
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 
 // Components
+import { AuthService } from 'src/app/services/auth.service';
 import { PointsListComponent } from '../points-list/points-list.component';
 import { PointEditComponent } from '../point-edit/point-edit.component';
 import { NgIf, AsyncPipe } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'app-question-answers',
-    templateUrl: './question-answers.component.html',
-    styleUrls: ['./question-answers.component.css'],
-    standalone: true,
-    imports: [MatButtonModule, MatTooltipModule, MatIconModule, NgIf, PointEditComponent, PointsListComponent, AsyncPipe]
+  selector: 'app-question-answers',
+  templateUrl: './question-answers.component.html',
+  styleUrls: ['./question-answers.component.css'],
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    NgIf,
+    PointEditComponent,
+    PointsListComponent,
+    AsyncPipe
+  ]
 })
 export class QuestionAnswersComponent {
   @Input() QuestionID = 0;
@@ -62,7 +65,7 @@ export class QuestionAnswersComponent {
   public error = '';
 
   constructor(
-    public auth0Service: AuthService,
+    public authService: AuthService,
     public localData: LocalDataService,
     private questionsService: QuestionsService
   ) {}

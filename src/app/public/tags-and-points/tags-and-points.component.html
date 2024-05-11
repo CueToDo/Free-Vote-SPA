@@ -43,7 +43,7 @@
     <!-- Local Topics -->
     <button
       mat-raised-button
-      *ngIf="auth0Service.isAuthenticated$ | async"
+      *ngIf="authService.SignedIn$ | async"
       [class.selected]="localData.ConstituencyID > 0"
       (click)="ChangeForConstituency()"
       class="localButton"

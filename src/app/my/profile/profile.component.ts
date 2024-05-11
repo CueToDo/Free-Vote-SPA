@@ -23,7 +23,7 @@ import {
 import { ProfilePicture } from 'src/app/models/Image.model';
 
 // Services
-import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 import { HttpService } from 'src/app/services/http.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
@@ -98,7 +98,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   dialogRef: any;
 
   constructor(
-    public auth0Wrapper: Auth0Wrapper,
+    public authService: AuthService,
     private democracyClubService: DemocracyClubService,
     public localData: LocalDataService,
     private httpService: HttpService,
@@ -179,7 +179,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         this.profileService.DELETE_ME().subscribe({
           next: () => {
             this.updateMessage = 'Thank you and goodbye';
-            this.auth0Wrapper.logout();
+            this.authService.signOut();
           },
           error: err => this.ShowError(err)
         });
@@ -295,7 +295,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     const profilePicture = {
       profilePictureOptionID:
         this.localData.freeVoteProfile.profilePictureOptionID,
-      socialMediaProfilePicture: this.auth0Wrapper.auth0Profile?.picture // sent whether used or not
+      socialMediaProfilePicture: this.authService.PhotoUrl // sent whether used or not
     } as ProfilePictureOption;
 
     this.profileService.profilePictureOptionUpdate(profilePicture).subscribe({

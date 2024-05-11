@@ -1,4 +1,3 @@
-import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
 // Angular
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
@@ -13,17 +12,18 @@ import { PoliticalParties } from 'src/app/models/enums';
 import { CandidateEditComponent } from '../candidate-edit/candidate-edit.component';
 
 // Services
+import { AuthService } from 'src/app/services/auth.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { MatButtonModule } from '@angular/material/button';
 import { NgClass, NgIf } from '@angular/common';
 
 @Component({
-    selector: 'app-candidate',
-    templateUrl: './candidate.component.html',
-    styleUrls: ['./candidate.component.css'],
-    standalone: true,
-    imports: [NgClass, NgIf, MatButtonModule]
+  selector: 'app-candidate',
+  templateUrl: './candidate.component.html',
+  styleUrls: ['./candidate.component.css'],
+  standalone: true,
+  imports: [NgClass, NgIf, MatButtonModule]
 })
 export class CandidateComponent {
   @Input() isMPs = false;
@@ -56,7 +56,7 @@ export class CandidateComponent {
   }
 
   constructor(
-    private auth0: Auth0Wrapper,
+    private authService: AuthService,
     private httpXS: HttpExtraService,
     private localData: LocalDataService,
     public matDialog: MatDialog
@@ -93,7 +93,7 @@ export class CandidateComponent {
   EditCandidate() {
     if (this.isMPs) return;
     if (this.localData.freeVoteProfile.email != 'alex@q2do.com') return;
-    if (!this.auth0.LoggedInToAuth0) {
+    if (!this.authService.IsSignedIn) {
       alert('not logged in');
       return;
     }

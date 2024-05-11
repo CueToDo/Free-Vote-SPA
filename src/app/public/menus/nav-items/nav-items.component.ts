@@ -1,30 +1,38 @@
 // Angular
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
+// Material
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { TooltipPosition, MatTooltipModule } from '@angular/material/tooltip';
 
 // rxjs
 import { Subscription } from 'rxjs/internal/Subscription';
 
-// Auth0
-import { AuthService } from '@auth0/auth0-angular';
-
 // FreeVote Services
 import { AppService } from 'src/app/services/app.service';
-import { Auth0Wrapper } from 'src/app/services/auth-wrapper.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { TooltipPosition, MatTooltipModule } from '@angular/material/tooltip';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-nav-items',
-    templateUrl: './nav-items.component.html',
-    styleUrls: ['./nav-items.component.css'],
-    standalone: true,
-    imports: [NgIf, MatButtonModule, RouterLink, RouterLinkActive, MatTooltipModule, MatIconModule, MatMenuModule, AsyncPipe]
+  selector: 'app-nav-items',
+  templateUrl: './nav-items.component.html',
+  styleUrls: ['./nav-items.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatButtonModule,
+    RouterLink,
+    RouterLinkActive,
+    MatTooltipModule,
+    MatIconModule,
+    MatMenuModule,
+    AsyncPipe
+  ]
 })
 export class NavItemsComponent implements OnInit, OnDestroy {
   tagsPointsActive$: Subscription | undefined;
@@ -44,9 +52,8 @@ export class NavItemsComponent implements OnInit, OnDestroy {
     return 'right';
   }
   constructor(
+    public authService: AuthService,
     public appService: AppService,
-    public auth0Service: AuthService,
-    public auth0Wrapper: Auth0Wrapper,
     public localData: LocalDataService,
     private httpXS: HttpExtraService
   ) {}
@@ -67,9 +74,9 @@ export class NavItemsComponent implements OnInit, OnDestroy {
     );
   }
 
-  logout() {
+  signOut() {
     this.localData.LocalLogging = false;
-    this.auth0Wrapper.logout();
+    this.authService.signOut();
   }
 
   ngOnDestroy(): void {

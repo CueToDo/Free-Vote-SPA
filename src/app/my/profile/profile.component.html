@@ -83,9 +83,9 @@
         <img
           *ngIf="
             localData.freeVoteProfile.profilePictureOptionID === '1' &&
-            auth0Wrapper.auth0Profile?.picture
+            !!authService.PhotoUrl
           "
-          [src]="auth0Wrapper.auth0Profile?.picture"
+          [src]="authService.PhotoUrl"
           alt="profile picture"
           class="rounded-circle img-fluid"
         />

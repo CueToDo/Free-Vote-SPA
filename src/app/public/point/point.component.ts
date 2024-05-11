@@ -16,9 +16,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 
-// Auth0
-import { AuthService } from '@auth0/auth0-angular';
-
 // Models & enums
 import { Point } from 'src/app/models/point.model';
 import { Tag } from 'src/app/models/tag.model';
@@ -50,14 +47,31 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { WebsitePreviewComponent } from '../website-preview/website-preview.component';
 import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-    selector: 'app-point',
-    templateUrl: './point.component.html',
-    styleUrls: ['./point.component.css'],
-    preserveWhitespaces: true,
-    standalone: true,
-    imports: [NgIf, NgClass, NgFor, WebsitePreviewComponent, MatButtonModule, MatTooltipModule, MatIconModule, PointTypesComponent, PointCommandsComponent, RouterLink, PointEditComponent, AsyncPipe, NbspPipe, SafeURLPipe, SafeHtmlPipe]
+  selector: 'app-point',
+  templateUrl: './point.component.html',
+  styleUrls: ['./point.component.css'],
+  preserveWhitespaces: true,
+  standalone: true,
+  imports: [
+    NgIf,
+    NgClass,
+    NgFor,
+    WebsitePreviewComponent,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    PointTypesComponent,
+    PointCommandsComponent,
+    RouterLink,
+    PointEditComponent,
+    AsyncPipe,
+    NbspPipe,
+    SafeURLPipe,
+    SafeHtmlPipe
+  ]
 })
 export class PointComponent implements AfterViewInit {
   @Input() point = new Point();
@@ -120,7 +134,7 @@ export class PointComponent implements AfterViewInit {
   public PointTypesEnum = PointTypesEnum;
 
   constructor(
-    public auth0Service: AuthService,
+    public authService: AuthService,
     private htmlService: HtmlService,
     public localData: LocalDataService, // public - used in template
     private lookupsService: LookupsService,

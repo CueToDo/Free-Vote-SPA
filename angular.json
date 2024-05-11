@@ -75,15 +75,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "free-vote:build",
+            "buildTarget": "free-vote:build",
             "port": 7027
           },
           "configurations": {
             "production": {
-              "browserTarget": "free-vote:build:production"
+              "buildTarget": "free-vote:build:production"
             },
             "development": {
-              "browserTarget": "free-vote:build:development"
+              "buildTarget": "free-vote:build:development"
             }
           },
           "defaultConfiguration": "production"
@@ -91,7 +91,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "free-vote:build"
+            "buildTarget": "free-vote:build"
           }
         },
         "test": {
@@ -163,11 +163,11 @@
           "builder": "@nguniversal/builders:ssr-dev-server",
           "configurations": {
             "development": {
-              "browserTarget": "free-vote:build:development",
+              "buildTarget": "free-vote:build:development",
               "serverTarget": "free-vote:server:development"
             },
             "production": {
-              "browserTarget": "free-vote:build:production",
+              "buildTarget": "free-vote:build:production",
               "serverTarget": "free-vote:server:production"
             }
           },
@@ -180,11 +180,11 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "free-vote:build:production",
+              "buildTarget": "free-vote:build:production",
               "serverTarget": "free-vote:server:production"
             },
             "development": {
-              "browserTarget": "free-vote:build:development",
+              "buildTarget": "free-vote:build:development",
               "serverTarget": "free-vote:server:development"
             }
           },

@@ -33,46 +33,24 @@ export class LocalDataService {
 
   public TagChange = false; // use gloablly for comms from point-edit to point to points-list
 
-  // jwt contains All claims
-  // SessionID is baked into jwt for anon or signed-in users
-  // jwt must be in-memory for server side rendering
+  // An AccessToken is obtained from firebase Authentication
+  // It does not contrain any free.vote profile information
+  // SessionIDs will be saved to cookies for anon users
+  // All profile information will be cookie based
 
-  private jwt = '';
-  public get JWT(): string {
-    return this.jwt;
+  private accessToken = '';
+  public get AccessToken(): string {
+    return this.accessToken;
   }
-  public set JWT(jwt: string) {
-    if (jwt === null || jwt === undefined) {
-      jwt = '';
+  public set AccessToken(accessToken: string) {
+    if (accessToken === null || accessToken === undefined) {
+      accessToken = '';
     }
-    this.jwt = jwt;
+    this.accessToken = accessToken;
   }
 
-  // We have a jwt - signed in or not - unless just signed out or never signed in
-  public get GotFreeVoteJwt(): boolean {
-    // actually have a jwt
-    return !!this.JWT;
-  }
-
-  // Need in-memory value for server side tasks (no local storage)
-  private gettingFreevoteJwt = false;
-  public get GettingFreeVoteJwt(): boolean {
-    return this.gettingFreevoteJwt;
-  }
-  public set GettingFreeVoteJwt(getting: boolean) {
-    // Save Status
-    this.gettingFreevoteJwt = getting; // no need to save to local storage
-    this.Log(`Set GettingFreeVoteJwt: ${getting}`);
-    if (getting) {
-      // Clear existing
-      this.ClearExistingJwt();
-    }
-  }
-
-  public ClearExistingJwt(): void {
-    this.JWT = '';
-    // any credentials supplied to get jwt are now invalid - allow call to get fresh jwt
-    this.gettingFreevoteJwt = false;
+  public ClearAccessToken(): void {
+    this.AccessToken = '';
   }
 
   public freeVoteProfile = new FreeVoteProfile(); // For client updates to API
@@ -257,7 +235,7 @@ export class LocalDataService {
 
   public LoadClientValues(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.JWT = this.GetItem('jwt');
+      this.accessToken = this.GetItem('accessToken');
 
       // Logging
       this.localLogging = this.GetItem('localLogging');
@@ -302,7 +280,7 @@ export class LocalDataService {
       return;
     }
 
-    this.SetItem('jwt', this.JWT);
+    this.SetItem('accessToken', this.AccessToken);
     this.SetItem('localLogging', this.localLogging);
     this.SetItem('localLog', this.localLog);
 
@@ -385,12 +363,6 @@ export class LocalDataService {
     }
 
     if (values && !this.updatingProfile) {
-      if (!!values.jwt) {
-        // Set
-        this.JWT = values.jwt;
-        this.GettingFreeVoteJwt = false;
-      }
-
       if (values.roles) {
         this.roles = values.roles.toString().split(',');
       }
@@ -517,7 +489,7 @@ export class LocalDataService {
   }
 
   public SignedOut(): void {
-    this.ClearExistingJwt();
+    this.ClearAccessToken();
 
     // client side values - user may update and post to API
     this.freeVoteProfile.email = '';
