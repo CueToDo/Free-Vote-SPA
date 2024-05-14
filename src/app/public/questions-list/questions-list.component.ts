@@ -31,6 +31,9 @@ import { QuestionComponent } from '../question/question.component';
 import { QuestionCreateNewComponent } from '../question-create-new/question-create-new.component';
 import { SortMenuComponent } from '../menus/sort-menu/sort-menu.component';
 
+// Directives
+import { ElementScrollDirective } from 'src/app/custommodule/directives/elementscroll.directive';
+
 // Services
 import { AuthService } from 'src/app/services/auth.service';
 import { BasicService } from 'src/app/services/basic.service';
@@ -51,7 +54,8 @@ import { QuestionsService } from 'src/app/services/questions.service';
     NgFor,
     QuestionComponent,
     RouterLink,
-    AsyncPipe
+    AsyncPipe,
+    ElementScrollDirective
   ]
 })
 export class QuestionsListComponent implements OnInit, OnChanges {

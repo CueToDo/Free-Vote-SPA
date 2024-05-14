@@ -39,6 +39,9 @@ import { PointCreateNewComponent } from 'src/app/public/point-create-new/point-c
 import { PointComponent } from '../point/point.component';
 import { SortMenuComponent } from '../menus/sort-menu/sort-menu.component';
 
+// Directives
+import { ElementScrollDirective } from 'src/app/custommodule/directives/elementscroll.directive';
+
 // Services
 import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -62,7 +65,8 @@ import { TagsService } from 'src/app/services/tags.service';
     NgFor,
     PointComponent,
     RouterLink,
-    AsyncPipe
+    AsyncPipe,
+    ElementScrollDirective
   ]
 })
 export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
