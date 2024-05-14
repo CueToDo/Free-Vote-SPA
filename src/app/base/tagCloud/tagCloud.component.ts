@@ -27,14 +27,24 @@ import { NgIf, NgFor, NgStyle } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
+import { BasicService } from 'src/app/services/basic.service';
 
 @Component({
-    selector: 'app-tag-cloud',
-    templateUrl: './tagCloud.component.html',
-    styleUrls: ['./tagCloud.component.css'],
-    preserveWhitespaces: true,
-    standalone: true,
-    imports: [MatButtonModule, MatTooltipModule, MatIconModule, NgIf, TagSearchComponent, NgFor, NgStyle, TagDisplayPipe]
+  selector: 'app-tag-cloud',
+  templateUrl: './tagCloud.component.html',
+  styleUrls: ['./tagCloud.component.css'],
+  preserveWhitespaces: true,
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    NgIf,
+    TagSearchComponent,
+    NgFor,
+    NgStyle,
+    TagDisplayPipe
+  ]
 })
 export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
   @Input() HasFocus = false;
@@ -84,6 +94,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private appService: AppService,
+    private basicService: BasicService,
     private tagsService: TagsService,
     public localData: LocalDataService
   ) {}
@@ -147,6 +158,7 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
 
     this.waiting = true;
     this.tags = [];
+    this.error = '';
 
     this.tags$ = this.tagsService
       .TagCloud(this.tagCloudType, this.localData.ConstituencyID)
@@ -157,7 +169,8 @@ export class TagCloudComponent implements OnInit, OnDestroy, OnChanges {
           this.wasForConstituency = this.ForConstituency;
         },
         error: serverError => {
-          this.error = serverError.error.detail;
+          this.error = this.basicService.getError(serverError);
+          this.waiting = false;
         }
       });
   }

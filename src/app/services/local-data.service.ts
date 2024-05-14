@@ -17,10 +17,10 @@ import { environment as env } from 'src/environments/environment';
 // Mainly intended for client side, but has server side only code
 @Injectable({ providedIn: 'root' })
 export class LocalDataService {
-  public website = 'free.vote';
-  public strapline = '';
+  public SPAWebsite = 'free.vote';
   public websiteUrlWTS = ''; // WTS: without trailing slash
   public apiUrl = '';
+  public strapline = '';
 
   // Don't mess with in memory values loaded and saved at app start and close - write straight to local storage
   public get cookieConsent(): boolean {
@@ -38,19 +38,18 @@ export class LocalDataService {
   // SessionIDs will be saved to cookies for anon users
   // All profile information will be cookie based
 
-  private accessToken = '';
   public get AccessToken(): string {
-    return this.accessToken;
+    return this.GetItem('accessToken');
   }
   public set AccessToken(accessToken: string) {
     if (accessToken === null || accessToken === undefined) {
       accessToken = '';
     }
-    this.accessToken = accessToken;
+    this.SetItem('accessToken', accessToken);
   }
 
-  public ClearAccessToken(): void {
-    this.AccessToken = '';
+  public AccessTokenClear(): void {
+    this.RemoveItem('accessToken');
   }
 
   public freeVoteProfile = new FreeVoteProfile(); // For client updates to API
@@ -216,6 +215,12 @@ export class LocalDataService {
     return value ? value : '';
   }
 
+  RemoveItem(name: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(name);
+    }
+  }
+
   public SetServiceURL(): void {
     // Defaults
 
@@ -223,26 +228,30 @@ export class LocalDataService {
     this.apiUrl = env.apiUri;
 
     if (isPlatformBrowser(this.platformId)) {
-      this.website = window.location.origin.replace('https://', '');
-      this.website = this.website.replace('http://', '');
+      this.SPAWebsite = window.location.origin.replace('https://', '');
+      this.SPAWebsite = this.SPAWebsite.replace('http://', '');
       this.websiteUrlWTS = window.location.origin;
     } else if (isPlatformServer(this.platformId)) {
       // window not available on server
       // this.website = this.request.hostname;
-      this.websiteUrlWTS = `https://${this.website}`;
+      this.websiteUrlWTS = `https://${this.SPAWebsite}`;
     }
+    if (this.SPAWebsite.includes('localhost')) this.SPAWebsite = 'free.vote';
   }
 
   public LoadClientValues(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.accessToken = this.GetItem('accessToken');
-
       // Logging
       this.localLogging = this.GetItem('localLogging');
       this.localLog = this.GetItem('localLog');
 
       // client side values - user may update and post to API
+      // Identity
+      this.freeVoteProfile.sessionID = this.GetItem('sessionID');
       this.freeVoteProfile.email = this.GetItem('email');
+      this.freeVoteProfile.voterID = this.GetItem('voterID');
+
+      // Name
       this.freeVoteProfile.givenName = this.GetItem('givenName');
       this.freeVoteProfile.familyName = this.GetItem('familyName');
       this.freeVoteProfile.alias = this.GetItem('alias');
@@ -281,13 +290,23 @@ export class LocalDataService {
     }
 
     this.SetItem('accessToken', this.AccessToken);
+
     this.SetItem('localLogging', this.localLogging);
     this.SetItem('localLog', this.localLog);
 
     if (this.freeVoteProfile) {
+      // Identity
+      if (this.freeVoteProfile.sessionID) {
+        this.SetItem('sessionID', this.freeVoteProfile.sessionID);
+      }
       if (this.freeVoteProfile.email) {
         this.SetItem('email', this.freeVoteProfile.email);
       }
+      if (this.freeVoteProfile.voterID) {
+        this.SetItem('voterID', this.freeVoteProfile.voterID);
+      }
+
+      // Name
       if (this.freeVoteProfile.givenName) {
         this.SetItem('givenName', this.freeVoteProfile.givenName);
       }
@@ -363,13 +382,21 @@ export class LocalDataService {
     }
 
     if (values && !this.updatingProfile) {
+      // Identity
+      if (values.sessionID) {
+        this.freeVoteProfile.sessionID = values.sessionID;
+      }
+      if (values.email) {
+        this.freeVoteProfile.email = values.email;
+      }
+      if (values.voterID) {
+        this.freeVoteProfile.voterID = values.voterID;
+      }
       if (values.roles) {
         this.roles = values.roles.toString().split(',');
       }
 
-      if (values.email) {
-        this.freeVoteProfile.email = values.email;
-      }
+      // Name
       if (values.givenName) {
         this.freeVoteProfile.givenName = values.givenName;
       }
@@ -489,13 +516,21 @@ export class LocalDataService {
   }
 
   public SignedOut(): void {
-    this.ClearAccessToken();
+    this.AccessTokenClear();
 
     // client side values - user may update and post to API
+
+    // Identity
+    this.freeVoteProfile.sessionID = '';
     this.freeVoteProfile.email = '';
+    this.freeVoteProfile.voterID = '';
+
+    // Name
     this.freeVoteProfile.givenName = '';
     this.freeVoteProfile.familyName = '';
     this.freeVoteProfile.alias = '';
+
+    // Location
     this.freeVoteProfile.countryId = '0';
     this.freeVoteProfile.country = '';
     this.freeVoteProfile.cityId = '0';

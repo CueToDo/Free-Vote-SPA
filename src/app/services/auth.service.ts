@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
+// Angular
+import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
+// Firebase
 import {
   Auth,
   signInWithEmailAndPassword,
@@ -11,35 +14,43 @@ import {
   UserInfo,
   getAdditionalUserInfo
 } from '@angular/fire/auth';
-import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+
+// rxjs
+import { BehaviorSubject, Subscription } from 'rxjs';
+
+// Models
+import { FreeVoteProfile } from '../models/FreeVoteProfile';
+
+// Services
 import { LocalDataService } from './local-data.service';
+import { ProfileService } from './profile.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  private get userInfo(): UserInfo | null {
+export class AuthService implements OnDestroy {
+  private get firebaseUserInfo(): UserInfo | null {
     const ui = localStorage.getItem('userInfo');
     if (!!ui) return JSON.parse(ui);
     return null;
   }
 
-  private set userInfo(ui: UserInfo | null) {
+  private set firebaseUserInfo(ui: UserInfo | null) {
     if (!!ui) localStorage.setItem('userInfo', JSON.stringify(ui));
     else localStorage.removeItem('userInfo');
   }
 
   public get PhotoUrl(): string {
-    let photoUrl = this.userInfo?.photoURL;
+    let photoUrl = this.firebaseUserInfo?.photoURL;
     if (!!photoUrl) return photoUrl;
     return '';
   }
 
   public SignedIn$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private profile$: Subscription | undefined;
 
   public get IsSignedIn(): boolean {
-    return !!this.userInfo;
+    return !!this.firebaseUserInfo;
   }
 
   //   constructor(public auth: Auth) {
@@ -59,34 +70,30 @@ export class AuthService {
 
   constructor(
     private auth: Auth,
+    private profileService: ProfileService,
     private localData: LocalDataService,
     public router: Router
   ) {
     console.log('AuthorizationService', auth.name);
 
-    onAuthStateChanged(auth, user => {
-      if (user) {
+    onAuthStateChanged(auth, firebaseUser => {
+      if (firebaseUser) {
         this.SignedIn$.next(true);
 
-        this.userInfo = user;
+        this.firebaseUserInfo = firebaseUser;
 
-        console.log(user);
-
-        user.getIdToken().then(idToken => {
+        firebaseUser.getIdToken().then(idToken => {
           this.localData.AccessToken = idToken;
+
+          this.profile$ = this.profileService
+            .GetProfile()
+            .subscribe((profile: FreeVoteProfile) => {
+              this.localData.AssignAPIValues(profile);
+            });
         });
-
-        var email = '';
-        var displayName = '';
-
-        if (!!user.email) email = user.email;
-        else email = user.providerData[0]?.email ?? '';
-
-        if (!!user.displayName) displayName = user.displayName;
-        else displayName = user.providerData[0].displayName ?? '';
-
-        console.log(user.providerData[0].providerId, displayName, email);
       } else {
+        this.firebaseUserInfo = null;
+        this.localData.SignedOut();
         this.SignedIn$.next(false);
       }
     });
@@ -174,8 +181,13 @@ export class AuthService {
   // Sign out
   signOut() {
     return this.auth.signOut().then(() => {
+      this.localData.AccessTokenClear();
       localStorage.removeItem('user');
       this.router.navigate(['sign-in']);
     });
+  }
+
+  ngOnDestroy() {
+    if (!!this.profile$) this.profile$.unsubscribe();
   }
 }

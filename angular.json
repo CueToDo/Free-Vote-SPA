@@ -29,6 +29,7 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles/styles.scss",
               "src/styles/bootstrap-alt.css",
               "src/styles/political-parties.css"
@@ -105,7 +106,12 @@
               "src/manifest.json",
               "src/manifest.webmanifest"
             ],
-            "styles": ["src/styles/styles.css", "src/styles/bootstrap-alt.css"],
+            "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles/styles.scss",
+              "src/styles/bootstrap-alt.css",
+              "src/styles/political-parties.css"
+            ],
             "scripts": []
           }
         },

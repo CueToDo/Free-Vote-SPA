@@ -22,20 +22,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 // FreeVote routes
 import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-
-export const authenticationInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-) => {
-  const modifiedReq = req.clone({
-    headers: req.headers.set(
-      'Authorization',
-      `Bearer ${sessionStorage.getItem('token')}`
-    )
-  });
-
-  return next(modifiedReq);
-};
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 // Base element in index.html
 // Base Url with Standalone components - https://g.co/gemini/share/162c224716d3
@@ -54,7 +41,7 @@ export const appConfig: ApplicationConfig = {
     { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
     provideRouter(routes, withHashLocation()),
     // provideHttpClient(withInterceptorsFromDi()),
-    provideHttpClient(withInterceptors([authenticationInterceptor])),
+    provideHttpClient(),
     provideClientHydration(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
@@ -75,6 +62,7 @@ export const appConfig: ApplicationConfig = {
         })
       )
     ),
-    importProvidersFrom(provideAuth(() => getAuth()))
+    importProvidersFrom(provideAuth(() => getAuth())),
+    provideAnimationsAsync()
   ]
 };

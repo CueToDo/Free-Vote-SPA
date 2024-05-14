@@ -153,8 +153,8 @@ export class QuestionsListComponent implements OnInit, OnChanges {
         )
         .subscribe({
           next: psr => this.DisplayQuestions(psr),
-          error: err => {
-            this.error = err.error.detail;
+          error: serverError => {
+            this.error = this.basicService.getError(serverError);
             this.alreadyFetchingFromDB = false;
           }
         });
@@ -187,7 +187,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
             this.NewQuestionsDisplayed();
           },
           error: serverError => {
-            this.error = serverError.error.detail;
+            this.error = this.basicService.getError(serverError);
             this.alreadyFetchingFromDB = false;
           }
         });
@@ -241,7 +241,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
             this.NewQuestionsDisplayed();
           },
           error: serverError => {
-            this.error = serverError.error.detail;
+            this.error = this.basicService.getError(serverError);
             this.alreadyFetchingFromDB = false;
           }
         });
@@ -270,7 +270,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
               this.NewQuestionsDisplayed();
             },
             error: serverError => {
-              this.error = serverError.error.detail;
+              this.error = this.basicService.getError(serverError);
               this.alreadyFetchingFromDB = false;
               this.allQuestionsDisplayed = true;
             }

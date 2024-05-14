@@ -1,6 +1,6 @@
 {
   "name": "free-vote",
-  "version": "17.0.0",
+  "version": "17.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --watch --host=localhost --configuration development --ssl true --ssl-key ssl/server.key --ssl-cert ssl/server.crt",
@@ -29,7 +29,7 @@
     "@angular/core": "^17.3.2",
     "@angular/fire": "^17.0.1",
     "@angular/forms": "^17.3.2",
-    "@angular/material": "^17.3.2",
+    "@angular/material": "^17.3.8",
     "@angular/platform-browser": "^17.3.2",
     "@angular/platform-browser-dynamic": "^17.3.2",
     "@angular/platform-server": "^17.3.2",

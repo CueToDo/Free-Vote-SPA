@@ -21,31 +21,7 @@ export class HttpService {
     private localData: LocalDataService
   ) {}
 
-  // Just headers - used within request options
-  private RequestHeaders(type: ContentType): HttpHeaders {
-    let httpHeaders: HttpHeaders;
-
-    switch (type) {
-      case ContentType.json:
-        httpHeaders = new HttpHeaders().set(
-          'Content-Type',
-          'application/json; charset=utf-8'
-        );
-        break;
-      case ContentType.form:
-        httpHeaders = new HttpHeaders();
-        // https://stackoverflow.com/questions/61602744/contenttype-for-httpheaders-when-uploading-file-in-formdata
-        // .set('Content-Type', 'multipart/form-data'); does not work
-        // .set('Content-Type', 'multipart/form-data;boundary=SOME_BOUNDARY'); let the automagic happen
-        break;
-    }
-
-    // ToDo add accessToken to headers?
-
-    return httpHeaders;
-  }
-
-  private RequestOptions(type: ContentType): any {
+  private RequestHeaders(type: ContentType): any {
     // https://stackoverflow.com/questions/45286764/angular-4-3-httpclient-doesnt-send-header/45286959#45286959
     // The instances of the new HttpHeader class are immutable objects.
     // state cannot be changed after creation
@@ -55,7 +31,31 @@ export class HttpService {
     // Do not set an empty string to a header - it becomes undefined and the post fails
 
     // Full request options consists of headers only
-    return { headers: this.RequestHeaders(type) };
+
+    let httpHeaders: HttpHeaders;
+
+    switch (type) {
+      case ContentType.json:
+        const token = this.localData.AccessToken;
+        let profileString = '';
+        if (!!this.localData.freeVoteProfile)
+          profileString = JSON.stringify(this.localData.freeVoteProfile);
+
+        httpHeaders = new HttpHeaders()
+          .set('Content-Type', 'application/json; charset=utf-8')
+          .set('Authorization', `Bearer ${token}`)
+          .set('SPAWebsite', this.localData.SPAWebsite)
+          .set('VoterProfile', profileString);
+        break;
+      case ContentType.form:
+        httpHeaders = new HttpHeaders();
+        // https://stackoverflow.com/questions/61602744/contenttype-for-httpheaders-when-uploading-file-in-formdata
+        // .set('Content-Type', 'multipart/form-data'); does not work
+        // .set('Content-Type', 'multipart/form-data;boundary=SOME_BOUNDARY'); let the automagic happen
+        break;
+    }
+
+    return { headers: httpHeaders };
   }
 
   public get(url: string): Observable<any> {
@@ -64,16 +64,10 @@ export class HttpService {
 
     this.localData.Log(`About to call API, ${this.localData.apiUrl}${url}`);
 
+    const headers = this.RequestHeaders(ContentType.json);
+
     return this.httpClient // call the free vote api
-      .get(
-        this.localData.apiUrl + url,
-        this.RequestOptions(ContentType.json) // The request is constructed without a jwt before we receive it
-      )
-      .pipe(
-        tap(response =>
-          this.localData.Log(`API return from ${url}: ${response}`)
-        )
-      );
+      .get(this.localData.apiUrl + url, headers);
   }
 
   public post(url: string, data: any): Observable<any> {
@@ -81,7 +75,7 @@ export class HttpService {
       .post(
         this.localData.apiUrl + url,
         JSON.stringify(data),
-        this.RequestOptions(ContentType.json)
+        this.RequestHeaders(ContentType.json)
       );
   }
 
@@ -90,7 +84,7 @@ export class HttpService {
       .post(
         this.localData.apiUrl + url,
         JSON.stringify(data),
-        this.RequestOptions(ContentType.form)
+        this.RequestHeaders(ContentType.form)
       );
   }
 
@@ -99,7 +93,7 @@ export class HttpService {
       .post<T>(
         this.localData.apiUrl + url,
         formData,
-        this.RequestOptions(ContentType.form)
+        this.RequestHeaders(ContentType.form)
       );
   }
 

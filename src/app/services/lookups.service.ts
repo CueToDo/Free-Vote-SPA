@@ -43,7 +43,7 @@ export class LookupsService {
 
     if (!this.localData.strapline) {
       this.httpService
-        .get(`lookups/website-strapline/${this.localData.website}`)
+        .get(`lookups/website-strapline/${this.localData.SPAWebsite}`)
         .subscribe(strapline => {
           this.localData.strapline = strapline.value;
         });

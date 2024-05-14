@@ -1,4 +1,5 @@
 // Angular
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 // Models
@@ -9,6 +10,21 @@ import { ID } from 'src/app/models/common';
 })
 export class BasicService {
   constructor() {}
+
+  public getError(error: any): string {
+    if (error instanceof HttpErrorResponse) {
+      if (error.error && error.error.message) return error.error.message;
+
+      if (error.status == 401) return '401: Unauthorised';
+      if (error.status == 500) return '500: Internal Server Error';
+
+      return 'HttpError - details not provided';
+    }
+    if (!!error?.error?.detail) return error?.error?.detail;
+    if (error.statusText) return error.statusText;
+    // Handle the error based on the status text
+    return 'Error details not provided';
+  }
 
   public ordinal(i: number): string {
     const j = i % 10;

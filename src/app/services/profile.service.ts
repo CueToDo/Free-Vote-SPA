@@ -4,19 +4,30 @@ import { Injectable } from '@angular/core';
 // rxjs
 import { Observable } from 'rxjs';
 
-// FreeVote
+import { HttpService } from './http.service';
+
+// Models
 import {
   FreeVoteProfile,
   ProfileEditFormData,
   ProfilePictureOption
 } from 'src/app/models/FreeVoteProfile';
-import { HttpService } from './http.service';
+
+// Services
+import { LocalDataService } from './local-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
-  constructor(private httpService: HttpService) {}
+  constructor(
+    private localData: LocalDataService,
+    private httpService: HttpService
+  ) {}
+
+  GetProfile(): Observable<FreeVoteProfile> {
+    return this.httpService.get(`profile/voter/${this.localData.SPAWebsite}`);
+  }
 
   SaveProfile(profile: FreeVoteProfile): Observable<boolean> {
     const profileUpdate = {

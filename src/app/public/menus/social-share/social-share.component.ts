@@ -20,11 +20,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'app-social-share',
-    templateUrl: './social-share.component.html',
-    styleUrls: ['./social-share.component.css'],
-    standalone: true,
-    imports: [MatButtonModule, RouterLink, MatIconModule, ClipboardModule]
+  selector: 'app-social-share',
+  templateUrl: './social-share.component.html',
+  styleUrls: ['./social-share.component.css'],
+  standalone: true,
+  imports: [MatButtonModule, RouterLink, MatIconModule, ClipboardModule]
 })
 export class SocialShareComponent implements OnInit {
   url = '';
@@ -128,7 +128,7 @@ export class SocialShareComponent implements OnInit {
     window.open(
       `mailto:?subject=${this.shareTitle}&body=Hi,
 %0D%0A%0D%0A
-Take a look at this from the ${this.localData.website} website - what do you think?
+Take a look at this from the ${this.localData.SPAWebsite} website - what do you think?
 %0D%0A%0D%0A
 ${this.sharePreview}
 %0D%0A%0D%0A

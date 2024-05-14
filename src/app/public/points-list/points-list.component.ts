@@ -210,8 +210,10 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
           next: slashTag => {
             this.localData.SlashTagSelected = slashTag;
           },
-          error: error =>
-            console.log('Server Error on getting last slash tag', error)
+          error: error => {
+            this.error = this.basicService.getError(error);
+            console.log('Server Error on getting last slash tag', this.error);
+          }
         });
     }
 
@@ -360,8 +362,8 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
           )
           .subscribe({
             next: psr => this.DisplayPoints(psr),
-            error: err => (this.error = err.error.detail),
-            complete: () => {
+            error: err => {
+              this.error = this.basicService.getError(err);
               this.SelectComplete();
             }
           });
@@ -382,9 +384,12 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
               this.sortDescending
             )
             .subscribe({
-              next: psr => this.DisplayPoints(psr),
-              error: err => (this.error = err.error.detail),
-              complete: () => {
+              next: psr => {
+                this.DisplayPoints(psr);
+                this.SelectComplete();
+              },
+              error: err => {
+                this.error = this.basicService.getError(err);
                 this.SelectComplete();
               }
             });
@@ -403,9 +408,12 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
             this.localData.ConstituencyIDVoter
           )
           .subscribe({
-            next: psr => this.DisplayPoints(psr),
-            error: err => (this.error = err.error.detail),
-            complete: () => {
+            next: psr => {
+              this.DisplayPoints(psr);
+              this.SelectComplete();
+            },
+            error: err => {
+              this.error = this.basicService.getError(err);
               this.SelectComplete();
             }
           });
@@ -429,9 +437,12 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
                 this.updateTopicViewCount
               )
               .subscribe({
-                next: psr => this.DisplayPoints(psr),
-                error: err => (this.error = err.error.detail),
-                complete: () => {
+                next: psr => {
+                  this.DisplayPoints(psr);
+                  this.SelectComplete();
+                },
+                error: err => {
+                  this.error = this.basicService.getError(err);
                   this.SelectComplete();
                 }
               });
@@ -483,7 +494,7 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
               this.NewPointsDisplayed();
             },
             error: err => {
-              this.error = err.error.detail;
+              this.error = this.basicService.getError(err);
             }
           });
       }

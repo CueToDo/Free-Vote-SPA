@@ -112,7 +112,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // https://stackoverflow.com/questions/39845082/angular-2-change-favicon-icon-as-per-configuration/45753615
     let favicon = 'favicon.ico';
-    switch (this.localData.website) {
+    switch (this.localData.SPAWebsite) {
       case 'break-out.group':
         favicon = 'lightbulb-idea.ico';
         this.imgVulcan = '../assets/lightbulb-idea.png';
@@ -256,7 +256,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (route === '/' || route === '' || route.indexOf('/callback') === 0) {
       // Home page
-      this.routeDisplay = this.localData.website;
+      this.routeDisplay = this.localData.SPAWebsite;
 
       // https://blog.bitsrc.io/dynamic-page-titles-in-angular-98ce20b5c334
       this.titleService.setTitle(this.routeDisplay);
