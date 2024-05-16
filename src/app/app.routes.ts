@@ -9,14 +9,14 @@ import { HomeComponent } from './public/home/home.component';
 import { PointCommentsComponent } from './public/point-comments/point-comments.component';
 import { PointOfTheWeekComponent } from './public/point-of-the-week/point-of-the-week.component';
 import { TagsAndPointsComponent } from './public/tags-and-points/tags-and-points.component';
-
-// Services: if decorated with "providedIn", no need to import and must NOT add to providers
-// Only need to import LoginRouteGuardService as it's used in appRoots declaration
-import { LoginRouteGuardService } from './services/login-route-guard.service';
 import { LocalMenuComponent } from './local/local-menu/local-menu.component';
 import { OrganisationComponent } from './organisations/organisation/organisation.component';
 import { OrganisationsComponent } from './organisations/organisations/organisations.component';
 import { ProfileComponent } from './my/profile/profile.component';
+
+// Services: if decorated with "providedIn", no need to import and must NOT add to providers
+// Only need to import LoginRouteGuardService as it's used in appRoots declaration
+import { LoginRouteGuardService } from './services/login-route-guard.service';
 
 export const routes: Routes = [
   // Refresh in browser fails - when route is specified

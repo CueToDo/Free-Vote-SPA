@@ -74,6 +74,10 @@ export class NavItemsComponent implements OnInit, OnDestroy {
     );
   }
 
+  signInWithGoogle() {
+    this.authService.signInWithGoogle();
+  }
+
   signOut() {
     this.localData.LocalLogging = false;
     this.authService.signOut();

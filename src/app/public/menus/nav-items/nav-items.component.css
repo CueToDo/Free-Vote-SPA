@@ -39,3 +39,29 @@ div.burger button.selected {
   width: 30px;
   margin-right: 6px;
 }
+
+img.g {
+  height: 28px !important;
+  margin-right: 16px;
+}
+
+img.x {
+  height: 20px !important;
+  margin-left: 4px;
+  margin-right: 19px;
+}
+
+img.f {
+  height: 28px !important;
+  margin-right: 16px;
+}
+
+.fb-button,
+.fb-button:hover {
+  background-color: #1877f2 !important;
+}
+
+.c {
+  margin-left: 3px;
+  margin-right: 22px !important;
+}

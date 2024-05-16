@@ -131,11 +131,32 @@
   <button
     mat-button
     *ngIf="(authService.SignedIn$ | async) == false"
-    (click)="authService.signInWithGoogle()"
+    [matMenuTriggerFor]="signInMenu"
     matTooltip="sign in"
     [matTooltipPosition]="matTooltipPosition"
   >
     <mat-icon>person</mat-icon>
     sign in
   </button>
+
+  <mat-menu #signInMenu="matMenu">
+    <button mat-menu-item (click)="signInWithGoogle()">
+      <img src="../../../../assets/G.png" class="g" alt="" />
+      Sign in with Google
+    </button>
+
+    <button mat-menu-item>
+      <img src="../../../../assets/X.png" class="x" alt="" />
+      Sign in with X
+    </button>
+
+    <button mat-menu-item class="fb-button">
+      <img src="../../../../assets/F.png" class="f" alt="" />
+    </button>
+
+    <button mat-menu-item>
+      <mat-icon class="c">cancel</mat-icon>
+      Cancel
+    </button>
+  </mat-menu>
 </div>

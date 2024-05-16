@@ -39,8 +39,7 @@ function getBaseUrl(): string {
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
-    provideRouter(routes, withHashLocation()),
-    // provideHttpClient(withInterceptorsFromDi()),
+    provideRouter(routes),
     provideHttpClient(),
     provideClientHydration(),
     provideServiceWorker('ngsw-worker.js', {
