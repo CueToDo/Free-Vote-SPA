@@ -6,16 +6,6 @@ const apiUri = 'https://localhost:44389/';
 
 export const environment = {
   production: false,
-  facebookAppId: '743956010581212',
-  auth: {
-    domain: 'freevote.eu.auth0.com',
-    clientId: '8LP3ZQ8EpAujVoTruLcI2YNsO0yQry9D',
-    authorizationParams: {
-      audience: 'https://free.vote',
-      redirect_uri: window.location.origin
-    },
-    errorPath: ''
-  },
   httpInterceptor: {
     allowedList: [`${apiUri}/*`]
   },

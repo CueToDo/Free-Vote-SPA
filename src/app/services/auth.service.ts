@@ -8,15 +8,16 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  signInWithPopup,
   FacebookAuthProvider,
   GoogleAuthProvider,
-  UserInfo,
-  getAdditionalUserInfo
+  getAdditionalUserInfo,
+  TwitterAuthProvider,
+  User,
+  signInWithRedirect
 } from '@angular/fire/auth';
 
 // rxjs
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 
 // Models
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
@@ -29,44 +30,47 @@ import { ProfileService } from './profile.service';
   providedIn: 'root'
 })
 export class AuthService implements OnDestroy {
-  private get firebaseUserInfo(): UserInfo | null {
-    const ui = localStorage.getItem('userInfo');
-    if (!!ui) return JSON.parse(ui);
-    return null;
-  }
-
-  private set firebaseUserInfo(ui: UserInfo | null) {
-    if (!!ui) localStorage.setItem('userInfo', JSON.stringify(ui));
-    else localStorage.removeItem('userInfo');
-  }
-
-  public get PhotoUrl(): string {
-    let photoUrl = this.firebaseUserInfo?.photoURL;
-    if (!!photoUrl) return photoUrl;
-    return '';
-  }
-
+  // Subjects, BehaviorSubjects
   public SignedIn$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public SignInError$: Subject<string> = new Subject();
+  public PhotoUrl$: Subject<string> = new Subject();
+  public GettingProfile$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  // Subscriptions
   private profile$: Subscription | undefined;
+
+  private firebaseUserInfo: User | null = null;
 
   public get IsSignedIn(): boolean {
     return !!this.firebaseUserInfo;
   }
 
-  //   constructor(public auth: Auth) {
-  //     /* Saving user data in localstorage when
-  //     logged in and setting up null when logged out */
-  //     this.auth.authStateReady.subscribe((user) => {
-  //       if (user) {
-  //         this.userData = user;
-  //         localStorage.setItem('user', JSON.stringify(this.userData));
-  //         JSON.parse(localStorage.getItem('user')!);
-  //       } else {
-  //         localStorage.setItem('user', 'null');
-  //         JSON.parse(localStorage.getItem('user')!);
-  //       }
-  //     });
-  //   }
+  private get Email(): string {
+    const provider = this.firebaseUserInfo?.providerData[0].providerId;
+    console.log('Email', this.firebaseUserInfo, 'Provider', provider);
+
+    switch (provider) {
+      case 'google.com':
+        return this.firebaseUserInfo?.email ?? '';
+      case 'facebook.com':
+      case 'twitter.com':
+        return this.firebaseUserInfo?.providerData[0]?.email ?? '';
+      default:
+        return '';
+    }
+  }
+
+  public UpdatePhotoUrl(): void {
+    var photoUrl = '';
+
+    if (this.IsSignedIn) {
+      photoUrl = this.firebaseUserInfo?.providerData[0]?.photoURL ?? '';
+    } else {
+      photoUrl = '';
+    }
+
+    this.PhotoUrl$.next(photoUrl);
+  }
 
   constructor(
     private auth: Auth,
@@ -74,46 +78,111 @@ export class AuthService implements OnDestroy {
     private localData: LocalDataService,
     public router: Router
   ) {
-    console.log('AuthorizationService', auth.name);
-
     onAuthStateChanged(auth, firebaseUser => {
+      this.localData.cookieConsent = false;
       if (firebaseUser) {
-        this.SignedIn$.next(true);
-
         this.firebaseUserInfo = firebaseUser;
 
-        firebaseUser.getIdToken().then(idToken => {
-          this.localData.AccessToken = idToken;
+        firebaseUser
+          .getIdToken()
+          .then(idToken => {
+            this.localData.AccessToken = idToken;
 
-          this.profile$ = this.profileService
-            .GetProfile()
-            .subscribe((profile: FreeVoteProfile) => {
-              this.localData.AssignAPIValues(profile);
-            });
-        });
+            this.GettingProfile$.next(true);
+
+            // Get the FreeVote Profile data
+            this.profile$ = this.profileService
+              .GetProfile(this.Email)
+              .subscribe({
+                next: (profile: FreeVoteProfile) => {
+                  this.localData.AssignAPIValues(profile);
+                  this.GettingProfile$.next(false);
+                  this.SignedIn$.next(true);
+                  this.UpdatePhotoUrl();
+                },
+                error: err => {
+                  this.GettingProfile$.next(false);
+                  this.SignInError$.next(err);
+                  this.SignedIn$.next(false);
+                  this.signOut();
+                }
+              });
+          })
+          .catch(err => console.log('getIdToken ERROR', err));
       } else {
+        console.log('NO FBU');
         this.firebaseUserInfo = null;
         this.localData.SignedOut();
         this.SignedIn$.next(false);
+        this.UpdatePhotoUrl();
       }
     });
+  }
+
+  signInWithGoogle() {
+    signInWithRedirect(this.auth, new GoogleAuthProvider())
+      .then(result => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential?.accessToken;
+        // The signed-in user info.
+        // const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch(error => {
+        // const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage);
+        // The email of the user's account used.
+        // const email = error.customData.email;
+        // The AuthCredential type that was used.
+        // const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  }
+
+  signInWithX() {
+    signInWithRedirect(this.auth, new TwitterAuthProvider())
+      .then(result => {
+        console.log('Twitter Login Success');
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // const credential = TwitterAuthProvider.credentialFromResult(result);
+        // const token = credential?.accessToken;
+        // The signed-in user info.
+        // const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch(error => {
+        // const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage);
+        // The email of the user's account used.
+        // const email = error.customData.email;
+        // The AuthCredential type that was used.
+        // const credential = TwitterAuthProvider.credentialFromError(error);
+        // ...
+      });
   }
 
   signInWithFacebook() {
     let fb = new FacebookAuthProvider();
     fb.addScope('email');
-    signInWithPopup(this.auth, fb)
+    signInWithRedirect(this.auth, fb)
       .then(result => {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential?.accessToken;
+        // const credential = FacebookAuthProvider.credentialFromResult(result);
+        // const accessToken = credential?.accessToken;
 
         // The signed-in user info.
-        const user = result.user;
+        // const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
 
         let additional = getAdditionalUserInfo(result);
+        this.localData.Log(JSON.stringify(additional));
+        console.log('Additional', additional);
         let profile = additional?.profile;
         if (!!profile) {
           var picture: any = profile['picture'];
@@ -122,36 +191,15 @@ export class AuthService implements OnDestroy {
       })
       .catch(error => {
         // Handle Errors here.
-        const errorCode = error.code;
+        // const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = FacebookAuthProvider.credentialFromError(error);
-        console.log(error);
-        // ...
-      });
-  }
+        alert(errorMessage);
 
-  signInWithGoogle() {
-    signInWithPopup(this.auth, new GoogleAuthProvider())
-      .then(result => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential?.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-      })
-      .catch(error => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
         // The email of the user's account used.
-        const email = error.customData.email;
+        // const email = error.customData.email;
         // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
+        // const credential = FacebookAuthProvider.credentialFromError(error);
+        console.log(error);
         // ...
       });
   }
@@ -183,7 +231,6 @@ export class AuthService implements OnDestroy {
     return this.auth.signOut().then(() => {
       this.localData.AccessTokenClear();
       localStorage.removeItem('user');
-      this.router.navigate(['sign-in']);
     });
   }
 

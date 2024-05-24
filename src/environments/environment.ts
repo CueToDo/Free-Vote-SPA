@@ -6,17 +6,6 @@ const apiUri = 'https://api.free.vote/';
 
 export const environment = {
   production: true,
-  facebookAppId: '743956010581212',
-  auth: {
-    domain: 'freevote.eu.auth0.com',
-    clientId: '2R7Db5byd6g7h2K2oj3MUGoiHaoqnM1Y',
-    authorizationParams: {
-      audience: 'https://free.vote',
-      redirect_uri: 'https://free.vote',
-      scope: 'openid profile email'
-    },
-    errorPath: ''
-  },
   httpInterceptor: {
     allowedList: [`${apiUri}/*`]
   },

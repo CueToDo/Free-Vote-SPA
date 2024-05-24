@@ -130,7 +130,7 @@ export class HtmlService {
     // 8) Facebook app_id
     this.metaService.updateTag({
       property: 'fb:app_id',
-      content: environment.facebookAppId
+      content: '743956010581212'
     });
   }
 
