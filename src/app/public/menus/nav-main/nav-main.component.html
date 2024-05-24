@@ -1,1 +1,6 @@
-<app-nav-items MenuType="main" #navItems></app-nav-items>
+<app-nav-items
+  MenuType="main"
+  #navItems
+  (MenuItemsError)="MenuItemsError($event)"
+  (ClearError)="ClearError()"
+></app-nav-items>

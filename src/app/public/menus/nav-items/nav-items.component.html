@@ -57,10 +57,9 @@
   >
     <img
       *ngIf="
-        localData.freeVoteProfile.profilePictureOptionID === '1' &&
-        authService.PhotoUrl
+        localData.freeVoteProfile.profilePictureOptionID === '1' && !!photoUrl
       "
-      [src]="authService.PhotoUrl"
+      [src]="photoUrl"
       class="rounded-circle img-fluid profilePic"
     />
 
@@ -75,6 +74,12 @@
 
     {{ localData.freeVoteProfile.givenName }}
   </button>
+
+  <div *ngIf="this.authService.GettingProfile$ | async" class="uploading">
+    <span class="spinner-grow ms-3" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </span>
+  </div>
 
   <!-- Profile/Sign Out Menu -->
   <mat-menu #profileMenu="matMenu">
@@ -145,12 +150,12 @@
       Sign in with Google
     </button>
 
-    <button mat-menu-item>
+    <button mat-menu-item (click)="signInWithX()">
       <img src="../../../../assets/X.png" class="x" alt="" />
       Sign in with X
     </button>
 
-    <button mat-menu-item class="fb-button">
+    <button mat-menu-item class="fb-button" (click)="signInWithFacebook()">
       <img src="../../../../assets/F.png" class="f" alt="" />
     </button>
 

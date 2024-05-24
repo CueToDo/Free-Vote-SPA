@@ -1,5 +1,12 @@
 // Angular
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import { NgIf, AsyncPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -15,6 +22,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 // FreeVote Services
 import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { BasicService } from 'src/app/services/basic.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
@@ -35,7 +43,12 @@ import { LocalDataService } from 'src/app/services/local-data.service';
   ]
 })
 export class NavItemsComponent implements OnInit, OnDestroy {
+  @Output() MenuItemsError = new EventEmitter<string>();
+  @Output() ClearError = new EventEmitter();
+
   tagsPointsActive$: Subscription | undefined;
+  signInError$: Subscription | undefined;
+  photoUrl$: Subscription | undefined;
 
   get constituencyKebab(): string {
     return this.httpXS.kebabUri(this.localData.Constituency);
@@ -51,8 +64,12 @@ export class NavItemsComponent implements OnInit, OnDestroy {
     if (this.MenuType == 'main') return 'above';
     return 'right';
   }
+
+  public photoUrl = '';
+
   constructor(
     public authService: AuthService,
+    private basicService: BasicService,
     public appService: AppService,
     public localData: LocalDataService,
     private httpXS: HttpExtraService
@@ -72,18 +89,40 @@ export class NavItemsComponent implements OnInit, OnDestroy {
         }
       } // simply return boolean value to template
     );
+
+    this.signInError$ = this.authService.SignInError$.subscribe(error =>
+      this.MenuItemsError.emit(this.basicService.getError(error))
+    );
+
+    this.photoUrl$ = this.authService.PhotoUrl$.subscribe(
+      photoUrl => (this.photoUrl = photoUrl)
+    );
   }
 
   signInWithGoogle() {
+    this.ClearError.emit();
     this.authService.signInWithGoogle();
   }
 
+  signInWithX() {
+    this.ClearError.emit();
+    this.authService.signInWithX();
+  }
+
+  signInWithFacebook() {
+    this.ClearError.emit();
+    this.authService.signInWithFacebook();
+  }
+
   signOut() {
+    this.ClearError.emit();
     this.localData.LocalLogging = false;
     this.authService.signOut();
   }
 
   ngOnDestroy(): void {
     this.tagsPointsActive$?.unsubscribe();
+    this.signInError$?.unsubscribe();
+    this.photoUrl$?.unsubscribe();
   }
 }

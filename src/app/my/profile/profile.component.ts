@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
@@ -13,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 // rxjs
 import { tap, map, filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 // Models
 import { Kvp } from '../../models/kvp.model';
@@ -61,7 +63,7 @@ import { CkeUniversalComponent } from '../../public/cke-universal/cke-universal.
     CkeUniversalComponent
   ]
 })
-export class ProfileComponent implements OnInit, AfterViewInit {
+export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   // https://medium.com/better-programming/angular-manipulate-properly-the-dom-with-renderer-16a756508cba
   // Use static false when element has *ngIf
   // use hidden on any conditionally inserted parent NOT ngIf
@@ -69,6 +71,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   @ViewChild('tvConstituency', { static: false }) tvConstituency:
     | ElementRef
     | undefined;
+
+  public photoUrl = '';
+  PhotoUrl$: Subscription | undefined;
 
   countries: Kvp[] = [];
   cities: Kvp[] = [];
@@ -109,6 +114,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.postcode = this.localData.freeVoteProfile.postcode;
+
+    this.PhotoUrl$ = this.authService.PhotoUrl$.subscribe(
+      photoUrl => (this.photoUrl = photoUrl)
+    );
   }
 
   ngAfterViewInit() {
@@ -295,7 +304,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     const profilePicture = {
       profilePictureOptionID:
         this.localData.freeVoteProfile.profilePictureOptionID,
-      socialMediaProfilePicture: this.authService.PhotoUrl // sent whether used or not
+      socialMediaProfilePicture: this.photoUrl // sent whether used or not
     } as ProfilePictureOption;
 
     this.profileService.profilePictureOptionUpdate(profilePicture).subscribe({
@@ -375,5 +384,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.updateMessage = err;
     }
     this.error = true;
+  }
+
+  ngOnDestroy(): void {
+    this.PhotoUrl$?.unsubscribe();
   }
 }

@@ -16,7 +16,10 @@ export class BasicService {
       if (error.error && error.error.message) return error.error.message;
 
       if (error.status == 401) return '401: Unauthorised';
-      if (error.status == 500) return '500: Internal Server Error';
+      if (error.status == 500) {
+        if (error?.error?.detail.startsWith('API')) return error.error.detail;
+        return '500: Internal Server Error';
+      }
 
       return 'HttpError - details not provided';
     }

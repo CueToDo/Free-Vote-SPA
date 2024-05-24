@@ -1,3 +1,7 @@
 <div [@burgerMenu]="burgerMenuState" id="burgerMenuContainer">
-  <app-nav-items MenuType="burger"></app-nav-items>
+  <app-nav-items
+    MenuType="burger"
+    (MenuItemsError)="MenuItemsError($event)"
+    (ClearError)="ClearError()"
+  ></app-nav-items>
 </div>

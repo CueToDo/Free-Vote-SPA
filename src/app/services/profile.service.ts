@@ -25,8 +25,10 @@ export class ProfileService {
     private httpService: HttpService
   ) {}
 
-  GetProfile(): Observable<FreeVoteProfile> {
-    return this.httpService.get(`profile/voter/${this.localData.SPAWebsite}`);
+  GetProfile(email: string): Observable<FreeVoteProfile> {
+    return this.httpService.post(`profile/voter/${this.localData.SPAWebsite}`, {
+      email: email
+    });
   }
 
   SaveProfile(profile: FreeVoteProfile): Observable<boolean> {

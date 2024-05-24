@@ -15,13 +15,27 @@
 </div>
 
 <!-- Burger menu opened by the show menu button above -->
-<app-nav-burger #burgerMenu></app-nav-burger>
+<app-nav-burger
+  #burgerMenu
+  (BurgerMenuError)="MenuError($event)"
+  (BurgerMenuErrorClear)="MenuErrorClear()"
+></app-nav-burger>
 
 <!-- Main Menu on large screens -->
 <div>
   <nav *ngIf="!showBurger">
-    <app-nav-main #navMain></app-nav-main>
+    <app-nav-main
+      #navMain
+      (MainMenuError)="MenuError($event)"
+      (MainMenuErrorClear)="MenuErrorClear()"
+    ></app-nav-main>
   </nav>
+</div>
+
+<div *ngIf="menuError" class="alert alert-danger">
+  <div class="content">
+    {{ menuError }}
+  </div>
 </div>
 
 <main (click)="closeBurgerMenu()">
@@ -45,6 +59,6 @@
       {{ localData.strapline }}
     </div>
 
-    <div class="copyright">{{ localData.SPAWebsite }} 2024 v17.0.2</div>
+    <div class="copyright">{{ localData.SPAWebsite }} 2024 v17.0.3</div>
   </div>
 </div>

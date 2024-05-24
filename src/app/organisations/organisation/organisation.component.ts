@@ -41,8 +41,6 @@ import { WebsitePreviewComponent } from '../../public/website-preview/website-pr
 export class OrganisationComponent implements OnInit {
   public organisation = new Organisation();
   public organisationCopyForEdit = new Organisation();
-  @Output() Refresh = new EventEmitter();
-
   public GeographicalExtentID = GeographicalExtentID;
 
   organisationEdit = false;

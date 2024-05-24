@@ -83,6 +83,8 @@ export class AppComponent implements OnInit, OnDestroy {
   altVulcan = 'Vulcan';
   under500 = false;
 
+  menuError = '';
+
   constructor(
     public appService: AppService,
     private auth: AuthService,
@@ -106,7 +108,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.localData.Log(`<br><br>APP Initialising`);
     this.localData.LoadClientValues();
 
-    this.cookieConsent();
+    this.auth.SignedIn$.subscribe(signedIn => this.cookieConsent());
 
     this.subscribeNetworkStatus();
 
@@ -346,6 +348,14 @@ export class AppComponent implements OnInit, OnDestroy {
   closeBurgerMenu() {
     this.showBurgerMenu = false;
     this.burgerMenu?.ShowMenu(false);
+  }
+
+  MenuError(error: string): void {
+    this.menuError = error;
+  }
+
+  MenuErrorClear(): void {
+    this.menuError = '';
   }
 
   vulcan() {

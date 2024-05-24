@@ -65,3 +65,7 @@ img.f {
   margin-left: 3px;
   margin-right: 22px !important;
 }
+
+.spinner-grow {
+  color: lightgray;
+}

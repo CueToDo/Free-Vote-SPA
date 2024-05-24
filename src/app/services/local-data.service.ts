@@ -24,7 +24,8 @@ export class LocalDataService {
 
   // Don't mess with in memory values loaded and saved at app start and close - write straight to local storage
   public get cookieConsent(): boolean {
-    return this.GetItem('cookieConsent') == 'true';
+    const consent = this.GetItem('cookieConsent') ?? '';
+    return consent == 'true';
   }
 
   public set cookieConsent(value: boolean) {
