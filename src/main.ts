@@ -1,17 +1,5 @@
-// Angular
-import { enableProdMode } from '@angular/core';
-
 import { bootstrapApplication } from '@angular/platform-browser';
-
-// Components
+import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 
-// Other
-import { environment } from './environments/environment';
-import { appConfig } from './app/app.config';
-
-if (environment.production) {
-  enableProdMode();
-}
-
-bootstrapApplication(AppComponent, appConfig).catch(err => console.log(err));
+bootstrapApplication(AppComponent, appConfig).catch(err => console.error(err));
