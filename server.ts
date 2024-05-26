@@ -11,8 +11,12 @@ import bootstrap from './src/main.server';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
+
+  // set distFolder from current working directory
+  const distFolder = join(process.cwd(), 'dist/free-vote');
+  const serverDistFolder = distFolder + '/server';
+  const browserDistFolder = distFolder + '/browser';
+
   const indexHtml = join(serverDistFolder, 'index.html');
 
   console.log(`ServerDistFolder: ${serverDistFolder}`);
