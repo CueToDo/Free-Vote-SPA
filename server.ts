@@ -13,16 +13,15 @@ export function app(): express.Express {
   const server = express();
 
   // set distFolder from current working directory
-  const cwd = process.cwd();
-  const serverDistFolder = dirname(cwd);
-  // const distFolder = resolve(cwd, '../../dist/free-vote');
-  // const serverDistFolder = resolve(distFolder, 'server');
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
-
+  const workingDirectory = process.cwd();
+  const browserDistFolder = resolve(
+    workingDirectory,
+    '../../../dist/free-vote/browser'
+  );
   const indexHtml = join(browserDistFolder, 'index.html');
 
   console.log(
-    `cwd:${cwd} ServerDistFolder: ${serverDistFolder} BrowserDistFolder:${browserDistFolder} indexHtml:${indexHtml}`
+    `workingDirectory:${workingDirectory} BrowserDistFolder:${browserDistFolder} indexHtml:${indexHtml}`
   );
 
   const commonEngine = new CommonEngine();
