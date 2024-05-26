@@ -14,7 +14,7 @@ export function app(): express.Express {
 
   // set distFolder from current working directory
   const cwd = process.cwd();
-  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+  const serverDistFolder = dirname(cwd);
   // const distFolder = resolve(cwd, '../../dist/free-vote');
   // const serverDistFolder = resolve(distFolder, 'server');
   const browserDistFolder = resolve(serverDistFolder, '../browser');
