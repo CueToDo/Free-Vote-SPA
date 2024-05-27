@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "dev:ssr": "ng run free-vote:serve-ssr --port 7027",
-    "serve:ssr": "node dist/free-vote/server/main.js",
+    "serve:ssr:ssr4": "node dist/ssr4/server/server.mjs",
     "build:ssr": "ng build && ng run free-vote:server",
     "prerender": "ng run free-vote:prerender",
     "lint": "eslint . --ext .ts",
