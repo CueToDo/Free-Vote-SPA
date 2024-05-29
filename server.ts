@@ -9,6 +9,8 @@ import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 import { existsSync } from 'node:fs';
 
+const fs = require('fs');
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
@@ -34,6 +36,18 @@ export function app(): express.Express {
     workingDirectory,
     '../../dist/free-vote/browser'
   );
+
+  fs.readdir(workingDirectory, (err: any, files: any[]) => {
+    files.forEach((file: any) => {
+      fs.readFile(file, 'utf8', function (err: any, data: any) {
+        if (err) {
+          return console.log(err);
+        }
+        console.log(data);
+      });
+    });
+  });
+
   const indexHtml = join(browserDistFolder, 'index.html');
 
   console.log(
