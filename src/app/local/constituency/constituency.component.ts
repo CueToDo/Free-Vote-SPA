@@ -1,9 +1,13 @@
 // Angular
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 // Material
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 // rxjs
 import { Subscription, of, switchMap, take } from 'rxjs';
@@ -14,22 +18,29 @@ import { Constituency } from 'src/app/models/constituency.model';
 import { ElectionDate } from 'src/app/models/electionDate';
 
 // Services
+import { BasicService } from 'src/app/services/basic.service';
 import { CandidateAddComponent } from '../candidate-add/candidate-add.component';
 import { DemocracyClubService } from 'src/app/services/democracy-club.service';
 import { HttpExtraService } from 'src/app/services/http-extra.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+
+// Components
 import { CandidateComponent } from '../candidate/candidate.component';
-import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-    selector: 'app-constituency',
-    templateUrl: './constituency.component.html',
-    styleUrls: ['./constituency.component.css'],
-    standalone: true,
-    imports: [RouterLink, NgIf, NgFor, CandidateComponent, FormsModule, MatButtonModule, MatIconModule]
+  selector: 'app-constituency',
+  templateUrl: './constituency.component.html',
+  styleUrls: ['./constituency.component.css'],
+  standalone: true,
+  imports: [
+    RouterLink,
+    NgIf,
+    NgFor,
+    CandidateComponent,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule
+  ]
 })
 export class ConstituencyComponent implements OnInit, OnDestroy {
   searching = false;
@@ -163,10 +174,19 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
     return parsedDate < today;
   }
 
+  get findThatPostCode(): string {
+    return `https://findthatpostcode.uk/areas/${this.constituencyDetails.gen0GSS}.html`;
+  }
+
+  get importCandidatesForGSS(): string {
+    return `https://localhost:44389/democracyClub/ImportCandidatesForGSS/${this.constituencyDetails.gen0GSS}`;
+  }
+
   showVoteShare = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private basicService: BasicService,
     public localData: LocalDataService,
     private democracyClubService: DemocracyClubService,
     public dialog: MatDialog,
@@ -326,20 +346,9 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: () => this.ReselectCandidates(),
-        error: serverError => this.ShowCandidateRemoveError(serverError)
+        error: serverError =>
+          (this.candidateRemoveError = this.basicService.getError(serverError))
       });
-  }
-
-  ShowCandidateRemoveError(err: any) {
-    this.searching = false;
-
-    if (err?.error?.detail) {
-      this.candidateRemoveError = err.error.detail;
-    } else if (err?.error) {
-      this.candidateRemoveError = err.error;
-    } else if (err) {
-      this.candidateRemoveError = err;
-    }
   }
 
   ToggleShowVoteShare() {

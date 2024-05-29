@@ -32,7 +32,7 @@ export function app(): express.Express {
   const workingDirectory = process.cwd();
   const browserDistFolder = resolve(
     workingDirectory,
-    '../../../dist/free-vote/browser'
+    '../../dist/free-vote/browser'
   );
   const indexHtml = join(browserDistFolder, 'index.html');
 
