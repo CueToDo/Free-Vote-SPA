@@ -39,12 +39,7 @@ export function app(): express.Express {
 
   fs.readdir(workingDirectory, (err: any, files: any[]) => {
     files.forEach((file: any) => {
-      fs.readFile(file, 'utf8', function (err: any, data: any) {
-        if (err) {
-          return console.log(err);
-        }
-        console.log(data);
-      });
+      console.log(file);
     });
   });
 
