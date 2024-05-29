@@ -34,7 +34,7 @@ export function app(): express.Express {
   const workingDirectory = process.cwd();
   const browserDistFolder = resolve(
     workingDirectory,
-    '../../dist/free-vote/browser'
+    './dist/free-vote/browser'
   );
 
   fs.readdir(workingDirectory, (err: any, files: any[]) => {
