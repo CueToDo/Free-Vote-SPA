@@ -9,6 +9,8 @@ import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 import { existsSync } from 'node:fs';
 
+import 'zone.js';
+
 const fs = require('fs');
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -33,19 +35,30 @@ export function app(): express.Express {
   // 2. Set distFolder from current working directory
   const workingDirectory = process.cwd();
 
+  console.log(`workingDirectory:${workingDirectory}`);
+
   fs.readdir(workingDirectory, (err: any, files: any[]) => {
     files.forEach((file: any) => {
       console.log(file);
     });
   });
 
-  const browserDistFolder = resolve(workingDirectory, 'dist/free-vote/browser');
+  const browserDistFolder = resolve(
+    workingDirectory,
+    '/dist/free-vote/browser'
+  );
+
+  console.log(`BrowserDistFolder:${browserDistFolder}`);
+
+  fs.readdir(browserDistFolder, (err: any, files: any[]) => {
+    files.forEach((file: any) => {
+      console.log(file);
+    });
+  });
 
   const indexHtml = join(browserDistFolder, 'index.html');
 
-  console.log(
-    `workingDirectory:${workingDirectory} BrowserDistFolder:${browserDistFolder} indexHtml:${indexHtml}`
-  );
+  console.log(`indexHtml:${indexHtml}`);
 
   //3. Original
   // server.set('view engine', 'html');
