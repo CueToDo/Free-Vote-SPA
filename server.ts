@@ -32,16 +32,14 @@ export function app(): express.Express {
 
   // 2. Set distFolder from current working directory
   const workingDirectory = process.cwd();
-  const browserDistFolder = resolve(
-    workingDirectory,
-    './dist/free-vote/browser'
-  );
 
   fs.readdir(workingDirectory, (err: any, files: any[]) => {
     files.forEach((file: any) => {
       console.log(file);
     });
   });
+
+  const browserDistFolder = resolve(workingDirectory, 'dist/free-vote/browser');
 
   const indexHtml = join(browserDistFolder, 'index.html');
 
