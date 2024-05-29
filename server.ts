@@ -39,7 +39,7 @@ export function app(): express.Express {
 
   fs.readdir(workingDirectory, (err: any, files: any[]) => {
     files.forEach((file: any) => {
-      console.log(file);
+      console.log(`workingDirectory ${file}`);
     });
   });
 
@@ -52,7 +52,7 @@ export function app(): express.Express {
 
   fs.readdir(browserDistFolder, (err: any, files: any[]) => {
     files.forEach((file: any) => {
-      console.log(file);
+      console.log(`BrowserDistFolder ${file}`);
     });
   });
 
