@@ -26,12 +26,12 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles/styles.scss",
               "src/styles/bootstrap-alt.css",
               "src/styles/political-parties.css"
             ],
             "scripts": [],
-            "serviceWorker": "true",
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -44,7 +44,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -92,5 +92,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "e47f69d1-af51-40e4-8a61-42111c65de77"
   }
 }

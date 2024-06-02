@@ -6,9 +6,6 @@
 /* import custom material theme */
 @import 'freevote-theme.scss';
 
-/* Bootstrap was in index.html up to Angular 12 */
-@import '~bootstrap/dist/css/bootstrap.min.css';
-
 html,
 body {
   height: 100vh;
