@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ssr": {
+    "free-vote": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -16,18 +16,22 @@
             "outputPath": "dist/ssr",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.json",
+              "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles/styles.scss",
+              "src/styles/bootstrap-alt.css",
+              "src/styles/political-parties.css"
             ],
             "scripts": [],
+            "serviceWorker": "true",
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -62,35 +66,27 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ssr:build:production"
+              "buildTarget": "free-vote:build:production"
             },
             "development": {
-              "buildTarget": "ssr:build:development"
+              "buildTarget": "free-vote:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ssr:build"
+            "buildTarget": "free-vote:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css"],
             "scripts": []
           }
         }
