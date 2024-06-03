@@ -46,12 +46,26 @@ import { CkeUniversalComponent } from '../cke-universal/cke-universal.component'
 import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-point-edit',
-    templateUrl: './point-edit.component.html',
-    styleUrls: ['./point-edit.component.css'],
-    preserveWhitespaces: true,
-    standalone: true,
-    imports: [FormsModule, CkeUniversalComponent, NgIf, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressBarModule, TagsEditComponent, MatSelectModule, NgFor, MatOptionModule, MatCheckboxModule]
+  selector: 'app-point-edit',
+  templateUrl: './point-edit.component.html',
+  styleUrls: ['./point-edit.component.css'],
+  preserveWhitespaces: true,
+  standalone: true,
+  imports: [
+    FormsModule,
+    CkeUniversalComponent,
+    NgIf,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressBarModule,
+    TagsEditComponent,
+    MatSelectModule,
+    NgFor,
+    MatOptionModule,
+    MatCheckboxModule
+  ]
 })
 export class PointEditComponent implements OnInit {
   // Point must be cloned for 1-way binding, otherwise cancelled changes get reflected in parent
@@ -421,7 +435,7 @@ export class PointEditComponent implements OnInit {
     this.pointClone.pointTypeID = PointTypesEnum.Opinion;
 
     this.pointClone.pointHTML = ''; // doesn't get through to ckEditor on property binding
-    this.ckeFudge.clearData(); // Must explicitly clear previous data
+    this.ckeFudge?.clearData(); // Must explicitly clear previous data
 
     this.pointClone.constituencyID = this.localData.ConstituencyID;
 

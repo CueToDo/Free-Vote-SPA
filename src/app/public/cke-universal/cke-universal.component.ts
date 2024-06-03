@@ -12,14 +12,19 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
+
+// CKE
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+
+// Pipe
 import { SafeHtmlPipe } from '../../custommodule/pipes/safe-html.pipe';
 
 @Component({
-    selector: 'app-cke-universal',
-    templateUrl: './cke-universal.component.html',
-    styleUrls: ['./cke-universal.component.css'],
-    standalone: true,
-    imports: [SafeHtmlPipe]
+  selector: 'app-cke-universal',
+  templateUrl: './cke-universal.component.html',
+  styleUrls: ['./cke-universal.component.css'],
+  standalone: true,
+  imports: [SafeHtmlPipe]
 })
 export class CkeUniversalComponent implements AfterViewInit {
   // https://www.lavalamp.biz/blogs/how-to-use-ckeditor-5-in-angular-with-server-side-rendering-support/
