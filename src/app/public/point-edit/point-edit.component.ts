@@ -8,7 +8,19 @@ import {
   ViewChild,
   ElementRef
 } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
+// Material
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatOptionModule } from '@angular/material/core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
 
 // rxjs
 import { Observable, of } from 'rxjs';
@@ -25,6 +37,10 @@ import { PointEdit } from 'src/app/models/point.model';
 import { PointTypesEnum } from 'src/app/models/enums';
 import { Tag } from 'src/app/models/tag.model';
 
+// Components
+import { CkeUniversalComponent } from '../cke-universal/cke-universal.component';
+import { TagsEditComponent } from '../../base/tags-edit/tags-edit.component';
+
 // Services
 import { HtmlService } from 'src/app/services/html.service';
 import { HttpService } from 'src/app/services/http.service';
@@ -32,18 +48,6 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { LookupsService } from 'src/app/services/lookups.service';
 import { PointsService } from 'src/app/services/points.service';
 import { TagsService } from 'src/app/services/tags.service';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { TagsEditComponent } from '../../base/tags-edit/tags-edit.component';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { NgIf, NgFor } from '@angular/common';
-import { CkeUniversalComponent } from '../cke-universal/cke-universal.component';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-point-edit',
