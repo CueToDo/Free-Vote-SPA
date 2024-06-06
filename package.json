@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:ssr": "node dist/ssr/server/server.mjs",
-    "start:heroku": "node server.ts",
+    "start:heroku": "node main.server.ts",
     "heroku-postbuild": "ng build --configuration production"
   },
   "private": true,
