@@ -13,9 +13,6 @@ import {
 } from '@angular/core';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 
-// CKE
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-
 // Pipe
 import { SafeHtmlPipe } from '../../custommodule/pipes/safe-html.pipe';
 
@@ -121,7 +118,7 @@ export class CkeUniversalComponent implements AfterViewInit {
     ckeScriptElement.id = 'CKEScript';
 
     // Use my custom build
-    ckeScriptElement.src = 'https://free.vote/assets/ckeditor.js';
+    ckeScriptElement.src = 'https://api.free.vote/js/ckeditor.js';
     // ckeScriptElement.src = 'https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js';
 
     ckeScriptElement.text = `
