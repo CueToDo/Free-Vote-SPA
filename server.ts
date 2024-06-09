@@ -5,12 +5,10 @@ const path = require('path');
 const app = express();
 
 // Serve only the static files form the dist directory
-app.use(express.static(__dirname + '/dist/bare-bones-angular-spa/browser'));
+app.use(express.static(__dirname + '/dist/free-vote/browser'));
 
 app.get('/*', function (_req: any, res: { sendFile: (arg0: any) => void }) {
-  res.sendFile(
-    path.join(__dirname + '/dist/bare-bones-angular-spa/browser/index.html')
-  );
+  res.sendFile(path.join(__dirname + '/dist/free-vote/browser/index.html'));
 });
 
 // Start the app by listening on the default Heroku port
