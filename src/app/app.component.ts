@@ -160,7 +160,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.SetTitle(route);
     });
 
-    // Viewport Width: Setup and subscribe to changes on browser only - not for Universla SSR
+    // Viewport Width: Setup and subscribe to changes on browser only - not for Universal SSR
 
     if (isPlatformBrowser(this.platformId)) {
       this.SetVPW();
