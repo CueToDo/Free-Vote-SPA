@@ -32,7 +32,7 @@
               "src/styles/political-parties.css"
             ],
             "scripts": [],
-            "server": "src/main.server.ts",
+            "server": "main.server.ts",
             "prerender": true,
             "ssr": {
               "entry": "server.ts"
