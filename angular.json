@@ -33,7 +33,8 @@
             ],
             "scripts": [],
             "server": "main.server.ts",
-            "prerender": true,
+            "serviceWorker": "ngsw-config.json",
+            "prerender": false,
             "ssr": {
               "entry": "server.ts"
             }
