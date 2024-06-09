@@ -5,6 +5,8 @@ declare module 'src/assets/ckeditor.js' {
   export = ClassicEditorBuild;
 }
 
+declare module 'express';
+
 /**
  * https://stackoverflow.com/questions/51503754/typescript-type-beforeinstallpromptevent
  *

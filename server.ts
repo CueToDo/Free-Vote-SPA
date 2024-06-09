@@ -1,132 +1,17 @@
-import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
+//Install express server
+const express = require('express');
+const path = require('path');
 
-import express from 'express';
+const app = express();
 
-import { fileURLToPath } from 'node:url';
-import { dirname, join, resolve } from 'node:path';
+// Serve only the static files form the dist directory
+app.use(express.static(__dirname + '/dist/bare-bones-angular-spa/browser'));
 
-import bootstrap from 'main.server';
-import { existsSync } from 'node:fs';
-
-import 'zone.js';
-
-const fs = require('fs');
-
-// The Express app is exported so that it can be used by serverless Functions.
-export function app(): express.Express {
-  const server = express();
-
-  // 1. REDIRECT TO HTTPS
-  server.use(function (req, res, next) {
-    // if (!req.secure) {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-      res.redirect(301, `https://${req.hostname}${req.originalUrl}`);
-    }
-    next();
-  });
-
-  // 2. Original
-  // const distFolder = join(process.cwd(), 'dist/free-vote/browser');
-  // const indexHtml = existsSync(join(distFolder, 'index.original.html'))
-  //   ? 'index.original.html'
-  //   : 'index';
-
-  // 2. Set distFolder from current working directory
-  const workingDirectory = process.cwd();
-
-  console.log(`workingDirectory:${workingDirectory}`);
-
-  fs.readdir(workingDirectory, (err: any, files: any[]) => {
-    files.forEach((file: any) => {
-      console.log(`workingDirectory ${file}`);
-    });
-  });
-
-  const browserDistFolder = resolve(
-    workingDirectory,
-    '/dist/free-vote/browser'
+app.get('/*', function (_req: any, res: { sendFile: (arg0: any) => void }) {
+  res.sendFile(
+    path.join(__dirname + '/dist/bare-bones-angular-spa/browser/index.html')
   );
+});
 
-  console.log(`BrowserDistFolder:${browserDistFolder}`);
-
-  fs.readdir(browserDistFolder, (err: any, files: any[]) => {
-    files.forEach((file: any) => {
-      console.log(`BrowserDistFolder ${file}`);
-    });
-  });
-
-  const indexHtml = join(browserDistFolder, 'index.html');
-
-  console.log(`indexHtml:${indexHtml}`);
-
-  //3. Original
-  // server.set('view engine', 'html');
-  // server.set('views', distFolder);
-
-  // 3. server.set
-  server.set('view engine', 'html');
-  server.set('views', browserDistFolder);
-
-  // 4. Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-
-  //4a. Original
-  // server.get(
-  //   '*.*',
-  //   express.static(distFolder, {
-  //     maxAge: '1y'
-  //   })
-  // );
-
-  // 4a. Serve static files from /browser
-  server.get(
-    '*.*',
-    express.static(browserDistFolder, {
-      maxAge: '1y'
-    })
-  );
-
-  // 4b. Original
-  // All regular routes use the Universal engine
-  // server.get('*', (req, res) => {
-  //   res.render(indexHtml, {
-  //     req,
-  //     providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }]
-  //   });
-  // });
-
-  // 4b. All regular routes use the Angular engine
-
-  const commonEngine = new CommonEngine();
-
-  server.get('*', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
-
-    commonEngine
-      .render({
-        bootstrap,
-        documentFilePath: indexHtml,
-        url: `${protocol}://${headers.host}${originalUrl}`,
-        publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }]
-      })
-      .then(html => res.send(html))
-      .catch(err => next(err));
-  });
-
-  // end function app()
-  return server;
-}
-
-function run(): void {
-  const port = process.env['PORT'] || 4000;
-
-  // Start up the Node server
-  const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
-}
-
-run();
+// Start the app by listening on the default Heroku port
+app.listen(process.env['PORT'] || 8080);
