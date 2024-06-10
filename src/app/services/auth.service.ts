@@ -13,7 +13,7 @@ import {
   getAdditionalUserInfo,
   TwitterAuthProvider,
   User,
-  signInWithRedirect
+  signInWithPopup
 } from '@angular/fire/auth';
 
 // rxjs
@@ -80,9 +80,9 @@ export class AuthService implements OnDestroy {
   ) {
     onAuthStateChanged(auth, firebaseUser => {
       this.localData.cookieConsent = false;
-      if (firebaseUser) {
-        this.firebaseUserInfo = firebaseUser;
+      this.firebaseUserInfo = firebaseUser;
 
+      if (!!firebaseUser) {
         firebaseUser
           .getIdToken()
           .then(idToken => {
@@ -111,7 +111,6 @@ export class AuthService implements OnDestroy {
           .catch(err => console.log('getIdToken ERROR', err));
       } else {
         console.log('NO FBU');
-        this.firebaseUserInfo = null;
         this.localData.SignedOut();
         this.SignedIn$.next(false);
         this.UpdatePhotoUrl();
@@ -120,7 +119,7 @@ export class AuthService implements OnDestroy {
   }
 
   signInWithGoogle() {
-    signInWithRedirect(this.auth, new GoogleAuthProvider())
+    signInWithPopup(this.auth, new GoogleAuthProvider())
       .then(result => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         // const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -143,7 +142,7 @@ export class AuthService implements OnDestroy {
   }
 
   signInWithX() {
-    signInWithRedirect(this.auth, new TwitterAuthProvider())
+    signInWithPopup(this.auth, new TwitterAuthProvider())
       .then(result => {
         console.log('Twitter Login Success');
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -169,7 +168,7 @@ export class AuthService implements OnDestroy {
   signInWithFacebook() {
     let fb = new FacebookAuthProvider();
     fb.addScope('email');
-    signInWithRedirect(this.auth, fb)
+    signInWithPopup(this.auth, fb)
       .then(result => {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         // const credential = FacebookAuthProvider.credentialFromResult(result);
