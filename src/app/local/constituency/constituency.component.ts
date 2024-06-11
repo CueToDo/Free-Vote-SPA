@@ -175,11 +175,12 @@ export class ConstituencyComponent implements OnInit, OnDestroy {
   }
 
   get findThatPostCode(): string {
-    return `https://findthatpostcode.uk/areas/${this.constituencyDetails.gen0GSS}.html`;
+    return `https://findthatpostcode.uk/areas/${this.constituencyDetails.gss}.html`;
   }
 
+  // Assuming DemocracyClub now using latest constituency GSS
   get importCandidatesForGSS(): string {
-    return `https://localhost:44389/democracyClub/ImportCandidatesForGSS/${this.constituencyDetails.gen0GSS}`;
+    return `https://localhost:44389/democracyClub/ImportCandidatesForGSS/${this.constituencyDetails.gss}`;
   }
 
   showVoteShare = false;
