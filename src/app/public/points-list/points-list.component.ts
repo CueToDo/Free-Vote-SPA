@@ -590,7 +590,8 @@ export class PointsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   NewPoint(): void {
-    let dialogConfig = new MatDialogConfig();
+    // https://stackoverflow.com/questions/52256019/how-to-implement-mat-dialog-default-options
+    const dialogConfig: MatDialogConfig = {};
     dialogConfig.data = {
       tag: this.localData.SlashTagSelected
     };

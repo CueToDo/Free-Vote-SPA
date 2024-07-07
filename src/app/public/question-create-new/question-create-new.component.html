@@ -1,9 +1,13 @@
 <div class="container">
   <h1>New question</h1>
 
-  <app-question-edit
-    #questionEdit
-    (CompleteEdit)="SaveComplete()"
-    (CancelEdit)="Cancel()"
-  ></app-question-edit>
+  <div class="scroller">
+    <div class="overflow-hidden">
+      <app-question-edit
+        #questionEdit
+        (CompleteEdit)="SaveComplete()"
+        (CancelEdit)="Cancel()"
+      ></app-question-edit>
+    </div>
+  </div>
 </div>
