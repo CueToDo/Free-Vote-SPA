@@ -73,16 +73,17 @@ export class AuthService implements OnDestroy {
   }
 
   constructor(
-    private auth: Auth,
+    private angularFireAuth: Auth,
     private profileService: ProfileService,
     private localData: LocalDataService,
     public router: Router
   ) {
-    onAuthStateChanged(auth, firebaseUser => {
-      this.localData.cookieConsent = false;
+    // OnAUthStateCHange could be session expiry
+    onAuthStateChanged(angularFireAuth, firebaseUser => {
       this.firebaseUserInfo = firebaseUser;
 
       if (!!firebaseUser) {
+        // state has changed to signed in - get a JWT token
         firebaseUser
           .getIdToken()
           .then(idToken => {
@@ -110,16 +111,14 @@ export class AuthService implements OnDestroy {
           })
           .catch(err => console.log('getIdToken ERROR', err));
       } else {
-        console.log('NO FBU');
-        this.localData.SignedOut();
-        this.SignedIn$.next(false);
-        this.UpdatePhotoUrl();
+        console.log('NO FBU - sign out or session expiry');
+        // this could be a session expiry where firebase automatically refreshes the token
       }
     });
   }
 
   signInWithGoogle() {
-    signInWithPopup(this.auth, new GoogleAuthProvider())
+    signInWithPopup(this.angularFireAuth, new GoogleAuthProvider())
       .then(result => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         // const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -142,7 +141,7 @@ export class AuthService implements OnDestroy {
   }
 
   signInWithX() {
-    signInWithPopup(this.auth, new TwitterAuthProvider())
+    signInWithPopup(this.angularFireAuth, new TwitterAuthProvider())
       .then(result => {
         console.log('Twitter Login Success');
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -168,7 +167,7 @@ export class AuthService implements OnDestroy {
   signInWithFacebook() {
     let fb = new FacebookAuthProvider();
     fb.addScope('email');
-    signInWithPopup(this.auth, fb)
+    signInWithPopup(this.angularFireAuth, fb)
       .then(result => {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         // const credential = FacebookAuthProvider.credentialFromResult(result);
@@ -204,7 +203,7 @@ export class AuthService implements OnDestroy {
   }
 
   emailAndPassword(email: string, password: string) {
-    signInWithEmailAndPassword(this.auth, email, password)
+    signInWithEmailAndPassword(this.angularFireAuth, email, password)
       .then((result: { user: any }) => {
         alert(result);
       })
@@ -214,7 +213,7 @@ export class AuthService implements OnDestroy {
   }
 
   createUser(email: string, password: string) {
-    createUserWithEmailAndPassword(this.auth, email, password)
+    createUserWithEmailAndPassword(this.angularFireAuth, email, password)
       .then((userCredential: { user: any }) => {
         alert(userCredential.user);
         console.log(userCredential.user);
@@ -227,9 +226,13 @@ export class AuthService implements OnDestroy {
 
   // Sign out
   signOut() {
-    return this.auth.signOut().then(() => {
-      this.localData.AccessTokenClear();
+    return this.angularFireAuth.signOut().then(() => {
       localStorage.removeItem('user');
+      this.localData.AccessTokenClear();
+      this.localData.cookieConsent = false; // All anon users must re-consent to cookies
+      this.localData.SignedOut();
+      this.UpdatePhotoUrl();
+      this.SignedIn$.next(false);
     });
   }
 
