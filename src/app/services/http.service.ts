@@ -1,11 +1,12 @@
 // Angular
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
 
 // rxjs
 
 import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 // Models/enums
 import { ContentType } from '../models/enums';
@@ -14,12 +15,38 @@ import { Image, ProfilePicture } from 'src/app/models/Image.model';
 // Services
 import { LocalDataService } from './local-data.service';
 
+export enum NetworkStatus {
+  ONLINE = 'online',
+  OFFLINE = 'offline'
+}
+
 @Injectable({ providedIn: 'root' })
 export class HttpService {
   constructor(
     private httpClient: HttpClient,
-    private localData: LocalDataService
+    private localData: LocalDataService,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
+
+  public online = false;
+
+  // https://www.inoaspect.com.au/creating-a-progressive-web-app-pwa-service-to-include-all-features-angular/
+  subscribeNetworkStatus() {
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener(
+        NetworkStatus.ONLINE,
+        this.onNetworkStatusChange.bind(this)
+      );
+      window.addEventListener(
+        NetworkStatus.OFFLINE,
+        this.onNetworkStatusChange.bind(this)
+      );
+    }
+  }
+
+  onNetworkStatusChange() {
+    this.online = navigator.onLine;
+  }
 
   private RequestHeaders(type: ContentType): any {
     // https://stackoverflow.com/questions/45286764/angular-4-3-httpclient-doesnt-send-header/45286959#45286959

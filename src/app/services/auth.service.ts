@@ -13,11 +13,22 @@ import {
   getAdditionalUserInfo,
   TwitterAuthProvider,
   User,
-  signInWithPopup
+  signInWithPopup,
+  idToken
 } from '@angular/fire/auth';
 
 // rxjs
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  delay,
+  fromEvent,
+  Observable,
+  of,
+  Subject,
+  Subscription,
+  switchMap,
+  take
+} from 'rxjs';
 
 // Models
 import { FreeVoteProfile } from '../models/FreeVoteProfile';
@@ -25,6 +36,8 @@ import { FreeVoteProfile } from '../models/FreeVoteProfile';
 // Services
 import { LocalDataService } from './local-data.service';
 import { ProfileService } from './profile.service';
+import { DatetimeService } from './datetime.service';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -74,47 +87,72 @@ export class AuthService implements OnDestroy {
 
   constructor(
     private angularFireAuth: Auth,
-    private profileService: ProfileService,
+    private httpService: HttpService,
     private localData: LocalDataService,
+    private profileService: ProfileService,
     public router: Router
   ) {
     // OnAUthStateCHange could be session expiry
     onAuthStateChanged(angularFireAuth, firebaseUser => {
       this.firebaseUserInfo = firebaseUser;
+      this.TokenRefresh();
+    });
+  }
 
-      if (!!firebaseUser) {
-        // state has changed to signed in - get a JWT token
-        firebaseUser
-          .getIdToken()
-          .then(idToken => {
+  TokenRefresh() {
+    if (!!this.firebaseUserInfo) {
+      // state has changed to signed in (or session expiry???) - get a JWT token
+      // wait for network availability before token refresh
+
+      // Define an Observable that emits true if we should wait, or an empty value otherwise
+      const waitForOnline: Observable<any> = !this.httpService.online
+        ? fromEvent(window, 'online').pipe(take(1))
+        : of(null);
+
+      // Use switchMap wait for online (if not already) before getting token
+      waitForOnline
+        .pipe(
+          switchMap(_ => {
+            console.log('Network available - now getting token');
+            // Assert that we have firebaseUserInfo with ! (checked above)
+            return this.firebaseUserInfo!.getIdToken();
+          }),
+          switchMap(idToken => {
+            // Save the token and get user profile
             this.localData.AccessToken = idToken;
 
-            this.GettingProfile$.next(true);
-
-            // Get the FreeVote Profile data
-            this.profile$ = this.profileService
-              .GetProfile(this.Email)
-              .subscribe({
-                next: (profile: FreeVoteProfile) => {
-                  this.localData.AssignAPIValues(profile);
-                  this.GettingProfile$.next(false);
-                  this.SignedIn$.next(true);
-                  this.UpdatePhotoUrl();
-                },
-                error: err => {
-                  this.GettingProfile$.next(false);
-                  this.SignInError$.next(err);
-                  this.SignedIn$.next(false);
-                  this.signOut();
-                }
-              });
+            if (!!idToken) {
+              this.GettingProfile$.next(true);
+              // Get user profile
+              return this.profileService.GetProfile(this.Email);
+            } else {
+              return of(null);
+            }
           })
-          .catch(err => console.log('getIdToken ERROR', err));
-      } else {
-        console.log('NO FBU - sign out or session expiry');
-        // this could be a session expiry where firebase automatically refreshes the token
-      }
-    });
+        )
+        .subscribe({
+          next: (profile: FreeVoteProfile | null) => {
+            if (!!profile) {
+              this.localData.AssignAPIValues(profile);
+              this.SignedIn$.next(true);
+              this.UpdatePhotoUrl();
+            }
+            this.GettingProfile$.next(false);
+          },
+          error: err => {
+            this.GettingProfile$.next(false);
+            this.SignInError$.next(err);
+            this.SignedIn$.next(false);
+            this.signOut();
+          }
+        });
+    } else {
+      console.log('No FirebaseUser - signed out');
+    }
+  }
+
+  public ForcedIDTokenRefresh(): void {
+    this.TokenRefresh();
   }
 
   signInWithGoogle() {

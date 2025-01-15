@@ -42,11 +42,7 @@ import { CookieConsentComponent } from './base/cookie-consent/cookie-consent.com
 import { NavBurgerComponent } from 'src/app/public/menus/nav-burger/nav-burger.component';
 import { NavMainComponent } from 'src/app/public/menus/nav-main/nav-main.component';
 import { SwUpdate } from '@angular/service-worker';
-
-export enum NetworkStatus {
-  ONLINE = 'online',
-  OFFLINE = 'offline'
-}
+import { HttpService } from './services/http.service';
 
 @Component({
   selector: 'app-root',
@@ -72,8 +68,6 @@ export class AppComponent implements OnInit, OnDestroy {
   routeDisplay = '';
   pageTitleToolTip = '';
 
-  offline = false;
-
   widthBand = 4; // 0 400, 1 550, 2 700, 3 800, 4 900
   showBurger = false;
   showBurgerMenu = false;
@@ -88,6 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     public appService: AppService,
     private auth: AuthService,
+    public httpService: HttpService,
     public localData: LocalDataService /* inject to ensure constructed and values Loaded */,
     private lookupsService: LookupsService,
     private tagsService: TagsService,
@@ -108,9 +103,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.localData.Log(`<br><br>APP Initialising`);
     this.localData.LoadClientValues();
 
-    this.auth.SignedIn$.subscribe(signedIn => this.cookieConsent());
+    // Services don't have OnInit lifecycle hook
+    this.httpService.online = navigator.onLine;
+    this.httpService.subscribeNetworkStatus();
 
-    this.subscribeNetworkStatus();
+    // On app Init cookie consent
+    this.checkCookieConsent();
 
     // https://stackoverflow.com/questions/39845082/angular-2-change-favicon-icon-as-per-configuration/45753615
     let favicon = 'favicon.ico';
@@ -209,7 +207,9 @@ export class AppComponent implements OnInit, OnDestroy {
             console.log(
               'Reload the page to update to the latest version after the new version is activated'
             );
-            if (confirm('Load new version now?')) {
+            if (
+              confirm('New version of web application is available. Load now?')
+            ) {
               this.swUpdate
                 .activateUpdate()
                 .then(() => document.location.reload());
@@ -223,7 +223,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  cookieConsent() {
+  ngAfterViewInit() {
+    this.refreshIDTokenOnWindowVisible();
+  }
+
+  checkCookieConsent() {
     if (!this.localData.cookieConsent) {
       this.dialog.open(CookieConsentComponent, {
         disableClose: true,
@@ -232,22 +236,13 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  // https://www.inoaspect.com.au/creating-a-progressive-web-app-pwa-service-to-include-all-features-angular/
-  subscribeNetworkStatus() {
-    if (isPlatformBrowser(this.platformId)) {
-      window.addEventListener(
-        NetworkStatus.ONLINE,
-        this.onNetworkStatusChange.bind(this)
-      );
-      window.addEventListener(
-        NetworkStatus.OFFLINE,
-        this.onNetworkStatusChange.bind(this)
-      );
-    }
-  }
-
-  onNetworkStatusChange() {
-    this.offline = !navigator.onLine;
+  private refreshIDTokenOnWindowVisible() {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        console.log('Tab became active');
+        this.auth.ForcedIDTokenRefresh();
+      }
+    });
   }
 
   public SetTitle(route: string): void {

@@ -11,7 +11,7 @@
     {{ routeDisplay }}
   </h1>
 
-  <div *ngIf="offline" class="amr-3" id="offline">OFFLINE</div>
+  <div *ngIf="!httpService.online" class="amr-3" id="offline">OFFLINE</div>
 </div>
 
 <!-- Burger menu opened by the show menu button above -->
@@ -59,6 +59,6 @@
       {{ localData.strapline }}
     </div>
 
-    <div class="copyright">{{ localData.SPAWebsite }} 2024 v17.0.5</div>
+    <div class="copyright">{{ localData.SPAWebsite }} 2024 v17.0.6</div>
   </div>
 </div>
