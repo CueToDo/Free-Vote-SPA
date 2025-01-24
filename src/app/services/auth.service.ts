@@ -152,6 +152,7 @@ export class AuthService implements OnDestroy {
   }
 
   public ForcedIDTokenRefresh(): void {
+    // ToDo Check expiry time and only refresh if necessary
     this.TokenRefresh();
   }
 

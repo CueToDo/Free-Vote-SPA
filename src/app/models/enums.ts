@@ -1,9 +1,3 @@
-// HttpHeaders
-export enum ContentType {
-  json,
-  form
-}
-
 export enum PointSelectionTypes {
   // Not used in database
 

@@ -1,4 +1,4 @@
-export class Image {
+export class ImageDownload {
   imageID = '';
   imageFileName = '';
 }

@@ -145,4 +145,15 @@ export class BasicService {
   //   }, {});
   //   return result as T;
   // }
+
+  GetError(err: any): string {
+    if (err?.error?.detail) {
+      return err.error.detail;
+    } else if (err?.error) {
+      return err.error;
+    } else if (err) {
+      return err;
+    }
+    return 'Error details not provided';
+  }
 }

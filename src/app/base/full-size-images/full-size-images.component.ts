@@ -8,11 +8,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'app-full-size-images',
-    templateUrl: './full-size-images.component.html',
-    styleUrls: ['./full-size-images.component.css'],
-    standalone: true,
-    imports: [MatDialogModule, MatButtonModule, MatIconModule, NgClass, NgIf]
+  selector: 'app-full-size-images',
+  templateUrl: './full-size-images.component.html',
+  styleUrls: ['./full-size-images.component.css'],
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgClass, NgIf]
 })
 export class FullSizeImagesComponent {
   csvImages = '';
@@ -41,6 +41,7 @@ export class FullSizeImagesComponent {
     }
   ) {
     this.csvImages = data.csvPointImages;
+    // ToDo: EmbeddedImages could be removed now? No longer used?
     if (!!data.csvPointImages && !!data.csvPointImagesEmbedded)
       this.csvImages += ',';
     this.csvImages += data.csvPointImagesEmbedded;

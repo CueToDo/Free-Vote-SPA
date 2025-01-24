@@ -9,7 +9,6 @@ import {
   ElementRef
 } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
-import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 // Material
@@ -23,14 +22,14 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 
 // rxjs
-import { Observable, of } from 'rxjs';
-import { tap, map, filter, concatMap } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { tap, map, concatMap } from 'rxjs/operators';
 
 // Lodash https://github.com/lodash/lodash/issues/3192
 import { cloneDeep } from 'lodash-es';
 
 // Models
-import { Image } from 'src/app/models/Image.model';
+import { ImageDownload } from 'src/app/models/Image.model';
 import { Kvp } from 'src/app/models/kvp.model';
 import { Point } from 'src/app/models/point.model';
 import { PointEdit } from 'src/app/models/point.model';
@@ -42,6 +41,7 @@ import { CkeUniversalComponent } from '../cke-universal/cke-universal.component'
 import { TagsEditComponent } from '../../base/tags-edit/tags-edit.component';
 
 // Services
+import { BasicService } from 'src/app/services/basic.service';
 import { HtmlService } from 'src/app/services/html.service';
 import { HttpService } from 'src/app/services/http.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
@@ -126,9 +126,15 @@ export class PointEditComponent implements OnInit {
   // https://stackoverflow.com/questions/47079366/expression-has-changed-after-it-was-checked-during-iteration-by-map-keys-in-angu/50749898
   // pointKeys: IterableIterator<number>;
 
-  imageUploadObservable: Observable<string> | undefined;
+  // Subscriptions
+  private lookups$: Subscription | undefined;
+  private tagsEdit$: Subscription | undefined;
+  private imageUpload$: Subscription | undefined;
+  private imageUploadCancel$: Subscription | undefined;
+  private pointUpdate$: Subscription | undefined;
 
   constructor(
+    private basicService: BasicService,
     private htmlService: HtmlService,
     private httpService: HttpService,
     private localData: LocalDataService,
@@ -146,7 +152,7 @@ export class PointEditComponent implements OnInit {
       this.GetPointTagsEdit();
     }
 
-    this.lookupsService
+    this.lookups$ = this.lookupsService
       .PointTypes()
       .subscribe(pointTypes => (this.pointTypes = pointTypes));
 
@@ -162,7 +168,8 @@ export class PointEditComponent implements OnInit {
   GetPointTagsEdit(): void {
     // Get all national and constituency tags for the point
     this.waiting = true;
-    this.tagsService
+
+    this.tagsEdit$ = this.tagsService
       .PointTagsEdit(
         this.pointClone.pointID,
         this.localData.ConstituencyIDVoter
@@ -197,65 +204,60 @@ export class PointEditComponent implements OnInit {
     this.imageUploadProgress = 0;
 
     if (this.imageFileForUpload) {
-      return this.httpService.uploadImage(this.imageFileForUpload).pipe(
-        tap(response => {
-          // tap changes nothing in the pipe. What came in goes out
+      return this.httpService
+        .uploadImage(this.pointClone.pointID, this.imageFileForUpload)
+        .pipe(
+          tap(response => {
+            // ToDo: Implement image upload progress in API (never properly implemented here)
+            // tap changes nothing in the pipe. What came in goes out
+            // type is only relevant if the reponse is an HttpEvent
+            // switch (response.type) {
+            //   case HttpEventType.Sent:
+            //     console.log(
+            //       `Uploading file "${this.imageName}" of size ${this.imageFileForUpload?.size}.`
+            //     );
+            //     break;
+            //   case HttpEventType.UploadProgress:
+            //     // Compute and show the % done: This only works if the API sends progress status
+            //     // Get round possibility of response.total being undefined
+            //     const total = response.total
+            //       ? response.total
+            //       : 2 * response.loaded;
+            //     const percentDone = Math.round((100 * response.loaded) / total);
+            //     this.imageUploadProgress = percentDone;
+            //     console.log(
+            //       `File "${this.imageName}" is ${percentDone}% uploaded.`
+            //     );
+            //     break;
+            //   case HttpEventType.Response:
+            //     break;
+            //   default:
+            //     console.log(
+            //       `File "${this.imageName}" surprising upload event: ${response.type}.`
+            //     );
+            // }
+          }),
+          // filter(response => response.type === HttpEventType.Response),
+          map((response: ImageDownload) => {
+            this.uploadingImage = false;
+            // const responseBody = (response as HttpResponse<ImageDownload>).body;
 
-          switch (response.type) {
-            case HttpEventType.Sent:
-              console.log(
-                `Uploading file "${this.imageName}" of size ${this.imageFileForUpload?.size}.`
-              );
-              break;
+            if (this.pointClone) {
+              this.pointClone.pointHTML += `<img src="${response?.imageFileName}">`;
+            }
+            this.imageName = '';
+            this.imageFileForUpload = undefined;
+            if (this.imageSelect) {
+              this.imageSelect.nativeElement.value = '';
+            }
 
-            case HttpEventType.UploadProgress:
-              // Compute and show the % done:
-
-              // Get round possibility of response.total being undefined
-              const total = response.total
-                ? response.total
-                : 2 * response.loaded;
-
-              const percentDone = Math.round((100 * response.loaded) / total);
-              this.imageUploadProgress = percentDone;
-              console.log(
-                `File "${this.imageName}" is ${percentDone}% uploaded.`
-              );
-              break;
-
-            case HttpEventType.Response:
-              this.uploadingImage = false;
-              const responseBody = (response as HttpResponse<Image>).body;
-
-              console.log(`File "${this.imageName}" was completely uploaded!`);
-              console.log(responseBody?.imageFileName, responseBody?.imageID);
-
-              if (this.pointClone) {
-                this.pointClone.pointHTML += `<img src="${responseBody?.imageFileName}">`;
-              }
-              this.imageName = '';
-              this.imageFileForUpload = undefined;
-              if (this.imageSelect) {
-                this.imageSelect.nativeElement.value = '';
-              }
-              break;
-
-            default:
-              console.log(
-                `File "${this.imageName}" surprising upload event: ${response.type}.`
-              );
-          }
-        }),
-        filter(response => response.type === HttpEventType.Response),
-        map((response: HttpEvent<Image>) => {
-          const x = response as HttpResponse<Image>;
-          let id = x.body?.imageID;
-          if (!id) {
-            id = '';
-          }
-          return id;
-        })
-      );
+            let id = response?.imageID;
+            if (!id) {
+              id = '';
+            }
+            return id;
+          })
+        );
     } else {
       // This is the important conditional "Do Nothing"
       return of('');
@@ -267,10 +269,7 @@ export class PointEditComponent implements OnInit {
     this.error = '';
 
     if (this.pointClone) {
-      // Must initialise before subscribing - may do nothing
-      this.imageUploadObservable = this.ImageUploadObservable();
-
-      this.imageUploadObservable.subscribe({
+      this.imageUpload$ = this.ImageUploadObservable().subscribe({
         next: imageID => {
           // Image now has a database ID, but is not yet attached to unsaved point
           // ... will be attached when point updated
@@ -362,14 +361,13 @@ export class PointEditComponent implements OnInit {
         );
 
         // Must always initialise before subscribing - may be nothing to upload
-        this.imageUploadObservable = this.ImageUploadObservable();
 
-        this.imageUploadObservable
+        this.pointUpdate$ = this.ImageUploadObservable()
           .pipe(
             map(imageID => {
               /// There may not be an image upload, in which case the imageID will be ''
               // There could be a situation where we've uploaded an image
-              // and then attached another without uploading, but we're now saving
+              // and then attached another without uploading, but we're now saving the point
               if (this.pointClone) {
                 // Don't want undefined
                 if (!this.pointClone.csvImageIDs) {
@@ -420,7 +418,7 @@ export class PointEditComponent implements OnInit {
             },
             error: serverError => {
               this.waiting = false;
-              this.error = serverError.error.detail;
+              this.error = this.basicService.GetError(serverError);
             },
             complete: () => {
               this.uploadingImage = false;
@@ -463,7 +461,7 @@ export class PointEditComponent implements OnInit {
   Cancel(): void {
     // Delete any uploaded images from server
     if (!!this.pointClone?.csvImageIDs) {
-      this.httpService
+      this.imageUploadCancel$ = this.httpService
         .ImageUploadCancel(this.pointClone.csvImageIDs)
         .subscribe({
           next: () => {
@@ -526,11 +524,17 @@ export class PointEditComponent implements OnInit {
     }
   }
 
-  // ngOnDestroy(): void {
-  // When an Observable issues an OnError or OnComplete notification to its observers,
-  // this ends the subscription.
-  // Observers do not need to issue an Unsubscribe notification to end subscriptions
-  // that are ended by the Observable in this way.
-  /// No need to unsubscribe http calls which will end with completion or error
-  // }
+  ngOnDestroy(): void {
+    // When an Observable issues an OnError or OnComplete notification to its observers,
+    // this ends the subscription.
+    // Observers do not need to issue an Unsubscribe notification to end subscriptions
+    // that are ended by the Observable in this way.
+    // No need to unsubscribe http calls which will end with completion or error
+    // But do we know our calls are issuing OnComplete?
+    this.lookups$?.unsubscribe();
+    this.tagsEdit$?.unsubscribe();
+    this.pointUpdate$?.unsubscribe();
+    this.imageUpload$?.unsubscribe();
+    this.imageUploadCancel$?.unsubscribe();
+  }
 }

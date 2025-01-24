@@ -207,6 +207,7 @@ export class AppComponent implements OnInit, OnDestroy {
             console.log(
               'Reload the page to update to the latest version after the new version is activated'
             );
+            //ToDo check the window is visible - otherwise chrome suppresses confirmation
             if (
               confirm('New version of web application is available. Load now?')
             ) {

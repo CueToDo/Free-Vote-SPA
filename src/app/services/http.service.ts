@@ -9,8 +9,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 // Models/enums
-import { ContentType } from '../models/enums';
-import { Image, ProfilePicture } from 'src/app/models/Image.model';
+import { ImageDownload, ProfilePicture } from 'src/app/models/Image.model';
 
 // Services
 import { LocalDataService } from './local-data.service';
@@ -48,7 +47,7 @@ export class HttpService {
     this.online = navigator.onLine;
   }
 
-  private RequestHeaders(type: ContentType): any {
+  private RequestHeaders(isForm: boolean, reportProgress: boolean): any {
     // https://stackoverflow.com/questions/45286764/angular-4-3-httpclient-doesnt-send-header/45286959#45286959
     // The instances of the new HttpHeader class are immutable objects.
     // state cannot be changed after creation
@@ -58,31 +57,35 @@ export class HttpService {
     // Do not set an empty string to a header - it becomes undefined and the post fails
 
     // Full request options consists of headers only
+    const token = this.localData.AccessToken;
 
-    let httpHeaders: HttpHeaders;
+    let profileString = '';
 
-    switch (type) {
-      case ContentType.json:
-        const token = this.localData.AccessToken;
-        let profileString = '';
-        if (!!this.localData.freeVoteProfile)
-          profileString = JSON.stringify(this.localData.freeVoteProfile);
+    if (!!this.localData.freeVoteProfile)
+      profileString = JSON.stringify(this.localData.freeVoteProfile);
 
-        httpHeaders = new HttpHeaders()
-          .set('Content-Type', 'application/json; charset=utf-8')
-          .set('Authorization', `Bearer ${token}`)
-          .set('SPAWebsite', this.localData.SPAWebsite)
-          .set('VoterProfile', profileString);
-        break;
-      case ContentType.form:
-        httpHeaders = new HttpHeaders();
-        // https://stackoverflow.com/questions/61602744/contenttype-for-httpheaders-when-uploading-file-in-formdata
-        // .set('Content-Type', 'multipart/form-data'); does not work
-        // .set('Content-Type', 'multipart/form-data;boundary=SOME_BOUNDARY'); let the automagic happen
-        break;
+    // Use Forms to post images
+    // https://stackoverflow.com/questions/61602744/contenttype-for-httpheaders-when-uploading-file-in-formdata
+    // .set('Content-Type', 'multipart/form-data;boundary=SOME_BOUNDARY'); let the automagic happen
+
+    let httpHeaders = undefined;
+
+    if (isForm) {
+      // Web Browser will add  Content-Type header itself (with boundary), so we don't need to add it
+      httpHeaders = new HttpHeaders()
+        .set('Authorization', `Bearer ${token}`)
+        .set('SPAWebsite', this.localData.SPAWebsite)
+        .set('VoterProfile', profileString);
+    } else {
+      httpHeaders = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', `Bearer ${token}`)
+        .set('SPAWebsite', this.localData.SPAWebsite)
+        .set('VoterProfile', profileString);
     }
 
-    return { headers: httpHeaders };
+    // reportProgress for imageUploads
+    return { headers: httpHeaders, reportProgress: reportProgress };
   }
 
   public get(url: string): Observable<any> {
@@ -91,7 +94,7 @@ export class HttpService {
 
     this.localData.Log(`About to call API, ${this.localData.apiUrl}${url}`);
 
-    const headers = this.RequestHeaders(ContentType.json);
+    const headers = this.RequestHeaders(false, false);
 
     return this.httpClient // call the free vote api
       .get(this.localData.apiUrl + url, headers);
@@ -102,16 +105,16 @@ export class HttpService {
       .post(
         this.localData.apiUrl + url,
         JSON.stringify(data),
-        this.RequestHeaders(ContentType.json)
+        this.RequestHeaders(false, false)
       );
   }
 
-  public postForm(url: string, data: FormData): Observable<any> {
+  public postForm(url: string, formData: FormData): Observable<any> {
     return this.httpClient // call the free vote api
       .post(
         this.localData.apiUrl + url,
-        JSON.stringify(data),
-        this.RequestHeaders(ContentType.form)
+        JSON.stringify(formData),
+        this.RequestHeaders(true, true)
       );
   }
 
@@ -120,41 +123,35 @@ export class HttpService {
       .post<T>(
         this.localData.apiUrl + url,
         formData,
-        this.RequestHeaders(ContentType.form)
+        this.RequestHeaders(true, true)
       );
   }
 
-  // These methods use httpClient directly - unwrapped
-  public uploadImage(imageUpload: File): Observable<HttpEvent<Image>> {
-    const fd = new FormData();
-    fd.append('image', imageUpload, imageUpload.name);
-
-    const url = this.localData.apiUrl + 'points/imageUpload';
-
+  public uploadImage(
+    pointID: number,
+    imageFile: File
+  ): Observable<ImageDownload> {
+    // If the API returns progress update to HttpEvent<ImageDownload>
     // Max Shwartzmuller https://www.youtube.com/watch?v=YkvqLNcJz3Y
 
-    return this.httpClient.post<Image>(url, fd, {
-      reportProgress: true,
-      observe: 'events',
-      headers: this.RequestHeaders(ContentType.form)
-    });
+    let formData = new FormData();
+    formData.set('pointID', pointID.toString());
+    formData.set('image', imageFile, imageFile.name);
+
+    const url = 'points/imageUpload';
+
+    return this.postFormType<ImageDownload>(url, formData);
   }
 
-  public uploadProfilePicture(
-    pictureUpload: File
-  ): Observable<HttpEvent<ProfilePicture>> {
+  public uploadProfilePicture(pictureUpload: File): Observable<ProfilePicture> {
     const fd = new FormData();
-    fd.append('file', pictureUpload, pictureUpload.name);
+    fd.append('imageObject', pictureUpload, pictureUpload.name);
 
-    const url = this.localData.apiUrl + 'profile/pictureUpload';
+    const url = 'profile/pictureUpload';
 
     // Max Shwartzmuller https://www.youtube.com/watch?v=YkvqLNcJz3Y
 
-    return this.httpClient.post<ProfilePicture>(url, fd, {
-      reportProgress: true,
-      observe: 'events',
-      headers: this.RequestHeaders(ContentType.form)
-    });
+    return this.postFormType<ProfilePicture>(url, fd);
   }
 
   public profilePictureDelete(): Observable<string> {

@@ -233,55 +233,52 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       this.httpService
         .uploadProfilePicture(picture)
         .pipe(
-          tap((serverEvent: HttpEvent<ProfilePicture>) => {
-            // tap changes nothing in the pipe. What came in goes out
-            if (serverEvent !== null) {
-              switch (serverEvent.type) {
-                case HttpEventType.Sent: // 0
-                  console.log(`Uploading file of size ${picture.size}.`);
-                  break;
-                case HttpEventType.UploadProgress: // 1
-                case HttpEventType.DownloadProgress: // 3
-                  // Compute and show the % done:
-                  const total = serverEvent.total;
-                  if (total) {
-                    const percentDone = Math.round(
-                      (100 * serverEvent.loaded) / total
-                    );
-                    this.uploadPercentDone = percentDone;
-                    console.log(`File is ${percentDone}% uploaded.`);
-                  }
-                  break;
-                case HttpEventType.Response: // 4
-                  console.log(`File was completely uploaded!`);
-                  console.log(
-                    (serverEvent as HttpResponse<ProfilePicture>).body
-                  );
-                  const pictureUrl = (
-                    serverEvent as HttpResponse<ProfilePicture>
-                  ).body?.pictureUrl;
-                  if (pictureUrl) {
-                    this.localData.freeVoteProfile.profilePicture = pictureUrl;
-                  }
-                  break;
-                case HttpEventType.ResponseHeader: // 2
-                  console.log(`Response Header: ${serverEvent.type}.`);
-                  break;
-                case HttpEventType.User: // 5
-                  console.log(`Surprising upload event: ${serverEvent.type}.`);
-              }
+          //ToDo: Implement progress notification in API (following never properly implemented)
+
+          // tap((serverEvent: ProfilePicture) => {
+          //   // If API provides progress change to HttpEvent<ProfilePicture>
+          //   // tap changes nothing in the pipe. What came in goes out
+          //   if (serverEvent !== null) {
+          //     switch (serverEvent.type) {
+          //       case HttpEventType.Sent: // 0
+          //         console.log(`Uploading file of size ${picture.size}.`);
+          //         break;
+          //       case HttpEventType.UploadProgress: // 1
+          //       case HttpEventType.DownloadProgress: // 3
+          //         // Compute and show the % done:
+          //         const total = serverEvent.total;
+          //         if (total) {
+          //           const percentDone = Math.round(
+          //             (100 * serverEvent.loaded) / total
+          //           );
+          //           this.uploadPercentDone = percentDone;
+          //           console.log(`File is ${percentDone}% uploaded.`);
+          //         }
+          //         break;
+          //       case HttpEventType.Response: // 4
+          //         console.log(`File was completely uploaded!`);
+          //         console.log(serverEvent as ProfilePicture);
+
+          //         break;
+          //       case HttpEventType.ResponseHeader: // 2
+          //         console.log(`Response Header: ${serverEvent.type}.`);
+          //         break;
+          //       case HttpEventType.User: // 5
+          //         console.log(`Surprising upload event: ${serverEvent.type}.`);
+          //     }
+          //   }
+          // }),
+          // filter(
+          //   (serverEvent: HttpEvent<ProfilePicture>) =>
+          //     serverEvent.type === HttpEventType.Response
+          // ),
+          map((serverEvent: ProfilePicture) => {
+            // If API provides progress change to HttpEvent<ProfilePicture>
+            const pictureUrl = (serverEvent as ProfilePicture)?.pictureUrl;
+            if (pictureUrl) {
+              this.localData.freeVoteProfile.profilePicture = pictureUrl;
             }
-          }),
-          filter(
-            (serverEvent: HttpEvent<ProfilePicture>) =>
-              serverEvent.type === HttpEventType.Response
-          ),
-          tap((serverEvent: HttpEvent<ProfilePicture>) =>
-            console.log(serverEvent)
-          ),
-          map((serverEvent: HttpEvent<ProfilePicture>) => {
-            return (serverEvent as HttpResponse<ProfilePicture>).body
-              ?.pictureUrl;
+            return pictureUrl;
           })
         )
         .subscribe({
