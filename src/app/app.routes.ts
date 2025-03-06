@@ -96,6 +96,9 @@ export const routes: Routes = [
 
   // Single routeparameter :tag
   { path: ':tag', component: TagsAndPointsComponent },
+  // Required if returning to TagsAndPoints from PointComments
+  { path: ':tag/points', component: TagsAndPointsComponent },
+  { path: ':tag/questions', component: TagsAndPointsComponent },
   { path: ':tag/by/:alias', component: TagsAndPointsComponent },
   { path: ':tag/question/:questionSlug', component: TagsAndPointsComponent },
 

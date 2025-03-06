@@ -182,16 +182,14 @@ export class TagsAndPointsComponent
 
   ngAfterViewInit() {
     // Process Initial Route
-    let initialRoute = this.activatedRoute.snapshot.url[0].path;
+    let initialRoute = this.activatedRoute.snapshot.url.join('/');
     const routeparts = initialRoute.split('/');
     if (routeparts) this.InitialRoute(routeparts);
   }
 
   InitialRoute(routeparts: string[]): void {
-    if (routeparts.length === 2) {
-      // {0}/trending - length=2
-
-      switch (routeparts[1]) {
+    if (routeparts.length === 1) {
+      switch (routeparts[0]) {
         // may have separate tab for following
         case 'slash-tags':
         case 'trending':
@@ -206,12 +204,11 @@ export class TagsAndPointsComponent
           break;
         default:
           this.tabIndex = Tabs.tagPoints;
-          this.localData.SlashTagSelected = '/' + routeparts[1];
+          this.localData.SlashTagSelected = '/' + routeparts[0];
       }
-    } else if (routeparts.length === 3) {
-      // {0}/{slashTag}/points
-
-      this.localData.SlashTagSelected = '/' + routeparts[2];
+    } else if (routeparts.length === 2) {
+      // {slashTag}/points
+      this.localData.SlashTagSelected = '/' + routeparts[0];
 
       switch (routeparts[1]) {
         case 'questions':
@@ -224,12 +221,12 @@ export class TagsAndPointsComponent
           );
           break;
       }
-    } else if (routeparts.length === 4) {
-      // {0}/{slashTag}/by/{Alias}
-      // {0}/{slashTag}/question/{question-slug}
+    } else if (routeparts.length === 3) {
+      // {slashTag}/by/{Alias}
+      // {slashTag}/question/{question-slug}
       this.localData.SlashTagSelected = '/' + routeparts[1];
 
-      switch (routeparts[2]) {
+      switch (routeparts[1]) {
         case 'question':
           this.tabIndex = Tabs.questionAnswers;
           break;

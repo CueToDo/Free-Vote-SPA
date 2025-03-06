@@ -19,13 +19,23 @@ import { SocialShareComponent } from '../menus/social-share/social-share.compone
 import { PointsListComponent } from '../points-list/points-list.component';
 import { MatButtonModule } from '@angular/material/button';
 import { NgIf, NgFor, NgClass } from '@angular/common';
+import { PointSelectionTypes } from 'src/app/models/enums';
 
 @Component({
-    selector: 'app-point-comments',
-    templateUrl: './point-comments.component.html',
-    styleUrls: ['./point-comments.component.css'],
-    standalone: true,
-    imports: [SocialShareComponent, NgIf, NgFor, PointComponent, NgClass, PointsListComponent, MatButtonModule, PointEditComponent]
+  selector: 'app-point-comments',
+  templateUrl: './point-comments.component.html',
+  styleUrls: ['./point-comments.component.css'],
+  standalone: true,
+  imports: [
+    SocialShareComponent,
+    NgIf,
+    NgFor,
+    PointComponent,
+    NgClass,
+    PointsListComponent,
+    MatButtonModule,
+    PointEditComponent
+  ]
 })
 export class PointCommentsComponent implements OnInit {
   @ViewChild('newPoint') newPointComponent!: PointEditComponent;
@@ -33,6 +43,8 @@ export class PointCommentsComponent implements OnInit {
   @ViewChild('socialShare') socialShareComponent!: SocialShareComponent;
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   @ViewChild('appPointsList') childComments!: PointsListComponent;
+
+  public PointSelectionTypes = PointSelectionTypes;
 
   initialised = false;
 
@@ -124,6 +136,8 @@ export class PointCommentsComponent implements OnInit {
 
     // now we have pointID, select ancestors and comments
     this.SelectAncestors(); // doesn't return anything
+
+    this.childComments.ParentPointID = this.parentPoint.pointID;
     this.childComments.SelectPoints();
   }
 

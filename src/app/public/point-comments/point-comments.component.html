@@ -46,6 +46,7 @@
       <!-- Children -->
       <app-points-list
         #appPointsList
+        [PointSelectionType]="PointSelectionTypes.Comments"
         [ParentPointID]="ParentPointID"
         (AlreadyFetchingPointsFromDB)="(gettingChildren)"
         (SelectComment)="SelectMainPointByID($event)"
